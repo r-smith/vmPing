@@ -1,0 +1,352 @@
+﻿<Window x:Class="vmPing.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        xmlns:local="clr-namespace:vmPing"
+        Title="vmPing" Height="400" Width="800"
+        MinHeight="200" MinWidth="350"
+        Background="#F4F4F4"
+        Loaded="Window_Loaded">
+
+
+    <Window.Resources>
+        <!-- Boolean to visibility converters -->
+        <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <local:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+        <local:PingStatusButtonTextConverter x:Key="PingStatusButtonTextConverter" />
+        <local:PingStatusButtonImageConverter x:Key="PingStatusButtonImageConverter" />
+
+
+        <ControlTemplate x:Key="TextBoxBaseControlTemplate" TargetType="{x:Type TextBoxBase}">
+            <ScrollViewer x:Name="PART_ContentHost"
+                          Background="{TemplateBinding Background}"
+                          BorderThickness="{TemplateBinding BorderThickness}"
+                          BorderBrush="Transparent" />
+        </ControlTemplate>
+
+        <!-- Style for hostname textbox -->
+        <ControlTemplate x:Key="TextBoxBaseControlTemplatez" TargetType="{x:Type TextBoxBase}">
+            <Border Background="{TemplateBinding Background}"
+                    x:Name="Bd"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    BorderBrush="{TemplateBinding BorderBrush}">
+                <ScrollViewer x:Name="PART_ContentHost" />
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#EEEEFF" />
+                    <Setter Property="Foreground" Value="#333388" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!-- Remove left margin from menu item dropdown -->
+        <ItemsPanelTemplate x:Key="MenuItemPanelTemplate">
+            <StackPanel Margin="0,0,0,0" Background="White"/>
+        </ItemsPanelTemplate>
+        <Style TargetType="{x:Type MenuItem}">
+            <Setter Property="ItemsPanel" Value="{StaticResource MenuItemPanelTemplate}"/>
+        </Style>
+    </Window.Resources>
+
+
+    <Window.InputBindings>
+    </Window.InputBindings>
+
+    <!-- MASTER DOCKPANEL -->
+    <DockPanel>
+
+        <!-- Menu bar -->
+        <Menu DockPanel.Dock="Top" Name="menuMain"
+              FontSize="12" FontStretch="Normal" FontStyle="Normal">
+            <Menu.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <DockPanel HorizontalAlignment="Stretch" LastChildFill="False" />
+                </ItemsPanelTemplate>
+            </Menu.ItemsPanel>
+
+            <!-- Menu Item: Add Monitor -->
+            <MenuItem x:Name="AddMonitorMenu"
+                      Margin="6,0">
+                <MenuItem.Header>
+                    <AccessText Text="_Add Host" VerticalAlignment="Center" />
+                </MenuItem.Header>
+                <MenuItem.Icon>
+                    <Image Source="Resources\add-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                </MenuItem.Icon>
+            </MenuItem>
+
+            <!-- Menu Item: Columns -->
+            <MenuItem Margin="6,0">
+                <MenuItem.Header>
+                    <AccessText Text="_Columns" VerticalAlignment="Center" />
+                </MenuItem.Header>
+                <MenuItem.Icon>
+                    <Image Source="Resources\grid-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                </MenuItem.Icon>
+                <!-- Columns slider -->
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="{Binding ElementName=sliderColumns, Path=Value}"
+                           Margin="0,0,15,0"
+                           Width="30"
+                           HorizontalContentAlignment="Center"
+                           VerticalContentAlignment="Center"
+                           />
+                    <Slider Name="sliderColumns"
+                            Minimum="1" Maximum="10"
+                            Value="3"
+                            TickFrequency="1" SmallChange="1"
+                            TickPlacement="BottomRight"
+                            IsSnapToTickEnabled="True"
+                            Width="200"
+                            Foreground="Gray"
+                            Margin="0,5"
+                            ValueChanged="sliderColumns_ValueChanged"
+                            />
+                </StackPanel>
+            </MenuItem>
+
+            <!-- Menu Item: Start/Stop All -->
+            <MenuItem x:Name="StartStopMenu"
+                      Margin="6,0">
+                <MenuItem.Header>
+                    <AccessText Name="StartStopMenuHeader" Text="_Start All (F5)" VerticalAlignment="Center" />
+                </MenuItem.Header>
+                <MenuItem.Icon>
+                    <Image Name="StartStopMenuImage" Source="Resources\play-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                </MenuItem.Icon>
+            </MenuItem>
+
+
+            <!-- Menu Item: Extras -->
+            <MenuItem Width="24"
+                      Margin="0,0,5,0"
+                      DockPanel.Dock="Right"
+                      >
+                <MenuItem.Icon>
+                    <Image Source="Resources\downCircle-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                </MenuItem.Icon>
+
+                <MenuItem Name="mnuOnTop"
+                          Header="Keep Window on Top"
+                          InputGestureText="F9"
+                          Click="mnuOnTop_Click"
+                          Padding="0,5"
+                          IsCheckable="True" />
+                <MenuItem Name="mnuProbeOptions"
+                          Header="Set Probe Options"
+                          InputGestureText="F10"
+                          Click="mnuProbeOptions_Click"
+                          Padding="0,5" />
+                <MenuItem Name="mnuLogOutput"
+                          Header="Log Output to Files"
+                          InputGestureText="F11"
+                          Click="mnuLogOutput_Click"
+                          Padding="0,5"
+                          IsCheckable="True" />
+                <MenuItem Name="mnuEmailAlerts"
+                          Header="Enable Email Alerts"
+                          InputGestureText="F12"
+                          Click="mnuEmailAlerts_Click"
+                          Padding="0,5"
+                          IsCheckable="True" />
+                
+                <Separator Padding="0,6" />
+                
+                <MenuItem Header="Trace Route" x:Name="TraceRouteMenu" InputGestureText="Ctrl-T" Padding="0,5">
+                    <MenuItem.Icon>
+                        <Image Source="Resources\route-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Flood Host" x:Name="FloodHostMenu" InputGestureText="Ctrl-F" Padding="0,5">
+                    <MenuItem.Icon>
+                        <Image Source="Resources\bomb-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="vmPing" x:Name="NewInstanceMenu" InputGestureText="Ctrl-N" Padding="0,5">
+                    <MenuItem.Icon>
+                        <Image Source="Resources\vmPing-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                
+                <Separator Padding="0,6" />
+                
+                <MenuItem Header="Help" x:Name="HelpMenu" InputGestureText="F1" Padding="0,5">
+                    <MenuItem.Icon>
+                        <Image Source="Resources\questionMark-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+
+
+        <!-- Items Control -->
+        <ItemsControl Name="icPingItems" IsTabStop="False" Focusable="False">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="5" SnapsToDevicePixels="True">
+                        <Grid Name="gridItemsControl">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <!-- Ping output textbox -->
+                            <ScrollViewer Name="svOutput" Grid.Row="0" VerticalScrollBarVisibility="Auto" Margin="0" FocusVisualStyle="{x:Null}">
+                                <TextBox BorderThickness="0" BorderBrush="Transparent"
+                                         Name="txtOutput"
+                                         TextChanged="txtOutput_TextChanged"
+                                         IsTabStop="False"
+                                         IsReadOnly="True"
+                                         IsEnabled="False"
+                                         Background="{Binding Brush_OutputBackground}"
+                                         Foreground="{Binding Brush_OutputForeground}"
+                                         Text="{Binding PingOutput, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
+                                         FontFamily="Consolas" FontSize="12"
+                                         Cursor="Arrow"
+                                         Padding="0,0,0,6" Margin="0"
+                                         Template="{StaticResource TextBoxBaseControlTemplate}">
+                                    <TextBox.Triggers>
+                                        <EventTrigger RoutedEvent="Binding.TargetUpdated">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="lblStats"
+                                                                     Storyboard.TargetProperty="Opacity"
+                                                                     From="0.0" To="1.0" Duration="0:0:0.5"
+                                                                     />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </TextBox.Triggers>
+                                </TextBox>
+                            </ScrollViewer>
+
+                            <!-- Ping statistics textblock -->
+                            <Label Name="lblStats"
+                                   VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                                   Grid.Row="0"
+                                   Content="{Binding PingStatisticsText, UpdateSourceTrigger=PropertyChanged}"
+                                   Width="{Binding Path=ViewportWidth, ElementName=svOutput}"
+                                   Background="Transparent"
+                                   Foreground="{Binding Brush_StatsForeground}"
+                                   FontFamily="Segoe UI" FontSize="14" FontWeight="Bold"
+                                   Padding="8,0,0,3"
+                                   />
+                            
+                            <!-- vmPing icon -->
+                            <Image Source="Resources/vmPing-96.png"
+                                   Width="96"
+                                   Height="96"
+                                   Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                                   Opacity="0.03" />
+                                   <!--Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}" />-->
+
+                            <!-- Delete button -->
+                            <DockPanel VerticalAlignment="Top" HorizontalAlignment="Left" LastChildFill="False"
+                                  Width="{Binding Path=ViewportWidth, ElementName=svOutput}">
+                                <Button Name="btnRemove"
+                                        DockPanel.Dock="Right"
+                                        Padding="3"
+                                        Background="Transparent"
+                                        IsTabStop="False"
+                                        Click="btnRemove_Click">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="controlButton_border" BorderThickness="0"
+                                                    Padding="{TemplateBinding Padding}"
+                                                    Background="{TemplateBinding Background}"
+                                                    >
+                                                <Image Name="controlButton_image" Source="Resources/cancel-16.png"
+                                                       Stretch="None"
+                                                       Opacity="0.35"
+                                                       />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
+                                                </Trigger>
+                                                <Trigger Property="IsPressed" Value="True">
+                                                    <Setter TargetName="controlButton_border" Property="Background" Value="#D0D0D0" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </DockPanel>
+
+                            <!-- Hostname and ping button section -->
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Hostname textbox -->
+                                <TextBox Name="tbHostname"
+                                         FontSize="18" FontWeight="Bold"
+                                         BorderThickness="0,1,0,0"
+                                         BorderBrush="Black"
+                                         VerticalContentAlignment="Center"
+                                         CharacterCasing="Upper"
+                                         Text="{Binding Hostname, UpdateSourceTrigger=PropertyChanged}"
+                                         IsEnabled="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}"
+                                         Template="{StaticResource TextBoxBaseControlTemplatez}"
+                                         KeyDown="tbHostname_KeyDown"
+                                         />
+
+                                <!-- Ping button -->
+                                <Button Name="btnPing"
+                                        Click="btnPing_Click"
+                                        Grid.Column="1"
+                                        FontSize="14"
+                                        Padding="0,6"
+                                        Width="75"
+                                        Background="AliceBlue">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="pingButton_border" BorderThickness="1,1,0,0" BorderBrush="Black"
+                                                    Background="{TemplateBinding Background}"
+                                                    Padding="{TemplateBinding Padding}">
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <Image Source="{Binding IsActive, Converter={StaticResource PingStatusButtonImageConverter}}"
+                                                           Margin="0,0,8,0"
+                                                           />
+                                                    <TextBlock Text="{Binding IsActive, Converter={StaticResource PingStatusButtonTextConverter}}" />
+                                                </StackPanel>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="pingButton_border" Property="Background" Value="#E0F0FF" />
+                                                </Trigger>
+                                                <Trigger Property="IsPressed" Value="True">
+                                                    <Setter TargetName="pingButton_border" Property="Background" Value="#D0E0EF" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="{Binding ElementName=sliderColumns, Path=Value}" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </DockPanel>
+</Window>

@@ -1,0 +1,140 @@
+﻿<Window x:Class="vmPing.ProbeOptionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="vmPing Probe Options" Height="220" Width="330"
+        ResizeMode="NoResize" Background="#F7F9F8"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        ShowInTaskbar="False">
+    
+    <Border BorderBrush="Black" BorderThickness="3">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Text="Probe Options"
+                           Foreground="#333"
+                           Margin="0,10,0,10"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"
+                           />
+                <!-- Probes: Ping Interval -->
+                <StackPanel Grid.Row="1"
+                            Orientation="Horizontal"
+                            Margin="20,10,0,0">
+                    <Label Content="Ping interval:"
+                           Width="100"
+                           FontSize="14"
+                           Foreground="#555555"
+                           />
+                    <TextBox Name="txtPingInterval"
+                             PreviewTextInput="txtNumericTextbox_PreviewTextInput"
+                             Width="60"
+                             VerticalContentAlignment="Center"
+                             Padding="3,0,0,0"
+                             MaxLength="5"
+                             FontSize="14"
+                             />
+                    <ComboBox Name="cboPingInterval" Width="100" Margin="10,0,0,0" VerticalContentAlignment="Center" FontSize="14" Foreground="#555555">
+                        <ComboBoxItem Content="Seconds" IsSelected="True" />
+                        <ComboBoxItem Content="Minutes" />
+                        <ComboBoxItem Content="Hours" />
+                    </ComboBox>
+                </StackPanel>
+
+                <!-- Probes: Ping Timeout -->
+                <StackPanel Grid.Row="2"
+                            Orientation="Horizontal"
+                            Margin="20,10,0,0">
+                    <Label Content="Ping timeout:"
+                           Width="100"
+                           FontSize="14"
+                           Foreground="#555555"
+                           />
+                    <TextBox Name="txtPingTimeout"
+                             PreviewTextInput="txtNumericTextbox_PreviewTextInput"
+                             Width="60"
+                             VerticalContentAlignment="Center"
+                             Padding="3,0,0,0"
+                             MaxLength="2"
+                             FontSize="14"
+                             />
+                    <Label Content="Seconds" Margin="10,0,0,0" FontSize="14" Foreground="#555555" />
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Name="btnCancel"
+                        IsCancel="True"
+                        Grid.Column="1"
+                        FontSize="14"
+                        Padding="6"
+                        Margin="17"
+                        Width="100"
+                        Background="AliceBlue">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Name="button_border"
+                                    BorderThickness="1" BorderBrush="Black"
+                                    Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
+                                <TextBlock HorizontalAlignment="Center">Cancel</TextBlock>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="button_border" Property="Background" Value="#E0F0FF" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="button_border" Property="Background" Value="#D0E0EF" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Name="btnOk"
+                        Click="btnOk_Click"
+                        Grid.Column="2"
+                        FontSize="14"
+                        Padding="6"
+                        Margin="17"
+                        Width="100"
+                        Background="AliceBlue">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Name="button_border"
+                                    BorderThickness="1" BorderBrush="Black"
+                                    Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
+                                <TextBlock HorizontalAlignment="Center">OK</TextBlock>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="button_border" Property="Background" Value="#E0F0FF" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="button_border" Property="Background" Value="#D0E0EF" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

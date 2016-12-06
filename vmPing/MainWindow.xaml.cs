@@ -209,7 +209,15 @@ namespace vmPing
             var p = new System.Diagnostics.Process();
             p.StartInfo.FileName =
                 System.Reflection.Assembly.GetExecutingAssembly().Location;
-            p.Start();
+            try
+            {
+                p.Start();
+            }
+
+            catch
+            {
+                // do nothing.
+            }
         }
 
 

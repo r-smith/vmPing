@@ -13,7 +13,7 @@ namespace vmPing
             InitializeComponent();
 
             Version version = typeof(MainWindow).Assembly.GetName().Version;
-            tbVersion.Text = $"Version: {version.Major}.{version.Minor}.{version.MinorRevision}";
+            tbVersion.Text = $"Version: {version.Major}.{version.Minor}.{version.Build}";
 
             // Generate copyright text based on the current year.
             txtCopyright.Text = $"Copyright \u00a9 {DateTime.Now.Year.ToString()} Ryan Smith";

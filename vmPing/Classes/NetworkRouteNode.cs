@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Net.NetworkInformation;
 
-namespace vmPing
+namespace vmPing.Classes
 {
     class NetworkRouteNode : INotifyPropertyChanged
     {

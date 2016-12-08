@@ -1,4 +1,4 @@
-﻿<Window x:Class="vmPing.HelpWindow"
+﻿<Window x:Class="vmPing.Views.HelpWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="vmPing Help" Height="450" Width="475"

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Threading;
 
-namespace vmPing
+namespace vmPing.Classes
 {
     class NetworkRoute : INotifyPropertyChanged
     {

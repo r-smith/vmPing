@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace vmPing
+namespace vmPing.Views
 {
     /// <summary>
     /// Interaction logic for HelpWindow.xaml

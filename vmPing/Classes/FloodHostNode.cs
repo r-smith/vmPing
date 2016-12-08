@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Threading;
 
-namespace vmPing
+namespace vmPing.Classes
 {
     public class FloodHostNode : INotifyPropertyChanged
     {

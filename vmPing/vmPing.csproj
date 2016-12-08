@@ -36,9 +36,7 @@
   <PropertyGroup>
     <ApplicationIcon>vmPing.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -61,19 +59,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ApplicationOptions.cs" />
-    <Compile Include="EmailAlertWindow.xaml.cs">
+    <Compile Include="Classes\ApplicationOptions.cs" />
+    <Compile Include="Classes\Favorite.cs" />
+    <Compile Include="Views\EmailAlertWindow.xaml.cs">
       <DependentUpon>EmailAlertWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FloodHostNode.cs" />
-    <Compile Include="FloodHostWindow.xaml.cs">
+    <Compile Include="Classes\FloodHostNode.cs" />
+    <Compile Include="Views\ErrorWindow.xaml.cs">
+      <DependentUpon>ErrorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FloodHostWindow.xaml.cs">
       <DependentUpon>FloodHostWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NetworkRoute.cs" />
-    <Compile Include="NetworkRouteNode.cs" />
-    <Compile Include="PingItem.cs" />
-    <Compile Include="PingStatistics.cs" />
-    <Compile Include="ProbeOptionsWindow.xaml.cs">
+    <Compile Include="Classes\NetworkRoute.cs" />
+    <Compile Include="Classes\NetworkRouteNode.cs" />
+    <Compile Include="Classes\PingItem.cs" />
+    <Compile Include="Classes\PingStatistics.cs" />
+    <Compile Include="Views\ManageFavoritesWindow.xaml.cs">
+      <DependentUpon>ManageFavoritesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProbeOptionsWindow.xaml.cs">
       <DependentUpon>ProbeOptionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
@@ -81,22 +86,29 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="TraceRouteWindow.xaml.cs">
+    <Compile Include="Views\TraceRouteWindow.xaml.cs">
       <DependentUpon>TraceRouteWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="EmailAlertWindow.xaml">
+    <Compile Include="Views\AddToFavoritesWindow.xaml.cs">
+      <DependentUpon>AddToFavoritesWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\EmailAlertWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FloodHostWindow.xaml">
+    <Page Include="Views\ErrorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="HelpWindow.xaml">
+    <Page Include="Views\FloodHostWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\HelpWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -104,19 +116,27 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Constants.cs" />
-    <Compile Include="HelpWindow.xaml.cs">
+    <Compile Include="Classes\Constants.cs" />
+    <Compile Include="Views\HelpWindow.xaml.cs">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ProbeOptionsWindow.xaml">
+    <Page Include="Views\ManageFavoritesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TraceRouteWindow.xaml">
+    <Page Include="Views\ProbeOptionsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TraceRouteWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddToFavoritesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -135,7 +155,6 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -177,6 +196,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\stopCircle-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\caution-40.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

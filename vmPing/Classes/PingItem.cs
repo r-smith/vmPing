@@ -5,7 +5,7 @@ using System.Net.NetworkInformation;
 using System.Threading;
 using System.Windows.Media;
 
-namespace vmPing
+namespace vmPing.Classes
 {
     public class PingItem : INotifyPropertyChanged
     {

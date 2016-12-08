@@ -1,8 +1,8 @@
-﻿<Window x:Class="vmPing.MainWindow"
+﻿<Window x:Class="vmPing.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
-        xmlns:local="clr-namespace:vmPing"
+        xmlns:local="clr-namespace:vmPing.Views"
         Title="vmPing" Height="400" Width="800"
         MinHeight="200" MinWidth="350"
         Background="#F4F4F4"
@@ -72,7 +72,7 @@
                     <AccessText Text="_Add Host" VerticalAlignment="Center" />
                 </MenuItem.Header>
                 <MenuItem.Icon>
-                    <Image Source="Resources\add-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                    <Image Source="/Resources/add-16.png" VerticalAlignment="Center" Width="16" Height="16" />
                 </MenuItem.Icon>
             </MenuItem>
 
@@ -82,7 +82,7 @@
                     <AccessText Text="_Columns" VerticalAlignment="Center" />
                 </MenuItem.Header>
                 <MenuItem.Icon>
-                    <Image Source="Resources\grid-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                    <Image Source="/Resources/grid-16.png" VerticalAlignment="Center" Width="16" Height="16" />
                 </MenuItem.Icon>
                 <!-- Columns slider -->
                 <StackPanel Orientation="Horizontal">
@@ -113,7 +113,7 @@
                     <AccessText Name="StartStopMenuHeader" Text="_Start All (F5)" VerticalAlignment="Center" />
                 </MenuItem.Header>
                 <MenuItem.Icon>
-                    <Image Name="StartStopMenuImage" Source="Resources\play-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                    <Image Name="StartStopMenuImage" Source="/Resources/play-16.png" VerticalAlignment="Center" Width="16" Height="16" />
                 </MenuItem.Icon>
             </MenuItem>
 
@@ -124,7 +124,7 @@
                       DockPanel.Dock="Right"
                       >
                 <MenuItem.Icon>
-                    <Image Source="Resources\downCircle-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                    <Image Source="/Resources/downCircle-16.png" VerticalAlignment="Center" Width="16" Height="16" />
                 </MenuItem.Icon>
 
                 <MenuItem Name="mnuOnTop"
@@ -150,22 +150,30 @@
                           Click="mnuEmailAlerts_Click"
                           Padding="0,5"
                           IsCheckable="True" />
+
+                <Separator Padding="0,6" />
+
+                <MenuItem Header="Favorites" x:Name="mnuFavorites">
+                    <MenuItem Header="Add to favorites" Click="mnuAddToFavorites_Click" />
+                    <MenuItem Header="Manage favorites" Click="mnuManageFavorites_Click" />
+                    <Separator Padding="0,6" />
+                </MenuItem>
                 
                 <Separator Padding="0,6" />
-                
+
                 <MenuItem Header="Trace Route" x:Name="TraceRouteMenu" InputGestureText="Ctrl-T" Padding="0,5">
                     <MenuItem.Icon>
-                        <Image Source="Resources\route-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                        <Image Source="/Resources/route-16.png" VerticalAlignment="Center" Width="16" Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Flood Host" x:Name="FloodHostMenu" InputGestureText="Ctrl-F" Padding="0,5">
                     <MenuItem.Icon>
-                        <Image Source="Resources\bomb-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                        <Image Source="/Resources/bomb-16.png" VerticalAlignment="Center" Width="16" Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="vmPing" x:Name="NewInstanceMenu" InputGestureText="Ctrl-N" Padding="0,5">
                     <MenuItem.Icon>
-                        <Image Source="Resources\vmPing-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                        <Image Source="/Resources/vmPing-16.png" VerticalAlignment="Center" Width="16" Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
                 
@@ -173,7 +181,7 @@
                 
                 <MenuItem Header="Help" x:Name="HelpMenu" InputGestureText="F1" Padding="0,5">
                     <MenuItem.Icon>
-                        <Image Source="Resources\questionMark-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                        <Image Source="/Resources/questionMark-16.png" VerticalAlignment="Center" Width="16" Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -234,12 +242,11 @@
                                    />
                             
                             <!-- vmPing icon -->
-                            <Image Source="Resources/vmPing-96.png"
+                            <Image Source="/Resources/vmPing-96.png"
                                    Width="96"
                                    Height="96"
                                    Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
                                    Opacity="0.03" />
-                                   <!--Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}" />-->
 
                             <!-- Delete button -->
                             <DockPanel VerticalAlignment="Top" HorizontalAlignment="Left" LastChildFill="False"
@@ -256,7 +263,7 @@
                                                     Padding="{TemplateBinding Padding}"
                                                     Background="{TemplateBinding Background}"
                                                     >
-                                                <Image Name="controlButton_image" Source="Resources/cancel-16.png"
+                                                <Image Name="controlButton_image" Source="/Resources/cancel-16.png"
                                                        Stretch="None"
                                                        Opacity="0.35"
                                                        />

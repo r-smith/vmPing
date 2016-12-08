@@ -6,8 +6,9 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using vmPing.Classes;
 
-namespace vmPing
+namespace vmPing.Views
 {
     /// <summary>
     /// Interaction logic for FloodHostWindow.xaml

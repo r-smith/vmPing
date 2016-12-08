@@ -14,10 +14,9 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using vmPing.Classes;
 
-
-
-namespace vmPing
+namespace vmPing.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -141,6 +140,8 @@ namespace vmPing
 
             sliderColumns.Value = _pingItems.Count;
             icPingItems.ItemsSource = _pingItems;
+
+            RefreshFavorites();
         }
 
         private void AlwaysOnTopExecute(object sender, ExecutedRoutedEventArgs e)
@@ -443,12 +444,12 @@ namespace vmPing
             if (isActive)
             {
                 StartStopMenuHeader.Text = "_Stop All (F5)";
-                StartStopMenuImage.Source = new BitmapImage(new Uri(@"Resources/stopCircle-16.png", UriKind.Relative));
+                StartStopMenuImage.Source = new BitmapImage(new Uri(@"/Resources/stopCircle-16.png", UriKind.Relative));
             }
             else
             {
                 StartStopMenuHeader.Text = "_Start All (F5)";
-                StartStopMenuImage.Source = new BitmapImage(new Uri(@"Resources/play-16.png", UriKind.Relative));
+                StartStopMenuImage.Source = new BitmapImage(new Uri(@"/Resources/play-16.png", UriKind.Relative));
             }
         }
 
@@ -874,6 +875,82 @@ namespace vmPing
                 window.Opacity = 1;
             }
         }
+
+
+        private void RefreshFavorites()
+        {
+            var favoritesList = Favorite.GetFavoriteTitles();
+
+            // Clear existing favorites menu.
+            for (int i = mnuFavorites.Items.Count - 1; i > 2; --i)
+                mnuFavorites.Items.RemoveAt(i);
+
+            // Load favorites.
+            foreach (var fav in favoritesList)
+            {
+                var menuItem = new MenuItem();
+                menuItem.Header = fav;
+                menuItem.Click += (s, r) =>
+                {
+                    _pingItems.Clear();
+
+                    var selectedFavorite = s as MenuItem;
+                    var favorite = Favorite.GetFavoriteEntry(selectedFavorite.Header.ToString());
+                    if (favorite.Hostnames.Count < 1)
+                        AddHostMonitor(1);
+                    else
+                    {
+                        AddHostMonitor(favorite.Hostnames.Count);
+                        for (int i = 0; i < favorite.Hostnames.Count; ++i)
+                        {
+                            _pingItems[i].Hostname = favorite.Hostnames[i].ToUpper();
+                            PingStartStop(_pingItems[i]);
+                        }
+                    }
+
+                    sliderColumns.Value = favorite.ColumnCount;
+                };
+                
+                mnuFavorites.Items.Add(menuItem);
+            }
+        }
+
+
+        private void mnuAddToFavorites_Click(object sender, RoutedEventArgs e)
+        {
+            // Blur all open windows.
+            foreach (Window window in Application.Current.Windows)
+            {
+                System.Windows.Media.Effects.BlurEffect objBlur = new System.Windows.Media.Effects.BlurEffect();
+                objBlur.Radius = 4;
+                window.Opacity = 0.85;
+                window.Effect = objBlur;
+            }
+
+            // Display email alerts window
+            var addToFavoritesWindow = new AddToFavoritesWindow();
+            addToFavoritesWindow.Owner = this;
+            if (addToFavoritesWindow.ShowDialog() == true)
+            {
+                var currentHostList = new List<string>();
+                for (int i = 0; i < _pingItems.Count; ++i)
+                    currentHostList.Add(_pingItems[i].Hostname);
+                Favorite.AddFavoriteEntry(addToFavoritesWindow.FavoriteTitle, currentHostList, (int)sliderColumns.Value);
+                RefreshFavorites();
+            }
+
+            // Remove blur from all windows and set topmost property if set in options.
+            foreach (Window window in Application.Current.Windows)
+            {
+                window.Effect = null;
+                window.Opacity = 1;
+            }
+        }
+
+        private void mnuManageFavorites_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 
 
@@ -926,9 +1003,9 @@ namespace vmPing
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if ((bool)value == false)
-                return new BitmapImage(new Uri(@"Resources/play-16.png", UriKind.Relative));
+                return new BitmapImage(new Uri(@"/Resources/play-16.png", UriKind.Relative));
             else
-                return new BitmapImage(new Uri(@"Resources/stopCircle-16.png", UriKind.Relative));
+                return new BitmapImage(new Uri(@"/Resources/stopCircle-16.png", UriKind.Relative));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

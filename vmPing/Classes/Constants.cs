@@ -1,4 +1,4 @@
-﻿namespace vmPing
+﻿namespace vmPing.Classes
 {
     class Constants
     {

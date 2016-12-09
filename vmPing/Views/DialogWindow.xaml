@@ -8,6 +8,7 @@
         Title="ErrorWindow" Height="180" Width="360"
         ResizeMode="NoResize" Background="#F7F9F8"
         WindowStartupLocation="CenterOwner"
+        SizeToContent="Height"
         WindowStyle="None"
         ShowInTaskbar="False">
     <Border BorderBrush="Black" BorderThickness="3">
@@ -38,9 +39,8 @@
                 <TextBlock Grid.Row="1"
                            Name="tbDialogBody"
                            FontSize="14"
-                           Margin="20,0"
-                           Text="This is warning text"  TextWrapping="Wrap" TextAlignment="Justify"/>
-
+                           Margin="20,0,20,5"
+                           Text="This is warning text"  TextWrapping="Wrap"/>
             </Grid>
 
             <!-- Buttons -->

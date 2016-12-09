@@ -100,7 +100,10 @@ namespace vmPing.Classes
 
         public static void AddFavoriteEntry(string title, List<string> hostnames, int columnCount)
         {
+            var rootPath = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing");
             var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPingFavorites.xml");
+            if (!Directory.Exists(rootPath))
+                Directory.CreateDirectory(rootPath);
             if (!File.Exists(path))
             {
                 try
@@ -110,6 +113,7 @@ namespace vmPing.Classes
                 }
                 catch
                 {
+                    MessageBox.Show("HEY!");
                     return;
                 }
             }

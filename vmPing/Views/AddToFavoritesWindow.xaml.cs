@@ -26,13 +26,13 @@ namespace vmPing.Views
 
             if (Favorite.DoesTitleExist(txtTitle.Text))
             {
-                var errorWindow = new ErrorWindow(
-                    ErrorWindow.DialogIcon.Warning,
+                var dialogWindow = new DialogWindow(
+                    DialogWindow.DialogIcon.Warning,
                     "Warning",
                     $"{txtTitle.Text} already exists.  Would you like to overwrite?",
                     "Overwrite");
-                errorWindow.Owner = this;
-                if (errorWindow.ShowDialog() == true)
+                dialogWindow.Owner = this;
+                if (dialogWindow.ShowDialog() == true)
                     DialogResult = true;
             }
             else

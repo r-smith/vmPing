@@ -927,7 +927,7 @@ namespace vmPing.Views
                 window.Effect = objBlur;
             }
 
-            // Display email alerts window
+            // Display add to favorites window.
             var addToFavoritesWindow = new AddToFavoritesWindow();
             addToFavoritesWindow.Owner = this;
             if (addToFavoritesWindow.ShowDialog() == true)
@@ -949,7 +949,27 @@ namespace vmPing.Views
 
         private void mnuManageFavorites_Click(object sender, RoutedEventArgs e)
         {
+            // Blur all open windows.
+            foreach (Window window in Application.Current.Windows)
+            {
+                System.Windows.Media.Effects.BlurEffect objBlur = new System.Windows.Media.Effects.BlurEffect();
+                objBlur.Radius = 4;
+                window.Opacity = 0.85;
+                window.Effect = objBlur;
+            }
 
+            // Display manage favorites window.
+            var manageFavorites = new ManageFavoritesWindow();
+            manageFavorites.Owner = this;
+            manageFavorites.ShowDialog();
+            RefreshFavorites();
+
+            // Remove blur from all windows and set topmost property if set in options.
+            foreach (Window window in Application.Current.Windows)
+            {
+                window.Effect = null;
+                window.Opacity = 1;
+            }
         }
     }
 

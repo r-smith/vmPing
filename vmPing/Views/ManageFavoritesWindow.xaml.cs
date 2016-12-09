@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using vmPing.Classes;
 
 namespace vmPing.Views
 {
@@ -21,6 +11,33 @@ namespace vmPing.Views
         public ManageFavoritesWindow()
         {
             InitializeComponent();
+
+            RefreshFavoriteList();
+        }
+
+        private void RefreshFavoriteList()
+        {
+            lbFavorites.ItemsSource = null;
+            lbFavorites.Items.Clear();
+            lbFavorites.ItemsSource = Favorite.GetFavoriteTitles();
+        }
+
+        private void btnRemove_Click(object sender, RoutedEventArgs e)
+        {
+            if (lbFavorites.SelectedIndex < 0)
+                return;
+
+            var dialogWindow = new DialogWindow(
+                DialogWindow.DialogIcon.Warning,
+                "Confirm Delete",
+                $"Are you sure you want to remove {lbFavorites.SelectedItem.ToString()} from your favorites?",
+                "Remove");
+            dialogWindow.Owner = this;
+            if (dialogWindow.ShowDialog() == true)
+            {
+                Favorite.DeleteFavoriteEntry(lbFavorites.SelectedItem.ToString());
+                RefreshFavoriteList();
+            }
         }
     }
 }

@@ -126,7 +126,6 @@ namespace vmPing.Classes
                 foreach (XmlNode node in nodeTitleSearch)
                 {
                     // Title already exists.  Delete any old versions.
-                    //node.RemoveAll();
                     nodeRoot.RemoveChild(node);
                 }
 
@@ -141,6 +140,35 @@ namespace vmPing.Classes
                     favorite.AppendChild(xmlElement);
                 }
                 nodeRoot.AppendChild(favorite);
+                xd.Save(path);
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
+        public static void DeleteFavoriteEntry(string title)
+        {
+            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPingFavorites.xml");
+            if (!File.Exists(path))
+                return;
+
+            try
+            {
+                var xd = new XmlDocument();
+                xd.Load(path);
+
+                XmlNode nodeRoot = xd.SelectSingleNode("/favorites");
+
+                // Search for favorite by title.
+                XmlNodeList nodeTitleSearch = xd.SelectNodes($"/favorites/favorite[@title='{title}']");
+                foreach (XmlNode node in nodeTitleSearch)
+                {
+                    // Found title.  Delete all versions.
+                    nodeRoot.RemoveChild(node);
+                }
                 xd.Save(path);
             }
 

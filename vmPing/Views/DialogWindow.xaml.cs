@@ -7,14 +7,14 @@ namespace vmPing.Views
     /// <summary>
     /// Interaction logic for ErrorWindow.xaml
     /// </summary>
-    public partial class ErrorWindow : Window
+    public partial class DialogWindow : Window
     {
         public enum DialogIcon
         {
             Warning
         }
 
-        public ErrorWindow(DialogIcon dialogIcon, string dialogTitle, string dialogBody, string confirmationText)
+        public DialogWindow(DialogIcon dialogIcon, string dialogTitle, string dialogBody, string confirmationText)
         {
             InitializeComponent();
 

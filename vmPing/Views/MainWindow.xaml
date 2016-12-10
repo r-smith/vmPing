@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns:local="clr-namespace:vmPing.Views"
+        xmlns:classes="clr-namespace:vmPing.Classes"
         Title="vmPing" Height="400" Width="800"
         MinHeight="200" MinWidth="350"
         Background="#F4F4F4"
@@ -10,11 +11,11 @@
 
 
     <Window.Resources>
-        <!-- Boolean to visibility converters -->
-        <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-        <local:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        <local:PingStatusButtonTextConverter x:Key="PingStatusButtonTextConverter" />
-        <local:PingStatusButtonImageConverter x:Key="PingStatusButtonImageConverter" />
+        <!-- Value converters -->
+        <classes:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <classes:BooleanToImageConverter x:Key="BooleanToImageConverter" />
+        <classes:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+        <classes:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="Ping" TrueValue="Stop" />
 
 
         <ControlTemplate x:Key="TextBoxBaseControlTemplate" TargetType="{x:Type TextBoxBase}">
@@ -325,10 +326,10 @@
                                                     Background="{TemplateBinding Background}"
                                                     Padding="{TemplateBinding Padding}">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                    <Image Source="{Binding IsActive, Converter={StaticResource PingStatusButtonImageConverter}}"
+                                                    <Image Source="{Binding IsActive, Converter={StaticResource BooleanToImageConverter}}"
                                                            Margin="0,0,8,0"
                                                            />
-                                                    <TextBlock Text="{Binding IsActive, Converter={StaticResource PingStatusButtonTextConverter}}" />
+                                                    <TextBlock Text="{Binding IsActive, Converter={StaticResource BoolToStringConverter}}" />
                                                 </StackPanel>
                                             </Border>
                                             <ControlTemplate.Triggers>

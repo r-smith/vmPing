@@ -151,22 +151,4 @@ namespace vmPing.Views
             dgTrace.ScrollIntoView(dgTrace.Items[_route.networkRoute.Count - 1]);
         }
     }
-
-
-
-    public class TraceRouteButtonTextConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if ((bool)value == false)
-                return "Trace Route";
-            else
-                return "Stop Trace";
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

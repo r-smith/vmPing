@@ -182,26 +182,13 @@ namespace vmPing.Views
 
         private void HelpExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            // Blur all open windows.
-            foreach (Window window in Application.Current.Windows)
-            {
-                var objBlur = new System.Windows.Media.Effects.BlurEffect();
-                objBlur.Radius = 4;
-                window.Opacity = 0.85;
-                window.Effect = objBlur;
-            }
-
             // Display help window.
+            ApplicationOptions.BlurWindows();
             var helpWindow = new HelpWindow();
             helpWindow.Owner = this;
             helpWindow.ShowDialog();
 
-            // Remove blur effect from all windows.
-            foreach (Window window in Application.Current.Windows)
-            {
-                window.Effect = null;
-                window.Opacity = 1;
-            }
+            ApplicationOptions.RemoveBlurWindows();
         }
 
 
@@ -785,28 +772,15 @@ namespace vmPing.Views
                 return;
             }
 
-            // Blur all open windows.
-            foreach (Window window in Application.Current.Windows)
-            {
-                System.Windows.Media.Effects.BlurEffect objBlur = new System.Windows.Media.Effects.BlurEffect();
-                objBlur.Radius = 4;
-                window.Opacity = 0.85;
-                window.Effect = objBlur;
-            }
-
             // Display email alerts window
+            ApplicationOptions.BlurWindows();
             var emailAlertWindow = new EmailAlertWindow(_applicationOptions);
             emailAlertWindow.Owner = this;
 
             emailAlertWindow.ShowDialog();
             mnuEmailAlerts.IsChecked = _applicationOptions.EmailAlert;
 
-            // Remove blur from all windows and set topmost property if set in options.
-            foreach (Window window in Application.Current.Windows)
-            {
-                window.Effect = null;
-                window.Opacity = 1;
-            }
+            ApplicationOptions.RemoveBlurWindows();
         }
 
         private void DisplayLogOutput()
@@ -818,16 +792,9 @@ namespace vmPing.Views
                 return;
             }
 
-            // Blur all open windows.
-            foreach (Window window in Application.Current.Windows)
-            {
-                System.Windows.Media.Effects.BlurEffect objBlur = new System.Windows.Media.Effects.BlurEffect();
-                objBlur.Radius = 4;
-                window.Opacity = 0.85;
-                window.Effect = objBlur;
-            }
-
+            
             // Display folder browse dialog box.
+            ApplicationOptions.BlurWindows();
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
             dialog.Description = "Select a location for the log files.";
             System.Windows.Forms.DialogResult result = dialog.ShowDialog();
@@ -843,37 +810,18 @@ namespace vmPing.Views
             }
             mnuLogOutput.IsChecked = _applicationOptions.LogOutput;
 
-            // Remove blur from all windows and set topmost property if set in options.
-            foreach (Window window in Application.Current.Windows)
-            {
-                window.Effect = null;
-                window.Opacity = 1;
-            }
+            ApplicationOptions.RemoveBlurWindows();
         }
 
         private void DisplayProbeOptions()
         {
-            // Blur all open windows.
-            foreach (Window window in Application.Current.Windows)
-            {
-                System.Windows.Media.Effects.BlurEffect objBlur = new System.Windows.Media.Effects.BlurEffect();
-                objBlur.Radius = 4;
-                window.Opacity = 0.85;
-                window.Effect = objBlur;
-            }
-
             // Display probe options window
+            ApplicationOptions.BlurWindows();
             var probeOptionsWindow = new ProbeOptionsWindow(_applicationOptions);
             probeOptionsWindow.Owner = this;
-
             probeOptionsWindow.ShowDialog();
 
-            // Remove blur from all windows and set topmost property if set in options.
-            foreach (Window window in Application.Current.Windows)
-            {
-                window.Effect = null;
-                window.Opacity = 1;
-            }
+            ApplicationOptions.RemoveBlurWindows();
         }
 
 
@@ -918,16 +866,8 @@ namespace vmPing.Views
 
         private void mnuAddToFavorites_Click(object sender, RoutedEventArgs e)
         {
-            // Blur all open windows.
-            foreach (Window window in Application.Current.Windows)
-            {
-                System.Windows.Media.Effects.BlurEffect objBlur = new System.Windows.Media.Effects.BlurEffect();
-                objBlur.Radius = 4;
-                window.Opacity = 0.85;
-                window.Effect = objBlur;
-            }
-
             // Display add to favorites window.
+            ApplicationOptions.BlurWindows();
             var addToFavoritesWindow = new AddToFavoritesWindow();
             addToFavoritesWindow.Owner = this;
             if (addToFavoritesWindow.ShowDialog() == true)
@@ -939,98 +879,19 @@ namespace vmPing.Views
                 RefreshFavorites();
             }
 
-            // Remove blur from all windows and set topmost property if set in options.
-            foreach (Window window in Application.Current.Windows)
-            {
-                window.Effect = null;
-                window.Opacity = 1;
-            }
+            ApplicationOptions.RemoveBlurWindows();
         }
 
         private void mnuManageFavorites_Click(object sender, RoutedEventArgs e)
         {
-            // Blur all open windows.
-            foreach (Window window in Application.Current.Windows)
-            {
-                System.Windows.Media.Effects.BlurEffect objBlur = new System.Windows.Media.Effects.BlurEffect();
-                objBlur.Radius = 4;
-                window.Opacity = 0.85;
-                window.Effect = objBlur;
-            }
-
             // Display manage favorites window.
-            var manageFavorites = new ManageFavoritesWindow();
-            manageFavorites.Owner = this;
-            manageFavorites.ShowDialog();
+            ApplicationOptions.BlurWindows();
+            var manageFavoritesWindow = new ManageFavoritesWindow();
+            manageFavoritesWindow.Owner = this;
+            manageFavoritesWindow.ShowDialog();
             RefreshFavorites();
 
-            // Remove blur from all windows and set topmost property if set in options.
-            foreach (Window window in Application.Current.Windows)
-            {
-                window.Effect = null;
-                window.Opacity = 1;
-            }
-        }
-    }
-
-
-
-
-    public class InverseBooleanConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return !((bool)value);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class InverseBooleanToVisibilityConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return (bool)value == true ? Visibility.Collapsed : Visibility.Visible;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class PingStatusButtonTextConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if ((bool)value == false)
-                return "Ping";
-            else
-                return "Stop";
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class PingStatusButtonImageConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if ((bool)value == false)
-                return new BitmapImage(new Uri(@"/Resources/play-16.png", UriKind.Relative));
-            else
-                return new BitmapImage(new Uri(@"/Resources/stopCircle-16.png", UriKind.Relative));
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
+            ApplicationOptions.RemoveBlurWindows();
         }
     }
 }

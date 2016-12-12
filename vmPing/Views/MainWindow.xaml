@@ -16,6 +16,9 @@
         <classes:BooleanToImageConverter x:Key="BooleanToImageConverter" />
         <classes:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
         <classes:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="Ping" TrueValue="Stop" />
+        <classes:PingStatusToBackgroundBrushConverter x:Key="PingStatusToBackgroundBrushConverter" />
+        <classes:PingStatusToForegroundBrushConverter x:Key="PingStatusToForegroundBrushConverter" />
+        <classes:PingStatusToStatisticsBrushConverter x:Key="PingStatusToStatisticsBrushConverter" />
 
 
         <ControlTemplate x:Key="TextBoxBaseControlTemplate" TargetType="{x:Type TextBoxBase}">
@@ -208,8 +211,8 @@
                                          IsTabStop="False"
                                          IsReadOnly="True"
                                          IsEnabled="False"
-                                         Background="{Binding Brush_OutputBackground}"
-                                         Foreground="{Binding Brush_OutputForeground}"
+                                         Background="{Binding Status, Converter={StaticResource PingStatusToBackgroundBrushConverter}}"
+                                         Foreground="{Binding Status, Converter={StaticResource PingStatusToForegroundBrushConverter}}"
                                          Text="{Binding PingOutput, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
                                          FontFamily="Consolas" FontSize="12"
                                          Cursor="Arrow"
@@ -237,7 +240,7 @@
                                    Content="{Binding PingStatisticsText, UpdateSourceTrigger=PropertyChanged}"
                                    Width="{Binding Path=ViewportWidth, ElementName=svOutput}"
                                    Background="Transparent"
-                                   Foreground="{Binding Brush_StatsForeground}"
+                                   Foreground="{Binding Status, Converter={StaticResource PingStatusToStatisticsBrushConverter}}"
                                    FontFamily="Segoe UI" FontSize="14" FontWeight="Bold"
                                    Padding="8,0,0,3"
                                    />

@@ -37,18 +37,36 @@ namespace vmPing.Views
         public static RoutedCommand FloodHostCommand = new RoutedCommand();
         public static RoutedCommand AddMonitorCommand = new RoutedCommand();
 
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-
-            Application.Current.Shutdown();
-        }
-
 
         public MainWindow()
         {
             InitializeComponent();
 
+            InitializeCommandBindings();
+            ProcessCommandLineArguments();
+            RefreshFavorites();
+
+            sliderColumns.Value = _pingItems.Count;
+            icPingItems.ItemsSource = _pingItems;
+        }
+
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Set initial focus first text box.
+            if (_pingItems.Count > 0)
+            {
+                var cp = icPingItems.ItemContainerGenerator.ContainerFromIndex(0) as ContentPresenter;
+                var tb = (TextBox)cp.ContentTemplate.FindName("tbHostname", cp);
+
+                if (tb != null)
+                    tb.Focus();
+            }
+        }
+
+
+        private void InitializeCommandBindings()
+        {
             CommandBindings.Add(new CommandBinding(AlwaysOnTopCommand, AlwaysOnTopExecute));
             CommandBindings.Add(new CommandBinding(ProbeOptionsCommand, ProbeOptionsExecute));
             CommandBindings.Add(new CommandBinding(LogOutputCommand, LogOutputExecute));
@@ -87,9 +105,13 @@ namespace vmPing.Views
             TraceRouteMenu.Command = TraceRouteCommand;
             FloodHostMenu.Command = FloodHostCommand;
             AddMonitorMenu.Command = AddMonitorCommand;
+        }
 
+
+        private void ProcessCommandLineArguments()
+        {
             var commandLineArgs = Environment.GetCommandLineArgs();
-            var errorString = "";
+            var errorString = string.Empty;
             var hostnameList = new List<string>();
 
             for (int index = 1; index < commandLineArgs.Length; ++index)
@@ -137,12 +159,8 @@ namespace vmPing.Views
             }
             else
                 AddHostMonitor(2);
-
-            sliderColumns.Value = _pingItems.Count;
-            icPingItems.ItemsSource = _pingItems;
-
-            RefreshFavorites();
         }
+
 
         private void AlwaysOnTopExecute(object sender, ExecutedRoutedEventArgs e)
         {
@@ -170,19 +188,18 @@ namespace vmPing.Views
         {
             string toggleStatus = StartStopMenuHeader.Text;
 
-            foreach (var pingX in _pingItems)
+            foreach (var pingItem in _pingItems)
             {
-                if (toggleStatus == "_Stop All (F5)" && pingX.IsActive)
-                    PingStartStop(pingX);
-                else if (toggleStatus == "_Start All (F5)" && !pingX.IsActive)
-                    PingStartStop(pingX);
+                if (toggleStatus == "_Stop All (F5)" && pingItem.IsActive)
+                    PingStartStop(pingItem);
+                else if (toggleStatus == "_Start All (F5)" && !pingItem.IsActive)
+                    PingStartStop(pingItem);
             }
         }
 
 
         private void HelpExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            // Display help window.
             ApplicationOptions.BlurWindows();
             var helpWindow = new HelpWindow();
             helpWindow.Owner = this;
@@ -228,21 +245,7 @@ namespace vmPing.Views
             _pingItems.Add(new PingItem());
         }
 
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Set initial focus first text box.
-            if (_pingItems.Count > 0)
-            {
-                var cp = icPingItems.ItemContainerGenerator.ContainerFromIndex(0) as ContentPresenter;
-                var tb = (TextBox)cp.ContentTemplate.FindName("tbHostname", cp);
-
-                if (tb != null)
-                    tb.Focus();
-            }
-        }
-
-
+        
         public void AddHostMonitor(int numberOfHostMonitors)
         {
             for (; numberOfHostMonitors > 0; --numberOfHostMonitors)
@@ -250,18 +253,15 @@ namespace vmPing.Views
         }
 
 
-        public void DisplayReply(PingItem pingItem)
+        public void DisplayIcmpReply(PingItem pingItem)
         {
             if (pingItem.Reply == null)
                 return;
             if (pingItem.PingBackgroundWorker.CancellationPending)
                 return;
 
-            string pingOutput;
-
-            // Prefix the ping reply output with a timestamp.
-            pingOutput = $"[{DateTime.Now.ToLongTimeString()}]  ";
-
+            string pingOutput = $"[{DateTime.Now.ToLongTimeString()}]  ";
+            
             // Read the status code of the ping response.
             switch (pingItem.Reply.Status)
             {
@@ -286,7 +286,7 @@ namespace vmPing.Views
                     pingOutput += "Request timed out.";
                     break;
                 default:
-                    pingOutput = pingOutput + pingItem.Reply.Status.ToString();
+                    pingOutput += pingItem.Reply.Status.ToString();
                     break;
             }
             // Add response to the output window.
@@ -301,45 +301,9 @@ namespace vmPing.Views
                     outputFile.WriteLine(pingOutput.Insert(1, DateTime.Now.ToShortDateString() + " "));
                 }
             }
-
-            // Set the colors of the output window and ping statistics label.
-            if (pingItem.Reply.Status == IPStatus.Success)
-            {
-                // Ping reply received.  Set colors to signify the host is up.
-                pingItem.Brush_OutputBackground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_UP);
-                pingItem.Brush_OutputBackground.Freeze();
-                pingItem.Brush_OutputForeground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_FORECOLOR_ACTIVE);
-                pingItem.Brush_OutputForeground.Freeze();
-                pingItem.Brush_StatsForeground = (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_UP);
-                pingItem.Brush_StatsForeground.Freeze();
-
-                // Send email alert if the option is enabled and there has been a change in status.
-                if (pingItem.IsHostUp == false && _applicationOptions.EmailAlert)
-                    SendEmail("up", pingItem.Hostname);
-
-                // Set status to record that the host is up.
-                pingItem.IsHostUp = true;
-            }
-            else
-            {
-                // Ping timeout or error.  Set colors to signify the host is down.
-                pingItem.Brush_OutputBackground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_DOWN);
-                pingItem.Brush_OutputBackground.Freeze();
-                pingItem.Brush_OutputForeground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_FORECOLOR_ACTIVE);
-                pingItem.Brush_OutputForeground.Freeze();
-                pingItem.Brush_StatsForeground = (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_DOWN);
-                pingItem.Brush_StatsForeground.Freeze();
-
-                // Send email alert if the option is enabled and there has been a change in status.
-                if (pingItem.IsHostUp == true && _applicationOptions.EmailAlert)
-                    SendEmail("down", pingItem.Hostname);
-
-                // Set status to record that the host is down.
-                pingItem.IsHostUp = false;
-            }
         }
 
-        public void DisplayReplyALT(PingItem pingItem, bool isPortOpen, int portnumber, int errorCode)
+        public void DisplayTcpReply(PingItem pingItem, bool isPortOpen, int portnumber, int errorCode)
         {
             if (pingItem.PingBackgroundWorker.CancellationPending)
                 return;
@@ -366,42 +330,6 @@ namespace vmPing.Views
                 {
                     outputFile.WriteLine(pingOutput);
                 }
-            }
-
-            // Set the colors of the output window and ping statistics label.
-            if (isPortOpen)
-            {
-                // Ping reply received.  Set colors to signify the host is up.
-                pingItem.Brush_OutputBackground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_UP);
-                pingItem.Brush_OutputBackground.Freeze();
-                pingItem.Brush_OutputForeground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_FORECOLOR_ACTIVE);
-                pingItem.Brush_OutputForeground.Freeze();
-                pingItem.Brush_StatsForeground = (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_UP);
-                pingItem.Brush_StatsForeground.Freeze();
-
-                // Send email alert if the option is enabled and there has been a change in status.
-                if (pingItem.IsHostUp == false && _applicationOptions.EmailAlert)
-                    SendEmail("up", pingItem.Hostname);
-
-                // Set status to record that the host is up.
-                pingItem.IsHostUp = true;
-            }
-            else
-            {
-                // Ping timeout or error.  Set colors to signify the host is down.
-                pingItem.Brush_OutputBackground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_DOWN);
-                pingItem.Brush_OutputBackground.Freeze();
-                pingItem.Brush_OutputForeground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_FORECOLOR_ACTIVE);
-                pingItem.Brush_OutputForeground.Freeze();
-                pingItem.Brush_StatsForeground = (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_DOWN);
-                pingItem.Brush_StatsForeground.Freeze();
-
-                // Send email alert if the option is enabled and there has been a change in status.
-                if (pingItem.IsHostUp == true && _applicationOptions.EmailAlert)
-                    SendEmail("down", pingItem.Hostname);
-
-                // Set status to record that the host is down.
-                pingItem.IsHostUp = false;
             }
         }
 
@@ -445,14 +373,7 @@ namespace vmPing.Views
         {
             if (pingItem.Hostname == null) return;
             if (pingItem.Hostname.Length == 0) return;
-
-            pingItem.Brush_OutputBackground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_INACTIVE);
-            pingItem.Brush_OutputBackground.Freeze();
-            pingItem.Brush_OutputForeground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_FORECOLOR_INACTIVE);
-            pingItem.Brush_OutputForeground.Freeze();
-            pingItem.Brush_StatsForeground = (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_INACTIVE);
-            pingItem.Brush_StatsForeground.Freeze();
-
+            
             if (!pingItem.IsActive)
             {
                 pingItem.IsActive = true;
@@ -466,9 +387,9 @@ namespace vmPing.Views
                 pingItem.PingBackgroundWorker = new BackgroundWorker();
                 pingItem.PingResetEvent = new AutoResetEvent(false);
                 if (pingItem.Hostname.Count(f => f == ':') == 1)
-                    pingItem.PingBackgroundWorker.DoWork += new DoWorkEventHandler(backgroundThread_DoWorkALT);
+                    pingItem.PingBackgroundWorker.DoWork += new DoWorkEventHandler(backgroundThread_PerformTcpProbe);
                 else
-                    pingItem.PingBackgroundWorker.DoWork += new DoWorkEventHandler(backgroundThread_DoWork);
+                    pingItem.PingBackgroundWorker.DoWork += new DoWorkEventHandler(backgroundThread_PerformIcmpProbe);
                 pingItem.PingBackgroundWorker.WorkerSupportsCancellation = true;
                 pingItem.PingBackgroundWorker.RunWorkerAsync(pingItem);
             }
@@ -476,6 +397,7 @@ namespace vmPing.Views
             {
                 pingItem.PingBackgroundWorker.CancelAsync();
                 pingItem.PingResetEvent.WaitOne();
+                pingItem.Status = PingStatus.Inactive;
                 pingItem.IsActive = false;
             }
 
@@ -491,7 +413,7 @@ namespace vmPing.Views
         }
 
 
-        public void backgroundThread_DoWorkALT(object sender, DoWorkEventArgs e)
+        public void backgroundThread_PerformTcpProbe(object sender, DoWorkEventArgs e)
         {
             var backgroundWorker = sender as BackgroundWorker;
             var pingItem = e.Argument as PingItem;
@@ -508,17 +430,12 @@ namespace vmPing.Views
 
             if (!isPortValid)
             {
-                // Error.  Set colors to signify there was an error and abort!
+                // Error.
                 pingItem.PingOutput += "Invalid port number.";
-                pingItem.Brush_OutputBackground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_ERROR);
-                pingItem.Brush_OutputBackground.Freeze();
-                pingItem.Brush_OutputForeground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_FORECOLOR_ERROR);
-                pingItem.Brush_OutputForeground.Freeze();
-                pingItem.Brush_StatsForeground = (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_ERROR);
-                pingItem.Brush_StatsForeground.Freeze();
-
+                
                 e.Cancel = true;
                 pingItem.PingResetEvent.Set();
+                pingItem.Status = PingStatus.Error;
                 pingItem.IsActive = false;
                 return;
             }
@@ -536,18 +453,40 @@ namespace vmPing.Views
                     try
                     {
                         client.Connect(hostname, portnumber);
+                        if (backgroundWorker.CancellationPending || pingItem.IsActive == false)
+                        {
+                            pingItem.PingResetEvent.Set();
+                            return;
+                        }
+
+                        // Check if email alert is triggered.
+                        if (pingItem.Status != PingStatus.Up && _applicationOptions.EmailAlert)
+                            SendEmail("up", pingItem.Hostname);
+
                         ++pingItem.Statistics.PingsReceived;
+                        pingItem.Status = PingStatus.Up;
                         isPortOpen = true;
                     }
                     catch (SocketException ex)
                     {
+                        if (backgroundWorker.CancellationPending || pingItem.IsActive == false)
+                        {
+                            pingItem.PingResetEvent.Set();
+                            return;
+                        }
+
+                        // Check if email alert is triggered.
+                        if (pingItem.Status != PingStatus.Down && _applicationOptions.EmailAlert)
+                            SendEmail("up", pingItem.Hostname);
+
                         ++pingItem.Statistics.PingsLost;
+                        pingItem.Status = PingStatus.Down;
                         isPortOpen = false;
                         errorCode = ex.ErrorCode;
                     }
                     client.Close();
                 }
-                DisplayReplyALT(pingItem, isPortOpen, portnumber, errorCode);
+                DisplayTcpReply(pingItem, isPortOpen, portnumber, errorCode);
                 DisplayStatistics(pingItem);
                 pingItem.PingResetEvent.Set();
                 Thread.Sleep(5000);
@@ -557,7 +496,7 @@ namespace vmPing.Views
         }
 
 
-        public void backgroundThread_DoWork(object sender, DoWorkEventArgs e)
+        public void backgroundThread_PerformIcmpProbe(object sender, DoWorkEventArgs e)
         {
             var backgroundWorker = sender as BackgroundWorker;
             var pingItem = e.Argument as PingItem;
@@ -572,20 +511,47 @@ namespace vmPing.Views
                 try
                 {
                     pingItem.Reply = pingItem.Sender.Send(pingItem.Hostname, _applicationOptions.PingTimeout, buffer, options);
+                    if (backgroundWorker.CancellationPending || pingItem.IsActive == false)
+                    {
+                        pingItem.PingResetEvent.Set();
+                        return;
+                    }
+
                     ++pingItem.Statistics.PingsSent;
                     if (pingItem.Reply.Status == IPStatus.Success)
+                    {
+                        // Check if email alert is triggered.
+                        if (pingItem.Status != PingStatus.Up && _applicationOptions.EmailAlert)
+                            SendEmail("up", pingItem.Hostname);
+
                         ++pingItem.Statistics.PingsReceived;
+                        pingItem.Status = PingStatus.Up;
+                    }
                     else if (pingItem.Reply.Status == IPStatus.TimedOut ||
                         pingItem.Reply.Status == IPStatus.DestinationHostUnreachable ||
                         pingItem.Reply.Status == IPStatus.DestinationNetworkUnreachable ||
                         pingItem.Reply.Status == IPStatus.DestinationUnreachable
                         )
+                    {
+                        // Check if email alert is triggered.
+                        if (pingItem.Status != PingStatus.Down && _applicationOptions.EmailAlert)
+                            SendEmail("down", pingItem.Hostname);
+
                         ++pingItem.Statistics.PingsLost;
+                        pingItem.Status = PingStatus.Down;
+                    }
                     else
+                    {
+                        // Check if email alert is triggered.
+                        if (pingItem.Status != PingStatus.Down && _applicationOptions.EmailAlert)
+                            SendEmail("down", pingItem.Hostname);
+
                         ++pingItem.Statistics.PingsError;
+                        pingItem.Status = PingStatus.Down;
+                    }
 
                     DisplayStatistics(pingItem);
-                    DisplayReply(pingItem);
+                    DisplayIcmpReply(pingItem);
                     pingItem.PingResetEvent.Set();
 
                     if (pingItem.Reply.Status == IPStatus.TimedOut)
@@ -605,36 +571,22 @@ namespace vmPing.Views
                 }
                 catch (PingException ex)
                 {
-                    if (ex.InnerException is System.Net.Sockets.SocketException)
-                        pingItem.PingOutput = pingItem.PingOutput + "Unable to resolve hostname.";
+                    if (ex.InnerException is SocketException)
+                        pingItem.PingOutput += "Unable to resolve hostname.";
                     else
-                        pingItem.PingOutput = pingItem.PingOutput + ex.InnerException.Message;
-
-                    // Ping error.  Set colors to signify there was an error.
-                    pingItem.Brush_OutputBackground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_ERROR);
-                    pingItem.Brush_OutputBackground.Freeze();
-                    pingItem.Brush_OutputForeground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_FORECOLOR_ERROR);
-                    pingItem.Brush_OutputForeground.Freeze();
-                    pingItem.Brush_StatsForeground = (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_ERROR);
-                    pingItem.Brush_StatsForeground.Freeze();
-
+                        pingItem.PingOutput += ex.InnerException.Message;
+                    
                     e.Cancel = true;
+                    pingItem.Status = PingStatus.Error;
                     pingItem.PingResetEvent.Set();
                     pingItem.IsActive = false;
                     return;
                 }
                 catch
                 {
-                    // Ping error.  Set colors to signify there was an error.
-                    pingItem.Brush_OutputBackground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_ERROR);
-                    pingItem.Brush_OutputForeground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_FORECOLOR_ERROR);
-                    pingItem.Brush_StatsForeground = (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_ERROR);
-                    pingItem.Brush_OutputBackground.Freeze();
-                    pingItem.Brush_OutputForeground.Freeze();
-                    pingItem.Brush_StatsForeground.Freeze();
-
                     e.Cancel = true;
                     pingItem.PingResetEvent.Set();
+                    pingItem.Status = PingStatus.Error;
                     pingItem.IsActive = false;
                     return;
                 }
@@ -674,6 +626,14 @@ namespace vmPing.Views
                     if (tb != null)
                         tb.Focus();
                 }
+            }
+        }
+
+        private void CheckEmailAlertTriggers(PingStatus previousStatus, PingStatus newStatus)
+        {
+            if (_applicationOptions.EmailAlert && (previousStatus != newStatus))
+            {
+
             }
         }
 
@@ -755,6 +715,7 @@ namespace vmPing.Views
             DisplayProbeOptions();
         }
 
+
         private void ToggleAlwaysOnTop()
         {
             _applicationOptions.AlwaysOnTop = mnuOnTop.IsChecked;
@@ -762,6 +723,7 @@ namespace vmPing.Views
             foreach (Window window in Application.Current.Windows)
                 window.Topmost = _applicationOptions.AlwaysOnTop;
         }
+
 
         private void DisplayEmailAlerts()
         {
@@ -782,6 +744,7 @@ namespace vmPing.Views
 
             ApplicationOptions.RemoveBlurWindows();
         }
+
 
         private void DisplayLogOutput()
         {

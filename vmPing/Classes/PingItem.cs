@@ -7,6 +7,14 @@ using System.Windows.Media;
 
 namespace vmPing.Classes
 {
+    public enum PingStatus
+    {
+        Up,
+        Down,
+        Error,
+        Inactive
+    }
+
     public class PingItem : INotifyPropertyChanged
     {
         public static int NumberOfActivePings;
@@ -19,7 +27,20 @@ namespace vmPing.Classes
         public PingStatistics Statistics { get; set; }
         public PingReply Reply { get; set; }
         public Ping Sender { get; set; }
-        public bool IsHostUp { get; set; }
+
+        private PingStatus status = PingStatus.Inactive;
+        public PingStatus Status
+        {
+            get { return status; }
+            set
+            {
+                if (value != status)
+                {
+                    status = value;
+                    NotifyPropertyChanged("Status");
+                }
+            }
+        }
 
         private bool isActive = false;
         public bool IsActive
@@ -37,48 +58,6 @@ namespace vmPing.Classes
                 {
                     isActive = value;
                     NotifyPropertyChanged("IsActive");
-                }
-            }
-        }
-
-        private Brush brush_OutputBackground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_INACTIVE);
-        public Brush Brush_OutputBackground
-        {
-            get { return brush_OutputBackground; }
-            set
-            {
-                if (value != brush_OutputBackground)
-                {
-                    brush_OutputBackground = value;
-                    NotifyPropertyChanged("Brush_OutputBackground");
-                }
-            }
-        }
-
-        private Brush brush_OutputForeground = (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_FORECOLOR_INACTIVE);
-        public Brush Brush_OutputForeground
-        {
-            get { return brush_OutputForeground; }
-            set
-            {
-                if (value != brush_OutputForeground)
-                {
-                    brush_OutputForeground = value;
-                    NotifyPropertyChanged("Brush_OutputForeground");
-                }
-            }
-        }
-
-        private Brush brush_StatsForeground = (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_INACTIVE);
-        public Brush Brush_StatsForeground
-        {
-            get { return brush_StatsForeground; }
-            set
-            {
-                if (value != brush_StatsForeground)
-                {
-                    brush_StatsForeground = value;
-                    NotifyPropertyChanged("Brush_StatsForeground");
                 }
             }
         }

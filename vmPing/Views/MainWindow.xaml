@@ -210,6 +210,7 @@
                                          TextChanged="txtOutput_TextChanged"
                                          IsTabStop="False"
                                          IsReadOnly="True"
+                                         IsUndoEnabled="False"
                                          IsEnabled="False"
                                          Background="{Binding Status, Converter={StaticResource PingStatusToBackgroundBrushConverter}}"
                                          Foreground="{Binding Status, Converter={StaticResource PingStatusToForegroundBrushConverter}}"

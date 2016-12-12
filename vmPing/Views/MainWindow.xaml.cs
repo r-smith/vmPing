@@ -160,6 +160,452 @@ namespace vmPing.Views
             else
                 AddHostMonitor(2);
         }
+        
+        
+        public void AddHostMonitor(int numberOfHostMonitors)
+        {
+            for (; numberOfHostMonitors > 0; --numberOfHostMonitors)
+                _pingItems.Add(new PingItem());
+        }
+        
+        
+        public void btnPing_Click(object sender, EventArgs e)
+        {
+            var pingButton = sender as Button;
+            var pingItem = pingButton.DataContext as PingItem;
+
+            PingStartStop(pingItem);
+        }
+
+
+        public void PingStartStop(PingItem pingItem)
+        {
+            if (pingItem.Hostname == null) return;
+            if (pingItem.Hostname.Length == 0) return;
+            
+            if (!pingItem.IsActive)
+            {
+                pingItem.IsActive = true;
+
+                if (pingItem.PingBackgroundWorker != null)
+                    pingItem.PingBackgroundWorker.CancelAsync();
+
+                pingItem.PingStatisticsText = string.Empty;
+                pingItem.PingOutput = $"*** Pinging {pingItem.Hostname}:{Environment.NewLine}";
+
+                pingItem.PingBackgroundWorker = new BackgroundWorker();
+                pingItem.PingResetEvent = new AutoResetEvent(false);
+                if (pingItem.Hostname.Count(f => f == ':') == 1)
+                    pingItem.PingBackgroundWorker.DoWork += new DoWorkEventHandler(backgroundThread_PerformTcpProbe);
+                else
+                    pingItem.PingBackgroundWorker.DoWork += new DoWorkEventHandler(backgroundThread_PerformIcmpProbe);
+                pingItem.PingBackgroundWorker.WorkerSupportsCancellation = true;
+                pingItem.PingBackgroundWorker.RunWorkerAsync(pingItem);
+            }
+            else
+            {
+                pingItem.PingBackgroundWorker.CancelAsync();
+                pingItem.PingResetEvent.WaitOne();
+                pingItem.Status = PingStatus.Inactive;
+                pingItem.IsActive = false;
+            }
+
+            RefreshGlobalStartStop();
+        }
+
+
+        public void RefreshGlobalStartStop()
+        {
+            // Check if any pings are in progress and update the start/stop all toggle accordingly.
+            bool isActive = false;
+            foreach (PingItem pingItem in _pingItems)
+            {
+                if (pingItem.IsActive)
+                {
+                    isActive = true;
+                    break;
+                }
+            }
+
+            if (isActive)
+            {
+                StartStopMenuHeader.Text = "_Stop All (F5)";
+                StartStopMenuImage.Source = new BitmapImage(new Uri(@"/Resources/stopCircle-16.png", UriKind.Relative));
+            }
+            else
+            {
+                StartStopMenuHeader.Text = "_Start All (F5)";
+                StartStopMenuImage.Source = new BitmapImage(new Uri(@"/Resources/play-16.png", UriKind.Relative));
+            }
+        }
+
+
+        public void backgroundThread_PerformIcmpProbe(object sender, DoWorkEventArgs e)
+        {
+            var backgroundWorker = sender as BackgroundWorker;
+            var pingItem = e.Argument as PingItem;
+
+            pingItem.Statistics = new PingStatistics();
+            var buffer = Encoding.ASCII.GetBytes(Constants.PING_DATA);
+            var options = new PingOptions(Constants.PING_TTL, true);
+
+            using (pingItem.Sender = new Ping())
+            {
+                while (!backgroundWorker.CancellationPending && pingItem.IsActive)
+                {
+                    try
+                    {
+                        pingItem.Reply = pingItem.Sender.Send(pingItem.Hostname, _applicationOptions.PingTimeout, buffer, options);
+                        if (backgroundWorker.CancellationPending || pingItem.IsActive == false)
+                        {
+                            pingItem.PingResetEvent.Set();
+                            return;
+                        }
+
+                        ++pingItem.Statistics.PingsSent;
+                        if (pingItem.Reply.Status == IPStatus.Success)
+                        {
+                            // Check if email alert is triggered.
+                            if (pingItem.Status != PingStatus.Up && _applicationOptions.EmailAlert)
+                                SendEmail("up", pingItem.Hostname);
+
+                            ++pingItem.Statistics.PingsReceived;
+                            pingItem.Status = PingStatus.Up;
+                        }
+                        else if (pingItem.Reply.Status == IPStatus.TimedOut ||
+                            pingItem.Reply.Status == IPStatus.DestinationHostUnreachable ||
+                            pingItem.Reply.Status == IPStatus.DestinationNetworkUnreachable ||
+                            pingItem.Reply.Status == IPStatus.DestinationUnreachable
+                            )
+                        {
+                            // Check if email alert is triggered.
+                            if (pingItem.Status != PingStatus.Down && _applicationOptions.EmailAlert)
+                                SendEmail("down", pingItem.Hostname);
+
+                            ++pingItem.Statistics.PingsLost;
+                            pingItem.Status = PingStatus.Down;
+                        }
+                        else
+                        {
+                            // Check if email alert is triggered.
+                            if (pingItem.Status != PingStatus.Down && _applicationOptions.EmailAlert)
+                                SendEmail("down", pingItem.Hostname);
+
+                            ++pingItem.Statistics.PingsError;
+                            pingItem.Status = PingStatus.Down;
+                        }
+
+                        DisplayStatistics(pingItem);
+                        DisplayIcmpReply(pingItem);
+                        pingItem.PingResetEvent.Set();
+
+                        if (pingItem.Reply.Status == IPStatus.TimedOut)
+                        {
+                            // Ping timed out.  If the ping interval is greater than the timeout,
+                            // then sleep for [INTERVAL - TIMEOUT]
+                            // Otherwise, sleep for a fixed amount of 1 second
+                            if (_applicationOptions.PingInterval > _applicationOptions.PingTimeout)
+                                Thread.Sleep(_applicationOptions.PingInterval - _applicationOptions.PingTimeout);
+                            else
+                                Thread.Sleep(1000);
+                        }
+                        else
+                            // For any other type of ping response, sleep for the global ping interval amount
+                            // before sending another ping.
+                            Thread.Sleep(_applicationOptions.PingInterval);
+                    }
+                    catch (PingException ex)
+                    {
+                        if (ex.InnerException is SocketException)
+                            pingItem.PingOutput += "Unable to resolve hostname.";
+                        else
+                            pingItem.PingOutput += ex.InnerException.Message;
+
+                        e.Cancel = true;
+                        pingItem.Status = PingStatus.Error;
+                        pingItem.PingResetEvent.Set();
+                        pingItem.IsActive = false;
+                        return;
+                    }
+                    catch
+                    {
+                        e.Cancel = true;
+                        pingItem.PingResetEvent.Set();
+                        pingItem.Status = PingStatus.Error;
+                        pingItem.IsActive = false;
+                        return;
+                    }
+                }
+            }
+
+            pingItem.PingResetEvent.Set();
+        }
+
+        public void backgroundThread_PerformTcpProbe(object sender, DoWorkEventArgs e)
+        {
+            var backgroundWorker = sender as BackgroundWorker;
+            var pingItem = e.Argument as PingItem;
+
+            var hostAndPort = pingItem.Hostname.Split(':');
+            string hostname = hostAndPort[0];
+            int portnumber;
+            bool isPortValid;
+            bool isPortOpen = false;
+            if (int.TryParse(hostAndPort[1], out portnumber) && portnumber >= 1 && portnumber <= 65535)
+                isPortValid = true;
+            else
+                isPortValid = false;
+
+            if (!isPortValid)
+            {
+                // Error.
+                pingItem.PingOutput += "Invalid port number.";
+                
+                e.Cancel = true;
+                pingItem.PingResetEvent.Set();
+                pingItem.Status = PingStatus.Error;
+                pingItem.IsActive = false;
+                return;
+            }
+
+            pingItem.Statistics = new PingStatistics();
+            int errorCode = 0;
+
+
+            while (!backgroundWorker.CancellationPending && pingItem.IsActive)
+            {
+                using (TcpClient client = new TcpClient())
+                {
+                    ++pingItem.Statistics.PingsSent;
+                    DisplayStatistics(pingItem);
+                    try
+                    {
+                        client.Connect(hostname, portnumber);
+                        if (backgroundWorker.CancellationPending || pingItem.IsActive == false)
+                        {
+                            pingItem.PingResetEvent.Set();
+                            return;
+                        }
+
+                        // Check if email alert is triggered.
+                        if (pingItem.Status != PingStatus.Up && _applicationOptions.EmailAlert)
+                            SendEmail("up", pingItem.Hostname);
+
+                        ++pingItem.Statistics.PingsReceived;
+                        pingItem.Status = PingStatus.Up;
+                        isPortOpen = true;
+                    }
+                    catch (SocketException ex)
+                    {
+                        if (backgroundWorker.CancellationPending || pingItem.IsActive == false)
+                        {
+                            pingItem.PingResetEvent.Set();
+                            return;
+                        }
+
+                        // Check if email alert is triggered.
+                        if (pingItem.Status != PingStatus.Down && _applicationOptions.EmailAlert)
+                            SendEmail("up", pingItem.Hostname);
+
+                        ++pingItem.Statistics.PingsLost;
+                        pingItem.Status = PingStatus.Down;
+                        isPortOpen = false;
+                        errorCode = ex.ErrorCode;
+                    }
+                    client.Close();
+                }
+                DisplayTcpReply(pingItem, isPortOpen, portnumber, errorCode);
+                DisplayStatistics(pingItem);
+                pingItem.PingResetEvent.Set();
+                Thread.Sleep(5000);
+            }
+
+            pingItem.PingResetEvent.Set();
+        }
+
+
+        public void DisplayIcmpReply(PingItem pingItem)
+        {
+            if (pingItem.Reply == null)
+                return;
+            if (pingItem.PingBackgroundWorker.CancellationPending)
+                return;
+
+            string pingOutput = $"[{DateTime.Now.ToLongTimeString()}]  ";
+
+            // Read the status code of the ping response.
+            switch (pingItem.Reply.Status)
+            {
+                case IPStatus.Success:
+                    pingOutput += "Reply from ";
+                    pingOutput += pingItem.Reply.Address.ToString();
+                    if (pingItem.Reply.RoundtripTime < 1)
+                        pingOutput += "  [<1ms]";
+                    else
+                        pingOutput += $"  [{pingItem.Reply.RoundtripTime} ms]";
+                    break;
+                case IPStatus.DestinationHostUnreachable:
+                    pingOutput += "Reply  [Host unreachable]";
+                    break;
+                case IPStatus.DestinationNetworkUnreachable:
+                    pingOutput += "Reply  [Network unreachable]";
+                    break;
+                case IPStatus.DestinationUnreachable:
+                    pingOutput += "Reply  [Unreachable]";
+                    break;
+                case IPStatus.TimedOut:
+                    pingOutput += "Request timed out.";
+                    break;
+                default:
+                    pingOutput += pingItem.Reply.Status.ToString();
+                    break;
+            }
+            // Add response to the output window.
+            pingItem.PingOutput += pingOutput + Environment.NewLine;
+
+            // If logging is enabled, write the response to a file.
+            if (_applicationOptions.LogOutput && _applicationOptions.LogPath.Length > 0)
+            {
+                var logPath = $@"{_applicationOptions.LogPath}\{pingItem.Hostname}.txt";
+                using (System.IO.StreamWriter outputFile = new System.IO.StreamWriter(@logPath, true))
+                {
+                    outputFile.WriteLine(pingOutput.Insert(1, DateTime.Now.ToShortDateString() + " "));
+                }
+            }
+        }
+
+        public void DisplayTcpReply(PingItem pingItem, bool isPortOpen, int portnumber, int errorCode)
+        {
+            if (pingItem.PingBackgroundWorker.CancellationPending)
+                return;
+
+            string pingOutput;
+
+            // Prefix the ping reply output with a timestamp.
+            pingOutput = $"[{DateTime.Now.ToLongTimeString()}]  Port {portnumber.ToString()}: ";
+            if (isPortOpen)
+                pingOutput += "OPEN";
+            else
+            {
+                pingOutput += "CLOSED";
+            }
+
+            // Add response to the output window.
+            pingItem.PingOutput += pingOutput + Environment.NewLine;
+
+            // If logging is enabled, write the response to a file.
+            if (_applicationOptions.LogOutput && _applicationOptions.LogPath.Length > 0)
+            {
+                var logPath = $@"{_applicationOptions.LogPath}\{pingItem.Hostname}.txt";
+                using (System.IO.StreamWriter outputFile = new System.IO.StreamWriter(@logPath, true))
+                {
+                    outputFile.WriteLine(pingOutput);
+                }
+            }
+        }
+
+
+        public void DisplayStatistics(PingItem pingItem)
+        {
+            // Update the ping statistics label with the current
+            // number of pings sent, received, and lost.
+            pingItem.PingStatisticsText =
+                $"Sent: {pingItem.Statistics.PingsSent} Received: {pingItem.Statistics.PingsReceived} Lost: {pingItem.Statistics.PingsLost}";
+        }
+
+
+        private void txtOutput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            var textBoxAncestor = textBox.Parent;
+            var svTextBox = textBoxAncestor as ScrollViewer;
+            svTextBox.ScrollToBottom();
+        }
+
+        private void sliderColumns_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (sliderColumns.Value > _pingItems.Count)
+                sliderColumns.Value = _pingItems.Count;
+        }
+
+        private void tbHostname_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var pingTB = sender as TextBox;
+                var pingItem = pingTB.DataContext as PingItem;
+                PingStartStop(pingItem);
+
+                int index = _pingItems.IndexOf(pingItem);
+                if (index < _pingItems.Count - 1)
+                {
+                    var cp = icPingItems.ItemContainerGenerator.ContainerFromIndex(index + 1) as ContentPresenter;
+                    var tb = (TextBox)cp.ContentTemplate.FindName("tbHostname", cp);
+
+                    if (tb != null)
+                        tb.Focus();
+                }
+            }
+        }
+
+        
+        private void btnRemove_Click(object sender, RoutedEventArgs e)
+        {
+            if (_pingItems.Count <= 1)
+                return;
+
+            var pingButton = sender as Button;
+            var pingItem = pingButton.DataContext as PingItem;
+            if (pingItem.PingBackgroundWorker != null)
+                pingItem.PingBackgroundWorker.CancelAsync();
+            _pingItems.Remove(pingItem);
+            if (sliderColumns.Value > _pingItems.Count)
+                sliderColumns.Value = _pingItems.Count;
+        }
+
+
+        public void SendEmail(string hostStatus, string hostName)
+        {
+            var serverAddress = _applicationOptions.EmailServer;
+            var mailFromAddress = _applicationOptions.EmailFromAddress;
+            var mailFromFriendly = "vmPing";
+            var mailToAddress = _applicationOptions.EmailRecipient;
+            var mailSubject = $"[vmPing] {hostName} <> Host {hostStatus}";
+            var mailBody =
+                $"{hostName} is {hostStatus}.{Environment.NewLine}" +
+                $"{DateTime.Now.ToLongDateString()}  {DateTime.Now.ToLongTimeString()}";
+
+            var message = new MailMessage();
+
+            try
+            {
+                var smtpClient = new SmtpClient();
+                MailAddress fromAddress;
+                if (mailFromFriendly.Length > 0)
+                    fromAddress = new MailAddress(mailFromAddress, mailFromFriendly);
+                else
+                    fromAddress = new MailAddress(mailFromAddress);
+
+                smtpClient.Host = serverAddress;
+
+                message.From = fromAddress;
+                message.Subject = mailSubject;
+                message.Body = mailBody;
+
+                message.To.Add(mailToAddress);
+
+                //Send the email.
+                smtpClient.Send(message);
+            }
+            catch
+            {
+                // There was an error sending Email.
+            }
+            finally
+            {
+                message.Dispose();
+            }
+        }
 
 
         private void AlwaysOnTopExecute(object sender, ExecutedRoutedEventArgs e)
@@ -245,455 +691,6 @@ namespace vmPing.Views
             _pingItems.Add(new PingItem());
         }
 
-        
-        public void AddHostMonitor(int numberOfHostMonitors)
-        {
-            for (; numberOfHostMonitors > 0; --numberOfHostMonitors)
-                _pingItems.Add(new PingItem());
-        }
-
-
-        public void DisplayIcmpReply(PingItem pingItem)
-        {
-            if (pingItem.Reply == null)
-                return;
-            if (pingItem.PingBackgroundWorker.CancellationPending)
-                return;
-
-            string pingOutput = $"[{DateTime.Now.ToLongTimeString()}]  ";
-            
-            // Read the status code of the ping response.
-            switch (pingItem.Reply.Status)
-            {
-                case IPStatus.Success:
-                    pingOutput += "Reply from ";
-                    pingOutput += pingItem.Reply.Address.ToString();
-                    if (pingItem.Reply.RoundtripTime < 1)
-                        pingOutput += "  [<1ms]";
-                    else
-                        pingOutput += $"  [{pingItem.Reply.RoundtripTime} ms]";
-                    break;
-                case IPStatus.DestinationHostUnreachable:
-                    pingOutput += "Reply  [Host unreachable]";
-                    break;
-                case IPStatus.DestinationNetworkUnreachable:
-                    pingOutput += "Reply  [Network unreachable]";
-                    break;
-                case IPStatus.DestinationUnreachable:
-                    pingOutput += "Reply  [Unreachable]";
-                    break;
-                case IPStatus.TimedOut:
-                    pingOutput += "Request timed out.";
-                    break;
-                default:
-                    pingOutput += pingItem.Reply.Status.ToString();
-                    break;
-            }
-            // Add response to the output window.
-            pingItem.PingOutput += pingOutput + Environment.NewLine;
-
-            // If logging is enabled, write the response to a file.
-            if (_applicationOptions.LogOutput && _applicationOptions.LogPath.Length > 0)
-            {
-                var logPath = $@"{_applicationOptions.LogPath}\{pingItem.Hostname}.txt";
-                using (System.IO.StreamWriter outputFile = new System.IO.StreamWriter(@logPath, true))
-                {
-                    outputFile.WriteLine(pingOutput.Insert(1, DateTime.Now.ToShortDateString() + " "));
-                }
-            }
-        }
-
-        public void DisplayTcpReply(PingItem pingItem, bool isPortOpen, int portnumber, int errorCode)
-        {
-            if (pingItem.PingBackgroundWorker.CancellationPending)
-                return;
-
-            string pingOutput;
-
-            // Prefix the ping reply output with a timestamp.
-            pingOutput = $"[{DateTime.Now.ToLongTimeString()}]  Port {portnumber.ToString()}: ";
-            if (isPortOpen)
-                pingOutput += "OPEN";
-            else
-            {
-                pingOutput += "CLOSED";
-            }
-
-            // Add response to the output window.
-            pingItem.PingOutput += pingOutput + Environment.NewLine;
-
-            // If logging is enabled, write the response to a file.
-            if (_applicationOptions.LogOutput && _applicationOptions.LogPath.Length > 0)
-            {
-                var logPath = $@"{_applicationOptions.LogPath}\{pingItem.Hostname}.txt";
-                using (System.IO.StreamWriter outputFile = new System.IO.StreamWriter(@logPath, true))
-                {
-                    outputFile.WriteLine(pingOutput);
-                }
-            }
-        }
-
-
-        public void DisplayStatistics(PingItem pingItem)
-        {
-            // Update the ping statistics label with the current
-            // number of pings sent, received, and lost.
-            pingItem.PingStatisticsText =
-                $"Sent: {pingItem.Statistics.PingsSent} Received: {pingItem.Statistics.PingsReceived} Lost: {pingItem.Statistics.PingsLost}";
-        }
-
-
-        public void RefreshGlobalStartStop()
-        {
-            // Check if any pings are in progress and update the start/stop all toggle accordingly.
-            bool isActive = false;
-            foreach (PingItem pingItem in _pingItems)
-            {
-                if (pingItem.IsActive)
-                {
-                    isActive = true;
-                    break;
-                }
-            }
-
-            if (isActive)
-            {
-                StartStopMenuHeader.Text = "_Stop All (F5)";
-                StartStopMenuImage.Source = new BitmapImage(new Uri(@"/Resources/stopCircle-16.png", UriKind.Relative));
-            }
-            else
-            {
-                StartStopMenuHeader.Text = "_Start All (F5)";
-                StartStopMenuImage.Source = new BitmapImage(new Uri(@"/Resources/play-16.png", UriKind.Relative));
-            }
-        }
-
-
-        public void PingStartStop(PingItem pingItem)
-        {
-            if (pingItem.Hostname == null) return;
-            if (pingItem.Hostname.Length == 0) return;
-            
-            if (!pingItem.IsActive)
-            {
-                pingItem.IsActive = true;
-
-                if (pingItem.PingBackgroundWorker != null)
-                    pingItem.PingBackgroundWorker.CancelAsync();
-
-                pingItem.PingStatisticsText = string.Empty;
-                pingItem.PingOutput = $"*** Pinging {pingItem.Hostname}:{Environment.NewLine}";
-
-                pingItem.PingBackgroundWorker = new BackgroundWorker();
-                pingItem.PingResetEvent = new AutoResetEvent(false);
-                if (pingItem.Hostname.Count(f => f == ':') == 1)
-                    pingItem.PingBackgroundWorker.DoWork += new DoWorkEventHandler(backgroundThread_PerformTcpProbe);
-                else
-                    pingItem.PingBackgroundWorker.DoWork += new DoWorkEventHandler(backgroundThread_PerformIcmpProbe);
-                pingItem.PingBackgroundWorker.WorkerSupportsCancellation = true;
-                pingItem.PingBackgroundWorker.RunWorkerAsync(pingItem);
-            }
-            else
-            {
-                pingItem.PingBackgroundWorker.CancelAsync();
-                pingItem.PingResetEvent.WaitOne();
-                pingItem.Status = PingStatus.Inactive;
-                pingItem.IsActive = false;
-            }
-
-            RefreshGlobalStartStop();
-        }
-
-        public void btnPing_Click(object sender, EventArgs e)
-        {
-            var pingButton = sender as Button;
-            var pingItem = pingButton.DataContext as PingItem;
-
-            PingStartStop(pingItem);
-        }
-
-
-        public void backgroundThread_PerformTcpProbe(object sender, DoWorkEventArgs e)
-        {
-            var backgroundWorker = sender as BackgroundWorker;
-            var pingItem = e.Argument as PingItem;
-
-            var hostAndPort = pingItem.Hostname.Split(':');
-            string hostname = hostAndPort[0];
-            int portnumber;
-            bool isPortValid;
-            bool isPortOpen = false;
-            if (int.TryParse(hostAndPort[1], out portnumber) && portnumber >= 1 && portnumber <= 65535)
-                isPortValid = true;
-            else
-                isPortValid = false;
-
-            if (!isPortValid)
-            {
-                // Error.
-                pingItem.PingOutput += "Invalid port number.";
-                
-                e.Cancel = true;
-                pingItem.PingResetEvent.Set();
-                pingItem.Status = PingStatus.Error;
-                pingItem.IsActive = false;
-                return;
-            }
-
-            pingItem.Statistics = new PingStatistics();
-            int errorCode = 0;
-
-
-            while (!backgroundWorker.CancellationPending && pingItem.IsActive)
-            {
-                using (TcpClient client = new TcpClient())
-                {
-                    ++pingItem.Statistics.PingsSent;
-                    DisplayStatistics(pingItem);
-                    try
-                    {
-                        client.Connect(hostname, portnumber);
-                        if (backgroundWorker.CancellationPending || pingItem.IsActive == false)
-                        {
-                            pingItem.PingResetEvent.Set();
-                            return;
-                        }
-
-                        // Check if email alert is triggered.
-                        if (pingItem.Status != PingStatus.Up && _applicationOptions.EmailAlert)
-                            SendEmail("up", pingItem.Hostname);
-
-                        ++pingItem.Statistics.PingsReceived;
-                        pingItem.Status = PingStatus.Up;
-                        isPortOpen = true;
-                    }
-                    catch (SocketException ex)
-                    {
-                        if (backgroundWorker.CancellationPending || pingItem.IsActive == false)
-                        {
-                            pingItem.PingResetEvent.Set();
-                            return;
-                        }
-
-                        // Check if email alert is triggered.
-                        if (pingItem.Status != PingStatus.Down && _applicationOptions.EmailAlert)
-                            SendEmail("up", pingItem.Hostname);
-
-                        ++pingItem.Statistics.PingsLost;
-                        pingItem.Status = PingStatus.Down;
-                        isPortOpen = false;
-                        errorCode = ex.ErrorCode;
-                    }
-                    client.Close();
-                }
-                DisplayTcpReply(pingItem, isPortOpen, portnumber, errorCode);
-                DisplayStatistics(pingItem);
-                pingItem.PingResetEvent.Set();
-                Thread.Sleep(5000);
-            }
-
-            pingItem.PingResetEvent.Set();
-        }
-
-
-        public void backgroundThread_PerformIcmpProbe(object sender, DoWorkEventArgs e)
-        {
-            var backgroundWorker = sender as BackgroundWorker;
-            var pingItem = e.Argument as PingItem;
-
-            pingItem.Statistics = new PingStatistics();
-            pingItem.Sender = new Ping();
-            var buffer = Encoding.ASCII.GetBytes(Constants.PING_DATA);
-            var options = new PingOptions(Constants.PING_TTL, true);
-
-            while (!backgroundWorker.CancellationPending && pingItem.IsActive)
-            {
-                try
-                {
-                    pingItem.Reply = pingItem.Sender.Send(pingItem.Hostname, _applicationOptions.PingTimeout, buffer, options);
-                    if (backgroundWorker.CancellationPending || pingItem.IsActive == false)
-                    {
-                        pingItem.PingResetEvent.Set();
-                        return;
-                    }
-
-                    ++pingItem.Statistics.PingsSent;
-                    if (pingItem.Reply.Status == IPStatus.Success)
-                    {
-                        // Check if email alert is triggered.
-                        if (pingItem.Status != PingStatus.Up && _applicationOptions.EmailAlert)
-                            SendEmail("up", pingItem.Hostname);
-
-                        ++pingItem.Statistics.PingsReceived;
-                        pingItem.Status = PingStatus.Up;
-                    }
-                    else if (pingItem.Reply.Status == IPStatus.TimedOut ||
-                        pingItem.Reply.Status == IPStatus.DestinationHostUnreachable ||
-                        pingItem.Reply.Status == IPStatus.DestinationNetworkUnreachable ||
-                        pingItem.Reply.Status == IPStatus.DestinationUnreachable
-                        )
-                    {
-                        // Check if email alert is triggered.
-                        if (pingItem.Status != PingStatus.Down && _applicationOptions.EmailAlert)
-                            SendEmail("down", pingItem.Hostname);
-
-                        ++pingItem.Statistics.PingsLost;
-                        pingItem.Status = PingStatus.Down;
-                    }
-                    else
-                    {
-                        // Check if email alert is triggered.
-                        if (pingItem.Status != PingStatus.Down && _applicationOptions.EmailAlert)
-                            SendEmail("down", pingItem.Hostname);
-
-                        ++pingItem.Statistics.PingsError;
-                        pingItem.Status = PingStatus.Down;
-                    }
-
-                    DisplayStatistics(pingItem);
-                    DisplayIcmpReply(pingItem);
-                    pingItem.PingResetEvent.Set();
-
-                    if (pingItem.Reply.Status == IPStatus.TimedOut)
-                    {
-                        // Ping timed out.  If the ping interval is greater than the timeout,
-                        // then sleep for [INTERVAL - TIMEOUT]
-                        // Otherwise, sleep for a fixed amount of 1 second
-                        if (_applicationOptions.PingInterval > _applicationOptions.PingTimeout)
-                            Thread.Sleep(_applicationOptions.PingInterval - _applicationOptions.PingTimeout);
-                        else
-                            Thread.Sleep(1000);
-                    }
-                    else
-                        // For any other type of ping response, sleep for the global ping interval amount
-                        // before sending another ping.
-                        Thread.Sleep(_applicationOptions.PingInterval);
-                }
-                catch (PingException ex)
-                {
-                    if (ex.InnerException is SocketException)
-                        pingItem.PingOutput += "Unable to resolve hostname.";
-                    else
-                        pingItem.PingOutput += ex.InnerException.Message;
-                    
-                    e.Cancel = true;
-                    pingItem.Status = PingStatus.Error;
-                    pingItem.PingResetEvent.Set();
-                    pingItem.IsActive = false;
-                    return;
-                }
-                catch
-                {
-                    e.Cancel = true;
-                    pingItem.PingResetEvent.Set();
-                    pingItem.Status = PingStatus.Error;
-                    pingItem.IsActive = false;
-                    return;
-                }
-            }
-
-            pingItem.PingResetEvent.Set();
-        }
-
-        private void txtOutput_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            var textBoxAncestor = textBox.Parent;
-            var svTextBox = textBoxAncestor as ScrollViewer;
-            svTextBox.ScrollToBottom();
-        }
-
-        private void sliderColumns_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (sliderColumns.Value > _pingItems.Count)
-                sliderColumns.Value = _pingItems.Count;
-        }
-
-        private void tbHostname_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                var pingTB = sender as TextBox;
-                var pingItem = pingTB.DataContext as PingItem;
-                PingStartStop(pingItem);
-
-                int index = _pingItems.IndexOf(pingItem);
-                if (index < _pingItems.Count - 1)
-                {
-                    var cp = icPingItems.ItemContainerGenerator.ContainerFromIndex(index + 1) as ContentPresenter;
-                    var tb = (TextBox)cp.ContentTemplate.FindName("tbHostname", cp);
-
-                    if (tb != null)
-                        tb.Focus();
-                }
-            }
-        }
-
-        private void CheckEmailAlertTriggers(PingStatus previousStatus, PingStatus newStatus)
-        {
-            if (_applicationOptions.EmailAlert && (previousStatus != newStatus))
-            {
-
-            }
-        }
-
-        private void btnRemove_Click(object sender, RoutedEventArgs e)
-        {
-            if (_pingItems.Count <= 1)
-                return;
-
-            var pingButton = sender as Button;
-            var pingItem = pingButton.DataContext as PingItem;
-            if (pingItem.PingBackgroundWorker != null)
-                pingItem.PingBackgroundWorker.CancelAsync();
-            _pingItems.Remove(pingItem);
-            if (sliderColumns.Value > _pingItems.Count)
-                sliderColumns.Value = _pingItems.Count;
-        }
-
-
-        public void SendEmail(string hostStatus, string hostName)
-        {
-            var serverAddress = _applicationOptions.EmailServer;
-            var mailFromAddress = _applicationOptions.EmailFromAddress;
-            var mailFromFriendly = "vmPing";
-            var mailToAddress = _applicationOptions.EmailRecipient;
-            var mailSubject = $"[vmPing] {hostName} <> Host {hostStatus}";
-            var mailBody =
-                $"{hostName} is {hostStatus}.{Environment.NewLine}" +
-                $"{DateTime.Now.ToLongDateString()}  {DateTime.Now.ToLongTimeString()}";
-
-            var message = new MailMessage();
-
-            try
-            {
-                var smtpClient = new SmtpClient();
-                MailAddress fromAddress;
-                if (mailFromFriendly.Length > 0)
-                    fromAddress = new MailAddress(mailFromAddress, mailFromFriendly);
-                else
-                    fromAddress = new MailAddress(mailFromAddress);
-
-                smtpClient.Host = serverAddress;
-
-                message.From = fromAddress;
-                message.Subject = mailSubject;
-                message.Body = mailBody;
-
-                message.To.Add(mailToAddress);
-
-                //Send the email.
-                smtpClient.Send(message);
-            }
-            catch
-            {
-                // There was an error sending Email.
-            }
-            finally
-            {
-                message.Dispose();
-            }
-        }
 
         private void mnuOnTop_Click(object sender, RoutedEventArgs e)
         {

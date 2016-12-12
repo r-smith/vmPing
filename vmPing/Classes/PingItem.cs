@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading;
-using System.Windows.Media;
 
 namespace vmPing.Classes
 {

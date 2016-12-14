@@ -62,6 +62,7 @@
     <Compile Include="Classes\ApplicationOptions.cs" />
     <Compile Include="Classes\Favorite.cs" />
     <Compile Include="Classes\ValueConverters.cs" />
+    <Compile Include="Controls\ListBoxBehavior.cs" />
     <Compile Include="Views\EmailAlertWindow.xaml.cs">
       <DependentUpon>EmailAlertWindow.xaml</DependentUpon>
     </Compile>

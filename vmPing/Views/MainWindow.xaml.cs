@@ -10,9 +10,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using vmPing.Classes;
 
@@ -191,7 +189,8 @@ namespace vmPing.Views
                     pingItem.PingBackgroundWorker.CancelAsync();
 
                 pingItem.PingStatisticsText = string.Empty;
-                pingItem.PingOutput = $"*** Pinging {pingItem.Hostname}:{Environment.NewLine}";
+                pingItem.History = new ObservableCollection<string>();
+                pingItem.AddHistory($"*** Pinging {pingItem.Hostname}:");
 
                 pingItem.PingBackgroundWorker = new BackgroundWorker();
                 pingItem.PingResetEvent = new AutoResetEvent(false);
@@ -317,9 +316,11 @@ namespace vmPing.Views
                     catch (PingException ex)
                     {
                         if (ex.InnerException is SocketException)
-                            pingItem.PingOutput += "Unable to resolve hostname.";
+                            Application.Current.Dispatcher.BeginInvoke(
+                                new Action(() => pingItem.AddHistory("Unable to resolve hostname.")));
                         else
-                            pingItem.PingOutput += ex.InnerException.Message;
+                            Application.Current.Dispatcher.BeginInvoke(
+                                new Action(() => pingItem.AddHistory(ex.InnerException.Message)));
 
                         e.Cancel = true;
                         pingItem.Status = PingStatus.Error;
@@ -359,8 +360,9 @@ namespace vmPing.Views
             if (!isPortValid)
             {
                 // Error.
-                pingItem.PingOutput += "Invalid port number.";
-                
+                Application.Current.Dispatcher.BeginInvoke(
+                    new Action(() => pingItem.AddHistory("Invalid port number.")));
+
                 e.Cancel = true;
                 pingItem.PingResetEvent.Set();
                 pingItem.Status = PingStatus.Error;
@@ -431,37 +433,38 @@ namespace vmPing.Views
             if (pingItem.PingBackgroundWorker.CancellationPending)
                 return;
 
-            string pingOutput = $"[{DateTime.Now.ToLongTimeString()}]  ";
+            var pingOutput = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  ");
 
             // Read the status code of the ping response.
             switch (pingItem.Reply.Status)
             {
                 case IPStatus.Success:
-                    pingOutput += "Reply from ";
-                    pingOutput += pingItem.Reply.Address.ToString();
+                    pingOutput.Append("Reply from ");
+                    pingOutput.Append(pingItem.Reply.Address.ToString());
                     if (pingItem.Reply.RoundtripTime < 1)
-                        pingOutput += "  [<1ms]";
+                        pingOutput.Append("  [<1ms]");
                     else
-                        pingOutput += $"  [{pingItem.Reply.RoundtripTime} ms]";
+                        pingOutput.Append($"  [{pingItem.Reply.RoundtripTime} ms]");
                     break;
                 case IPStatus.DestinationHostUnreachable:
-                    pingOutput += "Reply  [Host unreachable]";
+                    pingOutput.Append("Reply  [Host unreachable]");
                     break;
                 case IPStatus.DestinationNetworkUnreachable:
-                    pingOutput += "Reply  [Network unreachable]";
+                    pingOutput.Append("Reply  [Network unreachable]");
                     break;
                 case IPStatus.DestinationUnreachable:
-                    pingOutput += "Reply  [Unreachable]";
+                    pingOutput.Append("Reply  [Unreachable]");
                     break;
                 case IPStatus.TimedOut:
-                    pingOutput += "Request timed out.";
+                    pingOutput.Append("Request timed out.");
                     break;
                 default:
-                    pingOutput += pingItem.Reply.Status.ToString();
+                    pingOutput.Append(pingItem.Reply.Status.ToString());
                     break;
             }
             // Add response to the output window.
-            pingItem.PingOutput += pingOutput + Environment.NewLine;
+            Application.Current.Dispatcher.BeginInvoke(
+                new Action(() => pingItem.AddHistory(pingOutput.ToString())));
 
             // If logging is enabled, write the response to a file.
             if (_applicationOptions.LogOutput && _applicationOptions.LogPath.Length > 0)
@@ -469,7 +472,7 @@ namespace vmPing.Views
                 var logPath = $@"{_applicationOptions.LogPath}\{pingItem.Hostname}.txt";
                 using (System.IO.StreamWriter outputFile = new System.IO.StreamWriter(@logPath, true))
                 {
-                    outputFile.WriteLine(pingOutput.Insert(1, DateTime.Now.ToShortDateString() + " "));
+                    outputFile.WriteLine(pingOutput.ToString().Insert(1, DateTime.Now.ToShortDateString() + " "));
                 }
             }
         }
@@ -478,28 +481,29 @@ namespace vmPing.Views
         {
             if (pingItem.PingBackgroundWorker.CancellationPending)
                 return;
-
-            string pingOutput;
-
+            
             // Prefix the ping reply output with a timestamp.
-            pingOutput = $"[{DateTime.Now.ToLongTimeString()}]  Port {portnumber.ToString()}: ";
+            var pingOutput = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  Port {portnumber.ToString()}: ");
             if (isPortOpen)
-                pingOutput += "OPEN";
+                pingOutput.Append("OPEN");
             else
             {
-                pingOutput += "CLOSED";
+                pingOutput.Append("CLOSED");
             }
 
             // Add response to the output window.
-            pingItem.PingOutput += pingOutput + Environment.NewLine;
+            Application.Current.Dispatcher.BeginInvoke(
+                new Action(() => pingItem.AddHistory(pingOutput.ToString())));
 
             // If logging is enabled, write the response to a file.
             if (_applicationOptions.LogOutput && _applicationOptions.LogPath.Length > 0)
             {
-                var logPath = $@"{_applicationOptions.LogPath}\{pingItem.Hostname}.txt";
+                var index = pingItem.Hostname.IndexOf(':');
+                var hostname = (index > 0) ? pingItem.Hostname.Substring(0, index) : pingItem.Hostname;
+                var logPath = $@"{_applicationOptions.LogPath}\{hostname}.txt";
                 using (System.IO.StreamWriter outputFile = new System.IO.StreamWriter(@logPath, true))
                 {
-                    outputFile.WriteLine(pingOutput);
+                    outputFile.WriteLine(pingOutput.ToString().Insert(1, DateTime.Now.ToShortDateString() + " "));
                 }
             }
         }

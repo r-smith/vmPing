@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -26,6 +27,20 @@ namespace vmPing.Classes
         public PingStatistics Statistics { get; set; }
         public PingReply Reply { get; set; }
         public Ping Sender { get; set; }
+        
+        private ObservableCollection<string> history;
+        public ObservableCollection<string> History
+        {
+            get { return history; }
+            set
+            {
+                if (value != history)
+                {
+                    history = value;
+                    NotifyPropertyChanged("History");
+                }
+            }
+        }
 
         private PingStatus status = PingStatus.Inactive;
         public PingStatus Status
@@ -75,23 +90,11 @@ namespace vmPing.Classes
             }
         }
 
-        private string pingOuput;
-        public string PingOutput
+        public void AddHistory(string historyItem)
         {
-            get { return pingOuput; }
-            set
-            {
-                if (value != pingOuput)
-                {
-                    string[] lines = value.Split('\n').ToArray();
-                    if (lines.GetUpperBound(0) > 2000)
-                        value = string.Join("\n", lines, 1, lines.GetUpperBound(0));
-                    else
-                        value = string.Join("\n", lines);
-                    pingOuput = value;
-                    NotifyPropertyChanged("PingOutput");
-                }
-            }
+            if (history.Count >= 3600)
+                history.RemoveAt(0);
+            history.Add(historyItem);
         }
 
         private void NotifyPropertyChanged(String info)

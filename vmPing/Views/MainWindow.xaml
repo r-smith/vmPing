@@ -4,11 +4,11 @@
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns:local="clr-namespace:vmPing.Views"
         xmlns:classes="clr-namespace:vmPing.Classes"
+        xmlns:controls="clr-namespace:vmPing.Controls"
         Title="vmPing" Height="400" Width="800"
         MinHeight="200" MinWidth="350"
         Background="#F4F4F4"
         Loaded="Window_Loaded">
-
 
     <Window.Resources>
         <!-- Value converters -->
@@ -32,6 +32,7 @@
         <ControlTemplate x:Key="TextBoxBaseControlTemplatez" TargetType="{x:Type TextBoxBase}">
             <Border Background="{TemplateBinding Background}"
                     x:Name="Bd"
+                    CornerRadius="0,0,0,6"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     BorderBrush="{TemplateBinding BorderBrush}">
                 <ScrollViewer x:Name="PART_ContentHost" />
@@ -162,7 +163,7 @@
                     <MenuItem Header="Manage favorites" Click="mnuManageFavorites_Click" />
                     <Separator Padding="0,6" />
                 </MenuItem>
-                
+
                 <Separator Padding="0,6" />
 
                 <MenuItem Header="Trace Route" x:Name="TraceRouteMenu" InputGestureText="Ctrl-T" Padding="0,5">
@@ -180,9 +181,9 @@
                         <Image Source="/Resources/vmPing-16.png" VerticalAlignment="Center" Width="16" Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
-                
+
                 <Separator Padding="0,6" />
-                
+
                 <MenuItem Header="Help" x:Name="HelpMenu" InputGestureText="F1" Padding="0,5">
                     <MenuItem.Icon>
                         <Image Source="/Resources/questionMark-16.png" VerticalAlignment="Center" Width="16" Height="16" />
@@ -196,105 +197,119 @@
         <ItemsControl Name="icPingItems" IsTabStop="False" Focusable="False">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="Black" BorderThickness="1" Margin="5" SnapsToDevicePixels="True">
+                    <Border BorderBrush="Black" BorderThickness="2" Margin="5" SnapsToDevicePixels="True" CornerRadius="6"
+                            Background="{Binding Status, Converter={StaticResource PingStatusToBackgroundBrushConverter}}">
                         <Grid Name="gridItemsControl">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <!-- Ping output textbox -->
-                            <ScrollViewer Name="svOutput" Grid.Row="0" VerticalScrollBarVisibility="Auto" Margin="0" FocusVisualStyle="{x:Null}">
-                                <TextBox BorderThickness="0" BorderBrush="Transparent"
-                                         Name="txtOutput"
-                                         TextChanged="txtOutput_TextChanged"
-                                         IsTabStop="False"
-                                         IsReadOnly="True"
-                                         IsUndoEnabled="False"
-                                         IsEnabled="False"
-                                         Background="{Binding Status, Converter={StaticResource PingStatusToBackgroundBrushConverter}}"
-                                         Foreground="{Binding Status, Converter={StaticResource PingStatusToForegroundBrushConverter}}"
-                                         Text="{Binding PingOutput, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
-                                         FontFamily="Consolas" FontSize="12"
-                                         Cursor="Arrow"
-                                         Padding="0,0,0,6" Margin="0"
-                                         Template="{StaticResource TextBoxBaseControlTemplate}">
-                                    <TextBox.Triggers>
+                            <!-- Ping output section -->
+                            <DockPanel>
+                                <!-- Delete button -->
+                                <Grid DockPanel.Dock="Top">
+                                    <TextBlock Width="{Binding ElementName=lbHistory, Path=ActualWidth}"/>
+                                    <Button Name="btnRemove"
+                                            Padding="4,3"
+                                            Margin="0,0,4,0"
+                                            Background="Transparent"
+                                            HorizontalAlignment="Right"
+                                            IsTabStop="False"
+                                            Click="btnRemove_Click">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Name="controlButton_border" BorderThickness="0"
+                                                        CornerRadius="4"
+                                                        Padding="{TemplateBinding Padding}"
+                                                        Background="{TemplateBinding Background}">
+                                                    <Image Name="controlButton_image" Source="/Resources/cancel-16.png"
+                                                           Stretch="None"
+                                                           Opacity="0.35"
+                                                       />
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsPressed" Value="True">
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#D0D0D0" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </Grid>
+
+                                <!-- Ping statistics textblock -->
+                                <Label Name="lblStats"
+                                       DockPanel.Dock="Bottom"
+                                       HorizontalAlignment="Left"
+                                       Width="{Binding ElementName=lbHistory, Path=ActualWidth}"
+                                       Content="{Binding PingStatisticsText, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
+                                       Background="Transparent"
+                                       Foreground="{Binding Status, Converter={StaticResource PingStatusToStatisticsBrushConverter}}"
+                                       FontFamily="Segoe UI" FontSize="14" FontWeight="Bold"
+                                       Padding="8,0,0,3">
+                                    <Label.Triggers>
                                         <EventTrigger RoutedEvent="Binding.TargetUpdated">
                                             <BeginStoryboard>
                                                 <Storyboard>
                                                     <DoubleAnimation Storyboard.TargetName="lblStats"
                                                                      Storyboard.TargetProperty="Opacity"
-                                                                     From="0.0" To="1.0" Duration="0:0:0.5"
+                                                                     From="0.0" To="1.0" Duration="0:0:0.3"
                                                                      />
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </EventTrigger>
-                                    </TextBox.Triggers>
-                                </TextBox>
-                            </ScrollViewer>
+                                    </Label.Triggers>
+                                </Label>
 
-                            <!-- Ping statistics textblock -->
-                            <Label Name="lblStats"
-                                   VerticalAlignment="Bottom" HorizontalAlignment="Left"
-                                   Grid.Row="0"
-                                   Content="{Binding PingStatisticsText, UpdateSourceTrigger=PropertyChanged}"
-                                   Width="{Binding Path=ViewportWidth, ElementName=svOutput}"
-                                   Background="Transparent"
-                                   Foreground="{Binding Status, Converter={StaticResource PingStatusToStatisticsBrushConverter}}"
-                                   FontFamily="Segoe UI" FontSize="14" FontWeight="Bold"
-                                   Padding="8,0,0,3"
-                                   />
-                            
+                                <!-- Ping history listbox -->
+                                <ListBox Name="lbHistory"
+                                         BorderThickness="0"
+                                         Background="Transparent"
+                                         Foreground="{Binding Status, Converter={StaticResource PingStatusToForegroundBrushConverter}}"
+                                         ItemsSource="{Binding History}"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         IsTabStop="False"
+                                         IsTextSearchEnabled="False"
+                                         controls:ListBoxBehavior.ScrollOnNewItem="True"
+                                         FontFamily="Consolas" FontSize="12">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="{x:Type ListBoxItem}">
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                        <ContentPresenter />
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    
+                                </ListBox>
+                            </DockPanel>
+
+
                             <!-- vmPing icon -->
                             <Image Source="/Resources/vmPing-96.png"
-                                   Width="96"
-                                   Height="96"
-                                   Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
-                                   Opacity="0.03" />
+                                           Width="96"
+                                           Height="96"
+                                           Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                                           Opacity="0.03" />
 
-                            <!-- Delete button -->
-                            <DockPanel VerticalAlignment="Top" HorizontalAlignment="Left" LastChildFill="False"
-                                  Width="{Binding Path=ViewportWidth, ElementName=svOutput}">
-                                <Button Name="btnRemove"
-                                        DockPanel.Dock="Right"
-                                        Padding="3"
-                                        Background="Transparent"
-                                        IsTabStop="False"
-                                        Click="btnRemove_Click">
-                                    <Button.Template>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Name="controlButton_border" BorderThickness="0"
-                                                    Padding="{TemplateBinding Padding}"
-                                                    Background="{TemplateBinding Background}"
-                                                    >
-                                                <Image Name="controlButton_image" Source="/Resources/cancel-16.png"
-                                                       Stretch="None"
-                                                       Opacity="0.35"
-                                                       />
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
-                                                </Trigger>
-                                                <Trigger Property="IsPressed" Value="True">
-                                                    <Setter TargetName="controlButton_border" Property="Background" Value="#D0D0D0" />
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                    <Button.Style>
-                                        <Style TargetType="{x:Type Button}">
-                                            <Setter Property="Visibility" Value="Collapsed" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
-                                                    <Setter Property="Visibility" Value="Visible" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
-                                </Button>
-                            </DockPanel>
 
                             <!-- Hostname and ping button section -->
                             <Grid Grid.Row="1">
@@ -327,6 +342,7 @@
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Border Name="pingButton_border" BorderThickness="1,1,0,0" BorderBrush="Black"
+                                                    CornerRadius="0,0,6,0"
                                                     Background="{TemplateBinding Background}"
                                                     Padding="{TemplateBinding Padding}">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">

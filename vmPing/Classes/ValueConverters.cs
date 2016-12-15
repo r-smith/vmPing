@@ -153,4 +153,45 @@ namespace vmPing.Classes
             throw new NotImplementedException();
         }
     }
+
+    public class HostnameFontsizeConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((double)value > 250)
+                return 18;
+            else if ((double)value > 225)
+                return 17;
+            else if ((double)value > 200)
+                return 16;
+            else if ((double)value > 175)
+                return 15;
+            else if ((double)value > 150)
+                return 14;
+            else if ((double)value > 125)
+                return 13;
+            else return 12.5;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class ButtonTextVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((double)value > 200)
+                return Visibility.Visible;
+            else
+                return Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

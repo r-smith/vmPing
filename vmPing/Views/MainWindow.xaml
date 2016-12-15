@@ -19,6 +19,8 @@
         <classes:PingStatusToBackgroundBrushConverter x:Key="PingStatusToBackgroundBrushConverter" />
         <classes:PingStatusToForegroundBrushConverter x:Key="PingStatusToForegroundBrushConverter" />
         <classes:PingStatusToStatisticsBrushConverter x:Key="PingStatusToStatisticsBrushConverter" />
+        <classes:HostnameFontsizeConverter x:Key="HostnameFontsizeConverter" />
+        <classes:ButtonTextVisibilityConverter x:Key="ButtonTextVisibilityConverter" />
 
 
         <ControlTemplate x:Key="TextBoxBaseControlTemplate" TargetType="{x:Type TextBoxBase}">
@@ -320,7 +322,8 @@
 
                                 <!-- Hostname textbox -->
                                 <TextBox Name="tbHostname"
-                                         FontSize="18" FontWeight="Bold"
+                                         FontWeight="SemiBold"
+                                         FontSize="18"
                                          BorderThickness="0,1,0,0"
                                          BorderBrush="Black"
                                          VerticalContentAlignment="Center"
@@ -337,19 +340,22 @@
                                         Grid.Column="1"
                                         FontSize="14"
                                         Padding="0,6"
-                                        Width="75"
                                         Background="AliceBlue">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Border Name="pingButton_border" BorderThickness="1,1,0,0" BorderBrush="Black"
                                                     CornerRadius="0,0,6,0"
-                                                    Background="{TemplateBinding Background}"
-                                                    Padding="{TemplateBinding Padding}">
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    Background="{TemplateBinding Background}">
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
                                                     <Image Source="{Binding IsActive, Converter={StaticResource BooleanToImageConverter}}"
-                                                           Margin="0,0,8,0"
+                                                           Margin="0,6"
                                                            />
-                                                    <TextBlock Text="{Binding IsActive, Converter={StaticResource BoolToStringConverter}}" />
+                                                    <TextBlock Text="{Binding IsActive, Converter={StaticResource BoolToStringConverter}}"
+                                                               Visibility="{Binding ElementName=lbHistory, Path=ActualWidth, Converter={StaticResource ButtonTextVisibilityConverter}}"
+                                                               Foreground="#444"
+                                                               FontSize="13"
+                                                               VerticalAlignment="Center"
+                                                               Margin="8,0,0,0"/>
                                                 </StackPanel>
                                             </Border>
                                             <ControlTemplate.Triggers>

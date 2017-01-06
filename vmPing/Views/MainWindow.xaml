@@ -49,10 +49,29 @@
 
         <!-- Remove left margin from menu item dropdown -->
         <ItemsPanelTemplate x:Key="MenuItemPanelTemplate">
-            <StackPanel Margin="0,0,0,0" Background="White"/>
+            <StackPanel Margin="0" Background="White"/>
         </ItemsPanelTemplate>
         <Style TargetType="{x:Type MenuItem}">
             <Setter Property="ItemsPanel" Value="{StaticResource MenuItemPanelTemplate}"/>
+        </Style>
+        
+        <Style x:Key="MenuStyle1" TargetType="{x:Type Menu}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontStyle" Value="Normal"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Foreground" Value="#FF212121"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Menu}">
+                        <Border BorderBrush="Transparent" BorderThickness="0" Background="Transparent" Padding="0,0,5,0" SnapsToDevicePixels="True">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
 
@@ -63,8 +82,10 @@
     <!-- MASTER DOCKPANEL -->
     <DockPanel>
         <!-- Menu bar -->
-        <Menu DockPanel.Dock="Top" Name="menuMain"
-              FontSize="12" FontStretch="Normal" FontStyle="Normal">
+        <Menu DockPanel.Dock="Top"
+              Name="menuMain"
+              FontStretch="Normal"
+              Style="{DynamicResource MenuStyle1}">
             <Menu.ItemsPanel>
                 <ItemsPanelTemplate>
                     <DockPanel HorizontalAlignment="Stretch" LastChildFill="False" />
@@ -125,8 +146,8 @@
 
 
             <!-- Menu Item: Extras -->
-            <MenuItem Width="24"
-                      Margin="0,0,5,0"
+            <MenuItem Width="26"
+                      Margin="0"
                       DockPanel.Dock="Right"
                       >
                 <MenuItem.Icon>
@@ -150,7 +171,7 @@
                 </MenuItem>
 
                 <Separator Padding="0,6" />
-                
+
                 <MenuItem Name="mnuOnTop"
                           Header="Keep Window on Top"
                           InputGestureText="F9"
@@ -327,7 +348,7 @@
                                             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                                         </Style>
                                     </ListBox.ItemContainerStyle>
-                                    
+
                                 </ListBox>
                             </DockPanel>
 

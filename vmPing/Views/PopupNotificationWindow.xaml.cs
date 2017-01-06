@@ -18,30 +18,55 @@ namespace vmPing.Views
         {
             InitializeComponent();
 
-            var desktopWorkingArea = SystemParameters.WorkArea;
-            this.Left = desktopWorkingArea.Right - this.Width;
-            this.Top = desktopWorkingArea.Bottom - this.Height;
+            PositionWindow();
 
-            lvDrives.ItemsSource = statusChangeLog;
-            ((INotifyCollectionChanged)lvDrives.Items).CollectionChanged += PopupNotificationWindow_CollectionChanged;
+            lvStatusChangeLog.ItemsSource = statusChangeLog;
+            ((INotifyCollectionChanged)lvStatusChangeLog.Items).CollectionChanged += PopupNotificationWindow_CollectionChanged;
         }
 
         private void PopupNotificationWindow_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (lvDrives.Items.Count > 0)
+            if (lvStatusChangeLog.Items.Count > 0)
             {
-                var border = VisualTreeHelper.GetChild(lvDrives, 0) as Decorator;
+                var border = VisualTreeHelper.GetChild(lvStatusChangeLog, 0) as Decorator;
                 if (border != null)
                 {
                     var scroll = border.Child as ScrollViewer;
                     if (scroll != null) scroll.ScrollToEnd();
                 }
             }
+
+            switch (lvStatusChangeLog.Items.Count)
+            {
+                case 2:
+                    Height = 110;
+                    PositionWindow();
+                    break;
+                case 3:
+                    Height = 126;
+                    PositionWindow();
+                    break;
+                case 4:
+                    Height = 147;
+                    PositionWindow();
+                    break;
+                case 5:
+                    Height = 172;
+                    PositionWindow();
+                    break;
+            }
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void PositionWindow()
+        {
+            var desktopWorkingArea = SystemParameters.WorkArea;
+            this.Left = desktopWorkingArea.Right - this.Width;
+            this.Top = desktopWorkingArea.Bottom - this.Height;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -51,19 +76,6 @@ namespace vmPing.Views
             var anim = new DoubleAnimation(0, (Duration)TimeSpan.FromSeconds(0.2));
             anim.Completed += (s, _) => this.Close();
             this.BeginAnimation(UIElement.OpacityProperty, anim);
-        }
-
-        private void lbStatusChangeLog_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (lvDrives.Items.Count > 0)
-            {
-                var border = VisualTreeHelper.GetChild(lvDrives, 0) as Decorator;
-                if (border != null)
-                {
-                    var scroll = border.Child as ScrollViewer;
-                    if (scroll != null) scroll.ScrollToEnd();
-                }
-            }
         }
     }
 }

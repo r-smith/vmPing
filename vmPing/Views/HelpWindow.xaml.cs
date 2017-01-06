@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 
 namespace vmPing.Views
@@ -21,6 +22,21 @@ namespace vmPing.Views
             // Set initial focus to scrollviewer.  That way you can scroll the help window with the keyboard
             // without having to first click in the window.
             mainScrollViewer.Focus();
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            }
+            catch
+            {
+            }
+            finally
+            {
+                e.Handled = true;
+            }
         }
     }
 }

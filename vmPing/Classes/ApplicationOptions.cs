@@ -32,7 +32,7 @@ namespace vmPing.Classes
         public string EmailFromAddress { get; set; }
         public bool LogOutput { get; set; }
         public string LogPath { get; set; }
-        public PopupNotificationOption PopupOption { get; set; } = PopupNotificationOption.WhenMinimized;
+        public PopupNotificationOption PopupOption { get; set; } = PopupNotificationOption.Always;
 
         public static void BlurWindows()
         {

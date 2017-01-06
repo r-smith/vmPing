@@ -66,15 +66,25 @@
             <StackPanel Margin="0,0,0,25">
                 <!-- Title and description -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,10">
-                    <Image Source="vmPing.ico" Width="32" Height="32" Margin="0,0,18,0" />
+                    <Image Source="/vmPing.ico" Width="32" Height="32" Margin="0,0,18,0" />
                     <TextBlock Style="{StaticResource TitleText}"
                                VerticalAlignment="Center"
                                Text="vmPing">
                         <TextBlock.Effect>
-                            <DropShadowEffect ShadowDepth="4" Direction="330" Color="Black" Opacity="0.2" BlurRadius="4" />
+                            <DropShadowEffect ShadowDepth="4" Direction="330" Color="Black" Opacity="0.15" BlurRadius="4" />
                         </TextBlock.Effect>
                     </TextBlock>
                 </StackPanel>
+
+                <TextBlock HorizontalAlignment="Center">
+                <Hyperlink NavigateUri="https://www.github.com/R-Smith/vmPing"
+                           RequestNavigate="Hyperlink_RequestNavigate"
+                           TextDecorations="None"
+                           FontSize="13"
+                           Foreground="#6c71c4">
+                    https://www.github.com/R-Smith/vmPing
+                </Hyperlink>
+                </TextBlock>
                 <TextBlock Style="{StaticResource VersionText}"
                            Name="tbVersion"
                            Text="Version X.XXXX.XXXX" />

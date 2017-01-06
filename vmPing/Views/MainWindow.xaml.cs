@@ -23,6 +23,7 @@ namespace vmPing.Views
     {
         private ObservableCollection<PingItem> _pingItems = new ObservableCollection<PingItem>();
         ApplicationOptions _applicationOptions = new ApplicationOptions();
+        private ObservableCollection<StatusChangeLog> _statusChangeLog = new ObservableCollection<StatusChangeLog>();
 
         public static RoutedCommand AlwaysOnTopCommand = new RoutedCommand();
         public static RoutedCommand ProbeOptionsCommand = new RoutedCommand();
@@ -199,6 +200,8 @@ namespace vmPing.Views
                 else
                     pingItem.PingBackgroundWorker.DoWork += new DoWorkEventHandler(backgroundThread_PerformIcmpProbe);
                 pingItem.PingBackgroundWorker.WorkerSupportsCancellation = true;
+                pingItem.PingBackgroundWorker.WorkerReportsProgress = true;
+                pingItem.PingBackgroundWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundThread_ProgressChanged);
                 pingItem.PingBackgroundWorker.RunWorkerAsync(pingItem);
             }
             else
@@ -210,6 +213,28 @@ namespace vmPing.Views
             }
 
             RefreshGlobalStartStop();
+        }
+
+
+        private void backgroundThread_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            if (_applicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.Always ||
+                (_applicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.WhenMinimized &&
+                this.WindowState == WindowState.Minimized))
+            {
+                if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
+                {
+                    _statusChangeLog.Clear();
+                    _statusChangeLog.Add(e.UserState as StatusChangeLog);
+                    var wnd = new PopupNotificationWindow(_statusChangeLog);
+                    wnd.Show();
+                }
+                else
+                {
+                    _statusChangeLog.Add(e.UserState as StatusChangeLog);
+                }
+            }
+
         }
 
 
@@ -264,10 +289,17 @@ namespace vmPing.Views
                         ++pingItem.Statistics.PingsSent;
                         if (pingItem.Reply.Status == IPStatus.Success)
                         {
-                            // Check if email alert is triggered.
-                            if (pingItem.Status != PingStatus.Up && _applicationOptions.EmailAlert)
-                                SendEmail("up", pingItem.Hostname);
-
+                            // Check for status change.
+                            if (pingItem.Status != PingStatus.Up)
+                            {
+                                if (pingItem.Status != PingStatus.Inactive)
+                                backgroundWorker.ReportProgress(
+                                    0,
+                                    new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Up });
+                                if (_applicationOptions.EmailAlert)
+                                    SendEmail("up", pingItem.Hostname);
+                            }
+                                
                             ++pingItem.Statistics.PingsReceived;
                             pingItem.Status = PingStatus.Up;
                         }
@@ -277,18 +309,32 @@ namespace vmPing.Views
                             pingItem.Reply.Status == IPStatus.DestinationUnreachable
                             )
                         {
-                            // Check if email alert is triggered.
-                            if (pingItem.Status != PingStatus.Down && _applicationOptions.EmailAlert)
-                                SendEmail("down", pingItem.Hostname);
+                            // Check for status change.
+                            if (pingItem.Status != PingStatus.Down)
+                            {
+                                if (pingItem.Status != PingStatus.Inactive)
+                                    backgroundWorker.ReportProgress(
+                                        0,
+                                        new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
+                                if (_applicationOptions.EmailAlert)
+                                    SendEmail("down", pingItem.Hostname);
+                            }
 
                             ++pingItem.Statistics.PingsLost;
                             pingItem.Status = PingStatus.Down;
                         }
                         else
                         {
-                            // Check if email alert is triggered.
-                            if (pingItem.Status != PingStatus.Down && _applicationOptions.EmailAlert)
-                                SendEmail("down", pingItem.Hostname);
+                            // Check for status change.
+                            if (pingItem.Status != PingStatus.Down)
+                            {
+                                if (pingItem.Status != PingStatus.Inactive)
+                                    backgroundWorker.ReportProgress(
+                                        0,
+                                        new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
+                                if (_applicationOptions.EmailAlert)
+                                    SendEmail("down", pingItem.Hostname);
+                            }
 
                             ++pingItem.Statistics.PingsError;
                             pingItem.Status = PingStatus.Down;
@@ -389,9 +435,16 @@ namespace vmPing.Views
                             return;
                         }
 
-                        // Check if email alert is triggered.
-                        if (pingItem.Status != PingStatus.Up && _applicationOptions.EmailAlert)
-                            SendEmail("up", pingItem.Hostname);
+                        // Check for status change.
+                        if (pingItem.Status != PingStatus.Up)
+                        {
+                            if (pingItem.Status != PingStatus.Inactive)
+                                backgroundWorker.ReportProgress(
+                                    0,
+                                    new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Up });
+                            if (_applicationOptions.EmailAlert)
+                                SendEmail("up", pingItem.Hostname);
+                        }
 
                         ++pingItem.Statistics.PingsReceived;
                         pingItem.Status = PingStatus.Up;
@@ -405,9 +458,16 @@ namespace vmPing.Views
                             return;
                         }
 
-                        // Check if email alert is triggered.
-                        if (pingItem.Status != PingStatus.Down && _applicationOptions.EmailAlert)
-                            SendEmail("up", pingItem.Hostname);
+                        // Check for status change.
+                        if (pingItem.Status != PingStatus.Up)
+                        {
+                            if (pingItem.Status != PingStatus.Inactive)
+                                backgroundWorker.ReportProgress(
+                                    0,
+                                    new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
+                            if (_applicationOptions.EmailAlert)
+                                SendEmail("down", pingItem.Hostname);
+                        }
 
                         ++pingItem.Statistics.PingsLost;
                         pingItem.Status = PingStatus.Down;
@@ -856,6 +916,30 @@ namespace vmPing.Views
             RefreshFavorites();
 
             ApplicationOptions.RemoveBlurWindows();
+        }
+
+        private void mnuPopupNotification_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = sender as MenuItem;
+
+            mnuPopupAlways.IsChecked = false;
+            mnuPopupNever.IsChecked = false;
+            mnuPopupWhenMinimized.IsChecked = false;
+
+            menuItem.IsChecked = true;
+
+            switch (menuItem.Header.ToString())
+            {
+                case "Always":
+                    _applicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Always;
+                    break;
+                case "Never":
+                    _applicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Never;
+                    break;
+                case "When Minimized":
+                    _applicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
+                    break;
+            }
         }
     }
 }

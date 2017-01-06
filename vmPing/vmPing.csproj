@@ -61,6 +61,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\ApplicationOptions.cs" />
     <Compile Include="Classes\Favorite.cs" />
+    <Compile Include="Classes\StatusChangeLog.cs" />
     <Compile Include="Classes\ValueConverters.cs" />
     <Compile Include="Controls\ListBoxBehavior.cs" />
     <Compile Include="Views\EmailAlertWindow.xaml.cs">
@@ -79,6 +80,9 @@
     <Compile Include="Classes\PingStatistics.cs" />
     <Compile Include="Views\ManageFavoritesWindow.xaml.cs">
       <DependentUpon>ManageFavoritesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PopupNotificationWindow.xaml.cs">
+      <DependentUpon>PopupNotificationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProbeOptionsWindow.xaml.cs">
       <DependentUpon>ProbeOptionsWindow.xaml</DependentUpon>
@@ -127,6 +131,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\ManageFavoritesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PopupNotificationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

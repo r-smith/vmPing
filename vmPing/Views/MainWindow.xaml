@@ -62,7 +62,6 @@
 
     <!-- MASTER DOCKPANEL -->
     <DockPanel>
-
         <!-- Menu bar -->
         <Menu DockPanel.Dock="Top" Name="menuMain"
               FontSize="12" FontStretch="Normal" FontStyle="Normal">
@@ -134,6 +133,24 @@
                     <Image Source="/Resources/downCircle-16.png" VerticalAlignment="Center" Width="16" Height="16" />
                 </MenuItem.Icon>
 
+                <MenuItem Header="Popup Notifications">
+                    <MenuItem Name="mnuPopupNever"
+                              Header="Never"
+                              Click="mnuPopupNotification_Click"
+                              IsCheckable="True" />
+                    <MenuItem Name="mnuPopupWhenMinimized"
+                              Header="When Minimized"
+                              Click="mnuPopupNotification_Click"
+                              IsCheckable="True"
+                              IsChecked="True" />
+                    <MenuItem Name="mnuPopupAlways"
+                              Header="Always"
+                              Click="mnuPopupNotification_Click"
+                              IsCheckable="True" />
+                </MenuItem>
+
+                <Separator Padding="0,6" />
+                
                 <MenuItem Name="mnuOnTop"
                           Header="Keep Window on Top"
                           InputGestureText="F9"
@@ -298,6 +315,7 @@
                                                     </ControlTemplate>
                                                 </Setter.Value>
                                             </Setter>
+                                            <Setter Property="IsTabStop" Value="False" />
                                         </Style>
                                     </ListBox.ItemContainerStyle>
                                     
@@ -307,10 +325,10 @@
 
                             <!-- vmPing icon -->
                             <Image Source="/Resources/vmPing-96.png"
-                                           Width="96"
-                                           Height="96"
-                                           Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
-                                           Opacity="0.03" />
+                                   Width="96"
+                                   Height="96"
+                                   Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                                   Opacity="0.03" />
 
 
                             <!-- Hostname and ping button section -->
@@ -328,6 +346,7 @@
                                          BorderBrush="Black"
                                          VerticalContentAlignment="Center"
                                          CharacterCasing="Upper"
+                                         Padding="2,0,0,0"
                                          Text="{Binding Hostname, UpdateSourceTrigger=PropertyChanged}"
                                          IsEnabled="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}"
                                          Template="{StaticResource TextBoxBaseControlTemplatez}"

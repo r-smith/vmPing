@@ -99,8 +99,8 @@ namespace vmPing.Controls
             {
                 if (e.Action == NotifyCollectionChangedAction.Add)
                 {
-                    listBox.ScrollIntoView(e.NewItems[0]);
-                    listBox.SelectedItem = e.NewItems[0];
+                    listBox.ScrollIntoView(e.NewItems[e.NewItems.Count - 1]);
+                    //listBox.SelectedItem = e.NewItems[0];
                 }
             }
 

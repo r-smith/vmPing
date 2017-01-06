@@ -4,6 +4,13 @@ namespace vmPing.Classes
 {
     public class ApplicationOptions
     {
+        public enum PopupNotificationOption
+        {
+            Always,
+            Never,
+            WhenMinimized
+        }
+
         int pingInterval = Constants.PING_INTERVAL;
         public int PingInterval
         {
@@ -25,6 +32,7 @@ namespace vmPing.Classes
         public string EmailFromAddress { get; set; }
         public bool LogOutput { get; set; }
         public string LogPath { get; set; }
+        public PopupNotificationOption PopupOption { get; set; } = PopupNotificationOption.WhenMinimized;
 
         public static void BlurWindows()
         {

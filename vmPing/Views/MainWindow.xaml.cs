@@ -159,15 +159,15 @@ namespace vmPing.Views
             else
                 AddHostMonitor(2);
         }
-        
-        
+
+
         public void AddHostMonitor(int numberOfHostMonitors)
         {
             for (; numberOfHostMonitors > 0; --numberOfHostMonitors)
                 _pingItems.Add(new PingItem());
         }
-        
-        
+
+
         public void btnPing_Click(object sender, EventArgs e)
         {
             var pingButton = sender as Button;
@@ -181,7 +181,7 @@ namespace vmPing.Views
         {
             if (pingItem.Hostname == null) return;
             if (pingItem.Hostname.Length == 0) return;
-            
+
             if (!pingItem.IsActive)
             {
                 pingItem.IsActive = true;
@@ -290,16 +290,15 @@ namespace vmPing.Views
                         if (pingItem.Reply.Status == IPStatus.Success)
                         {
                             // Check for status change.
-                            if (pingItem.Status != PingStatus.Up)
+                            if (pingItem.Status != PingStatus.Up && pingItem.Status != PingStatus.Inactive)
                             {
-                                if (pingItem.Status != PingStatus.Inactive)
                                 backgroundWorker.ReportProgress(
                                     0,
                                     new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Up });
                                 if (_applicationOptions.EmailAlert)
                                     SendEmail("up", pingItem.Hostname);
                             }
-                                
+
                             ++pingItem.Statistics.PingsReceived;
                             pingItem.Status = PingStatus.Up;
                         }
@@ -310,12 +309,11 @@ namespace vmPing.Views
                             )
                         {
                             // Check for status change.
-                            if (pingItem.Status != PingStatus.Down)
+                            if (pingItem.Status != PingStatus.Down && pingItem.Status != PingStatus.Inactive)
                             {
-                                if (pingItem.Status != PingStatus.Inactive)
-                                    backgroundWorker.ReportProgress(
-                                        0,
-                                        new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
+                                backgroundWorker.ReportProgress(
+                                    0,
+                                    new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
                                 if (_applicationOptions.EmailAlert)
                                     SendEmail("down", pingItem.Hostname);
                             }
@@ -326,12 +324,11 @@ namespace vmPing.Views
                         else
                         {
                             // Check for status change.
-                            if (pingItem.Status != PingStatus.Down)
+                            if (pingItem.Status != PingStatus.Down && pingItem.Status != PingStatus.Inactive)
                             {
-                                if (pingItem.Status != PingStatus.Inactive)
-                                    backgroundWorker.ReportProgress(
-                                        0,
-                                        new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
+                                backgroundWorker.ReportProgress(
+                                    0,
+                                    new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
                                 if (_applicationOptions.EmailAlert)
                                     SendEmail("down", pingItem.Hostname);
                             }
@@ -436,12 +433,11 @@ namespace vmPing.Views
                         }
 
                         // Check for status change.
-                        if (pingItem.Status != PingStatus.Up)
+                        if (pingItem.Status != PingStatus.Up && pingItem.Status != PingStatus.Inactive)
                         {
-                            if (pingItem.Status != PingStatus.Inactive)
-                                backgroundWorker.ReportProgress(
-                                    0,
-                                    new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Up });
+                            backgroundWorker.ReportProgress(
+                                0,
+                                new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Up });
                             if (_applicationOptions.EmailAlert)
                                 SendEmail("up", pingItem.Hostname);
                         }
@@ -459,12 +455,11 @@ namespace vmPing.Views
                         }
 
                         // Check for status change.
-                        if (pingItem.Status != PingStatus.Up)
+                        if (pingItem.Status != PingStatus.Down && pingItem.Status != PingStatus.Inactive)
                         {
-                            if (pingItem.Status != PingStatus.Inactive)
-                                backgroundWorker.ReportProgress(
-                                    0,
-                                    new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
+                            backgroundWorker.ReportProgress(
+                                0,
+                                new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
                             if (_applicationOptions.EmailAlert)
                                 SendEmail("down", pingItem.Hostname);
                         }
@@ -541,7 +536,7 @@ namespace vmPing.Views
         {
             if (pingItem.PingBackgroundWorker.CancellationPending)
                 return;
-            
+
             // Prefix the ping reply output with a timestamp.
             var pingOutput = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  Port {portnumber.ToString()}: ");
             if (isPortOpen)
@@ -612,7 +607,7 @@ namespace vmPing.Views
             }
         }
 
-        
+
         private void btnRemove_Click(object sender, RoutedEventArgs e)
         {
             if (_pingItems.Count <= 1)
@@ -816,7 +811,7 @@ namespace vmPing.Views
                 return;
             }
 
-            
+
             // Display folder browse dialog box.
             ApplicationOptions.BlurWindows();
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -882,7 +877,7 @@ namespace vmPing.Views
 
                     sliderColumns.Value = favorite.ColumnCount;
                 };
-                
+
                 mnuFavorites.Items.Add(menuItem);
             }
         }

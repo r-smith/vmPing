@@ -34,7 +34,7 @@
         <ControlTemplate x:Key="TextBoxBaseControlTemplatez" TargetType="{x:Type TextBoxBase}">
             <Border Background="{TemplateBinding Background}"
                     x:Name="Bd"
-                    CornerRadius="0,0,0,6"
+                    CornerRadius="0,0,0,4"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     BorderBrush="{TemplateBinding BorderBrush}">
                 <ScrollViewer x:Name="PART_ContentHost" />
@@ -237,7 +237,7 @@
         <ItemsControl Name="icPingItems" IsTabStop="False" Focusable="False">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="Black" BorderThickness="2" Margin="5" SnapsToDevicePixels="True" CornerRadius="6"
+                    <Border BorderBrush="#666" BorderThickness="2" Margin="5" SnapsToDevicePixels="True" CornerRadius="4"
                             Background="{Binding Status, Converter={StaticResource PingStatusToBackgroundBrushConverter}}">
                         <Grid Name="gridItemsControl">
                             <Grid.RowDefinitions>
@@ -393,7 +393,7 @@
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Border Name="pingButton_border" BorderThickness="1,1,0,0" BorderBrush="Black"
-                                                    CornerRadius="0,0,6,0"
+                                                    CornerRadius="0,0,4,0"
                                                     Background="{TemplateBinding Background}">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
                                                     <Image Source="{Binding IsActive, Converter={StaticResource BooleanToImageConverter}}"

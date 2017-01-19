@@ -13,6 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using vmPing.Classes;
+using System.Timers;
 
 namespace vmPing.Views
 {
@@ -415,17 +416,26 @@ namespace vmPing.Views
 
             pingItem.Statistics = new PingStatistics();
             int errorCode = 0;
-
-
+            
             while (!backgroundWorker.CancellationPending && pingItem.IsActive)
             {
                 using (TcpClient client = new TcpClient())
                 {
                     ++pingItem.Statistics.PingsSent;
                     DisplayStatistics(pingItem);
+                    
                     try
                     {
-                        client.Connect(hostname, portnumber);
+                        var result = client.BeginConnect(hostname, portnumber, null, null);
+                        var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(3));
+
+                        if (!success)
+                        {
+                            throw new SocketException();
+                        }
+
+                        client.EndConnect(result);
+
                         if (backgroundWorker.CancellationPending || pingItem.IsActive == false)
                         {
                             pingItem.PingResetEvent.Set();
@@ -474,12 +484,12 @@ namespace vmPing.Views
                 DisplayTcpReply(pingItem, isPortOpen, portnumber, errorCode);
                 DisplayStatistics(pingItem);
                 pingItem.PingResetEvent.Set();
-                Thread.Sleep(5000);
+                Thread.Sleep(4000);
             }
 
             pingItem.PingResetEvent.Set();
         }
-
+        
 
         public void DisplayIcmpReply(PingItem pingItem)
         {

@@ -146,7 +146,7 @@
 
 
             <!-- Menu Item: Extras -->
-            <MenuItem Width="26"
+            <MenuItem Width="28"
                       Margin="0"
                       DockPanel.Dock="Right"
                       >

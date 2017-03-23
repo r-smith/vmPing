@@ -630,6 +630,7 @@ namespace vmPing.Views
             _pingItems.Remove(pingItem);
             if (sliderColumns.Value > _pingItems.Count)
                 sliderColumns.Value = _pingItems.Count;
+            RefreshGlobalStartStop();
         }
 
 
@@ -854,6 +855,17 @@ namespace vmPing.Views
         }
 
 
+        private void ClearAllPingItems()
+        {
+            foreach (var pingItem in _pingItems)
+            {
+                if (pingItem.PingBackgroundWorker != null)
+                    pingItem.PingBackgroundWorker.CancelAsync();
+            }
+            _pingItems.Clear();
+            RefreshGlobalStartStop();
+        }
+
         private void RefreshFavorites()
         {
             var favoritesList = Favorite.GetFavoriteTitles();
@@ -869,7 +881,7 @@ namespace vmPing.Views
                 menuItem.Header = fav;
                 menuItem.Click += (s, r) =>
                 {
-                    _pingItems.Clear();
+                    ClearAllPingItems();
 
                     var selectedFavorite = s as MenuItem;
                     var favorite = Favorite.GetFavoriteEntry(selectedFavorite.Header.ToString());

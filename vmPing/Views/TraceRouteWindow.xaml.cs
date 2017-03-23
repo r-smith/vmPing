@@ -84,8 +84,16 @@ namespace vmPing.Views
 
             while (!bgWorker.CancellationPending && _route.IsActive && pingOptions.Ttl <= _route.MaxHops)
             {
-                try { _route.DestinationIp = Dns.GetHostEntry(_route.DestinationHost).AddressList[0]; }
-                catch { bgWorker.ReportProgress(-1); break; }
+                IPAddress ipAddress;
+                if (IPAddress.TryParse(_route.DestinationHost, out ipAddress))
+                {
+                    _route.DestinationIp = ipAddress;
+                }
+                else
+                {
+                    try { _route.DestinationIp = Dns.GetHostEntry(_route.DestinationHost).AddressList[0]; }
+                    catch { bgWorker.ReportProgress(-1); break; }
+                }
 
                 using (Ping ping = new Ping())
                 {
@@ -143,7 +151,7 @@ namespace vmPing.Views
 
             if (node.ReplyStatus == IPStatus.TimedOut)
                 node.HostAddress = "Timed Out";
-
+            
             if (node.ReplyStatus == IPStatus.Success)
                 tbTraceStatus.Text = "Trace Complete";
 

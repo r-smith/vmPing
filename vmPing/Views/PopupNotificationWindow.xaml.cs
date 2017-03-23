@@ -77,5 +77,12 @@ namespace vmPing.Views
             anim.Completed += (s, _) => this.Close();
             this.BeginAnimation(UIElement.OpacityProperty, anim);
         }
+
+        private void Window_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (Application.Current.MainWindow.WindowState == WindowState.Minimized)
+                Application.Current.MainWindow.WindowState = WindowState.Normal;
+            Application.Current.MainWindow.Focus();
+        }
     }
 }

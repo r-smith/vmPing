@@ -11,6 +11,8 @@
         Background="#313130" BorderBrush="#636363" BorderThickness="1"
         Topmost="True"
         Closing="Window_Closing"
+        ShowActivated="False"
+        MouseLeftButtonUp="Window_MouseLeftButtonUp"
         AllowsTransparency="True">
     <Window.Triggers>
         <EventTrigger RoutedEvent="Window.Loaded">
@@ -87,6 +89,7 @@
                   FocusVisualStyle="{x:Null}"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   VerticalAlignment="Top"
+                  MouseLeftButtonUp="Window_MouseLeftButtonUp"
                   >
             <ListView.Resources>
                 <!-- Hide the header row of the listview -->

@@ -484,7 +484,8 @@ namespace vmPing.Views
                 DisplayTcpReply(pingItem, isPortOpen, portnumber, errorCode);
                 DisplayStatistics(pingItem);
                 pingItem.PingResetEvent.Set();
-                Thread.Sleep(4000);
+
+                Thread.Sleep(_applicationOptions.PingInterval < 4000 ? 4000 : _applicationOptions.PingInterval);
             }
 
             pingItem.PingResetEvent.Set();

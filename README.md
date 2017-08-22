@@ -3,13 +3,19 @@ vmPing
 
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
-###### (Latest version is 1.1.10 released on May 24, 2017)
-### [Click here to download the latest .exe](https://github.com/R-Smith/vmPing/releases/download/v1.1.10/vmPing.exe)
+###### (Latest version is 1.1.11 released on August 22, 2017)
+### [Click here to download the latest .exe](https://github.com/R-Smith/vmPing/releases/download/v1.1.11/vmPing.exe)
 ### [Click here to download the source](https://github.com/R-Smith/vmPing/archive/master.zip)
 
 ##### Notes
 * There is no installer.  Just run the .exe.
 * .NET 4.0 or greater is required.
+
+## Changes for v1.1.11
+* Fixed parsing of command line arguments.  The application wasn't properly parsing values supplied by **-i** and **-w** on the command line.
+
+## Changes for v1.1.10
+* The interval between TCP port pings is now tied to the global probe interval setting.  Previously, the probe interval was only being applied to ICMP pings.  The minimum interval for TCP probes is currently locked at four seconds, but any setting greater than that will be applied.
 
 ### Changes for v1.1.9
 * Popup notifications no longer steal focus.

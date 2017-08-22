@@ -122,19 +122,39 @@ namespace vmPing.Views
                 {
                     case "/i":
                     case "-i":
-                        ++index;
                         if (commandLineArgs.Length > index + 1 && int.TryParse(commandLineArgs[index + 1], out numValue) && numValue > 0 && numValue <= 86400)
+                        {
                             _applicationOptions.PingInterval = numValue * 1000;
+                            ++index;
+                        }
                         else
+                        {
                             errorString += $"For switch -i you must specify the number of seconds between 1 and 86400.{Environment.NewLine}";
+                            break;
+                        }
                         break;
                     case "/w":
                     case "-w":
-                        ++index;
                         if (commandLineArgs.Length > index + 1 && int.TryParse(commandLineArgs[index + 1], out numValue) && numValue > 0 && numValue <= 60)
+                        {
                             _applicationOptions.PingTimeout = numValue * 1000;
+                            ++index;
+                        }
                         else
+                        {
                             errorString += $"For switch -w you must specify the number of seconds between 1 and 60.{Environment.NewLine}";
+                            break;
+                        }
+                        break;
+                    case "/?":
+                    case "-?":
+                    case "--help":
+                        MessageBox.Show(
+                            $"Command Line Usage:{Environment.NewLine}vmPing [-i interval] [-w timeout] [<target_host>...]",
+                            "vmPing Help",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+                        Application.Current.Shutdown();
                         break;
                     default:
                         hostnameList.Add(commandLineArgs[index]);
@@ -142,11 +162,14 @@ namespace vmPing.Views
                 }
             }
             if (errorString.Length > 0)
+            {
                 MessageBox.Show(
                     $"{errorString}{Environment.NewLine}{Environment.NewLine}Command Line Usage:{Environment.NewLine}vmPing [-i interval] [-w timeout] [<target_host>...]",
                     "vmPing Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
+                Application.Current.Shutdown();
+            }
 
             if (hostnameList.Count > 0)
             {

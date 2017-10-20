@@ -4,7 +4,9 @@
         Title="vmPing Help" Height="450" Width="475"
         MinWidth="325" MinHeight="250"
         WindowStartupLocation="CenterOwner"
-        ShowInTaskbar="False"
+        ShowInTaskbar="True"
+        Closed="Window_Closed"
+        Loaded="Window_Loaded"
         FocusManager.FocusedElement="{Binding ElementName=txtVersion}">
     
     <Window.Resources>

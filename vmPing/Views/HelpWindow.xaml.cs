@@ -9,6 +9,8 @@ namespace vmPing.Views
     /// </summary>
     public partial class HelpWindow : Window
     {
+        public static HelpWindow openWindow = null;
+
         public HelpWindow()
         {
             InitializeComponent();
@@ -37,6 +39,17 @@ namespace vmPing.Views
             {
                 e.Handled = true;
             }
+        }
+
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            openWindow = this;
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            openWindow = null;
         }
     }
 }

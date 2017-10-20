@@ -740,12 +740,13 @@ namespace vmPing.Views
 
         private void HelpExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            ApplicationOptions.BlurWindows();
-            var helpWindow = new HelpWindow();
-            helpWindow.Owner = this;
-            helpWindow.ShowDialog();
-
-            ApplicationOptions.RemoveBlurWindows();
+            if (HelpWindow.openWindow != null)
+                HelpWindow.openWindow.Activate();
+            else
+            {
+                var helpWindow = new HelpWindow();
+                helpWindow.Show();
+            }
         }
 
 

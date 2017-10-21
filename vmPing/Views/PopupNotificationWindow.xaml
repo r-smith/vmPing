@@ -145,6 +145,9 @@
                                                     <DataTrigger Binding="{Binding StatusAsString}" Value="DOWN">
                                                         <Setter Property="Foreground" Value="#dc322f" />
                                                     </DataTrigger>
+                                                    <DataTrigger Binding="{Binding StatusAsString}" Value="[ERROR]">
+                                                        <Setter Property="Foreground" Value="#dc322f" />
+                                                    </DataTrigger>
                                                     <DataTrigger Binding="{Binding StatusAsString}" Value="UP">
                                                         <Setter Property="Foreground" Value="#859900" />
                                                     </DataTrigger>
@@ -180,6 +183,9 @@
                                             <Style TargetType="TextBlock">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding StatusAsString}" Value="DOWN">
+                                                        <Setter Property="Foreground" Value="#dc322f" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding StatusAsString}" Value="[ERROR]">
                                                         <Setter Property="Foreground" Value="#dc322f" />
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding StatusAsString}" Value="UP">

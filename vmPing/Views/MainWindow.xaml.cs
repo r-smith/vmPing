@@ -314,7 +314,7 @@ namespace vmPing.Views
                         if (pingItem.Reply.Status == IPStatus.Success)
                         {
                             // Check for status change.
-                            if (pingItem.Status != PingStatus.Up && pingItem.Status != PingStatus.Inactive)
+                            if (pingItem.Status == PingStatus.Down)
                             {
                                 backgroundWorker.ReportProgress(
                                     0,
@@ -333,7 +333,7 @@ namespace vmPing.Views
                             )
                         {
                             // Check for status change.
-                            if (pingItem.Status != PingStatus.Down && pingItem.Status != PingStatus.Inactive)
+                            if (pingItem.Status == PingStatus.Up)
                             {
                                 backgroundWorker.ReportProgress(
                                     0,
@@ -348,7 +348,7 @@ namespace vmPing.Views
                         else
                         {
                             // Check for status change.
-                            if (pingItem.Status != PingStatus.Down && pingItem.Status != PingStatus.Inactive)
+                            if (pingItem.Status == PingStatus.Up)
                             {
                                 backgroundWorker.ReportProgress(
                                     0,
@@ -380,26 +380,29 @@ namespace vmPing.Views
                             // before sending another ping.
                             Thread.Sleep(_applicationOptions.PingInterval);
                     }
-                    catch (PingException ex)
+                    catch (Exception ex)
                     {
                         if (ex.InnerException is SocketException)
                             Application.Current.Dispatcher.BeginInvoke(
                                 new Action(() => pingItem.AddHistory("Unable to resolve hostname.")));
                         else
                             Application.Current.Dispatcher.BeginInvoke(
-                                new Action(() => pingItem.AddHistory(ex.InnerException.Message)));
+                                new Action(() => pingItem.AddHistory("Error: " + ex.Message)));
 
                         e.Cancel = true;
+                        
+                        // Check for status change.
+                        if (pingItem.Status == PingStatus.Up || pingItem.Status == PingStatus.Down)
+                        {
+                            backgroundWorker.ReportProgress(
+                                0,
+                                new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Error });
+                            if (_applicationOptions.EmailAlert)
+                                SendEmail("error", pingItem.Hostname);
+                        }
+
                         pingItem.Status = PingStatus.Error;
                         pingItem.PingResetEvent.Set();
-                        pingItem.IsActive = false;
-                        return;
-                    }
-                    catch
-                    {
-                        e.Cancel = true;
-                        pingItem.PingResetEvent.Set();
-                        pingItem.Status = PingStatus.Error;
                         pingItem.IsActive = false;
                         return;
                     }
@@ -466,7 +469,7 @@ namespace vmPing.Views
                         }
 
                         // Check for status change.
-                        if (pingItem.Status != PingStatus.Up && pingItem.Status != PingStatus.Inactive)
+                        if (pingItem.Status == PingStatus.Down)
                         {
                             backgroundWorker.ReportProgress(
                                 0,
@@ -481,20 +484,35 @@ namespace vmPing.Views
                     }
                     catch (SocketException ex)
                     {
+                        const int WSAHOST_NOT_FOUND = 11001;
+
                         if (backgroundWorker.CancellationPending || pingItem.IsActive == false)
                         {
                             pingItem.PingResetEvent.Set();
                             return;
                         }
-
+                        
                         // Check for status change.
-                        if (pingItem.Status != PingStatus.Down && pingItem.Status != PingStatus.Inactive)
+                        if (pingItem.Status == PingStatus.Up)
                         {
                             backgroundWorker.ReportProgress(
                                 0,
                                 new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
                             if (_applicationOptions.EmailAlert)
                                 SendEmail("down", pingItem.Hostname);
+                        }
+
+                        // If hostname cannot be resolved, report error and stop.
+                        if (ex.ErrorCode == WSAHOST_NOT_FOUND)
+                        {
+                            e.Cancel = true;
+                            Application.Current.Dispatcher.BeginInvoke(
+                                new Action(() => pingItem.AddHistory("Unable to resolve hostname.")));
+
+                            pingItem.Status = PingStatus.Error;
+                            pingItem.PingResetEvent.Set();
+                            pingItem.IsActive = false;
+                            return;
                         }
 
                         ++pingItem.Statistics.PingsLost;
@@ -570,7 +588,7 @@ namespace vmPing.Views
         {
             if (pingItem.PingBackgroundWorker.CancellationPending)
                 return;
-
+            
             // Prefix the ping reply output with a timestamp.
             var pingOutput = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  Port {portnumber.ToString()}: ");
             if (isPortOpen)

@@ -20,6 +20,9 @@ namespace vmPing.Classes
                     case PingStatus.Up:
                         returnString = "UP";
                         break;
+                    case PingStatus.Error:
+                        returnString = "[ERROR]";
+                        break;
                 }
                 return returnString;
             }
@@ -32,6 +35,7 @@ namespace vmPing.Classes
                 string returnString = string.Empty;
                 switch (Status)
                 {
+                    case PingStatus.Error:
                     case PingStatus.Down:
                         returnString = "u";
                         break;

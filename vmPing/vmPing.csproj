@@ -81,11 +81,11 @@
     <Compile Include="Views\ManageFavoritesWindow.xaml.cs">
       <DependentUpon>ManageFavoritesWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\OptionsWindow.xaml.cs">
+      <DependentUpon>OptionsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PopupNotificationWindow.xaml.cs">
       <DependentUpon>PopupNotificationWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ProbeOptionsWindow.xaml.cs">
-      <DependentUpon>ProbeOptionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -134,11 +134,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\PopupNotificationWindow.xaml">
+    <Page Include="Views\OptionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ProbeOptionsWindow.xaml">
+    <Page Include="Views\PopupNotificationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -9,17 +9,13 @@ namespace vmPing.Views
     /// </summary>
     public partial class EmailAlertWindow : Window
     {
-        ApplicationOptions _applicationOptions;
-
-        public EmailAlertWindow(ApplicationOptions appOptions)
+        public EmailAlertWindow()
         {
             InitializeComponent();
-
-            _applicationOptions = appOptions;
-
-            txtEmailServer.Text = appOptions.EmailServer;
-            txtEmailRecipient.Text = appOptions.EmailRecipient;
-            txtEmailFromAddress.Text = appOptions.EmailFromAddress;
+            
+            txtEmailServer.Text = ApplicationOptions.EmailServer;
+            txtEmailRecipient.Text = ApplicationOptions.EmailRecipient;
+            txtEmailFromAddress.Text = ApplicationOptions.EmailFromAddress;
 
             // Set initial focus to text box.
             Loaded += (sender, e) =>
@@ -60,10 +56,10 @@ namespace vmPing.Views
                 return;
             }
 
-            _applicationOptions.EmailAlert = true;
-            _applicationOptions.EmailServer = txtEmailServer.Text;
-            _applicationOptions.EmailRecipient = txtEmailRecipient.Text;
-            _applicationOptions.EmailFromAddress = txtEmailFromAddress.Text;
+            ApplicationOptions.EmailAlert = true;
+            ApplicationOptions.EmailServer = txtEmailServer.Text;
+            ApplicationOptions.EmailRecipient = txtEmailRecipient.Text;
+            ApplicationOptions.EmailFromAddress = txtEmailFromAddress.Text;
 
             DialogResult = true;
         }

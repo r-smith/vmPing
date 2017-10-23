@@ -23,7 +23,6 @@ namespace vmPing.Views
     public partial class MainWindow : Window
     {
         private ObservableCollection<PingItem> _pingItems = new ObservableCollection<PingItem>();
-        ApplicationOptions _applicationOptions = new ApplicationOptions();
         private ObservableCollection<StatusChangeLog> _statusChangeLog = new ObservableCollection<StatusChangeLog>();
 
         public static RoutedCommand AlwaysOnTopCommand = new RoutedCommand();
@@ -41,13 +40,7 @@ namespace vmPing.Views
         public MainWindow()
         {
             InitializeComponent();
-
-            InitializeCommandBindings();
-            ProcessCommandLineArguments();
-            RefreshFavorites();
-
-            sliderColumns.Value = _pingItems.Count;
-            icPingItems.ItemsSource = _pingItems;
+            InitializeAplication();
         }
 
 
@@ -62,6 +55,17 @@ namespace vmPing.Views
                 if (tb != null)
                     tb.Focus();
             }
+        }
+
+
+        private void InitializeAplication()
+        {
+            InitializeCommandBindings();
+            ParseCommandLineArguments();
+            RefreshFavorites();
+
+            sliderColumns.Value = _pingItems.Count;
+            icPingItems.ItemsSource = _pingItems;
         }
 
 
@@ -108,13 +112,13 @@ namespace vmPing.Views
         }
 
 
-        private void ProcessCommandLineArguments()
+        private void ParseCommandLineArguments()
         {
             var commandLineArgs = Environment.GetCommandLineArgs();
             var errorString = string.Empty;
             var hostnameList = new List<string>();
 
-            for (int index = 1; index < commandLineArgs.Length; ++index)
+            for (var index = 1; index < commandLineArgs.Length; ++index)
             {
                 int numValue;
 
@@ -122,9 +126,11 @@ namespace vmPing.Views
                 {
                     case "/i":
                     case "-i":
-                        if (commandLineArgs.Length > index + 1 && int.TryParse(commandLineArgs[index + 1], out numValue) && numValue > 0 && numValue <= 86400)
+                        if (index + 1 < commandLineArgs.Length &&
+                            int.TryParse(commandLineArgs[index + 1], out numValue) &&
+                            numValue > 0 && numValue <= 86400)
                         {
-                            _applicationOptions.PingInterval = numValue * 1000;
+                            ApplicationOptions.PingInterval = numValue * 1000;
                             ++index;
                         }
                         else
@@ -135,9 +141,11 @@ namespace vmPing.Views
                         break;
                     case "/w":
                     case "-w":
-                        if (commandLineArgs.Length > index + 1 && int.TryParse(commandLineArgs[index + 1], out numValue) && numValue > 0 && numValue <= 60)
+                        if (commandLineArgs.Length > index + 1 &&
+                            int.TryParse(commandLineArgs[index + 1], out numValue) &&
+                            numValue > 0 && numValue <= 60)
                         {
-                            _applicationOptions.PingTimeout = numValue * 1000;
+                            ApplicationOptions.PingTimeout = numValue * 1000;
                             ++index;
                         }
                         else
@@ -242,8 +250,8 @@ namespace vmPing.Views
 
         private void backgroundThread_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            if (_applicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.Always ||
-                (_applicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.WhenMinimized &&
+            if (ApplicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.Always ||
+                (ApplicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.WhenMinimized &&
                 this.WindowState == WindowState.Minimized))
             {
                 if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
@@ -303,7 +311,7 @@ namespace vmPing.Views
                 {
                     try
                     {
-                        pingItem.Reply = pingItem.Sender.Send(pingItem.Hostname, _applicationOptions.PingTimeout, buffer, options);
+                        pingItem.Reply = pingItem.Sender.Send(pingItem.Hostname, ApplicationOptions.PingTimeout, buffer, options);
                         if (backgroundWorker.CancellationPending || pingItem.IsActive == false)
                         {
                             pingItem.PingResetEvent.Set();
@@ -319,10 +327,10 @@ namespace vmPing.Views
                                 backgroundWorker.ReportProgress(
                                     0,
                                     new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Up });
-                                if (_applicationOptions.EmailAlert)
+                                if (ApplicationOptions.EmailAlert)
                                     SendEmail("up", pingItem.Hostname);
                             }
-
+                            
                             ++pingItem.Statistics.PingsReceived;
                             pingItem.Status = PingStatus.Up;
                         }
@@ -338,7 +346,7 @@ namespace vmPing.Views
                                 backgroundWorker.ReportProgress(
                                     0,
                                     new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
-                                if (_applicationOptions.EmailAlert)
+                                if (ApplicationOptions.EmailAlert)
                                     SendEmail("down", pingItem.Hostname);
                             }
 
@@ -353,7 +361,7 @@ namespace vmPing.Views
                                 backgroundWorker.ReportProgress(
                                     0,
                                     new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
-                                if (_applicationOptions.EmailAlert)
+                                if (ApplicationOptions.EmailAlert)
                                     SendEmail("down", pingItem.Hostname);
                             }
 
@@ -370,15 +378,15 @@ namespace vmPing.Views
                             // Ping timed out.  If the ping interval is greater than the timeout,
                             // then sleep for [INTERVAL - TIMEOUT]
                             // Otherwise, sleep for a fixed amount of 1 second
-                            if (_applicationOptions.PingInterval > _applicationOptions.PingTimeout)
-                                Thread.Sleep(_applicationOptions.PingInterval - _applicationOptions.PingTimeout);
+                            if (ApplicationOptions.PingInterval > ApplicationOptions.PingTimeout)
+                                Thread.Sleep(ApplicationOptions.PingInterval - ApplicationOptions.PingTimeout);
                             else
                                 Thread.Sleep(1000);
                         }
                         else
                             // For any other type of ping response, sleep for the global ping interval amount
                             // before sending another ping.
-                            Thread.Sleep(_applicationOptions.PingInterval);
+                            Thread.Sleep(ApplicationOptions.PingInterval);
                     }
                     catch (Exception ex)
                     {
@@ -390,14 +398,14 @@ namespace vmPing.Views
                                 new Action(() => pingItem.AddHistory("Error: " + ex.Message)));
 
                         e.Cancel = true;
-                        
+
                         // Check for status change.
                         if (pingItem.Status == PingStatus.Up || pingItem.Status == PingStatus.Down)
                         {
                             backgroundWorker.ReportProgress(
                                 0,
                                 new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Error });
-                            if (_applicationOptions.EmailAlert)
+                            if (ApplicationOptions.EmailAlert)
                                 SendEmail("error", pingItem.Hostname);
                         }
 
@@ -442,14 +450,14 @@ namespace vmPing.Views
 
             pingItem.Statistics = new PingStatistics();
             int errorCode = 0;
-            
+
             while (!backgroundWorker.CancellationPending && pingItem.IsActive)
             {
                 using (TcpClient client = new TcpClient())
                 {
                     ++pingItem.Statistics.PingsSent;
                     DisplayStatistics(pingItem);
-                    
+
                     try
                     {
                         var result = client.BeginConnect(hostname, portnumber, null, null);
@@ -474,7 +482,7 @@ namespace vmPing.Views
                             backgroundWorker.ReportProgress(
                                 0,
                                 new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Up });
-                            if (_applicationOptions.EmailAlert)
+                            if (ApplicationOptions.EmailAlert)
                                 SendEmail("up", pingItem.Hostname);
                         }
 
@@ -491,14 +499,14 @@ namespace vmPing.Views
                             pingItem.PingResetEvent.Set();
                             return;
                         }
-                        
+
                         // Check for status change.
                         if (pingItem.Status == PingStatus.Up)
                         {
                             backgroundWorker.ReportProgress(
                                 0,
                                 new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
-                            if (_applicationOptions.EmailAlert)
+                            if (ApplicationOptions.EmailAlert)
                                 SendEmail("down", pingItem.Hostname);
                         }
 
@@ -526,12 +534,12 @@ namespace vmPing.Views
                 DisplayStatistics(pingItem);
                 pingItem.PingResetEvent.Set();
 
-                Thread.Sleep(_applicationOptions.PingInterval < 4000 ? 4000 : _applicationOptions.PingInterval);
+                Thread.Sleep(ApplicationOptions.PingInterval < 4000 ? 4000 : ApplicationOptions.PingInterval);
             }
 
             pingItem.PingResetEvent.Set();
         }
-        
+
 
         public void DisplayIcmpReply(PingItem pingItem)
         {
@@ -574,9 +582,9 @@ namespace vmPing.Views
                 new Action(() => pingItem.AddHistory(pingOutput.ToString())));
 
             // If logging is enabled, write the response to a file.
-            if (_applicationOptions.LogOutput && _applicationOptions.LogPath.Length > 0)
+            if (ApplicationOptions.LogOutput && ApplicationOptions.LogPath.Length > 0)
             {
-                var logPath = $@"{_applicationOptions.LogPath}\{pingItem.Hostname}.txt";
+                var logPath = $@"{ApplicationOptions.LogPath}\{pingItem.Hostname}.txt";
                 using (System.IO.StreamWriter outputFile = new System.IO.StreamWriter(@logPath, true))
                 {
                     outputFile.WriteLine(pingOutput.ToString().Insert(1, DateTime.Now.ToShortDateString() + " "));
@@ -588,7 +596,7 @@ namespace vmPing.Views
         {
             if (pingItem.PingBackgroundWorker.CancellationPending)
                 return;
-            
+
             // Prefix the ping reply output with a timestamp.
             var pingOutput = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  Port {portnumber.ToString()}: ");
             if (isPortOpen)
@@ -603,11 +611,11 @@ namespace vmPing.Views
                 new Action(() => pingItem.AddHistory(pingOutput.ToString())));
 
             // If logging is enabled, write the response to a file.
-            if (_applicationOptions.LogOutput && _applicationOptions.LogPath.Length > 0)
+            if (ApplicationOptions.LogOutput && ApplicationOptions.LogPath.Length > 0)
             {
                 var index = pingItem.Hostname.IndexOf(':');
                 var hostname = (index > 0) ? pingItem.Hostname.Substring(0, index) : pingItem.Hostname;
-                var logPath = $@"{_applicationOptions.LogPath}\{hostname}.txt";
+                var logPath = $@"{ApplicationOptions.LogPath}\{hostname}.txt";
                 using (System.IO.StreamWriter outputFile = new System.IO.StreamWriter(@logPath, true))
                 {
                     outputFile.WriteLine(pingOutput.ToString().Insert(1, DateTime.Now.ToShortDateString() + " "));
@@ -678,10 +686,10 @@ namespace vmPing.Views
 
         public void SendEmail(string hostStatus, string hostName)
         {
-            var serverAddress = _applicationOptions.EmailServer;
-            var mailFromAddress = _applicationOptions.EmailFromAddress;
+            var serverAddress = ApplicationOptions.EmailServer;
+            var mailFromAddress = ApplicationOptions.EmailFromAddress;
             var mailFromFriendly = "vmPing";
-            var mailToAddress = _applicationOptions.EmailRecipient;
+            var mailToAddress = ApplicationOptions.EmailRecipient;
             var mailSubject = $"[vmPing] {hostName} <> Host {hostStatus}";
             var mailBody =
                 $"{hostName} is {hostStatus}.{Environment.NewLine}" +
@@ -787,14 +795,14 @@ namespace vmPing.Views
 
         private void TraceRouteExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            var traceWindow = new TraceRouteWindow(_applicationOptions.AlwaysOnTop);
+            var traceWindow = new TraceRouteWindow(ApplicationOptions.AlwaysOnTop);
             traceWindow.Show();
         }
 
 
         private void FloodHostExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            var floodWindow = new FloodHostWindow(_applicationOptions.AlwaysOnTop);
+            var floodWindow = new FloodHostWindow(ApplicationOptions.AlwaysOnTop);
             floodWindow.Show();
         }
 
@@ -828,29 +836,29 @@ namespace vmPing.Views
 
         private void ToggleAlwaysOnTop()
         {
-            _applicationOptions.AlwaysOnTop = mnuOnTop.IsChecked;
+            ApplicationOptions.AlwaysOnTop = mnuOnTop.IsChecked;
 
             foreach (Window window in Application.Current.Windows)
-                window.Topmost = _applicationOptions.AlwaysOnTop;
+                window.Topmost = ApplicationOptions.AlwaysOnTop;
         }
 
 
         private void DisplayEmailAlerts()
         {
-            if (_applicationOptions.EmailAlert)
+            if (ApplicationOptions.EmailAlert)
             {
                 mnuEmailAlerts.IsChecked = false;
-                _applicationOptions.EmailAlert = false;
+                ApplicationOptions.EmailAlert = false;
                 return;
             }
 
             // Display email alerts window
             ApplicationOptions.BlurWindows();
-            var emailAlertWindow = new EmailAlertWindow(_applicationOptions);
+            var emailAlertWindow = new EmailAlertWindow();
             emailAlertWindow.Owner = this;
 
             emailAlertWindow.ShowDialog();
-            mnuEmailAlerts.IsChecked = _applicationOptions.EmailAlert;
+            mnuEmailAlerts.IsChecked = ApplicationOptions.EmailAlert;
 
             ApplicationOptions.RemoveBlurWindows();
         }
@@ -858,10 +866,10 @@ namespace vmPing.Views
 
         private void DisplayLogOutput()
         {
-            if (_applicationOptions.LogOutput)
+            if (ApplicationOptions.LogOutput)
             {
                 mnuLogOutput.IsChecked = false;
-                _applicationOptions.LogOutput = false;
+                ApplicationOptions.LogOutput = false;
                 return;
             }
 
@@ -874,27 +882,27 @@ namespace vmPing.Views
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                _applicationOptions.LogPath = dialog.SelectedPath;
-                _applicationOptions.LogOutput = true;
+                ApplicationOptions.LogPath = dialog.SelectedPath;
+                ApplicationOptions.LogOutput = true;
             }
             else
             {
-                _applicationOptions.LogOutput = false;
+                ApplicationOptions.LogOutput = false;
             }
-            mnuLogOutput.IsChecked = _applicationOptions.LogOutput;
+            mnuLogOutput.IsChecked = ApplicationOptions.LogOutput;
 
             ApplicationOptions.RemoveBlurWindows();
         }
 
         private void DisplayProbeOptions()
         {
-            // Display probe options window
-            ApplicationOptions.BlurWindows();
-            var probeOptionsWindow = new ProbeOptionsWindow(_applicationOptions);
-            probeOptionsWindow.Owner = this;
-            probeOptionsWindow.ShowDialog();
-
-            ApplicationOptions.RemoveBlurWindows();
+            if (OptionsWindow.openWindow != null)
+                OptionsWindow.openWindow.Activate();
+            else
+            {
+                var optionsWindow = new OptionsWindow();
+                optionsWindow.Show();
+            }
         }
 
 
@@ -991,13 +999,13 @@ namespace vmPing.Views
             switch (menuItem.Header.ToString())
             {
                 case "Always":
-                    _applicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Always;
+                    ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Always;
                     break;
                 case "Never":
-                    _applicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Never;
+                    ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Never;
                     break;
                 case "When Minimized":
-                    _applicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
+                    ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
                     break;
             }
         }

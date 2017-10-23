@@ -2,7 +2,7 @@
 
 namespace vmPing.Classes
 {
-    public class ApplicationOptions
+    public static class ApplicationOptions
     {
         public enum PopupNotificationOption
         {
@@ -10,29 +10,18 @@ namespace vmPing.Classes
             Never,
             WhenMinimized
         }
-
-        int pingInterval = Constants.PING_INTERVAL;
-        public int PingInterval
-        {
-            get { return this.pingInterval; }
-            set { this.pingInterval = value; }
-        }
-
-        int pingTimeout = Constants.PING_TIMEOUT;
-        public int PingTimeout
-        {
-            get { return this.pingTimeout; }
-            set { this.pingTimeout = value; }
-        }
-
-        public bool EmailAlert { get; set; }
-        public bool AlwaysOnTop { get; set; }
-        public string EmailServer { get; set; }
-        public string EmailRecipient { get; set; }
-        public string EmailFromAddress { get; set; }
-        public bool LogOutput { get; set; }
-        public string LogPath { get; set; }
-        public PopupNotificationOption PopupOption { get; set; } = PopupNotificationOption.Always;
+        
+        public static int PingInterval { get; set; } = Constants.PING_INTERVAL;
+        public static int PingTimeout { get; set; } = Constants.PING_TIMEOUT;
+        public static int AlertThreshold { get; set; } = 2;
+        public static bool EmailAlert { get; set; } = false;
+        public static bool AlwaysOnTop { get; set; } = false;
+        public static string EmailServer { get; set; }
+        public static string EmailRecipient { get; set; }
+        public static string EmailFromAddress { get; set; }
+        public static bool LogOutput { get; set; } = false;
+        public static string LogPath { get; set; }
+        public static PopupNotificationOption PopupOption { get; set; } = PopupNotificationOption.Always;
 
         public static void BlurWindows()
         {

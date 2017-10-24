@@ -99,6 +99,8 @@ namespace vmPing.Classes
                     return (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_DOWN);
                 case PingStatus.Error:
                     return (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_ERROR);
+                case PingStatus.Indeterminate:
+                    return (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_INDETERMINATE);
                 default:
                     return (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_INACTIVE);
             }
@@ -143,6 +145,8 @@ namespace vmPing.Classes
                     return (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_DOWN);
                 case PingStatus.Error:
                     return (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_ERROR);
+                case PingStatus.Indeterminate:
+                    return (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_INDETERMINATE);
                 default:
                     return (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_INACTIVE);
             }

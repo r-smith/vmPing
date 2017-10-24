@@ -26,6 +26,8 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0"
                                Text="Probe Options"
@@ -39,7 +41,7 @@
                                 Orientation="Horizontal"
                                 Margin="20,10,0,0">
                         <Label Content="Ping interval:"
-                               Width="100"
+                               Width="110"
                                FontSize="14"
                                Foreground="#555555" />
                         <TextBox Name="txtPingInterval"
@@ -61,7 +63,7 @@
                                 Orientation="Horizontal"
                                 Margin="20,10,0,0">
                         <Label Content="Ping timeout:"
-                               Width="100"
+                               Width="110"
                                FontSize="14"
                                Foreground="#555555" />
                         <TextBox Name="txtPingTimeout"
@@ -72,6 +74,26 @@
                                  MaxLength="2"
                                  FontSize="14" />
                         <Label Content="Seconds" Margin="10,0,0,0" FontSize="14" Foreground="#555555" />
+                    </StackPanel>
+
+                    <Separator Grid.Row="3" Height="1" Background="#ccc" Margin="20,20,20,5" />
+                    
+                    <!-- Alert Threshold -->
+                    <StackPanel Grid.Row="4"
+                                Orientation="Horizontal"
+                                Margin="20,10,0,0">
+                        <Label Content="Alert threshold:"
+                               Width="110"
+                               FontSize="14"
+                               Foreground="#555555" />
+                        <TextBox Name="txtAlertThreshold"
+                                 PreviewTextInput="txtNumericTextbox_PreviewTextInput"
+                                 Width="60"
+                                 VerticalContentAlignment="Center"
+                                 Padding="3,0,0,0"
+                                 MaxLength="2"
+                                 FontSize="14" />
+                        <Label Content="dropped pings" Margin="10,0,0,0" FontSize="14" Foreground="#555555" />
                     </StackPanel>
                 </Grid>
             </TabItem>

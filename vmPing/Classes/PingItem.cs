@@ -12,6 +12,7 @@ namespace vmPing.Classes
         Up,
         Down,
         Error,
+        Indeterminate,
         Inactive
     }
 
@@ -22,6 +23,7 @@ namespace vmPing.Classes
         public event PropertyChangedEventHandler PropertyChanged;
 
         public string Hostname { get; set; }
+        public int DownCount { get; set; }
         public BackgroundWorker PingBackgroundWorker { get; set; }
         public AutoResetEvent PingResetEvent { get; set; }
         public PingStatistics Statistics { get; set; }

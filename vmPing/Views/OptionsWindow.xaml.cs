@@ -51,6 +51,7 @@ namespace vmPing.Views
 
             txtPingInterval.Text = pingInterval.ToString();
             txtPingTimeout.Text = pingTimeout.ToString();
+            txtAlertThreshold.Text = ApplicationOptions.AlertThreshold.ToString();
             cboPingInterval.Text = pingIntervalText;
         }
 
@@ -71,6 +72,16 @@ namespace vmPing.Views
             {
                 MessageBox.Show(
                     "A ping timeout is required.",
+                    "vmPing Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                txtPingTimeout.Focus();
+                return;
+            }
+            else if (txtAlertThreshold.Text.Length == 0)
+            {
+                MessageBox.Show(
+                    "An alert threshold is required.",
                     "vmPing Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
@@ -112,6 +123,16 @@ namespace vmPing.Views
                 pingTimeout = Constants.PING_TIMEOUT;
 
             ApplicationOptions.PingTimeout = pingTimeout;
+
+            // Alert threshold
+            int alertThreshold;
+
+            var isThresholdValid = int.TryParse(txtAlertThreshold.Text, out alertThreshold) && alertThreshold > 0 && alertThreshold <= 60;
+            if (!isThresholdValid)
+                alertThreshold = 1;
+
+            ApplicationOptions.AlertThreshold = alertThreshold;
+            
             this.Close();
         }
 

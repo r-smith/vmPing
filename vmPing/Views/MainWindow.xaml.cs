@@ -202,17 +202,13 @@ namespace vmPing.Views
 
         public void btnPing_Click(object sender, EventArgs e)
         {
-            var pingButton = sender as Button;
-            var pingItem = pingButton.DataContext as PingItem;
-
-            PingStartStop(pingItem);
+            PingStartStop((PingItem)((Button)sender).DataContext);
         }
 
 
         public void PingStartStop(PingItem pingItem)
         {
-            if (pingItem.Hostname == null) return;
-            if (pingItem.Hostname.Length == 0) return;
+            if (string.IsNullOrEmpty(pingItem.Hostname)) return;
 
             if (!pingItem.IsActive)
             {
@@ -266,7 +262,6 @@ namespace vmPing.Views
                     _statusChangeLog.Add(e.UserState as StatusChangeLog);
                 }
             }
-
         }
 
 
@@ -330,19 +325,24 @@ namespace vmPing.Views
                                 if (ApplicationOptions.EmailAlert)
                                     SendEmail("up", pingItem.Hostname);
                             }
-                            
+
+                            pingItem.DownCount = 0;
                             ++pingItem.Statistics.PingsReceived;
                             pingItem.Status = PingStatus.Up;
                         }
-                        else if (pingItem.Reply.Status == IPStatus.TimedOut ||
-                            pingItem.Reply.Status == IPStatus.DestinationHostUnreachable ||
-                            pingItem.Reply.Status == IPStatus.DestinationNetworkUnreachable ||
-                            pingItem.Reply.Status == IPStatus.DestinationUnreachable
-                            )
+                        else 
                         {
-                            // Check for status change.
                             if (pingItem.Status == PingStatus.Up)
+                                pingItem.Status = PingStatus.Indeterminate;
+                            if (pingItem.Status == PingStatus.Inactive)
+                                pingItem.Status = PingStatus.Down;
+                            ++pingItem.DownCount;
+
+
+                            // Check for status change.
+                            if (pingItem.Status == PingStatus.Indeterminate && pingItem.DownCount >= ApplicationOptions.AlertThreshold)
                             {
+                                pingItem.Status = PingStatus.Down;
                                 backgroundWorker.ReportProgress(
                                     0,
                                     new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
@@ -350,23 +350,14 @@ namespace vmPing.Views
                                     SendEmail("down", pingItem.Hostname);
                             }
 
-                            ++pingItem.Statistics.PingsLost;
-                            pingItem.Status = PingStatus.Down;
-                        }
-                        else
-                        {
-                            // Check for status change.
-                            if (pingItem.Status == PingStatus.Up)
-                            {
-                                backgroundWorker.ReportProgress(
-                                    0,
-                                    new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
-                                if (ApplicationOptions.EmailAlert)
-                                    SendEmail("down", pingItem.Hostname);
-                            }
-
-                            ++pingItem.Statistics.PingsError;
-                            pingItem.Status = PingStatus.Down;
+                            if (pingItem.Reply.Status == IPStatus.TimedOut ||
+                                pingItem.Reply.Status == IPStatus.DestinationHostUnreachable ||
+                                pingItem.Reply.Status == IPStatus.DestinationNetworkUnreachable ||
+                                pingItem.Reply.Status == IPStatus.DestinationUnreachable
+                                )
+                                ++pingItem.Statistics.PingsLost;
+                            else
+                                ++pingItem.Statistics.PingsError;
                         }
 
                         DisplayStatistics(pingItem);
@@ -400,7 +391,7 @@ namespace vmPing.Views
                         e.Cancel = true;
 
                         // Check for status change.
-                        if (pingItem.Status == PingStatus.Up || pingItem.Status == PingStatus.Down)
+                        if (pingItem.Status == PingStatus.Up || pingItem.Status == PingStatus.Down || pingItem.Status == PingStatus.Indeterminate)
                         {
                             backgroundWorker.ReportProgress(
                                 0,
@@ -419,6 +410,7 @@ namespace vmPing.Views
 
             pingItem.PingResetEvent.Set();
         }
+
 
         public void backgroundThread_PerformTcpProbe(object sender, DoWorkEventArgs e)
         {
@@ -486,6 +478,7 @@ namespace vmPing.Views
                                 SendEmail("up", pingItem.Hostname);
                         }
 
+                        pingItem.DownCount = 0;
                         ++pingItem.Statistics.PingsReceived;
                         pingItem.Status = PingStatus.Up;
                         isPortOpen = true;
@@ -500,9 +493,16 @@ namespace vmPing.Views
                             return;
                         }
 
-                        // Check for status change.
                         if (pingItem.Status == PingStatus.Up)
+                            pingItem.Status = PingStatus.Indeterminate;
+                        if (pingItem.Status == PingStatus.Inactive)
+                            pingItem.Status = PingStatus.Down;
+                        ++pingItem.DownCount;
+
+                        // Check for status change.
+                        if (pingItem.Status == PingStatus.Indeterminate && pingItem.DownCount >= ApplicationOptions.AlertThreshold)
                         {
+                            pingItem.Status = PingStatus.Down;
                             backgroundWorker.ReportProgress(
                                 0,
                                 new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
@@ -524,7 +524,6 @@ namespace vmPing.Views
                         }
 
                         ++pingItem.Statistics.PingsLost;
-                        pingItem.Status = PingStatus.Down;
                         isPortOpen = false;
                         errorCode = ex.ErrorCode;
                     }
@@ -592,6 +591,7 @@ namespace vmPing.Views
             }
         }
 
+
         public void DisplayTcpReply(PingItem pingItem, bool isPortOpen, int portnumber, int errorCode)
         {
             if (pingItem.PingBackgroundWorker.CancellationPending)
@@ -641,11 +641,13 @@ namespace vmPing.Views
             svTextBox.ScrollToBottom();
         }
 
+
         private void sliderColumns_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (sliderColumns.Value > _pingItems.Count)
                 sliderColumns.Value = _pingItems.Count;
         }
+
 
         private void tbHostname_KeyDown(object sender, KeyEventArgs e)
         {

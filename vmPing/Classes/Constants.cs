@@ -12,6 +12,7 @@
         public const string TXTOUTPUT_BACKCOLOR_UP = "#859900";
         public const string TXTOUTPUT_BACKCOLOR_DOWN = "#dc322f";
         public const string TXTOUTPUT_BACKCOLOR_ERROR = "#b58900";
+        public const string TXTOUTPUT_BACKCOLOR_INDETERMINATE = "#FFDF00";
         public const string TXTOUTPUT_FORECOLOR_ACTIVE = "#002b36";
         public const string TXTOUTPUT_FORECOLOR_INACTIVE = "#839496";
         public const string TXTOUTPUT_FORECOLOR_ERROR = "Black";
@@ -35,6 +36,7 @@
         public const string LBLSTATS_FORECOLOR_INACTIVE = "#657b83";
         public const string LBLSTATS_FORECOLOR_UP = "#fdf6e3";
         public const string LBLSTATS_FORECOLOR_DOWN = LBLSTATS_FORECOLOR_UP;
+        public const string LBLSTATS_FORECOLOR_INDETERMINATE = "#111";
         public const string LBLSTATS_FORECOLOR_ERROR = "White";
         public const string LBLSTATS_FONT_NAME = "Segoe UI";
         public const float LBLSTATS_FONT_SIZE = 9.75F;

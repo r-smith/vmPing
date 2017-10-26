@@ -11,6 +11,13 @@ vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple h
 * There is no installer.  Just run the .exe.
 * .NET 4.0 or greater is required.
 
+[![Join the chat at https://gitter.im/vmPing/Lobby](https://badges.gitter.im/vmPing/Lobby.svg)](https://gitter.im/vmPing/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+### Changes for v1.1.13
+* Visual change: There is no longer a gap between each host monitor.  They are now separated only by a 2px border.
+* Visual change: When a ping is in progress, a glyph appears next to the hostname indicating whether the host is up, down, or indeterminate.
+* Other minor visual changes.
+
 ### Changes for v1.1.12
 * Added an alerts threshold option.  Popup notifications and email alerts are not triggered until the specified number of consecutive pings are lost.  This helps avoid notifications for occasional lost packets.  The setting is configured through the options window (F10 or select from the drop-down menu).  The default value is two.
 * Additional error handling and improved reporting of errors.

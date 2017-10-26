@@ -7,7 +7,7 @@
         xmlns:controls="clr-namespace:vmPing.Controls"
         Title="vmPing" Height="400" Width="800"
         MinHeight="200" MinWidth="350"
-        Background="#F4F4F4"
+        Background="White"
         Loaded="Window_Loaded">
 
     <Window.Resources>
@@ -21,6 +21,7 @@
         <classes:PingStatusToStatisticsBrushConverter x:Key="PingStatusToStatisticsBrushConverter" />
         <classes:HostnameFontsizeConverter x:Key="HostnameFontsizeConverter" />
         <classes:ButtonTextVisibilityConverter x:Key="ButtonTextVisibilityConverter" />
+        <classes:PingStatusToGlyphConverter x:Key="PingStatusToGlyphConverter" />
 
 
         <ControlTemplate x:Key="TextBoxBaseControlTemplate" TargetType="{x:Type TextBoxBase}">
@@ -34,14 +35,13 @@
         <ControlTemplate x:Key="TextBoxBaseControlTemplatez" TargetType="{x:Type TextBoxBase}">
             <Border Background="{TemplateBinding Background}"
                     x:Name="Bd"
-                    CornerRadius="0,0,0,4"
+                    CornerRadius="0,0,0,0"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     BorderBrush="{TemplateBinding BorderBrush}">
                 <ScrollViewer x:Name="PART_ContentHost" />
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Background" Value="#EEEEFF" />
                     <Setter Property="Foreground" Value="#333388" />
                 </Trigger>
             </ControlTemplate.Triggers>
@@ -54,7 +54,7 @@
         <Style TargetType="{x:Type MenuItem}">
             <Setter Property="ItemsPanel" Value="{StaticResource MenuItemPanelTemplate}"/>
         </Style>
-        
+
         <Style x:Key="MenuStyle1" TargetType="{x:Type Menu}">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}"/>
@@ -66,7 +66,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Menu}">
-                        <Border BorderBrush="Transparent" BorderThickness="0" Background="Transparent" Padding="0,0,5,0" SnapsToDevicePixels="True">
+                        <Border BorderBrush="Transparent" BorderThickness="0" Background="Transparent" Padding="0,0,0,0" SnapsToDevicePixels="True">
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                         </Border>
                     </ControlTemplate>
@@ -80,7 +80,7 @@
     </Window.InputBindings>
 
     <!-- MASTER DOCKPANEL -->
-    <DockPanel>
+    <DockPanel Background="#aaa">
         <!-- Menu bar -->
         <Menu DockPanel.Dock="Top"
               Name="menuMain"
@@ -88,7 +88,7 @@
               Style="{DynamicResource MenuStyle1}">
             <Menu.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <DockPanel HorizontalAlignment="Stretch" LastChildFill="False" />
+                    <DockPanel HorizontalAlignment="Stretch" LastChildFill="False" Background="White"/>
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
 
@@ -147,7 +147,7 @@
 
             <!-- Menu Item: Extras -->
             <MenuItem Width="28"
-                      Margin="0"
+                      Margin="0,0,5,0"
                       DockPanel.Dock="Right"
                       >
                 <MenuItem.Icon>
@@ -234,10 +234,10 @@
 
 
         <!-- Items Control -->
-        <ItemsControl Name="icPingItems" IsTabStop="False" Focusable="False">
+        <ItemsControl Name="icPingItems" IsTabStop="False" Focusable="False" BorderThickness="0,1,0,0" BorderBrush="#111" Margin="0,0,-2,-2">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="#666" BorderThickness="2" Margin="5" SnapsToDevicePixels="True" CornerRadius="4"
+                    <Border BorderBrush="#111" BorderThickness="0,0,2,2" Margin="0,0,0,0" SnapsToDevicePixels="True" CornerRadius="0"
                             Background="{Binding Status, Converter={StaticResource PingStatusToBackgroundBrushConverter}}">
                         <Grid Name="gridItemsControl">
                             <Grid.RowDefinitions>
@@ -267,20 +267,16 @@
                                                         Background="{TemplateBinding Background}">
                                                     <Image Name="controlButton_image" Source="/Resources/cancel-16.png"
                                                            Width="14" Height="14"
-                                                           Opacity="0.4"
-                                                       />
+                                                           Opacity="0.4" />
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
                                                         <Setter TargetName="controlButton_border" Property="BorderBrush" Value="#33000000" />
-                                                    </Trigger>
-                                                    <Trigger Property="IsMouseOver" Value="True">
                                                         <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
-                                                    </Trigger>
-                                                    <Trigger Property="IsPressed" Value="True">
                                                         <Setter TargetName="controlButton_border" Property="Background" Value="White" />
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#dddddd" />
                                                         <Setter TargetName="controlButton_border" Property="BorderBrush" Value="Black" />
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
@@ -307,7 +303,7 @@
                                        Content="{Binding PingStatisticsText, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
                                        Background="Transparent"
                                        Foreground="{Binding Status, Converter={StaticResource PingStatusToStatisticsBrushConverter}}"
-                                       FontFamily="Segoe UI" FontSize="14" FontWeight="Bold"
+                                       FontFamily="Segoe UI" FontSize="12" FontWeight="Bold"
                                        Padding="8,0,0,3">
                                     <Label.Triggers>
                                         <EventTrigger RoutedEvent="Binding.TargetUpdated">
@@ -315,8 +311,7 @@
                                                 <Storyboard>
                                                     <DoubleAnimation Storyboard.TargetName="lblStats"
                                                                      Storyboard.TargetProperty="Opacity"
-                                                                     From="0.0" To="1.0" Duration="0:0:0.3"
-                                                                     />
+                                                                     From="0.0" To="1.0" Duration="0:0:0.3" />
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </EventTrigger>
@@ -333,7 +328,7 @@
                                          IsTabStop="False"
                                          IsTextSearchEnabled="False"
                                          controls:ListBoxBehavior.ScrollOnNewItem="True"
-                                         FontFamily="Consolas" FontSize="12">
+                                         FontFamily="Consolas" FontSize="11">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="{x:Type ListBoxItem}">
                                             <Setter Property="Background" Value="Transparent" />
@@ -348,15 +343,14 @@
                                             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                                         </Style>
                                     </ListBox.ItemContainerStyle>
-
                                 </ListBox>
                             </DockPanel>
 
 
                             <!-- vmPing icon -->
                             <Image Source="/Resources/vmPing-96.png"
-                                   Width="96"
-                                   Height="96"
+                                   Width="72"
+                                   Height="72"
                                    Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
                                    Opacity="0.03" />
 
@@ -364,55 +358,72 @@
                             <!-- Hostname and ping button section -->
                             <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
+                                
+                                <!-- Border to set background color and top border for this section -->
+                                <Border Grid.ColumnSpan="3" Background="#e8ffffff" BorderThickness="0,1,0,0" BorderBrush="#20000000" />
+
+                                <!-- Status glyph -->
+                                <TextBlock Grid.Column="0"
+                                           Text="{Binding Status, Converter={StaticResource PingStatusToGlyphConverter}}"
+                                           FontSize="14"
+                                           FontFamily="Marlett"
+                                           VerticalAlignment="Center"
+                                           Foreground="Black"
+                                           Padding="4,0,1,0">
+                                </TextBlock>
 
                                 <!-- Hostname textbox -->
                                 <TextBox Name="tbHostname"
+                                         Grid.Column="1"
                                          FontWeight="SemiBold"
-                                         FontSize="18"
-                                         BorderThickness="0,1,0,0"
-                                         BorderBrush="Black"
+                                         FontSize="{Binding ElementName=lbHistory, Path=ActualWidth, Converter={StaticResource HostnameFontsizeConverter}}"
+                                         BorderThickness="0,0,0,0"
+                                         BorderBrush="#20000000"
                                          VerticalContentAlignment="Center"
+                                         Background="Transparent"
                                          CharacterCasing="Upper"
-                                         Padding="2,0,0,0"
+                                         Padding="0,0,0,0"
                                          Text="{Binding Hostname, UpdateSourceTrigger=PropertyChanged}"
                                          IsEnabled="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}"
                                          Template="{StaticResource TextBoxBaseControlTemplatez}"
-                                         KeyDown="tbHostname_KeyDown"
-                                         />
+                                         KeyDown="tbHostname_KeyDown" />
 
                                 <!-- Ping button -->
                                 <Button Name="btnPing"
                                         Click="btnPing_Click"
-                                        Grid.Column="1"
+                                        Grid.Column="2"
                                         FontSize="14"
-                                        Padding="0,6"
-                                        Background="AliceBlue">
+                                        Padding="0,2"
+                                        Margin="2"
+                                        HorizontalAlignment="Right"
+                                        Background="White">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
-                                            <Border Name="pingButton_border" BorderThickness="1,1,0,0" BorderBrush="Black"
-                                                    CornerRadius="0,0,4,0"
+                                            <Border Name="pingButton_border" BorderThickness="1" BorderBrush="#bb2e6da4"
+                                                    CornerRadius="4"
                                                     Background="{TemplateBinding Background}">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
                                                     <Image Source="{Binding IsActive, Converter={StaticResource BooleanToImageConverter}}"
-                                                           Margin="0,6"
-                                                           />
+                                                           Margin="0,6" />
                                                     <TextBlock Text="{Binding IsActive, Converter={StaticResource BoolToStringConverter}}"
                                                                Visibility="{Binding ElementName=lbHistory, Path=ActualWidth, Converter={StaticResource ButtonTextVisibilityConverter}}"
-                                                               Foreground="#444"
+                                                               Foreground="Black"
                                                                FontSize="13"
                                                                VerticalAlignment="Center"
-                                                               Margin="8,0,0,0"/>
+                                                               Margin="8,0,0,0" />
                                                 </StackPanel>
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="pingButton_border" Property="Background" Value="#E0F0FF" />
+                                                    <Setter TargetName="pingButton_border" Property="Background" Value="#f0f0f0" />
+                                                    <Setter TargetName="pingButton_border" Property="BorderBrush" Value="#ff2e6da4" />
                                                 </Trigger>
                                                 <Trigger Property="IsPressed" Value="True">
-                                                    <Setter TargetName="pingButton_border" Property="Background" Value="#D0E0EF" />
+                                                    <Setter TargetName="pingButton_border" Property="Background" Value="#d8d8d8" />
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>

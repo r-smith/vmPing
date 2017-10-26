@@ -187,10 +187,39 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((double)value > 200)
+            if ((double)value > 300)
                 return Visibility.Visible;
             else
                 return Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class PingStatusToGlyphConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var returnString = string.Empty;
+            switch ((PingStatus)value)
+            {
+                case PingStatus.Error:
+                    //returnString = "r";
+                    break;
+                case PingStatus.Down:
+                    returnString = "u";
+                    break;
+                case PingStatus.Indeterminate:
+                    returnString = "i";
+                    break;
+                case PingStatus.Up:
+                    returnString = "t";
+                    break;
+            }
+            return returnString;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -3,8 +3,8 @@ vmPing
 
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
-###### (Latest version is 1.1.13 released on October 25, 2017)
-### [Click here to download the latest .exe](https://github.com/R-Smith/vmPing/releases/download/v1.1.13/vmPing.exe)
+###### (Latest version is 1.1.14 released on January 25, 2018)
+### [Click here to download the latest .exe](https://github.com/R-Smith/vmPing/releases/download/v1.1.14/vmPing.exe)
 ### [Click here to download the source](https://github.com/R-Smith/vmPing/archive/master.zip)
 
 ##### Notes
@@ -13,18 +13,19 @@ vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple h
 
 [![Join the chat at https://gitter.im/vmPing/Lobby](https://badges.gitter.im/vmPing/Lobby.svg)](https://gitter.im/vmPing/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+### Changes for v1.1.14
+* When pinging a hostname and no response is received, the resolved IP address is now printed at the top of the output.
+
 ### Changes for v1.1.13
 * Visual change: There is no longer a gap between each host monitor.  They are now separated only by a 2px border.
 * Visual change: When a ping is in progress, a glyph appears next to the hostname indicating whether the host is up, down, or indeterminate.
 * Other minor visual changes.
 
-### Changes for v1.1.12
+### Older changes
 * Added an alerts threshold option.  Popup notifications and email alerts are not triggered until the specified number of consecutive pings are lost.  This helps avoid notifications for occasional lost packets.  The setting is configured through the options window (F10 or select from the drop-down menu).  The default value is two.
 * Additional error handling and improved reporting of errors.
 * The options window (F10) is now displayed as its own separate window.
 * The help window (F1) is now displayed as its own separate window.
-
-### Older changes
 * Fixed parsing of command line arguments.  The application wasn't properly parsing values supplied by **-i** and **-w** on the command line.
 * The interval between TCP port pings is now tied to the global probe interval setting.  Previously, the probe interval was only being applied to ICMP pings.  The minimum interval for TCP probes is currently locked at four seconds, but any setting greater than that will be applied.
 * Popup notifications no longer steal focus.

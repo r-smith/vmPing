@@ -300,6 +300,16 @@ namespace vmPing.Views
             var buffer = Encoding.ASCII.GetBytes(Constants.PING_DATA);
             var options = new PingOptions(Constants.PING_TTL, true);
 
+            // Check whether a hostname or an IP address was provided.  If hostname, resolve and print IP.
+            var hostnameType = Uri.CheckHostName(pingItem.Hostname);
+            if (hostnameType != UriHostNameType.IPv4 && hostnameType != UriHostNameType.IPv6)
+            {
+                var host = System.Net.Dns.GetHostEntry(pingItem.Hostname);
+                if (host.AddressList.Length > 0)
+                    Application.Current.Dispatcher.BeginInvoke(
+                                new Action(() => pingItem.AddHistory("*** [" + host.AddressList[0].ToString() + "]")));
+            }
+
             using (pingItem.Sender = new Ping())
             {
                 while (!backgroundWorker.CancellationPending && pingItem.IsActive)
@@ -416,7 +426,7 @@ namespace vmPing.Views
         {
             var backgroundWorker = sender as BackgroundWorker;
             var pingItem = e.Argument as PingItem;
-
+            
             var hostAndPort = pingItem.Hostname.Split(':');
             string hostname = hostAndPort[0];
             int portnumber;
@@ -438,6 +448,16 @@ namespace vmPing.Views
                 pingItem.Status = PingStatus.Error;
                 pingItem.IsActive = false;
                 return;
+            }
+
+            // Check whether a hostname or an IP address was provided.  If hostname, resolve and print IP.
+            var hostnameType = Uri.CheckHostName(hostname);
+            if (hostnameType != UriHostNameType.IPv4 && hostnameType != UriHostNameType.IPv6)
+            {
+                var host = System.Net.Dns.GetHostEntry(hostname);
+                if (host.AddressList.Length > 0)
+                    Application.Current.Dispatcher.BeginInvoke(
+                                new Action(() => pingItem.AddHistory("*** [" + host.AddressList[0].ToString() + "]")));
             }
 
             pingItem.Statistics = new PingStatistics();

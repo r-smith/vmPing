@@ -17,6 +17,9 @@ namespace vmPing.Classes
         public static bool EmailAlert { get; set; } = false;
         public static bool AlwaysOnTop { get; set; } = false;
         public static string EmailServer { get; set; }
+        public static string EmailUser { get; set; }
+        public static string EmailPassword { get; set; }
+        public static string EmailPort { get; set; }
         public static string EmailRecipient { get; set; }
         public static string EmailFromAddress { get; set; }
         public static bool LogOutput { get; set; } = false;

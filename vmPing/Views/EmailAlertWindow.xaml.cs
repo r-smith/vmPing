@@ -14,6 +14,9 @@ namespace vmPing.Views
             InitializeComponent();
             
             txtEmailServer.Text = ApplicationOptions.EmailServer;
+            txtEmailUser.Text = ApplicationOptions.EmailUser;
+            txtEmailPassword.Password = ApplicationOptions.EmailPassword;
+            txtEmailPort.Text = ApplicationOptions.EmailPort;
             txtEmailRecipient.Text = ApplicationOptions.EmailRecipient;
             txtEmailFromAddress.Text = ApplicationOptions.EmailFromAddress;
 
@@ -58,6 +61,9 @@ namespace vmPing.Views
 
             ApplicationOptions.EmailAlert = true;
             ApplicationOptions.EmailServer = txtEmailServer.Text;
+            ApplicationOptions.EmailUser = txtEmailUser.Text;
+            ApplicationOptions.EmailPassword = txtEmailPassword.Password;
+            ApplicationOptions.EmailPort = txtEmailPort.Text;
             ApplicationOptions.EmailRecipient = txtEmailRecipient.Text;
             ApplicationOptions.EmailFromAddress = txtEmailFromAddress.Text;
 

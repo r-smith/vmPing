@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using vmPing.Classes;
 using System.Timers;
+using System.Net;
 
 namespace vmPing.Views
 {
@@ -709,6 +710,9 @@ namespace vmPing.Views
         public void SendEmail(string hostStatus, string hostName)
         {
             var serverAddress = ApplicationOptions.EmailServer;
+            var serverUser = ApplicationOptions.EmailUser;
+            var serverPassword = ApplicationOptions.EmailPassword;
+            var serverPort = ApplicationOptions.EmailPort;
             var mailFromAddress = ApplicationOptions.EmailFromAddress;
             var mailFromFriendly = "vmPing";
             var mailToAddress = ApplicationOptions.EmailRecipient;
@@ -729,6 +733,16 @@ namespace vmPing.Views
                     fromAddress = new MailAddress(mailFromAddress);
 
                 smtpClient.Host = serverAddress;
+
+                if (serverUser.Length > 0 && serverPassword.Length > 0)
+                {
+                    NetworkCredential basicCredential =
+                        new NetworkCredential(serverUser, serverPassword);
+                    smtpClient.Credentials = basicCredential;
+                }
+
+                if (serverPort.Length > 0)
+                    smtpClient.Port = Int32.Parse(serverPort);
 
                 message.From = fromAddress;
                 message.Subject = mailSubject;

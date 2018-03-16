@@ -61,6 +61,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\ApplicationOptions.cs" />
     <Compile Include="Classes\Favorite.cs" />
+    <Compile Include="Classes\FavoriteItem.cs" />
     <Compile Include="Classes\StatusChangeLog.cs" />
     <Compile Include="Classes\ValueConverters.cs" />
     <Compile Include="Controls\ListBoxBehavior.cs" />

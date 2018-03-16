@@ -249,7 +249,22 @@
                             <DockPanel>
                                 <!-- Delete button -->
                                 <Grid DockPanel.Dock="Top">
-                                    <TextBlock Width="{Binding ElementName=lbHistory, Path=ActualWidth}"/>
+                                    <TextBlock Text="" Width="{Binding ElementName=lbHistory, Path=ActualWidth}"/>
+                                    <TextBox Name="txtFriendlyName" 
+                                             
+                                             GotFocus="txtFriendlyName_GotFocus" 
+                                             LostFocus="txtFriendlyName_LostFocus" 
+                                             Background="Transparent"  
+                                             Text="{Binding FriendlyName, UpdateSourceTrigger=PropertyChanged}"
+                                             FontWeight="SemiBold"
+                                             FontSize="{Binding ElementName=lbHistory, Path=ActualWidth, Converter={StaticResource HostnameFontsizeConverter}}"
+                                             BorderThickness="0,0,0,0"
+                                             BorderBrush="#20000000"
+                                             VerticalContentAlignment="Center"
+                                             CharacterCasing="Upper"
+                                             Padding="0,0,0,0"
+                                             IsEnabled="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}"
+                                             Template="{StaticResource TextBoxBaseControlTemplatez}"/>
                                     <Button Name="btnRemove"
                                             Padding="5,3"
                                             Margin="0,0,3,0"

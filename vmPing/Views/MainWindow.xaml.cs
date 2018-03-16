@@ -972,14 +972,15 @@ namespace vmPing.Views
 
                     var selectedFavorite = s as MenuItem;
                     var favorite = Favorite.GetFavoriteEntry(selectedFavorite.Header.ToString());
-                    if (favorite.Hostnames.Count < 1)
+                    if (favorite.Hosts.Count < 1)
                         AddHostMonitor(1);
                     else
                     {
-                        AddHostMonitor(favorite.Hostnames.Count);
-                        for (int i = 0; i < favorite.Hostnames.Count; ++i)
+                        AddHostMonitor(favorite.Hosts.Count);
+                        for (int i = 0; i < favorite.Hosts.Count; ++i)
                         {
-                            _pingItems[i].Hostname = favorite.Hostnames[i].ToUpper();
+                            _pingItems[i].Hostname = favorite.Hosts[i].HostAddr.ToUpper();
+                            _pingItems[i].FriendlyName = favorite.Hosts[i].FriendlyName.ToUpper();
                             PingStartStop(_pingItems[i]);
                         }
                     }
@@ -1000,10 +1001,11 @@ namespace vmPing.Views
             addToFavoritesWindow.Owner = this;
             if (addToFavoritesWindow.ShowDialog() == true)
             {
-                var currentHostList = new List<string>();
+                var currentHostList = new FavoriteItem();
+                currentHostList.Title = addToFavoritesWindow.FavoriteTitle;
                 for (int i = 0; i < _pingItems.Count; ++i)
-                    currentHostList.Add(_pingItems[i].Hostname);
-                Favorite.AddFavoriteEntry(addToFavoritesWindow.FavoriteTitle, currentHostList, (int)sliderColumns.Value);
+                    currentHostList.Hosts.Add(new FavoriteHostItem {FriendlyName = _pingItems[i].FriendlyName, HostAddr = _pingItems[i].Hostname});
+                Favorite.AddFavoriteEntry(currentHostList, (int)sliderColumns.Value);
                 RefreshFavorites();
             }
 
@@ -1044,6 +1046,20 @@ namespace vmPing.Views
                     ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
                     break;
             }
+        }
+
+        private void txtFriendlyName_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (((TextBox)sender).Text != "FRIENDLY NAME")
+                return;
+            else
+                ((TextBox)sender).Text = "";
+        }
+
+        private void txtFriendlyName_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if(string.IsNullOrEmpty(((TextBox)sender).Text))
+                ((TextBox)sender).Text = "FRIENDLY NAME";
         }
     }
 }

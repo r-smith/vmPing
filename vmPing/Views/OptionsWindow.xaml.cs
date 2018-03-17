@@ -132,6 +132,8 @@ namespace vmPing.Views
                 alertThreshold = 1;
 
             ApplicationOptions.AlertThreshold = alertThreshold;
+
+            ApplicationOptions.SaveApplicationOption();
             
             this.Close();
         }

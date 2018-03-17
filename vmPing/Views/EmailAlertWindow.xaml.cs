@@ -66,6 +66,7 @@ namespace vmPing.Views
             ApplicationOptions.EmailPort = txtEmailPort.Text;
             ApplicationOptions.EmailRecipient = txtEmailRecipient.Text;
             ApplicationOptions.EmailFromAddress = txtEmailFromAddress.Text;
+            ApplicationOptions.SaveApplicationOption();
 
             DialogResult = true;
         }

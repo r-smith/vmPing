@@ -64,6 +64,7 @@ namespace vmPing.Views
             InitializeCommandBindings();
             ParseCommandLineArguments();
             RefreshFavorites();
+            RefreshApplicationsOptions();
 
             sliderColumns.Value = _pingItems.Count;
             icPingItems.ItemsSource = _pingItems;
@@ -873,6 +874,7 @@ namespace vmPing.Views
         private void ToggleAlwaysOnTop()
         {
             ApplicationOptions.AlwaysOnTop = mnuOnTop.IsChecked;
+            ApplicationOptions.SaveApplicationOption();
 
             foreach (Window window in Application.Current.Windows)
                 window.Topmost = ApplicationOptions.AlwaysOnTop;
@@ -992,6 +994,31 @@ namespace vmPing.Views
             }
         }
 
+        private void RefreshApplicationsOptions()
+        {
+           ApplicationOptions.LoadApplicationOption();
+            mnuEmailAlerts.IsChecked = ApplicationOptions.EmailAlert;
+            mnuLogOutput.IsChecked = ApplicationOptions.LogOutput;
+            mnuOnTop.IsChecked = ApplicationOptions.AlwaysOnTop;
+            if (mnuOnTop.IsChecked)
+                ToggleAlwaysOnTop();
+            mnuPopupAlways.IsChecked = false;
+            mnuPopupNever.IsChecked = false;
+            mnuPopupWhenMinimized.IsChecked = false;
+            switch (ApplicationOptions.PopupOption)
+            {
+                case ApplicationOptions.PopupNotificationOption.Always:
+                    mnuPopupAlways.IsChecked = true;
+                    break;
+                case ApplicationOptions.PopupNotificationOption.Never:
+                    mnuPopupNever.IsChecked = true;
+                    break;
+                case ApplicationOptions.PopupNotificationOption.WhenMinimized:
+                    mnuPopupWhenMinimized.IsChecked = true;
+                    break;
+            }
+        }
+
 
         private void mnuAddToFavorites_Click(object sender, RoutedEventArgs e)
         {
@@ -1046,6 +1073,7 @@ namespace vmPing.Views
                     ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
                     break;
             }
+            ApplicationOptions.SaveApplicationOption();
         }
 
         private void txtFriendlyName_GotFocus(object sender, RoutedEventArgs e)

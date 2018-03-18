@@ -909,6 +909,7 @@ namespace vmPing.Views
             {
                 mnuLogOutput.IsChecked = false;
                 ApplicationOptions.LogOutput = false;
+                ApplicationOptions.SaveApplicationOption();
                 return;
             }
 
@@ -929,7 +930,7 @@ namespace vmPing.Views
                 ApplicationOptions.LogOutput = false;
             }
             mnuLogOutput.IsChecked = ApplicationOptions.LogOutput;
-
+            ApplicationOptions.SaveApplicationOption();
             ApplicationOptions.RemoveBlurWindows();
         }
 

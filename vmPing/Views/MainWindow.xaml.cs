@@ -887,6 +887,7 @@ namespace vmPing.Views
             {
                 mnuEmailAlerts.IsChecked = false;
                 ApplicationOptions.EmailAlert = false;
+                ApplicationOptions.SaveApplicationOption();
                 return;
             }
 

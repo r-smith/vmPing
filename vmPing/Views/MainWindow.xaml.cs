@@ -1091,5 +1091,16 @@ namespace vmPing.Views
             if(string.IsNullOrEmpty(((TextBox)sender).Text))
                 ((TextBox)sender).Text = "FRIENDLY NAME";
         }
+
+        private void Grid_DblClick(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount >= 2)
+            {
+                var pingButton = sender as Grid;
+                var pingItem = pingButton.DataContext as PingItem;
+                DetailWindow view = new DetailWindow(pingItem);
+                view.Show();
+            }
+        }
     }
 }

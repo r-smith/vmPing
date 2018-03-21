@@ -239,7 +239,7 @@
                 <DataTemplate>
                     <Border BorderBrush="#111" BorderThickness="0,0,2,2" Margin="0,0,0,0" SnapsToDevicePixels="True" CornerRadius="0"
                             Background="{Binding Status, Converter={StaticResource PingStatusToBackgroundBrushConverter}}">
-                        <Grid Name="gridItemsControl">
+                        <Grid Name="gridItemsControl" UIElement.PreviewMouseDown="Grid_DblClick">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />

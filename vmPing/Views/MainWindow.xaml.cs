@@ -305,10 +305,23 @@ namespace vmPing.Views
             var hostnameType = Uri.CheckHostName(pingItem.Hostname);
             if (hostnameType != UriHostNameType.IPv4 && hostnameType != UriHostNameType.IPv6)
             {
-                var host = System.Net.Dns.GetHostEntry(pingItem.Hostname);
-                if (host.AddressList.Length > 0)
+                try
+                {
+                    var host = Dns.GetHostEntry(pingItem.Hostname);
+
+                    if (host.AddressList.Length > 0)
+                        Application.Current.Dispatcher.BeginInvoke(
+                                    new Action(() => pingItem.AddHistory("*** [" + host.AddressList[0].ToString() + "]")));
+                }
+                catch
+                {
                     Application.Current.Dispatcher.BeginInvoke(
-                                new Action(() => pingItem.AddHistory("*** [" + host.AddressList[0].ToString() + "]")));
+                                new Action(() => pingItem.AddHistory("Unable to resolve hostname.")));
+                    pingItem.Status = PingStatus.Error;
+                    pingItem.PingResetEvent.Set();
+                    pingItem.IsActive = false;
+                    return;
+                }
             }
 
             using (pingItem.Sender = new Ping())
@@ -455,17 +468,34 @@ namespace vmPing.Views
             var hostnameType = Uri.CheckHostName(hostname);
             if (hostnameType != UriHostNameType.IPv4 && hostnameType != UriHostNameType.IPv6)
             {
-                var host = System.Net.Dns.GetHostEntry(hostname);
-                if (host.AddressList.Length > 0)
+                try
+                {
+                    var host = Dns.GetHostEntry(hostname);
+
+                    if (host.AddressList.Length > 0)
+                        Application.Current.Dispatcher.BeginInvoke(
+                                    new Action(() => pingItem.AddHistory("*** [" + host.AddressList[0].ToString() + "]")));
+                }
+                catch
+                {
                     Application.Current.Dispatcher.BeginInvoke(
-                                new Action(() => pingItem.AddHistory("*** [" + host.AddressList[0].ToString() + "]")));
+                                new Action(() => pingItem.AddHistory("Unable to resolve hostname.")));
+                    pingItem.Status = PingStatus.Error;
+                    pingItem.PingResetEvent.Set();
+                    pingItem.IsActive = false;
+                    return;
+                }
             }
 
             pingItem.Statistics = new PingStatistics();
             int errorCode = 0;
 
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+
             while (!backgroundWorker.CancellationPending && pingItem.IsActive)
             {
+                stopwatch.Restart();
+
                 using (TcpClient client = new TcpClient())
                 {
                     ++pingItem.Statistics.PingsSent;
@@ -507,6 +537,8 @@ namespace vmPing.Views
                     catch (SocketException ex)
                     {
                         const int WSAHOST_NOT_FOUND = 11001;
+
+                        stopwatch.Stop();
 
                         if (backgroundWorker.CancellationPending || pingItem.IsActive == false)
                         {
@@ -550,7 +582,7 @@ namespace vmPing.Views
                     }
                     client.Close();
                 }
-                DisplayTcpReply(pingItem, isPortOpen, portnumber, errorCode);
+                DisplayTcpReply(pingItem, isPortOpen, portnumber, errorCode, stopwatch.ElapsedMilliseconds);
                 DisplayStatistics(pingItem);
                 pingItem.PingResetEvent.Set();
 
@@ -613,7 +645,7 @@ namespace vmPing.Views
         }
 
 
-        public void DisplayTcpReply(PingItem pingItem, bool isPortOpen, int portnumber, int errorCode)
+        public void DisplayTcpReply(PingItem pingItem, bool isPortOpen, int portnumber, int errorCode, long elapsedTime)
         {
             if (pingItem.PingBackgroundWorker.CancellationPending)
                 return;
@@ -621,7 +653,7 @@ namespace vmPing.Views
             // Prefix the ping reply output with a timestamp.
             var pingOutput = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  Port {portnumber.ToString()}: ");
             if (isPortOpen)
-                pingOutput.Append("OPEN");
+                pingOutput.Append("OPEN  [" + elapsedTime.ToString() + "ms]");
             else
             {
                 pingOutput.Append("CLOSED");

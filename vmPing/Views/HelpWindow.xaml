@@ -79,12 +79,12 @@
                 </StackPanel>
 
                 <TextBlock HorizontalAlignment="Center">
-                <Hyperlink NavigateUri="https://www.github.com/R-Smith/vmPing"
+                <Hyperlink NavigateUri="https://github.com/R-Smith/vmPing"
                            RequestNavigate="Hyperlink_RequestNavigate"
                            TextDecorations="None"
                            FontSize="13"
                            Foreground="#6c71c4">
-                    https://www.github.com/R-Smith/vmPing
+                    https://github.com/R-Smith/vmPing
                 </Hyperlink>
                 </TextBlock>
                 <TextBlock Style="{StaticResource VersionText}"

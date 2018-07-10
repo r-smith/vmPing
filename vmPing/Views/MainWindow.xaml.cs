@@ -64,6 +64,7 @@ namespace vmPing.Views
             InitializeCommandBindings();
             ParseCommandLineArguments();
             RefreshFavorites();
+            RefreshApplicationsOptions();
 
             sliderColumns.Value = _pingItems.Count;
             icPingItems.ItemsSource = _pingItems;
@@ -905,6 +906,7 @@ namespace vmPing.Views
         private void ToggleAlwaysOnTop()
         {
             ApplicationOptions.AlwaysOnTop = mnuOnTop.IsChecked;
+            ApplicationOptions.SaveApplicationOption();
 
             foreach (Window window in Application.Current.Windows)
                 window.Topmost = ApplicationOptions.AlwaysOnTop;
@@ -917,6 +919,7 @@ namespace vmPing.Views
             {
                 mnuEmailAlerts.IsChecked = false;
                 ApplicationOptions.EmailAlert = false;
+                ApplicationOptions.SaveApplicationOption();
                 return;
             }
 
@@ -938,6 +941,7 @@ namespace vmPing.Views
             {
                 mnuLogOutput.IsChecked = false;
                 ApplicationOptions.LogOutput = false;
+                ApplicationOptions.SaveApplicationOption();
                 return;
             }
 
@@ -958,7 +962,7 @@ namespace vmPing.Views
                 ApplicationOptions.LogOutput = false;
             }
             mnuLogOutput.IsChecked = ApplicationOptions.LogOutput;
-
+            ApplicationOptions.SaveApplicationOption();
             ApplicationOptions.RemoveBlurWindows();
         }
 
@@ -1004,14 +1008,15 @@ namespace vmPing.Views
 
                     var selectedFavorite = s as MenuItem;
                     var favorite = Favorite.GetFavoriteEntry(selectedFavorite.Header.ToString());
-                    if (favorite.Hostnames.Count < 1)
+                    if (favorite.Hosts.Count < 1)
                         AddHostMonitor(1);
                     else
                     {
-                        AddHostMonitor(favorite.Hostnames.Count);
-                        for (int i = 0; i < favorite.Hostnames.Count; ++i)
+                        AddHostMonitor(favorite.Hosts.Count);
+                        for (int i = 0; i < favorite.Hosts.Count; ++i)
                         {
-                            _pingItems[i].Hostname = favorite.Hostnames[i].ToUpper();
+                            _pingItems[i].Hostname = favorite.Hosts[i].HostAddr.ToUpper();
+                            _pingItems[i].FriendlyName = favorite.Hosts[i].FriendlyName.ToUpper();
                             PingStartStop(_pingItems[i]);
                         }
                     }
@@ -1020,6 +1025,31 @@ namespace vmPing.Views
                 };
 
                 mnuFavorites.Items.Add(menuItem);
+            }
+        }
+
+        private void RefreshApplicationsOptions()
+        {
+           ApplicationOptions.LoadApplicationOption();
+            mnuEmailAlerts.IsChecked = ApplicationOptions.EmailAlert;
+            mnuLogOutput.IsChecked = ApplicationOptions.LogOutput;
+            mnuOnTop.IsChecked = ApplicationOptions.AlwaysOnTop;
+            if (mnuOnTop.IsChecked)
+                ToggleAlwaysOnTop();
+            mnuPopupAlways.IsChecked = false;
+            mnuPopupNever.IsChecked = false;
+            mnuPopupWhenMinimized.IsChecked = false;
+            switch (ApplicationOptions.PopupOption)
+            {
+                case ApplicationOptions.PopupNotificationOption.Always:
+                    mnuPopupAlways.IsChecked = true;
+                    break;
+                case ApplicationOptions.PopupNotificationOption.Never:
+                    mnuPopupNever.IsChecked = true;
+                    break;
+                case ApplicationOptions.PopupNotificationOption.WhenMinimized:
+                    mnuPopupWhenMinimized.IsChecked = true;
+                    break;
             }
         }
 
@@ -1032,10 +1062,11 @@ namespace vmPing.Views
             addToFavoritesWindow.Owner = this;
             if (addToFavoritesWindow.ShowDialog() == true)
             {
-                var currentHostList = new List<string>();
+                var currentHostList = new FavoriteItem();
+                currentHostList.Title = addToFavoritesWindow.FavoriteTitle;
                 for (int i = 0; i < _pingItems.Count; ++i)
-                    currentHostList.Add(_pingItems[i].Hostname);
-                Favorite.AddFavoriteEntry(addToFavoritesWindow.FavoriteTitle, currentHostList, (int)sliderColumns.Value);
+                    currentHostList.Hosts.Add(new FavoriteHostItem {FriendlyName = _pingItems[i].FriendlyName, HostAddr = _pingItems[i].Hostname});
+                Favorite.AddFavoriteEntry(currentHostList, (int)sliderColumns.Value);
                 RefreshFavorites();
             }
 
@@ -1075,6 +1106,32 @@ namespace vmPing.Views
                 case "When Minimized":
                     ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
                     break;
+            }
+            ApplicationOptions.SaveApplicationOption();
+        }
+
+        private void txtFriendlyName_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (((TextBox)sender).Text != "FRIENDLY NAME")
+                return;
+            else
+                ((TextBox)sender).Text = "";
+        }
+
+        private void txtFriendlyName_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if(string.IsNullOrEmpty(((TextBox)sender).Text))
+                ((TextBox)sender).Text = "FRIENDLY NAME";
+        }
+
+        private void Grid_DblClick(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount >= 2)
+            {
+                var pingButton = sender as Grid;
+                var pingItem = pingButton.DataContext as PingItem;
+                DetailWindow view = new DetailWindow(pingItem);
+                view.Show();
             }
         }
     }

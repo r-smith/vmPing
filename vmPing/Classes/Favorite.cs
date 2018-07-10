@@ -37,7 +37,45 @@ namespace vmPing.Classes
 
             return doesTitleExist;
         }
+        public static void UpgradeFavorite()
+        {
+            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPingFavorites.xml");
+            if (!File.Exists(path))
+                return;
 
+            var xd = new XmlDocument();
+            xd.Load(path);
+            XmlNode nodeRoot = xd.SelectSingleNode("/favorites");
+            XmlNodeList nodeTitle = xd.SelectNodes("/favorites/favorite");
+            var list = new List<FavoriteItem>();
+   
+            foreach (XmlNode node in nodeTitle)
+            {
+                var title = node.Attributes["title"].Value;
+                var collumn = node.Attributes["columncount"].Value;
+                var fav = new FavoriteItem();
+                var hosts = new FavoriteHostItem();
+                fav.Title = title;
+                fav.ColumnCount = int.Parse(collumn);
+
+                list.Add(fav);
+
+                XmlNode nodeFavorite = xd.SelectSingleNode($"/favorites/favorite[@title='{title}']");
+                XmlNodeList nodeHost = xd.SelectNodes($"/favorites/favorite[@title='{title}']/host");
+
+                foreach (XmlNode host in nodeHost)
+                {
+                    fav.Hosts.Add(new FavoriteHostItem { HostAddr = host.InnerText, FriendlyName = "FRIENDLY NAME HERE" });
+                }
+
+                list.Add(fav);
+            }
+            File.Delete(path);
+            foreach (FavoriteItem favitem in list)
+            {
+                AddFavoriteEntry(favitem, favitem.ColumnCount);
+            }
+        }
         public static List<string> GetFavoriteTitles()
         {
             var favoriteTitles = new List<string>();
@@ -45,17 +83,25 @@ namespace vmPing.Classes
             var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPingFavorites.xml");
             if (!File.Exists(path))
                 return favoriteTitles;
-            
-            try
-            {
+
+                try
+                {
                 var xd = new XmlDocument();
                 xd.Load(path);
 
-                XmlNodeList nodeTitle = xd.SelectNodes("/favorites/favorite");
-                
+                /* Upgrade previous version */
+                XmlNodeList oldNodeTitle = xd.SelectNodes("/favorites/favorite");
+                if (oldNodeTitle.Count > 0)
+                {
+                    UpgradeFavorite();
+                    xd.Load(path);
+                }
+
+                XmlNodeList nodeTitle = xd.SelectNodes("/Favorites/Favorite");
+
                 foreach (XmlNode node in nodeTitle)
                     favoriteTitles.Add(node.Attributes["title"].Value);
-                
+
             }
 
             catch (Exception ex)
@@ -67,27 +113,35 @@ namespace vmPing.Classes
             return favoriteTitles;
         }
 
-        public static Favorite GetFavoriteEntry(string favoriteTitle)
+        public static FavoriteItem GetFavoriteEntry(string favoriteTitle)
         {
-            var favorite = new Favorite();
+            var favorite = new FavoriteItem();
 
             var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPingFavorites.xml");
             if (!File.Exists(path))
                 return favorite;
-            
+
             try
             {
-                favorite.Hostnames = new List<string>();
+                favorite.Hosts = new List<FavoriteHostItem>();
 
                 var xd = new XmlDocument();
                 xd.Load(path);
-
-                XmlNode nodeFavorite = xd.SelectSingleNode($"/favorites/favorite[@title='{favoriteTitle}']");
+                XmlNode nodeFavorite = xd.SelectSingleNode($"/Favorites/Favorite[@title='{favoriteTitle}']");
                 favorite.ColumnCount = int.Parse(nodeFavorite.Attributes["columncount"].Value);
 
-                XmlNodeList nodeHost = xd.SelectNodes($"/favorites/favorite[@title='{favoriteTitle}']/host");
+                XmlNodeList nodeHost = xd.SelectNodes($"/Favorites/Favorite[@title='{favoriteTitle}']/Host");
+
                 foreach (XmlNode node in nodeHost)
-                    favorite.Hostnames.Add(node.InnerText);
+                {
+                    XmlNode nodeHostAddr = node.SelectSingleNode($"HostAddr");
+                    XmlNode nodeHostFriendly = node.SelectSingleNode($"HostFriendlyName");
+                    favorite.Hosts.Add(new FavoriteHostItem
+                    {
+                        FriendlyName = nodeHostFriendly.InnerText,
+                        HostAddr = nodeHostAddr.InnerText
+                    });
+                }
             }
 
             catch (Exception ex)
@@ -98,7 +152,7 @@ namespace vmPing.Classes
             return favorite;
         }
 
-        public static void AddFavoriteEntry(string title, List<string> hostnames, int columnCount)
+        public static void AddFavoriteEntry( FavoriteItem hostnames, int columnCount)
         {
             var rootPath = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing");
             var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPingFavorites.xml");
@@ -108,7 +162,7 @@ namespace vmPing.Classes
             {
                 try
                 {
-                    string[] lines = { "<favorites>", "</favorites>" };
+                    string[] lines = { "<Favorites>", "</Favorites>" };
                     File.WriteAllLines(path, lines);
                 }
                 catch
@@ -123,10 +177,10 @@ namespace vmPing.Classes
                 var xd = new XmlDocument();
                 xd.Load(path);
 
-                XmlNode nodeRoot = xd.SelectSingleNode("/favorites");
+                XmlNode nodeRoot = xd.SelectSingleNode("/Favorites");
 
                 // Check if title already exists.
-                XmlNodeList nodeTitleSearch = xd.SelectNodes($"/favorites/favorite[@title='{title}']");
+                XmlNodeList nodeTitleSearch = xd.SelectNodes($"/Favorites/Favorite[@title='{hostnames.Title}']");
                 foreach (XmlNode node in nodeTitleSearch)
                 {
                     // Title already exists.  Delete any old versions.
@@ -134,13 +188,18 @@ namespace vmPing.Classes
                 }
 
                 
-                XmlElement favorite = xd.CreateElement("favorite");
-                favorite.SetAttribute("title", title);
+                XmlElement favorite = xd.CreateElement("Favorite");
+                favorite.SetAttribute("title", hostnames.Title);
                 favorite.SetAttribute("columncount", columnCount.ToString());
-                foreach (string hostname in hostnames)
+                foreach (FavoriteHostItem item in hostnames.Hosts)
                 {
-                    var xmlElement = xd.CreateElement("host");
-                    xmlElement.InnerText = hostname;
+                    var xmlElement = xd.CreateElement("Host");
+                    var xmlHostAddr = xd.CreateElement("HostAddr");
+                    var xmlHostFriendlyName = xd.CreateElement("HostFriendlyName");
+                    xmlHostFriendlyName.InnerText = item.FriendlyName;
+                    xmlHostAddr.InnerText = item.HostAddr;
+                    xmlElement.AppendChild(xmlHostFriendlyName);
+                    xmlElement.AppendChild(xmlHostAddr);
                     favorite.AppendChild(xmlElement);
                 }
                 nodeRoot.AppendChild(favorite);
@@ -164,10 +223,10 @@ namespace vmPing.Classes
                 var xd = new XmlDocument();
                 xd.Load(path);
 
-                XmlNode nodeRoot = xd.SelectSingleNode("/favorites");
+                XmlNode nodeRoot = xd.SelectSingleNode("/Favorites");
 
                 // Search for favorite by title.
-                XmlNodeList nodeTitleSearch = xd.SelectNodes($"/favorites/favorite[@title='{title}']");
+                XmlNodeList nodeTitleSearch = xd.SelectNodes($"/Favorites/Favorite[@title='{title}']");
                 foreach (XmlNode node in nodeTitleSearch)
                 {
                     // Found title.  Delete all versions.

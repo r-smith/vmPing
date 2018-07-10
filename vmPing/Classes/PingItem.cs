@@ -22,6 +22,7 @@ namespace vmPing.Classes
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public string FriendlyName { get; set; }
         public string Hostname { get; set; }
         public int DownCount { get; set; }
         public BackgroundWorker PingBackgroundWorker { get; set; }
@@ -29,6 +30,11 @@ namespace vmPing.Classes
         public PingStatistics Statistics { get; set; }
         public PingReply Reply { get; set; }
         public Ping Sender { get; set; }
+
+        public PingItem()
+        {
+            FriendlyName = "FRIENDLY NAME";
+        }
         
         private ObservableCollection<string> history;
         public ObservableCollection<string> History

@@ -1,8 +1,6 @@
 ﻿<Window x:Class="vmPing.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
-        xmlns:local="clr-namespace:vmPing.Views"
         xmlns:classes="clr-namespace:vmPing.Classes"
         xmlns:controls="clr-namespace:vmPing.Controls"
         Title="vmPing" Height="400" Width="800"
@@ -22,14 +20,6 @@
         <classes:HostnameFontsizeConverter x:Key="HostnameFontsizeConverter" />
         <classes:ButtonTextVisibilityConverter x:Key="ButtonTextVisibilityConverter" />
         <classes:PingStatusToGlyphConverter x:Key="PingStatusToGlyphConverter" />
-
-
-        <ControlTemplate x:Key="TextBoxBaseControlTemplate" TargetType="{x:Type TextBoxBase}">
-            <ScrollViewer x:Name="PART_ContentHost"
-                          Background="{TemplateBinding Background}"
-                          BorderThickness="{TemplateBinding BorderThickness}"
-                          BorderBrush="Transparent" />
-        </ControlTemplate>
 
         <!-- Style for hostname textbox -->
         <ControlTemplate x:Key="TextBoxBaseControlTemplatez" TargetType="{x:Type TextBoxBase}">
@@ -75,9 +65,6 @@
         </Style>
     </Window.Resources>
 
-
-    <Window.InputBindings>
-    </Window.InputBindings>
 
     <!-- MASTER DOCKPANEL -->
     <DockPanel Background="#aaa">
@@ -247,25 +234,106 @@
 
                             <!-- Ping output section -->
                             <DockPanel>
-                                <!-- Delete button -->
+
+                                <!-- Ping title bar / button second -->
                                 <Grid DockPanel.Dock="Top">
-                                    <TextBlock Width="{Binding ElementName=lbHistory, Path=ActualWidth}"/>
-                                    <Button Name="btnRemove"
+                                    <Grid.Style>
+                                        <Style TargetType="{x:Type Grid}">
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
+                                                    <!-- TODO: Set hover color -->
+                                                    <Setter Property="Background" Value="#00000000" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!--<TextBlock Width="{Binding ElementName=lbHistory, Path=ActualWidth}"/>-->
+
+                                    <!-- TODO: Alias section -->
+                                    <!--<Label Content="{Binding Alias, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
+                                           FontSize="14"
+                                           VerticalContentAlignment="Center"
+                                           Padding="10,0,0,0"
+                                           Margin="0"
+                                           FontWeight="Bold"
+                                           Foreground="#f4f4f4" />-->
+
+                                    <!-- Button: Delete / Remove -->
+                                    <Button Grid.Column="2"
                                             Padding="5,3"
                                             Margin="0,0,3,0"
                                             Background="Transparent"
                                             HorizontalAlignment="Right"
                                             IsTabStop="False"
+                                            ToolTip="Close"
+                                            ToolTipService.InitialShowDelay="1500"
+                                            ToolTipService.ShowDuration="2000"
                                             Click="btnRemove_Click">
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
                                                 <Border Name="controlButton_border"
                                                         BorderThickness="1"
                                                         BorderBrush="Transparent"
-                                                        CornerRadius="4"
+                                                        CornerRadius="3"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
-                                                    <Image Name="controlButton_image" Source="/Resources/cancel-16.png"
+                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_close_14_0_000000_none.png"
+                                                           Width="14" Height="14"
+                                                           Opacity="0.4" />
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="controlButton_border" Property="BorderBrush" Value="#33000000" />
+                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="White" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsPressed" Value="True">
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#dddddd" />
+                                                        <Setter TargetName="controlButton_border" Property="BorderBrush" Value="Black" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+
+                                    <!-- Button: Isolated View -->
+                                    <Button Grid.Column="1"
+                                            Padding="5,3"
+                                            Margin="0,0,1,0"
+                                            Background="Transparent"
+                                            HorizontalAlignment="Right"
+                                            IsTabStop="False"
+                                            ToolTip="Open isolated view"
+                                            ToolTipService.InitialShowDelay="1500"
+                                            ToolTipService.ShowDuration="2000"
+                                            Click="ButtonIsolatedView_Click">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Name="controlButton_border"
+                                                        BorderThickness="1"
+                                                        BorderBrush="Transparent"
+                                                        CornerRadius="3"
+                                                        Padding="{TemplateBinding Padding}"
+                                                        Background="{TemplateBinding Background}">
+                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_window-restore_14_0_000000_none.png"
                                                            Width="14" Height="14"
                                                            Opacity="0.4" />
                                                 </Border>
@@ -362,7 +430,7 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                
+
                                 <!-- Border to set background color and top border for this section -->
                                 <Border Grid.ColumnSpan="3" Background="#e8ffffff" BorderThickness="0,1,0,0" BorderBrush="#20000000" />
 

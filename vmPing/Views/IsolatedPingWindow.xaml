@@ -1,0 +1,105 @@
+﻿<Window x:Class="vmPing.Views.IsolatedPingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:classes="clr-namespace:vmPing.Classes"
+        xmlns:controls="clr-namespace:vmPing.Controls"
+        Title="{Binding Hostname, StringFormat='vmPing - {0}'}"
+        Height="400" Width="800"
+        MinHeight="200" MinWidth="350"
+        Background="White">
+
+    <Window.Resources>
+        <!-- Value converters -->
+        <classes:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+        <classes:PingStatusToBackgroundBrushConverter x:Key="PingStatusToBackgroundBrushConverter" />
+        <classes:PingStatusToForegroundBrushConverter x:Key="PingStatusToForegroundBrushConverter" />
+        <classes:PingStatusToStatisticsBrushConverter x:Key="PingStatusToStatisticsBrushConverter" />
+    </Window.Resources>
+
+    <!-- Items Control -->
+    <Border BorderBrush="#111" BorderThickness="0,1,0,0" Margin="0,0,0,0" SnapsToDevicePixels="True" CornerRadius="0"
+            Background="{Binding Status, Converter={StaticResource PingStatusToBackgroundBrushConverter}}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Ping output section -->
+            <DockPanel Grid.Row="1">
+
+                <!-- Ping statistics textblock -->
+                <Label Name="lblStats"
+                       DockPanel.Dock="Bottom"
+                       HorizontalAlignment="Left"
+                       Width="{Binding ElementName=lbHistory, Path=ActualWidth}"
+                       Content="{Binding PingStatisticsText, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
+                       Background="Transparent"
+                       Foreground="{Binding Status, Converter={StaticResource PingStatusToStatisticsBrushConverter}}"
+                       FontFamily="Segoe UI" FontSize="12" FontWeight="Bold"
+                       Padding="8,0,0,3">
+                    <Label.Triggers>
+                        <EventTrigger RoutedEvent="Binding.TargetUpdated">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="lblStats"
+                                                     Storyboard.TargetProperty="Opacity"
+                                                     From="0.0" To="1.0" Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Label.Triggers>
+                </Label>
+
+                <!-- Ping history listbox -->
+                <ListBox Name="lbHistory"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         Foreground="{Binding Status, Converter={StaticResource PingStatusToForegroundBrushConverter}}"
+                         ItemsSource="{Binding History}"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         IsTabStop="False"
+                         IsTextSearchEnabled="False"
+                         controls:ListBoxBehavior.ScrollOnNewItem="True"
+                         FontFamily="Consolas" FontSize="11">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                        <ContentPresenter />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="IsTabStop" Value="False" />
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+            </DockPanel>
+
+
+            <!-- vmPing icon -->
+            <Image Source="/Resources/vmPing-96.png"
+                   Grid.Row="1"
+                   Width="72"
+                   Height="72"
+                   Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                   Opacity="0.03" />
+
+
+            <!-- Hostname section -->
+            <Label Grid.Row="0"
+                   FontWeight="SemiBold"
+                   Foreground="#eee"
+                   FontSize="20"
+                   Height="30"
+                   VerticalContentAlignment="Center"
+                   HorizontalContentAlignment="Center"
+                   Background="#80000000"
+                   Padding="0"
+                   Content="{Binding Hostname}" />
+        </Grid>
+    </Border>
+</Window>

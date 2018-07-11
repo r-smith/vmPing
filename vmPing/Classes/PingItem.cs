@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading;
+using vmPing.Views;
 
 namespace vmPing.Classes
 {
@@ -21,8 +21,7 @@ namespace vmPing.Classes
         public static int NumberOfActivePings;
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        public string Hostname { get; set; }
+        public IsolatedPingWindow IsolatedWindow { get; set; }
         public int DownCount { get; set; }
         public BackgroundWorker PingBackgroundWorker { get; set; }
         public AutoResetEvent PingResetEvent { get; set; }
@@ -40,6 +39,35 @@ namespace vmPing.Classes
                 {
                     history = value;
                     NotifyPropertyChanged("History");
+                }
+            }
+        }
+
+        private string hostname;
+        public string Hostname
+        {
+            get { return hostname; }
+            set
+            {
+                if (value != hostname)
+                {
+                    hostname = value;
+                    NotifyPropertyChanged("Hostname");
+                }
+            }
+        }
+
+
+        private string alias;
+        public string Alias
+        {
+            get { return alias; }
+            set
+            {
+                if (value != alias)
+                {
+                    alias = value;
+                    NotifyPropertyChanged("Alias");
                 }
             }
         }

@@ -64,6 +64,11 @@
     <Compile Include="Classes\StatusChangeLog.cs" />
     <Compile Include="Classes\ValueConverters.cs" />
     <Compile Include="Controls\ListBoxBehavior.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\EmailAlertWindow.xaml.cs">
       <DependentUpon>EmailAlertWindow.xaml</DependentUpon>
     </Compile>
@@ -78,6 +83,9 @@
     <Compile Include="Classes\NetworkRouteNode.cs" />
     <Compile Include="Classes\PingItem.cs" />
     <Compile Include="Classes\PingStatistics.cs" />
+    <Compile Include="Views\IsolatedPingWindow.xaml.cs">
+      <DependentUpon>IsolatedPingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ManageFavoritesWindow.xaml.cs">
       <DependentUpon>ManageFavoritesWindow.xaml</DependentUpon>
     </Compile>
@@ -86,11 +94,6 @@
     </Compile>
     <Compile Include="Views\PopupNotificationWindow.xaml.cs">
       <DependentUpon>PopupNotificationWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\TraceRouteWindow.xaml.cs">
       <DependentUpon>TraceRouteWindow.xaml</DependentUpon>
@@ -111,6 +114,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HelpWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\IsolatedPingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -212,6 +219,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\cancelWhite-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\font-awesome_4-7-0_close_14_0_000000_none.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\font-awesome_4-7-0_window-restore_14_0_000000_none.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

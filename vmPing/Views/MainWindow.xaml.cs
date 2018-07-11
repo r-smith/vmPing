@@ -13,7 +13,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using vmPing.Classes;
-using System.Timers;
 using System.Net;
 
 namespace vmPing.Views
@@ -1075,6 +1074,21 @@ namespace vmPing.Views
                 case "When Minimized":
                     ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
                     break;
+            }
+        }
+
+        private void ButtonIsolatedView_Click(object sender, RoutedEventArgs e)
+        {
+            var pingButton = sender as Button;
+            var pingItem = pingButton.DataContext as PingItem;
+            if (pingItem.IsolatedWindow == null || pingItem.IsolatedWindow.IsLoaded == false)
+            {
+                var wnd = new IsolatedPingWindow(pingItem);
+                wnd.Show();
+            }
+            else if (pingItem.IsolatedWindow.IsLoaded == true)
+            {
+                pingItem.IsolatedWindow.Focus();
             }
         }
     }

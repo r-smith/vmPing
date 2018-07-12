@@ -1091,5 +1091,23 @@ namespace vmPing.Views
                 pingItem.IsolatedWindow.Focus();
             }
         }
+
+        private void ButtonEditAlias_Click(object sender, RoutedEventArgs e)
+        {
+            var pingButton = sender as Button;
+            var pingItem = pingButton.DataContext as PingItem;
+
+            if (string.IsNullOrEmpty(pingItem.Hostname))
+                return;
+
+            // Display email alerts window
+            ApplicationOptions.BlurWindows();
+            var wnd = new EditAliasWindow(pingItem);
+            wnd.Owner = this;
+
+            wnd.ShowDialog();
+
+            ApplicationOptions.RemoveBlurWindows();
+        }
     }
 }

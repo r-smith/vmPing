@@ -235,15 +235,14 @@
                             <!-- Ping output section -->
                             <DockPanel>
 
-                                <!-- Ping title bar / button second -->
+                                <!-- Ping title bar / button section -->
                                 <Grid DockPanel.Dock="Top">
                                     <Grid.Style>
                                         <Style TargetType="{x:Type Grid}">
-                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="Background" Value="#00000000" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
-                                                    <!-- TODO: Set hover color -->
-                                                    <Setter Property="Background" Value="#00000000" />
+                                                    <Setter Property="Background" Value="#09000000" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -253,21 +252,34 @@
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
                                     <!--<TextBlock Width="{Binding ElementName=lbHistory, Path=ActualWidth}"/>-->
 
-                                    <!-- TODO: Alias section -->
-                                    <!--<Label Content="{Binding Alias, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
+                                    <!-- Alias section -->
+                                    <Label Name="txtEditAlias"
+                                           Content="{Binding Alias, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
+                                           Background="Transparent"
                                            FontSize="14"
                                            VerticalContentAlignment="Center"
-                                           Padding="10,0,0,0"
+                                           Padding="5,0,0,0"
                                            Margin="0"
-                                           FontWeight="Bold"
-                                           Foreground="#f4f4f4" />-->
+                                           FontWeight="SemiBold">
+                                        <Label.Style>
+                                            <Style TargetType="{x:Type Label}">
+                                                <Setter Property="Foreground" Value="Yellow" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                        <Setter Property="Foreground" Value="#444" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
 
                                     <!-- Button: Delete / Remove -->
-                                    <Button Grid.Column="2"
+                                    <Button Grid.Column="3"
                                             Padding="5,3"
                                             Margin="0,0,3,0"
                                             Background="Transparent"
@@ -315,7 +327,7 @@
                                     </Button>
 
                                     <!-- Button: Isolated View -->
-                                    <Button Grid.Column="1"
+                                    <Button Grid.Column="2"
                                             Padding="5,3"
                                             Margin="0,0,1,0"
                                             Background="Transparent"
@@ -334,6 +346,55 @@
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
                                                     <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_window-restore_14_0_000000_none.png"
+                                                           Width="14" Height="14"
+                                                           Opacity="0.4" />
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="controlButton_border" Property="BorderBrush" Value="#33000000" />
+                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="White" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsPressed" Value="True">
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#dddddd" />
+                                                        <Setter TargetName="controlButton_border" Property="BorderBrush" Value="Black" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+
+                                    <!-- Button: Edit Alias -->
+                                    <Button Grid.Column="1"
+                                            Padding="5,3"
+                                            Margin="0,0,1,0"
+                                            Background="Transparent"
+                                            HorizontalAlignment="Right"
+                                            IsTabStop="False"
+                                            ToolTip="Edit alias"
+                                            ToolTipService.InitialShowDelay="1500"
+                                            ToolTipService.ShowDuration="2000"
+                                            Click="ButtonEditAlias_Click"
+                                            >
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Name="controlButton_border"
+                                                        BorderThickness="1"
+                                                        BorderBrush="Transparent"
+                                                        CornerRadius="3"
+                                                        Padding="{TemplateBinding Padding}"
+                                                        Background="{TemplateBinding Background}">
+                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_pencil_14_0_000000_none.png"
                                                            Width="14" Height="14"
                                                            Opacity="0.4" />
                                                 </Border>

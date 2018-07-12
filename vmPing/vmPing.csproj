@@ -69,6 +69,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\ChangeLogWindow.xaml.cs">
+      <DependentUpon>ChangeLogWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EditAliasWindow.xaml.cs">
       <DependentUpon>EditAliasWindow.xaml</DependentUpon>
     </Compile>
@@ -104,6 +107,10 @@
     <Compile Include="Views\AddToFavoritesWindow.xaml.cs">
       <DependentUpon>AddToFavoritesWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\ChangeLogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\EditAliasWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -235,6 +242,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\font-awesome_4-7-0_pencil_14_0_000000_none.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\font-awesome_4-7-0_chevron-circle-down_16_0_000000_none.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

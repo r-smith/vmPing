@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using vmPing.Classes;
@@ -20,7 +22,10 @@ namespace vmPing.Views
 
             PositionWindow();
 
-            lvStatusChangeLog.ItemsSource = statusChangeLog;
+            ICollectionView filteredChangeLog = new CollectionViewSource { Source = statusChangeLog }.View;
+            filteredChangeLog.Filter = p => (p as StatusChangeLog).HasStatusBeenCleared == false;
+            lvStatusChangeLog.ItemsSource = filteredChangeLog;
+
             ((INotifyCollectionChanged)lvStatusChangeLog.Items).CollectionChanged += PopupNotificationWindow_CollectionChanged;
         }
 

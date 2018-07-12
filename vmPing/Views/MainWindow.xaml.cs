@@ -252,7 +252,10 @@ namespace vmPing.Views
             {
                 if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
                 {
-                    _statusChangeLog.Clear();
+                    // Mark all existing status changes as read.
+                    for (int i = 0; i < _statusChangeLog.Count; ++i)
+                        _statusChangeLog[i].HasStatusBeenCleared = true;
+
                     _statusChangeLog.Add(e.UserState as StatusChangeLog);
                     var wnd = new PopupNotificationWindow(_statusChangeLog);
                     wnd.Show();
@@ -1108,6 +1111,12 @@ namespace vmPing.Views
             wnd.ShowDialog();
 
             ApplicationOptions.RemoveBlurWindows();
+        }
+
+        private void mnuChangeLog_Click(object sender, RoutedEventArgs e)
+        {
+            var wnd = new ChangeLogWindow(_statusChangeLog);
+            wnd.Show();
         }
     }
 }

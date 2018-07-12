@@ -123,6 +123,16 @@ namespace vmPing.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap font_awesome_4_7_0_chevron_circle_down_16_0_000000_none {
+            get {
+                object obj = ResourceManager.GetObject("font_awesome_4_7_0_chevron_circle_down_16_0_000000_none", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap font_awesome_4_7_0_close_14_0_000000_none {
             get {
                 object obj = ResourceManager.GetObject("font_awesome_4_7_0_close_14_0_000000_none", resourceCulture);

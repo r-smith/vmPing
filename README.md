@@ -3,8 +3,8 @@ vmPing
 
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
-###### (Latest version is 1.2.0 released on July 11, 2018)
-### [Click here to download the latest .exe](https://github.com/R-Smith/vmPing/releases/download/v1.2.0/vmPing.exe)
+###### (Latest version is 1.2.1 released on July 11, 2018)
+### [Click here to download the latest .exe](https://github.com/R-Smith/vmPing/releases/download/v1.2.1/vmPing.exe)
 ### [Click here to download the source](https://github.com/R-Smith/vmPing/archive/master.zip)
 
 ##### Notes
@@ -13,11 +13,15 @@ vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple h
 
 [![Join the chat at https://gitter.im/vmPing/Lobby](https://badges.gitter.im/vmPing/Lobby.svg)](https://gitter.im/vmPing/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+### Changes for v1.2.1
+* New option for aliases - Display a custom title for each ping window.  To use: Hover over an active ping monitor to display the icon row.  Click the pencil icon and enter an alias.
+* TODO: Persistent aliases - Save aliases to disk so they are remembered after closing the application. Include the ability to view/recall/edit saved aliases.
+* TODO: Alternate compact view.
+* TODO: Alternate historical up/down view (similar to the popup notification window).
+
+
 ### Changes for v1.2.0
 * New isolated views - Open any ping monitor in it's own dedicated window.  To access: Hover over an active ping monitor to display the icon row.  The icon row currently consists of an 'X' (close) button and a 'rectangle' (isolated view) button.
-* TODO: Aliases
-* TODO: Alternate compact view
-* TODO: Alternate historical up/down view (similar to the popup notification window)
 
 
 ### Changes for v1.1.15

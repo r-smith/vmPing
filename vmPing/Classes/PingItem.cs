@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Net.NetworkInformation;
+using System.Text.RegularExpressions;
 using System.Threading;
 using vmPing.Views;
 
@@ -125,6 +128,36 @@ namespace vmPing.Classes
             if (history.Count >= 3600)
                 history.RemoveAt(0);
             history.Add(historyItem);
+        }
+
+        public void WriteFinalStatisticsToHistory()
+        {
+            var roundTripTimes = new List<int>();
+            var rttRegex = new Regex(@"  \[(?<rtt><?\d+) ?ms]$");
+
+            foreach (var historyItem in History)
+            {
+                Match regexMatch = rttRegex.Match(historyItem);
+                if (!regexMatch.Success) continue;
+                if (regexMatch.Groups["rtt"].Value == "<1")
+                    roundTripTimes.Add(0);
+                else
+                    roundTripTimes.Add(int.Parse(regexMatch.Groups["rtt"].Value));
+            }
+
+            // Display statics and round trip times
+            history.Add("");
+            history.Add($"[+] Ping statistics for {Hostname}");
+            history.Add($"    Sent = {Statistics.PingsSent}, Received = {Statistics.PingsReceived}, Lost = {Statistics.PingsSent - Statistics.PingsReceived} ({(100 * (Statistics.PingsSent - Statistics.PingsReceived)) / Statistics.PingsSent}% loss)");
+            if (roundTripTimes.Count > 0)
+            {
+                if (Statistics.PingsSent > 3600)
+                    history.Add($"[+] Round trip times (based on last 3,600 pings)");
+                else
+                    history.Add($"[+] Round trip times");
+                history.Add($"    Minimum = {roundTripTimes.Min()}ms, Maximum = {roundTripTimes.Max()}ms, Average = {roundTripTimes.Average().ToString("0.##")}ms");
+            }
+            history.Add(" ");
         }
 
         private void NotifyPropertyChanged(String info)

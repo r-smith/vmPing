@@ -238,6 +238,8 @@ namespace vmPing.Views
                 pingItem.PingResetEvent.WaitOne();
                 pingItem.Status = PingStatus.Inactive;
                 pingItem.IsActive = false;
+
+                pingItem.WriteFinalStatisticsToHistory();
             }
 
             RefreshGlobalStartStop();
@@ -685,15 +687,6 @@ namespace vmPing.Views
             // number of pings sent, received, and lost.
             pingItem.PingStatisticsText =
                 $"Sent: {pingItem.Statistics.PingsSent} Received: {pingItem.Statistics.PingsReceived} Lost: {pingItem.Statistics.PingsLost}";
-        }
-
-
-        private void txtOutput_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            var textBox = sender as TextBox;
-            var textBoxAncestor = textBox.Parent;
-            var svTextBox = textBoxAncestor as ScrollViewer;
-            svTextBox.ScrollToBottom();
         }
 
 

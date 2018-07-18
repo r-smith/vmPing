@@ -19,6 +19,8 @@ namespace vmPing.Views
             
             lvStatusChangeLog.ItemsSource = statusChangeLog;
             ((INotifyCollectionChanged)lvStatusChangeLog.Items).CollectionChanged += PopupNotificationWindow_CollectionChanged;
+            if (lvStatusChangeLog.Items.Count > 0)
+                lvStatusChangeLog.ScrollIntoView(lvStatusChangeLog.Items[lvStatusChangeLog.Items.Count - 1]);
         }
 
         private void PopupNotificationWindow_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

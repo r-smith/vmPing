@@ -23,7 +23,6 @@ namespace vmPing.Views
     public partial class MainWindow : Window
     {
         private ObservableCollection<PingItem> _pingItems = new ObservableCollection<PingItem>();
-        private ObservableCollection<StatusChangeLog> _statusChangeLog = new ObservableCollection<StatusChangeLog>();
 
         public static RoutedCommand AlwaysOnTopCommand = new RoutedCommand();
         public static RoutedCommand ProbeOptionsCommand = new RoutedCommand();
@@ -255,17 +254,26 @@ namespace vmPing.Views
                 if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
                 {
                     // Mark all existing status changes as read.
-                    for (int i = 0; i < _statusChangeLog.Count; ++i)
-                        _statusChangeLog[i].HasStatusBeenCleared = true;
+                    for (int i = 0; i < PingItem.StatusChangeLog.Count; ++i)
+                        PingItem.StatusChangeLog[i].HasStatusBeenCleared = true;
+                }
+                PingItem.StatusChangeLog.Add(e.UserState as StatusChangeLog);
 
-                    _statusChangeLog.Add(e.UserState as StatusChangeLog);
-                    var wnd = new PopupNotificationWindow(_statusChangeLog);
+                if (PingItem.ChangeWindow != null && PingItem.ChangeWindow.IsLoaded)
+                {
+                    if (PingItem.ChangeWindow.WindowState == WindowState.Minimized)
+                        PingItem.ChangeWindow.WindowState = WindowState.Normal;
+                    PingItem.ChangeWindow.Focus();
+                }
+                else if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
+                {
+                    var wnd = new PopupNotificationWindow(PingItem.StatusChangeLog);
                     wnd.Show();
                 }
-                else
-                {
-                    _statusChangeLog.Add(e.UserState as StatusChangeLog);
-                }
+            }
+            else
+            {
+                PingItem.StatusChangeLog.Add(e.UserState as StatusChangeLog);
             }
         }
 
@@ -358,7 +366,7 @@ namespace vmPing.Views
                             ++pingItem.Statistics.PingsReceived;
                             pingItem.Status = PingStatus.Up;
                         }
-                        else 
+                        else
                         {
                             if (pingItem.Status == PingStatus.Up)
                                 pingItem.Status = PingStatus.Indeterminate;
@@ -444,7 +452,7 @@ namespace vmPing.Views
         {
             var backgroundWorker = sender as BackgroundWorker;
             var pingItem = e.Argument as PingItem;
-            
+
             var hostAndPort = pingItem.Hostname.Split(':');
             string hostname = hostAndPort[0];
             int portnumber;
@@ -1082,7 +1090,7 @@ namespace vmPing.Views
                 var wnd = new IsolatedPingWindow(pingItem);
                 wnd.Show();
             }
-            else if (pingItem.IsolatedWindow.IsLoaded == true)
+            else if (pingItem.IsolatedWindow.IsLoaded)
             {
                 pingItem.IsolatedWindow.Focus();
             }
@@ -1108,8 +1116,16 @@ namespace vmPing.Views
 
         private void mnuChangeLog_Click(object sender, RoutedEventArgs e)
         {
-            var wnd = new ChangeLogWindow(_statusChangeLog);
-            wnd.Show();
+            if (PingItem.ChangeWindow == null || PingItem.ChangeWindow.IsLoaded == false)
+            {
+                var wnd = new ChangeLogWindow(PingItem.StatusChangeLog);
+                PingItem.ChangeWindow = wnd;
+                wnd.Show();
+            }
+            else if (PingItem.ChangeWindow.IsLoaded)
+            {
+                PingItem.ChangeWindow.Focus();
+            }
         }
     }
 }

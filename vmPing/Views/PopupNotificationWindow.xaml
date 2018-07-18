@@ -31,54 +31,112 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
-        <!-- Close button -->
-        <Button Name="btnClose"
-                Padding="6"
-                Margin="0,1,3,0"
-                Background="Transparent"
-                HorizontalAlignment="Right"
-                IsTabStop="False"
-                Click="btnClose_Click">
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Border Name="controlButton_border"
-                            BorderThickness="1"
-                            BorderBrush="Transparent"
-                            CornerRadius="4"
-                            Opacity="0.5"
-                            Padding="{TemplateBinding Padding}"
-                            Background="{TemplateBinding Background}">
-                        <Image Name="controlButton_image"
-                               Source="/Resources/font-awesome_4-7-0_close_14_0_ffffff_none.png"
-                               Width="12"
-                               Height="12"
-                               />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="controlButton_border" Property="Background" Value="#000" />
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="controlButton_border" Property="Opacity" Value="1" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="controlButton_border" Property="BorderBrush" Value="White" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Button.Template>
-            <Button.Style>
-                <Style TargetType="{x:Type Button}">
-                    <Setter Property="Visibility" Value="Hidden" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=IsMouseOver}" Value="True">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
-        
+        <!-- Buttons -->
+        <Grid HorizontalAlignment="Right">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
+            <!-- Button: Maximize / Dedicated Window -->
+            <Button Name="btnMaximize"
+                    Grid.Column="0"
+                    Padding="6"
+                    Margin="0,1,3,0"
+                    Background="Transparent"
+                    HorizontalAlignment="Right"
+                    IsTabStop="False"
+                    Click="btnMaximize_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="controlButton_border"
+                                BorderThickness="1"
+                                BorderBrush="Transparent"
+                                CornerRadius="4"
+                                Opacity="0.5"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}">
+                            <Image Name="controlButton_image"
+                                   Source="/Resources/font-awesome_4-7-0_window-restore_14_0_ffffff_none.png"
+                                   Width="12"
+                                   Height="12"
+                                   />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="controlButton_border" Property="Background" Value="#000" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="controlButton_border" Property="Opacity" Value="1" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="controlButton_border" Property="BorderBrush" Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Visibility" Value="Hidden" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=IsMouseOver}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            
+            <!-- Button: Close -->
+            <Button Name="btnClose"
+                    Grid.Column="1"
+                    Padding="6"
+                    Margin="0,1,3,0"
+                    Background="Transparent"
+                    HorizontalAlignment="Right"
+                    IsTabStop="False"
+                    Click="btnClose_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="controlButton_border"
+                                BorderThickness="1"
+                                BorderBrush="Transparent"
+                                CornerRadius="4"
+                                Opacity="0.5"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}">
+                            <Image Name="controlButton_image"
+                                   Source="/Resources/font-awesome_4-7-0_close_14_0_ffffff_none.png"
+                                   Width="12"
+                                   Height="12"
+                                   />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="controlButton_border" Property="Background" Value="#000" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="controlButton_border" Property="Opacity" Value="1" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="controlButton_border" Property="BorderBrush" Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Visibility" Value="Hidden" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=IsMouseOver}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+
         <!-- Status change log -->
         <ListView Name="lvStatusChangeLog"
                   Grid.Row="1"

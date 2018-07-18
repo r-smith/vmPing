@@ -89,5 +89,21 @@ namespace vmPing.Views
                 Application.Current.MainWindow.WindowState = WindowState.Normal;
             Application.Current.MainWindow.Focus();
         }
+
+        private void btnMaximize_Click(object sender, RoutedEventArgs e)
+        {
+            if (PingItem.ChangeWindow == null || PingItem.ChangeWindow.IsLoaded == false)
+            {
+                var wnd = new ChangeLogWindow(PingItem.StatusChangeLog);
+                PingItem.ChangeWindow = wnd;
+                wnd.Show();
+            }
+            else if (PingItem.ChangeWindow.IsLoaded)
+            {
+                PingItem.ChangeWindow.Focus();
+            }
+
+            Close();
+        }
     }
 }

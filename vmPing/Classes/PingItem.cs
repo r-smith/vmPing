@@ -22,6 +22,8 @@ namespace vmPing.Classes
     public class PingItem : INotifyPropertyChanged
     {
         public static int NumberOfActivePings;
+        public static ObservableCollection<StatusChangeLog> StatusChangeLog = new ObservableCollection<StatusChangeLog>();
+        public static ChangeLogWindow ChangeWindow;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public IsolatedPingWindow IsolatedWindow { get; set; }

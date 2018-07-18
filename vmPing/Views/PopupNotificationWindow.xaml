@@ -49,7 +49,7 @@
                             Padding="{TemplateBinding Padding}"
                             Background="{TemplateBinding Background}">
                         <Image Name="controlButton_image"
-                               Source="/Resources/cancelWhite-16.png"
+                               Source="/Resources/font-awesome_4-7-0_close_14_0_ffffff_none.png"
                                Width="12"
                                Height="12"
                                />

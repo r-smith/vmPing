@@ -83,39 +83,9 @@ namespace vmPing.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap cancel_16 {
-            get {
-                object obj = ResourceManager.GetObject("cancel_16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap cancelWhite_16 {
-            get {
-                object obj = ResourceManager.GetObject("cancelWhite_16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap caution_40 {
             get {
                 object obj = ResourceManager.GetObject("caution_40", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap downCircle_16 {
-            get {
-                object obj = ResourceManager.GetObject("downCircle_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -143,6 +113,16 @@ namespace vmPing.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap font_awesome_4_7_0_close_14_0_ffffff_none {
+            get {
+                object obj = ResourceManager.GetObject("font_awesome_4_7_0_close_14_0_ffffff_none", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap font_awesome_4_7_0_pencil_14_0_000000_none {
             get {
                 object obj = ResourceManager.GetObject("font_awesome_4_7_0_pencil_14_0_000000_none", resourceCulture);
@@ -156,6 +136,16 @@ namespace vmPing.Properties {
         internal static System.Drawing.Bitmap font_awesome_4_7_0_window_restore_14_0_000000_none {
             get {
                 object obj = ResourceManager.GetObject("font_awesome_4_7_0_window_restore_14_0_000000_none", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap font_awesome_4_7_0_window_restore_14_0_ffffff_none {
+            get {
+                object obj = ResourceManager.GetObject("font_awesome_4_7_0_window_restore_14_0_ffffff_none", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Xml;
 
@@ -18,7 +16,7 @@ namespace vmPing.Classes
         {
             bool doesTitleExist = false;
 
-            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPingFavorites.xml");
+            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
             if (!File.Exists(path))
                 return false;
 
@@ -27,7 +25,7 @@ namespace vmPing.Classes
                 var xd = new XmlDocument();
                 xd.Load(path);
 
-                XmlNode nodeTitleSearch = xd.SelectSingleNode($"/favorites/favorite[@title='{title}']");
+                XmlNode nodeTitleSearch = xd.SelectSingleNode($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(title)}]");
                 if (nodeTitleSearch != null)
                     doesTitleExist = true;
             }
@@ -42,7 +40,7 @@ namespace vmPing.Classes
         {
             var favoriteTitles = new List<string>();
 
-            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPingFavorites.xml");
+            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
             if (!File.Exists(path))
                 return favoriteTitles;
             
@@ -51,7 +49,7 @@ namespace vmPing.Classes
                 var xd = new XmlDocument();
                 xd.Load(path);
 
-                XmlNodeList nodeTitle = xd.SelectNodes("/favorites/favorite");
+                XmlNodeList nodeTitle = xd.SelectNodes("/vmping/favorites/favorite");
                 
                 foreach (XmlNode node in nodeTitle)
                     favoriteTitles.Add(node.Attributes["title"].Value);
@@ -71,7 +69,7 @@ namespace vmPing.Classes
         {
             var favorite = new Favorite();
 
-            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPingFavorites.xml");
+            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
             if (!File.Exists(path))
                 return favorite;
             
@@ -82,10 +80,10 @@ namespace vmPing.Classes
                 var xd = new XmlDocument();
                 xd.Load(path);
 
-                XmlNode nodeFavorite = xd.SelectSingleNode($"/favorites/favorite[@title='{favoriteTitle}']");
+                XmlNode nodeFavorite = xd.SelectSingleNode($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(favoriteTitle)}]");
                 favorite.ColumnCount = int.Parse(nodeFavorite.Attributes["columncount"].Value);
 
-                XmlNodeList nodeHost = xd.SelectNodes($"/favorites/favorite[@title='{favoriteTitle}']/host");
+                XmlNodeList nodeHost = xd.SelectNodes($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(favoriteTitle)}]/host");
                 foreach (XmlNode node in nodeHost)
                     favorite.Hostnames.Add(node.InnerText);
             }
@@ -100,33 +98,19 @@ namespace vmPing.Classes
 
         public static void AddFavoriteEntry(string title, List<string> hostnames, int columnCount)
         {
-            var rootPath = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing");
-            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPingFavorites.xml");
-            if (!Directory.Exists(rootPath))
-                Directory.CreateDirectory(rootPath);
-            if (!File.Exists(path))
-            {
-                try
-                {
-                    string[] lines = { "<favorites>", "</favorites>" };
-                    File.WriteAllLines(path, lines);
-                }
-                catch
-                {
-                    MessageBox.Show("HEY!");
-                    return;
-                }
-            }
+            if (Configuration.CheckAndInitializeConfigurationFile() == false)
+                return;
 
             try
             {
+                var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
                 var xd = new XmlDocument();
                 xd.Load(path);
 
-                XmlNode nodeRoot = xd.SelectSingleNode("/favorites");
+                XmlNode nodeRoot = xd.SelectSingleNode("/vmping/favorites");
 
                 // Check if title already exists.
-                XmlNodeList nodeTitleSearch = xd.SelectNodes($"/favorites/favorite[@title='{title}']");
+                XmlNodeList nodeTitleSearch = xd.SelectNodes($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(title)}]");
                 foreach (XmlNode node in nodeTitleSearch)
                 {
                     // Title already exists.  Delete any old versions.
@@ -155,7 +139,7 @@ namespace vmPing.Classes
 
         public static void DeleteFavoriteEntry(string title)
         {
-            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPingFavorites.xml");
+            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
             if (!File.Exists(path))
                 return;
 
@@ -163,11 +147,11 @@ namespace vmPing.Classes
             {
                 var xd = new XmlDocument();
                 xd.Load(path);
-
-                XmlNode nodeRoot = xd.SelectSingleNode("/favorites");
+                
+                XmlNode nodeRoot = xd.SelectSingleNode("/vmping/favorites");
 
                 // Search for favorite by title.
-                XmlNodeList nodeTitleSearch = xd.SelectNodes($"/favorites/favorite[@title='{title}']");
+                XmlNodeList nodeTitleSearch = xd.SelectNodes($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(title)}]");
                 foreach (XmlNode node in nodeTitleSearch)
                 {
                     // Found title.  Delete all versions.

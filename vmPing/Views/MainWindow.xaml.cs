@@ -23,6 +23,7 @@ namespace vmPing.Views
     public partial class MainWindow : Window
     {
         private ObservableCollection<PingItem> _pingItems = new ObservableCollection<PingItem>();
+        private Dictionary<string, string> Aliases = new Dictionary<string, string>();
 
         public static RoutedCommand AlwaysOnTopCommand = new RoutedCommand();
         public static RoutedCommand ProbeOptionsCommand = new RoutedCommand();
@@ -60,8 +61,10 @@ namespace vmPing.Views
         private void InitializeAplication()
         {
             InitializeCommandBindings();
+            Configuration.UpgradeConfigurationFile();
+            LoadFavorites();
+            LoadAliases();
             ParseCommandLineArguments();
-            RefreshFavorites();
 
             sliderColumns.Value = _pingItems.Count;
             icPingItems.ItemsSource = _pingItems;
@@ -215,6 +218,9 @@ namespace vmPing.Views
 
                 if (pingItem.PingBackgroundWorker != null)
                     pingItem.PingBackgroundWorker.CancelAsync();
+
+                if (pingItem.Hostname != null && Aliases.ContainsKey(pingItem.Hostname))
+                    pingItem.Alias = Aliases[pingItem.Hostname];
 
                 pingItem.PingStatisticsText = string.Empty;
                 pingItem.History = new ObservableCollection<string>();
@@ -988,7 +994,7 @@ namespace vmPing.Views
             RefreshGlobalStartStop();
         }
 
-        private void RefreshFavorites()
+        private void LoadFavorites()
         {
             var favoritesList = Favorite.GetFavoriteTitles();
 
@@ -1027,6 +1033,12 @@ namespace vmPing.Views
         }
 
 
+        private void LoadAliases()
+        {
+            Aliases = Alias.GetAliases();
+        }
+
+
         private void mnuAddToFavorites_Click(object sender, RoutedEventArgs e)
         {
             // Display add to favorites window.
@@ -1039,7 +1051,7 @@ namespace vmPing.Views
                 for (int i = 0; i < _pingItems.Count; ++i)
                     currentHostList.Add(_pingItems[i].Hostname);
                 Favorite.AddFavoriteEntry(addToFavoritesWindow.FavoriteTitle, currentHostList, (int)sliderColumns.Value);
-                RefreshFavorites();
+                LoadFavorites();
             }
 
             ApplicationOptions.RemoveBlurWindows();
@@ -1052,7 +1064,7 @@ namespace vmPing.Views
             var manageFavoritesWindow = new ManageFavoritesWindow();
             manageFavoritesWindow.Owner = this;
             manageFavoritesWindow.ShowDialog();
-            RefreshFavorites();
+            LoadFavorites();
 
             ApplicationOptions.RemoveBlurWindows();
         }

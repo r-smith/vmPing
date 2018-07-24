@@ -192,6 +192,10 @@
                     <MenuItem Header="Manage favorites" Click="mnuManageFavorites_Click" />
                     <Separator Padding="0,6" />
                 </MenuItem>
+                <MenuItem Header="Aliases" x:Name="mnuAliases">
+                    <MenuItem Header="Manage aliases" Click="mnuManageAliases_Click" />
+                    <Separator Padding="0,6" />
+                </MenuItem>
 
                 <Separator Padding="0,6" />
 

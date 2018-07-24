@@ -50,7 +50,7 @@ namespace vmPing.Classes
                 XmlNode nodeRoot = xd.SelectSingleNode("/vmping/aliases");
 
                 // Check if title already exists.
-                XmlNodeList nodeAliasSearch = xd.SelectNodes($"/vmping/aliases/favorite[@hosts={Configuration.GetEscapedXpath(hostname)}]");
+                XmlNodeList nodeAliasSearch = xd.SelectNodes($"/vmping/aliases/alias[@host={Configuration.GetEscapedXpath(hostname)}]");
                 foreach (XmlNode node in nodeAliasSearch)
                 {
                     // Title already exists.  Delete any old versions.
@@ -61,6 +61,36 @@ namespace vmPing.Classes
                 aliasEntry.SetAttribute("host", hostname.ToUpper());
                 aliasEntry.InnerText = alias;
                 nodeRoot.AppendChild(aliasEntry);
+                xd.Save(path);
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
+
+        public static void DeleteAlias(string key)
+        {
+            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
+            if (!File.Exists(path))
+                return;
+            
+            try
+            {
+                var xd = new XmlDocument();
+                xd.Load(path);
+
+                XmlNode nodeRoot = xd.SelectSingleNode("/vmping/aliases");
+
+                // Search for alias.
+                XmlNodeList nodeTitleSearch = xd.SelectNodes($"/vmping/aliases/alias[@host={Configuration.GetEscapedXpath(key)}]");
+                foreach (XmlNode node in nodeTitleSearch)
+                {
+                    // Found title.  Delete all versions.
+                    nodeRoot.RemoveChild(node);
+                }
                 xd.Save(path);
             }
 

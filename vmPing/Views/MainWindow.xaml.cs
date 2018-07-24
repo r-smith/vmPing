@@ -1036,6 +1036,44 @@ namespace vmPing.Views
         private void LoadAliases()
         {
             Aliases = Alias.GetAliases();
+            var aliasList = Aliases.ToList();
+            aliasList.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+            
+            // Clear existing aliases menu.
+            for (int i = mnuAliases.Items.Count - 1; i > 1; --i)
+                mnuAliases.Items.RemoveAt(i);
+
+            // Load favorites.
+            foreach (var alias in aliasList)
+            {
+                var menuItem = new MenuItem();
+                menuItem.Header = alias.Value;
+                menuItem.Click += (s, r) =>
+                {
+                    var selectedAlias = s as MenuItem;
+
+                    var didFindEmptyHost = false;
+                    for (int i = 0; i < _pingItems.Count; ++i)
+                    {
+                        if (string.IsNullOrWhiteSpace(_pingItems[i].Hostname))
+                        {
+                            _pingItems[i].Hostname = Aliases.FirstOrDefault(x => x.Value == selectedAlias.Header.ToString()).Key;
+                            PingStartStop(_pingItems[i]);
+                            didFindEmptyHost = true;
+                            break;
+                        }
+                    }
+
+                    if (!didFindEmptyHost)
+                    {
+                        AddHostMonitor(1);
+                        _pingItems[_pingItems.Count - 1].Hostname = Aliases.FirstOrDefault(x => x.Value == selectedAlias.Header.ToString()).Key;
+                        PingStartStop(_pingItems[_pingItems.Count - 1]);
+                    }
+                };
+
+                mnuAliases.Items.Add(menuItem);
+            }
         }
 
 
@@ -1065,6 +1103,18 @@ namespace vmPing.Views
             manageFavoritesWindow.Owner = this;
             manageFavoritesWindow.ShowDialog();
             LoadFavorites();
+
+            ApplicationOptions.RemoveBlurWindows();
+        }
+
+        private void mnuManageAliases_Click(object sender, RoutedEventArgs e)
+        {
+            // Display manage aliases window.
+            ApplicationOptions.BlurWindows();
+            var manageAliasesWindow = new ManageAliasesWindow();
+            manageAliasesWindow.Owner = this;
+            manageAliasesWindow.ShowDialog();
+            LoadAliases();
 
             ApplicationOptions.RemoveBlurWindows();
         }
@@ -1121,7 +1171,8 @@ namespace vmPing.Views
             var wnd = new EditAliasWindow(pingItem);
             wnd.Owner = this;
 
-            wnd.ShowDialog();
+            if (wnd.ShowDialog() == true)
+                LoadAliases();
 
             ApplicationOptions.RemoveBlurWindows();
         }

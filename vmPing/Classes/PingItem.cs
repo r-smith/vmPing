@@ -149,15 +149,15 @@ namespace vmPing.Classes
 
             // Display statics and round trip times
             history.Add("");
-            history.Add($"[+] Ping statistics for {Hostname}");
-            history.Add($"    Sent = {Statistics.PingsSent}, Received = {Statistics.PingsReceived}, Lost = {Statistics.PingsSent - Statistics.PingsReceived} ({(100 * (Statistics.PingsSent - Statistics.PingsReceived)) / Statistics.PingsSent}% loss)");
+            //history.Add($"[+] Ping statistics for {Hostname}");
+            history.Add($"Sent {Statistics.PingsSent}, Received {Statistics.PingsReceived}, Lost {Statistics.PingsSent - Statistics.PingsReceived} ({(100 * (Statistics.PingsSent - Statistics.PingsReceived)) / Statistics.PingsSent}% loss)");
             if (roundTripTimes.Count > 0)
             {
-                if (Statistics.PingsSent > 3600)
-                    history.Add($"[+] Round trip times (based on last 3,600 pings)");
-                else
-                    history.Add($"[+] Round trip times");
-                history.Add($"    Minimum = {roundTripTimes.Min()}ms, Maximum = {roundTripTimes.Max()}ms, Average = {roundTripTimes.Average().ToString("0.##")}ms");
+                //if (Statistics.PingsSent > 3600)
+                //    history.Add($"[+] Round trip times (based on last 3,600 pings)");
+                //else
+                //    history.Add($"[+] Round trip times");
+                history.Add($"Minimum ({roundTripTimes.Min()}ms), Maximum ({roundTripTimes.Max()}ms), Average ({roundTripTimes.Average().ToString("0.##")}ms)");
             }
             history.Add(" ");
         }

@@ -94,6 +94,9 @@
     <Compile Include="Views\IsolatedPingWindow.xaml.cs">
       <DependentUpon>IsolatedPingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ManageAliasesWindow.xaml.cs">
+      <DependentUpon>ManageAliasesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ManageFavoritesWindow.xaml.cs">
       <DependentUpon>ManageFavoritesWindow.xaml</DependentUpon>
     </Compile>
@@ -153,6 +156,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\ManageAliasesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ManageFavoritesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

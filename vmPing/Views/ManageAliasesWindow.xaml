@@ -1,0 +1,123 @@
+﻿<Window x:Class="vmPing.Views.ManageAliasesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:vmPing.Views"
+        mc:Ignorable="d"
+        Title="ManageAliasesWindow" Height="375" Width="400"
+        ResizeMode="NoResize" Background="#F7F9F8"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        ShowInTaskbar="False">
+    <Border BorderBrush="Black" BorderThickness="3">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Text="Manage Aliases"
+                           Foreground="#333"
+                           Margin="0,10,0,10"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"
+                           />
+                <ListBox Grid.Row="1"
+                         Name="lbAliases"
+                         SelectionMode="Single"
+                         Margin="25,0">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Path=Value}" />
+                                <TextBlock Grid.Column="1" Text="{Binding Path=Key, StringFormat=[{0}]}"
+                                           Foreground="#888"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Grid Grid.Row="2">
+                    <Button Name="btnRemove"
+                            Click="btnRemove_Click"
+                            FontSize="12"
+                            Padding="6,3"
+                            HorizontalAlignment="Right"
+                            Margin="0,10,25,25"
+                            Content="Remove"
+                            Foreground="White"
+                            Background="#666">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Name="button_border"
+                                    BorderThickness="1" BorderBrush="Black"
+                                    Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
+                                    <TextBlock HorizontalAlignment="Center" Text="{TemplateBinding Content}"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="button_border" Property="Background" Value="#888" />
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="button_border" Property="Background" Value="#333" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Grid>
+            </Grid>
+
+
+
+            <Border Grid.Row="1" Height="1" Background="#aaa" Margin="25,0" />
+
+            <!-- Buttons -->
+            <Grid Grid.Row="2">
+                <Button Name="btnClose"
+                        Grid.Column="2"
+                        FontSize="14"
+                        Padding="6"
+                        HorizontalAlignment="Right"
+                        Margin="17,17,25,17"
+                        Width="100"
+                        IsCancel="True"
+                        Content="Close"
+                        Background="AliceBlue">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Name="button_border"
+                                    BorderThickness="1" BorderBrush="Black"
+                                    Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
+                                <TextBlock HorizontalAlignment="Center" Text="{TemplateBinding Content}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="button_border" Property="Background" Value="#E0F0FF" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="button_border" Property="Background" Value="#D0E0EF" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

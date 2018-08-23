@@ -14,13 +14,17 @@ vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple h
 [![Join the chat at https://gitter.im/vmPing/Lobby](https://badges.gitter.im/vmPing/Lobby.svg)](https://gitter.im/vmPing/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
-### Changes for v1.2.6
-* Aliases can now be managed from the main drop down menu.
-* Keyboard focus now automatically shifts each time you add a new host monitor window.
+### Changes for v1.2.7
+* The keyboard focus feature that was supposedly added to the previous version is now working.
 * TODO: Revamp alias and favorite management windows.
 * TODO: Revamp settings window.
 * TODO: Add context menu to host monitor windows.
 * TODO: Alternate compact view.
+
+
+### Changes for v1.2.6
+* Aliases can now be managed from the main drop down menu.
+* Keyboard focus now automatically shifts each time you add a new host monitor window.
 
 
 ### Changes for v1.2.5

@@ -1199,7 +1199,7 @@ namespace vmPing.Views
         private void tbHostname_Loaded(object sender, RoutedEventArgs e)
         {
             // Set focus to textbox on newly added monitors.  If the hostname field is blank for any existing monitors, do not change focus.
-            for (int i = 0; i < _pingItems.Count; ++i)
+            for (int i = 0; i < _pingItems.Count - 1; ++i)
             {
                 if (string.IsNullOrEmpty(_pingItems[i].Hostname))
                     return;

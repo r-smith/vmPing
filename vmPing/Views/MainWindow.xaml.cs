@@ -44,20 +44,6 @@ namespace vmPing.Views
         }
 
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Set initial focus first text box.
-            if (_pingItems.Count > 0)
-            {
-                var cp = icPingItems.ItemContainerGenerator.ContainerFromIndex(0) as ContentPresenter;
-                var tb = (TextBox)cp.ContentTemplate.FindName("tbHostname", cp);
-
-                if (tb != null)
-                    tb.Focus();
-            }
-        }
-
-
         private void InitializeAplication()
         {
             InitializeCommandBindings();
@@ -1046,8 +1032,27 @@ namespace vmPing.Views
             // Load favorites.
             foreach (var alias in aliasList)
             {
-                var menuItem = new MenuItem();
-                menuItem.Header = alias.Value;
+                mnuAliases.Items.Add(BuildAliasMenuItem(alias, false));
+            }
+        }
+
+        private MenuItem BuildAliasMenuItem(KeyValuePair<string, string> alias, bool isContextMenu)
+        {
+            var menuItem = new MenuItem();
+            menuItem.Header = alias.Value;
+
+            if (isContextMenu)
+            {
+                menuItem.Click += (s, r) =>
+                {
+                    var selectedMenuItem = s as MenuItem;
+                    var selectedAlias = (PingItem)selectedMenuItem.DataContext;
+                    selectedAlias.Hostname = Aliases.FirstOrDefault(x => x.Value == selectedMenuItem.Header.ToString()).Key;
+                    PingStartStop(selectedAlias);
+                };
+            }
+            else
+            {
                 menuItem.Click += (s, r) =>
                 {
                     var selectedAlias = s as MenuItem;
@@ -1071,9 +1076,9 @@ namespace vmPing.Views
                         PingStartStop(_pingItems[_pingItems.Count - 1]);
                     }
                 };
-
-                mnuAliases.Items.Add(menuItem);
             }
+
+            return menuItem;
         }
 
 
@@ -1188,6 +1193,31 @@ namespace vmPing.Views
             else if (PingItem.ChangeWindow.IsLoaded)
             {
                 PingItem.ChangeWindow.Focus();
+            }
+        }
+
+        private void tbHostname_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Set focus to textbox on newly added monitors.  If the hostname field is blank for any existing monitors, do not change focus.
+            for (int i = 0; i < _pingItems.Count; ++i)
+            {
+                if (string.IsNullOrEmpty(_pingItems[i].Hostname))
+                    return;
+            }
+            var tb = (TextBox)sender;
+            tb.Focus();
+        }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            // Set initial focus first text box.
+            if (_pingItems.Count > 0)
+            {
+                var cp = icPingItems.ItemContainerGenerator.ContainerFromIndex(0) as ContentPresenter;
+                var tb = (TextBox)cp.ContentTemplate.FindName("tbHostname", cp);
+
+                if (tb != null)
+                    tb.Focus();
             }
         }
     }

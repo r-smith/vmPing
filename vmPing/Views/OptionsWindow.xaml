@@ -7,20 +7,55 @@
         xmlns:classes="clr-namespace:vmPing.Classes"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Background="#F7F9F8"
+        Background="#F4F4F4"
         Closed="Window_Closed"
         Loaded="Window_Loaded"
         ResizeMode="NoResize"
-        Title="vmPing - Options" Height="350" Width="350">
-    <Grid>
+        Title="vmPing - Options" Height="520" Width="475">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+        <Style TargetType="StackPanel" x:Key="EmailOptionsStackPanel">
+            <Setter Property="Margin" Value="0,4,20,3" />
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="DockPanel.Dock" Value="Top" />
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="EmailOptionsTextBlock">
+            <Setter Property="Margin" Value="0,0,12,0" />
+            <Setter Property="Foreground" Value="#555" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="OptionHeaderTextStyle">
+            <Setter Property="Margin" Value="0,10" />
+            <Setter Property="Foreground" Value="#444" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="OptionSubHeaderTextStyle">
+            <Setter Property="Margin" Value="0,0,0,8" />
+            <Setter Property="Foreground" Value="#268bd2" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="9">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
-        <TabControl>
-            <!-- General Tab -->
-            <TabItem Header="General">
+
+        <TabControl Style="{DynamicResource TabControlStyle}">
+            <!-- TAB: General -->
+            <TabItem Header="General" Name="GeneralTab">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -31,11 +66,7 @@
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0"
                                Text="Probe Options"
-                               Foreground="#333"
-                               Margin="0,10,0,10"
-                               FontSize="16"
-                               FontWeight="Bold"
-                               HorizontalAlignment="Center" />
+                               Style="{DynamicResource OptionHeaderTextStyle}" />
                     <!-- Probes: Ping Interval -->
                     <StackPanel Grid.Row="1"
                                 Orientation="Horizontal"
@@ -77,7 +108,7 @@
                     </StackPanel>
 
                     <Separator Grid.Row="3" Height="1" Background="#ccc" Margin="20,20,20,5" />
-                    
+
                     <!-- Alert Threshold -->
                     <StackPanel Grid.Row="4"
                                 Orientation="Horizontal"
@@ -97,69 +128,184 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
+
+            <!-- TAB: Email Alerts -->
+            <TabItem Header="Email Alerts" Name="EmailAlertsTab">
+                <DockPanel>
+
+                    <!-- Header -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Email Alerts"
+                               Style="{DynamicResource OptionHeaderTextStyle}" />
+
+                    <CheckBox DockPanel.Dock="Top"
+                              Name="IsEmailAlertsEnabled"
+                              Content="Enable email alerts"
+                              Click="IsEmailAlertsEnabled_Click"
+                              IsChecked="True"
+                              Margin="20,15,0,15"
+                              FontSize="14" />
+
+                    <DockPanel LastChildFill="False"
+                               DockPanel.Dock="Top"
+                               Margin="20,0,20,0"
+                               Visibility="{Binding IsChecked, ElementName=IsEmailAlertsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                        <!-- Separator -->
+                        <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" />
+
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Server Information"
+                                   Style="{DynamicResource OptionSubHeaderTextStyle}" />
+
+                        <!-- SMTP Server-->
+                        <StackPanel Style="{DynamicResource EmailOptionsStackPanel}">
+                            <Grid Width="120">
+                                <TextBlock Style="{DynamicResource EmailOptionsTextBlock}"
+                                           Text="SMTP server" />
+                            </Grid>
+                            <TextBox Style="{DynamicResource TextBoxStyle}"
+                                     Name="SmtpServer"
+                                     Width="250" />
+                        </StackPanel>
+
+                        <!-- Smtp Port -->
+                        <StackPanel Style="{DynamicResource EmailOptionsStackPanel}">
+                            <Grid Width="120">
+                                <TextBlock Style="{DynamicResource EmailOptionsTextBlock}"
+                                           Text="Port" />
+                            </Grid>
+                            <TextBox Style="{DynamicResource TextBoxStyle}"
+                                     Name="SmtpPort"
+                                     MaxLength="5"
+                                     Width="75" />
+                        </StackPanel>
+
+                        <!-- Authentication section -->
+                        <!-- Smtp Authentication -->
+                        <CheckBox DockPanel.Dock="Top"
+                                  Name="IsSmtpAuthenticationRequired"
+                                  Content="This server requires authentication"
+                                  Click="IsSmtpAuthenticationRequired_Click"
+                                  Foreground="#888"
+                                  FontSize="13"
+                                  Margin="120,8,0,0"
+                                  HorizontalAlignment="Left" />
+                        <StackPanel DockPanel.Dock="Top"
+                                    Visibility="{Binding IsChecked, ElementName=IsSmtpAuthenticationRequired, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <!-- Smtp User -->
+                            <StackPanel Style="{DynamicResource EmailOptionsStackPanel}">
+                                <Grid Width="120">
+                                    <TextBlock Style="{DynamicResource EmailOptionsTextBlock}"
+                                               Text="Username" />
+                                </Grid>
+                                <TextBox Style="{DynamicResource TextBoxStyle}"
+                                         Name="SmtpUsername"
+                                         Width="250" />
+                            </StackPanel>
+
+                            <!-- Smtp Password -->
+                            <StackPanel Style="{DynamicResource EmailOptionsStackPanel}">
+                                <Grid Width="120">
+                                    <TextBlock Style="{DynamicResource EmailOptionsTextBlock}"
+                                               Text="Password" />
+                                </Grid>
+                                <PasswordBox Style="{DynamicResource PasswordBoxStyle}"
+                                             Name="SmtpPassword"
+                                             Width="250" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Separator -->
+                        <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" Margin="0,15,0,0" />
+
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Email Settings"
+                                   Style="{DynamicResource OptionSubHeaderTextStyle}" />
+
+                        <!-- Recipient Address-->
+                        <StackPanel Style="{DynamicResource EmailOptionsStackPanel}">
+                            <Grid Width="120">
+                                <TextBlock Style="{DynamicResource EmailOptionsTextBlock}"
+                                           Text="Recipient address" />
+                            </Grid>
+                            <TextBox Style="{DynamicResource TextBoxStyle}"
+                                     Name="EmailRecipientAddress"
+                                     LostFocus="EmailRecipientAddress_LostFocus"
+                                     Width="250" />
+                        </StackPanel>
+
+                        <!-- From Address-->
+                        <StackPanel Style="{DynamicResource EmailOptionsStackPanel}">
+                            <Grid Width="120">
+                                <TextBlock Style="{DynamicResource EmailOptionsTextBlock}"
+                                           Text="From address" />
+                            </Grid>
+                            <TextBox Style="{DynamicResource TextBoxStyle}"
+                                     Name="EmailFromAddress"
+                                     Width="250" />
+                        </StackPanel>
+                    </DockPanel>
+                </DockPanel>
+            </TabItem>
+
+
+            <!-- TAB: Email Alerts -->
+            <TabItem Header="Log Output" Name="LogOutputTab">
+                <DockPanel>
+
+                    <!-- Header -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Log Output"
+                               Style="{DynamicResource OptionHeaderTextStyle}" />
+
+                    <CheckBox DockPanel.Dock="Top"
+                              Name="IsLogOutputEnabled"
+                              Content="Write ping output to plain text files"
+                              IsChecked="True"
+                              Margin="20,15,0,30"
+                              FontSize="14" />
+                    <Grid DockPanel.Dock="Top"
+                          Margin="20,0"
+                          VerticalAlignment="Top"
+                          Visibility="{Binding IsChecked, ElementName=IsLogOutputEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel>
+                            <TextBlock Style="{DynamicResource EmailOptionsTextBlock}"
+                                       HorizontalAlignment="Left"
+                                       Text="Log path" />
+                            <TextBox Style="{DynamicResource TextBoxStyle}"
+                                     Margin="0,5,0,10"
+                                     Name="LogPath" />
+                            <Button Style="{DynamicResource ButtonStyle}"
+                                    Click="BrowseLogPath_Click"
+                                    Width="70"
+                                    Background="#555"
+                                    Content="Browse"
+                                    HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </Grid>
+                </DockPanel>
+            </TabItem>
+
         </TabControl>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Button Name="btnCancel"
-                    Grid.Column="1"
-                    FontSize="14"
-                    Padding="6"
-                    Margin="17"
-                    Width="100"
+
+        <!-- Button Section -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,9,0,0" HorizontalAlignment="Right">
+            <Button Style="{DynamicResource ButtonStyle}"
+                    Click="btnOk_Click"
+                    Margin="0,0,9,0"
+                    Width="70"
+                    Content="OK" />
+            <Button Style="{DynamicResource ButtonStyle}"
                     Click="btnCancel_Click"
-                    Background="AliceBlue">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border Name="button_border"
-                                    BorderThickness="1" BorderBrush="Black"
-                                    Background="{TemplateBinding Background}"
-                                    Padding="{TemplateBinding Padding}">
-                            <TextBlock HorizontalAlignment="Center">Cancel</TextBlock>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="button_border" Property="Background" Value="#E0F0FF" />
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="button_border" Property="Background" Value="#D0E0EF" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-            <Button Name="btnOk"
-                        Click="btnOk_Click"
-                        Grid.Column="2"
-                        FontSize="14"
-                        Padding="6"
-                        Margin="17"
-                        Width="100"
-                        Background="AliceBlue">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border Name="button_border"
-                                    BorderThickness="1" BorderBrush="Black"
-                                    Background="{TemplateBinding Background}"
-                                    Padding="{TemplateBinding Padding}">
-                            <TextBlock HorizontalAlignment="Center">OK</TextBlock>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="button_border" Property="Background" Value="#E0F0FF" />
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="button_border" Property="Background" Value="#D0E0EF" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-        </Grid>
+                    Margin="0,0,9,0"
+                    Width="70"
+                    Content="Cancel" />
+            <Button Style="{DynamicResource ButtonStyle}"
+                    Width="70"
+                    IsEnabled="False"
+                    Content="Apply" />
+        </StackPanel>
     </Grid>
 </Window>

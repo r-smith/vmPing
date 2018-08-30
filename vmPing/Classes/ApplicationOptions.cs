@@ -14,15 +14,16 @@ namespace vmPing.Classes
         public static int PingInterval { get; set; } = Constants.PING_INTERVAL;
         public static int PingTimeout { get; set; } = Constants.PING_TIMEOUT;
         public static int AlertThreshold { get; set; } = 2;
-        public static bool EmailAlert { get; set; } = false;
         public static bool AlwaysOnTop { get; set; } = false;
+        public static bool IsEmailAlertEnabled { get; set; } = false;
+        public static bool IsEmailAuthenticationRequired { get; set; } = false;
         public static string EmailServer { get; set; }
         public static string EmailUser { get; set; }
         public static string EmailPassword { get; set; }
-        public static string EmailPort { get; set; }
+        public static string EmailPort { get; set; } = "25";
         public static string EmailRecipient { get; set; }
         public static string EmailFromAddress { get; set; }
-        public static bool LogOutput { get; set; } = false;
+        public static bool IsLogOutputEnabled { get; set; } = false;
         public static string LogPath { get; set; }
         public static PopupNotificationOption PopupOption { get; set; } = PopupNotificationOption.Always;
 

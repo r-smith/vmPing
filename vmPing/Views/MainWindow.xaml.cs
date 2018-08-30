@@ -350,7 +350,7 @@ namespace vmPing.Views
                                 backgroundWorker.ReportProgress(
                                     0,
                                     new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Up });
-                                if (ApplicationOptions.EmailAlert)
+                                if (ApplicationOptions.IsEmailAlertEnabled)
                                     SendEmail("up", pingItem.Hostname);
                             }
 
@@ -374,7 +374,7 @@ namespace vmPing.Views
                                 backgroundWorker.ReportProgress(
                                     0,
                                     new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
-                                if (ApplicationOptions.EmailAlert)
+                                if (ApplicationOptions.IsEmailAlertEnabled)
                                     SendEmail("down", pingItem.Hostname);
                             }
 
@@ -424,7 +424,7 @@ namespace vmPing.Views
                             backgroundWorker.ReportProgress(
                                 0,
                                 new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Error });
-                            if (ApplicationOptions.EmailAlert)
+                            if (ApplicationOptions.IsEmailAlertEnabled)
                                 SendEmail("error", pingItem.Hostname);
                         }
 
@@ -529,7 +529,7 @@ namespace vmPing.Views
                             backgroundWorker.ReportProgress(
                                 0,
                                 new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Up });
-                            if (ApplicationOptions.EmailAlert)
+                            if (ApplicationOptions.IsEmailAlertEnabled)
                                 SendEmail("up", pingItem.Hostname);
                         }
 
@@ -563,7 +563,7 @@ namespace vmPing.Views
                             backgroundWorker.ReportProgress(
                                 0,
                                 new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
-                            if (ApplicationOptions.EmailAlert)
+                            if (ApplicationOptions.IsEmailAlertEnabled)
                                 SendEmail("down", pingItem.Hostname);
                         }
 
@@ -638,7 +638,7 @@ namespace vmPing.Views
                 new Action(() => pingItem.AddHistory(pingOutput.ToString())));
 
             // If logging is enabled, write the response to a file.
-            if (ApplicationOptions.LogOutput && ApplicationOptions.LogPath.Length > 0)
+            if (ApplicationOptions.IsLogOutputEnabled && ApplicationOptions.LogPath.Length > 0)
             {
                 var logPath = $@"{ApplicationOptions.LogPath}\{pingItem.Hostname}.txt";
                 using (System.IO.StreamWriter outputFile = new System.IO.StreamWriter(@logPath, true))
@@ -668,7 +668,7 @@ namespace vmPing.Views
                 new Action(() => pingItem.AddHistory(pingOutput.ToString())));
 
             // If logging is enabled, write the response to a file.
-            if (ApplicationOptions.LogOutput && ApplicationOptions.LogPath.Length > 0)
+            if (ApplicationOptions.IsLogOutputEnabled && ApplicationOptions.LogPath.Length > 0)
             {
                 var index = pingItem.Hostname.IndexOf(':');
                 var hostname = (index > 0) ? pingItem.Hostname.Substring(0, index) : pingItem.Hostname;
@@ -793,8 +793,8 @@ namespace vmPing.Views
 
         private void AlwaysOnTopExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            mnuOnTop.IsChecked = !mnuOnTop.IsChecked;
-            ToggleAlwaysOnTop();
+            //mnuOnTop.IsChecked = !mnuOnTop.IsChecked;
+            //ToggleAlwaysOnTop();
         }
 
         private void ProbeOptionsExecute(object sender, ExecutedRoutedEventArgs e)
@@ -899,62 +899,62 @@ namespace vmPing.Views
 
         private void ToggleAlwaysOnTop()
         {
-            ApplicationOptions.AlwaysOnTop = mnuOnTop.IsChecked;
+            //ApplicationOptions.AlwaysOnTop = mnuOnTop.IsChecked;
 
-            foreach (Window window in Application.Current.Windows)
-                window.Topmost = ApplicationOptions.AlwaysOnTop;
+            //foreach (Window window in Application.Current.Windows)
+            //    window.Topmost = ApplicationOptions.AlwaysOnTop;
         }
 
 
         private void DisplayEmailAlerts()
         {
-            if (ApplicationOptions.EmailAlert)
-            {
-                mnuEmailAlerts.IsChecked = false;
-                ApplicationOptions.EmailAlert = false;
-                return;
-            }
+            //if (ApplicationOptions.IsEmailAlertEnabled)
+            //{
+            //    mnuEmailAlerts.IsChecked = false;
+            //    ApplicationOptions.IsEmailAlertEnabled = false;
+            //    return;
+            //}
 
-            // Display email alerts window
-            ApplicationOptions.BlurWindows();
-            var emailAlertWindow = new EmailAlertWindow();
-            emailAlertWindow.Owner = this;
+            //// Display email alerts window
+            //ApplicationOptions.BlurWindows();
+            //var emailAlertWindow = new EmailAlertWindow();
+            //emailAlertWindow.Owner = this;
 
-            emailAlertWindow.ShowDialog();
-            mnuEmailAlerts.IsChecked = ApplicationOptions.EmailAlert;
+            //emailAlertWindow.ShowDialog();
+            //mnuEmailAlerts.IsChecked = ApplicationOptions.IsEmailAlertEnabled;
 
-            ApplicationOptions.RemoveBlurWindows();
+            //ApplicationOptions.RemoveBlurWindows();
         }
 
 
         private void DisplayLogOutput()
         {
-            if (ApplicationOptions.LogOutput)
-            {
-                mnuLogOutput.IsChecked = false;
-                ApplicationOptions.LogOutput = false;
-                return;
-            }
+            //if (ApplicationOptions.IsLogOutputEnabled)
+            //{
+            //    mnuLogOutput.IsChecked = false;
+            //    ApplicationOptions.IsLogOutputEnabled = false;
+            //    return;
+            //}
 
 
-            // Display folder browse dialog box.
-            ApplicationOptions.BlurWindows();
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            dialog.Description = "Select a location for the log files.";
-            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+            //// Display folder browse dialog box.
+            //ApplicationOptions.BlurWindows();
+            //var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            //dialog.Description = "Select a location for the log files.";
+            //System.Windows.Forms.DialogResult result = dialog.ShowDialog();
 
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                ApplicationOptions.LogPath = dialog.SelectedPath;
-                ApplicationOptions.LogOutput = true;
-            }
-            else
-            {
-                ApplicationOptions.LogOutput = false;
-            }
-            mnuLogOutput.IsChecked = ApplicationOptions.LogOutput;
+            //if (result == System.Windows.Forms.DialogResult.OK)
+            //{
+            //    ApplicationOptions.LogPath = dialog.SelectedPath;
+            //    ApplicationOptions.IsLogOutputEnabled = true;
+            //}
+            //else
+            //{
+            //    ApplicationOptions.IsLogOutputEnabled = false;
+            //}
+            //mnuLogOutput.IsChecked = ApplicationOptions.IsLogOutputEnabled;
 
-            ApplicationOptions.RemoveBlurWindows();
+            //ApplicationOptions.RemoveBlurWindows();
         }
 
         private void DisplayProbeOptions()

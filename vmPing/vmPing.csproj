@@ -77,9 +77,6 @@
     <Compile Include="Views\EditAliasWindow.xaml.cs">
       <DependentUpon>EditAliasWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EmailAlertWindow.xaml.cs">
-      <DependentUpon>EmailAlertWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Classes\FloodHostNode.cs" />
     <Compile Include="Views\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
@@ -117,10 +114,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\EditAliasWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\EmailAlertWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

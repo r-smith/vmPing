@@ -141,6 +141,14 @@
                     <Image Source="/Resources/font-awesome_4-7-0_chevron-circle-down_16_0_000000_none.png" VerticalAlignment="Center" Width="16" Height="16" />
                 </MenuItem.Icon>
 
+                <MenuItem Name="mnuProbeOptions"
+                          Header="Options"
+                          InputGestureText="F10"
+                          Click="mnuProbeOptions_Click"
+                          Padding="0,5" />
+                
+                <Separator Padding="0,6" />
+
                 <MenuItem Header="Change Log" Click="mnuChangeLog_Click" />
                 
                 <MenuItem Header="Popup Notifications">
@@ -161,33 +169,33 @@
 
                 <Separator Padding="0,6" />
 
-                <MenuItem Name="mnuOnTop"
+                <!--<MenuItem Name="mnuOnTop"
                           Header="Keep Window on Top"
                           InputGestureText="F9"
                           Click="mnuOnTop_Click"
                           Padding="0,5"
-                          IsCheckable="True" />
-                <MenuItem Name="mnuProbeOptions"
+                          IsCheckable="True" />-->
+                <!--<MenuItem Name="mnuProbeOptions"
                           Header="Set Probe Options"
                           InputGestureText="F10"
                           Click="mnuProbeOptions_Click"
-                          Padding="0,5" />
-                <MenuItem Name="mnuLogOutput"
+                          Padding="0,5" />-->
+                <!--<MenuItem Name="mnuLogOutput"
                           Header="Log Output to Files"
                           InputGestureText="F11"
                           Click="mnuLogOutput_Click"
                           Padding="0,5"
-                          IsCheckable="True" />
-                <MenuItem Name="mnuEmailAlerts"
+                          IsCheckable="True" />-->
+                <!--<MenuItem Name="mnuEmailAlerts"
                           Header="Enable Email Alerts"
                           InputGestureText="F12"
                           Click="mnuEmailAlerts_Click"
                           Padding="0,5"
-                          IsCheckable="True" />
+                          IsCheckable="True" />-->
 
-                <Separator Padding="0,6" />
+                <!--<Separator Padding="0,6" />-->
 
-                <MenuItem Header="Favorites" x:Name="mnuFavorites">
+                <MenuItem Header="Favorite Sets" x:Name="mnuFavorites">
                     <MenuItem Header="Add to favorites" Click="mnuAddToFavorites_Click" />
                     <MenuItem Header="Manage favorites" Click="mnuManageFavorites_Click" />
                     <Separator Padding="0,6" />

@@ -3,8 +3,8 @@ vmPing
 
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
-###### (Latest version is 1.2.6 released on August 23, 2018)
-### [Click here to download the latest .exe](https://github.com/R-Smith/vmPing/releases/download/v1.2.6/vmPing.exe)
+###### (Latest version is 1.2.7 released on August 23, 2018)
+### [Click here to download the latest .exe](https://github.com/R-Smith/vmPing/releases/download/v1.2.7/vmPing.exe)
 ### [Click here to download the source](https://github.com/R-Smith/vmPing/archive/master.zip)
 
 ##### Notes
@@ -14,13 +14,17 @@ vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple h
 [![Join the chat at https://gitter.im/vmPing/Lobby](https://badges.gitter.im/vmPing/Lobby.svg)](https://gitter.im/vmPing/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
-### Changes for v1.2.6
-* Aliases can now be managed from the main drop down menu.
-* Keyboard focus now automatically shifts each time you add a new host monitor window.
+### Changes for v1.2.7
+* The keyboard focus feature that was supposedly added to the previous version is now working.
 * TODO: Revamp alias and favorite management windows.
 * TODO: Revamp settings window.
 * TODO: Add context menu to host monitor windows.
 * TODO: Alternate compact view.
+
+
+### Changes for v1.2.6
+* Aliases can now be managed from the main drop down menu.
+* Keyboard focus now automatically shifts each time you add a new host monitor window.
 
 
 ### Changes for v1.2.5

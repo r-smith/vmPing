@@ -134,6 +134,8 @@ namespace vmPing.Classes
 
         public void WriteFinalStatisticsToHistory()
         {
+            if (Statistics.PingsSent == 0) return;
+
             var roundTripTimes = new List<int>();
             var rttRegex = new Regex(@"  \[(?<rtt><?\d+) ?ms]$");
 

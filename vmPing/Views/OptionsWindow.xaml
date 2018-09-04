@@ -276,10 +276,9 @@
                             <TextBox Style="{DynamicResource TextBoxStyle}"
                                      Margin="0,5,0,10"
                                      Name="LogPath" />
-                            <Button Style="{DynamicResource ButtonStyle}"
+                            <Button Style="{DynamicResource ButtonSecondaryStyle}"
                                     Click="BrowseLogPath_Click"
                                     Width="70"
-                                    Background="#555"
                                     Content="Browse"
                                     HorizontalAlignment="Right"/>
                         </StackPanel>

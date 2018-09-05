@@ -1,109 +1,50 @@
 ﻿<Window x:Class="vmPing.Views.EditAliasWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="vmPing Edit Alias" Height="150" Width="380"
-        ResizeMode="NoResize" Background="#F7F9F8"
+        Title="vmPing" Height="170" Width="390"
+        ResizeMode="NoResize"
+        Background="#fff"
         WindowStartupLocation="CenterOwner"
-        WindowStyle="None"
         ShowInTaskbar="False">
 
-    <Border BorderBrush="Black" BorderThickness="3">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            
-            <Grid Grid.Row="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-                <!-- Header -->
-                <TextBlock Grid.Row="0"
-                           Name="tbTitle"
-                           Text="Alias for: "
-                           Foreground="#333"
-                           Margin="0,10,0,10"
-                           FontSize="16"
-                           FontWeight="Bold"
-                           HorizontalAlignment="Center" />
+        <DockPanel Grid.Row="0" LastChildFill="False" Margin="9">
 
-                <!-- Alias TextBox-->
-                <TextBox Grid.Row="1"
-                         Name="AliasTextBox"
-                         FontSize="16"
-                         Margin="15,0"
-                         Padding="2,3"
-                         VerticalContentAlignment="Center" />
-            </Grid>
+            <!-- Header -->
+            <TextBlock DockPanel.Dock="Top"
+                       Name="Header"
+                       Text="Alias for: "
+                       TextTrimming="CharacterEllipsis"
+                       Style="{DynamicResource ResourceKey=OptionHeaderTextStyle}"
+                       />
 
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                
-                <Button Name="btnCancel"
+            <!-- Alias TextBox-->
+            <TextBox DockPanel.Dock="Top"
+                     Name="MyAlias"
+                     Style="{DynamicResource TextBoxStyle}"
+                     MaxLength="64"
+                     />
+        </DockPanel>
+
+        <!-- Buttons -->
+        <Border Grid.Row="1" Background="#f0f0f0" BorderBrush="#dfdfdf" BorderThickness="0,1,0,0">
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
+                <Button Style="{DynamicResource ButtonStandardStyle}"
+                        Margin="0,0,8,0"
+                        Width="100"
                         IsCancel="True"
-                        Grid.Column="1"
-                        FontSize="14"
-                        Padding="6"
-                        Margin="17"
-                        Width="100"
-                        Background="AliceBlue">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Name="button_border"
-                                    BorderThickness="1" BorderBrush="Black"
-                                    Background="{TemplateBinding Background}"
-                                    Padding="{TemplateBinding Padding}">
-                                <TextBlock HorizontalAlignment="Center" Text="Cancel" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="button_border" Property="Background" Value="#E0F0FF" />
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="button_border" Property="Background" Value="#D0E0EF" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-
-                <Button Name="btnSave"
-                        Grid.Column="2"
-                        FontSize="14"
-                        Padding="6"
-                        Margin="17"
-                        Width="100"
-                        Background="AliceBlue"
+                        Content="Cancel" />
+                <Button Style="{DynamicResource ButtonStandardStyle}"
                         IsDefault="True"
-                        Click="btnSave_Click">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Name="button_border"
-                                    BorderThickness="1" BorderBrush="Black"
-                                    Background="{TemplateBinding Background}"
-                                    Padding="{TemplateBinding Padding}">
-                                <TextBlock HorizontalAlignment="Center" Text="Save" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="button_border" Property="Background" Value="#E0F0FF" />
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="button_border" Property="Background" Value="#D0E0EF" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </Grid>
-        </Grid>
-    </Border>
+                        Click="Save_Click"
+                        Width="100"
+                        Content="Save" />
+            </StackPanel>
+        </Border>
+    </Grid>
 </Window>

@@ -20,16 +20,16 @@ namespace vmPing.Views
                 MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
 
-        private void btnSave_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            FavoriteTitle = txtTitle.Text;
+            FavoriteTitle = MyTitle.Text;
 
-            if (Favorite.DoesTitleExist(txtTitle.Text))
+            if (Favorite.DoesTitleExist(MyTitle.Text))
             {
                 var dialogWindow = new DialogWindow(
                     DialogWindow.DialogIcon.Warning,
                     "Warning",
-                    $"{txtTitle.Text} already exists.  Would you like to overwrite?",
+                    $"{MyTitle.Text} already exists.  Would you like to overwrite?",
                     "Overwrite");
                 dialogWindow.Owner = this;
                 if (dialogWindow.ShowDialog() == true)

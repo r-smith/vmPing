@@ -15,9 +15,9 @@ namespace vmPing.Views
         {
             InitializeComponent();
 
-            tbTitle.Text = "Alias for: " + pingItem.Hostname;
-            AliasTextBox.Text = pingItem.Alias;
-            AliasTextBox.SelectAll();
+            Header.Text = "Alias for: " + pingItem.Hostname;
+            MyAlias.Text = pingItem.Alias;
+            MyAlias.SelectAll();
             _CurrentPingItem = pingItem;
 
             // Set initial focus to text box.
@@ -25,10 +25,17 @@ namespace vmPing.Views
                 MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
 
-        private void btnSave_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            _CurrentPingItem.Alias = AliasTextBox.Text;
-            Alias.AddAlias(_CurrentPingItem.Hostname, AliasTextBox.Text);
+            _CurrentPingItem.Alias = MyAlias.Text;
+            if (string.IsNullOrWhiteSpace(MyAlias.Text))
+            {
+                Alias.DeleteAlias(_CurrentPingItem.Hostname);
+            }
+            else
+            {
+                Alias.AddAlias(_CurrentPingItem.Hostname, MyAlias.Text);
+            }
             DialogResult = true;
         }
     }

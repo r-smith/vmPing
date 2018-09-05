@@ -12,6 +12,7 @@
         WindowStartupLocation="CenterOwner"
         SizeToContent="Height"
         ShowInTaskbar="False">
+    
     <Grid Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -25,16 +26,16 @@
             </Grid.RowDefinitions>
             <DockPanel HorizontalAlignment="Left" Margin="0,0,0,3">
                 <Image Name="MyIcon"
-                           Source="/Resources/caution-40.png"
-                           Width="40"
-                           Height="40"/>
+                       Source="/Resources/caution-40.png"
+                       Width="40"
+                       Height="40"/>
                 <TextBlock Name="MyTitle"
-                               Text="Warning"
-                               Foreground="#333"
-                               Margin="20,0,0,0"
-                               VerticalAlignment="Center"
-                               FontSize="16"
-                               FontWeight="Bold"/>
+                           Text="Warning"
+                           Foreground="#333"
+                           Margin="20,0,0,0"
+                           VerticalAlignment="Center"
+                           FontSize="16"
+                           FontWeight="Bold"/>
             </DockPanel>
             <TextBlock Grid.Row="1"
                        Name="Body"

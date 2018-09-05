@@ -761,11 +761,9 @@ namespace vmPing.Views
 
                 smtpClient.Host = serverAddress;
 
-                if (serverUser.Length > 0 && serverPassword.Length > 0)
+                if (ApplicationOptions.IsEmailAuthenticationRequired)
                 {
-                    NetworkCredential basicCredential =
-                        new NetworkCredential(serverUser, serverPassword);
-                    smtpClient.Credentials = basicCredential;
+                    smtpClient.Credentials = new NetworkCredential(serverUser, serverPassword);
                 }
 
                 if (serverPort.Length > 0)
@@ -1085,7 +1083,6 @@ namespace vmPing.Views
         private void mnuAddToFavorites_Click(object sender, RoutedEventArgs e)
         {
             // Display add to favorites window.
-            ApplicationOptions.BlurWindows();
             var addToFavoritesWindow = new AddToFavoritesWindow();
             addToFavoritesWindow.Owner = this;
             if (addToFavoritesWindow.ShowDialog() == true)
@@ -1096,8 +1093,6 @@ namespace vmPing.Views
                 Favorite.AddFavoriteEntry(addToFavoritesWindow.FavoriteTitle, currentHostList, (int)sliderColumns.Value);
                 LoadFavorites();
             }
-
-            ApplicationOptions.RemoveBlurWindows();
         }
 
         private void mnuManageFavorites_Click(object sender, RoutedEventArgs e)
@@ -1173,8 +1168,11 @@ namespace vmPing.Views
             if (string.IsNullOrEmpty(pingItem.Hostname))
                 return;
 
-            // Display email alerts window
-            ApplicationOptions.BlurWindows();
+            if (Aliases.ContainsKey(pingItem.Hostname))
+                pingItem.Alias = Aliases[pingItem.Hostname];
+            else
+                pingItem.Alias = string.Empty;
+
             var wnd = new EditAliasWindow(pingItem);
             wnd.Owner = this;
 
@@ -1182,8 +1180,6 @@ namespace vmPing.Views
             {
                 LoadAliases();
             }
-
-            ApplicationOptions.RemoveBlurWindows();
         }
 
         private void mnuChangeLog_Click(object sender, RoutedEventArgs e)

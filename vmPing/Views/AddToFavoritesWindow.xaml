@@ -5,113 +5,52 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:vmPing.Views"
         mc:Ignorable="d"
-        Title="AddToFavoritesWindow" Height="180" Width="360"
-        ResizeMode="NoResize" Background="#F7F9F8"
+        Title="vmPing" Height="180" Width="360"
+        ResizeMode="NoResize"
+        Background="#fff"
         WindowStartupLocation="CenterOwner"
-        WindowStyle="None"
         ShowInTaskbar="False">
-    <Border BorderBrush="Black" BorderThickness="3">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0"
-                           Text="Add to Favorites"
-                           Foreground="#333"
-                           Margin="0,10,0,10"
-                           FontSize="16"
-                           FontWeight="Bold"
-                           HorizontalAlignment="Center"
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" LastChildFill="False" Margin="9">
+            <TextBlock DockPanel.Dock="Top"
+                       Text="Add to Favorites"
+                       Style="{DynamicResource ResourceKey=OptionHeaderTextStyle}"
+                       />
+            <DockPanel DockPanel.Dock="Top"
+                       Margin="0,10,0,10">
+                <TextBlock Text="Title"
+                           FontSize="14"
+                           VerticalAlignment="Center"
+                           Foreground="#555"
                            />
-                <DockPanel Grid.Row="1"
-                           Margin="20,10,20,0">
-                    <TextBlock Text="Title:"
-                               FontSize="14"
-                               VerticalAlignment="Center"
-                               Foreground="#555555"
-                               />
-                    <TextBox Name="txtTitle"
-                             VerticalContentAlignment="Center"
-                             Margin="15,0,0,0"
-                             Padding="3,3,0,3"
-                             MaxLength="64"
-                             FontSize="14"
-                             />
-                </DockPanel>
-            </Grid>
+                <TextBox Name="MyTitle"
+                         Style="{DynamicResource TextBoxStyle}"
+                         Margin="10,0,0,0"
+                         MaxLength="64"
+                         />
+            </DockPanel>
+        </DockPanel>
 
-            <!-- Buttons -->
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Button Name="btnCancel"
+        <!-- Buttons -->
+        <Border Grid.Row="1" Background="#f0f0f0" BorderBrush="#dfdfdf" BorderThickness="0,1,0,0">
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
+                <Button Style="{DynamicResource ButtonStandardStyle}"
+                        Margin="0,0,8,0"
+                        Width="100"
                         IsCancel="True"
-                        Grid.Column="1"
-                        FontSize="14"
-                        Padding="6"
-                        Margin="17"
-                        Width="100"
-                        Background="AliceBlue">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Name="button_border"
-                                    BorderThickness="1" BorderBrush="Black"
-                                    Background="{TemplateBinding Background}"
-                                    Padding="{TemplateBinding Padding}">
-                                <TextBlock HorizontalAlignment="Center">Cancel</TextBlock>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="button_border" Property="Background" Value="#E0F0FF" />
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="button_border" Property="Background" Value="#D0E0EF" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-                <Button Name="btnSave"
-                        Click="btnSave_Click"
-                        Grid.Column="2"
-                        FontSize="14"
-                        Padding="6"
-                        Margin="17"
-                        Width="100"
+                        Content="Cancel" />
+                <Button Style="{DynamicResource ButtonStandardStyle}"
                         IsDefault="True"
-                        Content="Save"
-                        Background="AliceBlue">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Name="button_border"
-                                    BorderThickness="1" BorderBrush="Black"
-                                    Background="{TemplateBinding Background}"
-                                    Padding="{TemplateBinding Padding}">
-                                <TextBlock HorizontalAlignment="Center" Text="{TemplateBinding Content}"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="button_border" Property="Background" Value="#E0F0FF" />
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="button_border" Property="Background" Value="#D0E0EF" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </Grid>
-        </Grid>
-    </Border>
+                        Click="Save_Click"
+                        Width="100"
+                        Content="Save" />
+            </StackPanel>
+        </Border>
+    </Grid>
 </Window>

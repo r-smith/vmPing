@@ -5,108 +5,60 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:vmPing.Views"
         mc:Ignorable="d"
-        Title="ErrorWindow" Height="180" Width="360"
-        ResizeMode="NoResize" Background="#F7F9F8"
+        Title="vmPing"
+        Height="200" Width="400"
+        ResizeMode="NoResize"
+        Background="White"
         WindowStartupLocation="CenterOwner"
         SizeToContent="Height"
-        WindowStyle="None"
         ShowInTaskbar="False">
-    <Border BorderBrush="Black" BorderThickness="3">
-        <Grid>
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="20,10,20,15">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-
-            <Grid Grid.Row="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <DockPanel HorizontalAlignment="Center" Margin="0,15">
-                    <Image Name="imgDialogIcon"
+            <DockPanel HorizontalAlignment="Left" Margin="0,0,0,3">
+                <Image Name="MyIcon"
                            Source="/Resources/caution-40.png"
                            Width="40"
                            Height="40"/>
-                    <TextBlock Name="tbDialogTitle"
+                <TextBlock Name="MyTitle"
                                Text="Warning"
                                Foreground="#333"
                                Margin="20,0,0,0"
                                VerticalAlignment="Center"
                                FontSize="16"
                                FontWeight="Bold"/>
-                </DockPanel>
-                <TextBlock Grid.Row="1"
-                           Name="tbDialogBody"
-                           FontSize="14"
-                           Margin="20,0,20,5"
-                           Text="This is warning text"  TextWrapping="Wrap"/>
-            </Grid>
-
-            <!-- Buttons -->
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Button Name="btnCancel"
-                        IsCancel="True"
-                        Grid.Column="1"
-                        FontSize="14"
-                        Padding="6"
-                        Margin="17"
-                        Width="100"
-                        Background="AliceBlue">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Name="button_border"
-                                    BorderThickness="1" BorderBrush="Black"
-                                    Background="{TemplateBinding Background}"
-                                    Padding="{TemplateBinding Padding}">
-                                <TextBlock HorizontalAlignment="Center">Cancel</TextBlock>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="button_border" Property="Background" Value="#E0F0FF" />
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="button_border" Property="Background" Value="#D0E0EF" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-                <Button Name="btnSave"
-                        Click="btnSave_Click"
-                        Grid.Column="2"
-                        FontSize="14"
-                        Padding="6"
-                        Margin="17"
-                        Width="100"
-                        Content="OK"
-                        Background="AliceBlue">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Name="button_border"
-                                    BorderThickness="1" BorderBrush="Black"
-                                    Background="{TemplateBinding Background}"
-                                    Padding="{TemplateBinding Padding}">
-                                <TextBlock HorizontalAlignment="Center" Text="{TemplateBinding Content}"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="button_border" Property="Background" Value="#E0F0FF" />
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="button_border" Property="Background" Value="#D0E0EF" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </Grid>
+            </DockPanel>
+            <TextBlock Grid.Row="1"
+                       Name="Body"
+                       FontSize="14"
+                       Margin="60,0,0,10"
+                       Foreground="#005ace"
+                       Text="This is warning text"  TextWrapping="Wrap"/>
         </Grid>
-    </Border>
+
+        <!-- Buttons -->
+        <Border Grid.Row="1" Background="#f0f0f0" BorderBrush="#dfdfdf" BorderThickness="0,1,0,0">
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
+                <Button Style="{DynamicResource ButtonStandardStyle}"
+                        Name="Cancel"
+                        Margin="0,0,8,0"
+                        Width="100"
+                        IsCancel="True"
+                        Content="Cancel" />
+                <Button Style="{DynamicResource ButtonStandardStyle}"
+                        Name="OK"
+                        Click="OK_Click"
+                        Width="100"
+                        Content="OK" />
+            </StackPanel>
+        </Border>
+    </Grid>
 </Window>

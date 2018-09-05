@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:vmPing.Views"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Background="#F4F4F4"
+        Background="#fff"
         ResizeMode="CanResize"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
@@ -63,12 +63,13 @@
         </DataGrid>
 
 
-        <Border Grid.Row="2" Grid.RowSpan="2" Background="#bbb" BorderThickness="1,0,1,1" BorderBrush="#acacac">
+        <Border Grid.Row="2" Grid.RowSpan="2" Background="#f8f8f8" BorderThickness="1,0,1,1" BorderBrush="#acacac">
             <Grid>
                 <Button Name="Remove"
                         Click="Remove_Click"
                         Margin="9"
                         Width="120"
+                        Height="30"
                         Style="{DynamicResource ButtonSecondaryStyle}"
                         HorizontalAlignment="Right"
                         Content="Remove">

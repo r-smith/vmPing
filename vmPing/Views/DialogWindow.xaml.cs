@@ -18,19 +18,19 @@ namespace vmPing.Views
         {
             InitializeComponent();
 
-            tbDialogTitle.Text = dialogTitle;
-            tbDialogBody.Text = dialogBody;
-            btnSave.Content = confirmationText;
+            MyTitle.Text = dialogTitle;
+            Body.Text = dialogBody;
+            OK.Content = confirmationText;
 
             switch (dialogIcon)
             {
                 case DialogIcon.Warning:
-                    imgDialogIcon.Source = new BitmapImage(new Uri(@"/Resources/caution-40.png", UriKind.Relative));
+                    MyIcon.Source = new BitmapImage(new Uri(@"/Resources/caution-40.png", UriKind.Relative));
                     break;
             }
         }
 
-        private void btnSave_Click(object sender, RoutedEventArgs e)
+        private void OK_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
         }

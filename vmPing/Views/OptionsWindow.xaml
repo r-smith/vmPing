@@ -283,17 +283,17 @@
 
         <!-- Button Section -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,9,0,0" HorizontalAlignment="Right">
-            <Button Style="{DynamicResource ButtonStyle}"
+            <Button Style="{DynamicResource ButtonStandardStyle}"
                     Click="btnOk_Click"
                     Margin="0,0,9,0"
                     Width="70"
                     Content="OK" />
-            <Button Style="{DynamicResource ButtonStyle}"
+            <Button Style="{DynamicResource ButtonStandardStyle}"
                     Click="btnCancel_Click"
                     Margin="0,0,9,0"
                     Width="70"
                     Content="Cancel" />
-            <Button Style="{DynamicResource ButtonStyle}"
+            <Button Style="{DynamicResource ButtonStandardStyle}"
                     Width="70"
                     IsEnabled="False"
                     Content="Apply" />

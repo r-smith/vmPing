@@ -5,105 +5,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:vmPing.Views"
         mc:Ignorable="d"
-        Title="ManageFavoritesWindow" Height="375" Width="300"
-        ResizeMode="NoResize" Background="#F7F9F8"
-        WindowStartupLocation="CenterOwner"
-        WindowStyle="None"
-        ShowInTaskbar="False">
-    <Border BorderBrush="Black" BorderThickness="3">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        WindowStartupLocation="CenterScreen"
+        Background="#F4F4F4"
+        ResizeMode="CanResize"
+        Loaded="Window_Loaded"
+        Closed="Window_Closed"
+        SourceInitialized="Window_SourceInitialized"
+        Title="vmPing - Favorites"
+        Height="475" Width="550"
+        MinHeight="225" MinWidth="300">
 
-            <Grid Grid.Row="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0"
-                           Text="Manage Favorites"
-                           Foreground="#333"
-                           Margin="0,10,0,10"
-                           FontSize="16"
-                           FontWeight="Bold"
-                           HorizontalAlignment="Center"
-                           />
-                <ListBox Grid.Row="1"
-                         Name="lbFavorites"
-                         SelectionMode="Single"
-                         Margin="25,0"/>
-                <Grid Grid.Row="2">
-                    <Button Name="btnRemove"
-                            Click="btnRemove_Click"
-                            FontSize="12"
-                            Padding="6,3"
-                            HorizontalAlignment="Right"
-                            Margin="0,10,25,25"
-                            Content="Remove"
-                            Foreground="White"
-                            Background="#666">
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border Name="button_border"
-                                    BorderThickness="1" BorderBrush="Black"
-                                    Background="{TemplateBinding Background}"
-                                    Padding="{TemplateBinding Padding}">
-                                    <TextBlock HorizontalAlignment="Center" Text="{TemplateBinding Content}"/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="button_border" Property="Background" Value="#888" />
-                                    </Trigger>
-                                    <Trigger Property="IsPressed" Value="True">
-                                        <Setter TargetName="button_border" Property="Background" Value="#333" />
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-                </Grid>
-            </Grid>
-            
-            
-            
-            <Border Grid.Row="1" Height="1" Background="#aaa" Margin="25,0" />
+    <Grid Margin="9">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-            <!-- Buttons -->
-            <Grid Grid.Row="2">
-                <Button Name="btnClose"
-                        Grid.Column="2"
-                        FontSize="14"
-                        Padding="6"
+        <TextBlock Grid.Row="0"
+                   Text="Manage Favorites"
+                   Style="{DynamicResource ResourceKey=OptionHeaderTextStyle}"
+                   />
+
+        <ListBox Grid.Row="1"
+                 Name="Favorites"
+                 SelectionMode="Single"
+                 Margin="0"/>
+
+        <Border Grid.Row="2" Grid.RowSpan="2" Background="#bbb" BorderThickness="1,0,1,1" BorderBrush="#acacac">
+            <Grid>
+                <Button Name="Remove"
+                        Click="Remove_Click"
+                        Margin="9"
+                        Width="120"
+                        Style="{DynamicResource ButtonSecondaryStyle}"
                         HorizontalAlignment="Right"
-                        Margin="17,17,25,17"
-                        Width="100"
-                        IsCancel="True"
-                        Content="Close"
-                        Background="AliceBlue">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Name="button_border"
-                                    BorderThickness="1" BorderBrush="Black"
-                                    Background="{TemplateBinding Background}"
-                                    Padding="{TemplateBinding Padding}">
-                                <TextBlock HorizontalAlignment="Center" Text="{TemplateBinding Content}"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="button_border" Property="Background" Value="#E0F0FF" />
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="button_border" Property="Background" Value="#D0E0EF" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
+                        Content="Remove">
                 </Button>
             </Grid>
-        </Grid>
-    </Border>
+        </Border>
+    </Grid>
 </Window>

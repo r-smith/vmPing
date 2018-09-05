@@ -1034,11 +1034,6 @@ namespace vmPing.Views
             {
                 mnuAliases.Items.Add(BuildAliasMenuItem(alias, false));
             }
-
-            if (ManageAliasesWindow.openWindow != null)
-            {
-                ManageAliasesWindow.openWindow.RefreshAliasList();
-            }
         }
 
         private MenuItem BuildAliasMenuItem(KeyValuePair<string, string> alias, bool isContextMenu)
@@ -1107,14 +1102,15 @@ namespace vmPing.Views
 
         private void mnuManageFavorites_Click(object sender, RoutedEventArgs e)
         {
-            // Display manage favorites window.
-            ApplicationOptions.BlurWindows();
-            var manageFavoritesWindow = new ManageFavoritesWindow();
-            manageFavoritesWindow.Owner = this;
-            manageFavoritesWindow.ShowDialog();
-            LoadFavorites();
-
-            ApplicationOptions.RemoveBlurWindows();
+            if (ManageFavoritesWindow.openWindow != null)
+                ManageFavoritesWindow.openWindow.Activate();
+            else
+            {
+                var manageFavoritesWindow = new ManageFavoritesWindow();
+                manageFavoritesWindow.Owner = this;
+                manageFavoritesWindow.ShowDialog();
+                LoadFavorites();
+            }
         }
 
         private void mnuManageAliases_Click(object sender, RoutedEventArgs e)
@@ -1123,8 +1119,10 @@ namespace vmPing.Views
                 ManageAliasesWindow.openWindow.Activate();
             else
             {
-                var ManageAliasesWindow = new ManageAliasesWindow();
-                ManageAliasesWindow.Show();
+                var manageAliasesWindow = new ManageAliasesWindow();
+                manageAliasesWindow.Owner = this;
+                manageAliasesWindow.ShowDialog();
+                LoadAliases();
             }
         }
 

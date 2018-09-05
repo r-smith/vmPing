@@ -1034,6 +1034,11 @@ namespace vmPing.Views
             {
                 mnuAliases.Items.Add(BuildAliasMenuItem(alias, false));
             }
+
+            if (ManageAliasesWindow.openWindow != null)
+            {
+                ManageAliasesWindow.openWindow.RefreshAliasList();
+            }
         }
 
         private MenuItem BuildAliasMenuItem(KeyValuePair<string, string> alias, bool isContextMenu)
@@ -1114,14 +1119,13 @@ namespace vmPing.Views
 
         private void mnuManageAliases_Click(object sender, RoutedEventArgs e)
         {
-            // Display manage aliases window.
-            ApplicationOptions.BlurWindows();
-            var manageAliasesWindow = new ManageAliasesWindow();
-            manageAliasesWindow.Owner = this;
-            manageAliasesWindow.ShowDialog();
-            LoadAliases();
-
-            ApplicationOptions.RemoveBlurWindows();
+            if (ManageAliasesWindow.openWindow != null)
+                ManageAliasesWindow.openWindow.Activate();
+            else
+            {
+                var ManageAliasesWindow = new ManageAliasesWindow();
+                ManageAliasesWindow.Show();
+            }
         }
 
         private void mnuPopupNotification_Click(object sender, RoutedEventArgs e)
@@ -1177,7 +1181,9 @@ namespace vmPing.Views
             wnd.Owner = this;
 
             if (wnd.ShowDialog() == true)
+            {
                 LoadAliases();
+            }
 
             ApplicationOptions.RemoveBlurWindows();
         }

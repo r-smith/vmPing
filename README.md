@@ -3,8 +3,8 @@ vmPing
 
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
-###### (Latest version is 1.2.8 released on September 5, 2018)
-### [Click here to download the latest .exe](https://github.com/R-Smith/vmPing/releases/download/v1.2.8/vmPing.exe)
+###### (Latest version is 1.2.9 released on September 6, 2018)
+### [Click here to download the latest .exe](https://github.com/R-Smith/vmPing/releases/download/v1.2.9/vmPing.exe)
 ### [Click here to download the source](https://github.com/R-Smith/vmPing/archive/master.zip)
 
 ##### Notes
@@ -14,15 +14,22 @@ vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple h
 [![Join the chat at https://gitter.im/vmPing/Lobby](https://badges.gitter.im/vmPing/Lobby.svg)](https://gitter.im/vmPing/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
-### Changes for v1.2.8
-* Re-designed the options window, dialog popups, and the alias/favorites management windows.  Everything has a more consistent look.  No more fixed and unmovable dialog windows.  Email alerts and logging options are now found in the options window.
-* When renaming an alias, if you set a blank name for the title, it deletes the alias entry rather than creating a blank alias.
-* Bug fix: A crash would occur if you started a ping and then stopped it before any probes were sent - such as during DNS resolution. (Thanks @ichantio)
-* TODO: Ability to add and modify aliases and favorites from the alias and favorite management windows.
+### Changes for v1.2.9
+* You can now rename existing aliases and create new aliases directly from the alias management window.
+* You can now rename favorites from the favorites management window.
+* When you select a favorite from the favorites management window, it now displays the hosts that are in the selected entry.
+* When saving a new favorite set, the dialog window now displays the hosts that will be saved in your set.
+* When saving a new favorite set, if you haven't entered any hosts names, you will now get an error.
 * TODO: Add a script trigger option on host down / up.
 * TODO: Add additional probe options (TTL, fragmenting, ICMP message size).
 * TODO: Add context menu to host monitor windows.
 * TODO: Alternate compact view.
+
+
+### Changes for v1.2.8
+* Re-designed the options window, dialog popups, and the alias/favorites management windows.  Everything has a more consistent look.  No more fixed and unmovable dialog windows.  Email alerts and logging options are now found in the options window.
+* When renaming an alias, if you set a blank name for the title, it deletes the alias entry rather than creating a blank alias.
+* Bug fix: A crash would occur if you started a ping and then stopped it before any probes were sent - such as during DNS resolution. (Thanks @ichantio)
 
 
 ### Changes for v1.2.7

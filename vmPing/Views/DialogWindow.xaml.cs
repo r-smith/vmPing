@@ -14,7 +14,7 @@ namespace vmPing.Views
             Warning
         }
 
-        public DialogWindow(DialogIcon dialogIcon, string dialogTitle, string dialogBody, string confirmationText)
+        public DialogWindow(DialogIcon dialogIcon, string dialogTitle, string dialogBody, string confirmationText, bool isCancelButtonVisible)
         {
             InitializeComponent();
 

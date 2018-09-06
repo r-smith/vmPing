@@ -98,6 +98,9 @@
     <Compile Include="Views\ManageFavoritesWindow.xaml.cs">
       <DependentUpon>ManageFavoritesWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\NewAliasWindow.xaml.cs">
+      <DependentUpon>NewAliasWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
@@ -155,6 +158,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ManageFavoritesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NewAliasWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

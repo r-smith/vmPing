@@ -49,16 +49,16 @@
         <Border Grid.Row="1" Background="#f0f0f0" BorderBrush="#dfdfdf" BorderThickness="0,1,0,0">
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
                 <Button Style="{DynamicResource ButtonStandardStyle}"
-                        Name="Cancel"
-                        Margin="0,0,8,0"
-                        Width="100"
-                        IsCancel="True"
-                        Content="Cancel" />
-                <Button Style="{DynamicResource ButtonStandardStyle}"
                         Name="OK"
+                        Margin="0,0,8,0"
                         Click="OK_Click"
                         Width="100"
                         Content="OK" />
+                <Button Style="{DynamicResource ButtonStandardStyle}"
+                        Name="Cancel"
+                        Width="100"
+                        IsCancel="True"
+                        Content="Cancel" />
             </StackPanel>
         </Border>
     </Grid>

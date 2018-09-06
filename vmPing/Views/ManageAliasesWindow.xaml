@@ -75,14 +75,17 @@
                         Margin="9"
                         Width="90"
                         Style="{DynamicResource ButtonSecondaryStyle}"
+                        IsEnabled="{Binding ElementName=AliasesDataGrid, Path=SelectedItems.Count}"
                         HorizontalAlignment="Right"
                         Content="Edit" />
                 <Button Click="Remove_Click"
                         Margin="9"
                         Width="90"
                         Style="{DynamicResource ButtonSecondaryStyle}"
+                        IsEnabled="{Binding ElementName=AliasesDataGrid, Path=SelectedItems.Count}"
                         HorizontalAlignment="Right"
-                        Content="Remove" />
+                        Content="Remove">
+                </Button>
             </StackPanel>
         </Border>
     </Grid>

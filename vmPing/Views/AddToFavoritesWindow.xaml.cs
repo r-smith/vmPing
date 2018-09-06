@@ -22,6 +22,21 @@ namespace vmPing.Views
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(MyTitle.Text))
+            {
+                var dialogWindow = new DialogWindow(
+                    DialogWindow.DialogIcon.Warning,
+                    "Error",
+                    $"Please enter a valid name for this favorite set.",
+                    "OK",
+                    false);
+                dialogWindow.Owner = this;
+                dialogWindow.ShowDialog();
+                MyTitle.Focus();
+                MyTitle.SelectAll();
+                return;
+            }
+
             FavoriteTitle = MyTitle.Text;
 
             if (Favorite.DoesTitleExist(MyTitle.Text))
@@ -30,7 +45,8 @@ namespace vmPing.Views
                     DialogWindow.DialogIcon.Warning,
                     "Warning",
                     $"{MyTitle.Text} already exists.  Would you like to overwrite?",
-                    "Overwrite");
+                    "Overwrite",
+                    true);
                 dialogWindow.Owner = this;
                 if (dialogWindow.ShowDialog() == true)
                     DialogResult = true;

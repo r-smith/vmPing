@@ -52,7 +52,8 @@ namespace vmPing.Views
                 DialogWindow.DialogIcon.Warning,
                 "Confirm Delete",
                 $"Are you sure you want to remove {((KeyValuePair<string, string>)AliasesDataGrid.SelectedItem).Value} from your aliases?",
-                "Remove");
+                "Remove",
+                true);
             dialogWindow.Owner = this;
             if (dialogWindow.ShowDialog() == true)
             {
@@ -77,7 +78,12 @@ namespace vmPing.Views
 
         private void New_Click(object sender, RoutedEventArgs e)
         {
-
+            var newAliasWindow = new NewAliasWindow();
+            newAliasWindow.Owner = this;
+            if (newAliasWindow.ShowDialog() == true)
+            {
+                RefreshAliasList();
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

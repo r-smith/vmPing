@@ -22,6 +22,9 @@ namespace vmPing.Views
             Body.Text = dialogBody;
             OK.Content = confirmationText;
 
+            if (!isCancelButtonVisible)
+                Cancel.Visibility = Visibility.Collapsed;
+
             switch (dialogIcon)
             {
                 case DialogIcon.Warning:

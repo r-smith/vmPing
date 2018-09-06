@@ -996,7 +996,7 @@ namespace vmPing.Views
                     ClearAllPingItems();
 
                     var selectedFavorite = s as MenuItem;
-                    var favorite = Favorite.GetFavoriteEntry(selectedFavorite.Header.ToString());
+                    var favorite = Favorite.GetFavoriteContents(selectedFavorite.Header.ToString());
                     if (favorite.Hostnames.Count < 1)
                         AddHostMonitor(1);
                     else
@@ -1091,14 +1091,33 @@ namespace vmPing.Views
         private void mnuAddToFavorites_Click(object sender, RoutedEventArgs e)
         {
             // Display add to favorites window.
-            var addToFavoritesWindow = new AddToFavoritesWindow();
+            var currentHostList = new List<string>();
+            var haveAnyHostnamesBeenEntered = false;
+
+            for (int i = 0; i < _pingItems.Count; ++i)
+            {
+                currentHostList.Add(_pingItems[i].Hostname);
+                if (!string.IsNullOrWhiteSpace(_pingItems[i].Hostname))
+                    haveAnyHostnamesBeenEntered = true;
+            }
+
+            if (!haveAnyHostnamesBeenEntered)
+            {
+                var dialogWindow = new DialogWindow(
+                    DialogWindow.DialogIcon.Warning,
+                    "Error",
+                    $"You have not entered any hostnames.  Please setup vmPing with the hosts you would like to save as a favorite set.",
+                    "OK",
+                    false);
+                dialogWindow.Owner = this;
+                dialogWindow.ShowDialog();
+                return;
+            }
+
+            var addToFavoritesWindow = new NewFavoriteWindow(currentHostList, (int)sliderColumns.Value);
             addToFavoritesWindow.Owner = this;
             if (addToFavoritesWindow.ShowDialog() == true)
             {
-                var currentHostList = new List<string>();
-                for (int i = 0; i < _pingItems.Count; ++i)
-                    currentHostList.Add(_pingItems[i].Hostname);
-                Favorite.AddFavoriteEntry(addToFavoritesWindow.FavoriteTitle, currentHostList, (int)sliderColumns.Value);
                 LoadFavorites();
             }
         }

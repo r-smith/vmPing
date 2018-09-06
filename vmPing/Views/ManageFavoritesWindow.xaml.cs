@@ -36,6 +36,10 @@ namespace vmPing.Views
             Favorites.ItemsSource = null;
             Favorites.Items.Clear();
             Favorites.ItemsSource = Favorite.GetFavoriteTitles();
+
+            ContentsSection.Visibility = Visibility.Collapsed;
+            Contents.ItemsSource = null;
+            Contents.Items.Clear();
         }
 
         private void Remove_Click(object sender, RoutedEventArgs e)
@@ -52,7 +56,41 @@ namespace vmPing.Views
             dialogWindow.Owner = this;
             if (dialogWindow.ShowDialog() == true)
             {
-                Favorite.DeleteFavoriteEntry(Favorites.SelectedItem.ToString());
+                Favorite.DeleteFavoriteSet(Favorites.SelectedItem.ToString());
+                RefreshFavoriteList();
+            }
+        }
+
+        private void Favorites_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (Favorites.SelectedIndex < 0)
+            {
+                ContentsSection.Visibility = Visibility.Collapsed;
+                return;
+            }
+
+            var favorite = Favorite.GetFavoriteContents(Favorites.SelectedItem.ToString());
+            ContentsSection.Visibility = Visibility.Visible;
+            Contents.ItemsSource = null;
+            Contents.Items.Clear();
+            Contents.ItemsSource = favorite.Hostnames;
+        }
+
+        private void CloseContents_Click(object sender, RoutedEventArgs e)
+        {
+            ContentsSection.Visibility = Visibility.Collapsed;
+        }
+
+        private void Edit_Click(object sender, RoutedEventArgs e)
+        {
+            if (Favorites.SelectedIndex < 0)
+                return;
+
+            var editFavoriteWindow = new EditFavoriteWindow(Favorites.SelectedItem.ToString());
+            editFavoriteWindow.Owner = this;
+
+            if (editFavoriteWindow.ShowDialog() == true)
+            {
                 RefreshFavoriteList();
             }
         }

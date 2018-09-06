@@ -196,12 +196,12 @@
                 <!--<Separator Padding="0,6" />-->
 
                 <MenuItem Header="Favorite Sets" x:Name="mnuFavorites">
-                    <MenuItem Header="Add to favorites" Click="mnuAddToFavorites_Click" />
-                    <MenuItem Header="Manage favorites" Click="mnuManageFavorites_Click" />
+                    <MenuItem Header="Save Current Layout to Favorites" Click="mnuAddToFavorites_Click" />
+                    <MenuItem Header="Manage Favorites" Click="mnuManageFavorites_Click" />
                     <Separator Padding="0,6" />
                 </MenuItem>
                 <MenuItem Header="Aliases" x:Name="mnuAliases">
-                    <MenuItem Header="Manage aliases" Click="mnuManageAliases_Click" />
+                    <MenuItem Header="Manage Aliases" Click="mnuManageAliases_Click" />
                     <Separator Padding="0,6" />
                 </MenuItem>
 

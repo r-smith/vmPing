@@ -82,6 +82,9 @@
     <Compile Include="Views\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\EditFavoriteWindow.xaml.cs">
+      <DependentUpon>EditFavoriteWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\FloodHostWindow.xaml.cs">
       <DependentUpon>FloodHostWindow.xaml</DependentUpon>
     </Compile>
@@ -110,8 +113,8 @@
     <Compile Include="Views\TraceRouteWindow.xaml.cs">
       <DependentUpon>TraceRouteWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\AddToFavoritesWindow.xaml.cs">
-      <DependentUpon>AddToFavoritesWindow.xaml</DependentUpon>
+    <Compile Include="Views\NewFavoriteWindow.xaml.cs">
+      <DependentUpon>NewFavoriteWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\ChangeLogWindow.xaml">
       <SubType>Designer</SubType>
@@ -122,6 +125,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DialogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditFavoriteWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -177,7 +184,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\AddToFavoritesWindow.xaml">
+    <Page Include="Views\NewFavoriteWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

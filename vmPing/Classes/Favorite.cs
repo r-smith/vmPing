@@ -65,7 +65,7 @@ namespace vmPing.Classes
             return favoriteTitles;
         }
 
-        public static Favorite GetFavoriteEntry(string favoriteTitle)
+        public static Favorite GetFavoriteContents(string favoriteTitle)
         {
             var favorite = new Favorite();
 
@@ -96,7 +96,37 @@ namespace vmPing.Classes
             return favorite;
         }
 
-        public static void AddFavoriteEntry(string title, List<string> hostnames, int columnCount)
+        public static void RenameFavoriteSet(string originalTitle, string newTitle)
+        {
+            if (Configuration.CheckAndInitializeConfigurationFile() == false)
+                return;
+
+            try
+            {
+                var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
+                var xd = new XmlDocument();
+                xd.Load(path);
+
+                XmlNode nodeRoot = xd.SelectSingleNode("/vmping/favorites");
+
+                // Check if title already exists.
+                XmlNodeList nodeTitleSearch = xd.SelectNodes($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(originalTitle)}]");
+                foreach (XmlNode node in nodeTitleSearch)
+                {
+                    // Rename title attribue.
+                    node.Attributes["title"].Value = newTitle;
+                }
+
+                xd.Save(path);
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
+        public static void SaveFavoriteSet(string title, List<string> hostnames, int columnCount)
         {
             if (Configuration.CheckAndInitializeConfigurationFile() == false)
                 return;
@@ -137,7 +167,7 @@ namespace vmPing.Classes
             }
         }
 
-        public static void DeleteFavoriteEntry(string title)
+        public static void DeleteFavoriteSet(string title)
         {
             var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
             if (!File.Exists(path))

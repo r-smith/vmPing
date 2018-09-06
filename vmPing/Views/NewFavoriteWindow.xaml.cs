@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Input;
 using vmPing.Classes;
 
@@ -7,13 +8,19 @@ namespace vmPing.Views
     /// <summary>
     /// Interaction logic for AddToFavoritesWindow.xaml
     /// </summary>
-    public partial class AddToFavoritesWindow : Window
+    public partial class NewFavoriteWindow : Window
     {
-        public string FavoriteTitle;
+        private List<string> HostList;
+        private int ColumnCount;
 
-        public AddToFavoritesWindow()
+        public NewFavoriteWindow(List<string> hostList, int columnCount)
         {
             InitializeComponent();
+
+            Contents.ItemsSource = hostList;
+
+            HostList = hostList;
+            ColumnCount = columnCount;
 
             // Set initial focus to text box.
             Loaded += (sender, e) =>
@@ -37,8 +44,6 @@ namespace vmPing.Views
                 return;
             }
 
-            FavoriteTitle = MyTitle.Text;
-
             if (Favorite.DoesTitleExist(MyTitle.Text))
             {
                 var dialogWindow = new DialogWindow(
@@ -49,10 +54,16 @@ namespace vmPing.Views
                     true);
                 dialogWindow.Owner = this;
                 if (dialogWindow.ShowDialog() == true)
+                {
+                    Favorite.SaveFavoriteSet(MyTitle.Text, HostList, ColumnCount);
                     DialogResult = true;
+                }
             }
             else
+            {
+                Favorite.SaveFavoriteSet(MyTitle.Text, HostList, ColumnCount);
                 DialogResult = true;
+            }
         }
     }
 }

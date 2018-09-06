@@ -13,7 +13,7 @@
         SourceInitialized="Window_SourceInitialized"
         Title="vmPing - Favorites"
         Height="475" Width="550"
-        MinHeight="225" MinWidth="300">
+        MinHeight="300" MinWidth="425">
 
     <Grid Margin="9">
         <Grid.RowDefinitions>
@@ -26,25 +26,116 @@
                    Text="Manage Favorites"
                    Style="{DynamicResource ResourceKey=OptionHeaderTextStyle}"
                    />
-
-        <ListBox Grid.Row="1"
-                 Name="Favorites"
-                 SelectionMode="Single"
-                 Margin="0"/>
-
-        <Border Grid.Row="2" Grid.RowSpan="2" Background="#f8f8f8" BorderThickness="1,0,1,1" BorderBrush="#acacac">
+        <Border Grid.Row="1" BorderBrush="#acacac" BorderThickness="1">
             <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width=".9*" />
+                </Grid.ColumnDefinitions>
+                
+                <!-- Favorites List -->
+                <ListBox Grid.Column="0"
+                         Name="Favorites"
+                         SelectionMode="Single"
+                         SelectionChanged="Favorites_SelectionChanged"
+                         BorderThickness="0"
+                         Background="#fff"
+                         FontSize="13"
+                         Margin="0" />
+                
+                <!-- Section for contents of selected favorite -->
+                <DockPanel Grid.Column="1" Margin="10,20,20,20" Name="ContentsSection">
+                    
+                    <!-- Title bar for contents section -->
+                    <Border DockPanel.Dock="Top" Background="#eee8d5" BorderThickness="1,1,1,0" BorderBrush="#888" CornerRadius="7,7,0,0">
+                        <DockPanel>
+                            <Grid DockPanel.Dock="Top">
+                                <!-- Contents title -->
+                                <TextBlock DockPanel.Dock="Top"
+                                           Text="Hosts in Set"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           FontSize="13"
+                                           Margin="0"
+                                           Foreground="#666"
+                                           FontWeight="Bold" />
+
+                                <!-- Button: Close -->
+                                <Button Name="btnClose"
+                                        Padding="5"
+                                        Margin="0"
+                                        Background="Transparent"
+                                        HorizontalAlignment="Right"
+                                        IsTabStop="False"
+                                        Click="CloseContents_Click">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Name="controlButton_border"
+                                                    BorderThickness="1"
+                                                    BorderBrush="Transparent"
+                                                    CornerRadius="4"
+                                                    Padding="{TemplateBinding Padding}"
+                                                    Background="{TemplateBinding Background}">
+                                                <Image Name="controlButton_image"
+                                                       Source="/Resources/font-awesome_4-7-0_close_14_0_000000_none.png"
+                                                       Opacity="0.3"
+                                                       Width="12"
+                                                       Height="12"
+                                                       />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="controlButton_border" Property="BorderBrush" Value="#33000000" />
+                                                    <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
+                                                    <Setter TargetName="controlButton_border" Property="Background" Value="White" />
+                                                </Trigger>
+                                                <Trigger Property="IsPressed" Value="True">
+                                                    <Setter TargetName="controlButton_border" Property="Background" Value="#dddddd" />
+                                                    <Setter TargetName="controlButton_border" Property="BorderBrush" Value="Black" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </Grid>
+                        </DockPanel>
+                    </Border>
+
+                    <!-- Contents List -->
+                    <Border DockPanel.Dock="Top" Background="#fefefc" BorderThickness="1" BorderBrush="#888" CornerRadius="0,0,7,7">
+                        <ListBox Name="Contents"
+                                 Foreground="#005ace"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 SelectionMode="Single"
+                                 Margin="5"
+                                 ItemContainerStyle="{DynamicResource ListBoxItemNoHighlightStyle}" />
+                    </Border>
+                </DockPanel>
+
+            </Grid>
+        </Border>
+
+
+        <Border Grid.Row="2" Background="#f8f8f8" BorderThickness="1,0,1,1" BorderBrush="#acacac">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Click="Edit_Click"
+                        Margin="9"
+                        Width="90"
+                        Style="{DynamicResource ButtonSecondaryStyle}"
+                        IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
+                        HorizontalAlignment="Right"
+                        Content="Edit" />
                 <Button Name="Remove"
                         Click="Remove_Click"
                         Margin="9"
-                        Width="120"
-                        Height="30"
+                        Width="90"
                         Style="{DynamicResource ButtonSecondaryStyle}"
                         IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
                         HorizontalAlignment="Right"
                         Content="Remove">
                 </Button>
-            </Grid>
+            </StackPanel>
         </Border>
     </Grid>
 </Window>

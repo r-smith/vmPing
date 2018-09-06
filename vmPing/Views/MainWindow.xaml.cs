@@ -1027,10 +1027,18 @@ namespace vmPing.Views
             for (int i = mnuAliases.Items.Count - 1; i > 1; --i)
                 mnuAliases.Items.RemoveAt(i);
 
-            // Load favorites.
+            // Load aliases.
             foreach (var alias in aliasList)
             {
                 mnuAliases.Items.Add(BuildAliasMenuItem(alias, false));
+            }
+
+            foreach (var pingItem in _pingItems)
+            {
+                if (pingItem.Hostname != null && Aliases.ContainsKey(pingItem.Hostname))
+                    pingItem.Alias = Aliases[pingItem.Hostname];
+                else
+                    pingItem.Alias = string.Empty;
             }
         }
 

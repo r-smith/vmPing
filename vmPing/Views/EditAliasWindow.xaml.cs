@@ -25,9 +25,22 @@ namespace vmPing.Views
                 MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
 
+        public EditAliasWindow(string hostname, string alias)
+        {
+            InitializeComponent();
+
+            Header.Text = "Alias for: " + hostname;
+            MyAlias.Text = alias;
+            MyAlias.SelectAll();
+            _CurrentPingItem = new PingItem { Hostname = hostname, Alias = alias };
+
+            // Set initial focus to text box.
+            Loaded += (sender, e) =>
+                MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+        }
+
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            _CurrentPingItem.Alias = MyAlias.Text;
             if (string.IsNullOrWhiteSpace(MyAlias.Text))
             {
                 Alias.DeleteAlias(_CurrentPingItem.Hostname);

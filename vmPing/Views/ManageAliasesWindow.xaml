@@ -13,7 +13,7 @@
         SourceInitialized="Window_SourceInitialized"
         Title="vmPing - Aliases"
         Height="475" Width="450"
-        MinHeight="225" MinWidth="300">
+        MinHeight="250" MinWidth="360">
 
     <Grid Margin="9">
         <Grid.RowDefinitions>
@@ -64,17 +64,26 @@
 
 
         <Border Grid.Row="2" Grid.RowSpan="2" Background="#f8f8f8" BorderThickness="1,0,1,1" BorderBrush="#acacac">
-            <Grid>
-                <Button Name="Remove"
-                        Click="Remove_Click"
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Click="New_Click"
                         Margin="9"
-                        Width="120"
-                        Height="30"
+                        Width="90"
                         Style="{DynamicResource ButtonSecondaryStyle}"
                         HorizontalAlignment="Right"
-                        Content="Remove">
-                </Button>
-            </Grid>
+                        Content="New" />
+                <Button Click="Edit_Click"
+                        Margin="9"
+                        Width="90"
+                        Style="{DynamicResource ButtonSecondaryStyle}"
+                        HorizontalAlignment="Right"
+                        Content="Edit" />
+                <Button Click="Remove_Click"
+                        Margin="9"
+                        Width="90"
+                        Style="{DynamicResource ButtonSecondaryStyle}"
+                        HorizontalAlignment="Right"
+                        Content="Remove" />
+            </StackPanel>
         </Border>
     </Grid>
 </Window>

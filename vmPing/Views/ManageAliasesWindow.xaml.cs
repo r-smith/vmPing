@@ -61,6 +61,25 @@ namespace vmPing.Views
             }
         }
 
+        private void Edit_Click(object sender, RoutedEventArgs e)
+        {
+            if (AliasesDataGrid.SelectedIndex < 0)
+                return;
+
+            var editAliasWindow = new EditAliasWindow(((KeyValuePair<string, string>)AliasesDataGrid.SelectedItem).Key, ((KeyValuePair<string, string>)AliasesDataGrid.SelectedItem).Value);
+            editAliasWindow.Owner = this;
+
+            if (editAliasWindow.ShowDialog() == true)
+            {
+                RefreshAliasList();
+            }
+        }
+
+        private void New_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             openWindow = this;

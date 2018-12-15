@@ -55,6 +55,7 @@ namespace vmPing.Classes
             var newPath = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
 			var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
+
 			if (!Directory.Exists(rootPath))
                 return;
             if (File.Exists(newPath))

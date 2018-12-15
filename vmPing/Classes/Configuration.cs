@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Xml;
 
@@ -52,11 +53,15 @@ namespace vmPing.Classes
             var rootPath = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing");
             var oldPath = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPingFavorites.xml");
             var newPath = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
+			var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-            if (!Directory.Exists(rootPath))
+			if (!Directory.Exists(rootPath))
                 return;
             if (File.Exists(newPath))
-                return;
+			{
+				//TODO : Version Control
+				return;
+			}
             if (!File.Exists(oldPath))
                 return;
             else

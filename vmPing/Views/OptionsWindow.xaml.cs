@@ -242,6 +242,12 @@ namespace vmPing.Views
                         return false;
                     }
                 }
+                else
+                {
+                    ApplicationOptions.IsEmailAuthenticationRequired = false;
+                    SmtpUsername.Text = string.Empty;
+                    SmtpPassword.Password = string.Empty;
+                }
 
                 ApplicationOptions.IsEmailAlertEnabled = true;
                 ApplicationOptions.EmailServer = SmtpServer.Text;

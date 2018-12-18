@@ -154,7 +154,7 @@ namespace vmPing.Classes
                 {
                     configuration.AppendChild(GenerateOptionNode(
                         xmlDocument: xd,
-                        name: "EmailPassword",
+                        name: "EmailUser",
                         value: string.Empty));
                 }
 
@@ -393,11 +393,13 @@ namespace vmPing.Classes
 
                 if (configuration.TryGetValue("EmailUser", out optionValue))
                 {
-                    ApplicationOptions.EmailUser = DecryptStringAES(optionValue);
+                    if (optionValue.Length > 0)
+                        ApplicationOptions.EmailUser = DecryptStringAES(optionValue);
                 }
                 if (configuration.TryGetValue("EmailPassword", out optionValue))
                 {
-                    ApplicationOptions.EmailPassword = DecryptStringAES(optionValue);
+                    if (optionValue.Length > 0)
+                        ApplicationOptions.EmailPassword = DecryptStringAES(optionValue);
                 }
             }
 

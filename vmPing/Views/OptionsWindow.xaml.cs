@@ -85,6 +85,9 @@ namespace vmPing.Views
             if (SaveLogOutputOptions() == false)
                 return;
 
+            if (SaveAsDefaults.IsChecked == true)
+                Configuration.WriteConfiguration();
+
             Close();
         }
 
@@ -248,10 +251,23 @@ namespace vmPing.Views
                 ApplicationOptions.EmailRecipient = EmailRecipientAddress.Text;
                 ApplicationOptions.EmailFromAddress = EmailFromAddress.Text;
 
+                if (IsSmtpAuthenticationRequired.IsChecked == true && SaveAsDefaults.IsChecked == true)
+                {
+                    MessageBox.Show(
+                        "You have chosen to save your SMTP credentials to disk." + Environment.NewLine + Environment.NewLine +
+                        "While the data is stored in an encrypted format, anyone with access to your vmPing configuration file can decrypt the data.",
+                        "vmPing Warning",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                }
+
                 return true;
             }
             else
+            {
+                ApplicationOptions.IsEmailAlertEnabled = false;
                 return true;
+            }
         }
 
         private bool SaveLogOutputOptions()

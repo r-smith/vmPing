@@ -50,6 +50,7 @@ namespace vmPing.Views
             Configuration.UpgradeConfigurationFile();
             LoadFavorites();
             LoadAliases();
+            Configuration.LoadConfiguration();
             ParseCommandLineArguments();
 
             sliderColumns.Value = _pingItems.Count;
@@ -590,7 +591,7 @@ namespace vmPing.Views
                 DisplayStatistics(pingItem);
                 pingItem.PingResetEvent.Set();
 
-                Thread.Sleep(ApplicationOptions.PingInterval < 4000 ? 4000 : ApplicationOptions.PingInterval);
+                Thread.Sleep(ApplicationOptions.PingInterval);
             }
 
             pingItem.PingResetEvent.Set();

@@ -11,7 +11,7 @@
         Closed="Window_Closed"
         Loaded="Window_Loaded"
         ResizeMode="NoResize"
-        Title="vmPing - Options" Height="520" Width="475">
+        Title="vmPing - Options" Height="540" Width="475">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -282,21 +282,24 @@
 
 
         <!-- Button Section -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,9,0,0" HorizontalAlignment="Right">
-            <Button Style="{DynamicResource ButtonStandardStyle}"
+        <DockPanel Grid.Row="1" Margin="0,9,0,0" HorizontalAlignment="Right">
+            <CheckBox Name="SaveAsDefaults" DockPanel.Dock="Top" HorizontalAlignment="Right">Save as application defaults</CheckBox>
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,9,0,0" HorizontalAlignment="Right">
+                <Button Style="{DynamicResource ButtonStandardStyle}"
                     Click="btnOk_Click"
                     Margin="0,0,9,0"
                     Width="70"
                     Content="OK" />
-            <Button Style="{DynamicResource ButtonStandardStyle}"
+                <Button Style="{DynamicResource ButtonStandardStyle}"
                     Click="btnCancel_Click"
                     Margin="0,0,9,0"
                     Width="70"
                     Content="Cancel" />
-            <Button Style="{DynamicResource ButtonStandardStyle}"
+                <Button Style="{DynamicResource ButtonStandardStyle}"
                     Width="70"
                     IsEnabled="False"
                     Content="Apply" />
-        </StackPanel>
+            </StackPanel>
+        </DockPanel>
     </Grid>
 </Window>

@@ -15,6 +15,7 @@
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <classes:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
 
         <Style TargetType="StackPanel" x:Key="EmailOptionsStackPanel">
             <Setter Property="Margin" Value="0,4,20,3" />
@@ -120,7 +121,124 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
+            
+            
+            <!-- TAB: Advanced -->
+            <TabItem Header="Advanced" Name="AdvancedTab">
+                <DockPanel LastChildFill="False" Margin="20,0,20,20">
 
+                    <!-- Header -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Advanced ICMP Options"
+                               Style="{DynamicResource OptionHeaderTextStyle}" />
+
+                    <!-- TTL -->
+                    <StackPanel DockPanel.Dock="Top"
+                                Orientation="Horizontal"
+                                Margin="0,10,0,0">
+                        <Label Content="Time to live:"
+                               Width="110"
+                               FontSize="14"
+                               Foreground="#555555" />
+                        <TextBox Name="TTL"
+                                 PreviewTextInput="txtNumericTextbox_PreviewTextInput"
+                                 Width="80"
+                                 VerticalContentAlignment="Center"
+                                 Padding="3,0,0,0"
+                                 MaxLength="3"
+                                 FontSize="14" />
+                        <Label Content="hops" Margin="10,0,0,0" FontSize="14" Foreground="#555555" />
+                    </StackPanel>
+
+                    <!-- Separator -->
+                    <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" Margin="0,20" />
+                    
+                    <!-- Packet size -->
+                    <StackPanel DockPanel.Dock="Top"
+                                Orientation="Horizontal"
+                                Margin="0">
+                        <RadioButton GroupName="IcmpData"
+                                     Content="Packet data size"
+                                     Name="PacketSizeOption"
+                                     Checked="PacketSizeOption_Checked"
+                                     VerticalAlignment="Center"
+                                     IsChecked="True"
+                                     Width="160"
+                                     FontSize="14"
+                                     Foreground="#555555" />
+                        <TextBox Name="PacketSize"
+                                 PreviewTextInput="txtNumericTextbox_PreviewTextInput"
+                                 TextChanged="PacketData_TextChanged"
+                                 Width="80"
+                                 VerticalContentAlignment="Center"
+                                 Padding="3,0,0,0"
+                                 MaxLength="5"
+                                 FontSize="14"
+                                 Visibility="{Binding IsChecked, ElementName=PacketSizeOption, Converter={StaticResource BooleanToHiddenVisibilityConverter}}" />
+                        <Label Content="bytes" Margin="10,0,0,0" FontSize="14" Foreground="#555555"
+                               Visibility="{Binding IsChecked, ElementName=PacketSizeOption, Converter={StaticResource BooleanToHiddenVisibilityConverter}}" />
+                    </StackPanel>
+
+                    <!-- Packet data -->
+                    <StackPanel DockPanel.Dock="Top"
+                                Orientation="Horizontal"
+                                Margin="0,7,0,0">
+                        <RadioButton GroupName="IcmpData"
+                                     Content="Custom packet data"
+                                     Name="UseCustomPacketOption"
+                                     Checked="UseCustomPacketOption_Checked"
+                                     VerticalAlignment="Top"
+                                     Width="160"
+                                     FontSize="14"
+                                     Foreground="#555555" />
+                        <TextBox Name="PacketData"
+                                 TextChanged="PacketData_TextChanged"
+                                 Width="240"
+                                 Height="80"
+                                 VerticalContentAlignment="Top"
+                                 TextWrapping="Wrap"
+                                 VerticalScrollBarVisibility="Auto"
+                                 Padding="3"
+                                 MaxLength="65500"
+                                 FontSize="14"
+                                 Visibility="{Binding IsChecked, ElementName=UseCustomPacketOption, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    </StackPanel>
+                    
+                    <!-- Total packet size -->
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                        <TextBlock Foreground="#268bd2"
+                                   Text="Total packet size:" />
+                        <TextBlock Foreground="#dc322f"
+                                   Name="Bytes"
+                                   Margin="6,0,4,0"
+                                   Text="64" />
+                        <TextBlock Foreground="#dc322f"
+                                   Text="bytes" />
+                    </StackPanel>
+
+                    <!-- Separator -->
+                    <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" Margin="0,20" />
+                    
+                    <!-- Fragment / Don't fragment -->
+                    <RadioButton DockPanel.Dock="Top"
+                                 GroupName="Fragment"
+                                 Name="DontFragment"
+                                 Content="Don't fragment"
+                                 Foreground="#555555"
+                                 IsChecked="True"
+                                 Margin="0,0,0,7"
+                                 FontSize="14" />
+                    <RadioButton DockPanel.Dock="Top"
+                                 GroupName="Fragment"
+                                 Name="Fragment"
+                                 Content="Fragment"
+                                 Foreground="#555555"
+                                 Margin="0"
+                                 FontSize="14" />
+                </DockPanel>
+            </TabItem>
+            
+            
             <!-- TAB: Email Alerts -->
             <TabItem Header="Email Alerts" Name="EmailAlertsTab">
                 <DockPanel>

@@ -50,7 +50,7 @@ namespace vmPing.Views
             Configuration.UpgradeConfigurationFile();
             LoadFavorites();
             LoadAliases();
-            Configuration.LoadConfiguration();
+            Configuration.LoadConfigurationOptions();
             ParseCommandLineArguments();
 
             sliderColumns.Value = _pingItems.Count;
@@ -301,10 +301,7 @@ namespace vmPing.Views
         {
             var backgroundWorker = sender as BackgroundWorker;
             var pingItem = e.Argument as PingItem;
-
             pingItem.Statistics = new PingStatistics();
-            var buffer = Encoding.ASCII.GetBytes(Constants.PING_DATA);
-            var options = new PingOptions(Constants.PING_TTL, true);
 
             // Check whether a hostname or an IP address was provided.  If hostname, resolve and print IP.
             var hostnameType = Uri.CheckHostName(pingItem.Hostname);
@@ -335,7 +332,11 @@ namespace vmPing.Views
                 {
                     try
                     {
-                        pingItem.Reply = pingItem.Sender.Send(pingItem.Hostname, ApplicationOptions.PingTimeout, buffer, options);
+                        pingItem.Reply = pingItem.Sender.Send(
+                            hostNameOrAddress: pingItem.Hostname,
+                            timeout: ApplicationOptions.PingTimeout,
+                            buffer: ApplicationOptions.Buffer,
+                            options: ApplicationOptions.GetPingOptions);
                         if (backgroundWorker.CancellationPending || pingItem.IsActive == false)
                         {
                             pingItem.PingResetEvent.Set();

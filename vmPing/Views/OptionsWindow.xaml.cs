@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
@@ -21,6 +22,7 @@ namespace vmPing.Views
             PopulateGeneralOptions();
             PopulateEmailAlertOptions();
             PopulateLogOutputOptions();
+            PopulateAdvancedOptions();
         }
 
         private void PopulateGeneralOptions()
@@ -73,6 +75,28 @@ namespace vmPing.Views
             IsLogOutputEnabled.IsChecked = ApplicationOptions.IsLogOutputEnabled;
         }
 
+        private void PopulateAdvancedOptions()
+        {
+            TTL.Text = ApplicationOptions.TTL.ToString();
+            if (ApplicationOptions.DontFragment)
+                DontFragment.IsChecked = true;
+            else
+                Fragment.IsChecked = true;
+
+            if (ApplicationOptions.UseCustomBuffer)
+            {
+                UseCustomPacketOption.IsChecked = true;
+                PacketData.Text = Encoding.ASCII.GetString(ApplicationOptions.Buffer);
+            }
+            else
+            {
+                PacketSizeOption.IsChecked = true;
+                PacketSize.Text = ApplicationOptions.Buffer.Length.ToString();
+            }
+
+            UpdateByteCount();
+        }
+
 
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
@@ -85,8 +109,11 @@ namespace vmPing.Views
             if (SaveLogOutputOptions() == false)
                 return;
 
+            if (SaveAdvancedOptions() == false)
+                return;
+
             if (SaveAsDefaults.IsChecked == true)
-                Configuration.WriteConfiguration();
+                Configuration.WriteConfigurationOptions();
 
             Close();
         }
@@ -171,6 +198,71 @@ namespace vmPing.Views
                 alertThreshold = 1;
 
             ApplicationOptions.AlertThreshold = alertThreshold;
+
+            return true;
+        }
+
+
+        private bool SaveAdvancedOptions()
+        {
+            // Validate input.
+
+            var regex = new Regex("^\\d+$");
+
+            // Validate TTL.
+            if (!regex.IsMatch(TTL.Text) || int.Parse(TTL.Text) < 1 || int.Parse(TTL.Text) > 255)
+            {
+                AdvancedTab.Focus();
+                MessageBox.Show(
+                    "Please enter a valid TTL between 1 and 255.",
+                    "vmPing Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                TTL.Focus();
+                return false;
+            }
+
+            // Apply TTL.
+            ApplicationOptions.TTL = int.Parse(TTL.Text);
+
+            // Validate packet size.
+            if (PacketSizeOption.IsChecked == true)
+            {
+                if (!regex.IsMatch(PacketSize.Text) || int.Parse(PacketSize.Text) < 0 || int.Parse(PacketSize.Text) > 65500)
+                {
+                    AdvancedTab.Focus();
+                    MessageBox.Show(
+                        "Please enter a valid ICMP data size between 0 and 65,500.",
+                        "vmPing Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    PacketSize.Focus();
+                    return false;
+                }
+
+                // Apply packet size.
+                ApplicationOptions.Buffer = new byte[int.Parse(PacketSize.Text)];
+                ApplicationOptions.UseCustomBuffer = false;
+
+                // Fill buffer with default text.
+                if (ApplicationOptions.Buffer.Length >= 33)
+                    Buffer.BlockCopy(Encoding.ASCII.GetBytes(Constants.PING_DATA), 0, ApplicationOptions.Buffer, 0, 33);
+            }
+            else
+            {
+                // Use custom packet data.
+                ApplicationOptions.Buffer = Encoding.ASCII.GetBytes(PacketData.Text);
+                ApplicationOptions.UseCustomBuffer = true;
+            }
+
+            // Apply fragment / don't fragment option.
+            if (DontFragment.IsChecked == true)
+                ApplicationOptions.DontFragment = true;
+            else
+                ApplicationOptions.DontFragment = false;
+
+            // Update ping options (TTL / Don't fragment settings)
+            ApplicationOptions.UpdatePingOptions();
 
             return true;
         }
@@ -354,6 +446,39 @@ namespace vmPing.Views
 
             if (result == System.Windows.Forms.DialogResult.OK)
                 LogPath.Text = dialog.SelectedPath;
+        }
+
+        private void UpdateByteCount()
+        {
+            var regex = new Regex("^\\d+$");
+            if (PacketSizeOption.IsChecked == true)
+            {
+                if (PacketSize != null && regex.IsMatch(PacketSize.Text))
+                    Bytes.Text = (int.Parse(PacketSize.Text) + 28).ToString();
+                else
+                    Bytes.Text = "?";
+            }
+            else
+            {
+                Bytes.Text = (PacketData.Text.Length + 28).ToString();
+            }
+        }
+
+        private void PacketData_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            UpdateByteCount();
+        }
+
+        private void PacketSizeOption_Checked(object sender, RoutedEventArgs e)
+        {
+            if (IsLoaded)
+                UpdateByteCount();
+        }
+
+        private void UseCustomPacketOption_Checked(object sender, RoutedEventArgs e)
+        {
+            if (IsLoaded)
+                UpdateByteCount();
         }
     }
 }

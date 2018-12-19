@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Net.NetworkInformation;
+using System.Text;
+using System.Windows;
 
 namespace vmPing.Classes
 {
@@ -26,6 +28,29 @@ namespace vmPing.Classes
         public static bool IsLogOutputEnabled { get; set; } = false;
         public static string LogPath { get; set; }
         public static PopupNotificationOption PopupOption { get; set; } = PopupNotificationOption.Always;
+        public static int TTL { get; set; } = Constants.PING_TTL;
+        public static bool DontFragment { get; set; } = true;
+        public static bool UseCustomBuffer { get; set; } = false;
+        public static byte[] Buffer { get; set; }
+        public static PingOptions GetPingOptions { get; }
+
+
+        static ApplicationOptions()
+        {
+            // Set the default ping data.
+            Buffer = Encoding.ASCII.GetBytes(Constants.PING_DATA);
+
+            // Set the default ping options.
+            GetPingOptions = new PingOptions(Constants.PING_TTL, true);
+        }
+
+
+        public static void UpdatePingOptions()
+        {
+            GetPingOptions.Ttl = TTL;
+            GetPingOptions.DontFragment = DontFragment;
+        }
+
 
         public static void BlurWindows()
         {

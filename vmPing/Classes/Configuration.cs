@@ -93,7 +93,7 @@ namespace vmPing.Classes
         }
 
 
-        public static void WriteConfiguration()
+        public static void WriteConfigurationOptions()
         {
             if (Configuration.CheckAndInitializeConfigurationFile() == false)
                 return;
@@ -122,6 +122,22 @@ namespace vmPing.Classes
                     xmlDocument: xd,
                     name: "PingTimeout",
                     value: ApplicationOptions.PingTimeout.ToString()));
+                configuration.AppendChild(GenerateOptionNode(
+                    xmlDocument: xd,
+                    name: "TTL",
+                    value: ApplicationOptions.TTL.ToString()));
+                configuration.AppendChild(GenerateOptionNode(
+                    xmlDocument: xd,
+                    name: "DontFragment",
+                    value: ApplicationOptions.DontFragment.ToString()));
+                configuration.AppendChild(GenerateOptionNode(
+                    xmlDocument: xd,
+                    name: "UseCustomBuffer",
+                    value: ApplicationOptions.UseCustomBuffer.ToString()));
+                configuration.AppendChild(GenerateOptionNode(
+                    xmlDocument: xd,
+                    name: "Buffer",
+                    value: Encoding.ASCII.GetString(ApplicationOptions.Buffer)));
                 configuration.AppendChild(GenerateOptionNode(
                     xmlDocument: xd,
                     name: "AlertThreshold",
@@ -327,7 +343,7 @@ namespace vmPing.Classes
         }
 
 
-        public static void LoadConfiguration()
+        public static void LoadConfigurationOptions()
         {
             var configuration = new Dictionary<string, string>();
 
@@ -353,6 +369,22 @@ namespace vmPing.Classes
                 if (configuration.TryGetValue("PingTimeout", out optionValue))
                 {
                     ApplicationOptions.PingTimeout = int.Parse(optionValue);
+                }
+                if (configuration.TryGetValue("TTL", out optionValue))
+                {
+                    ApplicationOptions.TTL = int.Parse(optionValue);
+                }
+                if (configuration.TryGetValue("DontFragment", out optionValue))
+                {
+                    ApplicationOptions.DontFragment = bool.Parse(optionValue);
+                }
+                if (configuration.TryGetValue("UseCustomBuffer", out optionValue))
+                {
+                    ApplicationOptions.UseCustomBuffer = bool.Parse(optionValue);
+                }
+                if (configuration.TryGetValue("Buffer", out optionValue))
+                {
+                    ApplicationOptions.Buffer = Encoding.ASCII.GetBytes(optionValue);
                 }
                 if (configuration.TryGetValue("AlertThreshold", out optionValue))
                 {

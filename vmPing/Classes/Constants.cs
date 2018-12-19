@@ -55,7 +55,7 @@
         public const int LAYOUT_MAX_SETS = 20;
 
         // Ping constants.
-        public const string PING_DATA = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        public const string PING_DATA = "https://github.com/R-Smith/vmPing";
         public const int PING_TIMEOUT = 2000;       // In miliseconds.
         public const int PING_TTL = 64;
         public const int PING_INTERVAL = 2000;      // In miliseconds.

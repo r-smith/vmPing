@@ -94,15 +94,15 @@ namespace vmPing.Classes
             switch ((PingStatus)value)
             {
                 case PingStatus.Up:
-                    return (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_UP);
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Up);
                 case PingStatus.Down:
-                    return (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_DOWN);
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Down);
                 case PingStatus.Error:
-                    return (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_ERROR);
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Error);
                 case PingStatus.Indeterminate:
-                    return (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_INDETERMINATE);
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Indeterminate);
                 default:
-                    return (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_BACKCOLOR_INACTIVE);
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Inactive);
             }
         }
 
@@ -118,12 +118,16 @@ namespace vmPing.Classes
         {
             switch ((PingStatus)value)
             {
-                case PingStatus.Inactive:
-                    return (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_FORECOLOR_INACTIVE);
+                case PingStatus.Up:
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Up);
+                case PingStatus.Down:
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Down);
                 case PingStatus.Error:
-                    return (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_FORECOLOR_ERROR);
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Error);
+                case PingStatus.Indeterminate:
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Indeterminate);
                 default:
-                    return (Brush)new BrushConverter().ConvertFromString(Constants.TXTOUTPUT_FORECOLOR_ACTIVE);
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Inactive);
             }
         }
 
@@ -140,15 +144,60 @@ namespace vmPing.Classes
             switch ((PingStatus)value)
             {
                 case PingStatus.Up:
-                    return (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_UP);
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Up);
                 case PingStatus.Down:
-                    return (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_DOWN);
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Down);
                 case PingStatus.Error:
-                    return (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_ERROR);
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Error);
                 case PingStatus.Indeterminate:
-                    return (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_INDETERMINATE);
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Indeterminate);
                 default:
-                    return (Brush)new BrushConverter().ConvertFromString(Constants.LBLSTATS_FORECOLOR_INACTIVE);
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Inactive);
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class PingStatusToAliasBrushConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            switch ((PingStatus)value)
+            {
+                case PingStatus.Up:
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Up);
+                case PingStatus.Down:
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Down);
+                case PingStatus.Error:
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Error);
+                case PingStatus.Indeterminate:
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Indeterminate);
+                default:
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Inactive);
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class StringToBrushConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            try
+            {
+                return (Brush)new BrushConverter().ConvertFromString((string)value);
+            }
+            catch
+            {
+                return Binding.DoNothing;
             }
         }
 

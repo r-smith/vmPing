@@ -11,11 +11,13 @@
         Closed="Window_Closed"
         Loaded="Window_Loaded"
         ResizeMode="NoResize"
+        UseLayoutRounding="True"
         Title="vmPing - Options" Height="540" Width="475">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <classes:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
+        <classes:StringToBrushConverter x:Key="StringToBrushConverter" />
 
         <Style TargetType="StackPanel" x:Key="EmailOptionsStackPanel">
             <Setter Property="Margin" Value="0,4,20,3" />
@@ -30,7 +32,7 @@
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Right" />
         </Style>
-        
+
         <Style TargetType="TextBlock" x:Key="OptionSubHeaderTextStyle">
             <Setter Property="Margin" Value="0,0,0,8" />
             <Setter Property="Foreground" Value="#268bd2" />
@@ -121,8 +123,8 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            
-            
+
+
             <!-- TAB: Advanced -->
             <TabItem Header="Advanced" Name="AdvancedTab">
                 <DockPanel LastChildFill="False" Margin="20,0,20,20">
@@ -152,7 +154,7 @@
 
                     <!-- Separator -->
                     <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" Margin="0,20" />
-                    
+
                     <!-- Packet size -->
                     <StackPanel DockPanel.Dock="Top"
                                 Orientation="Horizontal"
@@ -203,7 +205,7 @@
                                  FontSize="14"
                                  Visibility="{Binding IsChecked, ElementName=UseCustomPacketOption, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     </StackPanel>
-                    
+
                     <!-- Total packet size -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
                         <TextBlock Foreground="#268bd2"
@@ -218,7 +220,7 @@
 
                     <!-- Separator -->
                     <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" Margin="0,20" />
-                    
+
                     <!-- Fragment / Don't fragment -->
                     <RadioButton DockPanel.Dock="Top"
                                  GroupName="Fragment"
@@ -237,8 +239,8 @@
                                  FontSize="14" />
                 </DockPanel>
             </TabItem>
-            
-            
+
+
             <!-- TAB: Email Alerts -->
             <TabItem Header="Email Alerts" Name="EmailAlertsTab">
                 <DockPanel>
@@ -394,6 +396,205 @@
                         </StackPanel>
                     </Grid>
                 </DockPanel>
+            </TabItem>
+
+
+            <!-- TAB: Layout -->
+            <TabItem Header="Layout" Name="LayoutTab">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <DockPanel LastChildFill="False"
+                               Name="ColorsDockPanel"
+                               Margin="20,0">
+
+                        <!-- Header -->
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Colors"
+                                   Style="{DynamicResource OptionHeaderTextStyle}" />
+                        
+                        <!-- Probe background colors -->
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Probe Background] : Inactive" VerticalAlignment="Center" />
+                            <TextBox Name="BackgroundColor_Probe_Inactive"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=BackgroundColor_Probe_Inactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Probe Background] : Up" VerticalAlignment="Center" />
+                            <TextBox Name="BackgroundColor_Probe_Up"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=BackgroundColor_Probe_Up, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Probe Background] : Down" VerticalAlignment="Center" />
+                            <TextBox Name="BackgroundColor_Probe_Down"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=BackgroundColor_Probe_Down, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Probe Background] : Indeterminate" VerticalAlignment="Center" />
+                            <TextBox Name="BackgroundColor_Probe_Indeterminate"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=BackgroundColor_Probe_Indeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Probe Background] : Error" VerticalAlignment="Center" />
+                            <TextBox Name="BackgroundColor_Probe_Error"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=BackgroundColor_Probe_Error, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        
+                        <!-- Probe foreground colors -->
+                        <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="#ccc" Margin="0,20,0,0" />
+                        
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Probe Foreground] : Inactive" VerticalAlignment="Center" />
+                            <TextBox Name="ForegroundColor_Probe_Inactive"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=ForegroundColor_Probe_Inactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Probe Foreground] : Up" VerticalAlignment="Center" />
+                            <TextBox Name="ForegroundColor_Probe_Up"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=ForegroundColor_Probe_Up, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Probe Foreground] : Down" VerticalAlignment="Center" />
+                            <TextBox Name="ForegroundColor_Probe_Down"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=ForegroundColor_Probe_Down, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Probe Foreground] : Indeterminate" VerticalAlignment="Center" />
+                            <TextBox Name="ForegroundColor_Probe_Indeterminate"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=ForegroundColor_Probe_Indeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Probe Foreground] : Error" VerticalAlignment="Center" />
+                            <TextBox Name="ForegroundColor_Probe_Error"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=ForegroundColor_Probe_Error, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        
+                        <!-- Statistics foreground colors -->
+                        <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="#ccc" Margin="0,20,0,0" />
+                        
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Statistics Foreground] : Inactive" VerticalAlignment="Center" />
+                            <TextBox Name="ForegroundColor_Stats_Inactive"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=ForegroundColor_Stats_Inactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Statistics Foreground] : Up" VerticalAlignment="Center" />
+                            <TextBox Name="ForegroundColor_Stats_Up"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=ForegroundColor_Stats_Up, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Statistics Foreground] : Down" VerticalAlignment="Center" />
+                            <TextBox Name="ForegroundColor_Stats_Down"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=ForegroundColor_Stats_Down, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Statistics Foreground] : Indeterminate" VerticalAlignment="Center" />
+                            <TextBox Name="ForegroundColor_Stats_Indeterminate"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=ForegroundColor_Stats_Indeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,10">
+                            <TextBlock Width="230" Text="[Statistics Foreground] : Error" VerticalAlignment="Center" />
+                            <TextBox Name="ForegroundColor_Stats_Error"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=ForegroundColor_Stats_Error, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        
+                        <!-- Alias foreground colors -->
+                        <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="#ccc" Margin="0,20,0,0" />
+
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Alias Foreground] : Inactive" VerticalAlignment="Center" />
+                            <TextBox Name="ForegroundColor_Alias_Inactive"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=ForegroundColor_Alias_Inactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Alias Foreground] : Up" VerticalAlignment="Center" />
+                            <TextBox Name="ForegroundColor_Alias_Up"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=ForegroundColor_Alias_Up, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Alias Foreground] : Down" VerticalAlignment="Center" />
+                            <TextBox Name="ForegroundColor_Alias_Down"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=ForegroundColor_Alias_Down, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Width="230" Text="[Alias Foreground] : Indeterminate" VerticalAlignment="Center" />
+                            <TextBox Name="ForegroundColor_Alias_Indeterminate"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=ForegroundColor_Alias_Indeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,10">
+                            <TextBlock Width="230" Text="[Alias Foreground] : Error" VerticalAlignment="Center" />
+                            <TextBox Name="ForegroundColor_Alias_Error"
+                                     Style="{DynamicResource HtmlTextBoxStyle}"
+                                     PreviewTextInput="HtmlColor_PreviewTextInput" />
+                            <Border Background="{Binding ElementName=ForegroundColor_Alias_Error, Path=Text, Converter={StaticResource StringToBrushConverter}}"
+                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                        </StackPanel>
+
+                        <!-- Restore defaults button -->
+                        <Grid DockPanel.Dock="Top" Margin="0,15,0,10">
+                            <Button Style="{DynamicResource ButtonSecondaryStyle}"
+                                    Click="RestoreDefaultColors_Click"
+                                    Padding="15,5"
+                                    Content="Restore Defaults"
+                                    HorizontalAlignment="Right"/>
+                        </Grid>
+                    </DockPanel>
+                </ScrollViewer>
             </TabItem>
 
         </TabControl>

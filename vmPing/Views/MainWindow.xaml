@@ -17,6 +17,7 @@
         <classes:PingStatusToBackgroundBrushConverter x:Key="PingStatusToBackgroundBrushConverter" />
         <classes:PingStatusToForegroundBrushConverter x:Key="PingStatusToForegroundBrushConverter" />
         <classes:PingStatusToStatisticsBrushConverter x:Key="PingStatusToStatisticsBrushConverter" />
+        <classes:PingStatusToAliasBrushConverter x:Key="PingStatusToAliasBrushConverter" />
         <classes:HostnameFontsizeConverter x:Key="HostnameFontsizeConverter" />
         <classes:ButtonTextVisibilityConverter x:Key="ButtonTextVisibilityConverter" />
         <classes:PingStatusToGlyphConverter x:Key="PingStatusToGlyphConverter" />
@@ -279,17 +280,8 @@
                                            VerticalContentAlignment="Center"
                                            Padding="5,0,0,0"
                                            Margin="0"
-                                           FontWeight="SemiBold">
-                                        <Label.Style>
-                                            <Style TargetType="{x:Type Label}">
-                                                <Setter Property="Foreground" Value="Yellow" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsActive}" Value="False">
-                                                        <Setter Property="Foreground" Value="#444" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Label.Style>
+                                           FontWeight="SemiBold"
+                                           Foreground="{Binding Status, Converter={StaticResource PingStatusToAliasBrushConverter}}">
                                     </Label>
 
                                     <!-- Button: Delete / Remove -->

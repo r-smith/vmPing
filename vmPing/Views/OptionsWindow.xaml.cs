@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using vmPing.Classes;
 
@@ -23,6 +24,7 @@ namespace vmPing.Views
             PopulateEmailAlertOptions();
             PopulateLogOutputOptions();
             PopulateAdvancedOptions();
+            PopulateLayoutOptions();
         }
 
         private void PopulateGeneralOptions()
@@ -97,6 +99,30 @@ namespace vmPing.Views
             UpdateByteCount();
         }
 
+        private void PopulateLayoutOptions()
+        {
+            BackgroundColor_Probe_Inactive.Text = ApplicationOptions.BackgroundColor_Probe_Inactive;
+            BackgroundColor_Probe_Up.Text = ApplicationOptions.BackgroundColor_Probe_Up;
+            BackgroundColor_Probe_Down.Text = ApplicationOptions.BackgroundColor_Probe_Down;
+            BackgroundColor_Probe_Error.Text = ApplicationOptions.BackgroundColor_Probe_Error;
+            BackgroundColor_Probe_Indeterminate.Text = ApplicationOptions.BackgroundColor_Probe_Indeterminate;
+            ForegroundColor_Probe_Inactive.Text = ApplicationOptions.ForegroundColor_Probe_Inactive;
+            ForegroundColor_Probe_Up.Text = ApplicationOptions.ForegroundColor_Probe_Up;
+            ForegroundColor_Probe_Down.Text = ApplicationOptions.ForegroundColor_Probe_Down;
+            ForegroundColor_Probe_Error.Text = ApplicationOptions.ForegroundColor_Probe_Error;
+            ForegroundColor_Probe_Indeterminate.Text = ApplicationOptions.ForegroundColor_Probe_Indeterminate;
+            ForegroundColor_Stats_Inactive.Text = ApplicationOptions.ForegroundColor_Stats_Inactive;
+            ForegroundColor_Stats_Up.Text = ApplicationOptions.ForegroundColor_Stats_Up;
+            ForegroundColor_Stats_Down.Text = ApplicationOptions.ForegroundColor_Stats_Down;
+            ForegroundColor_Stats_Error.Text = ApplicationOptions.ForegroundColor_Stats_Error;
+            ForegroundColor_Stats_Indeterminate.Text = ApplicationOptions.ForegroundColor_Stats_Inactive;
+            ForegroundColor_Alias_Inactive.Text = ApplicationOptions.ForegroundColor_Alias_Inactive;
+            ForegroundColor_Alias_Up.Text = ApplicationOptions.ForegroundColor_Alias_Up;
+            ForegroundColor_Alias_Down.Text = ApplicationOptions.ForegroundColor_Alias_Down;
+            ForegroundColor_Alias_Error.Text = ApplicationOptions.ForegroundColor_Alias_Error;
+            ForegroundColor_Alias_Indeterminate.Text = ApplicationOptions.ForegroundColor_Alias_Inactive;
+        }
+
 
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
@@ -110,6 +136,9 @@ namespace vmPing.Views
                 return;
 
             if (SaveAdvancedOptions() == false)
+                return;
+
+            if (SaveLayoutOptions() == false)
                 return;
 
             if (SaveAsDefaults.IsChecked == true)
@@ -396,10 +425,66 @@ namespace vmPing.Views
         }
 
 
+        private bool SaveLayoutOptions()
+        {
+            // Validate input.
+            foreach (var control in ColorsDockPanel.GetChildren())
+            {
+                if (control is TextBox)
+                {
+                    if (!Configuration.IsValidHtmlColor(((TextBox)control).Text))
+                    {
+                        LayoutTab.Focus();
+                        MessageBox.Show(
+                            "Please enter a valid HTML color code.  Accepted formats are #RGB, #RRGGBB, and #AARRGGBB.  Example: #3266CF",
+                            "vmPing Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                        ((TextBox)control).Focus();
+                        ((TextBox)control).SelectAll();
+
+                        return false;
+                    }
+                }
+            }
+
+            ApplicationOptions.BackgroundColor_Probe_Inactive = BackgroundColor_Probe_Inactive.Text;
+            ApplicationOptions.BackgroundColor_Probe_Up = BackgroundColor_Probe_Up.Text;
+            ApplicationOptions.BackgroundColor_Probe_Down = BackgroundColor_Probe_Down.Text;
+            ApplicationOptions.BackgroundColor_Probe_Indeterminate = BackgroundColor_Probe_Indeterminate.Text;
+            ApplicationOptions.BackgroundColor_Probe_Error = BackgroundColor_Probe_Error.Text;
+            ApplicationOptions.ForegroundColor_Probe_Inactive = ForegroundColor_Probe_Inactive.Text;
+            ApplicationOptions.ForegroundColor_Probe_Up = ForegroundColor_Probe_Up.Text;
+            ApplicationOptions.ForegroundColor_Probe_Down = ForegroundColor_Probe_Down.Text;
+            ApplicationOptions.ForegroundColor_Probe_Indeterminate = ForegroundColor_Probe_Indeterminate.Text;
+            ApplicationOptions.ForegroundColor_Probe_Error = ForegroundColor_Probe_Error.Text;
+            ApplicationOptions.ForegroundColor_Stats_Inactive = ForegroundColor_Stats_Inactive.Text;
+            ApplicationOptions.ForegroundColor_Stats_Up = ForegroundColor_Stats_Up.Text;
+            ApplicationOptions.ForegroundColor_Stats_Down = ForegroundColor_Stats_Down.Text;
+            ApplicationOptions.ForegroundColor_Stats_Indeterminate = ForegroundColor_Stats_Indeterminate.Text;
+            ApplicationOptions.ForegroundColor_Stats_Error = ForegroundColor_Stats_Error.Text;
+            ApplicationOptions.ForegroundColor_Alias_Inactive = ForegroundColor_Alias_Inactive.Text;
+            ApplicationOptions.ForegroundColor_Alias_Up = ForegroundColor_Alias_Up.Text;
+            ApplicationOptions.ForegroundColor_Alias_Down = ForegroundColor_Alias_Down.Text;
+            ApplicationOptions.ForegroundColor_Alias_Indeterminate = ForegroundColor_Alias_Indeterminate.Text;
+            ApplicationOptions.ForegroundColor_Alias_Error = ForegroundColor_Alias_Error.Text;
+
+            return true;
+        }
+
+
         private void txtNumericTextbox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             var regex = new Regex("[^0-9.-]+");
             if (regex.IsMatch(e.Text))
+                e.Handled = true;
+        }
+
+
+        private void HtmlColor_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var regex = new Regex("[#a-fA-F0-9]");
+            if (!regex.IsMatch(e.Text))
                 e.Handled = true;
         }
 
@@ -479,6 +564,30 @@ namespace vmPing.Views
         {
             if (IsLoaded)
                 UpdateByteCount();
+        }
+
+        private void RestoreDefaultColors_Click(object sender, RoutedEventArgs e)
+        {
+            BackgroundColor_Probe_Inactive.Text = Constants.Color_Probe_Background_Inactive;
+            BackgroundColor_Probe_Up.Text = Constants.Color_Probe_Background_Up;
+            BackgroundColor_Probe_Down.Text = Constants.Color_Probe_Background_Down;
+            BackgroundColor_Probe_Error.Text = Constants.Color_Probe_Background_Error;
+            BackgroundColor_Probe_Indeterminate.Text = Constants.Color_Probe_Background_Indeterminate;
+            ForegroundColor_Probe_Inactive.Text = Constants.Color_Probe_Foreground_Inactive;
+            ForegroundColor_Probe_Up.Text = Constants.Color_Probe_Foreground_Up;
+            ForegroundColor_Probe_Down.Text = Constants.Color_Probe_Foreground_Down;
+            ForegroundColor_Probe_Error.Text = Constants.Color_Probe_Foreground_Error;
+            ForegroundColor_Probe_Indeterminate.Text = Constants.Color_Probe_Foreground_Indeterminate;
+            ForegroundColor_Stats_Inactive.Text = Constants.Color_Statistics_Foreground_Inactive;
+            ForegroundColor_Stats_Up.Text = Constants.Color_Statistics_Foreground_Up;
+            ForegroundColor_Stats_Down.Text = Constants.Color_Statistics_Foreground_Down;
+            ForegroundColor_Stats_Error.Text = Constants.Color_Statistics_Foreground_Error;
+            ForegroundColor_Stats_Indeterminate.Text = Constants.Color_Statistics_Foreground_Inactive;
+            ForegroundColor_Alias_Inactive.Text = Constants.Color_Alias_Foreground_Inactive;
+            ForegroundColor_Alias_Up.Text = Constants.Color_Alias_Foreground_Up;
+            ForegroundColor_Alias_Down.Text = Constants.Color_Alias_Foreground_Down;
+            ForegroundColor_Alias_Error.Text = Constants.Color_Alias_Foreground_Error;
+            ForegroundColor_Alias_Indeterminate.Text = Constants.Color_Alias_Foreground_Inactive;
         }
     }
 }

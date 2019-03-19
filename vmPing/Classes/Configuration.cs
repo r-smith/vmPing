@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Xml;
 
@@ -113,100 +114,18 @@ namespace vmPing.Classes
                     nodeRoot.RemoveChild(node);
                 }
 
-                XmlElement configuration = xd.CreateElement("configuration");
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "PingInterval",
-                    value: ApplicationOptions.PingInterval.ToString()));
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "PingTimeout",
-                    value: ApplicationOptions.PingTimeout.ToString()));
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "TTL",
-                    value: ApplicationOptions.TTL.ToString()));
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "DontFragment",
-                    value: ApplicationOptions.DontFragment.ToString()));
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "UseCustomBuffer",
-                    value: ApplicationOptions.UseCustomBuffer.ToString()));
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "Buffer",
-                    value: Encoding.ASCII.GetString(ApplicationOptions.Buffer)));
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "AlertThreshold",
-                    value: ApplicationOptions.AlertThreshold.ToString()));
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "IsEmailAlertEnabled",
-                    value: ApplicationOptions.IsEmailAlertEnabled.ToString()));
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "EmailServer",
-                    value: ApplicationOptions.EmailServer != null ? ApplicationOptions.EmailServer.ToString() : string.Empty));
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "EmailPort",
-                    value: ApplicationOptions.EmailPort != null ? ApplicationOptions.EmailPort.ToString() : string.Empty));
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "IsEmailAuthenticationRequired",
-                    value: ApplicationOptions.IsEmailAuthenticationRequired.ToString()));
-
-                if (!string.IsNullOrWhiteSpace(ApplicationOptions.EmailUser))
+                // Check if colors node already exists.  If so, delete it.
+                nodeSearch = xd.SelectNodes($"/vmping/colors");
+                foreach (XmlNode node in nodeSearch)
                 {
-                    configuration.AppendChild(GenerateOptionNode(
-                        xmlDocument: xd,
-                        name: "EmailUser",
-                        value: EncryptStringAES(ApplicationOptions.EmailUser)));
-                }
-                else
-                {
-                    configuration.AppendChild(GenerateOptionNode(
-                        xmlDocument: xd,
-                        name: "EmailUser",
-                        value: string.Empty));
+                    nodeRoot.RemoveChild(node);
                 }
 
-                if (!string.IsNullOrWhiteSpace(ApplicationOptions.EmailPassword))
-                {
-                    configuration.AppendChild(GenerateOptionNode(
-                        xmlDocument: xd,
-                        name: "EmailPassword",
-                        value: EncryptStringAES(ApplicationOptions.EmailPassword)));
-                }
-                else
-                {
-                    configuration.AppendChild(GenerateOptionNode(
-                        xmlDocument: xd,
-                        name: "EmailPassword",
-                        value: string.Empty));
-                }
-
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "EmailRecipient",
-                    value: ApplicationOptions.EmailRecipient != null ? ApplicationOptions.EmailRecipient.ToString() : string.Empty));
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "EmailFromAddress",
-                    value: ApplicationOptions.EmailFromAddress != null ? ApplicationOptions.EmailFromAddress.ToString() : string.Empty));
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "IsLogOutputEnabled",
-                    value: ApplicationOptions.IsLogOutputEnabled.ToString()));
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "LogPath",
-                    value: ApplicationOptions.LogPath != null ? ApplicationOptions.LogPath.ToString() : string.Empty));
+                XmlElement configuration = GenerateConfigurationNode(xd);
+                XmlElement colors = GenerateColorsNode(xd);
 
                 nodeRoot.AppendChild(configuration);
+                nodeRoot.AppendChild(colors);
                 xd.Save(path);
             }
 
@@ -216,6 +135,199 @@ namespace vmPing.Classes
             }
         }
 
+
+        private static XmlElement GenerateColorsNode(XmlDocument xd)
+        {
+            XmlElement colors = xd.CreateElement("colors");
+
+            // Write probe background colors.
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Probe.Background.Inactive",
+                value: ApplicationOptions.BackgroundColor_Probe_Inactive));
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Probe.Background.Up",
+                value: ApplicationOptions.BackgroundColor_Probe_Up));
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Probe.Background.Down",
+                value: ApplicationOptions.BackgroundColor_Probe_Down));
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Probe.Background.Indeterminate",
+                value: ApplicationOptions.BackgroundColor_Probe_Indeterminate));
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Probe.Background.Error",
+                value: ApplicationOptions.BackgroundColor_Probe_Error));
+
+            // Write probe foreground colors.
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Probe.Foreground.Inactive",
+                value: ApplicationOptions.ForegroundColor_Probe_Inactive));
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Probe.Foreground.Up",
+                value: ApplicationOptions.ForegroundColor_Probe_Up));
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Probe.Foreground.Down",
+                value: ApplicationOptions.ForegroundColor_Probe_Down));
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Probe.Foreground.Indeterminate",
+                value: ApplicationOptions.ForegroundColor_Probe_Indeterminate));
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Probe.Foreground.Error",
+                value: ApplicationOptions.ForegroundColor_Probe_Error));
+
+            // Write statistics foreground colors.
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Statistics.Foreground.Inactive",
+                value: ApplicationOptions.ForegroundColor_Stats_Inactive));
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Statistics.Foreground.Up",
+                value: ApplicationOptions.ForegroundColor_Stats_Up));
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Statistics.Foreground.Down",
+                value: ApplicationOptions.ForegroundColor_Stats_Down));
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Statistics.Foreground.Indeterminate",
+                value: ApplicationOptions.ForegroundColor_Stats_Indeterminate));
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Statistics.Foreground.Error",
+                value: ApplicationOptions.ForegroundColor_Stats_Error));
+
+            // Write alias foreground colors.
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Alias.Foreground.Inactive",
+                value: ApplicationOptions.ForegroundColor_Alias_Inactive));
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Alias.Foreground.Up",
+                value: ApplicationOptions.ForegroundColor_Alias_Up));
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Alias.Foreground.Down",
+                value: ApplicationOptions.ForegroundColor_Alias_Down));
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Alias.Foreground.Indeterminate",
+                value: ApplicationOptions.ForegroundColor_Alias_Indeterminate));
+            colors.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Alias.Foreground.Error",
+                value: ApplicationOptions.ForegroundColor_Alias_Error));
+
+            return colors;
+        }
+
+        private static XmlElement GenerateConfigurationNode(XmlDocument xd)
+        {
+            XmlElement configuration = xd.CreateElement("configuration");
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "PingInterval",
+                value: ApplicationOptions.PingInterval.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "PingTimeout",
+                value: ApplicationOptions.PingTimeout.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "TTL",
+                value: ApplicationOptions.TTL.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "DontFragment",
+                value: ApplicationOptions.DontFragment.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "UseCustomBuffer",
+                value: ApplicationOptions.UseCustomBuffer.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "Buffer",
+                value: Encoding.ASCII.GetString(ApplicationOptions.Buffer)));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "AlertThreshold",
+                value: ApplicationOptions.AlertThreshold.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "IsEmailAlertEnabled",
+                value: ApplicationOptions.IsEmailAlertEnabled.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "EmailServer",
+                value: ApplicationOptions.EmailServer != null ? ApplicationOptions.EmailServer.ToString() : string.Empty));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "EmailPort",
+                value: ApplicationOptions.EmailPort != null ? ApplicationOptions.EmailPort.ToString() : string.Empty));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "IsEmailAuthenticationRequired",
+                value: ApplicationOptions.IsEmailAuthenticationRequired.ToString()));
+
+            if (!string.IsNullOrWhiteSpace(ApplicationOptions.EmailUser))
+            {
+                configuration.AppendChild(GenerateOptionNode(
+                    xmlDocument: xd,
+                    name: "EmailUser",
+                    value: EncryptStringAES(ApplicationOptions.EmailUser)));
+            }
+            else
+            {
+                configuration.AppendChild(GenerateOptionNode(
+                    xmlDocument: xd,
+                    name: "EmailUser",
+                    value: string.Empty));
+            }
+
+            if (!string.IsNullOrWhiteSpace(ApplicationOptions.EmailPassword))
+            {
+                configuration.AppendChild(GenerateOptionNode(
+                    xmlDocument: xd,
+                    name: "EmailPassword",
+                    value: EncryptStringAES(ApplicationOptions.EmailPassword)));
+            }
+            else
+            {
+                configuration.AppendChild(GenerateOptionNode(
+                    xmlDocument: xd,
+                    name: "EmailPassword",
+                    value: string.Empty));
+            }
+
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "EmailRecipient",
+                value: ApplicationOptions.EmailRecipient != null ? ApplicationOptions.EmailRecipient.ToString() : string.Empty));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "EmailFromAddress",
+                value: ApplicationOptions.EmailFromAddress != null ? ApplicationOptions.EmailFromAddress.ToString() : string.Empty));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "IsLogOutputEnabled",
+                value: ApplicationOptions.IsLogOutputEnabled.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "LogPath",
+                value: ApplicationOptions.LogPath != null ? ApplicationOptions.LogPath.ToString() : string.Empty));
+
+            return configuration;
+        }
 
         private static XmlElement GenerateOptionNode(XmlDocument xmlDocument, string name, string value)
         {
@@ -345,7 +457,7 @@ namespace vmPing.Classes
 
         public static void LoadConfigurationOptions()
         {
-            var configuration = new Dictionary<string, string>();
+
 
             var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
             if (!File.Exists(path))
@@ -356,88 +468,221 @@ namespace vmPing.Classes
                 var xd = new XmlDocument();
                 xd.Load(path);
 
-                XmlNodeList nodeConfigurationOption = xd.SelectNodes("/vmping/configuration/option");
-
-                foreach (XmlNode node in nodeConfigurationOption)
-                    configuration.Add(node.Attributes["name"].Value, node.InnerText);
-
-                string optionValue;
-                if (configuration.TryGetValue("PingInterval", out optionValue))
-                {
-                    ApplicationOptions.PingInterval = int.Parse(optionValue);
-                }
-                if (configuration.TryGetValue("PingTimeout", out optionValue))
-                {
-                    ApplicationOptions.PingTimeout = int.Parse(optionValue);
-                }
-                if (configuration.TryGetValue("TTL", out optionValue))
-                {
-                    ApplicationOptions.TTL = int.Parse(optionValue);
-                }
-                if (configuration.TryGetValue("DontFragment", out optionValue))
-                {
-                    ApplicationOptions.DontFragment = bool.Parse(optionValue);
-                }
-                if (configuration.TryGetValue("UseCustomBuffer", out optionValue))
-                {
-                    ApplicationOptions.UseCustomBuffer = bool.Parse(optionValue);
-                }
-                if (configuration.TryGetValue("Buffer", out optionValue))
-                {
-                    ApplicationOptions.Buffer = Encoding.ASCII.GetBytes(optionValue);
-                }
-                if (configuration.TryGetValue("AlertThreshold", out optionValue))
-                {
-                    ApplicationOptions.AlertThreshold = int.Parse(optionValue);
-                }
-                if (configuration.TryGetValue("IsEmailAlertEnabled", out optionValue))
-                {
-                    ApplicationOptions.IsEmailAlertEnabled = bool.Parse(optionValue);
-                }
-                if (configuration.TryGetValue("IsEmailAuthenticationRequired", out optionValue))
-                {
-                    ApplicationOptions.IsEmailAuthenticationRequired = bool.Parse(optionValue);
-                }
-                if (configuration.TryGetValue("EmailServer", out optionValue))
-                {
-                    ApplicationOptions.EmailServer = optionValue;
-                }
-                if (configuration.TryGetValue("EmailPort", out optionValue))
-                {
-                    ApplicationOptions.EmailPort = optionValue;
-                }
-                if (configuration.TryGetValue("EmailRecipient", out optionValue))
-                {
-                    ApplicationOptions.EmailRecipient = optionValue;
-                }
-                if (configuration.TryGetValue("EmailFromAddress", out optionValue))
-                {
-                    ApplicationOptions.EmailFromAddress = optionValue;
-                }
-                if (configuration.TryGetValue("IsLogOutputEnabled", out optionValue))
-                {
-                    ApplicationOptions.IsLogOutputEnabled = bool.Parse(optionValue);
-                }
-                if (configuration.TryGetValue("LogPath", out optionValue))
-                {
-                    ApplicationOptions.LogPath = optionValue;
-                }
-
-                if (configuration.TryGetValue("EmailUser", out optionValue))
-                {
-                    if (optionValue.Length > 0)
-                        ApplicationOptions.EmailUser = DecryptStringAES(optionValue);
-                }
-                if (configuration.TryGetValue("EmailPassword", out optionValue))
-                {
-                    if (optionValue.Length > 0)
-                        ApplicationOptions.EmailPassword = DecryptStringAES(optionValue);
-                }
+                LoadConfigurationNode(xd.SelectNodes("/vmping/configuration/option"));
+                LoadColorsNode(xd.SelectNodes("/vmping/colors/option"));
             }
 
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
+
+        private static void LoadColorsNode(XmlNodeList nodeList)
+        {
+            var options = new Dictionary<string, string>();
+
+            foreach (XmlNode node in nodeList)
+                options.Add(node.Attributes["name"].Value, node.InnerText);
+
+            string optionValue;
+            // Load probe backgorund colors.
+            if (options.TryGetValue("Probe.Background.Inactive", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.BackgroundColor_Probe_Inactive = optionValue;
+            }
+            if (options.TryGetValue("Probe.Background.Up", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.BackgroundColor_Probe_Up = optionValue;
+            }
+            if (options.TryGetValue("Probe.Background.Down", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.BackgroundColor_Probe_Down = optionValue;
+            }
+            if (options.TryGetValue("Probe.Background.Indeterminate", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.BackgroundColor_Probe_Indeterminate = optionValue;
+            }
+            if (options.TryGetValue("Probe.Background.Error", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.BackgroundColor_Probe_Error = optionValue;
+            }
+
+            // Load probe foreground colors.
+            if (options.TryGetValue("Probe.Foreground.Inactive", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.ForegroundColor_Probe_Inactive = optionValue;
+            }
+            if (options.TryGetValue("Probe.Foreground.Up", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.ForegroundColor_Probe_Up = optionValue;
+            }
+            if (options.TryGetValue("Probe.Foreground.Down", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.ForegroundColor_Probe_Down = optionValue;
+            }
+            if (options.TryGetValue("Probe.Foreground.Indeterminate", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.ForegroundColor_Probe_Indeterminate = optionValue;
+            }
+            if (options.TryGetValue("Probe.Foreground.Error", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.ForegroundColor_Probe_Error = optionValue;
+            }
+
+            // Load statistics foreground colors.
+            if (options.TryGetValue("Statistics.Foreground.Inactive", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.ForegroundColor_Stats_Inactive = optionValue;
+            }
+            if (options.TryGetValue("Statistics.Foreground.Up", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.ForegroundColor_Stats_Up = optionValue;
+            }
+            if (options.TryGetValue("Statistics.Foreground.Down", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.ForegroundColor_Stats_Down = optionValue;
+            }
+            if (options.TryGetValue("Statistics.Foreground.Indeterminate", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.ForegroundColor_Stats_Indeterminate = optionValue;
+            }
+            if (options.TryGetValue("Statistics.Foreground.Error", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.ForegroundColor_Stats_Error = optionValue;
+            }
+
+            // Load alias foreground colors.
+            if (options.TryGetValue("Alias.Foreground.Inactive", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.ForegroundColor_Alias_Inactive = optionValue;
+            }
+            if (options.TryGetValue("Alias.Foreground.Up", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.ForegroundColor_Alias_Up = optionValue;
+            }
+            if (options.TryGetValue("Alias.Foreground.Down", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.ForegroundColor_Alias_Down = optionValue;
+            }
+            if (options.TryGetValue("Alias.Foreground.Indeterminate", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.ForegroundColor_Alias_Indeterminate = optionValue;
+            }
+            if (options.TryGetValue("Alias.Foreground.Error", out optionValue))
+            {
+                if (IsValidHtmlColor(optionValue))
+                    ApplicationOptions.ForegroundColor_Alias_Error = optionValue;
+            }
+        }
+
+
+        public static bool IsValidHtmlColor(string htmlColor)
+        {
+            var regex = new Regex("^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$");
+
+            return regex.IsMatch(htmlColor);
+        }
+
+
+        private static void LoadConfigurationNode(XmlNodeList nodeList)
+        {
+            var options = new Dictionary<string, string>();
+
+            foreach (XmlNode node in nodeList)
+                options.Add(node.Attributes["name"].Value, node.InnerText);
+
+            string optionValue;
+            if (options.TryGetValue("PingInterval", out optionValue))
+            {
+                ApplicationOptions.PingInterval = int.Parse(optionValue);
+            }
+            if (options.TryGetValue("PingTimeout", out optionValue))
+            {
+                ApplicationOptions.PingTimeout = int.Parse(optionValue);
+            }
+            if (options.TryGetValue("TTL", out optionValue))
+            {
+                ApplicationOptions.TTL = int.Parse(optionValue);
+            }
+            if (options.TryGetValue("DontFragment", out optionValue))
+            {
+                ApplicationOptions.DontFragment = bool.Parse(optionValue);
+            }
+            if (options.TryGetValue("UseCustomBuffer", out optionValue))
+            {
+                ApplicationOptions.UseCustomBuffer = bool.Parse(optionValue);
+            }
+            if (options.TryGetValue("Buffer", out optionValue))
+            {
+                ApplicationOptions.Buffer = Encoding.ASCII.GetBytes(optionValue);
+            }
+            if (options.TryGetValue("AlertThreshold", out optionValue))
+            {
+                ApplicationOptions.AlertThreshold = int.Parse(optionValue);
+            }
+            if (options.TryGetValue("IsEmailAlertEnabled", out optionValue))
+            {
+                ApplicationOptions.IsEmailAlertEnabled = bool.Parse(optionValue);
+            }
+            if (options.TryGetValue("IsEmailAuthenticationRequired", out optionValue))
+            {
+                ApplicationOptions.IsEmailAuthenticationRequired = bool.Parse(optionValue);
+            }
+            if (options.TryGetValue("EmailServer", out optionValue))
+            {
+                ApplicationOptions.EmailServer = optionValue;
+            }
+            if (options.TryGetValue("EmailPort", out optionValue))
+            {
+                ApplicationOptions.EmailPort = optionValue;
+            }
+            if (options.TryGetValue("EmailRecipient", out optionValue))
+            {
+                ApplicationOptions.EmailRecipient = optionValue;
+            }
+            if (options.TryGetValue("EmailFromAddress", out optionValue))
+            {
+                ApplicationOptions.EmailFromAddress = optionValue;
+            }
+            if (options.TryGetValue("IsLogOutputEnabled", out optionValue))
+            {
+                ApplicationOptions.IsLogOutputEnabled = bool.Parse(optionValue);
+            }
+            if (options.TryGetValue("LogPath", out optionValue))
+            {
+                ApplicationOptions.LogPath = optionValue;
+            }
+
+            if (options.TryGetValue("EmailUser", out optionValue))
+            {
+                if (optionValue.Length > 0)
+                    ApplicationOptions.EmailUser = DecryptStringAES(optionValue);
+            }
+            if (options.TryGetValue("EmailPassword", out optionValue))
+            {
+                if (optionValue.Length > 0)
+                    ApplicationOptions.EmailPassword = DecryptStringAES(optionValue);
             }
         }
     }

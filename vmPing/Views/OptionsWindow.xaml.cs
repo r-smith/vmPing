@@ -120,7 +120,7 @@ namespace vmPing.Views
             ForegroundColor_Alias_Up.Text = ApplicationOptions.ForegroundColor_Alias_Up;
             ForegroundColor_Alias_Down.Text = ApplicationOptions.ForegroundColor_Alias_Down;
             ForegroundColor_Alias_Error.Text = ApplicationOptions.ForegroundColor_Alias_Error;
-            ForegroundColor_Alias_Indeterminate.Text = ApplicationOptions.ForegroundColor_Alias_Inactive;
+            ForegroundColor_Alias_Indeterminate.Text = ApplicationOptions.ForegroundColor_Alias_Indeterminate;
         }
 
 

@@ -3,8 +3,8 @@ vmPing
 
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
-###### (Latest version is 1.2.14 released on March 19, 2019)
-### [Click here to download the latest .exe](https://github.com/R-Smith/vmPing/releases/download/v1.2.14/vmPing.exe)
+###### (Latest version is 1.2.15 released on March 19, 2019)
+### [Click here to download the latest .exe](https://github.com/R-Smith/vmPing/releases/download/v1.2.15/vmPing.exe)
 ### [Click here to download the source](https://github.com/R-Smith/vmPing/archive/master.zip)
 
 ##### Notes
@@ -14,7 +14,7 @@ vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple h
 [![Join the chat at https://gitter.im/vmPing/Lobby](https://badges.gitter.im/vmPing/Lobby.svg)](https://gitter.im/vmPing/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
-### Changes for v1.2.14
+### Changes for v1.2.15
 * Added the ability to customize the colors.  Most colors within that application can now be set to your liking.  To access: open the application options and then select the Layout tab.
 * TODO: Add a script trigger option on host down / up.
 * TODO: Add context menu to host monitor windows.

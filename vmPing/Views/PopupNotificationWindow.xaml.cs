@@ -12,7 +12,8 @@ using vmPing.Classes;
 namespace vmPing.Views
 {
     /// <summary>
-    /// Interaction logic for PopupNotificationWindow.xaml
+    /// PopupNotificationWindow is an alert that gets displayed in the lower right corner of the screen.
+    /// It is triggered when a monitored hosts changes status between down or up.
     /// </summary>
     public partial class PopupNotificationWindow : Window
     {
@@ -24,25 +25,37 @@ namespace vmPing.Views
 
             ICollectionView filteredChangeLog = new CollectionViewSource { Source = statusChangeLog }.View;
             filteredChangeLog.Filter = p => (p as StatusChangeLog).HasStatusBeenCleared == false;
-            lvStatusChangeLog.ItemsSource = filteredChangeLog;
+            StatusHistoryList.ItemsSource = filteredChangeLog;
 
-            ((INotifyCollectionChanged)lvStatusChangeLog.Items).CollectionChanged += PopupNotificationWindow_CollectionChanged;
+            ((INotifyCollectionChanged)StatusHistoryList.Items).CollectionChanged += PopupNotificationWindow_CollectionChanged;
         }
 
         private void PopupNotificationWindow_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (lvStatusChangeLog.Items.Count > 0)
+            ScaleWindowSize();
+            ScrollToEnd();
+        }
+
+        private void ScrollToEnd()
+        {
+            if (StatusHistoryList.Items.Count > 0)
             {
-                var border = VisualTreeHelper.GetChild(lvStatusChangeLog, 0) as Decorator;
-                if (border != null)
+                if (VisualTreeHelper.GetChild(StatusHistoryList, 0) is Decorator border)
                 {
-                    var scroll = border.Child as ScrollViewer;
-                    if (scroll != null) scroll.ScrollToEnd();
+                    if (border.Child is ScrollViewer scroll) scroll.ScrollToEnd();
                 }
             }
+        }
 
-            switch (lvStatusChangeLog.Items.Count)
+        private void ScaleWindowSize()
+        {
+            // ScaleWindowSize resizes the window baased on the number of displayed items.
+            switch (StatusHistoryList.Items.Count)
             {
+                case 1:
+                    Height = 95;
+                    PositionWindow();
+                    break;
                 case 2:
                     Height = 110;
                     PositionWindow();
@@ -62,25 +75,21 @@ namespace vmPing.Views
             }
         }
 
-        private void btnClose_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
         private void PositionWindow()
         {
-            var desktopWorkingArea = SystemParameters.WorkArea;
-            this.Left = desktopWorkingArea.Right - this.Width;
-            this.Top = desktopWorkingArea.Bottom - this.Height;
+            // PositionWindow places the window in the lower right corner of the screen.
+            Rect desktopWorkingArea = SystemParameters.WorkArea;
+            Left = desktopWorkingArea.Right - Width;
+            Top = desktopWorkingArea.Bottom - Height;
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             Closing -= Window_Closing;
             e.Cancel = true;
-            var anim = new DoubleAnimation(0, (Duration)TimeSpan.FromSeconds(0.2));
-            anim.Completed += (s, _) => this.Close();
-            this.BeginAnimation(UIElement.OpacityProperty, anim);
+            var anim = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
+            anim.Completed += (s, _) => Close();
+            BeginAnimation(OpacityProperty, anim);
         }
 
         private void Window_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -90,7 +99,12 @@ namespace vmPing.Views
             Application.Current.MainWindow.Focus();
         }
 
-        private void btnMaximize_Click(object sender, RoutedEventArgs e)
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Maximize_Click(object sender, RoutedEventArgs e)
         {
             if (PingItem.StatusWindow == null || PingItem.StatusWindow.IsLoaded == false)
             {

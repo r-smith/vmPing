@@ -23,7 +23,7 @@ namespace vmPing.Classes
     {
         public static int NumberOfActivePings;
         public static ObservableCollection<StatusChangeLog> StatusChangeLog = new ObservableCollection<StatusChangeLog>();
-        public static ChangeLogWindow ChangeWindow;
+        public static StatusHistoryWindow StatusWindow;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public IsolatedPingWindow IsolatedWindow { get; set; }

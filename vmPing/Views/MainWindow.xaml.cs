@@ -252,11 +252,11 @@ namespace vmPing.Views
                 }
                 PingItem.StatusChangeLog.Add(e.UserState as StatusChangeLog);
 
-                if (PingItem.ChangeWindow != null && PingItem.ChangeWindow.IsLoaded)
+                if (PingItem.StatusWindow != null && PingItem.StatusWindow.IsLoaded)
                 {
-                    if (PingItem.ChangeWindow.WindowState == WindowState.Minimized)
-                        PingItem.ChangeWindow.WindowState = WindowState.Normal;
-                    PingItem.ChangeWindow.Focus();
+                    if (PingItem.StatusWindow.WindowState == WindowState.Minimized)
+                        PingItem.StatusWindow.WindowState = WindowState.Normal;
+                    PingItem.StatusWindow.Focus();
                 }
                 else if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
                 {
@@ -1211,17 +1211,17 @@ namespace vmPing.Views
             }
         }
 
-        private void mnuChangeLog_Click(object sender, RoutedEventArgs e)
+        private void mnuStatusHistory_Click(object sender, RoutedEventArgs e)
         {
-            if (PingItem.ChangeWindow == null || PingItem.ChangeWindow.IsLoaded == false)
+            if (PingItem.StatusWindow == null || PingItem.StatusWindow.IsLoaded == false)
             {
-                var wnd = new ChangeLogWindow(PingItem.StatusChangeLog);
-                PingItem.ChangeWindow = wnd;
+                var wnd = new StatusHistoryWindow(PingItem.StatusChangeLog);
+                PingItem.StatusWindow = wnd;
                 wnd.Show();
             }
-            else if (PingItem.ChangeWindow.IsLoaded)
+            else if (PingItem.StatusWindow.IsLoaded)
             {
-                PingItem.ChangeWindow.Focus();
+                PingItem.StatusWindow.Focus();
             }
         }
 

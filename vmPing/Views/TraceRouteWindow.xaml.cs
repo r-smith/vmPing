@@ -19,6 +19,7 @@ namespace vmPing.Views
     {
         NetworkRoute _route = new NetworkRoute();
 
+        internal NetworkRoute Route { get => _route; set => _route = value; }
 
         public TraceRouteWindow(bool alwaysOnTop)
         {

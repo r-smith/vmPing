@@ -150,7 +150,7 @@
                 
                 <Separator Padding="0,6" />
 
-                <MenuItem Header="Change Log" Click="mnuChangeLog_Click" />
+                <MenuItem Header="Status History" Click="mnuStatusHistory_Click" />
                 
                 <MenuItem Header="Popup Notifications">
                     <MenuItem Name="mnuPopupNever"

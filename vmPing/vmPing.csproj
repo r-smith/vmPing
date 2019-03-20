@@ -72,8 +72,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Views\ChangeLogWindow.xaml.cs">
-      <DependentUpon>ChangeLogWindow.xaml</DependentUpon>
+    <Compile Include="Views\StatusHistoryWindow.xaml.cs">
+      <DependentUpon>StatusHistoryWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EditAliasWindow.xaml.cs">
       <DependentUpon>EditAliasWindow.xaml</DependentUpon>
@@ -116,7 +116,7 @@
     <Compile Include="Views\NewFavoriteWindow.xaml.cs">
       <DependentUpon>NewFavoriteWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\ChangeLogWindow.xaml">
+    <Page Include="Views\StatusHistoryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

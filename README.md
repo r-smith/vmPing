@@ -14,7 +14,7 @@ vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple h
 [![Join the chat at https://gitter.im/vmPing/Lobby](https://badges.gitter.im/vmPing/Lobby.svg)](https://gitter.im/vmPing/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
-### Changes for v1.2.13
+### Changes for v1.2.14
 * Added the ability to customize the colors.  Most colors within that application can now be set to your liking.  To access: open the application options and then select the Layout tab.
 * TODO: Add a script trigger option on host down / up.
 * TODO: Add context menu to host monitor windows.

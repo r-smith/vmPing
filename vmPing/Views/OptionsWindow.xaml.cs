@@ -587,7 +587,7 @@ namespace vmPing.Views
             ForegroundColor_Alias_Up.Text = Constants.Color_Alias_Foreground_Up;
             ForegroundColor_Alias_Down.Text = Constants.Color_Alias_Foreground_Down;
             ForegroundColor_Alias_Error.Text = Constants.Color_Alias_Foreground_Error;
-            ForegroundColor_Alias_Indeterminate.Text = Constants.Color_Alias_Foreground_Inactive;
+            ForegroundColor_Alias_Indeterminate.Text = Constants.Color_Alias_Foreground_Indeterminate;
         }
     }
 }

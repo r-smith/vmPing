@@ -11,7 +11,7 @@ namespace vmPing.Views
     {
         private string _Hostname;
 
-        public EditAliasWindow(PingItem pingItem) : this(pingItem.Hostname, pingItem.Alias)
+        public EditAliasWindow(Probe pingItem) : this(pingItem.Hostname, pingItem.Alias)
         {
         }
 

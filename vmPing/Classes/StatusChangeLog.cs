@@ -6,7 +6,7 @@ namespace vmPing.Classes
     {
         public DateTime Timestamp { get; set; }
         public string Hostname { get; set; }
-        public PingStatus Status { get; set; }
+        public ProbeStatus Status { get; set; }
         public bool HasStatusBeenCleared { get; set; }
         public string StatusAsString
         {
@@ -15,13 +15,13 @@ namespace vmPing.Classes
                 string returnString = string.Empty;
                 switch (Status)
                 {
-                    case PingStatus.Down:
+                    case ProbeStatus.Down:
                         returnString = "DOWN";
                         break;
-                    case PingStatus.Up:
+                    case ProbeStatus.Up:
                         returnString = "UP";
                         break;
-                    case PingStatus.Error:
+                    case ProbeStatus.Error:
                         returnString = "[ERROR]";
                         break;
                 }
@@ -36,11 +36,11 @@ namespace vmPing.Classes
                 string returnString = string.Empty;
                 switch (Status)
                 {
-                    case PingStatus.Error:
-                    case PingStatus.Down:
+                    case ProbeStatus.Error:
+                    case ProbeStatus.Down:
                         returnString = "u";
                         break;
-                    case PingStatus.Up:
+                    case ProbeStatus.Up:
                         returnString = "t";
                         break;
                 }

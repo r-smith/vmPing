@@ -8,7 +8,7 @@ namespace vmPing.Views
     /// </summary>
     public partial class IsolatedPingWindow : Window
     {
-        public IsolatedPingWindow(PingItem pingItem)
+        public IsolatedPingWindow(Probe pingItem)
         {
             InitializeComponent();
             pingItem.IsolatedWindow = this;

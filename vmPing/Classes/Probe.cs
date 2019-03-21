@@ -10,7 +10,7 @@ using vmPing.Views;
 
 namespace vmPing.Classes
 {
-    public enum PingStatus
+    public enum ProbeStatus
     {
         Up,
         Down,
@@ -19,7 +19,7 @@ namespace vmPing.Classes
         Inactive
     }
 
-    public class PingItem : INotifyPropertyChanged
+    public class Probe : INotifyPropertyChanged
     {
         public static int NumberOfActivePings;
         public static ObservableCollection<StatusChangeLog> StatusChangeLog = new ObservableCollection<StatusChangeLog>();
@@ -37,7 +37,7 @@ namespace vmPing.Classes
         private ObservableCollection<string> history;
         public ObservableCollection<string> History
         {
-            get { return history; }
+            get => history;
             set
             {
                 if (value != history)
@@ -51,7 +51,7 @@ namespace vmPing.Classes
         private string hostname;
         public string Hostname
         {
-            get { return hostname; }
+            get => hostname;
             set
             {
                 if (value != hostname)
@@ -66,7 +66,7 @@ namespace vmPing.Classes
         private string alias;
         public string Alias
         {
-            get { return alias; }
+            get => alias;
             set
             {
                 if (value != alias)
@@ -77,10 +77,10 @@ namespace vmPing.Classes
             }
         }
 
-        private PingStatus status = PingStatus.Inactive;
-        public PingStatus Status
+        private ProbeStatus status = ProbeStatus.Inactive;
+        public ProbeStatus Status
         {
-            get { return status; }
+            get => status;
             set
             {
                 if (value != status)
@@ -94,7 +94,7 @@ namespace vmPing.Classes
         private bool isActive = false;
         public bool IsActive
         {
-            get { return isActive; }
+            get => isActive;
             set
             {
                 if (value == true)
@@ -114,7 +114,7 @@ namespace vmPing.Classes
         private string pingStatisticsText;
         public string PingStatisticsText
         {
-            get { return pingStatisticsText; }
+            get => pingStatisticsText;
             set
             {
                 if (value != pingStatisticsText)
@@ -124,6 +124,7 @@ namespace vmPing.Classes
                 }
             }
         }
+
 
         public void AddHistory(string historyItem)
         {

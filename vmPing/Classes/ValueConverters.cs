@@ -91,15 +91,15 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            switch ((PingStatus)value)
+            switch ((ProbeStatus)value)
             {
-                case PingStatus.Up:
+                case ProbeStatus.Up:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Up);
-                case PingStatus.Down:
+                case ProbeStatus.Down:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Down);
-                case PingStatus.Error:
+                case ProbeStatus.Error:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Error);
-                case PingStatus.Indeterminate:
+                case ProbeStatus.Indeterminate:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Indeterminate);
                 default:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Inactive);
@@ -116,15 +116,15 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            switch ((PingStatus)value)
+            switch ((ProbeStatus)value)
             {
-                case PingStatus.Up:
+                case ProbeStatus.Up:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Up);
-                case PingStatus.Down:
+                case ProbeStatus.Down:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Down);
-                case PingStatus.Error:
+                case ProbeStatus.Error:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Error);
-                case PingStatus.Indeterminate:
+                case ProbeStatus.Indeterminate:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Indeterminate);
                 default:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Inactive);
@@ -141,15 +141,15 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            switch ((PingStatus)value)
+            switch ((ProbeStatus)value)
             {
-                case PingStatus.Up:
+                case ProbeStatus.Up:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Up);
-                case PingStatus.Down:
+                case ProbeStatus.Down:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Down);
-                case PingStatus.Error:
+                case ProbeStatus.Error:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Error);
-                case PingStatus.Indeterminate:
+                case ProbeStatus.Indeterminate:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Indeterminate);
                 default:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Inactive);
@@ -166,15 +166,15 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            switch ((PingStatus)value)
+            switch ((ProbeStatus)value)
             {
-                case PingStatus.Up:
+                case ProbeStatus.Up:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Up);
-                case PingStatus.Down:
+                case ProbeStatus.Down:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Down);
-                case PingStatus.Error:
+                case ProbeStatus.Error:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Error);
-                case PingStatus.Indeterminate:
+                case ProbeStatus.Indeterminate:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Indeterminate);
                 default:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Inactive);
@@ -253,18 +253,18 @@ namespace vmPing.Classes
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var returnString = string.Empty;
-            switch ((PingStatus)value)
+            switch ((ProbeStatus)value)
             {
-                case PingStatus.Error:
+                case ProbeStatus.Error:
                     //returnString = "r";
                     break;
-                case PingStatus.Down:
+                case ProbeStatus.Down:
                     returnString = "u";
                     break;
-                case PingStatus.Indeterminate:
+                case ProbeStatus.Indeterminate:
                     returnString = "i";
                     break;
-                case PingStatus.Up:
+                case ProbeStatus.Up:
                     returnString = "t";
                     break;
             }

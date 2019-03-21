@@ -91,7 +91,7 @@
     </Compile>
     <Compile Include="Classes\NetworkRoute.cs" />
     <Compile Include="Classes\NetworkRouteNode.cs" />
-    <Compile Include="Classes\PingItem.cs" />
+    <Compile Include="Classes\Probe.cs" />
     <Compile Include="Classes\PingStatistics.cs" />
     <Compile Include="Views\IsolatedPingWindow.xaml.cs">
       <DependentUpon>IsolatedPingWindow.xaml</DependentUpon>

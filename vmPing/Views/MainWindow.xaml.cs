@@ -22,7 +22,7 @@ namespace vmPing.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ObservableCollection<PingItem> _PingItems = new ObservableCollection<PingItem>();
+        private ObservableCollection<Probe> _PingItems = new ObservableCollection<Probe>();
         private Dictionary<string, string> _Aliases = new Dictionary<string, string>();
 
         public static RoutedCommand ProbeOptionsCommand = new RoutedCommand();
@@ -93,17 +93,17 @@ namespace vmPing.Views
         public void AddHostMonitor(int numberOfHostMonitors)
         {
             for (; numberOfHostMonitors > 0; --numberOfHostMonitors)
-                _PingItems.Add(new PingItem());
+                _PingItems.Add(new Probe());
         }
 
 
         public void btnPing_Click(object sender, EventArgs e)
         {
-            PingStartStop((PingItem)((Button)sender).DataContext);
+            PingStartStop((Probe)((Button)sender).DataContext);
         }
 
 
-        public void PingStartStop(PingItem pingItem)
+        public void PingStartStop(Probe pingItem)
         {
             if (string.IsNullOrEmpty(pingItem.Hostname)) return;
 
@@ -136,7 +136,7 @@ namespace vmPing.Views
             {
                 pingItem.PingBackgroundWorker.CancelAsync();
                 pingItem.PingResetEvent.WaitOne();
-                pingItem.Status = PingStatus.Inactive;
+                pingItem.Status = ProbeStatus.Inactive;
                 pingItem.IsActive = false;
 
                 pingItem.WriteFinalStatisticsToHistory();
@@ -155,26 +155,26 @@ namespace vmPing.Views
                 if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
                 {
                     // Mark all existing status changes as read.
-                    for (int i = 0; i < PingItem.StatusChangeLog.Count; ++i)
-                        PingItem.StatusChangeLog[i].HasStatusBeenCleared = true;
+                    for (int i = 0; i < Probe.StatusChangeLog.Count; ++i)
+                        Probe.StatusChangeLog[i].HasStatusBeenCleared = true;
                 }
-                PingItem.StatusChangeLog.Add(e.UserState as StatusChangeLog);
+                Probe.StatusChangeLog.Add(e.UserState as StatusChangeLog);
 
-                if (PingItem.StatusWindow != null && PingItem.StatusWindow.IsLoaded)
+                if (Probe.StatusWindow != null && Probe.StatusWindow.IsLoaded)
                 {
-                    if (PingItem.StatusWindow.WindowState == WindowState.Minimized)
-                        PingItem.StatusWindow.WindowState = WindowState.Normal;
-                    PingItem.StatusWindow.Focus();
+                    if (Probe.StatusWindow.WindowState == WindowState.Minimized)
+                        Probe.StatusWindow.WindowState = WindowState.Normal;
+                    Probe.StatusWindow.Focus();
                 }
                 else if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
                 {
-                    var wnd = new PopupNotificationWindow(PingItem.StatusChangeLog);
+                    var wnd = new PopupNotificationWindow(Probe.StatusChangeLog);
                     wnd.Show();
                 }
             }
             else
             {
-                PingItem.StatusChangeLog.Add(e.UserState as StatusChangeLog);
+                Probe.StatusChangeLog.Add(e.UserState as StatusChangeLog);
             }
         }
 
@@ -183,7 +183,7 @@ namespace vmPing.Views
         {
             // Check if any pings are in progress and update the start/stop all toggle accordingly.
             bool isActive = false;
-            foreach (PingItem pingItem in _PingItems)
+            foreach (Probe pingItem in _PingItems)
             {
                 if (pingItem.IsActive)
                 {
@@ -208,7 +208,7 @@ namespace vmPing.Views
         public void backgroundThread_PerformIcmpProbe(object sender, DoWorkEventArgs e)
         {
             var backgroundWorker = sender as BackgroundWorker;
-            var pingItem = e.Argument as PingItem;
+            var pingItem = e.Argument as Probe;
             pingItem.Statistics = new PingStatistics();
 
             // Check whether a hostname or an IP address was provided.  If hostname, resolve and print IP.
@@ -227,7 +227,7 @@ namespace vmPing.Views
                 {
                     Application.Current.Dispatcher.BeginInvoke(
                                 new Action(() => pingItem.AddHistory("Unable to resolve hostname.")));
-                    pingItem.Status = PingStatus.Error;
+                    pingItem.Status = ProbeStatus.Error;
                     pingItem.PingResetEvent.Set();
                     pingItem.IsActive = false;
                     return;
@@ -255,35 +255,35 @@ namespace vmPing.Views
                         if (pingItem.Reply.Status == IPStatus.Success)
                         {
                             // Check for status change.
-                            if (pingItem.Status == PingStatus.Down)
+                            if (pingItem.Status == ProbeStatus.Down)
                             {
                                 backgroundWorker.ReportProgress(
                                     0,
-                                    new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Up });
+                                    new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = ProbeStatus.Up });
                                 if (ApplicationOptions.IsEmailAlertEnabled)
                                     SendEmail("up", pingItem.Hostname);
                             }
 
                             pingItem.DownCount = 0;
                             ++pingItem.Statistics.PingsReceived;
-                            pingItem.Status = PingStatus.Up;
+                            pingItem.Status = ProbeStatus.Up;
                         }
                         else
                         {
-                            if (pingItem.Status == PingStatus.Up)
-                                pingItem.Status = PingStatus.Indeterminate;
-                            if (pingItem.Status == PingStatus.Inactive)
-                                pingItem.Status = PingStatus.Down;
+                            if (pingItem.Status == ProbeStatus.Up)
+                                pingItem.Status = ProbeStatus.Indeterminate;
+                            if (pingItem.Status == ProbeStatus.Inactive)
+                                pingItem.Status = ProbeStatus.Down;
                             ++pingItem.DownCount;
 
 
                             // Check for status change.
-                            if (pingItem.Status == PingStatus.Indeterminate && pingItem.DownCount >= ApplicationOptions.AlertThreshold)
+                            if (pingItem.Status == ProbeStatus.Indeterminate && pingItem.DownCount >= ApplicationOptions.AlertThreshold)
                             {
-                                pingItem.Status = PingStatus.Down;
+                                pingItem.Status = ProbeStatus.Down;
                                 backgroundWorker.ReportProgress(
                                     0,
-                                    new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
+                                    new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = ProbeStatus.Down });
                                 if (ApplicationOptions.IsEmailAlertEnabled)
                                     SendEmail("down", pingItem.Hostname);
                             }
@@ -329,16 +329,16 @@ namespace vmPing.Views
                         e.Cancel = true;
 
                         // Check for status change.
-                        if (pingItem.Status == PingStatus.Up || pingItem.Status == PingStatus.Down || pingItem.Status == PingStatus.Indeterminate)
+                        if (pingItem.Status == ProbeStatus.Up || pingItem.Status == ProbeStatus.Down || pingItem.Status == ProbeStatus.Indeterminate)
                         {
                             backgroundWorker.ReportProgress(
                                 0,
-                                new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Error });
+                                new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = ProbeStatus.Error });
                             if (ApplicationOptions.IsEmailAlertEnabled)
                                 SendEmail("error", pingItem.Hostname);
                         }
 
-                        pingItem.Status = PingStatus.Error;
+                        pingItem.Status = ProbeStatus.Error;
                         pingItem.PingResetEvent.Set();
                         pingItem.IsActive = false;
                         return;
@@ -353,7 +353,7 @@ namespace vmPing.Views
         public void backgroundThread_PerformTcpProbe(object sender, DoWorkEventArgs e)
         {
             var backgroundWorker = sender as BackgroundWorker;
-            var pingItem = e.Argument as PingItem;
+            var pingItem = e.Argument as Probe;
 
             var hostAndPort = pingItem.Hostname.Split(':');
             string hostname = hostAndPort[0];
@@ -373,7 +373,7 @@ namespace vmPing.Views
 
                 e.Cancel = true;
                 pingItem.PingResetEvent.Set();
-                pingItem.Status = PingStatus.Error;
+                pingItem.Status = ProbeStatus.Error;
                 pingItem.IsActive = false;
                 return;
             }
@@ -394,7 +394,7 @@ namespace vmPing.Views
                 {
                     Application.Current.Dispatcher.BeginInvoke(
                                 new Action(() => pingItem.AddHistory("Unable to resolve hostname.")));
-                    pingItem.Status = PingStatus.Error;
+                    pingItem.Status = ProbeStatus.Error;
                     pingItem.PingResetEvent.Set();
                     pingItem.IsActive = false;
                     return;
@@ -434,18 +434,18 @@ namespace vmPing.Views
                         }
 
                         // Check for status change.
-                        if (pingItem.Status == PingStatus.Down)
+                        if (pingItem.Status == ProbeStatus.Down)
                         {
                             backgroundWorker.ReportProgress(
                                 0,
-                                new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Up });
+                                new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = ProbeStatus.Up });
                             if (ApplicationOptions.IsEmailAlertEnabled)
                                 SendEmail("up", pingItem.Hostname);
                         }
 
                         pingItem.DownCount = 0;
                         ++pingItem.Statistics.PingsReceived;
-                        pingItem.Status = PingStatus.Up;
+                        pingItem.Status = ProbeStatus.Up;
                         isPortOpen = true;
                     }
                     catch (SocketException ex)
@@ -460,19 +460,19 @@ namespace vmPing.Views
                             return;
                         }
 
-                        if (pingItem.Status == PingStatus.Up)
-                            pingItem.Status = PingStatus.Indeterminate;
-                        if (pingItem.Status == PingStatus.Inactive)
-                            pingItem.Status = PingStatus.Down;
+                        if (pingItem.Status == ProbeStatus.Up)
+                            pingItem.Status = ProbeStatus.Indeterminate;
+                        if (pingItem.Status == ProbeStatus.Inactive)
+                            pingItem.Status = ProbeStatus.Down;
                         ++pingItem.DownCount;
 
                         // Check for status change.
-                        if (pingItem.Status == PingStatus.Indeterminate && pingItem.DownCount >= ApplicationOptions.AlertThreshold)
+                        if (pingItem.Status == ProbeStatus.Indeterminate && pingItem.DownCount >= ApplicationOptions.AlertThreshold)
                         {
-                            pingItem.Status = PingStatus.Down;
+                            pingItem.Status = ProbeStatus.Down;
                             backgroundWorker.ReportProgress(
                                 0,
-                                new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = PingStatus.Down });
+                                new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = ProbeStatus.Down });
                             if (ApplicationOptions.IsEmailAlertEnabled)
                                 SendEmail("down", pingItem.Hostname);
                         }
@@ -484,7 +484,7 @@ namespace vmPing.Views
                             Application.Current.Dispatcher.BeginInvoke(
                                 new Action(() => pingItem.AddHistory("Unable to resolve hostname.")));
 
-                            pingItem.Status = PingStatus.Error;
+                            pingItem.Status = ProbeStatus.Error;
                             pingItem.PingResetEvent.Set();
                             pingItem.IsActive = false;
                             return;
@@ -507,7 +507,7 @@ namespace vmPing.Views
         }
 
 
-        public void DisplayIcmpReply(PingItem pingItem)
+        public void DisplayIcmpReply(Probe pingItem)
         {
             if (pingItem.Reply == null)
                 return;
@@ -559,7 +559,7 @@ namespace vmPing.Views
         }
 
 
-        public void DisplayTcpReply(PingItem pingItem, bool isPortOpen, int portnumber, int errorCode, long elapsedTime)
+        public void DisplayTcpReply(Probe pingItem, bool isPortOpen, int portnumber, int errorCode, long elapsedTime)
         {
             if (pingItem.PingBackgroundWorker.CancellationPending)
                 return;
@@ -591,7 +591,7 @@ namespace vmPing.Views
         }
 
 
-        public void DisplayStatistics(PingItem pingItem)
+        public void DisplayStatistics(Probe pingItem)
         {
             // Update the ping statistics label with the current
             // number of pings sent, received, and lost.
@@ -612,7 +612,7 @@ namespace vmPing.Views
             if (e.Key == Key.Enter)
             {
                 var pingTB = sender as TextBox;
-                var pingItem = pingTB.DataContext as PingItem;
+                var pingItem = pingTB.DataContext as Probe;
                 PingStartStop(pingItem);
 
                 int index = _PingItems.IndexOf(pingItem);
@@ -634,7 +634,7 @@ namespace vmPing.Views
                 return;
 
             var pingButton = sender as Button;
-            var pingItem = pingButton.DataContext as PingItem;
+            var pingItem = pingButton.DataContext as Probe;
             if (pingItem.PingBackgroundWorker != null)
                 pingItem.PingBackgroundWorker.CancelAsync();
             _PingItems.Remove(pingItem);
@@ -764,7 +764,7 @@ namespace vmPing.Views
 
         private void AddMonitorExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            _PingItems.Add(new PingItem());
+            _PingItems.Add(new Probe());
         }
 
         
@@ -871,7 +871,7 @@ namespace vmPing.Views
                 menuItem.Click += (s, r) =>
                 {
                     var selectedMenuItem = s as MenuItem;
-                    var selectedAlias = (PingItem)selectedMenuItem.DataContext;
+                    var selectedAlias = (Probe)selectedMenuItem.DataContext;
                     selectedAlias.Hostname = _Aliases.FirstOrDefault(x => x.Value == selectedMenuItem.Header.ToString()).Key;
                     PingStartStop(selectedAlias);
                 };
@@ -994,7 +994,7 @@ namespace vmPing.Views
         private void ButtonIsolatedView_Click(object sender, RoutedEventArgs e)
         {
             var pingButton = sender as Button;
-            var pingItem = pingButton.DataContext as PingItem;
+            var pingItem = pingButton.DataContext as Probe;
             if (pingItem.IsolatedWindow == null || pingItem.IsolatedWindow.IsLoaded == false)
             {
                 var wnd = new IsolatedPingWindow(pingItem);
@@ -1009,7 +1009,7 @@ namespace vmPing.Views
         private void ButtonEditAlias_Click(object sender, RoutedEventArgs e)
         {
             var pingButton = sender as Button;
-            var pingItem = pingButton.DataContext as PingItem;
+            var pingItem = pingButton.DataContext as Probe;
 
             if (string.IsNullOrEmpty(pingItem.Hostname))
                 return;
@@ -1030,15 +1030,15 @@ namespace vmPing.Views
 
         private void mnuStatusHistory_Click(object sender, RoutedEventArgs e)
         {
-            if (PingItem.StatusWindow == null || PingItem.StatusWindow.IsLoaded == false)
+            if (Probe.StatusWindow == null || Probe.StatusWindow.IsLoaded == false)
             {
-                var wnd = new StatusHistoryWindow(PingItem.StatusChangeLog);
-                PingItem.StatusWindow = wnd;
+                var wnd = new StatusHistoryWindow(Probe.StatusChangeLog);
+                Probe.StatusWindow = wnd;
                 wnd.Show();
             }
-            else if (PingItem.StatusWindow.IsLoaded)
+            else if (Probe.StatusWindow.IsLoaded)
             {
-                PingItem.StatusWindow.Focus();
+                Probe.StatusWindow.Focus();
             }
         }
 

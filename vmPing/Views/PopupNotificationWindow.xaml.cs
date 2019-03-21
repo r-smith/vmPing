@@ -106,15 +106,15 @@ namespace vmPing.Views
 
         private void Maximize_Click(object sender, RoutedEventArgs e)
         {
-            if (PingItem.StatusWindow == null || PingItem.StatusWindow.IsLoaded == false)
+            if (Probe.StatusWindow == null || Probe.StatusWindow.IsLoaded == false)
             {
-                var wnd = new StatusHistoryWindow(PingItem.StatusChangeLog);
-                PingItem.StatusWindow = wnd;
+                var wnd = new StatusHistoryWindow(Probe.StatusChangeLog);
+                Probe.StatusWindow = wnd;
                 wnd.Show();
             }
-            else if (PingItem.StatusWindow.IsLoaded)
+            else if (Probe.StatusWindow.IsLoaded)
             {
-                PingItem.StatusWindow.Focus();
+                Probe.StatusWindow.Focus();
             }
 
             Close();

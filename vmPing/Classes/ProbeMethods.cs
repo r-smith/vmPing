@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -7,7 +6,6 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using vmPing.Views;
@@ -149,7 +147,7 @@ namespace vmPing.Classes
                                     0,
                                     new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = ProbeStatus.Up });
                                 if (ApplicationOptions.IsEmailAlertEnabled)
-                                    SendEmail("up", pingItem.Hostname);
+                                    Util.SendEmail("up", pingItem.Hostname);
                             }
 
                             pingItem.DownCount = 0;
@@ -173,7 +171,7 @@ namespace vmPing.Classes
                                     0,
                                     new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = ProbeStatus.Down });
                                 if (ApplicationOptions.IsEmailAlertEnabled)
-                                    SendEmail("down", pingItem.Hostname);
+                                    Util.SendEmail("down", pingItem.Hostname);
                             }
 
                             if (pingItem.Reply.Status == IPStatus.TimedOut ||
@@ -223,7 +221,7 @@ namespace vmPing.Classes
                                 0,
                                 new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = ProbeStatus.Error });
                             if (ApplicationOptions.IsEmailAlertEnabled)
-                                SendEmail("error", pingItem.Hostname);
+                                Util.SendEmail("error", pingItem.Hostname);
                         }
 
                         pingItem.Status = ProbeStatus.Error;
@@ -328,7 +326,7 @@ namespace vmPing.Classes
                                 0,
                                 new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = ProbeStatus.Up });
                             if (ApplicationOptions.IsEmailAlertEnabled)
-                                SendEmail("up", pingItem.Hostname);
+                                Util.SendEmail("up", pingItem.Hostname);
                         }
 
                         pingItem.DownCount = 0;
@@ -362,7 +360,7 @@ namespace vmPing.Classes
                                 0,
                                 new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = ProbeStatus.Down });
                             if (ApplicationOptions.IsEmailAlertEnabled)
-                                SendEmail("down", pingItem.Hostname);
+                                Util.SendEmail("down", pingItem.Hostname);
                         }
 
                         // If hostname cannot be resolved, report error and stop.
@@ -485,13 +483,6 @@ namespace vmPing.Classes
             // number of pings sent, received, and lost.
             pingItem.StatisticsText =
                 $"Sent: {pingItem.Statistics.PingsSent} Received: {pingItem.Statistics.PingsReceived} Lost: {pingItem.Statistics.PingsLost}";
-        }
-
-
-        // TODO:
-        private static void SendEmail(string var1, string var2)
-        {
-            return;
         }
     }
 }

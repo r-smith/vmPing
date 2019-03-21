@@ -6,14 +6,13 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Input;
 using vmPing.Classes;
 
 namespace vmPing.Views
 {
     /// <summary>
-    /// Interaction logic for TraceRouteWindow.xaml
+    /// TraceRouteWindow is a tool for performing a network traceroute to a given host.
     /// </summary>
     public partial class TraceRouteWindow : Window
     {
@@ -21,15 +20,12 @@ namespace vmPing.Views
 
         internal NetworkRoute Route { get => _route; set => _route = value; }
 
-        public TraceRouteWindow(bool alwaysOnTop)
+        public TraceRouteWindow()
         {
             InitializeComponent();
 
-            this.DataContext = _route;
+            DataContext = _route;
             dgTrace.ItemsSource = _route.networkRoute;
-
-            // Set window topmost attribute if specified in the application options.
-            this.Topmost = alwaysOnTop;
 
             // Set initial focus to text box.
             Loaded += (sender, e) =>

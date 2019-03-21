@@ -4,28 +4,24 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Input;
 using vmPing.Classes;
 
 namespace vmPing.Views
 {
     /// <summary>
-    /// Interaction logic for FloodHostWindow.xaml
+    /// FloodHostWindow is a tool for generating a high volume of traffic to a specific host.
     /// </summary>
     public partial class FloodHostWindow : Window
     {
         FloodHostNode _floodHost = new FloodHostNode();
 
 
-        public FloodHostWindow(bool alwaysOnTop)
+        public FloodHostWindow()
         {
             InitializeComponent();
 
-            this.DataContext = _floodHost;
-
-            // Set window topmost attribute if specified in the application options.
-            this.Topmost = alwaysOnTop;
+            DataContext = _floodHost;
 
             // Set initial focus to text box.
             Loaded += (sender, e) =>

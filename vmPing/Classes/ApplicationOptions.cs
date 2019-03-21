@@ -18,7 +18,6 @@ namespace vmPing.Classes
         public static int PingInterval { get; set; } = Constants.PING_INTERVAL;
         public static int PingTimeout { get; set; } = Constants.PING_TIMEOUT;
         public static int AlertThreshold { get; set; } = 2;
-        public static bool AlwaysOnTop { get; set; } = false;
         public static bool IsEmailAlertEnabled { get; set; } = false;
         public static bool IsEmailAuthenticationRequired { get; set; } = false;
         public static string EmailServer { get; set; }

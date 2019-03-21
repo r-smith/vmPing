@@ -62,6 +62,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\Alias.cs" />
     <Compile Include="Classes\ApplicationOptions.cs" />
+    <Compile Include="Classes\CommandLine.cs" />
     <Compile Include="Classes\Configuration.cs" />
     <Compile Include="Classes\Favorite.cs" />
     <Compile Include="Classes\StatusChangeLog.cs" />

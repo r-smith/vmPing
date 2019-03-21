@@ -25,10 +25,7 @@ namespace vmPing.Views
         private ObservableCollection<PingItem> _PingItems = new ObservableCollection<PingItem>();
         private Dictionary<string, string> _Aliases = new Dictionary<string, string>();
 
-        public static RoutedCommand AlwaysOnTopCommand = new RoutedCommand();
         public static RoutedCommand ProbeOptionsCommand = new RoutedCommand();
-        public static RoutedCommand LogOutputCommand = new RoutedCommand();
-        public static RoutedCommand EmailAlertsCommand = new RoutedCommand();
         public static RoutedCommand StartStopCommand = new RoutedCommand();
         public static RoutedCommand HelpCommand = new RoutedCommand();
         public static RoutedCommand NewInstanceCommand = new RoutedCommand();
@@ -51,7 +48,8 @@ namespace vmPing.Views
             LoadFavorites();
             LoadAliases();
             Configuration.LoadConfigurationOptions();
-            ParseCommandLineArguments();
+            CommandLine.ParseArguments();
+            AddHostMonitor(2);  // Temporary
 
             sliderColumns.Value = _PingItems.Count;
             icPingItems.ItemsSource = _PingItems;
@@ -89,87 +87,6 @@ namespace vmPing.Views
             TraceRouteMenu.Command = TraceRouteCommand;
             FloodHostMenu.Command = FloodHostCommand;
             AddMonitorMenu.Command = AddMonitorCommand;
-        }
-
-
-        private void ParseCommandLineArguments()
-        {
-            var commandLineArgs = Environment.GetCommandLineArgs();
-            var errorString = string.Empty;
-            var hostnameList = new List<string>();
-
-            for (var index = 1; index < commandLineArgs.Length; ++index)
-            {
-                int numValue;
-
-                switch (commandLineArgs[index].ToLower())
-                {
-                    case "/i":
-                    case "-i":
-                        if (index + 1 < commandLineArgs.Length &&
-                            int.TryParse(commandLineArgs[index + 1], out numValue) &&
-                            numValue > 0 && numValue <= 86400)
-                        {
-                            ApplicationOptions.PingInterval = numValue * 1000;
-                            ++index;
-                        }
-                        else
-                        {
-                            errorString += $"For switch -i you must specify the number of seconds between 1 and 86400.{Environment.NewLine}";
-                            break;
-                        }
-                        break;
-                    case "/w":
-                    case "-w":
-                        if (commandLineArgs.Length > index + 1 &&
-                            int.TryParse(commandLineArgs[index + 1], out numValue) &&
-                            numValue > 0 && numValue <= 60)
-                        {
-                            ApplicationOptions.PingTimeout = numValue * 1000;
-                            ++index;
-                        }
-                        else
-                        {
-                            errorString += $"For switch -w you must specify the number of seconds between 1 and 60.{Environment.NewLine}";
-                            break;
-                        }
-                        break;
-                    case "/?":
-                    case "-?":
-                    case "--help":
-                        MessageBox.Show(
-                            $"Command Line Usage:{Environment.NewLine}vmPing [-i interval] [-w timeout] [<target_host>...]",
-                            "vmPing Help",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Information);
-                        Application.Current.Shutdown();
-                        break;
-                    default:
-                        hostnameList.Add(commandLineArgs[index]);
-                        break;
-                }
-            }
-            if (errorString.Length > 0)
-            {
-                MessageBox.Show(
-                    $"{errorString}{Environment.NewLine}{Environment.NewLine}Command Line Usage:{Environment.NewLine}vmPing [-i interval] [-w timeout] [<target_host>...]",
-                    "vmPing Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-                Application.Current.Shutdown();
-            }
-
-            if (hostnameList.Count > 0)
-            {
-                AddHostMonitor(hostnameList.Count);
-                for (int i = 0; i < hostnameList.Count; ++i)
-                {
-                    _PingItems[i].Hostname = hostnameList[i].ToUpper();
-                    PingStartStop(_PingItems[i]);
-                }
-            }
-            else
-                AddHostMonitor(2);
         }
 
 

@@ -19,7 +19,7 @@ namespace vmPing.Classes
         Inactive
     }
 
-    public class Probe : INotifyPropertyChanged
+    public partial class Probe : INotifyPropertyChanged
     {
         public static int NumberOfActivePings;
         public static ObservableCollection<StatusChangeLog> StatusChangeLog = new ObservableCollection<StatusChangeLog>();
@@ -28,8 +28,8 @@ namespace vmPing.Classes
         public event PropertyChangedEventHandler PropertyChanged;
         public IsolatedPingWindow IsolatedWindow { get; set; }
         public int DownCount { get; set; }
-        public BackgroundWorker PingBackgroundWorker { get; set; }
-        public AutoResetEvent PingResetEvent { get; set; }
+        public BackgroundWorker Thread { get; set; }
+        public AutoResetEvent ThreadResetEvent { get; set; }
         public PingStatistics Statistics { get; set; }
         public PingReply Reply { get; set; }
         public Ping Sender { get; set; }
@@ -111,16 +111,16 @@ namespace vmPing.Classes
             }
         }
 
-        private string pingStatisticsText;
-        public string PingStatisticsText
+        private string statisticsText;
+        public string StatisticsText
         {
-            get => pingStatisticsText;
+            get => statisticsText;
             set
             {
-                if (value != pingStatisticsText)
+                if (value != statisticsText)
                 {
-                    pingStatisticsText = value;
-                    NotifyPropertyChanged("PingStatisticsText");
+                    statisticsText = value;
+                    NotifyPropertyChanged("StatisticsText");
                 }
             }
         }

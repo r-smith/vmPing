@@ -44,8 +44,8 @@ namespace vmPing.Views
             CommandLine.ParseArguments();
             AddProbe(2);  // Temporary
 
-            sliderColumns.Value = _ProbeCollection.Count;
-            icPingItems.ItemsSource = _ProbeCollection;
+            ColumnCount.Value = _ProbeCollection.Count;
+            ProbeItemsControl.ItemsSource = _ProbeCollection;
         }
 
 
@@ -90,7 +90,7 @@ namespace vmPing.Views
         }
 
 
-        public void btnPing_Click(object sender, EventArgs e)
+        public void ProbeStartStop_Click(object sender, EventArgs e)
         {
             Probe.StartStop((Probe)((Button)sender).DataContext);
         }
@@ -122,26 +122,24 @@ namespace vmPing.Views
         }
 
 
-        private void sliderColumns_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void ColumnCount_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (sliderColumns.Value > _ProbeCollection.Count)
-                sliderColumns.Value = _ProbeCollection.Count;
+            if (ColumnCount.Value > _ProbeCollection.Count)
+                ColumnCount.Value = _ProbeCollection.Count;
         }
 
 
-        private void tbHostname_KeyDown(object sender, KeyEventArgs e)
+        private void Hostname_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                var pingTB = sender as TextBox;
-                var pingItem = pingTB.DataContext as Probe;
-                Probe.StartStop(pingItem);
+                var probe = (sender as TextBox).DataContext as Probe;
+                Probe.StartStop(probe);
 
-                int index = _ProbeCollection.IndexOf(pingItem);
-                if (index < _ProbeCollection.Count - 1)
+                if (_ProbeCollection.IndexOf(probe) < _ProbeCollection.Count - 1)
                 {
-                    var cp = icPingItems.ItemContainerGenerator.ContainerFromIndex(index + 1) as ContentPresenter;
-                    var tb = (TextBox)cp.ContentTemplate.FindName("tbHostname", cp);
+                    var cp = ProbeItemsControl.ItemContainerGenerator.ContainerFromIndex(_ProbeCollection.IndexOf(probe) + 1) as ContentPresenter;
+                    var tb = (TextBox)cp.ContentTemplate.FindName("Hostname", cp);
 
                     if (tb != null)
                         tb.Focus();
@@ -150,18 +148,17 @@ namespace vmPing.Views
         }
 
 
-        private void btnRemove_Click(object sender, RoutedEventArgs e)
+        private void RemoveProbe_Click(object sender, RoutedEventArgs e)
         {
             if (_ProbeCollection.Count <= 1)
                 return;
 
-            var pingButton = sender as Button;
-            var pingItem = pingButton.DataContext as Probe;
-            if (pingItem.Thread != null)
-                pingItem.Thread.CancelAsync();
-            _ProbeCollection.Remove(pingItem);
-            if (sliderColumns.Value > _ProbeCollection.Count)
-                sliderColumns.Value = _ProbeCollection.Count;
+            var probe = (sender as Button).DataContext as Probe;
+            if (probe.Thread != null)
+                probe.Thread.CancelAsync();
+            _ProbeCollection.Remove(probe);
+            if (ColumnCount.Value > _ProbeCollection.Count)
+                ColumnCount.Value = _ProbeCollection.Count;
             RefreshGlobalStartStop();
         }
 
@@ -246,7 +243,7 @@ namespace vmPing.Views
         {
             if (OptionsWindow.openWindow == null)
             {
-                // Open a new options window.
+                // Open the options window.
                 new OptionsWindow().Show();
             }
             else
@@ -257,12 +254,12 @@ namespace vmPing.Views
         }
 
 
-        private void ClearAllPingItems()
+        private void RemoveAllProbes()
         {
-            foreach (var pingItem in _ProbeCollection)
+            foreach (var probe in _ProbeCollection)
             {
-                if (pingItem.Thread != null)
-                    pingItem.Thread.CancelAsync();
+                if (probe.Thread != null)
+                    probe.Thread.CancelAsync();
             }
             _ProbeCollection.Clear();
             RefreshGlobalStartStop();
@@ -270,20 +267,18 @@ namespace vmPing.Views
 
         private void LoadFavorites()
         {
-            var favoritesList = Favorite.GetFavoriteTitles();
-
             // Clear existing favorites menu.
             for (int i = mnuFavorites.Items.Count - 1; i > 2; --i)
                 mnuFavorites.Items.RemoveAt(i);
 
             // Load favorites.
-            foreach (var fav in favoritesList)
+            foreach (var fav in Favorite.GetFavoriteTitles())
             {
                 var menuItem = new MenuItem();
                 menuItem.Header = fav;
                 menuItem.Click += (s, r) =>
                 {
-                    ClearAllPingItems();
+                    RemoveAllProbes();
 
                     var selectedFavorite = s as MenuItem;
                     var favorite = Favorite.GetFavoriteContents(selectedFavorite.Header.ToString());
@@ -291,7 +286,7 @@ namespace vmPing.Views
                         AddProbe();
                     else
                     {
-                        AddProbe(favorite.Hostnames.Count);
+                        AddProbe(numberOfProbes: favorite.Hostnames.Count);
                         for (int i = 0; i < favorite.Hostnames.Count; ++i)
                         {
                             _ProbeCollection[i].Hostname = favorite.Hostnames[i].ToUpper();
@@ -299,7 +294,7 @@ namespace vmPing.Views
                         }
                     }
 
-                    sliderColumns.Value = favorite.ColumnCount;
+                    ColumnCount.Value = favorite.ColumnCount;
                 };
 
                 mnuFavorites.Items.Add(menuItem);
@@ -323,12 +318,11 @@ namespace vmPing.Views
                 mnuAliases.Items.Add(BuildAliasMenuItem(alias, false));
             }
 
-            foreach (var pingItem in _ProbeCollection)
+            foreach (var probe in _ProbeCollection)
             {
-                if (pingItem.Hostname != null && _Aliases.ContainsKey(pingItem.Hostname))
-                    pingItem.Alias = _Aliases[pingItem.Hostname];
-                else
-                    pingItem.Alias = string.Empty;
+                probe.Alias = probe.Hostname != null && _Aliases.ContainsKey(probe.Hostname)
+                    ? _Aliases[probe.Hostname]
+                    : string.Empty;
             }
         }
 
@@ -393,18 +387,14 @@ namespace vmPing.Views
 
             if (!haveAnyHostnamesBeenEntered)
             {
-                var dialogWindow = new DialogWindow(
-                    DialogWindow.DialogIcon.Warning,
-                    "Error",
-                    $"You have not entered any hostnames.  Please setup vmPing with the hosts you would like to save as a favorite set.",
-                    "OK",
-                    false);
-                dialogWindow.Owner = this;
-                dialogWindow.ShowDialog();
+                var errorWindow = DialogWindow.ErrorWindow(
+                    $"You have not entered any hostnames.  Please setup vmPing with the hosts you would like to save as a favorite set.");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
                 return;
             }
 
-            var addToFavoritesWindow = new NewFavoriteWindow(currentHostList, (int)sliderColumns.Value);
+            var addToFavoritesWindow = new NewFavoriteWindow(currentHostList, (int)ColumnCount.Value);
             addToFavoritesWindow.Owner = this;
             if (addToFavoritesWindow.ShowDialog() == true)
             {
@@ -414,27 +404,35 @@ namespace vmPing.Views
 
         private void mnuManageFavorites_Click(object sender, RoutedEventArgs e)
         {
-            if (ManageFavoritesWindow.openWindow != null)
-                ManageFavoritesWindow.openWindow.Activate();
-            else
+            if (ManageFavoritesWindow.openWindow == null)
             {
+                // Open the favorites window.
                 var manageFavoritesWindow = new ManageFavoritesWindow();
                 manageFavoritesWindow.Owner = this;
                 manageFavoritesWindow.ShowDialog();
                 LoadFavorites();
             }
+            else
+            {
+                // Favorites window is already open.  Activate it.
+                ManageFavoritesWindow.openWindow.Activate();
+            }
         }
 
         private void mnuManageAliases_Click(object sender, RoutedEventArgs e)
         {
-            if (ManageAliasesWindow.openWindow != null)
-                ManageAliasesWindow.openWindow.Activate();
-            else
+            if (ManageAliasesWindow.openWindow == null)
             {
+                // Open the aliases window.
                 var manageAliasesWindow = new ManageAliasesWindow();
                 manageAliasesWindow.Owner = this;
                 manageAliasesWindow.ShowDialog();
                 LoadAliases();
+            }
+            else
+            {
+                // Aliases window is already open.  Activate it.
+                ManageAliasesWindow.openWindow.Activate();
             }
         }
 
@@ -462,35 +460,32 @@ namespace vmPing.Views
             }
         }
 
-        private void ButtonIsolatedView_Click(object sender, RoutedEventArgs e)
+        private void IsolatedView_Click(object sender, RoutedEventArgs e)
         {
-            var pingButton = sender as Button;
-            var pingItem = pingButton.DataContext as Probe;
-            if (pingItem.IsolatedWindow == null || pingItem.IsolatedWindow.IsLoaded == false)
+            var probe = (sender as Button).DataContext as Probe;
+            if (probe.IsolatedWindow == null || probe.IsolatedWindow.IsLoaded == false)
             {
-                var wnd = new IsolatedPingWindow(pingItem);
-                wnd.Show();
+                new IsolatedPingWindow(probe).Show();
             }
-            else if (pingItem.IsolatedWindow.IsLoaded)
+            else if (probe.IsolatedWindow.IsLoaded)
             {
-                pingItem.IsolatedWindow.Focus();
+                probe.IsolatedWindow.Focus();
             }
         }
 
-        private void ButtonEditAlias_Click(object sender, RoutedEventArgs e)
+        private void EditAlias_Click(object sender, RoutedEventArgs e)
         {
-            var pingButton = sender as Button;
-            var pingItem = pingButton.DataContext as Probe;
+            var probe = (sender as Button).DataContext as Probe;
 
-            if (string.IsNullOrEmpty(pingItem.Hostname))
+            if (string.IsNullOrEmpty(probe.Hostname))
                 return;
 
-            if (_Aliases.ContainsKey(pingItem.Hostname))
-                pingItem.Alias = _Aliases[pingItem.Hostname];
+            if (_Aliases.ContainsKey(probe.Hostname))
+                probe.Alias = _Aliases[probe.Hostname];
             else
-                pingItem.Alias = string.Empty;
+                probe.Alias = string.Empty;
 
-            var wnd = new EditAliasWindow(pingItem);
+            var wnd = new EditAliasWindow(probe);
             wnd.Owner = this;
 
             if (wnd.ShowDialog() == true)
@@ -513,7 +508,7 @@ namespace vmPing.Views
             }
         }
 
-        private void tbHostname_Loaded(object sender, RoutedEventArgs e)
+        private void Hostname_Loaded(object sender, RoutedEventArgs e)
         {
             // Set focus to textbox on newly added monitors.  If the hostname field is blank for any existing monitors, do not change focus.
             for (int i = 0; i < _ProbeCollection.Count - 1; ++i)
@@ -521,8 +516,7 @@ namespace vmPing.Views
                 if (string.IsNullOrEmpty(_ProbeCollection[i].Hostname))
                     return;
             }
-            var tb = (TextBox)sender;
-            tb.Focus();
+            ((TextBox)sender).Focus();
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -530,8 +524,8 @@ namespace vmPing.Views
             // Set initial focus first text box.
             if (_ProbeCollection.Count > 0)
             {
-                var cp = icPingItems.ItemContainerGenerator.ContainerFromIndex(0) as ContentPresenter;
-                var tb = (TextBox)cp.ContentTemplate.FindName("tbHostname", cp);
+                var cp = ProbeItemsControl.ItemContainerGenerator.ContainerFromIndex(0) as ContentPresenter;
+                var tb = (TextBox)cp.ContentTemplate.FindName("Hostname", cp);
 
                 if (tb != null)
                     tb.Focus();

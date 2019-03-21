@@ -101,13 +101,13 @@
                 </MenuItem.Icon>
                 <!-- Columns slider -->
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="{Binding ElementName=sliderColumns, Path=Value}"
+                    <Label Content="{Binding ElementName=ColumnCount, Path=Value}"
                            Margin="0,0,15,0"
                            Width="30"
                            HorizontalContentAlignment="Center"
                            VerticalContentAlignment="Center"
                            />
-                    <Slider Name="sliderColumns"
+                    <Slider Name="ColumnCount"
                             Minimum="1" Maximum="10"
                             Value="3"
                             TickFrequency="1" SmallChange="1"
@@ -116,7 +116,7 @@
                             Width="200"
                             Foreground="Gray"
                             Margin="0,5"
-                            ValueChanged="sliderColumns_ValueChanged"
+                            ValueChanged="ColumnCount_ValueChanged"
                             />
                 </StackPanel>
             </MenuItem>
@@ -210,7 +210,7 @@
 
 
         <!-- Items Control -->
-        <ItemsControl Name="icPingItems" IsTabStop="False" Focusable="False" BorderThickness="0,1,0,0" BorderBrush="#111" Margin="0,0,-2,-2">
+        <ItemsControl Name="ProbeItemsControl" IsTabStop="False" Focusable="False" BorderThickness="0,1,0,0" BorderBrush="#111" Margin="0,0,-2,-2">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="#111" BorderThickness="0,0,2,2" Margin="0,0,0,0" SnapsToDevicePixels="True" CornerRadius="0"
@@ -268,7 +268,7 @@
                                             ToolTip="Close"
                                             ToolTipService.InitialShowDelay="1500"
                                             ToolTipService.ShowDuration="2000"
-                                            Click="btnRemove_Click">
+                                            Click="RemoveProbe_Click">
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
                                                 <Border Name="controlButton_border"
@@ -316,7 +316,7 @@
                                             ToolTip="Open isolated view"
                                             ToolTipService.InitialShowDelay="1500"
                                             ToolTipService.ShowDuration="2000"
-                                            Click="ButtonIsolatedView_Click">
+                                            Click="IsolatedView_Click">
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
                                                 <Border Name="controlButton_border"
@@ -364,7 +364,7 @@
                                             ToolTip="Edit alias"
                                             ToolTipService.InitialShowDelay="1500"
                                             ToolTipService.ShowDuration="2000"
-                                            Click="ButtonEditAlias_Click"
+                                            Click="EditAlias_Click"
                                             >
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
@@ -486,7 +486,7 @@
                                 </TextBlock>
 
                                 <!-- Hostname textbox -->
-                                <TextBox Name="tbHostname"
+                                <TextBox Name="Hostname"
                                          Grid.Column="1"
                                          FontWeight="SemiBold"
                                          FontSize="{Binding ElementName=lbHistory, Path=ActualWidth, Converter={StaticResource HostnameFontsizeConverter}}"
@@ -499,12 +499,11 @@
                                          Text="{Binding Hostname, UpdateSourceTrigger=PropertyChanged}"
                                          IsEnabled="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}"
                                          Template="{StaticResource TextBoxBaseControlTemplatez}"
-                                         Loaded="tbHostname_Loaded"
-                                         KeyDown="tbHostname_KeyDown" />
+                                         Loaded="Hostname_Loaded"
+                                         KeyDown="Hostname_KeyDown" />
 
                                 <!-- Ping button -->
-                                <Button Name="btnPing"
-                                        Click="btnPing_Click"
+                                <Button Click="ProbeStartStop_Click"
                                         Grid.Column="2"
                                         FontSize="14"
                                         Padding="0,2"
@@ -548,7 +547,7 @@
 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="{Binding ElementName=sliderColumns, Path=Value}" />
+                    <UniformGrid Columns="{Binding ElementName=ColumnCount, Path=Value}" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

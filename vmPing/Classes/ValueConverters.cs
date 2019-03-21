@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -87,7 +86,7 @@ namespace vmPing.Classes
         }
     }
 
-    public class PingStatusToBackgroundBrushConverter : IValueConverter
+    public class ProbeStatusToBackgroundBrushConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -112,7 +111,7 @@ namespace vmPing.Classes
         }
     }
 
-    public class PingStatusToForegroundBrushConverter : IValueConverter
+    public class ProbeStatusToForegroundBrushConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -137,7 +136,7 @@ namespace vmPing.Classes
         }
     }
 
-    public class PingStatusToStatisticsBrushConverter : IValueConverter
+    public class ProbeStatusToStatisticsBrushConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -162,7 +161,7 @@ namespace vmPing.Classes
         }
     }
 
-    public class PingStatusToAliasBrushConverter : IValueConverter
+    public class ProbeStatusToAliasBrushConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -248,7 +247,7 @@ namespace vmPing.Classes
         }
     }
 
-    public class PingStatusToGlyphConverter : IValueConverter
+    public class ProbeStatusToGlyphConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

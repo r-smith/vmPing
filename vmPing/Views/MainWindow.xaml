@@ -14,13 +14,13 @@
         <classes:BooleanToImageConverter x:Key="BooleanToImageConverter" />
         <classes:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
         <classes:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="Ping" TrueValue="Stop" />
-        <classes:PingStatusToBackgroundBrushConverter x:Key="PingStatusToBackgroundBrushConverter" />
-        <classes:PingStatusToForegroundBrushConverter x:Key="PingStatusToForegroundBrushConverter" />
-        <classes:PingStatusToStatisticsBrushConverter x:Key="PingStatusToStatisticsBrushConverter" />
-        <classes:PingStatusToAliasBrushConverter x:Key="PingStatusToAliasBrushConverter" />
+        <classes:ProbeStatusToBackgroundBrushConverter x:Key="ProbeStatusToBackgroundBrushConverter" />
+        <classes:ProbeStatusToForegroundBrushConverter x:Key="ProbeStatusToForegroundBrushConverter" />
+        <classes:ProbeStatusToStatisticsBrushConverter x:Key="ProbeStatusToStatisticsBrushConverter" />
+        <classes:ProbeStatusToAliasBrushConverter x:Key="ProbeStatusToAliasBrushConverter" />
+        <classes:ProbeStatusToGlyphConverter x:Key="ProbeStatusToGlyphConverter" />
         <classes:HostnameFontsizeConverter x:Key="HostnameFontsizeConverter" />
         <classes:ButtonTextVisibilityConverter x:Key="ButtonTextVisibilityConverter" />
-        <classes:PingStatusToGlyphConverter x:Key="PingStatusToGlyphConverter" />
 
         <!-- Style for hostname textbox -->
         <ControlTemplate x:Key="TextBoxBaseControlTemplatez" TargetType="{x:Type TextBoxBase}">
@@ -214,7 +214,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="#111" BorderThickness="0,0,2,2" Margin="0,0,0,0" SnapsToDevicePixels="True" CornerRadius="0"
-                            Background="{Binding Status, Converter={StaticResource PingStatusToBackgroundBrushConverter}}">
+                            Background="{Binding Status, Converter={StaticResource ProbeStatusToBackgroundBrushConverter}}">
                         <Grid Name="gridItemsControl">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
@@ -255,7 +255,7 @@
                                            Padding="5,0,0,0"
                                            Margin="0"
                                            FontWeight="SemiBold"
-                                           Foreground="{Binding Status, Converter={StaticResource PingStatusToAliasBrushConverter}}">
+                                           Foreground="{Binding Status, Converter={StaticResource ProbeStatusToAliasBrushConverter}}">
                                     </Label>
 
                                     <!-- Button: Delete / Remove -->
@@ -411,7 +411,7 @@
                                        Width="{Binding ElementName=lbHistory, Path=ActualWidth}"
                                        Content="{Binding PingStatisticsText, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
                                        Background="Transparent"
-                                       Foreground="{Binding Status, Converter={StaticResource PingStatusToStatisticsBrushConverter}}"
+                                       Foreground="{Binding Status, Converter={StaticResource ProbeStatusToStatisticsBrushConverter}}"
                                        FontFamily="Segoe UI" FontSize="12" FontWeight="Bold"
                                        Padding="8,0,0,3">
                                     <Label.Triggers>
@@ -431,7 +431,7 @@
                                 <ListBox Name="lbHistory"
                                          BorderThickness="0"
                                          Background="Transparent"
-                                         Foreground="{Binding Status, Converter={StaticResource PingStatusToForegroundBrushConverter}}"
+                                         Foreground="{Binding Status, Converter={StaticResource ProbeStatusToForegroundBrushConverter}}"
                                          ItemsSource="{Binding History}"
                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                          IsTabStop="False"
@@ -477,7 +477,7 @@
 
                                 <!-- Status glyph -->
                                 <TextBlock Grid.Column="0"
-                                           Text="{Binding Status, Converter={StaticResource PingStatusToGlyphConverter}}"
+                                           Text="{Binding Status, Converter={StaticResource ProbeStatusToGlyphConverter}}"
                                            FontSize="14"
                                            FontFamily="Marlett"
                                            VerticalAlignment="Center"

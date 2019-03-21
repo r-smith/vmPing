@@ -11,14 +11,14 @@
     <Window.Resources>
         <!-- Value converters -->
         <classes:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        <classes:PingStatusToBackgroundBrushConverter x:Key="PingStatusToBackgroundBrushConverter" />
-        <classes:PingStatusToForegroundBrushConverter x:Key="PingStatusToForegroundBrushConverter" />
-        <classes:PingStatusToStatisticsBrushConverter x:Key="PingStatusToStatisticsBrushConverter" />
+        <classes:ProbeStatusToBackgroundBrushConverter x:Key="ProbeStatusToBackgroundBrushConverter" />
+        <classes:ProbeStatusToForegroundBrushConverter x:Key="ProbeStatusToForegroundBrushConverter" />
+        <classes:ProbeStatusToStatisticsBrushConverter x:Key="ProbeStatusToStatisticsBrushConverter" />
     </Window.Resources>
 
     <!-- Items Control -->
     <Border BorderBrush="#111" BorderThickness="0,1,0,0" Margin="0,0,0,0" SnapsToDevicePixels="True" CornerRadius="0"
-            Background="{Binding Status, Converter={StaticResource PingStatusToBackgroundBrushConverter}}">
+            Background="{Binding Status, Converter={StaticResource ProbeStatusToBackgroundBrushConverter}}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -35,7 +35,7 @@
                        Width="{Binding ElementName=lbHistory, Path=ActualWidth}"
                        Content="{Binding PingStatisticsText, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
                        Background="Transparent"
-                       Foreground="{Binding Status, Converter={StaticResource PingStatusToStatisticsBrushConverter}}"
+                       Foreground="{Binding Status, Converter={StaticResource ProbeStatusToStatisticsBrushConverter}}"
                        FontFamily="Segoe UI" FontSize="12" FontWeight="Bold"
                        Padding="8,0,0,3">
                     <Label.Triggers>
@@ -55,7 +55,7 @@
                 <ListBox Name="lbHistory"
                          BorderThickness="0"
                          Background="Transparent"
-                         Foreground="{Binding Status, Converter={StaticResource PingStatusToForegroundBrushConverter}}"
+                         Foreground="{Binding Status, Converter={StaticResource ProbeStatusToForegroundBrushConverter}}"
                          ItemsSource="{Binding History}"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          IsTabStop="False"

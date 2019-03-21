@@ -22,8 +22,8 @@ namespace vmPing.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ObservableCollection<PingItem> _pingItems = new ObservableCollection<PingItem>();
-        private Dictionary<string, string> Aliases = new Dictionary<string, string>();
+        private ObservableCollection<PingItem> _PingItems = new ObservableCollection<PingItem>();
+        private Dictionary<string, string> _Aliases = new Dictionary<string, string>();
 
         public static RoutedCommand AlwaysOnTopCommand = new RoutedCommand();
         public static RoutedCommand ProbeOptionsCommand = new RoutedCommand();
@@ -53,17 +53,14 @@ namespace vmPing.Views
             Configuration.LoadConfigurationOptions();
             ParseCommandLineArguments();
 
-            sliderColumns.Value = _pingItems.Count;
-            icPingItems.ItemsSource = _pingItems;
+            sliderColumns.Value = _PingItems.Count;
+            icPingItems.ItemsSource = _PingItems;
         }
 
 
         private void InitializeCommandBindings()
         {
-            CommandBindings.Add(new CommandBinding(AlwaysOnTopCommand, AlwaysOnTopExecute));
             CommandBindings.Add(new CommandBinding(ProbeOptionsCommand, ProbeOptionsExecute));
-            CommandBindings.Add(new CommandBinding(LogOutputCommand, LogOutputExecute));
-            CommandBindings.Add(new CommandBinding(EmailAlertsCommand, EmailAlertsExecute));
             CommandBindings.Add(new CommandBinding(StartStopCommand, StartStopExecute));
             CommandBindings.Add(new CommandBinding(HelpCommand, HelpExecute));
             CommandBindings.Add(new CommandBinding(NewInstanceCommand, NewInstanceExecute));
@@ -71,20 +68,14 @@ namespace vmPing.Views
             CommandBindings.Add(new CommandBinding(FloodHostCommand, FloodHostExecute));
             CommandBindings.Add(new CommandBinding(AddMonitorCommand, AddMonitorExecute));
 
-            var kgAlwaysOnTop = new KeyGesture(Key.F9);
             var kgProbeOptions = new KeyGesture(Key.F10);
-            var kgLogOutput = new KeyGesture(Key.F11);
-            var kgEmailAlerts = new KeyGesture(Key.F12);
             var kgStartStop = new KeyGesture(Key.F5);
             var kgHelp = new KeyGesture(Key.F1);
             var kgNewInstance = new KeyGesture(Key.N, ModifierKeys.Control);
             var kgTraceRoute = new KeyGesture(Key.T, ModifierKeys.Control);
             var kgFloodHost = new KeyGesture(Key.F, ModifierKeys.Control);
             var kgAddMonitor = new KeyGesture(Key.A, ModifierKeys.Control);
-            InputBindings.Add(new InputBinding(AlwaysOnTopCommand, kgAlwaysOnTop));
             InputBindings.Add(new InputBinding(ProbeOptionsCommand, kgProbeOptions));
-            InputBindings.Add(new InputBinding(LogOutputCommand, kgLogOutput));
-            InputBindings.Add(new InputBinding(EmailAlertsCommand, kgEmailAlerts));
             InputBindings.Add(new InputBinding(StartStopCommand, kgStartStop));
             InputBindings.Add(new InputBinding(HelpCommand, kgHelp));
             InputBindings.Add(new InputBinding(NewInstanceCommand, kgNewInstance));
@@ -173,8 +164,8 @@ namespace vmPing.Views
                 AddHostMonitor(hostnameList.Count);
                 for (int i = 0; i < hostnameList.Count; ++i)
                 {
-                    _pingItems[i].Hostname = hostnameList[i].ToUpper();
-                    PingStartStop(_pingItems[i]);
+                    _PingItems[i].Hostname = hostnameList[i].ToUpper();
+                    PingStartStop(_PingItems[i]);
                 }
             }
             else
@@ -185,7 +176,7 @@ namespace vmPing.Views
         public void AddHostMonitor(int numberOfHostMonitors)
         {
             for (; numberOfHostMonitors > 0; --numberOfHostMonitors)
-                _pingItems.Add(new PingItem());
+                _PingItems.Add(new PingItem());
         }
 
 
@@ -206,8 +197,8 @@ namespace vmPing.Views
                 if (pingItem.PingBackgroundWorker != null)
                     pingItem.PingBackgroundWorker.CancelAsync();
 
-                if (pingItem.Hostname != null && Aliases.ContainsKey(pingItem.Hostname))
-                    pingItem.Alias = Aliases[pingItem.Hostname];
+                if (pingItem.Hostname != null && _Aliases.ContainsKey(pingItem.Hostname))
+                    pingItem.Alias = _Aliases[pingItem.Hostname];
 
                 pingItem.PingStatisticsText = string.Empty;
                 pingItem.History = new ObservableCollection<string>();
@@ -275,7 +266,7 @@ namespace vmPing.Views
         {
             // Check if any pings are in progress and update the start/stop all toggle accordingly.
             bool isActive = false;
-            foreach (PingItem pingItem in _pingItems)
+            foreach (PingItem pingItem in _PingItems)
             {
                 if (pingItem.IsActive)
                 {
@@ -694,8 +685,8 @@ namespace vmPing.Views
 
         private void sliderColumns_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (sliderColumns.Value > _pingItems.Count)
-                sliderColumns.Value = _pingItems.Count;
+            if (sliderColumns.Value > _PingItems.Count)
+                sliderColumns.Value = _PingItems.Count;
         }
 
 
@@ -707,8 +698,8 @@ namespace vmPing.Views
                 var pingItem = pingTB.DataContext as PingItem;
                 PingStartStop(pingItem);
 
-                int index = _pingItems.IndexOf(pingItem);
-                if (index < _pingItems.Count - 1)
+                int index = _PingItems.IndexOf(pingItem);
+                if (index < _PingItems.Count - 1)
                 {
                     var cp = icPingItems.ItemContainerGenerator.ContainerFromIndex(index + 1) as ContentPresenter;
                     var tb = (TextBox)cp.ContentTemplate.FindName("tbHostname", cp);
@@ -722,16 +713,16 @@ namespace vmPing.Views
 
         private void btnRemove_Click(object sender, RoutedEventArgs e)
         {
-            if (_pingItems.Count <= 1)
+            if (_PingItems.Count <= 1)
                 return;
 
             var pingButton = sender as Button;
             var pingItem = pingButton.DataContext as PingItem;
             if (pingItem.PingBackgroundWorker != null)
                 pingItem.PingBackgroundWorker.CancelAsync();
-            _pingItems.Remove(pingItem);
-            if (sliderColumns.Value > _pingItems.Count)
-                sliderColumns.Value = _pingItems.Count;
+            _PingItems.Remove(pingItem);
+            if (sliderColumns.Value > _PingItems.Count)
+                sliderColumns.Value = _PingItems.Count;
             RefreshGlobalStartStop();
         }
 
@@ -790,26 +781,10 @@ namespace vmPing.Views
             }
         }
 
-
-        private void AlwaysOnTopExecute(object sender, ExecutedRoutedEventArgs e)
-        {
-            //mnuOnTop.IsChecked = !mnuOnTop.IsChecked;
-            //ToggleAlwaysOnTop();
-        }
-
+        
         private void ProbeOptionsExecute(object sender, ExecutedRoutedEventArgs e)
         {
             DisplayProbeOptions();
-        }
-
-        private void LogOutputExecute(object sender, ExecutedRoutedEventArgs e)
-        {
-            DisplayLogOutput();
-        }
-
-        private void EmailAlertsExecute(object sender, ExecutedRoutedEventArgs e)
-        {
-            DisplayEmailAlerts();
         }
 
 
@@ -817,7 +792,7 @@ namespace vmPing.Views
         {
             string toggleStatus = StartStopMenuHeader.Text;
 
-            foreach (var pingItem in _pingItems)
+            foreach (var pingItem in _PingItems)
             {
                 if (toggleStatus == "_Stop All (F5)" && pingItem.IsActive)
                     PingStartStop(pingItem);
@@ -872,90 +847,15 @@ namespace vmPing.Views
 
         private void AddMonitorExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            _pingItems.Add(new PingItem());
+            _PingItems.Add(new PingItem());
         }
 
-
-        private void mnuOnTop_Click(object sender, RoutedEventArgs e)
-        {
-            ToggleAlwaysOnTop();
-        }
-
-        private void mnuEmailAlerts_Click(object sender, RoutedEventArgs e)
-        {
-            DisplayEmailAlerts();
-        }
-
-        private void mnuLogOutput_Click(object sender, RoutedEventArgs e)
-        {
-            DisplayLogOutput();
-        }
-
+        
         private void mnuProbeOptions_Click(object sender, RoutedEventArgs e)
         {
             DisplayProbeOptions();
         }
 
-
-        private void ToggleAlwaysOnTop()
-        {
-            //ApplicationOptions.AlwaysOnTop = mnuOnTop.IsChecked;
-
-            //foreach (Window window in Application.Current.Windows)
-            //    window.Topmost = ApplicationOptions.AlwaysOnTop;
-        }
-
-
-        private void DisplayEmailAlerts()
-        {
-            //if (ApplicationOptions.IsEmailAlertEnabled)
-            //{
-            //    mnuEmailAlerts.IsChecked = false;
-            //    ApplicationOptions.IsEmailAlertEnabled = false;
-            //    return;
-            //}
-
-            //// Display email alerts window
-            //ApplicationOptions.BlurWindows();
-            //var emailAlertWindow = new EmailAlertWindow();
-            //emailAlertWindow.Owner = this;
-
-            //emailAlertWindow.ShowDialog();
-            //mnuEmailAlerts.IsChecked = ApplicationOptions.IsEmailAlertEnabled;
-
-            //ApplicationOptions.RemoveBlurWindows();
-        }
-
-
-        private void DisplayLogOutput()
-        {
-            //if (ApplicationOptions.IsLogOutputEnabled)
-            //{
-            //    mnuLogOutput.IsChecked = false;
-            //    ApplicationOptions.IsLogOutputEnabled = false;
-            //    return;
-            //}
-
-
-            //// Display folder browse dialog box.
-            //ApplicationOptions.BlurWindows();
-            //var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            //dialog.Description = "Select a location for the log files.";
-            //System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-
-            //if (result == System.Windows.Forms.DialogResult.OK)
-            //{
-            //    ApplicationOptions.LogPath = dialog.SelectedPath;
-            //    ApplicationOptions.IsLogOutputEnabled = true;
-            //}
-            //else
-            //{
-            //    ApplicationOptions.IsLogOutputEnabled = false;
-            //}
-            //mnuLogOutput.IsChecked = ApplicationOptions.IsLogOutputEnabled;
-
-            //ApplicationOptions.RemoveBlurWindows();
-        }
 
         private void DisplayProbeOptions()
         {
@@ -971,12 +871,12 @@ namespace vmPing.Views
 
         private void ClearAllPingItems()
         {
-            foreach (var pingItem in _pingItems)
+            foreach (var pingItem in _PingItems)
             {
                 if (pingItem.PingBackgroundWorker != null)
                     pingItem.PingBackgroundWorker.CancelAsync();
             }
-            _pingItems.Clear();
+            _PingItems.Clear();
             RefreshGlobalStartStop();
         }
 
@@ -1006,8 +906,8 @@ namespace vmPing.Views
                         AddHostMonitor(favorite.Hostnames.Count);
                         for (int i = 0; i < favorite.Hostnames.Count; ++i)
                         {
-                            _pingItems[i].Hostname = favorite.Hostnames[i].ToUpper();
-                            PingStartStop(_pingItems[i]);
+                            _PingItems[i].Hostname = favorite.Hostnames[i].ToUpper();
+                            PingStartStop(_PingItems[i]);
                         }
                     }
 
@@ -1021,8 +921,8 @@ namespace vmPing.Views
 
         private void LoadAliases()
         {
-            Aliases = Alias.GetAliases();
-            var aliasList = Aliases.ToList();
+            _Aliases = Alias.GetAliases();
+            var aliasList = _Aliases.ToList();
             aliasList.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
             
             // Clear existing aliases menu.
@@ -1035,10 +935,10 @@ namespace vmPing.Views
                 mnuAliases.Items.Add(BuildAliasMenuItem(alias, false));
             }
 
-            foreach (var pingItem in _pingItems)
+            foreach (var pingItem in _PingItems)
             {
-                if (pingItem.Hostname != null && Aliases.ContainsKey(pingItem.Hostname))
-                    pingItem.Alias = Aliases[pingItem.Hostname];
+                if (pingItem.Hostname != null && _Aliases.ContainsKey(pingItem.Hostname))
+                    pingItem.Alias = _Aliases[pingItem.Hostname];
                 else
                     pingItem.Alias = string.Empty;
             }
@@ -1055,7 +955,7 @@ namespace vmPing.Views
                 {
                     var selectedMenuItem = s as MenuItem;
                     var selectedAlias = (PingItem)selectedMenuItem.DataContext;
-                    selectedAlias.Hostname = Aliases.FirstOrDefault(x => x.Value == selectedMenuItem.Header.ToString()).Key;
+                    selectedAlias.Hostname = _Aliases.FirstOrDefault(x => x.Value == selectedMenuItem.Header.ToString()).Key;
                     PingStartStop(selectedAlias);
                 };
             }
@@ -1066,12 +966,12 @@ namespace vmPing.Views
                     var selectedAlias = s as MenuItem;
 
                     var didFindEmptyHost = false;
-                    for (int i = 0; i < _pingItems.Count; ++i)
+                    for (int i = 0; i < _PingItems.Count; ++i)
                     {
-                        if (string.IsNullOrWhiteSpace(_pingItems[i].Hostname))
+                        if (string.IsNullOrWhiteSpace(_PingItems[i].Hostname))
                         {
-                            _pingItems[i].Hostname = Aliases.FirstOrDefault(x => x.Value == selectedAlias.Header.ToString()).Key;
-                            PingStartStop(_pingItems[i]);
+                            _PingItems[i].Hostname = _Aliases.FirstOrDefault(x => x.Value == selectedAlias.Header.ToString()).Key;
+                            PingStartStop(_PingItems[i]);
                             didFindEmptyHost = true;
                             break;
                         }
@@ -1080,8 +980,8 @@ namespace vmPing.Views
                     if (!didFindEmptyHost)
                     {
                         AddHostMonitor(1);
-                        _pingItems[_pingItems.Count - 1].Hostname = Aliases.FirstOrDefault(x => x.Value == selectedAlias.Header.ToString()).Key;
-                        PingStartStop(_pingItems[_pingItems.Count - 1]);
+                        _PingItems[_PingItems.Count - 1].Hostname = _Aliases.FirstOrDefault(x => x.Value == selectedAlias.Header.ToString()).Key;
+                        PingStartStop(_PingItems[_PingItems.Count - 1]);
                     }
                 };
             }
@@ -1096,10 +996,10 @@ namespace vmPing.Views
             var currentHostList = new List<string>();
             var haveAnyHostnamesBeenEntered = false;
 
-            for (int i = 0; i < _pingItems.Count; ++i)
+            for (int i = 0; i < _PingItems.Count; ++i)
             {
-                currentHostList.Add(_pingItems[i].Hostname);
-                if (!string.IsNullOrWhiteSpace(_pingItems[i].Hostname))
+                currentHostList.Add(_PingItems[i].Hostname);
+                if (!string.IsNullOrWhiteSpace(_PingItems[i].Hostname))
                     haveAnyHostnamesBeenEntered = true;
             }
 
@@ -1197,8 +1097,8 @@ namespace vmPing.Views
             if (string.IsNullOrEmpty(pingItem.Hostname))
                 return;
 
-            if (Aliases.ContainsKey(pingItem.Hostname))
-                pingItem.Alias = Aliases[pingItem.Hostname];
+            if (_Aliases.ContainsKey(pingItem.Hostname))
+                pingItem.Alias = _Aliases[pingItem.Hostname];
             else
                 pingItem.Alias = string.Empty;
 
@@ -1228,9 +1128,9 @@ namespace vmPing.Views
         private void tbHostname_Loaded(object sender, RoutedEventArgs e)
         {
             // Set focus to textbox on newly added monitors.  If the hostname field is blank for any existing monitors, do not change focus.
-            for (int i = 0; i < _pingItems.Count - 1; ++i)
+            for (int i = 0; i < _PingItems.Count - 1; ++i)
             {
-                if (string.IsNullOrEmpty(_pingItems[i].Hostname))
+                if (string.IsNullOrEmpty(_PingItems[i].Hostname))
                     return;
             }
             var tb = (TextBox)sender;
@@ -1240,7 +1140,7 @@ namespace vmPing.Views
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             // Set initial focus first text box.
-            if (_pingItems.Count > 0)
+            if (_PingItems.Count > 0)
             {
                 var cp = icPingItems.ItemContainerGenerator.ContainerFromIndex(0) as ContentPresenter;
                 var tb = (TextBox)cp.ContentTemplate.FindName("tbHostname", cp);

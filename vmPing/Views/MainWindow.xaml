@@ -170,32 +170,6 @@
 
                 <Separator Padding="0,6" />
 
-                <!--<MenuItem Name="mnuOnTop"
-                          Header="Keep Window on Top"
-                          InputGestureText="F9"
-                          Click="mnuOnTop_Click"
-                          Padding="0,5"
-                          IsCheckable="True" />-->
-                <!--<MenuItem Name="mnuProbeOptions"
-                          Header="Set Probe Options"
-                          InputGestureText="F10"
-                          Click="mnuProbeOptions_Click"
-                          Padding="0,5" />-->
-                <!--<MenuItem Name="mnuLogOutput"
-                          Header="Log Output to Files"
-                          InputGestureText="F11"
-                          Click="mnuLogOutput_Click"
-                          Padding="0,5"
-                          IsCheckable="True" />-->
-                <!--<MenuItem Name="mnuEmailAlerts"
-                          Header="Enable Email Alerts"
-                          InputGestureText="F12"
-                          Click="mnuEmailAlerts_Click"
-                          Padding="0,5"
-                          IsCheckable="True" />-->
-
-                <!--<Separator Padding="0,6" />-->
-
                 <MenuItem Header="Favorite Sets" x:Name="mnuFavorites">
                     <MenuItem Header="Save Current Layout to Favorites" Click="mnuAddToFavorites_Click" />
                     <MenuItem Header="Manage Favorites" Click="mnuManageFavorites_Click" />

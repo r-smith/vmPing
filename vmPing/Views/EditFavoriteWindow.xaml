@@ -18,7 +18,7 @@
             <!-- Header -->
             <TextBlock DockPanel.Dock="Top"
                        Name="Header"
-                       Text="Rename Favorite - "
+                       Text="Rename: "
                        TextTrimming="CharacterEllipsis"
                        Style="{DynamicResource ResourceKey=OptionHeaderTextStyle}"
                        />

@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using vmPing.Classes;
 
 namespace vmPing.Views
 {
     /// <summary>
-    /// Interaction logic for NewAliasWindow.xaml
+    /// NewAliasWindow provides an interface for creating an alias.  An alias maps a friendly display name
+    /// to a hostname.  If a host has an alias, the alias is displayed at the top of the probe window.
     /// </summary>
     public partial class NewAliasWindow : Window
     {
@@ -30,36 +21,29 @@ namespace vmPing.Views
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(MyHost.Text))
+            // Validate hostname.
+            if (Alias.IsHostInvalid(MyHost.Text))
             {
-                var dialogWindow = new DialogWindow(
-                    DialogWindow.DialogIcon.Warning,
-                    "Error",
-                    $"Please enter a valid host name.",
-                    "OK",
-                    false);
-                dialogWindow.Owner = this;
-                dialogWindow.ShowDialog();
+                var errorWindow = DialogWindow.ErrorWindow($"Please enter a valid host name.");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
                 MyHost.Focus();
                 MyHost.SelectAll();
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(MyAlias.Text))
+            // Validate alias name.
+            if (Alias.IsNameInvalid(MyAlias.Text))
             {
-                var dialogWindow = new DialogWindow(
-                    DialogWindow.DialogIcon.Warning,
-                    "Error",
-                    $"Please enter a valid alias.",
-                    "OK",
-                    false);
-                dialogWindow.Owner = this;
-                dialogWindow.ShowDialog();
+                var errorWindow = DialogWindow.ErrorWindow($"Please enter a valid alias.");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
                 MyAlias.Focus();
                 MyAlias.SelectAll();
                 return;
             }
 
+            // Checks passed.  Add alias entry.
             Alias.AddAlias(MyHost.Text.ToUpper(), MyAlias.Text);
             DialogResult = true;
         }

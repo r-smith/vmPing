@@ -96,6 +96,11 @@ namespace vmPing.Classes
             return favorite;
         }
 
+        public static bool IsTitleInvalid(string title)
+        {
+            return string.IsNullOrWhiteSpace(title);
+        }
+
         public static void RenameFavoriteSet(string originalTitle, string newTitle)
         {
             if (Configuration.CheckAndInitializeConfigurationFile() == false)

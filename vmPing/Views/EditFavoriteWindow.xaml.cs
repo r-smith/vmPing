@@ -1,21 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using vmPing.Classes;
 
 namespace vmPing.Views
 {
     /// <summary>
-    /// Interaction logic for EditFavoriteWindow.xaml
+    /// EditFavoriteWindow is used to rename a favorite set.
     /// </summary>
     public partial class EditFavoriteWindow : Window
     {
@@ -25,7 +15,7 @@ namespace vmPing.Views
         {
             InitializeComponent();
 
-            Header.Text = "Rename Favorite - " + favoriteTitle;
+            Header.Text = "Rename: " + favoriteTitle;
             MyFavoriteTitle.Text = favoriteTitle;
             MyFavoriteTitle.SelectAll();
 
@@ -38,16 +28,12 @@ namespace vmPing.Views
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(MyFavoriteTitle.Text))
+            // Validate favorite name.
+            if (Favorite.IsTitleInvalid(MyFavoriteTitle.Text))
             {
-                var dialogWindow = new DialogWindow(
-                    DialogWindow.DialogIcon.Warning,
-                    "Error",
-                    $"Please enter a valid name for this favorite set.",
-                    "OK",
-                    false);
-                dialogWindow.Owner = this;
-                dialogWindow.ShowDialog();
+                var errorWindow = DialogWindow.ErrorWindow($"Please enter a valid name for this favorite set.");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
                 MyFavoriteTitle.Focus();
                 MyFavoriteTitle.SelectAll();
                 return;
@@ -55,12 +41,13 @@ namespace vmPing.Views
 
             if (_OriginalFavoriteTitle.Equals(MyFavoriteTitle.Text))
             {
+                // User picked the same name.  Close edit window without making any changes.
                 DialogResult = true;
                 return;
             }
 
+            // Update favorite set with new name.
             Favorite.RenameFavoriteSet(_OriginalFavoriteTitle, MyFavoriteTitle.Text);
-
             DialogResult = true;
         }
     }

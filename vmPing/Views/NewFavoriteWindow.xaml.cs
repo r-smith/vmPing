@@ -6,7 +6,8 @@ using vmPing.Classes;
 namespace vmPing.Views
 {
     /// <summary>
-    /// Interaction logic for AddToFavoritesWindow.xaml
+    /// NewFavoriteWindow provides an interface for creating a favorite.  A favorite is a
+    /// collection of hosts that can be recalled later.
     /// </summary>
     public partial class NewFavoriteWindow : Window
     {
@@ -29,41 +30,41 @@ namespace vmPing.Views
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(MyTitle.Text))
+            // Validate favorite name.
+            if (Favorite.IsTitleInvalid(MyTitle.Text))
             {
-                var dialogWindow = new DialogWindow(
-                    DialogWindow.DialogIcon.Warning,
-                    "Error",
-                    $"Please enter a valid name for this favorite set.",
-                    "OK",
-                    false);
-                dialogWindow.Owner = this;
-                dialogWindow.ShowDialog();
+                var errorWindow = DialogWindow.ErrorWindow($"Please enter a valid name for this favorite set.");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
                 MyTitle.Focus();
                 MyTitle.SelectAll();
                 return;
             }
 
+            // Check if favorite title already exists.
             if (Favorite.DoesTitleExist(MyTitle.Text))
             {
-                var dialogWindow = new DialogWindow(
-                    DialogWindow.DialogIcon.Warning,
-                    "Warning",
-                    $"{MyTitle.Text} already exists.  Would you like to overwrite?",
-                    "Overwrite",
-                    true);
-                dialogWindow.Owner = this;
-                if (dialogWindow.ShowDialog() == true)
+                var warningWindow = DialogWindow.WarningWindow(
+                    message: $"{MyTitle.Text} already exists.  Would you like to overwrite?",
+                    confirmButtonText: "Overwrite");
+                warningWindow.Owner = this;
+                if (warningWindow.ShowDialog() == true)
                 {
-                    Favorite.SaveFavoriteSet(MyTitle.Text, HostList, ColumnCount);
-                    DialogResult = true;
+                    // User opted to overwrite existing favorite entry.
+                    SaveFavorite();
                 }
             }
             else
             {
-                Favorite.SaveFavoriteSet(MyTitle.Text, HostList, ColumnCount);
-                DialogResult = true;
+                // Checks passed.  Saving.
+                SaveFavorite();
             }
+        }
+
+        private void SaveFavorite()
+        {
+            Favorite.SaveFavoriteSet(MyTitle.Text, HostList, ColumnCount);
+            DialogResult = true;
         }
     }
 }

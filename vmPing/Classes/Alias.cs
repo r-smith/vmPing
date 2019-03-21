@@ -99,5 +99,17 @@ namespace vmPing.Classes
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
+
+
+        public static bool IsNameInvalid(string name)
+        {
+            return string.IsNullOrWhiteSpace(name);
+        }
+
+
+        public static bool IsHostInvalid(string hostname)
+        {
+            return string.IsNullOrWhiteSpace(hostname);
+        }
     }
 }

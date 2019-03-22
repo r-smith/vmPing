@@ -30,20 +30,10 @@
         public const string Color_Alias_Foreground_Indeterminate = "#ffffff";
         public const string Color_Alias_Foreground_Error = "#ffff00";
 
-        // Unused
-        //public const string TXTOUTPUT_FONT_NAME = "Consolas";
-        //public const float TXTOUTPUT_FONT_SIZE = 9.75F;
-        //public const string TXTHOST_BACKCOLOR = "White";
-        //public const string TXTHOST_FORECOLOR = "Black";
-        //public const string TXTHOST_FONT_NAME = "Segoe UI";
-        //public const float TXTHOST_FONT_SIZE = 14.25F;
-        //public const string LBLSTATS_FONT_NAME = "Segoe UI";
-        //public const float LBLSTATS_FONT_SIZE = 9.75F;
-
         // Default probe options.
-        public const string PING_DATA = "https://github.com/R-Smith/vmPing";
-        public const int PING_TIMEOUT = 2000;       // In miliseconds.
-        public const int PING_TTL = 64;
-        public const int PING_INTERVAL = 2000;      // In miliseconds.
+        public const string DefaultIcmpData = "https://github.com/R-Smith/vmPing";
+        public const int DefaultTimeout = 2000;       // In miliseconds.
+        public const int DefaultTTL = 64;
+        public const int DefaultInterval = 2000;      // In miliseconds.
     }
 }

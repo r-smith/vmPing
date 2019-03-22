@@ -103,7 +103,7 @@ namespace vmPing.Classes
 
         public static void RenameFavoriteSet(string originalTitle, string newTitle)
         {
-            if (Configuration.CheckAndInitializeConfigurationFile() == false)
+            if (Configuration.IsReady() == false)
                 return;
 
             try
@@ -133,7 +133,7 @@ namespace vmPing.Classes
 
         public static void SaveFavoriteSet(string title, List<string> hostnames, int columnCount)
         {
-            if (Configuration.CheckAndInitializeConfigurationFile() == false)
+            if (Configuration.IsReady() == false)
                 return;
 
             try

@@ -40,7 +40,7 @@ namespace vmPing.Views
             Configuration.UpgradeConfigurationFile();
             LoadFavorites();
             LoadAliases();
-            Configuration.LoadConfigurationOptions();
+            Configuration.Load();
             CommandLine.ParseArguments();
             AddProbe(2);  // Temporary
 

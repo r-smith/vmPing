@@ -1,32 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Windows;
 using System.Xml;
 
 namespace vmPing.Classes
 {
     class Configuration
     {
-        public static bool CheckAndInitializeConfigurationFile()
+        public static string Path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
+        public static string ParentFolder = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing");
+        public static string OldPath = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPingFavorites.xml");
+
+        public static bool Exists()
         {
-            var rootPath = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing");
-            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
-            if (!Directory.Exists(rootPath))
+            return File.Exists(Path);
+        }
+
+        public static bool IsReady()
+        {
+            if (!Directory.Exists(ParentFolder))
+            {
                 try
                 {
-                    Directory.CreateDirectory(rootPath);
+                    Directory.CreateDirectory(ParentFolder);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Failed to create directory for vmPing configuration file.  " + ex.Message);
+                    Util.ShowError($"Failed to create directory for vmPing configuration file. {ex.Message}");
                     return false;
                 }
+            }
 
-            if (!File.Exists(path))
+            if (!File.Exists(Path))
             {
                 try
                 {
@@ -39,11 +45,11 @@ namespace vmPing.Classes
                     rootNode.AppendChild(xmlFile.CreateElement("configuration"));
                     rootNode.AppendChild(xmlFile.CreateElement("favorites"));
 
-                    xmlFile.Save(path);
+                    xmlFile.Save(Path);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Failed to create vmPing configuration file.  " + ex.Message);
+                    Util.ShowError($"Failed to create vmPing configuration file. {ex.Message}");
                     return false;
                 }
             }
@@ -51,34 +57,37 @@ namespace vmPing.Classes
             return true;
         }
 
+
         public static void UpgradeConfigurationFile()
         {
-            var rootPath = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing");
-            var oldPath = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPingFavorites.xml");
-            var newPath = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
+            if (!Directory.Exists(ParentFolder))
+                return;
+            if (File.Exists(Path))
+                return;
 
-            if (!Directory.Exists(rootPath))
-                return;
-            if (File.Exists(newPath))
-                return;
-            if (!File.Exists(oldPath))
-                return;
-            else
+            if (File.Exists(OldPath))
             {
-                // Upgrade old configuration file.
-                var newXmlFile = new XmlDocument();
-                var newRootNode = newXmlFile.CreateElement("vmping");
-                newXmlFile.AppendChild(newRootNode);
+                try
+                {
+                    // Upgrade old configuration file.
+                    var newXmlFile = new XmlDocument();
+                    var newRootNode = newXmlFile.CreateElement("vmping");
+                    newXmlFile.AppendChild(newRootNode);
 
-                var oldXmlFile = new XmlDocument();
-                oldXmlFile.Load(oldPath);
-                var oldRootNode = oldXmlFile.FirstChild;
+                    var oldXmlFile = new XmlDocument();
+                    oldXmlFile.Load(OldPath);
+                    var oldRootNode = oldXmlFile.FirstChild;
 
-                newRootNode.AppendChild(newXmlFile.CreateElement("aliases"));
-                newRootNode.AppendChild(newXmlFile.CreateElement("configuration"));
-                newRootNode.AppendChild(newXmlFile.ImportNode(oldRootNode, true));
+                    newRootNode.AppendChild(newXmlFile.CreateElement("aliases"));
+                    newRootNode.AppendChild(newXmlFile.CreateElement("configuration"));
+                    newRootNode.AppendChild(newXmlFile.ImportNode(oldRootNode, true));
 
-                newXmlFile.Save(newPath);
+                    newXmlFile.Save(Path);
+                }
+                catch (Exception ex)
+                {
+                    Util.ShowError($"Failed to upgrade configuration file. {ex.Message}");
+                }
             }
         }
 
@@ -96,27 +105,23 @@ namespace vmPing.Classes
 
         public static void WriteConfigurationOptions()
         {
-            if (Configuration.CheckAndInitializeConfigurationFile() == false)
+            if (IsReady() == false)
                 return;
 
             try
             {
-                var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
                 var xd = new XmlDocument();
-                xd.Load(path);
-
-                XmlNode nodeRoot = xd.SelectSingleNode("/vmping");
+                xd.Load(Configuration.Path);
 
                 // Check if configuration node already exists.  If so, delete it.
-                XmlNodeList nodeSearch = xd.SelectNodes($"/vmping/configuration");
-                foreach (XmlNode node in nodeSearch)
+                XmlNode nodeRoot = xd.SelectSingleNode("/vmping");
+                foreach (XmlNode node in xd.SelectNodes($"/vmping/configuration"))
                 {
                     nodeRoot.RemoveChild(node);
                 }
 
                 // Check if colors node already exists.  If so, delete it.
-                nodeSearch = xd.SelectNodes($"/vmping/colors");
-                foreach (XmlNode node in nodeSearch)
+                foreach (XmlNode node in xd.SelectNodes($"/vmping/colors"))
                 {
                     nodeRoot.RemoveChild(node);
                 }
@@ -126,12 +131,12 @@ namespace vmPing.Classes
 
                 nodeRoot.AppendChild(configuration);
                 nodeRoot.AppendChild(colors);
-                xd.Save(path);
+                xd.Save(Configuration.Path);
             }
 
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                Util.ShowError($"Failed to write to configuration file. {ex.Message}");
             }
         }
 
@@ -284,7 +289,7 @@ namespace vmPing.Classes
                 configuration.AppendChild(GenerateOptionNode(
                     xmlDocument: xd,
                     name: "EmailUser",
-                    value: EncryptStringAES(ApplicationOptions.EmailUser)));
+                    value: Util.EncryptStringAES(ApplicationOptions.EmailUser)));
             }
             else
             {
@@ -299,7 +304,7 @@ namespace vmPing.Classes
                 configuration.AppendChild(GenerateOptionNode(
                     xmlDocument: xd,
                     name: "EmailPassword",
-                    value: EncryptStringAES(ApplicationOptions.EmailPassword)));
+                    value: Util.EncryptStringAES(ApplicationOptions.EmailPassword)));
             }
             else
             {
@@ -329,6 +334,7 @@ namespace vmPing.Classes
             return configuration;
         }
 
+
         private static XmlElement GenerateOptionNode(XmlDocument xmlDocument, string name, string value)
         {
             XmlElement option = xmlDocument.CreateElement("option");
@@ -339,134 +345,15 @@ namespace vmPing.Classes
         }
 
 
-        private static string EncryptStringAES(string plainText)
+        public static void Load()
         {
-            if (string.IsNullOrEmpty(plainText))
-                throw new ArgumentNullException("plainText");
-
-            string encryptedString = null;                       // Encrypted string to return.
-            RijndaelManaged aesAlgorithm = null;                 // RijndaelManaged object used to encrypt the data.
-
-            try
-            {
-                // Generate the key from a shared secret and initilization vector.
-                Rfc2898DeriveBytes key = new Rfc2898DeriveBytes("https://github.com/R-Smith/vmPing" + Environment.MachineName, Encoding.ASCII.GetBytes(Environment.UserName + "@@vmping-salt@@"));
-
-                // Create a RijndaelManaged object.
-                aesAlgorithm = new RijndaelManaged();
-                aesAlgorithm.Padding = PaddingMode.PKCS7;
-                aesAlgorithm.Key = key.GetBytes(aesAlgorithm.KeySize / 8);
-
-                // Create a decryptor to perform the stream transform.
-                ICryptoTransform encryptor = aesAlgorithm.CreateEncryptor(aesAlgorithm.Key, aesAlgorithm.IV);
-
-                // Create the streams used for encryption.
-                using (MemoryStream memoryStream = new MemoryStream())
-                {
-                    // Prepend the IV.
-                    memoryStream.Write(BitConverter.GetBytes(aesAlgorithm.IV.Length), 0, sizeof(int));
-                    memoryStream.Write(aesAlgorithm.IV, 0, aesAlgorithm.IV.Length);
-                    using (CryptoStream cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
-                    {
-                        using (StreamWriter streamWriter = new StreamWriter(cryptoStream))
-                        {
-                            // Write all data to the stream.
-                            streamWriter.Write(plainText);
-                        }
-                    }
-                    encryptedString = Convert.ToBase64String(memoryStream.ToArray());
-                }
-            }
-            finally
-            {
-                // Clear the RijndaelManaged object.
-                if (aesAlgorithm != null)
-                    aesAlgorithm.Clear();
-            }
-
-            // Return the encrypted bytes from the memory stream.
-            return encryptedString;
-        }
-
-
-        public static string DecryptStringAES(string cipherText)
-        {
-            if (string.IsNullOrEmpty(cipherText))
-                throw new ArgumentNullException("cipherText");
-
-            // Declare the RijndaelManaged object used to decrypt the data.
-            RijndaelManaged aesAlgorithm = null;
-
-            // Declare the string used to hold the decrypted text.
-            string plaintext = null;
-
-            try
-            {
-                // Generate the key from a shared secret and initilization vector.
-                Rfc2898DeriveBytes key = new Rfc2898DeriveBytes("https://github.com/R-Smith/vmPing" + Environment.MachineName, Encoding.ASCII.GetBytes(Environment.UserName + "@@vmping-salt@@"));
-
-                // Create the streams used for decryption.                
-                byte[] bytes = Convert.FromBase64String(cipherText);
-                using (MemoryStream memoryStream = new MemoryStream(bytes))
-                {
-                    // Create a RijndaelManaged object with the specified key and IV.
-                    aesAlgorithm = new RijndaelManaged();
-                    aesAlgorithm.Padding = PaddingMode.PKCS7;
-                    aesAlgorithm.Key = key.GetBytes(aesAlgorithm.KeySize / 8);
-                    // Get the initialization vector from the encrypted stream.
-                    aesAlgorithm.IV = ReadByteArray(memoryStream);
-                    // Create a decrytor to perform the stream transform.
-                    ICryptoTransform decryptor = aesAlgorithm.CreateDecryptor(aesAlgorithm.Key, aesAlgorithm.IV);
-                    using (CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
-                    {
-                        using (StreamReader streamReader = new StreamReader(cryptoStream))
-
-                            // Read the decrypted bytes from the decrypting stream and place them in a string.
-                            plaintext = streamReader.ReadToEnd();
-                    }
-                }
-            }
-            finally
-            {
-                // Clear the RijndaelManaged object.
-                if (aesAlgorithm != null)
-                    aesAlgorithm.Clear();
-            }
-
-            return plaintext;
-        }
-
-
-        private static byte[] ReadByteArray(Stream stream)
-        {
-            byte[] rawLength = new byte[sizeof(int)];
-            if (stream.Read(rawLength, 0, rawLength.Length) != rawLength.Length)
-            {
-                throw new SystemException("Stream did not contain properly formatted byte array");
-            }
-
-            byte[] buffer = new byte[BitConverter.ToInt32(rawLength, 0)];
-            if (stream.Read(buffer, 0, buffer.Length) != buffer.Length)
-            {
-                throw new SystemException("Did not read byte array properly");
-            }
-
-            return buffer;
-        }
-
-
-        public static void LoadConfigurationOptions()
-        {
-
-
-            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
-            if (!File.Exists(path))
+            if (!Exists())
                 return;
 
             try
             {
                 var xd = new XmlDocument();
-                xd.Load(path);
+                xd.Load(Path);
 
                 LoadConfigurationNode(xd.SelectNodes("/vmping/configuration/option"));
                 LoadColorsNode(xd.SelectNodes("/vmping/colors/option"));
@@ -474,7 +361,7 @@ namespace vmPing.Classes
 
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                Util.ShowError($"Failed to load configuration file. {ex.Message}");
             }
         }
 
@@ -490,118 +377,110 @@ namespace vmPing.Classes
             // Load probe backgorund colors.
             if (options.TryGetValue("Probe.Background.Inactive", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.BackgroundColor_Probe_Inactive = optionValue;
             }
             if (options.TryGetValue("Probe.Background.Up", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.BackgroundColor_Probe_Up = optionValue;
             }
             if (options.TryGetValue("Probe.Background.Down", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.BackgroundColor_Probe_Down = optionValue;
             }
             if (options.TryGetValue("Probe.Background.Indeterminate", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.BackgroundColor_Probe_Indeterminate = optionValue;
             }
             if (options.TryGetValue("Probe.Background.Error", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.BackgroundColor_Probe_Error = optionValue;
             }
 
             // Load probe foreground colors.
             if (options.TryGetValue("Probe.Foreground.Inactive", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.ForegroundColor_Probe_Inactive = optionValue;
             }
             if (options.TryGetValue("Probe.Foreground.Up", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.ForegroundColor_Probe_Up = optionValue;
             }
             if (options.TryGetValue("Probe.Foreground.Down", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.ForegroundColor_Probe_Down = optionValue;
             }
             if (options.TryGetValue("Probe.Foreground.Indeterminate", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.ForegroundColor_Probe_Indeterminate = optionValue;
             }
             if (options.TryGetValue("Probe.Foreground.Error", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.ForegroundColor_Probe_Error = optionValue;
             }
 
             // Load statistics foreground colors.
             if (options.TryGetValue("Statistics.Foreground.Inactive", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.ForegroundColor_Stats_Inactive = optionValue;
             }
             if (options.TryGetValue("Statistics.Foreground.Up", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.ForegroundColor_Stats_Up = optionValue;
             }
             if (options.TryGetValue("Statistics.Foreground.Down", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.ForegroundColor_Stats_Down = optionValue;
             }
             if (options.TryGetValue("Statistics.Foreground.Indeterminate", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.ForegroundColor_Stats_Indeterminate = optionValue;
             }
             if (options.TryGetValue("Statistics.Foreground.Error", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.ForegroundColor_Stats_Error = optionValue;
             }
 
             // Load alias foreground colors.
             if (options.TryGetValue("Alias.Foreground.Inactive", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.ForegroundColor_Alias_Inactive = optionValue;
             }
             if (options.TryGetValue("Alias.Foreground.Up", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.ForegroundColor_Alias_Up = optionValue;
             }
             if (options.TryGetValue("Alias.Foreground.Down", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.ForegroundColor_Alias_Down = optionValue;
             }
             if (options.TryGetValue("Alias.Foreground.Indeterminate", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.ForegroundColor_Alias_Indeterminate = optionValue;
             }
             if (options.TryGetValue("Alias.Foreground.Error", out optionValue))
             {
-                if (IsValidHtmlColor(optionValue))
+                if (Util.IsValidHtmlColor(optionValue))
                     ApplicationOptions.ForegroundColor_Alias_Error = optionValue;
             }
-        }
-
-
-        public static bool IsValidHtmlColor(string htmlColor)
-        {
-            var regex = new Regex("^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$");
-
-            return regex.IsMatch(htmlColor);
         }
 
 
@@ -677,12 +556,12 @@ namespace vmPing.Classes
             if (options.TryGetValue("EmailUser", out optionValue))
             {
                 if (optionValue.Length > 0)
-                    ApplicationOptions.EmailUser = DecryptStringAES(optionValue);
+                    ApplicationOptions.EmailUser = Util.DecryptStringAES(optionValue);
             }
             if (options.TryGetValue("EmailPassword", out optionValue))
             {
                 if (optionValue.Length > 0)
-                    ApplicationOptions.EmailPassword = DecryptStringAES(optionValue);
+                    ApplicationOptions.EmailPassword = Util.DecryptStringAES(optionValue);
             }
         }
     }

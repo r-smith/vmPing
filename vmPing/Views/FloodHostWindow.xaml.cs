@@ -73,8 +73,8 @@ namespace vmPing.Views
             var bgWorker = sender as BackgroundWorker;
             var node = e.Argument as FloodHostNode;
 
-            var pingBuffer = Encoding.ASCII.GetBytes(Constants.PING_DATA);
-            var pingOptions = new PingOptions(Constants.PING_TTL, true);
+            var pingBuffer = Encoding.ASCII.GetBytes(Constants.DefaultIcmpData);
+            var pingOptions = new PingOptions(Constants.DefaultTTL, true);
 
             while (!bgWorker.CancellationPending && node.IsActive)
             {

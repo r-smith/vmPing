@@ -205,7 +205,7 @@ namespace vmPing.Views
             if (int.TryParse(txtPingInterval.Text, out pingInterval) && pingInterval > 0 && pingInterval <= 86400)
                 pingInterval *= multiplier;
             else
-                pingInterval = Constants.PING_INTERVAL;
+                pingInterval = Constants.DefaultInterval;
 
             ApplicationOptions.PingInterval = pingInterval;
 
@@ -215,7 +215,7 @@ namespace vmPing.Views
             if (int.TryParse(txtPingTimeout.Text, out pingTimeout) && pingTimeout > 0 && pingTimeout <= 60)
                 pingTimeout *= 1000;
             else
-                pingTimeout = Constants.PING_TIMEOUT;
+                pingTimeout = Constants.DefaultTimeout;
 
             ApplicationOptions.PingTimeout = pingTimeout;
 
@@ -275,7 +275,7 @@ namespace vmPing.Views
 
                 // Fill buffer with default text.
                 if (ApplicationOptions.Buffer.Length >= 33)
-                    Buffer.BlockCopy(Encoding.ASCII.GetBytes(Constants.PING_DATA), 0, ApplicationOptions.Buffer, 0, 33);
+                    Buffer.BlockCopy(Encoding.ASCII.GetBytes(Constants.DefaultIcmpData), 0, ApplicationOptions.Buffer, 0, 33);
             }
             else
             {
@@ -432,7 +432,7 @@ namespace vmPing.Views
             {
                 if (control is TextBox)
                 {
-                    if (!Configuration.IsValidHtmlColor(((TextBox)control).Text))
+                    if (!Util.IsValidHtmlColor(((TextBox)control).Text))
                     {
                         LayoutTab.Focus();
                         MessageBox.Show(

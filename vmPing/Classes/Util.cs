@@ -1,6 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Windows;
 
 namespace vmPing.Classes
 {
@@ -58,6 +63,138 @@ namespace vmPing.Classes
             {
                 message.Dispose();
             }
+        }
+
+
+        public static void ShowError(string message)
+        {
+            MessageBox.Show(message, "vmPing - Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+
+        public static bool IsValidHtmlColor(string htmlColor)
+        {
+            var regex = new Regex("^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$");
+
+            return regex.IsMatch(htmlColor);
+        }
+
+
+        public static string EncryptStringAES(string plainText)
+        {
+            if (string.IsNullOrEmpty(plainText))
+                throw new ArgumentNullException("plainText");
+
+            string encryptedString = null;                       // Encrypted string to return.
+            RijndaelManaged aesAlgorithm = null;                 // RijndaelManaged object used to encrypt the data.
+
+            try
+            {
+                // Generate the key from a shared secret and initilization vector.
+                Rfc2898DeriveBytes key = new Rfc2898DeriveBytes("https://github.com/R-Smith/vmPing" + Environment.MachineName, Encoding.ASCII.GetBytes(Environment.UserName + "@@vmping-salt@@"));
+
+                // Create a RijndaelManaged object.
+                aesAlgorithm = new RijndaelManaged
+                {
+                    Padding = PaddingMode.PKCS7,
+                    Key = key.GetBytes(aesAlgorithm.KeySize / 8)
+                };
+
+                // Create a decryptor to perform the stream transform.
+                ICryptoTransform encryptor = aesAlgorithm.CreateEncryptor(aesAlgorithm.Key, aesAlgorithm.IV);
+
+                // Create the streams used for encryption.
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    // Prepend the IV.
+                    memoryStream.Write(BitConverter.GetBytes(aesAlgorithm.IV.Length), 0, sizeof(int));
+                    memoryStream.Write(aesAlgorithm.IV, 0, aesAlgorithm.IV.Length);
+                    using (CryptoStream cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter streamWriter = new StreamWriter(cryptoStream))
+                        {
+                            // Write all data to the stream.
+                            streamWriter.Write(plainText);
+                        }
+                    }
+                    encryptedString = Convert.ToBase64String(memoryStream.ToArray());
+                }
+            }
+            finally
+            {
+                // Clear the RijndaelManaged object.
+                if (aesAlgorithm != null)
+                    aesAlgorithm.Clear();
+            }
+
+            // Return the encrypted bytes from the memory stream.
+            return encryptedString;
+        }
+
+
+        public static string DecryptStringAES(string cipherText)
+        {
+            if (string.IsNullOrEmpty(cipherText))
+                throw new ArgumentNullException("cipherText");
+
+            // Declare the RijndaelManaged object used to decrypt the data.
+            RijndaelManaged aesAlgorithm = null;
+
+            // Declare the string used to hold the decrypted text.
+            string plaintext = null;
+
+            try
+            {
+                // Generate the key from a shared secret and initilization vector.
+                Rfc2898DeriveBytes key = new Rfc2898DeriveBytes("https://github.com/R-Smith/vmPing" + Environment.MachineName, Encoding.ASCII.GetBytes(Environment.UserName + "@@vmping-salt@@"));
+
+                // Create the streams used for decryption.                
+                byte[] bytes = Convert.FromBase64String(cipherText);
+                using (MemoryStream memoryStream = new MemoryStream(bytes))
+                {
+                    // Create a RijndaelManaged object with the specified key and IV.
+                    aesAlgorithm = new RijndaelManaged();
+                    aesAlgorithm.Padding = PaddingMode.PKCS7;
+                    aesAlgorithm.Key = key.GetBytes(aesAlgorithm.KeySize / 8);
+                    // Get the initialization vector from the encrypted stream.
+                    aesAlgorithm.IV = ReadByteArray(memoryStream);
+                    // Create a decrytor to perform the stream transform.
+                    ICryptoTransform decryptor = aesAlgorithm.CreateDecryptor(aesAlgorithm.Key, aesAlgorithm.IV);
+                    using (CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader streamReader = new StreamReader(cryptoStream))
+
+                            // Read the decrypted bytes from the decrypting stream and place them in a string.
+                            plaintext = streamReader.ReadToEnd();
+                    }
+                }
+            }
+            finally
+            {
+                // Clear the RijndaelManaged object.
+                if (aesAlgorithm != null)
+                    aesAlgorithm.Clear();
+            }
+
+            return plaintext;
+        }
+
+
+        private static byte[] ReadByteArray(Stream stream)
+        {
+            byte[] rawLength = new byte[sizeof(int)];
+            if (stream.Read(rawLength, 0, rawLength.Length) != rawLength.Length)
+            {
+                throw new SystemException("Stream did not contain properly formatted byte array");
+            }
+
+            byte[] buffer = new byte[BitConverter.ToInt32(rawLength, 0)];
+            if (stream.Read(buffer, 0, buffer.Length) != buffer.Length)
+            {
+                throw new SystemException("Did not read byte array properly");
+            }
+
+            return buffer;
         }
     }
 }

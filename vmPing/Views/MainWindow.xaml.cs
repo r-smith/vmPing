@@ -41,8 +41,18 @@ namespace vmPing.Views
             LoadFavorites();
             LoadAliases();
             Configuration.Load();
-            CommandLine.ParseArguments();
-            AddProbe(2);  // Temporary
+
+            List<string> hosts = CommandLine.ParseArguments();
+            if (hosts.Count > 0)
+            {
+                AddProbe(hosts.Count);
+                for (int i = 0; i < hosts.Count; ++i)
+                    Probe.StartStop(_ProbeCollection[i]);
+            }
+            else
+            {
+                AddProbe(2);
+            }
 
             ColumnCount.Value = _ProbeCollection.Count;
             ProbeItemsControl.ItemsSource = _ProbeCollection;
@@ -272,7 +282,7 @@ namespace vmPing.Views
                 mnuFavorites.Items.RemoveAt(i);
 
             // Load favorites.
-            foreach (var fav in Favorite.GetFavoriteTitles())
+            foreach (var fav in Favorite.GetTitles())
             {
                 var menuItem = new MenuItem();
                 menuItem.Header = fav;
@@ -281,7 +291,7 @@ namespace vmPing.Views
                     RemoveAllProbes();
 
                     var selectedFavorite = s as MenuItem;
-                    var favorite = Favorite.GetFavoriteContents(selectedFavorite.Header.ToString());
+                    var favorite = Favorite.GetContents(selectedFavorite.Header.ToString());
                     if (favorite.Hostnames.Count < 1)
                         AddProbe();
                     else

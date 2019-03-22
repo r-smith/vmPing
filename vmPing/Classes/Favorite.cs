@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Windows;
 using System.Xml;
 
 namespace vmPing.Classes
@@ -12,135 +10,131 @@ namespace vmPing.Classes
         public int ColumnCount { get; set; }
 
 
-        public static bool DoesTitleExist(string title)
+        public static bool TitleExists(string title)
         {
-            bool doesTitleExist = false;
-
-            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
-            if (!File.Exists(path))
+            if (!Configuration.Exists())
                 return false;
+
+            var titleExists = false;
 
             try
             {
                 var xd = new XmlDocument();
-                xd.Load(path);
+                xd.Load(Configuration.Path);
 
                 XmlNode nodeTitleSearch = xd.SelectSingleNode($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(title)}]");
                 if (nodeTitleSearch != null)
-                    doesTitleExist = true;
+                    titleExists = true;
             }
-            catch
+            catch (Exception ex)
             {
+                Util.ShowError($"Failed to read configuration file. {ex.Message}");
+                titleExists = false;
             }
 
-            return doesTitleExist;
+            return titleExists;
         }
 
-        public static List<string> GetFavoriteTitles()
+
+        public static List<string> GetTitles()
         {
+            if (!Configuration.Exists())
+                return new List<string>();
+
             var favoriteTitles = new List<string>();
 
-            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
-            if (!File.Exists(path))
-                return favoriteTitles;
-            
             try
             {
                 var xd = new XmlDocument();
-                xd.Load(path);
+                xd.Load(Configuration.Path);
 
-                XmlNodeList nodeTitle = xd.SelectNodes("/vmping/favorites/favorite");
-                
-                foreach (XmlNode node in nodeTitle)
+                foreach (XmlNode node in xd.SelectNodes("/vmping/favorites/favorite"))
                     favoriteTitles.Add(node.Attributes["title"].Value);
-                
             }
 
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                Util.ShowError($"Failed to read configuration file. {ex.Message}");
             }
 
             favoriteTitles.Sort();
             return favoriteTitles;
         }
 
-        public static Favorite GetFavoriteContents(string favoriteTitle)
+
+        public static Favorite GetContents(string favoriteTitle)
         {
+            if (!Configuration.Exists())
+                return new Favorite();
+
             var favorite = new Favorite();
 
-            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
-            if (!File.Exists(path))
-                return favorite;
-            
             try
             {
                 favorite.Hostnames = new List<string>();
 
                 var xd = new XmlDocument();
-                xd.Load(path);
+                xd.Load(Configuration.Path);
 
                 XmlNode nodeFavorite = xd.SelectSingleNode($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(favoriteTitle)}]");
                 favorite.ColumnCount = int.Parse(nodeFavorite.Attributes["columncount"].Value);
 
-                XmlNodeList nodeHost = xd.SelectNodes($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(favoriteTitle)}]/host");
-                foreach (XmlNode node in nodeHost)
+                foreach (XmlNode node in xd.SelectNodes($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(favoriteTitle)}]/host"))
                     favorite.Hostnames.Add(node.InnerText);
             }
 
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                Util.ShowError($"Failed to read configuration file. {ex.Message}");
             }
 
             return favorite;
         }
+
 
         public static bool IsTitleInvalid(string title)
         {
             return string.IsNullOrWhiteSpace(title);
         }
 
-        public static void RenameFavoriteSet(string originalTitle, string newTitle)
+
+        public static void Rename(string originalTitle, string newTitle)
         {
             if (Configuration.IsReady() == false)
                 return;
 
             try
             {
-                var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
                 var xd = new XmlDocument();
-                xd.Load(path);
-
-                XmlNode nodeRoot = xd.SelectSingleNode("/vmping/favorites");
+                xd.Load(Configuration.Path);
 
                 // Check if title already exists.
-                XmlNodeList nodeTitleSearch = xd.SelectNodes($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(originalTitle)}]");
-                foreach (XmlNode node in nodeTitleSearch)
+                XmlNode nodeRoot = xd.SelectSingleNode("/vmping/favorites");
+                foreach (XmlNode node in xd.SelectNodes($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(originalTitle)}]"))
                 {
                     // Rename title attribue.
                     node.Attributes["title"].Value = newTitle;
                 }
 
-                xd.Save(path);
+                xd.Save(Configuration.Path);
             }
 
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                Util.ShowError($"Failed to write to configuration file. {ex.Message}");
             }
         }
 
-        public static void SaveFavoriteSet(string title, List<string> hostnames, int columnCount)
+
+        public static void Save(string title, List<string> hostnames, int columnCount)
         {
             if (Configuration.IsReady() == false)
                 return;
 
             try
             {
-                var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
                 var xd = new XmlDocument();
-                xd.Load(path);
+                xd.Load(Configuration.Path);
 
                 XmlNode nodeRoot = xd.SelectSingleNode("/vmping/favorites");
 
@@ -152,7 +146,6 @@ namespace vmPing.Classes
                     nodeRoot.RemoveChild(node);
                 }
 
-                
                 XmlElement favorite = xd.CreateElement("favorite");
                 favorite.SetAttribute("title", title);
                 favorite.SetAttribute("columncount", columnCount.ToString());
@@ -163,41 +156,38 @@ namespace vmPing.Classes
                     favorite.AppendChild(xmlElement);
                 }
                 nodeRoot.AppendChild(favorite);
-                xd.Save(path);
+                xd.Save(Configuration.Path);
             }
 
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                Util.ShowError($"Failed to write to configuration file. {ex.Message}");
             }
         }
 
-        public static void DeleteFavoriteSet(string title)
+        public static void Delete(string title)
         {
-            var path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
-            if (!File.Exists(path))
+            if (!Configuration.Exists())
                 return;
 
             try
             {
                 var xd = new XmlDocument();
-                xd.Load(path);
-                
-                XmlNode nodeRoot = xd.SelectSingleNode("/vmping/favorites");
+                xd.Load(Configuration.Path);
 
                 // Search for favorite by title.
-                XmlNodeList nodeTitleSearch = xd.SelectNodes($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(title)}]");
-                foreach (XmlNode node in nodeTitleSearch)
+                XmlNode nodeRoot = xd.SelectSingleNode("/vmping/favorites");
+                foreach (XmlNode node in xd.SelectNodes($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(title)}]"))
                 {
                     // Found title.  Delete all versions.
                     nodeRoot.RemoveChild(node);
                 }
-                xd.Save(path);
+                xd.Save(Configuration.Path);
             }
 
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                Util.ShowError($"Failed to write to configuration file. {ex.Message}");
             }
         }
     }

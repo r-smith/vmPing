@@ -47,7 +47,7 @@ namespace vmPing.Views
             }
 
             // Update favorite set with new name.
-            Favorite.RenameFavoriteSet(_OriginalFavoriteTitle, MyFavoriteTitle.Text);
+            Favorite.Rename(_OriginalFavoriteTitle, MyFavoriteTitle.Text);
             DialogResult = true;
         }
     }

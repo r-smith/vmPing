@@ -135,7 +135,7 @@ namespace vmPing.Classes
 
         public void WriteFinalStatisticsToHistory()
         {
-            if (Statistics.PingsSent == 0) return;
+            if (Statistics.Sent == 0) return;
 
             var roundTripTimes = new List<int>();
             var rttRegex = new Regex(@"  \[(?<rtt><?\d+) ?ms]$");
@@ -153,7 +153,7 @@ namespace vmPing.Classes
             // Display statics and round trip times
             history.Add("");
             //history.Add($"[+] Ping statistics for {Hostname}");
-            history.Add($"Sent {Statistics.PingsSent}, Received {Statistics.PingsReceived}, Lost {Statistics.PingsSent - Statistics.PingsReceived} ({(100 * (Statistics.PingsSent - Statistics.PingsReceived)) / Statistics.PingsSent}% loss)");
+            history.Add($"Sent {Statistics.Sent}, Received {Statistics.Received}, Lost {Statistics.Sent - Statistics.Received} ({(100 * (Statistics.Sent - Statistics.Received)) / Statistics.Sent}% loss)");
             if (roundTripTimes.Count > 0)
             {
                 //if (Statistics.PingsSent > 3600)

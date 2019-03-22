@@ -2,16 +2,9 @@
 {
     public class PingStatistics
     {
-        public uint PingsSent { get; set; }
-        public uint PingsReceived { get; set; }
-        public uint PingsLost { get; set; }
-        public uint PingsError { get; set; }
-        public PingStatistics()
-        {
-            PingsSent = 0;
-            PingsReceived = 0;
-            PingsLost = 0;
-            PingsError = 0;
-        }
+        public uint Sent { get; set; } = 0;
+        public uint Received { get; set; } = 0;
+        public uint Lost { get; set; } = 0;
+        public uint Error { get; set; } = 0;
     }
 }

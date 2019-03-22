@@ -244,8 +244,6 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <!--<TextBlock Width="{Binding ElementName=lbHistory, Path=ActualWidth}"/>-->
-
                                     <!-- Alias section -->
                                     <Label Name="txtEditAlias"
                                            Content="{Binding Alias, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
@@ -409,7 +407,7 @@
                                        DockPanel.Dock="Bottom"
                                        HorizontalAlignment="Left"
                                        Width="{Binding ElementName=lbHistory, Path=ActualWidth}"
-                                       Content="{Binding PingStatisticsText, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
+                                       Content="{Binding StatisticsText, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
                                        Background="Transparent"
                                        Foreground="{Binding Status, Converter={StaticResource ProbeStatusToStatisticsBrushConverter}}"
                                        FontFamily="Segoe UI" FontSize="12" FontWeight="Bold"

@@ -6,7 +6,7 @@ namespace vmPing.Classes
 {
     class CommandLine
     {
-        public static void ParseArguments()
+        public static List<string> ParseArguments()
         {
             var args = Environment.GetCommandLineArgs();
             var errorMessage = string.Empty;
@@ -81,18 +81,12 @@ namespace vmPing.Classes
                 Application.Current.Shutdown();
             }
 
+            for (int i = 0; i < hostnames.Count; ++i)
+            {
+                hostnames[i] = hostnames[i].ToUpper();
+            }
 
-            //if (hostnames.Count > 0)
-            //{
-            //    AddHostMonitor(hostnames.Count);
-            //    for (int i = 0; i < hostnames.Count; ++i)
-            //    {
-            //        _PingItems[i].Hostname = hostnames[i].ToUpper();
-            //        PingStartStop(_PingItems[i]);
-            //    }
-            //}
-            //else
-            //    AddHostMonitor(2);
+            return hostnames;
         }
     }
 }

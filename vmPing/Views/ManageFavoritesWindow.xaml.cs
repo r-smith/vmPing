@@ -35,7 +35,7 @@ namespace vmPing.Views
         {
             Favorites.ItemsSource = null;
             Favorites.Items.Clear();
-            Favorites.ItemsSource = Favorite.GetFavoriteTitles();
+            Favorites.ItemsSource = Favorite.GetTitles();
 
             ContentsSection.Visibility = Visibility.Collapsed;
             Contents.ItemsSource = null;
@@ -56,7 +56,7 @@ namespace vmPing.Views
             dialogWindow.Owner = this;
             if (dialogWindow.ShowDialog() == true)
             {
-                Favorite.DeleteFavoriteSet(Favorites.SelectedItem.ToString());
+                Favorite.Delete(Favorites.SelectedItem.ToString());
                 RefreshFavoriteList();
             }
         }
@@ -69,7 +69,7 @@ namespace vmPing.Views
                 return;
             }
 
-            var favorite = Favorite.GetFavoriteContents(Favorites.SelectedItem.ToString());
+            var favorite = Favorite.GetContents(Favorites.SelectedItem.ToString());
             ContentsSection.Visibility = Visibility.Visible;
             Contents.ItemsSource = null;
             Contents.Items.Clear();

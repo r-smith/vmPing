@@ -42,7 +42,7 @@ namespace vmPing.Views
             }
 
             // Check if favorite title already exists.
-            if (Favorite.DoesTitleExist(MyTitle.Text))
+            if (Favorite.TitleExists(MyTitle.Text))
             {
                 var warningWindow = DialogWindow.WarningWindow(
                     message: $"{MyTitle.Text} already exists.  Would you like to overwrite?",
@@ -63,7 +63,7 @@ namespace vmPing.Views
 
         private void SaveFavorite()
         {
-            Favorite.SaveFavoriteSet(MyTitle.Text, HostList, ColumnCount);
+            Favorite.Save(MyTitle.Text, HostList, ColumnCount);
             DialogResult = true;
         }
     }

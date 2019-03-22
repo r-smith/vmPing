@@ -137,7 +137,7 @@ namespace vmPing.Classes
                             return;
                         }
 
-                        ++pingItem.Statistics.PingsSent;
+                        ++pingItem.Statistics.Sent;
                         if (pingItem.Reply.Status == IPStatus.Success)
                         {
                             // Check for status change.
@@ -151,7 +151,7 @@ namespace vmPing.Classes
                             }
 
                             pingItem.DownCount = 0;
-                            ++pingItem.Statistics.PingsReceived;
+                            ++pingItem.Statistics.Received;
                             pingItem.Status = ProbeStatus.Up;
                         }
                         else
@@ -179,9 +179,9 @@ namespace vmPing.Classes
                                 pingItem.Reply.Status == IPStatus.DestinationNetworkUnreachable ||
                                 pingItem.Reply.Status == IPStatus.DestinationUnreachable
                                 )
-                                ++pingItem.Statistics.PingsLost;
+                                ++pingItem.Statistics.Lost;
                             else
-                                ++pingItem.Statistics.PingsError;
+                                ++pingItem.Statistics.Error;
                         }
 
                         DisplayStatistics(pingItem);
@@ -298,7 +298,7 @@ namespace vmPing.Classes
 
                 using (TcpClient client = new TcpClient())
                 {
-                    ++pingItem.Statistics.PingsSent;
+                    ++pingItem.Statistics.Sent;
                     DisplayStatistics(pingItem);
 
                     try
@@ -330,7 +330,7 @@ namespace vmPing.Classes
                         }
 
                         pingItem.DownCount = 0;
-                        ++pingItem.Statistics.PingsReceived;
+                        ++pingItem.Statistics.Received;
                         pingItem.Status = ProbeStatus.Up;
                         isPortOpen = true;
                     }
@@ -376,7 +376,7 @@ namespace vmPing.Classes
                             return;
                         }
 
-                        ++pingItem.Statistics.PingsLost;
+                        ++pingItem.Statistics.Lost;
                         isPortOpen = false;
                         errorCode = ex.ErrorCode;
                     }
@@ -482,7 +482,7 @@ namespace vmPing.Classes
             // Update the ping statistics label with the current
             // number of pings sent, received, and lost.
             pingItem.StatisticsText =
-                $"Sent: {pingItem.Statistics.PingsSent} Received: {pingItem.Statistics.PingsReceived} Lost: {pingItem.Statistics.PingsLost}";
+                $"Sent: {pingItem.Statistics.Sent} Received: {pingItem.Statistics.Received} Lost: {pingItem.Statistics.Lost}";
         }
     }
 }

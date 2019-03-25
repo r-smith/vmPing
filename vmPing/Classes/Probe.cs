@@ -21,11 +21,28 @@ namespace vmPing.Classes
 
     public partial class Probe : INotifyPropertyChanged
     {
-        public static int NumberOfActivePings;
         public static ObservableCollection<StatusChangeLog> StatusChangeLog = new ObservableCollection<StatusChangeLog>();
         public static StatusHistoryWindow StatusWindow;
 
+        private static int activeCount;
+        public static int ActiveCount
+        {
+            get => activeCount;
+            set
+            {
+                activeCount = value;
+                OnActiveCountChanged(EventArgs.Empty);
+            }
+        }
+        public static event EventHandler ActiveCountChanged;
+        protected static void OnActiveCountChanged(EventArgs e)
+        {
+            ActiveCountChanged?.Invoke(null, e);
+        }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         public IsolatedPingWindow IsolatedWindow { get; set; }
         public int DownCount { get; set; }
         public BackgroundWorker Thread { get; set; }
@@ -98,9 +115,9 @@ namespace vmPing.Classes
             set
             {
                 if (value == true)
-                    ++NumberOfActivePings;
+                    ++ActiveCount;
                 else
-                    --NumberOfActivePings;
+                    --ActiveCount;
                 NotifyPropertyChanged("NumberOfActivePings");
 
                 if (value != isActive)

@@ -53,9 +53,6 @@ namespace vmPing.Classes
 
                 probe.WriteFinalStatisticsToHistory();
             }
-
-            // TODO:
-            //RefreshGlobalStartStop();
         }
 
         private static void Thread_ProgressChanged(object sender, ProgressChangedEventArgs e)

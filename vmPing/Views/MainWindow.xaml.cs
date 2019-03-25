@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using vmPing.Classes;
 
 namespace vmPing.Views
@@ -106,32 +105,6 @@ namespace vmPing.Views
         }
 
 
-        public void RefreshGlobalStartStop()
-        {
-            // Check if any pings are in progress and update the start/stop all toggle accordingly.
-            bool isActive = false;
-            foreach (Probe pingItem in _ProbeCollection)
-            {
-                if (pingItem.IsActive)
-                {
-                    isActive = true;
-                    break;
-                }
-            }
-
-            if (isActive)
-            {
-                StartStopMenuHeader.Text = "_Stop All (F5)";
-                StartStopMenuImage.Source = new BitmapImage(new Uri(@"/Resources/stopCircle-16.png", UriKind.Relative));
-            }
-            else
-            {
-                StartStopMenuHeader.Text = "_Start All (F5)";
-                StartStopMenuImage.Source = new BitmapImage(new Uri(@"/Resources/play-16.png", UriKind.Relative));
-            }
-        }
-
-
         private void ColumnCount_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (ColumnCount.Value > _ProbeCollection.Count)
@@ -169,7 +142,6 @@ namespace vmPing.Views
             _ProbeCollection.Remove(probe);
             if (ColumnCount.Value > _ProbeCollection.Count)
                 ColumnCount.Value = _ProbeCollection.Count;
-            RefreshGlobalStartStop();
         }
 
 
@@ -272,7 +244,6 @@ namespace vmPing.Views
                     probe.Thread.CancelAsync();
             }
             _ProbeCollection.Clear();
-            RefreshGlobalStartStop();
         }
 
         private void LoadFavorites()

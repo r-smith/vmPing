@@ -19,6 +19,8 @@
         <classes:ProbeStatusToStatisticsBrushConverter x:Key="ProbeStatusToStatisticsBrushConverter" />
         <classes:ProbeStatusToAliasBrushConverter x:Key="ProbeStatusToAliasBrushConverter" />
         <classes:ProbeStatusToGlyphConverter x:Key="ProbeStatusToGlyphConverter" />
+        <classes:ProbeCountToGlobalStartStopText x:Key="ProbeCountToGlobalStartStopText" />
+        <classes:ProbeCountToGlobalStartStopIcon x:Key="ProbeCountToGlobalStartStopIcon" />
         <classes:HostnameFontsizeConverter x:Key="HostnameFontsizeConverter" />
         <classes:ButtonTextVisibilityConverter x:Key="ButtonTextVisibilityConverter" />
 
@@ -125,10 +127,15 @@
             <MenuItem x:Name="StartStopMenu"
                       Margin="6,0">
                 <MenuItem.Header>
-                    <AccessText Name="StartStopMenuHeader" Text="_Start All (F5)" VerticalAlignment="Center" />
+                    <AccessText Name="StartStopMenuHeader"
+                                VerticalAlignment="Center"
+                                Text="{Binding Path=(classes:Probe.ActiveCount), Converter={StaticResource ProbeCountToGlobalStartStopText}}" />
                 </MenuItem.Header>
                 <MenuItem.Icon>
-                    <Image Name="StartStopMenuImage" Source="/Resources/play-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                    <Image Name="StartStopMenuImage"
+                           VerticalAlignment="Center"
+                           Width="16" Height="16"
+                           Source="{Binding Path=(classes:Probe.ActiveCount), Converter={StaticResource ProbeCountToGlobalStartStopIcon}}" />
                 </MenuItem.Icon>
             </MenuItem>
 

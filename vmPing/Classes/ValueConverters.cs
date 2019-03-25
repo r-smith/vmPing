@@ -275,4 +275,37 @@ namespace vmPing.Classes
             throw new NotImplementedException();
         }
     }
+
+
+    public class ProbeCountToGlobalStartStopText : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((int)value > 0)
+                return "_Stop All (F5)";
+            else
+                return "_Start All (F5)";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class ProbeCountToGlobalStartStopIcon : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((int)value > 0)
+                return new BitmapImage(new Uri(@"/Resources/stopCircle-16.png", UriKind.Relative));
+            else
+                return new BitmapImage(new Uri(@"/Resources/play-16.png", UriKind.Relative));
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

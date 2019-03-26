@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
@@ -30,7 +29,6 @@ namespace vmPing.Classes
                 //    pingItem.Alias = _Aliases[pingItem.Hostname];
 
                 probe.StatisticsText = string.Empty;
-                probe.History = new ObservableCollection<string>();
                 probe.AddHistory($"*** Pinging {probe.Hostname}:");
 
                 probe.Thread = new BackgroundWorker();

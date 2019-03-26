@@ -50,20 +50,7 @@ namespace vmPing.Classes
         public PingStatistics Statistics { get; set; }
         public PingReply Reply { get; set; }
         public Ping Sender { get; set; }
-        
-        private ObservableCollection<string> history;
-        public ObservableCollection<string> History
-        {
-            get => history;
-            set
-            {
-                if (value != history)
-                {
-                    history = value;
-                    NotifyPropertyChanged("History");
-                }
-            }
-        }
+        public ObservableCollection<string> History { get; } = new ObservableCollection<string>();
 
         private string hostname;
         public string Hostname
@@ -145,9 +132,11 @@ namespace vmPing.Classes
 
         public void AddHistory(string historyItem)
         {
-            if (history.Count >= 3600)
-                history.RemoveAt(0);
-            history.Add(historyItem);
+            const int MaxSize = 3600;
+
+            History.Add(historyItem);
+            if (History.Count > MaxSize)
+                History.RemoveAt(0);
         }
 
         public void WriteFinalStatisticsToHistory()
@@ -167,19 +156,14 @@ namespace vmPing.Classes
                     roundTripTimes.Add(int.Parse(regexMatch.Groups["rtt"].Value));
             }
 
-            // Display statics and round trip times
-            history.Add("");
-            //history.Add($"[+] Ping statistics for {Hostname}");
-            history.Add($"Sent {Statistics.Sent}, Received {Statistics.Received}, Lost {Statistics.Sent - Statistics.Received} ({(100 * (Statistics.Sent - Statistics.Received)) / Statistics.Sent}% loss)");
+            // Display statics and round trip times.
+            AddHistory("");
+            AddHistory($"Sent {Statistics.Sent}, Received {Statistics.Received}, Lost {Statistics.Sent - Statistics.Received} ({(100 * (Statistics.Sent - Statistics.Received)) / Statistics.Sent}% loss)");
             if (roundTripTimes.Count > 0)
             {
-                //if (Statistics.PingsSent > 3600)
-                //    history.Add($"[+] Round trip times (based on last 3,600 pings)");
-                //else
-                //    history.Add($"[+] Round trip times");
-                history.Add($"Minimum ({roundTripTimes.Min()}ms), Maximum ({roundTripTimes.Max()}ms), Average ({roundTripTimes.Average().ToString("0.##")}ms)");
+                AddHistory($"Minimum ({roundTripTimes.Min()}ms), Maximum ({roundTripTimes.Max()}ms), Average ({roundTripTimes.Average().ToString("0.##")}ms)");
             }
-            history.Add(" ");
+            AddHistory(" ");
         }
 
         private void NotifyPropertyChanged(String info)

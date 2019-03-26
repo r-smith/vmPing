@@ -505,6 +505,7 @@
                                          IsEnabled="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}"
                                          Template="{StaticResource TextBoxBaseControlTemplatez}"
                                          Loaded="Hostname_Loaded"
+                                         TextChanged="Hostname_TextChanged"
                                          KeyDown="Hostname_KeyDown" />
 
                                 <!-- Ping button -->

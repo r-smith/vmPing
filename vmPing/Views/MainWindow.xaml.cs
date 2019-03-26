@@ -500,6 +500,16 @@ namespace vmPing.Views
             ((TextBox)sender).Focus();
         }
 
+        private void Hostname_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Check if there is an alias for the hostname as you type.
+            var probe = (sender as TextBox).DataContext as Probe;
+            if (probe.Hostname != null)
+            {
+                probe.Alias = _Aliases.ContainsKey(probe.Hostname) ? _Aliases[probe.Hostname] : null;
+            }
+        }
+
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             // Set initial focus first text box.

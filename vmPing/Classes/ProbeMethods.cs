@@ -24,10 +24,6 @@ namespace vmPing.Classes
                 if (probe.Thread != null)
                     probe.Thread.CancelAsync();
 
-                // TODO:
-                //if (pingItem.Hostname != null && _Aliases.ContainsKey(pingItem.Hostname))
-                //    pingItem.Alias = _Aliases[pingItem.Hostname];
-
                 probe.StatisticsText = string.Empty;
                 probe.AddHistory($"*** Pinging {probe.Hostname}:");
 

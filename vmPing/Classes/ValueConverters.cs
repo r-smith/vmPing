@@ -282,9 +282,9 @@ namespace vmPing.Classes
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if ((int)value > 0)
-                return "_Stop All (F5)";
+                return Properties.Strings.Toolbar_StopAll;
             else
-                return "_Start All (F5)";
+                return Properties.Strings.Toolbar_StartAll;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

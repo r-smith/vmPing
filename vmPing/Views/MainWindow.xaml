@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:classes="clr-namespace:vmPing.Classes"
         xmlns:controls="clr-namespace:vmPing.Controls"
+        xmlns:resource="clr-namespace:vmPing.Properties"
         Title="vmPing" Height="400" Width="800"
         MinHeight="200" MinWidth="350"
         Background="White"
@@ -13,7 +14,7 @@
         <classes:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         <classes:BooleanToImageConverter x:Key="BooleanToImageConverter" />
         <classes:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        <classes:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="Ping" TrueValue="Stop" />
+        <classes:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="{x:Static resource:Strings.Button_Ping}" TrueValue="{x:Static resource:Strings.Button_Stop}" />
         <classes:ProbeStatusToBackgroundBrushConverter x:Key="ProbeStatusToBackgroundBrushConverter" />
         <classes:ProbeStatusToForegroundBrushConverter x:Key="ProbeStatusToForegroundBrushConverter" />
         <classes:ProbeStatusToStatisticsBrushConverter x:Key="ProbeStatusToStatisticsBrushConverter" />
@@ -86,7 +87,7 @@
             <MenuItem x:Name="AddMonitorMenu"
                       Margin="6,0">
                 <MenuItem.Header>
-                    <AccessText Text="_Add Host" VerticalAlignment="Center" />
+                    <AccessText Text="{x:Static resource:Strings.Toolbar_Add}" VerticalAlignment="Center" />
                 </MenuItem.Header>
                 <MenuItem.Icon>
                     <Image Source="/Resources/add-16.png" VerticalAlignment="Center" Width="16" Height="16" />
@@ -96,7 +97,7 @@
             <!-- Menu Item: Columns -->
             <MenuItem Margin="6,0">
                 <MenuItem.Header>
-                    <AccessText Text="_Columns" VerticalAlignment="Center" />
+                    <AccessText Text="{x:Static resource:Strings.Toolbar_Columns}" VerticalAlignment="Center" />
                 </MenuItem.Header>
                 <MenuItem.Icon>
                     <Image Source="/Resources/grid-16.png" VerticalAlignment="Center" Width="16" Height="16" />
@@ -150,26 +151,26 @@
                 </MenuItem.Icon>
 
                 <MenuItem Name="mnuProbeOptions"
-                          Header="Options"
+                          Header="{x:Static resource:Strings.Menu_Options}"
                           InputGestureText="F10"
                           Click="mnuProbeOptions_Click"
                           Padding="0,5" />
                 
                 <Separator Padding="0,6" />
 
-                <MenuItem Header="Status History" Click="mnuStatusHistory_Click" />
-                
-                <MenuItem Header="Popup Notifications">
+                <MenuItem Header="{x:Static resource:Strings.Menu_StatusHistory}" Click="mnuStatusHistory_Click" />
+
+                <MenuItem Header="{x:Static resource:Strings.Menu_PopupNotifications}">
                     <MenuItem Name="mnuPopupNever"
-                              Header="Never"
+                              Header="{x:Static resource:Strings.Menu_Never}"
                               Click="mnuPopupNotification_Click"
                               IsCheckable="True" />
                     <MenuItem Name="mnuPopupWhenMinimized"
-                              Header="When Minimized"
+                              Header="{x:Static resource:Strings.Menu_WhenMinimized}"
                               Click="mnuPopupNotification_Click"
                               IsCheckable="True" />
                     <MenuItem Name="mnuPopupAlways"
-                              Header="Always"
+                              Header="{x:Static resource:Strings.Menu_Always}"
                               Click="mnuPopupNotification_Click"
                               IsCheckable="True"
                               IsChecked="True" />
@@ -177,24 +178,24 @@
 
                 <Separator Padding="0,6" />
 
-                <MenuItem Header="Favorite Sets" x:Name="mnuFavorites">
-                    <MenuItem Header="Save Current Layout to Favorites" Click="mnuAddToFavorites_Click" />
-                    <MenuItem Header="Manage Favorites" Click="mnuManageFavorites_Click" />
+                <MenuItem Header="{x:Static resource:Strings.Menu_FavoriteSets}" x:Name="mnuFavorites">
+                    <MenuItem Header="{x:Static resource:Strings.Menu_SaveToFavorites}" Click="mnuAddToFavorites_Click" />
+                    <MenuItem Header="{x:Static resource:Strings.Menu_ManageFavorites}" Click="mnuManageFavorites_Click" />
                     <Separator Padding="0,6" />
                 </MenuItem>
-                <MenuItem Header="Aliases" x:Name="mnuAliases">
-                    <MenuItem Header="Manage Aliases" Click="mnuManageAliases_Click" />
+                <MenuItem Header="{x:Static resource:Strings.Menu_Aliases}" x:Name="mnuAliases">
+                    <MenuItem Header="{x:Static resource:Strings.Menu_ManageAliases}" Click="mnuManageAliases_Click" />
                     <Separator Padding="0,6" />
                 </MenuItem>
 
                 <Separator Padding="0,6" />
 
-                <MenuItem Header="Trace Route" x:Name="TraceRouteMenu" InputGestureText="Ctrl-T" Padding="0,5">
+                <MenuItem Header="{x:Static resource:Strings.Menu_TraceRoute}" x:Name="TraceRouteMenu" InputGestureText="Ctrl-T" Padding="0,5">
                     <MenuItem.Icon>
                         <Image Source="/Resources/route-16.png" VerticalAlignment="Center" Width="16" Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Flood Host" x:Name="FloodHostMenu" InputGestureText="Ctrl-F" Padding="0,5">
+                <MenuItem Header="{x:Static resource:Strings.Menu_FloodHost}" x:Name="FloodHostMenu" InputGestureText="Ctrl-F" Padding="0,5">
                     <MenuItem.Icon>
                         <Image Source="/Resources/bomb-16.png" VerticalAlignment="Center" Width="16" Height="16" />
                     </MenuItem.Icon>
@@ -207,7 +208,7 @@
 
                 <Separator Padding="0,6" />
 
-                <MenuItem Header="Help" x:Name="HelpMenu" InputGestureText="F1" Padding="0,5">
+                <MenuItem Header="{x:Static resource:Strings.Menu_Help}" x:Name="HelpMenu" InputGestureText="F1" Padding="0,5">
                     <MenuItem.Icon>
                         <Image Source="/Resources/questionMark-16.png" VerticalAlignment="Center" Width="16" Height="16" />
                     </MenuItem.Icon>
@@ -270,7 +271,7 @@
                                             Background="Transparent"
                                             HorizontalAlignment="Right"
                                             IsTabStop="False"
-                                            ToolTip="Close"
+                                            ToolTip="{x:Static resource:Strings.Tooltip_Close}"
                                             ToolTipService.InitialShowDelay="1500"
                                             ToolTipService.ShowDuration="2000"
                                             Click="RemoveProbe_Click">
@@ -318,7 +319,7 @@
                                             Background="Transparent"
                                             HorizontalAlignment="Right"
                                             IsTabStop="False"
-                                            ToolTip="Open isolated view"
+                                            ToolTip="{x:Static resource:Strings.Tooltip_IsolatedView}"
                                             ToolTipService.InitialShowDelay="1500"
                                             ToolTipService.ShowDuration="2000"
                                             Click="IsolatedView_Click">
@@ -366,7 +367,7 @@
                                             Background="Transparent"
                                             HorizontalAlignment="Right"
                                             IsTabStop="False"
-                                            ToolTip="Edit alias"
+                                            ToolTip="{x:Static resource:Strings.Tooltip_EditAlias}"
                                             ToolTipService.InitialShowDelay="1500"
                                             ToolTipService.ShowDuration="2000"
                                             Click="EditAlias_Click"

@@ -79,6 +79,213 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string DialogButton_Cancel {
+            get {
+                return ResourceManager.GetString("DialogButton_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string DialogButton_Edit {
+            get {
+                return ResourceManager.GetString("DialogButton_Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New.
+        /// </summary>
+        public static string DialogButton_New {
+            get {
+                return ResourceManager.GetString("DialogButton_New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string DialogButton_OK {
+            get {
+                return ResourceManager.GetString("DialogButton_OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overwrite.
+        /// </summary>
+        public static string DialogButton_Overwrite {
+            get {
+                return ResourceManager.GetString("DialogButton_Overwrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        public static string DialogButton_Remove {
+            get {
+                return ResourceManager.GetString("DialogButton_Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string DialogButton_Save {
+            get {
+                return ResourceManager.GetString("DialogButton_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm Delete.
+        /// </summary>
+        public static string DialogTitle_ConfirmDelete {
+            get {
+                return ResourceManager.GetString("DialogTitle_ConfirmDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string DialogTitle_Error {
+            get {
+                return ResourceManager.GetString("DialogTitle_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        public static string DialogTitle_Warning {
+            get {
+                return ResourceManager.GetString("DialogTitle_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Alias for:.
+        /// </summary>
+        public static string EditAlias_AliasFor {
+            get {
+                return ResourceManager.GetString("EditAlias_AliasFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename:.
+        /// </summary>
+        public static string EditFavorite_Rename {
+            get {
+                return ResourceManager.GetString("EditFavorite_Rename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Alias.
+        /// </summary>
+        public static string ManageAliases_Alias {
+            get {
+                return ResourceManager.GetString("ManageAliases_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage Aliases.
+        /// </summary>
+        public static string ManageAliases_Header {
+            get {
+                return ResourceManager.GetString("ManageAliases_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Host.
+        /// </summary>
+        public static string ManageAliases_Host {
+            get {
+                return ResourceManager.GetString("ManageAliases_Host", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove.
+        /// </summary>
+        public static string ManageAliases_Warn_DeleteA {
+            get {
+                return ResourceManager.GetString("ManageAliases_Warn_DeleteA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to from your aliases?.
+        /// </summary>
+        public static string ManageAliases_Warn_DeleteB {
+            get {
+                return ResourceManager.GetString("ManageAliases_Warn_DeleteB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to vmPing - Aliases.
+        /// </summary>
+        public static string ManageAliases_WindowTitle {
+            get {
+                return ResourceManager.GetString("ManageAliases_WindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage Favorites.
+        /// </summary>
+        public static string ManageFavorites_Header {
+            get {
+                return ResourceManager.GetString("ManageFavorites_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hosts in Set.
+        /// </summary>
+        public static string ManageFavorites_HostsInSet {
+            get {
+                return ResourceManager.GetString("ManageFavorites_HostsInSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove.
+        /// </summary>
+        public static string ManageFavorites_Warn_DeleteA {
+            get {
+                return ResourceManager.GetString("ManageFavorites_Warn_DeleteA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to from your favorites?.
+        /// </summary>
+        public static string ManageFavorites_Warn_DeleteB {
+            get {
+                return ResourceManager.GetString("ManageFavorites_Warn_DeleteB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to vmPing - Favorites.
+        /// </summary>
+        public static string ManageFavorites_WindowTitle {
+            get {
+                return ResourceManager.GetString("ManageFavorites_WindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Aliases.
         /// </summary>
         public static string Menu_Aliases {
@@ -201,6 +408,159 @@ namespace vmPing.Properties {
         public static string Menu_WhenMinimized {
             get {
                 return ResourceManager.GetString("Menu_WhenMinimized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Alias.
+        /// </summary>
+        public static string NewAlias_Alias {
+            get {
+                return ResourceManager.GetString("NewAlias_Alias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid alias..
+        /// </summary>
+        public static string NewAlias_Error_InvalidAlias {
+            get {
+                return ResourceManager.GetString("NewAlias_Error_InvalidAlias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid host name..
+        /// </summary>
+        public static string NewAlias_Error_InvalidHost {
+            get {
+                return ResourceManager.GetString("NewAlias_Error_InvalidHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Alias.
+        /// </summary>
+        public static string NewAlias_Header {
+            get {
+                return ResourceManager.GetString("NewAlias_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Host.
+        /// </summary>
+        public static string NewAlias_Host {
+            get {
+                return ResourceManager.GetString("NewAlias_Host", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid name for this favorite set..
+        /// </summary>
+        public static string NewFavorite_Error_InvalidName {
+            get {
+                return ResourceManager.GetString("NewFavorite_Error_InvalidName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a Favorite Set.
+        /// </summary>
+        public static string NewFavorite_Header {
+            get {
+                return ResourceManager.GetString("NewFavorite_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected Hosts.
+        /// </summary>
+        public static string NewFavorite_SelectedHostsHeader {
+            get {
+                return ResourceManager.GetString("NewFavorite_SelectedHostsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string NewFavorite_Title {
+            get {
+                return ResourceManager.GetString("NewFavorite_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to already exists.  Would you like to overwrite?.
+        /// </summary>
+        public static string NewFavorite_Warn_AlreadyExists {
+            get {
+                return ResourceManager.GetString("NewFavorite_Warn_AlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DOWN.
+        /// </summary>
+        public static string StatusChange_Down {
+            get {
+                return ResourceManager.GetString("StatusChange_Down", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [ERROR].
+        /// </summary>
+        public static string StatusChange_Error {
+            get {
+                return ResourceManager.GetString("StatusChange_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UP.
+        /// </summary>
+        public static string StatusChange_Up {
+            get {
+                return ResourceManager.GetString("StatusChange_Up", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to is.
+        /// </summary>
+        public static string StatusChange_Verb {
+            get {
+                return ResourceManager.GetString("StatusChange_Verb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No status changes.
+        /// </summary>
+        public static string StatusHistory_NoChanges {
+            get {
+                return ResourceManager.GetString("StatusHistory_NoChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When a host changes between down or up, it&apos;ll show up here.
+        /// </summary>
+        public static string StatusHistory_NoChangesDescription {
+            get {
+                return ResourceManager.GetString("StatusHistory_NoChangesDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to vmPing - Status History.
+        /// </summary>
+        public static string StatusHistory_WindowTitle {
+            get {
+                return ResourceManager.GetString("StatusHistory_WindowTitle", resourceCulture);
             }
         }
         

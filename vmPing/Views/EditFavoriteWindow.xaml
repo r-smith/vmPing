@@ -1,6 +1,7 @@
 ﻿<Window x:Class="vmPing.Views.EditFavoriteWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:resource="clr-namespace:vmPing.Properties"
         Title="vmPing" Height="170" Width="440"
         ResizeMode="NoResize"
         Background="#fff"
@@ -18,7 +19,7 @@
             <!-- Header -->
             <TextBlock DockPanel.Dock="Top"
                        Name="Header"
-                       Text="Rename: "
+                       Text="{x:Static resource:Strings.EditFavorite_Rename}"
                        TextTrimming="CharacterEllipsis"
                        Style="{DynamicResource ResourceKey=OptionHeaderTextStyle}"
                        />
@@ -39,11 +40,11 @@
                         Margin="0,0,8,0"
                         Click="Save_Click"
                         Width="100"
-                        Content="Save" />
+                        Content="{x:Static resource:Strings.DialogButton_Save}" />
                 <Button Style="{DynamicResource ButtonStandardStyle}"
                         Width="100"
                         IsCancel="True"
-                        Content="Cancel" />
+                        Content="{x:Static resource:Strings.DialogButton_Cancel}" />
             </StackPanel>
         </Border>
     </Grid>

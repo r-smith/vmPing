@@ -37,7 +37,7 @@ namespace vmPing.Views
         {
             return new DialogWindow(
                 icon: DialogIcon.Warning,
-                title: "Error",
+                title: Properties.Strings.DialogTitle_Error,
                 body: message,
                 confirmationText: "OK",
                 isCancelButtonVisible: false);
@@ -47,7 +47,7 @@ namespace vmPing.Views
         {
             return new DialogWindow(
                 icon: DialogIcon.Warning,
-                title: "Warning",
+                title: Properties.Strings.DialogTitle_Warning,
                 body: message,
                 confirmationText: confirmButtonText,
                 isCancelButtonVisible: true);

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:vmPing.Views"
+        xmlns:resource="clr-namespace:vmPing.Properties"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Background="#fff"
@@ -11,7 +11,7 @@
         Loaded="Window_Loaded"
         Closed="Window_Closed"
         SourceInitialized="Window_SourceInitialized"
-        Title="vmPing - Aliases"
+        Title="{x:Static resource:Strings.ManageAliases_WindowTitle}"
         Height="475" Width="450"
         MinHeight="250" MinWidth="360">
 
@@ -22,7 +22,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0"
-                   Text="Manage Aliases"
+                   Text="{x:Static resource:Strings.ManageAliases_Header}"
                    Style="{DynamicResource ResourceKey=OptionHeaderTextStyle}"
                    />
 
@@ -31,7 +31,7 @@
                   Style="{DynamicResource DataGridStyle}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=Value}" Header="Alias" Width="*">
+                <DataGridTextColumn Binding="{Binding Path=Value}" Header="{x:Static resource:Strings.ManageAliases_Alias}" Width="*">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
@@ -45,7 +45,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Binding="{Binding Path=Key}" Header="Host" Width=".8*">
+                <DataGridTextColumn Binding="{Binding Path=Key}" Header="{x:Static resource:Strings.ManageAliases_Host}" Width=".8*">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
@@ -70,22 +70,21 @@
                         Width="90"
                         Style="{DynamicResource ButtonSecondaryStyle}"
                         HorizontalAlignment="Right"
-                        Content="New" />
+                        Content="{x:Static resource:Strings.DialogButton_New}" />
                 <Button Click="Edit_Click"
                         Margin="9"
                         Width="90"
                         Style="{DynamicResource ButtonSecondaryStyle}"
                         IsEnabled="{Binding ElementName=AliasesDataGrid, Path=SelectedItems.Count}"
                         HorizontalAlignment="Right"
-                        Content="Edit" />
+                        Content="{x:Static resource:Strings.DialogButton_Edit}" />
                 <Button Click="Remove_Click"
                         Margin="9"
                         Width="90"
                         Style="{DynamicResource ButtonSecondaryStyle}"
                         IsEnabled="{Binding ElementName=AliasesDataGrid, Path=SelectedItems.Count}"
                         HorizontalAlignment="Right"
-                        Content="Remove">
-                </Button>
+                        Content="{x:Static resource:Strings.DialogButton_Remove}" />
             </StackPanel>
         </Border>
     </Grid>

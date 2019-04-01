@@ -1,6 +1,7 @@
 ﻿<Window x:Class="vmPing.Views.NewAliasWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:resource="clr-namespace:vmPing.Properties"
         Title="vmPing"
         Height="205" Width="390"
         ResizeMode="NoResize"
@@ -18,7 +19,7 @@
 
             <!-- Header -->
             <TextBlock DockPanel.Dock="Top"
-                       Text="New Alias"
+                       Text="{x:Static resource:Strings.NewAlias_Header}"
                        TextTrimming="CharacterEllipsis"
                        Style="{DynamicResource ResourceKey=OptionHeaderTextStyle}"
                        />
@@ -26,7 +27,7 @@
             <!-- Hostname TextBox-->
             <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
                 <Border Width="50" Margin="0,0,15,0">
-                    <TextBlock Text="Host"
+                    <TextBlock Text="{x:Static resource:Strings.NewAlias_Host}"
                                FontSize="14"
                                VerticalAlignment="Center"
                                Foreground="#555"
@@ -44,7 +45,7 @@
             <!-- Alias TextBox-->
             <DockPanel DockPanel.Dock="Top">
                 <Border Width="50" Margin="0,0,15,0">
-                    <TextBlock Text="Alias"
+                    <TextBlock Text="{x:Static resource:Strings.NewAlias_Alias}"
                                FontSize="14"
                                VerticalAlignment="Center"
                                Foreground="#555"
@@ -66,11 +67,11 @@
                         Margin="0,0,8,0"
                         Click="Save_Click"
                         Width="100"
-                        Content="Save" />
+                        Content="{x:Static resource:Strings.DialogButton_Save}" />
                 <Button Style="{DynamicResource ButtonStandardStyle}"
                         Width="100"
                         IsCancel="True"
-                        Content="Cancel" />
+                        Content="{x:Static resource:Strings.DialogButton_Cancel}" />
             </StackPanel>
         </Border>
     </Grid>

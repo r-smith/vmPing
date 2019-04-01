@@ -19,7 +19,7 @@ namespace vmPing.Views
         {
             InitializeComponent();
 
-            Header.Text = "Alias for: " + hostname;
+            Header.Text = $"{Properties.Strings.EditAlias_AliasFor} {hostname}";
             MyAlias.Text = alias;
             MyAlias.SelectAll();
             _Hostname = hostname;

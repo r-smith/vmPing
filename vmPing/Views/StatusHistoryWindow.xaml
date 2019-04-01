@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:resource="clr-namespace:vmPing.Properties"
         mc:Ignorable="d"
         Height="300" Width="600"
         MinHeight="200" MinWidth="350"
-        Title="vmPing - Status History"
+        Title="{x:Static resource:Strings.StatusHistory_WindowTitle}"
         Background="#313130">
 
     <Grid>
@@ -104,7 +105,7 @@
                                                VerticalAlignment="Center"
                                                Padding="9,0,0,0" />
                                     <TextBlock Grid.Column="3"
-                                               Text="is"
+                                               Text="{x:Static resource:Strings.StatusChange_Verb}"
                                                FontSize="17"
                                                Foreground="White"
                                                VerticalAlignment="Center"
@@ -117,13 +118,13 @@
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding StatusAsString}" Value="DOWN">
+                                                    <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Down}">
                                                         <Setter Property="Foreground" Value="#dc322f" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding StatusAsString}" Value="[ERROR]">
+                                                    <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Error}">
                                                         <Setter Property="Foreground" Value="#dc322f" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding StatusAsString}" Value="UP">
+                                                    <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Up}">
                                                         <Setter Property="Foreground" Value="#859900" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -154,13 +155,13 @@
             <TextBlock Foreground="#f0f0f0"
                        FontSize="24"
                        HorizontalAlignment="Center"
-                       Text="No status changes" />
+                       Text="{x:Static resource:Strings.StatusHistory_NoChanges}" />
             <TextBlock Foreground="#888"
                        Width="200"
                        TextWrapping="Wrap"
                        HorizontalAlignment="Center"
                        Margin="0,10,0,0"
-                       Text="When a host changes between down or up, it'll show up here" />
+                       Text="{x:Static resource:Strings.StatusHistory_NoChangesDescription}" />
         </StackPanel>
         
         <!-- Logo -->

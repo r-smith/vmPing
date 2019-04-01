@@ -123,6 +123,80 @@
   <data name="Button_Stop" xml:space="preserve">
     <value>Stop</value>
   </data>
+  <data name="DialogButton_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="DialogButton_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="DialogButton_New" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="DialogButton_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="DialogButton_Overwrite" xml:space="preserve">
+    <value>Overwrite</value>
+  </data>
+  <data name="DialogButton_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="DialogButton_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="DialogTitle_ConfirmDelete" xml:space="preserve">
+    <value>Confirm Delete</value>
+  </data>
+  <data name="DialogTitle_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="DialogTitle_Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="EditAlias_AliasFor" xml:space="preserve">
+    <value>Alias for:</value>
+    <comment>Parsed as:  Alias for: {hostname}</comment>
+  </data>
+  <data name="EditFavorite_Rename" xml:space="preserve">
+    <value>Rename:</value>
+    <comment>Parsed as:  Rename: {FavoriteTitle}</comment>
+  </data>
+  <data name="ManageAliases_Alias" xml:space="preserve">
+    <value>Alias</value>
+  </data>
+  <data name="ManageAliases_Header" xml:space="preserve">
+    <value>Manage Aliases</value>
+  </data>
+  <data name="ManageAliases_Host" xml:space="preserve">
+    <value>Host</value>
+  </data>
+  <data name="ManageAliases_Warn_DeleteA" xml:space="preserve">
+    <value>Are you sure you want to remove</value>
+    <comment>Parsed as:  [DeleteA] {AliasName} [DeleteB]</comment>
+  </data>
+  <data name="ManageAliases_Warn_DeleteB" xml:space="preserve">
+    <value>from your aliases?</value>
+    <comment>/// See ManageFavorites_Warn_DeleteA for usage when translating</comment>
+  </data>
+  <data name="ManageAliases_WindowTitle" xml:space="preserve">
+    <value>vmPing - Aliases</value>
+  </data>
+  <data name="ManageFavorites_Header" xml:space="preserve">
+    <value>Manage Favorites</value>
+  </data>
+  <data name="ManageFavorites_HostsInSet" xml:space="preserve">
+    <value>Hosts in Set</value>
+  </data>
+  <data name="ManageFavorites_Warn_DeleteA" xml:space="preserve">
+    <value>Are you sure you want to remove</value>
+    <comment>Parsed as:  [DeleteA] {FavoriteTitle} [DeleteB]  /// Translating: If this format does not make sense for your locale, make OverwriteA an empty string and put your translated message in OverwriteB</comment>
+  </data>
+  <data name="ManageFavorites_Warn_DeleteB" xml:space="preserve">
+    <value>from your favorites?</value>
+  </data>
+  <data name="ManageFavorites_WindowTitle" xml:space="preserve">
+    <value>vmPing - Favorites</value>
+  </data>
   <data name="Menu_Aliases" xml:space="preserve">
     <value>Aliases</value>
   </data>
@@ -164,6 +238,59 @@
   </data>
   <data name="Menu_WhenMinimized" xml:space="preserve">
     <value>When Minimized</value>
+  </data>
+  <data name="NewAlias_Alias" xml:space="preserve">
+    <value>Alias</value>
+  </data>
+  <data name="NewAlias_Error_InvalidAlias" xml:space="preserve">
+    <value>Please enter a valid alias.</value>
+  </data>
+  <data name="NewAlias_Error_InvalidHost" xml:space="preserve">
+    <value>Please enter a valid host name.</value>
+  </data>
+  <data name="NewAlias_Header" xml:space="preserve">
+    <value>New Alias</value>
+  </data>
+  <data name="NewAlias_Host" xml:space="preserve">
+    <value>Host</value>
+  </data>
+  <data name="NewFavorite_Error_InvalidName" xml:space="preserve">
+    <value>Please enter a valid name for this favorite set.</value>
+  </data>
+  <data name="NewFavorite_Header" xml:space="preserve">
+    <value>Create a Favorite Set</value>
+  </data>
+  <data name="NewFavorite_SelectedHostsHeader" xml:space="preserve">
+    <value>Selected Hosts</value>
+  </data>
+  <data name="NewFavorite_Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="NewFavorite_Warn_AlreadyExists" xml:space="preserve">
+    <value>already exists.  Would you like to overwrite?</value>
+    <comment>Parsed as:  {Title} already exists.  Would you like to overwrite?</comment>
+  </data>
+  <data name="StatusChange_Down" xml:space="preserve">
+    <value>DOWN</value>
+  </data>
+  <data name="StatusChange_Error" xml:space="preserve">
+    <value>[ERROR]</value>
+  </data>
+  <data name="StatusChange_Up" xml:space="preserve">
+    <value>UP</value>
+  </data>
+  <data name="StatusChange_Verb" xml:space="preserve">
+    <value>is</value>
+    <comment>Example:   127.0.0.1 "is" DOWN</comment>
+  </data>
+  <data name="StatusHistory_NoChanges" xml:space="preserve">
+    <value>No status changes</value>
+  </data>
+  <data name="StatusHistory_NoChangesDescription" xml:space="preserve">
+    <value>When a host changes between down or up, it'll show up here</value>
+  </data>
+  <data name="StatusHistory_WindowTitle" xml:space="preserve">
+    <value>vmPing - Status History</value>
   </data>
   <data name="Toolbar_Add" xml:space="preserve">
     <value>_Add Host</value>

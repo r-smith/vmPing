@@ -16,13 +16,13 @@ namespace vmPing.Classes
                 switch (Status)
                 {
                     case ProbeStatus.Down:
-                        returnString = "DOWN";
+                        returnString = Properties.Strings.StatusChange_Down;
                         break;
                     case ProbeStatus.Up:
-                        returnString = "UP";
+                        returnString = Properties.Strings.StatusChange_Up;
                         break;
                     case ProbeStatus.Error:
-                        returnString = "[ERROR]";
+                        returnString = Properties.Strings.StatusChange_Error;
                         break;
                 }
                 return returnString;

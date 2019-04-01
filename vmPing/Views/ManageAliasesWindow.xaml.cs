@@ -50,9 +50,9 @@ namespace vmPing.Views
 
             var dialogWindow = new DialogWindow(
                 DialogWindow.DialogIcon.Warning,
-                "Confirm Delete",
-                $"Are you sure you want to remove {((KeyValuePair<string, string>)AliasesDataGrid.SelectedItem).Value} from your aliases?",
-                "Remove",
+                Properties.Strings.DialogTitle_ConfirmDelete,
+                $"{Properties.Strings.ManageAliases_Warn_DeleteA} {((KeyValuePair<string, string>)AliasesDataGrid.SelectedItem).Value} {Properties.Strings.ManageAliases_Warn_DeleteB}",
+                Properties.Strings.DialogButton_Remove,
                 true);
             dialogWindow.Owner = this;
             if (dialogWindow.ShowDialog() == true)

@@ -33,7 +33,7 @@ namespace vmPing.Views
             // Validate favorite name.
             if (Favorite.IsTitleInvalid(MyTitle.Text))
             {
-                var errorWindow = DialogWindow.ErrorWindow($"Please enter a valid name for this favorite set.");
+                var errorWindow = DialogWindow.ErrorWindow(Properties.Strings.NewFavorite_Error_InvalidName);
                 errorWindow.Owner = this;
                 errorWindow.ShowDialog();
                 MyTitle.Focus();
@@ -45,8 +45,8 @@ namespace vmPing.Views
             if (Favorite.TitleExists(MyTitle.Text))
             {
                 var warningWindow = DialogWindow.WarningWindow(
-                    message: $"{MyTitle.Text} already exists.  Would you like to overwrite?",
-                    confirmButtonText: "Overwrite");
+                    message: $"{MyTitle.Text} {Properties.Strings.NewFavorite_Warn_AlreadyExists}",
+                    confirmButtonText: Properties.Strings.DialogButton_Overwrite);
                 warningWindow.Owner = this;
                 if (warningWindow.ShowDialog() == true)
                 {

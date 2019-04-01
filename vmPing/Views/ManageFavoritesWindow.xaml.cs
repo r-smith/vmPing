@@ -49,9 +49,9 @@ namespace vmPing.Views
 
             var dialogWindow = new DialogWindow(
                 DialogWindow.DialogIcon.Warning,
-                "Confirm Delete",
-                $"Are you sure you want to remove {Favorites.SelectedItem.ToString()} from your favorites?",
-                "Remove",
+                Properties.Strings.DialogTitle_ConfirmDelete,
+                $"{Properties.Strings.ManageFavorites_Warn_DeleteA} {Favorites.SelectedItem.ToString()} {Properties.Strings.ManageFavorites_Warn_DeleteB}",
+                Properties.Strings.DialogButton_Remove,
                 true);
             dialogWindow.Owner = this;
             if (dialogWindow.ShowDialog() == true)

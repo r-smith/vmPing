@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:vmPing.Views"
+        xmlns:resource="clr-namespace:vmPing.Properties"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Background="#fff"
@@ -11,7 +11,7 @@
         Loaded="Window_Loaded"
         Closed="Window_Closed"
         SourceInitialized="Window_SourceInitialized"
-        Title="vmPing - Favorites"
+        Title="{x:Static resource:Strings.ManageFavorites_WindowTitle}"
         Height="475" Width="550"
         MinHeight="300" MinWidth="425">
 
@@ -23,7 +23,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0"
-                   Text="Manage Favorites"
+                   Text="{x:Static resource:Strings.ManageFavorites_Header}"
                    Style="{DynamicResource ResourceKey=OptionHeaderTextStyle}"
                    />
         <Border Grid.Row="1" BorderBrush="#acacac" BorderThickness="1">
@@ -52,7 +52,7 @@
                             <Grid DockPanel.Dock="Top">
                                 <!-- Contents title -->
                                 <TextBlock DockPanel.Dock="Top"
-                                           Text="Hosts in Set"
+                                           Text="{x:Static resource:Strings.ManageFavorites_HostsInSet}"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            FontSize="13"
@@ -125,7 +125,7 @@
                         Style="{DynamicResource ButtonSecondaryStyle}"
                         IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
                         HorizontalAlignment="Right"
-                        Content="Edit" />
+                        Content="{x:Static resource:Strings.DialogButton_Edit}" />
                 <Button Name="Remove"
                         Click="Remove_Click"
                         Margin="9"
@@ -133,7 +133,7 @@
                         Style="{DynamicResource ButtonSecondaryStyle}"
                         IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
                         HorizontalAlignment="Right"
-                        Content="Remove">
+                        Content="{x:Static resource:Strings.DialogButton_Remove}">
                 </Button>
             </StackPanel>
         </Border>

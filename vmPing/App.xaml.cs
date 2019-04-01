@@ -7,5 +7,10 @@ namespace vmPing
     /// </summary>
     public partial class App : Application
     {
+        // DEBUG: Use this for testing alternate locales.
+        //public App()
+        //{
+        //    vmPing.Properties.Strings.Culture = new System.Globalization.CultureInfo("en-GB");
+        //}
     }
 }

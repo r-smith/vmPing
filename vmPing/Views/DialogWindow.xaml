@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:vmPing.Views"
+        xmlns:resource="clr-namespace:vmPing.Properties"
         mc:Ignorable="d"
         Title="vmPing"
         Height="200" Width="400"
@@ -52,13 +52,13 @@
                         Name="OK"
                         Click="OK_Click"
                         Width="100"
-                        Content="OK" />
+                        Content="{x:Static resource:Strings.DialogButton_OK}" />
                 <Button Style="{DynamicResource ButtonStandardStyle}"
                         Name="Cancel"
                         Margin="8,0,0,0"
                         Width="100"
                         IsCancel="True"
-                        Content="Cancel" />
+                        Content="{x:Static resource:Strings.DialogButton_Cancel}" />
             </StackPanel>
         </Border>
     </Grid>

@@ -24,7 +24,7 @@ namespace vmPing.Views
             // Validate hostname.
             if (Alias.IsHostInvalid(MyHost.Text))
             {
-                var errorWindow = DialogWindow.ErrorWindow($"Please enter a valid host name.");
+                var errorWindow = DialogWindow.ErrorWindow(Properties.Strings.NewAlias_Error_InvalidHost);
                 errorWindow.Owner = this;
                 errorWindow.ShowDialog();
                 MyHost.Focus();
@@ -35,7 +35,7 @@ namespace vmPing.Views
             // Validate alias name.
             if (Alias.IsNameInvalid(MyAlias.Text))
             {
-                var errorWindow = DialogWindow.ErrorWindow($"Please enter a valid alias.");
+                var errorWindow = DialogWindow.ErrorWindow(Properties.Strings.NewAlias_Error_InvalidAlias);
                 errorWindow.Owner = this;
                 errorWindow.ShowDialog();
                 MyAlias.Focus();

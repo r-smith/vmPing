@@ -15,7 +15,7 @@ namespace vmPing.Views
         {
             InitializeComponent();
 
-            Header.Text = "Rename: " + favoriteTitle;
+            Header.Text = $"{Properties.Strings.EditFavorite_Rename} {favoriteTitle}";
             MyFavoriteTitle.Text = favoriteTitle;
             MyFavoriteTitle.SelectAll();
 
@@ -31,7 +31,7 @@ namespace vmPing.Views
             // Validate favorite name.
             if (Favorite.IsTitleInvalid(MyFavoriteTitle.Text))
             {
-                var errorWindow = DialogWindow.ErrorWindow($"Please enter a valid name for this favorite set.");
+                var errorWindow = DialogWindow.ErrorWindow(Properties.Strings.NewFavorite_Error_InvalidName);
                 errorWindow.Owner = this;
                 errorWindow.ShowDialog();
                 MyFavoriteTitle.Focus();

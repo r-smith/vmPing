@@ -27,6 +27,15 @@ namespace vmPing.Views
             PopulateLayoutOptions();
         }
 
+        private void ShowError(string message, TabItem tabItem, Control control)
+        {
+            tabItem.Focus();
+            var errorWindow = DialogWindow.ErrorWindow(message);
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
+            control.Focus();
+        }
+
         private void PopulateGeneralOptions()
         {
             string pingIntervalText;
@@ -152,35 +161,17 @@ namespace vmPing.Views
         {
             if (txtPingInterval.Text.Length == 0)
             {
-                GeneralTab.Focus();
-                MessageBox.Show(
-                    "Please enter a valid ping interval.",
-                    "vmPing Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-                txtPingInterval.Focus();
+                ShowError("Please enter a valid ping interval.", GeneralTab, txtPingInterval);
                 return false;
             }
             else if (txtPingTimeout.Text.Length == 0)
             {
-                GeneralTab.Focus();
-                MessageBox.Show(
-                    "Please enter a valid ping timeout.",
-                    "vmPing Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-                txtPingTimeout.Focus();
+                ShowError("Please enter a valid ping timeout.", GeneralTab, txtPingTimeout);
                 return false;
             }
             else if (txtAlertThreshold.Text.Length == 0)
             {
-                GeneralTab.Focus();
-                MessageBox.Show(
-                    "Please enter an alert threshold.",
-                    "vmPing Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-                txtPingTimeout.Focus();
+                ShowError("Please enter a valid alert threshold.", GeneralTab, txtAlertThreshold);
                 return false;
             }
 
@@ -241,13 +232,7 @@ namespace vmPing.Views
             // Validate TTL.
             if (!regex.IsMatch(TTL.Text) || int.Parse(TTL.Text) < 1 || int.Parse(TTL.Text) > 255)
             {
-                AdvancedTab.Focus();
-                MessageBox.Show(
-                    "Please enter a valid TTL between 1 and 255.",
-                    "vmPing Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-                TTL.Focus();
+                ShowError("Please enter a valid TTL between 1 and 255.", AdvancedTab, TTL);
                 return false;
             }
 
@@ -259,13 +244,7 @@ namespace vmPing.Views
             {
                 if (!regex.IsMatch(PacketSize.Text) || int.Parse(PacketSize.Text) < 0 || int.Parse(PacketSize.Text) > 65500)
                 {
-                    AdvancedTab.Focus();
-                    MessageBox.Show(
-                        "Please enter a valid ICMP data size between 0 and 65,500.",
-                        "vmPing Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                    PacketSize.Focus();
+                    ShowError("Please enter a valid data size between 0 and 65,500.", AdvancedTab, PacketSize);
                     return false;
                 }
 
@@ -306,46 +285,22 @@ namespace vmPing.Views
 
                 if (SmtpServer.Text.Length == 0)
                 {
-                    EmailAlertsTab.Focus();
-                    MessageBox.Show(
-                        "Please enter a valid address for your outgoing mail server.",
-                        "vmPing Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                    SmtpServer.Focus();
+                    ShowError("Please enter a valid address for your outgoing mail server.", EmailAlertsTab, SmtpServer);
                     return false;
                 }
                 else if (SmtpPort.Text.Length == 0 || !regex.IsMatch(SmtpPort.Text))
                 {
-                    EmailAlertsTab.Focus();
-                    MessageBox.Show(
-                        "Please enter a valid port number.  The standard is 25.",
-                        "vmPing Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                    SmtpPort.Focus();
+                    ShowError("Please enter a valid port number for your SMTP server.", EmailAlertsTab, SmtpPort);
                     return false;
                 }
                 else if (EmailRecipientAddress.Text.Length == 0)
                 {
-                    EmailAlertsTab.Focus();
-                    MessageBox.Show(
-                        "Please enter a valid recipient email address.  This is the address that will receive alerts.",
-                        "vmPing Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                    EmailRecipientAddress.Focus();
+                    ShowError("Please enter a valid recipient email address.  This is the address that will receive alerts.", EmailAlertsTab, EmailRecipientAddress);
                     return false;
                 }
                 else if (EmailFromAddress.Text.Length == 0)
                 {
-                    EmailAlertsTab.Focus();
-                    MessageBox.Show(
-                        "Please enter a valid 'from' address.  This address will appear as the sender for any alerts that are sent.",
-                        "vmPing Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                    EmailFromAddress.Focus();
+                    ShowError("Please enter a valid 'from' address.  This address will appear as the sender for any alerts that are sent.", EmailAlertsTab, EmailFromAddress);
                     return false;
                 }
                 if (IsSmtpAuthenticationRequired.IsChecked == true)
@@ -353,13 +308,7 @@ namespace vmPing.Views
                     ApplicationOptions.IsEmailAuthenticationRequired = true;
                     if (SmtpUsername.Text.Length == 0)
                     {
-                        EmailAlertsTab.Focus();
-                        MessageBox.Show(
-                            "Please enter a valid username for authenticating to your mail server.",
-                            "vmPing Error",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Error);
-                        SmtpUsername.Focus();
+                        ShowError("Please enter a valid username for your mail server.", EmailAlertsTab, SmtpUsername);
                         return false;
                     }
                 }
@@ -403,13 +352,7 @@ namespace vmPing.Views
             {
                 if (!Directory.Exists(LogPath.Text))
                 {
-                    LogOutputTab.Focus();
-                    MessageBox.Show(
-                        "The specified path does not exist.  Please enter a valid path.",
-                        "vmPing Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                    LogPath.Focus();
+                    ShowError("The specified path does not exist.  Please enter a valid path.", LogOutputTab, LogPath);
                     return false;
                 }
 
@@ -434,13 +377,7 @@ namespace vmPing.Views
                 {
                     if (!Util.IsValidHtmlColor(((TextBox)control).Text))
                     {
-                        LayoutTab.Focus();
-                        MessageBox.Show(
-                            "Please enter a valid HTML color code.  Accepted formats are #RGB, #RRGGBB, and #AARRGGBB.  Example: #3266CF",
-                            "vmPing Error",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Error);
-                        ((TextBox)control).Focus();
+                        ShowError("Please enter a valid HTML color code.  Accepted formats are #RGB, #RRGGBB, and #AARRGGBB.  Example: #3266CF", LayoutTab, (TextBox)control);
                         ((TextBox)control).SelectAll();
 
                         return false;

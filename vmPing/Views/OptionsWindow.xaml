@@ -182,21 +182,21 @@
                     </StackPanel>
 
                     <!-- Packet data -->
-                    <StackPanel DockPanel.Dock="Top"
-                                Orientation="Horizontal"
+                    <DockPanel DockPanel.Dock="Top"
                                 Margin="0,7,0,0">
                         <RadioButton GroupName="IcmpData"
                                      Content="Custom packet data"
                                      Name="UseCustomPacketOption"
                                      Checked="UseCustomPacketOption_Checked"
+                                     DockPanel.Dock="Left"
                                      VerticalAlignment="Top"
                                      Width="160"
                                      FontSize="14"
                                      Foreground="#555555" />
                         <TextBox Name="PacketData"
                                  TextChanged="PacketData_TextChanged"
-                                 Width="240"
                                  Height="80"
+                                 DockPanel.Dock="Right"
                                  VerticalContentAlignment="Top"
                                  TextWrapping="Wrap"
                                  VerticalScrollBarVisibility="Auto"
@@ -204,7 +204,7 @@
                                  MaxLength="65500"
                                  FontSize="14"
                                  Visibility="{Binding IsChecked, ElementName=UseCustomPacketOption, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                    </StackPanel>
+                    </DockPanel>
 
                     <!-- Total packet size -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">

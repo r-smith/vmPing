@@ -12,7 +12,8 @@ namespace vmPing.Views
     {
         public enum DialogIcon
         {
-            Warning
+            Warning,
+            Error
         }
 
         public DialogWindow(DialogIcon icon, string title, string body, string confirmationText, bool isCancelButtonVisible)
@@ -31,16 +32,19 @@ namespace vmPing.Views
                 case DialogIcon.Warning:
                     MyIcon.Source = new BitmapImage(new Uri(@"/Resources/caution-40.png", UriKind.Relative));
                     break;
+                case DialogIcon.Error:
+                    MyIcon.Source = new BitmapImage(new Uri(@"/Resources/font-awesome_4-7-0_exclamation-circle_40_0_c0392b_none.png", UriKind.Relative));
+                    break;
             }
         }
 
         public static DialogWindow ErrorWindow(string message)
         {
             return new DialogWindow(
-                icon: DialogIcon.Warning,
+                icon: DialogIcon.Error,
                 title: Strings.DialogTitle_Error,
                 body: message,
-                confirmationText: "OK",
+                confirmationText: Strings.DialogButton_OK,
                 isCancelButtonVisible: false);
         }
 

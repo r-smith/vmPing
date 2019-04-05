@@ -41,6 +41,7 @@ namespace vmPing.Views
             LoadFavorites();
             LoadAliases();
             Configuration.Load();
+            UpdatePopupOptionIsCheckedState();
 
             List<string> hosts = CommandLine.ParseArguments();
             if (hosts.Count > 0)
@@ -56,6 +57,27 @@ namespace vmPing.Views
 
             ColumnCount.Value = _ProbeCollection.Count;
             ProbeItemsControl.ItemsSource = _ProbeCollection;
+        }
+
+
+        private void UpdatePopupOptionIsCheckedState()
+        {
+            PopupAlways.IsChecked = false;
+            PopupNever.IsChecked = false;
+            PopupWhenMinimized.IsChecked = false;
+
+            switch (ApplicationOptions.PopupOption)
+            {
+                case ApplicationOptions.PopupNotificationOption.Always:
+                    PopupAlways.IsChecked = true;
+                    break;
+                case ApplicationOptions.PopupNotificationOption.Never:
+                    PopupNever.IsChecked = true;
+                    break;
+                case ApplicationOptions.PopupNotificationOption.WhenMinimized:
+                    PopupWhenMinimized.IsChecked = true;
+                    break;
+            }
         }
 
 
@@ -417,28 +439,28 @@ namespace vmPing.Views
             }
         }
 
-        private void mnuPopupNotification_Click(object sender, RoutedEventArgs e)
+        private void PopupAlways_Click(object sender, RoutedEventArgs e)
         {
-            var menuItem = sender as MenuItem;
+            PopupAlways.IsChecked = true;
+            PopupNever.IsChecked = false;
+            PopupWhenMinimized.IsChecked = false;
+            ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Always;
+        }
 
-            mnuPopupAlways.IsChecked = false;
-            mnuPopupNever.IsChecked = false;
-            mnuPopupWhenMinimized.IsChecked = false;
+        private void PopupNever_Click(object sender, RoutedEventArgs e)
+        {
+            PopupAlways.IsChecked = false;
+            PopupNever.IsChecked = true;
+            PopupWhenMinimized.IsChecked = false;
+            ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Never;
+        }
 
-            menuItem.IsChecked = true;
-
-            switch (menuItem.Header.ToString())
-            {
-                case "Always":
-                    ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Always;
-                    break;
-                case "Never":
-                    ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Never;
-                    break;
-                case "When Minimized":
-                    ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
-                    break;
-            }
+        private void PopupWhenMinimized_Click(object sender, RoutedEventArgs e)
+        {
+            PopupAlways.IsChecked = false;
+            PopupNever.IsChecked = false;
+            PopupWhenMinimized.IsChecked = true;
+            ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
         }
 
         private void IsolatedView_Click(object sender, RoutedEventArgs e)

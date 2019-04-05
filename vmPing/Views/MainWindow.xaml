@@ -161,19 +161,19 @@
                 <MenuItem Header="{x:Static resource:Strings.Menu_StatusHistory}" Click="mnuStatusHistory_Click" />
 
                 <MenuItem Header="{x:Static resource:Strings.Menu_PopupNotifications}">
-                    <MenuItem Name="mnuPopupNever"
+                    <MenuItem Name="PopupNever"
                               Header="{x:Static resource:Strings.Notification_Never}"
-                              Click="mnuPopupNotification_Click"
+                              Click="PopupNever_Click"
                               IsCheckable="True" />
-                    <MenuItem Name="mnuPopupWhenMinimized"
+                    <MenuItem Name="PopupWhenMinimized"
                               Header="{x:Static resource:Strings.Notification_WhenMinimized}"
-                              Click="mnuPopupNotification_Click"
+                              Click="PopupWhenMinimized_Click"
                               IsCheckable="True" />
-                    <MenuItem Name="mnuPopupAlways"
+                    <MenuItem Name="PopupAlways"
                               Header="{x:Static resource:Strings.Notification_Always}"
-                              Click="mnuPopupNotification_Click"
+                              Click="PopupAlways_Click"
                               IsCheckable="True"
-                              IsChecked="True" />
+                               />
                 </MenuItem>
 
                 <Separator Padding="0,6" />

@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using vmPing.Classes;
+using vmPing.Properties;
 
 namespace vmPing.Views
 {
@@ -19,7 +20,7 @@ namespace vmPing.Views
         {
             InitializeComponent();
 
-            Header.Text = $"{Properties.Strings.EditAlias_AliasFor} {hostname}";
+            Header.Text = $"{Strings.EditAlias_AliasFor} {hostname}";
             MyAlias.Text = alias;
             MyAlias.SelectAll();
             _Hostname = hostname;

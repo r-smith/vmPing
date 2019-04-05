@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using vmPing.Classes;
+using vmPing.Properties;
 
 namespace vmPing.Views
 {
@@ -24,7 +25,7 @@ namespace vmPing.Views
             // Validate hostname.
             if (Alias.IsHostInvalid(MyHost.Text))
             {
-                var errorWindow = DialogWindow.ErrorWindow(Properties.Strings.NewAlias_Error_InvalidHost);
+                var errorWindow = DialogWindow.ErrorWindow(Strings.NewAlias_Error_InvalidHost);
                 errorWindow.Owner = this;
                 errorWindow.ShowDialog();
                 MyHost.Focus();
@@ -35,7 +36,7 @@ namespace vmPing.Views
             // Validate alias name.
             if (Alias.IsNameInvalid(MyAlias.Text))
             {
-                var errorWindow = DialogWindow.ErrorWindow(Properties.Strings.NewAlias_Error_InvalidAlias);
+                var errorWindow = DialogWindow.ErrorWindow(Strings.NewAlias_Error_InvalidAlias);
                 errorWindow.Owner = this;
                 errorWindow.ShowDialog();
                 MyAlias.Focus();

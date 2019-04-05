@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using vmPing.Classes;
+using vmPing.Properties;
 
 namespace vmPing.Views
 {
@@ -49,9 +50,9 @@ namespace vmPing.Views
 
             var dialogWindow = new DialogWindow(
                 DialogWindow.DialogIcon.Warning,
-                Properties.Strings.DialogTitle_ConfirmDelete,
-                $"{Properties.Strings.ManageFavorites_Warn_DeleteA} {Favorites.SelectedItem.ToString()} {Properties.Strings.ManageFavorites_Warn_DeleteB}",
-                Properties.Strings.DialogButton_Remove,
+                Strings.DialogTitle_ConfirmDelete,
+                $"{Strings.ManageFavorites_Warn_DeleteA} {Favorites.SelectedItem.ToString()} {Strings.ManageFavorites_Warn_DeleteB}",
+                Strings.DialogButton_Remove,
                 true);
             dialogWindow.Owner = this;
             if (dialogWindow.ShowDialog() == true)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
+using vmPing.Properties;
 
 namespace vmPing.Classes
 {
@@ -27,7 +28,7 @@ namespace vmPing.Classes
                 }
                 catch (Exception ex)
                 {
-                    Util.ShowError($"Failed to create directory for vmPing configuration file. {ex.Message}");
+                    Util.ShowError($"{Strings.Error_CreateDirectory} {ex.Message}");
                     return false;
                 }
             }
@@ -49,7 +50,7 @@ namespace vmPing.Classes
                 }
                 catch (Exception ex)
                 {
-                    Util.ShowError($"Failed to create vmPing configuration file. {ex.Message}");
+                    Util.ShowError($"{Strings.Error_CreateConfig} {ex.Message}");
                     return false;
                 }
             }
@@ -86,7 +87,7 @@ namespace vmPing.Classes
                 }
                 catch (Exception ex)
                 {
-                    Util.ShowError($"Failed to upgrade configuration file. {ex.Message}");
+                    Util.ShowError($"{Strings.Error_UpgradeConfig} {ex.Message}");
                 }
             }
         }
@@ -136,7 +137,7 @@ namespace vmPing.Classes
 
             catch (Exception ex)
             {
-                Util.ShowError($"Failed to write to configuration file. {ex.Message}");
+                Util.ShowError($"{Strings.Error_WriteConfig} {ex.Message}");
             }
         }
 
@@ -361,7 +362,7 @@ namespace vmPing.Classes
 
             catch (Exception ex)
             {
-                Util.ShowError($"Failed to load configuration file. {ex.Message}");
+                Util.ShowError($"{Strings.Error_LoadConfig} {ex.Message}");
             }
         }
 

@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using vmPing.Classes;
+using vmPing.Properties;
 
 namespace vmPing.Views
 {
@@ -157,9 +158,9 @@ namespace vmPing.Views
 
             foreach (var pingItem in _ProbeCollection)
             {
-                if (toggleStatus == "_Stop All (F5)" && pingItem.IsActive)
+                if (toggleStatus == Strings.Toolbar_StopAll && pingItem.IsActive)
                     Probe.StartStop(pingItem);
-                else if (toggleStatus == "_Start All (F5)" && !pingItem.IsActive)
+                else if (toggleStatus == Strings.Toolbar_StartAll && !pingItem.IsActive)
                     Probe.StartStop(pingItem);
             }
         }
@@ -190,7 +191,7 @@ namespace vmPing.Views
 
             catch (Exception ex)
             {
-                var errorWindow = DialogWindow.ErrorWindow($"Failed to launch a new instance of vmPing. {ex.Message}");
+                var errorWindow = DialogWindow.ErrorWindow($"{Strings.Error_FailedToLaunch} {ex.Message}");
                 errorWindow.Owner = this;
                 errorWindow.ShowDialog();
             }
@@ -368,8 +369,7 @@ namespace vmPing.Views
 
             if (!haveAnyHostnamesBeenEntered)
             {
-                var errorWindow = DialogWindow.ErrorWindow(
-                    $"You have not entered any hostnames.  Please setup vmPing with the hosts you would like to save as a favorite set.");
+                var errorWindow = DialogWindow.ErrorWindow(Strings.Error_NoHostsForFavorite);
                 errorWindow.Owner = this;
                 errorWindow.ShowDialog();
                 return;

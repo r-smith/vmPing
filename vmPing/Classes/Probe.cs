@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using System.Threading;
+using vmPing.Properties;
 using vmPing.Views;
 
 namespace vmPing.Classes
@@ -144,7 +145,7 @@ namespace vmPing.Classes
             if (Statistics.Sent == 0) return;
 
             var roundTripTimes = new List<int>();
-            var rttRegex = new Regex(@"  \[(?<rtt><?\d+) ?ms]$");
+            var rttRegex = new Regex($@"  \[(?<rtt><?\d+) ?{Strings.Milliseconds_Symbol}]$");
 
             foreach (var historyItem in History)
             {
@@ -158,10 +159,16 @@ namespace vmPing.Classes
 
             // Display statics and round trip times.
             AddHistory("");
-            AddHistory($"Sent {Statistics.Sent}, Received {Statistics.Received}, Lost {Statistics.Sent - Statistics.Received} ({(100 * (Statistics.Sent - Statistics.Received)) / Statistics.Sent}% loss)");
+            AddHistory(
+                $"Sent {Statistics.Sent}, " +
+                $"Received {Statistics.Received}, " +
+                $"Lost {Statistics.Sent - Statistics.Received} ({(100 * (Statistics.Sent - Statistics.Received)) / Statistics.Sent}% loss)");
             if (roundTripTimes.Count > 0)
             {
-                AddHistory($"Minimum ({roundTripTimes.Min()}ms), Maximum ({roundTripTimes.Max()}ms), Average ({roundTripTimes.Average().ToString("0.##")}ms)");
+                AddHistory(
+                    $"Minimum ({roundTripTimes.Min()}{Strings.Milliseconds_Symbol}), " +
+                    $"Maximum ({roundTripTimes.Max()}{Strings.Milliseconds_Symbol}), " +
+                    $"Average ({roundTripTimes.Average().ToString("0.##")}{Strings.Milliseconds_Symbol})");
             }
             AddHistory(" ");
         }

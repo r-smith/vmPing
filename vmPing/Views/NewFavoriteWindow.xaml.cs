@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using vmPing.Classes;
+using vmPing.Properties;
 
 namespace vmPing.Views
 {
@@ -33,7 +34,7 @@ namespace vmPing.Views
             // Validate favorite name.
             if (Favorite.IsTitleInvalid(MyTitle.Text))
             {
-                var errorWindow = DialogWindow.ErrorWindow(Properties.Strings.NewFavorite_Error_InvalidName);
+                var errorWindow = DialogWindow.ErrorWindow(Strings.NewFavorite_Error_InvalidName);
                 errorWindow.Owner = this;
                 errorWindow.ShowDialog();
                 MyTitle.Focus();
@@ -45,8 +46,8 @@ namespace vmPing.Views
             if (Favorite.TitleExists(MyTitle.Text))
             {
                 var warningWindow = DialogWindow.WarningWindow(
-                    message: $"{MyTitle.Text} {Properties.Strings.NewFavorite_Warn_AlreadyExists}",
-                    confirmButtonText: Properties.Strings.DialogButton_Overwrite);
+                    message: $"{MyTitle.Text} {Strings.NewFavorite_Warn_AlreadyExists}",
+                    confirmButtonText: Strings.DialogButton_Overwrite);
                 warningWindow.Owner = this;
                 if (warningWindow.ShowDialog() == true)
                 {

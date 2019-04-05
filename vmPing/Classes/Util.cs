@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
+using vmPing.Properties;
 
 namespace vmPing.Classes
 {
@@ -20,9 +21,9 @@ namespace vmPing.Classes
             var mailFromAddress = ApplicationOptions.EmailFromAddress;
             var mailFromFriendly = "vmPing";
             var mailToAddress = ApplicationOptions.EmailRecipient;
-            var mailSubject = $"[vmPing] {hostName} <> Host {hostStatus}";
+            var mailSubject = $"[vmPing] {hostName} <> {Strings.Email_Host} {hostStatus}";
             var mailBody =
-                $"{hostName} is {hostStatus}.{Environment.NewLine}" +
+                $"{hostName} {Strings.Email_Verb} {hostStatus}.{Environment.NewLine}" +
                 $"{DateTime.Now.ToLongDateString()}  {DateTime.Now.ToLongTimeString()}";
 
             var message = new MailMessage();
@@ -68,7 +69,7 @@ namespace vmPing.Classes
 
         public static void ShowError(string message)
         {
-            MessageBox.Show(message, "vmPing - Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(message, Strings.Error_WindowTitle, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
 

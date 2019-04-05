@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using vmPing.Properties;
 
 namespace vmPing.Classes
 {
@@ -282,9 +283,9 @@ namespace vmPing.Classes
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if ((int)value > 0)
-                return Properties.Strings.Toolbar_StopAll;
+                return Strings.Toolbar_StopAll;
             else
-                return Properties.Strings.Toolbar_StartAll;
+                return Strings.Toolbar_StartAll;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

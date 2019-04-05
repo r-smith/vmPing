@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using vmPing.Classes;
+using vmPing.Properties;
 
 namespace vmPing.Views
 {
@@ -50,9 +51,9 @@ namespace vmPing.Views
 
             var dialogWindow = new DialogWindow(
                 DialogWindow.DialogIcon.Warning,
-                Properties.Strings.DialogTitle_ConfirmDelete,
-                $"{Properties.Strings.ManageAliases_Warn_DeleteA} {((KeyValuePair<string, string>)AliasesDataGrid.SelectedItem).Value} {Properties.Strings.ManageAliases_Warn_DeleteB}",
-                Properties.Strings.DialogButton_Remove,
+                Strings.DialogTitle_ConfirmDelete,
+                $"{Strings.ManageAliases_Warn_DeleteA} {((KeyValuePair<string, string>)AliasesDataGrid.SelectedItem).Value} {Strings.ManageAliases_Warn_DeleteB}",
+                Strings.DialogButton_Remove,
                 true);
             dialogWindow.Owner = this;
             if (dialogWindow.ShowDialog() == true)

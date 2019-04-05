@@ -1,4 +1,5 @@
 ﻿using System;
+using vmPing.Properties;
 
 namespace vmPing.Classes
 {
@@ -16,13 +17,13 @@ namespace vmPing.Classes
                 switch (Status)
                 {
                     case ProbeStatus.Down:
-                        returnString = Properties.Strings.StatusChange_Down;
+                        returnString = Strings.StatusChange_Down;
                         break;
                     case ProbeStatus.Up:
-                        returnString = Properties.Strings.StatusChange_Up;
+                        returnString = Strings.StatusChange_Up;
                         break;
                     case ProbeStatus.Error:
-                        returnString = Properties.Strings.StatusChange_Error;
+                        returnString = Strings.StatusChange_Error;
                         break;
                 }
                 return returnString;

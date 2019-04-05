@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using vmPing.Classes;
+using vmPing.Properties;
 
 namespace vmPing.Views
 {
@@ -15,7 +16,7 @@ namespace vmPing.Views
         {
             InitializeComponent();
 
-            Header.Text = $"{Properties.Strings.EditFavorite_Rename} {favoriteTitle}";
+            Header.Text = $"{Strings.EditFavorite_Rename} {favoriteTitle}";
             MyFavoriteTitle.Text = favoriteTitle;
             MyFavoriteTitle.SelectAll();
 
@@ -31,7 +32,7 @@ namespace vmPing.Views
             // Validate favorite name.
             if (Favorite.IsTitleInvalid(MyFavoriteTitle.Text))
             {
-                var errorWindow = DialogWindow.ErrorWindow(Properties.Strings.NewFavorite_Error_InvalidName);
+                var errorWindow = DialogWindow.ErrorWindow(Strings.NewFavorite_Error_InvalidName);
                 errorWindow.Owner = this;
                 errorWindow.ShowDialog();
                 MyFavoriteTitle.Focus();

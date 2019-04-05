@@ -187,6 +187,159 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to down.
+        /// </summary>
+        public static string Email_Down {
+            get {
+                return ResourceManager.GetString("Email_Down", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to error.
+        /// </summary>
+        public static string Email_Error {
+            get {
+                return ResourceManager.GetString("Email_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Host.
+        /// </summary>
+        public static string Email_Host {
+            get {
+                return ResourceManager.GetString("Email_Host", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to up.
+        /// </summary>
+        public static string Email_Up {
+            get {
+                return ResourceManager.GetString("Email_Up", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to is.
+        /// </summary>
+        public static string Email_Verb {
+            get {
+                return ResourceManager.GetString("Email_Verb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to add alias..
+        /// </summary>
+        public static string Error_AddAlias {
+            get {
+                return ResourceManager.GetString("Error_AddAlias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to create vmPing configuration file..
+        /// </summary>
+        public static string Error_CreateConfig {
+            get {
+                return ResourceManager.GetString("Error_CreateConfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to create directory for vmPing configuration file..
+        /// </summary>
+        public static string Error_CreateDirectory {
+            get {
+                return ResourceManager.GetString("Error_CreateDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete alias..
+        /// </summary>
+        public static string Error_DeleteAlias {
+            get {
+                return ResourceManager.GetString("Error_DeleteAlias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to launch a new instance of vmPing..
+        /// </summary>
+        public static string Error_FailedToLaunch {
+            get {
+                return ResourceManager.GetString("Error_FailedToLaunch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load aliases..
+        /// </summary>
+        public static string Error_LoadAlias {
+            get {
+                return ResourceManager.GetString("Error_LoadAlias", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load configuration file..
+        /// </summary>
+        public static string Error_LoadConfig {
+            get {
+                return ResourceManager.GetString("Error_LoadConfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have not entered any hostnames.  Please setup vmPing with the hosts you would like to save as a favorite set..
+        /// </summary>
+        public static string Error_NoHostsForFavorite {
+            get {
+                return ResourceManager.GetString("Error_NoHostsForFavorite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to read configuration file..
+        /// </summary>
+        public static string Error_ReadConfig {
+            get {
+                return ResourceManager.GetString("Error_ReadConfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to upgrade configuration file..
+        /// </summary>
+        public static string Error_UpgradeConfig {
+            get {
+                return ResourceManager.GetString("Error_UpgradeConfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to vmPing - Error.
+        /// </summary>
+        public static string Error_WindowTitle {
+            get {
+                return ResourceManager.GetString("Error_WindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to write to configuration file..
+        /// </summary>
+        public static string Error_WriteConfig {
+            get {
+                return ResourceManager.GetString("Error_WriteConfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Alias.
         /// </summary>
         public static string ManageAliases_Alias {
@@ -295,15 +448,6 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Always.
-        /// </summary>
-        public static string Menu_Always {
-            get {
-                return ResourceManager.GetString("Menu_Always", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Favorite Sets.
         /// </summary>
         public static string Menu_FavoriteSets {
@@ -345,15 +489,6 @@ namespace vmPing.Properties {
         public static string Menu_ManageFavorites {
             get {
                 return ResourceManager.GetString("Menu_ManageFavorites", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Never.
-        /// </summary>
-        public static string Menu_Never {
-            get {
-                return ResourceManager.GetString("Menu_Never", resourceCulture);
             }
         }
         
@@ -403,11 +538,11 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When Minimized.
+        ///   Looks up a localized string similar to ms.
         /// </summary>
-        public static string Menu_WhenMinimized {
+        public static string Milliseconds_Symbol {
             get {
-                return ResourceManager.GetString("Menu_WhenMinimized", resourceCulture);
+                return ResourceManager.GetString("Milliseconds_Symbol", resourceCulture);
             }
         }
         
@@ -498,6 +633,168 @@ namespace vmPing.Properties {
         public static string NewFavorite_Warn_AlreadyExists {
             get {
                 return ResourceManager.GetString("NewFavorite_Warn_AlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Always.
+        /// </summary>
+        public static string Notification_Always {
+            get {
+                return ResourceManager.GetString("Notification_Always", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Never.
+        /// </summary>
+        public static string Notification_Never {
+            get {
+                return ResourceManager.GetString("Notification_Never", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When Minimized.
+        /// </summary>
+        public static string Notification_WhenMinimized {
+            get {
+                return ResourceManager.GetString("Notification_WhenMinimized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error:.
+        /// </summary>
+        public static string Probe_Error {
+            get {
+                return ResourceManager.GetString("Probe_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reply  [Host unreachable].
+        /// </summary>
+        public static string Probe_HostUnreachable {
+            get {
+                return ResourceManager.GetString("Probe_HostUnreachable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid port number..
+        /// </summary>
+        public static string Probe_InvalidPort {
+            get {
+                return ResourceManager.GetString("Probe_InvalidPort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reply  [Network unreachable].
+        /// </summary>
+        public static string Probe_NetUnreachable {
+            get {
+                return ResourceManager.GetString("Probe_NetUnreachable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Port.
+        /// </summary>
+        public static string Probe_Port {
+            get {
+                return ResourceManager.GetString("Probe_Port", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CLOSED.
+        /// </summary>
+        public static string Probe_PortClosed {
+            get {
+                return ResourceManager.GetString("Probe_PortClosed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OPEN.
+        /// </summary>
+        public static string Probe_PortOpen {
+            get {
+                return ResourceManager.GetString("Probe_PortOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reply from.
+        /// </summary>
+        public static string Probe_Reply {
+            get {
+                return ResourceManager.GetString("Probe_Reply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pinging.
+        /// </summary>
+        public static string Probe_StartPing {
+            get {
+                return ResourceManager.GetString("Probe_StartPing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lost:.
+        /// </summary>
+        public static string Probe_Stat_Lost {
+            get {
+                return ResourceManager.GetString("Probe_Stat_Lost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Received:.
+        /// </summary>
+        public static string Probe_Stat_Received {
+            get {
+                return ResourceManager.GetString("Probe_Stat_Received", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sent:.
+        /// </summary>
+        public static string Probe_Stat_Sent {
+            get {
+                return ResourceManager.GetString("Probe_Stat_Sent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request timed out..
+        /// </summary>
+        public static string Probe_Timeout {
+            get {
+                return ResourceManager.GetString("Probe_Timeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to resolve hostname..
+        /// </summary>
+        public static string Probe_UnableToResolve {
+            get {
+                return ResourceManager.GetString("Probe_UnableToResolve", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reply  [Unreachable].
+        /// </summary>
+        public static string Probe_Unreachable {
+            get {
+                return ResourceManager.GetString("Probe_Unreachable", resourceCulture);
             }
         }
         

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using vmPing.Properties;
 
 namespace vmPing.Views
 {
@@ -37,7 +38,7 @@ namespace vmPing.Views
         {
             return new DialogWindow(
                 icon: DialogIcon.Warning,
-                title: Properties.Strings.DialogTitle_Error,
+                title: Strings.DialogTitle_Error,
                 body: message,
                 confirmationText: "OK",
                 isCancelButtonVisible: false);
@@ -47,7 +48,7 @@ namespace vmPing.Views
         {
             return new DialogWindow(
                 icon: DialogIcon.Warning,
-                title: Properties.Strings.DialogTitle_Warning,
+                title: Strings.DialogTitle_Warning,
                 body: message,
                 confirmationText: confirmButtonText,
                 isCancelButtonVisible: true);

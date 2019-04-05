@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
+using vmPing.Properties;
 
 namespace vmPing.Classes
 {
@@ -24,7 +25,7 @@ namespace vmPing.Classes
 
             catch (Exception ex)
             {
-                Util.ShowError($"Failed to load aliases. {ex.Message}");
+                Util.ShowError($"{Strings.Error_LoadAlias} {ex.Message}");
                 return new Dictionary<string, string>();
             }
         }
@@ -58,7 +59,7 @@ namespace vmPing.Classes
 
             catch (Exception ex)
             {
-                Util.ShowError($"Failed to add alias. {ex.Message}");
+                Util.ShowError($"{Strings.Error_AddAlias} {ex.Message}");
             }
         }
 
@@ -85,7 +86,7 @@ namespace vmPing.Classes
 
             catch (Exception ex)
             {
-                Util.ShowError($"Failed to delete alias. {ex.Message}");
+                Util.ShowError($"{Strings.Error_DeleteAlias} {ex.Message}");
             }
         }
 

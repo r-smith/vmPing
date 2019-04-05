@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
+using vmPing.Properties;
 
 namespace vmPing.Classes
 {
@@ -85,7 +86,7 @@ namespace vmPing.Classes
 
             catch (Exception ex)
             {
-                Util.ShowError($"Failed to read configuration file. {ex.Message}");
+                Util.ShowError($"{Strings.Error_ReadConfig} {ex.Message}");
             }
 
             return favorite;
@@ -121,7 +122,7 @@ namespace vmPing.Classes
 
             catch (Exception ex)
             {
-                Util.ShowError($"Failed to write to configuration file. {ex.Message}");
+                Util.ShowError($"{Strings.Error_WriteConfig} {ex.Message}");
             }
         }
 
@@ -161,7 +162,7 @@ namespace vmPing.Classes
 
             catch (Exception ex)
             {
-                Util.ShowError($"Failed to write to configuration file. {ex.Message}");
+                Util.ShowError($"{Strings.Error_WriteConfig} {ex.Message}");
             }
         }
 
@@ -187,7 +188,7 @@ namespace vmPing.Classes
 
             catch (Exception ex)
             {
-                Util.ShowError($"Failed to write to configuration file. {ex.Message}");
+                Util.ShowError($"{Strings.Error_WriteConfig} {ex.Message}");
             }
         }
     }

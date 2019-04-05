@@ -162,15 +162,15 @@
 
                 <MenuItem Header="{x:Static resource:Strings.Menu_PopupNotifications}">
                     <MenuItem Name="mnuPopupNever"
-                              Header="{x:Static resource:Strings.Menu_Never}"
+                              Header="{x:Static resource:Strings.Notification_Never}"
                               Click="mnuPopupNotification_Click"
                               IsCheckable="True" />
                     <MenuItem Name="mnuPopupWhenMinimized"
-                              Header="{x:Static resource:Strings.Menu_WhenMinimized}"
+                              Header="{x:Static resource:Strings.Notification_WhenMinimized}"
                               Click="mnuPopupNotification_Click"
                               IsCheckable="True" />
                     <MenuItem Name="mnuPopupAlways"
-                              Header="{x:Static resource:Strings.Menu_Always}"
+                              Header="{x:Static resource:Strings.Notification_Always}"
                               Click="mnuPopupNotification_Click"
                               IsCheckable="True"
                               IsChecked="True" />

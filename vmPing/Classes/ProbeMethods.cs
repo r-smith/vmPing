@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows;
+using vmPing.Properties;
 using vmPing.Views;
 
 namespace vmPing.Classes
@@ -25,7 +26,7 @@ namespace vmPing.Classes
                     probe.Thread.CancelAsync();
 
                 probe.StatisticsText = string.Empty;
-                probe.AddHistory($"*** Pinging {probe.Hostname}:");
+                probe.AddHistory($"*** {Strings.Probe_StartPing} {probe.Hostname}:");
 
                 probe.Thread = new BackgroundWorker();
                 probe.ThreadResetEvent = new AutoResetEvent(false);
@@ -103,7 +104,7 @@ namespace vmPing.Classes
                 catch
                 {
                     Application.Current.Dispatcher.BeginInvoke(
-                                new Action(() => pingItem.AddHistory("Unable to resolve hostname.")));
+                                new Action(() => pingItem.AddHistory(Strings.Probe_UnableToResolve)));
                     pingItem.Status = ProbeStatus.Error;
                     pingItem.ThreadResetEvent.Set();
                     pingItem.IsActive = false;
@@ -138,7 +139,7 @@ namespace vmPing.Classes
                                     0,
                                     new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = ProbeStatus.Up });
                                 if (ApplicationOptions.IsEmailAlertEnabled)
-                                    Util.SendEmail("up", pingItem.Hostname);
+                                    Util.SendEmail(Strings.Email_Up, pingItem.Hostname);
                             }
 
                             pingItem.DownCount = 0;
@@ -162,7 +163,7 @@ namespace vmPing.Classes
                                     0,
                                     new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = ProbeStatus.Down });
                                 if (ApplicationOptions.IsEmailAlertEnabled)
-                                    Util.SendEmail("down", pingItem.Hostname);
+                                    Util.SendEmail(Strings.Email_Down, pingItem.Hostname);
                             }
 
                             if (pingItem.Reply.Status == IPStatus.TimedOut ||
@@ -198,10 +199,10 @@ namespace vmPing.Classes
                     {
                         if (ex.InnerException is SocketException)
                             Application.Current.Dispatcher.BeginInvoke(
-                                new Action(() => pingItem.AddHistory("Unable to resolve hostname.")));
+                                new Action(() => pingItem.AddHistory(Strings.Probe_UnableToResolve)));
                         else
                             Application.Current.Dispatcher.BeginInvoke(
-                                new Action(() => pingItem.AddHistory("Error: " + ex.Message)));
+                                new Action(() => pingItem.AddHistory($"{Strings.Probe_Error} {ex.Message}")));
 
                         e.Cancel = true;
 
@@ -212,7 +213,7 @@ namespace vmPing.Classes
                                 0,
                                 new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = ProbeStatus.Error });
                             if (ApplicationOptions.IsEmailAlertEnabled)
-                                Util.SendEmail("error", pingItem.Hostname);
+                                Util.SendEmail(Strings.Email_Error, pingItem.Hostname);
                         }
 
                         pingItem.Status = ProbeStatus.Error;
@@ -246,7 +247,7 @@ namespace vmPing.Classes
             {
                 // Error.
                 Application.Current.Dispatcher.BeginInvoke(
-                    new Action(() => pingItem.AddHistory("Invalid port number.")));
+                    new Action(() => pingItem.AddHistory(Strings.Probe_InvalidPort)));
 
                 e.Cancel = true;
                 pingItem.ThreadResetEvent.Set();
@@ -270,7 +271,7 @@ namespace vmPing.Classes
                 catch
                 {
                     Application.Current.Dispatcher.BeginInvoke(
-                                new Action(() => pingItem.AddHistory("Unable to resolve hostname.")));
+                                new Action(() => pingItem.AddHistory(Strings.Probe_UnableToResolve)));
                     pingItem.Status = ProbeStatus.Error;
                     pingItem.ThreadResetEvent.Set();
                     pingItem.IsActive = false;
@@ -317,7 +318,7 @@ namespace vmPing.Classes
                                 0,
                                 new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = ProbeStatus.Up });
                             if (ApplicationOptions.IsEmailAlertEnabled)
-                                Util.SendEmail("up", pingItem.Hostname);
+                                Util.SendEmail(Strings.Email_Up, pingItem.Hostname);
                         }
 
                         pingItem.DownCount = 0;
@@ -351,7 +352,7 @@ namespace vmPing.Classes
                                 0,
                                 new StatusChangeLog { Timestamp = DateTime.Now, Hostname = pingItem.Hostname, Status = ProbeStatus.Down });
                             if (ApplicationOptions.IsEmailAlertEnabled)
-                                Util.SendEmail("down", pingItem.Hostname);
+                                Util.SendEmail(Strings.Email_Down, pingItem.Hostname);
                         }
 
                         // If hostname cannot be resolved, report error and stop.
@@ -359,7 +360,7 @@ namespace vmPing.Classes
                         {
                             e.Cancel = true;
                             Application.Current.Dispatcher.BeginInvoke(
-                                new Action(() => pingItem.AddHistory("Unable to resolve hostname.")));
+                                new Action(() => pingItem.AddHistory(Strings.Probe_UnableToResolve)));
 
                             pingItem.Status = ProbeStatus.Error;
                             pingItem.ThreadResetEvent.Set();
@@ -397,24 +398,23 @@ namespace vmPing.Classes
             switch (pingItem.Reply.Status)
             {
                 case IPStatus.Success:
-                    pingOutput.Append("Reply from ");
-                    pingOutput.Append(pingItem.Reply.Address.ToString());
+                    pingOutput.Append($"{Strings.Probe_Reply} {pingItem.Reply.Address.ToString()}");
                     if (pingItem.Reply.RoundtripTime < 1)
-                        pingOutput.Append("  [<1ms]");
+                        pingOutput.Append($"  [<1{Strings.Milliseconds_Symbol}]");
                     else
-                        pingOutput.Append($"  [{pingItem.Reply.RoundtripTime} ms]");
+                        pingOutput.Append($"  [{pingItem.Reply.RoundtripTime} {Strings.Milliseconds_Symbol}]");
                     break;
                 case IPStatus.DestinationHostUnreachable:
-                    pingOutput.Append("Reply  [Host unreachable]");
+                    pingOutput.Append(Strings.Probe_HostUnreachable);
                     break;
                 case IPStatus.DestinationNetworkUnreachable:
-                    pingOutput.Append("Reply  [Network unreachable]");
+                    pingOutput.Append(Strings.Probe_NetUnreachable);
                     break;
                 case IPStatus.DestinationUnreachable:
-                    pingOutput.Append("Reply  [Unreachable]");
+                    pingOutput.Append(Strings.Probe_Unreachable);
                     break;
                 case IPStatus.TimedOut:
-                    pingOutput.Append("Request timed out.");
+                    pingOutput.Append(Strings.Probe_Timeout);
                     break;
                 default:
                     pingOutput.Append(pingItem.Reply.Status.ToString());
@@ -442,12 +442,12 @@ namespace vmPing.Classes
                 return;
 
             // Prefix the ping reply output with a timestamp.
-            var pingOutput = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  Port {portnumber.ToString()}: ");
+            var pingOutput = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  {Strings.Probe_Port} {portnumber.ToString()}: ");
             if (isPortOpen)
-                pingOutput.Append("OPEN  [" + elapsedTime.ToString() + "ms]");
+                pingOutput.Append($"{Strings.Probe_PortOpen}  [{elapsedTime.ToString()}{Strings.Milliseconds_Symbol}]");
             else
             {
-                pingOutput.Append("CLOSED");
+                pingOutput.Append(Strings.Probe_PortClosed);
             }
 
             // Add response to the output window.
@@ -473,7 +473,7 @@ namespace vmPing.Classes
             // Update the ping statistics label with the current
             // number of pings sent, received, and lost.
             pingItem.StatisticsText =
-                $"Sent: {pingItem.Statistics.Sent} Received: {pingItem.Statistics.Received} Lost: {pingItem.Statistics.Lost}";
+                $"{Strings.Probe_Stat_Sent} {pingItem.Statistics.Sent} {Strings.Probe_Stat_Received} {pingItem.Statistics.Received} {Strings.Probe_Stat_Lost} {pingItem.Statistics.Lost}";
         }
     }
 }

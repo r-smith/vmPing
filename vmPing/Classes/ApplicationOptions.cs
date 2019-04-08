@@ -29,7 +29,7 @@ namespace vmPing.Classes
         public static string LogPath { get; set; }
         public static PopupNotificationOption PopupOption { get; set; } = PopupNotificationOption.Always;
         public static int TTL { get; set; } = Constants.DefaultTTL;
-        public static bool DontFragment { get; set; } = true;
+        public static bool DontFragment { get; set; } = false;
         public static bool UseCustomBuffer { get; set; } = false;
         public static byte[] Buffer { get; set; }
         public static PingOptions GetPingOptions { get; }

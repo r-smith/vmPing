@@ -89,10 +89,7 @@ namespace vmPing.Views
         private void PopulateAdvancedOptions()
         {
             TTL.Text = ApplicationOptions.TTL.ToString();
-            if (ApplicationOptions.DontFragment)
-                DontFragment.IsChecked = true;
-            else
-                Fragment.IsChecked = true;
+            DontFragment.IsChecked = ApplicationOptions.DontFragment;
 
             if (ApplicationOptions.UseCustomBuffer)
             {

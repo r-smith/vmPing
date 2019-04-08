@@ -222,21 +222,49 @@
                     <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" Margin="0,20" />
 
                     <!-- Fragment / Don't fragment -->
-                    <RadioButton DockPanel.Dock="Top"
-                                 GroupName="Fragment"
-                                 Name="DontFragment"
-                                 Content="Don't fragment"
-                                 Foreground="#555555"
-                                 IsChecked="True"
-                                 Margin="0,0,0,7"
-                                 FontSize="14" />
-                    <RadioButton DockPanel.Dock="Top"
-                                 GroupName="Fragment"
-                                 Name="Fragment"
-                                 Content="Fragment"
-                                 Foreground="#555555"
-                                 Margin="0"
-                                 FontSize="14" />
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="False">
+                        <CheckBox DockPanel.Dock="Left"
+                                  Name="DontFragment"
+                                  Content="Don't fragment"
+                                  Foreground="#555555"
+                                  VerticalContentAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Left"
+                                  FontSize="14"/>
+                        <Border DockPanel.Dock="Left"
+                                Background="Transparent"
+                                Margin="8,1,0,0"
+                                Padding="3"
+                                ToolTipService.InitialShowDelay="0"
+                                ToolTipService.ShowDuration="60000">
+                            <Border.ToolTip>
+                                <ToolTip>
+                                    <TextBlock Width="275"
+                                               Margin="5,1"
+                                               FontSize="14"
+                                               TextWrapping="Wrap"
+                                               Text="The don't fragment flag instructs routers to discard the packet if it is too big. This can be used to determine the MTU."/>
+                                </ToolTip>
+                            </Border.ToolTip>
+                            <Image Source="/Resources/font-awesome_4-7-0_info-circle_16_0_268bd2_none.png"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Width="16" Height="16"
+                                   Opacity="0.8"/>
+                        </Border>
+                        <!--<DockPanel DockPanel.Dock="Right"
+                                    HorizontalAlignment="Right"
+                                    Width="240">
+                            <Image Source="/Resources/font-awesome_4-7-0_info-circle_16_0_268bd2_none.png"
+                                   Width="16" Height="16"
+                                   Opacity="0.8"
+                                   VerticalAlignment="Top" Margin="0,2,5,0"/>
+                            <TextBlock TextWrapping="Wrap"
+                                       Foreground="#a0a0a0"
+                                       FontSize="12"
+                                       Text="The don't fragment flag instructs routers to discard the packet if it is too big. This can be used to determine the MTU."/>
+                        </DockPanel>-->
+                    </DockPanel>
                 </DockPanel>
             </TabItem>
 
@@ -410,7 +438,7 @@
                         <TextBlock DockPanel.Dock="Top"
                                    Text="Colors"
                                    Style="{DynamicResource OptionHeaderTextStyle}" />
-                        
+
                         <!-- Probe background colors -->
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
                             <TextBlock Width="230" Text="[Probe Background] : Inactive" VerticalAlignment="Center" />
@@ -452,10 +480,10 @@
                             <Border Background="{Binding ElementName=BackgroundColor_Probe_Error, Path=Text, Converter={StaticResource StringToBrushConverter}}"
                                     BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
                         </StackPanel>
-                        
+
                         <!-- Probe foreground colors -->
                         <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="#ccc" Margin="0,20,0,0" />
-                        
+
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
                             <TextBlock Width="230" Text="[Probe Foreground] : Inactive" VerticalAlignment="Center" />
                             <TextBox Name="ForegroundColor_Probe_Inactive"
@@ -496,10 +524,10 @@
                             <Border Background="{Binding ElementName=ForegroundColor_Probe_Error, Path=Text, Converter={StaticResource StringToBrushConverter}}"
                                     BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
                         </StackPanel>
-                        
+
                         <!-- Statistics foreground colors -->
                         <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="#ccc" Margin="0,20,0,0" />
-                        
+
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
                             <TextBlock Width="230" Text="[Statistics Foreground] : Inactive" VerticalAlignment="Center" />
                             <TextBox Name="ForegroundColor_Stats_Inactive"
@@ -540,7 +568,7 @@
                             <Border Background="{Binding ElementName=ForegroundColor_Stats_Error, Path=Text, Converter={StaticResource StringToBrushConverter}}"
                                     BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
                         </StackPanel>
-                        
+
                         <!-- Alias foreground colors -->
                         <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="#ccc" Margin="0,20,0,0" />
 

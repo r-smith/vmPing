@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using System.Threading;
 using vmPing.Properties;
@@ -25,6 +24,7 @@ namespace vmPing.Classes
         public static ObservableCollection<StatusChangeLog> StatusChangeLog = new ObservableCollection<StatusChangeLog>();
         public static StatusHistoryWindow StatusWindow;
 
+        private static Mutex mutex = new Mutex();
         private static int activeCount;
         public static int ActiveCount
         {
@@ -36,22 +36,26 @@ namespace vmPing.Classes
             }
         }
         public static event EventHandler ActiveCountChanged;
-        protected static void OnActiveCountChanged(EventArgs e)
-        {
-            ActiveCountChanged?.Invoke(null, e);
-        }
-
-
+        protected static void OnActiveCountChanged(EventArgs e) => ActiveCountChanged?.Invoke(null, e);
         public event PropertyChangedEventHandler PropertyChanged;
 
         public IsolatedPingWindow IsolatedWindow { get; set; }
-        public int DownCount { get; set; }
-        public BackgroundWorker Thread { get; set; }
-        public AutoResetEvent ThreadResetEvent { get; set; }
+        public int IndeterminateCount { get; set; }
         public PingStatistics Statistics { get; set; }
-        public PingReply Reply { get; set; }
-        public Ping Sender { get; set; }
-        public ObservableCollection<string> History { get; } = new ObservableCollection<string>();
+        public CancellationTokenSource CancelSource { get; set; }
+        private ObservableCollection<string> history;
+        public ObservableCollection<string> History
+        {
+            get => history;
+            set
+            {
+                if (value != history)
+                {
+                    history = value;
+                    NotifyPropertyChanged("History");
+                }
+            }
+        }
 
         private string hostname;
         public string Hostname
@@ -102,10 +106,12 @@ namespace vmPing.Classes
             get => isActive;
             set
             {
+                mutex.WaitOne();
                 if (value == true)
                     ++ActiveCount;
                 else
                     --ActiveCount;
+                mutex.ReleaseMutex();
                 NotifyPropertyChanged("NumberOfActivePings");
 
                 if (value != isActive)
@@ -157,7 +163,7 @@ namespace vmPing.Classes
                     roundTripTimes.Add(int.Parse(regexMatch.Groups["rtt"].Value));
             }
 
-            // Display statics and round trip times.
+            // Display stats and round trip times.
             AddHistory("");
             AddHistory(
                 $"Sent {Statistics.Sent}, " +
@@ -173,9 +179,6 @@ namespace vmPing.Classes
             AddHistory(" ");
         }
 
-        private void NotifyPropertyChanged(String info)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
-        }
+        private void NotifyPropertyChanged(string info) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
     }
 }

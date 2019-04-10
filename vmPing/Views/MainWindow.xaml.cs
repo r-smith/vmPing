@@ -48,7 +48,7 @@ namespace vmPing.Views
             {
                 AddProbe(hosts.Count);
                 for (int i = 0; i < hosts.Count; ++i)
-                    Probe.StartStop(_ProbeCollection[i]);
+                    _ProbeCollection[i].StartStop();
             }
             else
             {
@@ -124,7 +124,7 @@ namespace vmPing.Views
 
         public void ProbeStartStop_Click(object sender, EventArgs e)
         {
-            Probe.StartStop((Probe)((Button)sender).DataContext);
+            ((Probe)((Button)sender).DataContext).StartStop();
         }
 
 
@@ -140,7 +140,7 @@ namespace vmPing.Views
             if (e.Key == Key.Enter)
             {
                 var probe = (sender as TextBox).DataContext as Probe;
-                Probe.StartStop(probe);
+                probe.StartStop();
 
                 if (_ProbeCollection.IndexOf(probe) < _ProbeCollection.Count - 1)
                 {
@@ -160,8 +160,11 @@ namespace vmPing.Views
                 return;
 
             var probe = (sender as Button).DataContext as Probe;
-            if (probe.Thread != null)
-                probe.Thread.CancelAsync();
+            if (probe.IsActive)
+            {
+                // Stop/cancel active probe.
+                probe.StartStop();
+            }
             _ProbeCollection.Remove(probe);
             if (ColumnCount.Value > _ProbeCollection.Count)
                 ColumnCount.Value = _ProbeCollection.Count;
@@ -178,12 +181,12 @@ namespace vmPing.Views
         {
             string toggleStatus = StartStopMenuHeader.Text;
 
-            foreach (var pingItem in _ProbeCollection)
+            foreach (var probe in _ProbeCollection)
             {
-                if (toggleStatus == Strings.Toolbar_StopAll && pingItem.IsActive)
-                    Probe.StartStop(pingItem);
-                else if (toggleStatus == Strings.Toolbar_StartAll && !pingItem.IsActive)
-                    Probe.StartStop(pingItem);
+                if (toggleStatus == Strings.Toolbar_StopAll && probe.IsActive)
+                    probe.StartStop();
+                else if (toggleStatus == Strings.Toolbar_StartAll && !probe.IsActive)
+                    probe.StartStop();
             }
         }
 
@@ -263,10 +266,11 @@ namespace vmPing.Views
         {
             foreach (var probe in _ProbeCollection)
             {
-                if (probe.Thread != null)
-                    probe.Thread.CancelAsync();
+                if (probe.IsActive)
+                    probe.CancelSource.Cancel();
             }
             _ProbeCollection.Clear();
+            Probe.ActiveCount = 0;
         }
 
         private void LoadFavorites()
@@ -294,7 +298,7 @@ namespace vmPing.Views
                         for (int i = 0; i < favorite.Hostnames.Count; ++i)
                         {
                             _ProbeCollection[i].Hostname = favorite.Hostnames[i].ToUpper();
-                            Probe.StartStop(_ProbeCollection[i]);
+                            _ProbeCollection[i].StartStop();
                         }
                     }
 
@@ -342,7 +346,7 @@ namespace vmPing.Views
                     var selectedMenuItem = s as MenuItem;
                     var selectedAlias = (Probe)selectedMenuItem.DataContext;
                     selectedAlias.Hostname = _Aliases.FirstOrDefault(x => x.Value == selectedMenuItem.Header.ToString()).Key;
-                    Probe.StartStop(selectedAlias);
+                    selectedAlias.StartStop();
                 };
             }
             else
@@ -357,7 +361,7 @@ namespace vmPing.Views
                         if (string.IsNullOrWhiteSpace(_ProbeCollection[i].Hostname))
                         {
                             _ProbeCollection[i].Hostname = _Aliases.FirstOrDefault(x => x.Value == selectedAlias.Header.ToString()).Key;
-                            Probe.StartStop(_ProbeCollection[i]);
+                            _ProbeCollection[i].StartStop();
                             didFindEmptyHost = true;
                             break;
                         }
@@ -367,7 +371,7 @@ namespace vmPing.Views
                     {
                         AddProbe();
                         _ProbeCollection[_ProbeCollection.Count - 1].Hostname = _Aliases.FirstOrDefault(x => x.Value == selectedAlias.Header.ToString()).Key;
-                        Probe.StartStop(_ProbeCollection[_ProbeCollection.Count - 1]);
+                        _ProbeCollection[_ProbeCollection.Count - 1].StartStop();
                     }
                 };
             }

@@ -47,6 +47,7 @@ namespace vmPing.Classes
         private void InitializeProbe()
         {
             IsActive = true;
+            Status = ProbeStatus.Inactive;
             StatisticsText = string.Empty;
             History = new ObservableCollection<string>();
             Statistics = new PingStatistics();

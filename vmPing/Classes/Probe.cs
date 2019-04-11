@@ -48,7 +48,6 @@ namespace vmPing.Classes
         protected static void OnActiveCountChanged(EventArgs e) => ActiveCountChanged?.Invoke(null, e);
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ProbeType Type { get; set; } = ProbeType.Ping;
         public IsolatedPingWindow IsolatedWindow { get; set; }
         public int IndeterminateCount { get; set; }
         public PingStatistics Statistics { get; set; }
@@ -59,11 +58,19 @@ namespace vmPing.Classes
             get => history;
             set
             {
-                if (value != history)
-                {
-                    history = value;
-                    NotifyPropertyChanged("History");
-                }
+                history = value;
+                NotifyPropertyChanged("History");
+            }
+        }
+
+        private ProbeType type = ProbeType.Ping;
+        public ProbeType Type
+        {
+            get => type;
+            set
+            {
+                type = value;
+                NotifyPropertyChanged("Type");
             }
         }
 
@@ -81,18 +88,14 @@ namespace vmPing.Classes
             }
         }
 
-
         private string alias;
         public string Alias
         {
             get => alias;
             set
             {
-                if (value != alias)
-                {
-                    alias = value;
-                    NotifyPropertyChanged("Alias");
-                }
+                alias = value;
+                NotifyPropertyChanged("Alias");
             }
         }
 
@@ -102,11 +105,8 @@ namespace vmPing.Classes
             get => status;
             set
             {
-                if (value != status)
-                {
-                    status = value;
-                    NotifyPropertyChanged("Status");
-                }
+                status = value;
+                NotifyPropertyChanged("Status");
             }
         }
 

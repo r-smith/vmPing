@@ -422,6 +422,7 @@
                                        Content="{Binding StatisticsText, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
                                        Background="Transparent"
                                        Foreground="{Binding Status, Converter={StaticResource ProbeStatusToStatisticsBrushConverter}}"
+                                       Visibility="{Binding Type, Converter={StaticResource ProbeTypeToVisibilityConverter}}"
                                        FontFamily="Segoe UI" FontSize="12" FontWeight="Bold"
                                        Padding="8,0,0,3">
                                     <Label.Triggers>
@@ -448,7 +449,6 @@
                                          IsTextSearchEnabled="False"
                                          controls:ListBoxBehavior.ScrollOnNewItem="True"
                                          FontFamily="Consolas"
-                                         Visibility="{Binding Type, Converter={StaticResource ProbeTypeToVisibilityConverter}}"
                                          FontSize="{Binding Status, Converter={StaticResource ProbeStatusToFontSizeConverter}}">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="{x:Type ListBoxItem}">

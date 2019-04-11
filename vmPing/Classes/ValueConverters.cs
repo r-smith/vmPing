@@ -316,6 +316,8 @@ namespace vmPing.Classes
         {
             switch ((ProbeStatus)value)
             {
+                case ProbeStatus.Scanner:
+                    return ApplicationOptions.FontSize_Scanner;
                 default:
                     return ApplicationOptions.FontSize_Probe;
             }

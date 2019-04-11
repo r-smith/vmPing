@@ -16,7 +16,8 @@ namespace vmPing.Classes
         Down,
         Error,
         Indeterminate,
-        Inactive
+        Inactive,
+        Scanner
     }
 
     public partial class Probe : INotifyPropertyChanged

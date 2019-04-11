@@ -34,6 +34,10 @@ namespace vmPing.Classes
         public static byte[] Buffer { get; set; }
         public static PingOptions GetPingOptions { get; }
 
+        // Font sizes.
+        public static int FontSize_Probe { get; set; } = 11;
+        public static int FontSize_Scanner { get; set; } = 14;
+
         // Probe window background colors.
         public static string BackgroundColor_Probe_Inactive { get; set; } = Constants.Color_Probe_Background_Inactive;
         public static string BackgroundColor_Probe_Up { get; set; } = Constants.Color_Probe_Background_Up;

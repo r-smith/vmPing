@@ -24,6 +24,7 @@
         <classes:ProbeCountToGlobalStartStopIcon x:Key="ProbeCountToGlobalStartStopIcon" />
         <classes:HostnameFontsizeConverter x:Key="HostnameFontsizeConverter" />
         <classes:ButtonTextVisibilityConverter x:Key="ButtonTextVisibilityConverter" />
+        <classes:ProbeStatusToFontSizeConverter x:Key="ProbeStatusToFontSizeConverter" />
 
         <!-- Style for hostname textbox -->
         <ControlTemplate x:Key="TextBoxBaseControlTemplatez" TargetType="{x:Type TextBoxBase}">
@@ -445,7 +446,8 @@
                                          IsTabStop="False"
                                          IsTextSearchEnabled="False"
                                          controls:ListBoxBehavior.ScrollOnNewItem="True"
-                                         FontFamily="Consolas" FontSize="11">
+                                         FontFamily="Consolas"
+                                         FontSize="{Binding Status, Converter={StaticResource ProbeStatusToFontSizeConverter}}">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="{x:Type ListBoxItem}">
                                             <Setter Property="Background" Value="Transparent" />

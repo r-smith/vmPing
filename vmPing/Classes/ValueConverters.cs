@@ -309,4 +309,21 @@ namespace vmPing.Classes
             throw new NotImplementedException();
         }
     }
+
+    public class ProbeStatusToFontSizeConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            switch ((ProbeStatus)value)
+            {
+                default:
+                    return ApplicationOptions.FontSize_Probe;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

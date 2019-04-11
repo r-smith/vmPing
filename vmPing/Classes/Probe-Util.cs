@@ -111,27 +111,37 @@ namespace vmPing.Classes
                 (ApplicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.WhenMinimized &&
                 Application.Current.MainWindow.WindowState == WindowState.Minimized))
             {
-                if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
-                {
-                    // Mark all existing status changes as read.
-                    for (int i = 0; i < StatusChangeLog.Count; ++i)
-                        StatusChangeLog[i].HasStatusBeenCleared = true;
-                }
-                StatusChangeLog.Add(status);
+                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        mutex.WaitOne();
+                        if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
+                        {
+                            // Mark all existing status changes as read.
+                            for (int i = 0; i < StatusChangeLog.Count; ++i)
+                                StatusChangeLog[i].HasStatusBeenCleared = true;
+                        }
+                        StatusChangeLog.Add(status);
+                        mutex.ReleaseMutex();
 
-                if (StatusWindow != null && StatusWindow.IsLoaded)
-                {
-                    if (StatusWindow.WindowState == WindowState.Minimized)
-                        StatusWindow.WindowState = WindowState.Normal;
-                    StatusWindow.Focus();
-                }
-                else if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
-                {
-                    new PopupNotificationWindow(StatusChangeLog).Show();
-                }
+                        if (StatusWindow != null && StatusWindow.IsLoaded)
+                        {
+                            if (StatusWindow.WindowState == WindowState.Minimized)
+                                StatusWindow.WindowState = WindowState.Normal;
+                            StatusWindow.Focus();
+                        }
+                        else if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
+                        {
+                            new PopupNotificationWindow(StatusChangeLog).Show();
+                        }
+                    }));
             }
 
-            else StatusChangeLog.Add(status);
+            else
+            {
+                mutex.WaitOne();
+                StatusChangeLog.Add(status);
+                mutex.ReleaseMutex();
+            }
         }
     }
 }

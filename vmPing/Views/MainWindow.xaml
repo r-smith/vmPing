@@ -468,7 +468,8 @@
                             <Image Source="/Resources/vmPing-96.png"
                                    Width="72"
                                    Height="72"
-                                   Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                                   Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanToVisibilityConverter}, NotifyOnTargetUpdated=True}"
+                                   TargetUpdated="Logo_TargetUpdated"
                                    Opacity="0.03" />
 
 

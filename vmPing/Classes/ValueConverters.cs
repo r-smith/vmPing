@@ -101,6 +101,8 @@ namespace vmPing.Classes
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Error);
                 case ProbeStatus.Indeterminate:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Indeterminate);
+                case ProbeStatus.Scanner:
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Scanner);
                 default:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Inactive);
             }
@@ -126,6 +128,8 @@ namespace vmPing.Classes
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Error);
                 case ProbeStatus.Indeterminate:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Indeterminate);
+                case ProbeStatus.Scanner:
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Scanner);
                 default:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Inactive);
             }
@@ -176,6 +180,8 @@ namespace vmPing.Classes
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Error);
                 case ProbeStatus.Indeterminate:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Indeterminate);
+                case ProbeStatus.Scanner:
+                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Scanner);
                 default:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Inactive);
             }

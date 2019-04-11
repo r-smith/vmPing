@@ -149,7 +149,7 @@ namespace vmPing.Classes
 
         public void WriteFinalStatisticsToHistory()
         {
-            if (Statistics.Sent == 0) return;
+            if (Statistics == null || Statistics.Sent == 0) return;
 
             var roundTripTimes = new List<int>();
             var rttRegex = new Regex($@"  \[(?<rtt><?\d+) ?{Strings.Milliseconds_Symbol}]$");

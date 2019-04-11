@@ -35,6 +35,10 @@ namespace vmPing.Classes
         public static PingOptions GetPingOptions { get; }
 
         // Font sizes.
+        //public static string FontFamily_Alias { get; set; }
+        //public static string FontFamily_Probe { get; set; }
+        //public static string FontFamily_Scanner { get; set; }
+        //public static int FontSize_Alias { get; set; } = 14;
         public static int FontSize_Probe { get; set; } = 11;
         public static int FontSize_Scanner { get; set; } = 14;
 
@@ -44,6 +48,7 @@ namespace vmPing.Classes
         public static string BackgroundColor_Probe_Down { get; set; } = Constants.Color_Probe_Background_Down;
         public static string BackgroundColor_Probe_Indeterminate { get; set; } = Constants.Color_Probe_Background_Indeterminate;
         public static string BackgroundColor_Probe_Error { get; set; } = Constants.Color_Probe_Background_Error;
+        public static string BackgroundColor_Probe_Scanner { get; set; } = Constants.Color_Probe_Background_Scanner;
 
         // Probe window foreground colors.
         public static string ForegroundColor_Probe_Inactive { get; set; } = Constants.Color_Probe_Foreground_Inactive;
@@ -51,6 +56,7 @@ namespace vmPing.Classes
         public static string ForegroundColor_Probe_Down { get; set; } = Constants.Color_Probe_Foreground_Down;
         public static string ForegroundColor_Probe_Indeterminate { get; set; } = Constants.Color_Probe_Foreground_Indeterminate;
         public static string ForegroundColor_Probe_Error { get; set; } = Constants.Color_Probe_Foreground_Error;
+        public static string ForegroundColor_Probe_Scanner { get; set; } = Constants.Color_Probe_Foreground_Scanner;
 
         // Probe statistics foreground colors.
         public static string ForegroundColor_Stats_Inactive { get; set; } = Constants.Color_Statistics_Foreground_Inactive;
@@ -65,6 +71,7 @@ namespace vmPing.Classes
         public static string ForegroundColor_Alias_Down { get; set; } = Constants.Color_Alias_Foreground_Down;
         public static string ForegroundColor_Alias_Indeterminate { get; set; } = Constants.Color_Alias_Foreground_Indeterminate;
         public static string ForegroundColor_Alias_Error { get; set; } = Constants.Color_Alias_Foreground_Error;
+        public static string ForegroundColor_Alias_Scanner { get; set; } = Constants.Color_Alias_Foreground_Scanner;
 
 
         static ApplicationOptions()

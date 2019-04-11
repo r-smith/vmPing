@@ -25,6 +25,7 @@
         <classes:HostnameFontsizeConverter x:Key="HostnameFontsizeConverter" />
         <classes:ButtonTextVisibilityConverter x:Key="ButtonTextVisibilityConverter" />
         <classes:ProbeStatusToFontSizeConverter x:Key="ProbeStatusToFontSizeConverter" />
+        <classes:ProbeTypeToVisibilityConverter x:Key="ProbeTypeToVisibilityConverter" />
 
         <!-- Style for hostname textbox -->
         <ControlTemplate x:Key="TextBoxBaseControlTemplatez" TargetType="{x:Type TextBoxBase}">
@@ -447,6 +448,7 @@
                                          IsTextSearchEnabled="False"
                                          controls:ListBoxBehavior.ScrollOnNewItem="True"
                                          FontFamily="Consolas"
+                                         Visibility="{Binding Type, Converter={StaticResource ProbeTypeToVisibilityConverter}}"
                                          FontSize="{Binding Status, Converter={StaticResource ProbeStatusToFontSizeConverter}}">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="{x:Type ListBoxItem}">

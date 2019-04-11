@@ -336,4 +336,23 @@ namespace vmPing.Classes
             throw new NotImplementedException();
         }
     }
+
+    public class ProbeTypeToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            switch ((ProbeType)value)
+            {
+                case ProbeType.Ping:
+                    return Visibility.Visible;
+                default:
+                    return Visibility.Collapsed;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

@@ -191,6 +191,8 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (string.IsNullOrWhiteSpace((string)value))
+                return Binding.DoNothing;
             try
             {
                 return (Brush)new BrushConverter().ConvertFromString((string)value);

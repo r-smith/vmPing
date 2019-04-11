@@ -16,7 +16,7 @@
         public const string Color_Probe_Foreground_Down = "#002b36";
         public const string Color_Probe_Foreground_Indeterminate = "#002b36";
         public const string Color_Probe_Foreground_Error = "#000000";
-        public const string Color_Probe_Foreground_Scanner = "#eeeeee";
+        public const string Color_Probe_Foreground_Scanner = "#f0f0f0";
 
         // Default statistics foreground colors.
         public const string Color_Statistics_Foreground_Inactive = "#657b83";

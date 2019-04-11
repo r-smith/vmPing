@@ -24,10 +24,22 @@ namespace vmPing.Classes
             {
                 // Starting probe.
                 CancelSource = new CancellationTokenSource();
-                if (Hostname.Count(f => f == ':') == 1)
+                if (Hostname.StartsWith("D/"))
+                {
+                    Type = ProbeType.Dns;
+                    Hostname = Hostname.Substring(2);
+                    PerformDnsLookup(CancelSource.Token);
+                }
+                else if (Hostname.Count(f => f == ':') == 1)
+                {
+                    Type = ProbeType.Ping;
                     Task.Run(() => PerformTcpProbe(CancelSource.Token), CancelSource.Token);
+                }
                 else
+                {
+                    Type = ProbeType.Ping;
                     Task.Run(() => PerformIcmpProbe(CancelSource.Token), CancelSource.Token);
+                }
             }
         }
 

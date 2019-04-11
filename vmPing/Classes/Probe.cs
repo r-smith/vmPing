@@ -20,6 +20,14 @@ namespace vmPing.Classes
         Scanner
     }
 
+
+    public enum ProbeType
+    {
+        Dns,
+        Ping
+    }
+
+
     public partial class Probe : INotifyPropertyChanged
     {
         public static ObservableCollection<StatusChangeLog> StatusChangeLog = new ObservableCollection<StatusChangeLog>();
@@ -40,6 +48,7 @@ namespace vmPing.Classes
         protected static void OnActiveCountChanged(EventArgs e) => ActiveCountChanged?.Invoke(null, e);
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public ProbeType Type { get; set; } = ProbeType.Ping;
         public IsolatedPingWindow IsolatedWindow { get; set; }
         public int IndeterminateCount { get; set; }
         public PingStatistics Statistics { get; set; }

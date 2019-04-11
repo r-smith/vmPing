@@ -68,6 +68,7 @@
     <Compile Include="Classes\CommandLine.cs" />
     <Compile Include="Classes\Configuration.cs" />
     <Compile Include="Classes\Favorite.cs" />
+    <Compile Include="Classes\Probe-Dns.cs" />
     <Compile Include="Classes\Probe-Icmp.cs" />
     <Compile Include="Classes\Probe-Tcp.cs" />
     <Compile Include="Classes\Probe-Util.cs" />

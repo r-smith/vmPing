@@ -3,22 +3,33 @@ vmPing
 
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
-###### (Latest version is 1.2.15 released on March 19, 2019)
-### [Click here to download the latest .exe](https://github.com/R-Smith/vmPing/releases/download/v1.2.15/vmPing.exe)
+###### (Latest version is 1.3.0 released on April 11, 2019)
+### [Click here to download the latest .exe](https://github.com/R-Smith/vmPing/releases/download/v1.3.0/vmPing.exe)
 ### [Click here to download the source](https://github.com/R-Smith/vmPing/archive/master.zip)
 
 ##### Notes
 * There is no installer.  Just run the .exe.
-* .NET 4.0 or greater is required.
+* .NET 4.5 or greater is required.
 
 [![Join the chat at https://gitter.im/vmPing/Lobby](https://badges.gitter.im/vmPing/Lobby.svg)](https://gitter.im/vmPing/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
+### Changes for v1.3.0
+Most of the changes in this release are under the hood.  Code has been refactored to make way for future enhancements.  Please let me know if you encounter any bugs.
+
+Here are the visible changes:
+* The project now targets .NET 4.5.  It previously targeted .NET 4.0.
+* __New DNS probe!__  In the hostname box, type __'D/name_or_ip'__ and it will perform a DNS lookup.  This feature is fairly hidden at the moment, but will become more apparent in a future release.  Additional probe types are planned.
+* Renamed 'Change Log' to 'Status History'.
+* Most dialog boxes have been converted to custom dialog boxes.
+* Added an _error_ icon to custom dialog boxes when displaying error-type messages.
+* Options -> Advanced -> Don't fragment:  This control is now a checkbox and it now includes an information popup that explains the option.
+* Don't fragment option now defaults to off.
+* The generic background logo in each probe window no longer re-appears after stopping a probe.
+
+
 ### Changes for v1.2.15
 * Added the ability to customize the colors.  Most colors within that application can now be set to your liking.  To access: open the application options and then select the Layout tab.
-* TODO: Add a script trigger option on host down / up.
-* TODO: Add context menu to host monitor windows.
-* TODO: Alternate compact view.
 
 
 ### Changes for v1.2.12
@@ -49,16 +60,9 @@ vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple h
 * Bug fix: A crash would occur if you started a ping and then stopped it before any probes were sent - such as during DNS resolution. (Thanks @ichantio)
 
 
-### Changes for v1.2.7
-* The keyboard focus feature that was supposedly added to the previous version is now working.
-
-
-### Changes for v1.2.6
+### Older changes
 * Aliases can now be managed from the main drop down menu.
 * Keyboard focus now automatically shifts each time you add a new host monitor window.
-
-
-### Older changes
 * Aliases are now persistent and are saved to your local vmPing configuration file.
 * New configuration file - %LocalAppData%\vmPing\vmPing.xml - Old configuration files are automatically upgraded to the new format.  The new configuration file supports favorites, aliases, and any other settings that would need to be saved in the future.
 * After stopping a ping, basic statistics are added to the output window.  This is similar to command line ping utilities.

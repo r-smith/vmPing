@@ -318,16 +318,16 @@ namespace vmPing.Classes
         }
     }
 
-    public class ProbeStatusToFontSizeConverter : IValueConverter
+    public class ProbeTypeToFontSizeConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            switch ((ProbeStatus)value)
+            switch ((ProbeType)value)
             {
-                case ProbeStatus.Scanner:
-                    return ApplicationOptions.FontSize_Scanner;
-                default:
+                case ProbeType.Ping:
                     return ApplicationOptions.FontSize_Probe;
+                default:
+                    return ApplicationOptions.FontSize_Scanner;
             }
         }
 

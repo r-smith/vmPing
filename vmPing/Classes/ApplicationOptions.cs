@@ -40,7 +40,7 @@ namespace vmPing.Classes
         //public static string FontFamily_Scanner { get; set; }
         //public static int FontSize_Alias { get; set; } = 14;
         public static int FontSize_Probe { get; set; } = 11;
-        public static int FontSize_Scanner { get; set; } = 14;
+        public static int FontSize_Scanner { get; set; } = 16;
 
         // Probe window background colors.
         public static string BackgroundColor_Probe_Inactive { get; set; } = Constants.Color_Probe_Background_Inactive;

@@ -24,7 +24,8 @@ namespace vmPing.Classes
     public enum ProbeType
     {
         Dns,
-        Ping
+        Ping,
+        Traceroute
     }
 
 
@@ -116,18 +117,18 @@ namespace vmPing.Classes
             get => isActive;
             set
             {
-                mutex.WaitOne();
-                if (value == true)
-                    ++ActiveCount;
-                else
-                    --ActiveCount;
-                mutex.ReleaseMutex();
-                NotifyPropertyChanged("NumberOfActivePings");
-
                 if (value != isActive)
                 {
                     isActive = value;
                     NotifyPropertyChanged("IsActive");
+
+                    mutex.WaitOne();
+                    if (value == true)
+                        ++ActiveCount;
+                    else
+                        --ActiveCount;
+                    mutex.ReleaseMutex();
+                    NotifyPropertyChanged("NumberOfActivePings");
                 }
             }
         }

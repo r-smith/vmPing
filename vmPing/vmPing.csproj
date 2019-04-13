@@ -71,6 +71,7 @@
     <Compile Include="Classes\Probe-Dns.cs" />
     <Compile Include="Classes\Probe-Icmp.cs" />
     <Compile Include="Classes\Probe-Tcp.cs" />
+    <Compile Include="Classes\Probe-Traceroute.cs" />
     <Compile Include="Classes\Probe-Util.cs" />
     <Compile Include="Classes\StatusChangeLog.cs" />
     <Compile Include="Classes\Util.cs" />

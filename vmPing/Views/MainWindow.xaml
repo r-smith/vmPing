@@ -24,7 +24,7 @@
         <classes:ProbeCountToGlobalStartStopIcon x:Key="ProbeCountToGlobalStartStopIcon" />
         <classes:HostnameFontsizeConverter x:Key="HostnameFontsizeConverter" />
         <classes:ButtonTextVisibilityConverter x:Key="ButtonTextVisibilityConverter" />
-        <classes:ProbeStatusToFontSizeConverter x:Key="ProbeStatusToFontSizeConverter" />
+        <classes:ProbeTypeToFontSizeConverter x:Key="ProbeTypeToFontSizeConverter" />
         <classes:ProbeTypeToVisibilityConverter x:Key="ProbeTypeToVisibilityConverter" />
 
         <!-- Style for hostname textbox -->
@@ -142,7 +142,7 @@
                 </MenuItem.Icon>
             </MenuItem>
             <!-- DEBUG -->
-            <!-- <MenuItem Header="{Binding Path=(classes:Probe.ActiveCount)}" /> -->
+            <!-- <MenuItem Header="{Binding Path=(classes:Probe.ActiveCount)}" /> --> 
 
 
             <!-- Menu Item: Extras -->
@@ -448,8 +448,9 @@
                                          IsTabStop="False"
                                          IsTextSearchEnabled="False"
                                          controls:ListBoxBehavior.ScrollOnNewItem="True"
+                                         FocusVisualStyle="{x:Null}"
                                          FontFamily="Consolas"
-                                         FontSize="{Binding Status, Converter={StaticResource ProbeStatusToFontSizeConverter}}">
+                                         FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="{x:Type ListBoxItem}">
                                             <Setter Property="Background" Value="Transparent" />
@@ -464,6 +465,18 @@
                                             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                                         </Style>
                                     </ListBox.ItemContainerStyle>
+                                    <!-- Experimenting with multi-color listbox items -->
+                                    <!--<ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            --><!--<TextBox Text="{Binding Mode=OneWay}"
+                                                     Foreground="{Binding ElementName=lbHistory, Path=Foreground}"
+                                                     IsReadOnly="True"
+                                                     Background="Transparent"
+                                                     BorderThickness="0"
+                                                     Cursor="Arrow" />-->
+                                            <!--<TextBlock Text="{Binding}" Loaded="TextBlock_Loaded" />--><!--
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>-->
                                 </ListBox>
                             </DockPanel>
 

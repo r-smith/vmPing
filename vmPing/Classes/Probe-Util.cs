@@ -30,6 +30,12 @@ namespace vmPing.Classes
                     Hostname = Hostname.Substring(2);
                     PerformDnsLookup(CancelSource.Token);
                 }
+                else if (Hostname.StartsWith("T/"))
+                {
+                    Type = ProbeType.Traceroute;
+                    Hostname = Hostname.Substring(2);
+                    PerformTraceroute(CancelSource.Token);
+                }
                 else if (Hostname.Count(f => f == ':') == 1)
                 {
                     Type = ProbeType.Ping;
@@ -77,7 +83,7 @@ namespace vmPing.Classes
                         cancellationToken.ThrowIfCancellationRequested();
                         if (ipAddresses.Length > 0)
                             await Application.Current.Dispatcher.BeginInvoke(
-                                new Action(() => AddHistory($"*** [{ipAddresses[0]}]")));
+                                new Action(() => AddHistory($"    ({ipAddresses[0]})")));
                         break;
                     default:
                         throw new Exception();
@@ -89,7 +95,7 @@ namespace vmPing.Classes
                 if (!cancellationToken.IsCancellationRequested)
                 {
                     await Application.Current.Dispatcher.BeginInvoke(
-                        new Action(() => AddHistory("Unable to resolve hostname.")));
+                        new Action(() => AddHistory($"{Environment.NewLine}Unable to resolve hostname")));
                 }
                 return true;
             }

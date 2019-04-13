@@ -240,7 +240,7 @@ namespace vmPing.Views
             _ProbeCollection.Add(new Probe());
         }
 
-        
+
         private void mnuProbeOptions_Click(object sender, RoutedEventArgs e)
         {
             DisplayOptionsWindow();
@@ -315,7 +315,7 @@ namespace vmPing.Views
             _Aliases = Alias.GetAliases();
             var aliasList = _Aliases.ToList();
             aliasList.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
-            
+
             // Clear existing aliases menu.
             for (int i = mnuAliases.Items.Count - 1; i > 1; --i)
                 mnuAliases.Items.RemoveAt(i);
@@ -560,5 +560,21 @@ namespace vmPing.Views
                 image.Source = null;
             }
         }
+
+        // Experimenting with multi-color listbox items.
+        //private void TextBlock_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    var tb = sender as TextBlock;
+        //    var message = tb.Text;
+        //    tb.Text = string.Empty;
+        //    foreach (var letter in message)
+        //    {
+        //        if (char.IsControl(letter)) tb.Inlines.Add(letter.ToString());
+        //        else if (char.IsSymbol(letter))
+        //            tb.Inlines.Add(new Run(letter.ToString()) { Foreground = Brushes.Red });
+        //        else
+        //            tb.Inlines.Add(new Run(letter.ToString()) { Foreground = Brushes.Green });
+        //    }
+        //}
     }
 }

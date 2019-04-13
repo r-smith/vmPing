@@ -14,6 +14,8 @@
         <classes:ProbeStatusToBackgroundBrushConverter x:Key="ProbeStatusToBackgroundBrushConverter" />
         <classes:ProbeStatusToForegroundBrushConverter x:Key="ProbeStatusToForegroundBrushConverter" />
         <classes:ProbeStatusToStatisticsBrushConverter x:Key="ProbeStatusToStatisticsBrushConverter" />
+        <classes:ProbeTypeToFontSizeConverter x:Key="ProbeTypeToFontSizeConverter" />
+        <classes:ProbeTypeToVisibilityConverter x:Key="ProbeTypeToVisibilityConverter" />
     </Window.Resources>
 
     <!-- Items Control -->
@@ -37,6 +39,7 @@
                        Background="Transparent"
                        Foreground="{Binding Status, Converter={StaticResource ProbeStatusToStatisticsBrushConverter}}"
                        FontFamily="Segoe UI" FontSize="12" FontWeight="Bold"
+                       Visibility="{Binding Type, Converter={StaticResource ProbeTypeToVisibilityConverter}}"
                        Padding="8,0,0,3">
                     <Label.Triggers>
                         <EventTrigger RoutedEvent="Binding.TargetUpdated">
@@ -61,7 +64,8 @@
                          IsTabStop="False"
                          IsTextSearchEnabled="False"
                          controls:ListBoxBehavior.ScrollOnNewItem="True"
-                         FontFamily="Consolas" FontSize="11">
+                         FontFamily="Consolas"
+                         FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="{x:Type ListBoxItem}">
                             <Setter Property="Background" Value="Transparent" />

@@ -4,8 +4,12 @@
         xmlns:classes="clr-namespace:vmPing.Classes"
         xmlns:controls="clr-namespace:vmPing.Controls"
         xmlns:resource="clr-namespace:vmPing.Properties"
-        Title="vmPing" Height="400" Width="800"
-        MinHeight="200" MinWidth="350"
+        Title="vmPing"
+        UseLayoutRounding="True"
+        Height="400"
+        Width="800"
+        MinHeight="200"
+        MinWidth="350"
         Background="White"
         ContentRendered="Window_ContentRendered">
 
@@ -53,7 +57,7 @@
 
         <Style x:Key="MenuStyle1" TargetType="{x:Type Menu}">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}"/>
+            <Setter Property="FontFamily" Value="{StaticResource {x:Static SystemFonts.MenuFontFamilyKey}}"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontStyle" Value="Normal"/>
             <Setter Property="FontWeight" Value="Normal"/>
@@ -62,8 +66,8 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Menu}">
-                        <Border BorderBrush="Transparent" BorderThickness="0" Background="Transparent" Padding="0,0,0,0" SnapsToDevicePixels="True">
-                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        <Border BorderBrush="Transparent" BorderThickness="0" Background="Transparent" Padding="0,0,0,0">
+                            <ItemsPresenter/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -78,7 +82,7 @@
         <Menu DockPanel.Dock="Top"
               Name="menuMain"
               FontStretch="Normal"
-              Style="{DynamicResource MenuStyle1}">
+              Style="{StaticResource MenuStyle1}">
             <Menu.ItemsPanel>
                 <ItemsPanelTemplate>
                     <DockPanel HorizontalAlignment="Stretch" LastChildFill="False" Background="White"/>
@@ -225,7 +229,7 @@
         <ItemsControl Name="ProbeItemsControl" IsTabStop="False" Focusable="False" BorderThickness="0,1,0,0" BorderBrush="#111" Margin="0,0,-2,-2">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="#111" BorderThickness="0,0,2,2" Margin="0,0,0,0" SnapsToDevicePixels="True" CornerRadius="0"
+                    <Border BorderBrush="#111" BorderThickness="0,0,2,2" Margin="0,0,0,0" CornerRadius="0"
                             Background="{Binding Status, Converter={StaticResource ProbeStatusToBackgroundBrushConverter}}">
                         <Grid Name="gridItemsControl">
                             <Grid.RowDefinitions>

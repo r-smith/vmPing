@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:resource="clr-namespace:vmPing.Properties"
         Title="vmPing"
-        Height="205" Width="390"
+        UseLayoutRounding="True"
+        Height="205"
+        Width="390"
         ResizeMode="NoResize"
         Background="#fff"
         WindowStartupLocation="CenterOwner"
@@ -21,7 +23,7 @@
             <TextBlock DockPanel.Dock="Top"
                        Text="{x:Static resource:Strings.NewAlias_Header}"
                        TextTrimming="CharacterEllipsis"
-                       Style="{DynamicResource ResourceKey=OptionHeaderTextStyle}"
+                       Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"
                        />
 
             <!-- Hostname TextBox-->
@@ -35,7 +37,7 @@
                                />
                 </Border>
                 <TextBox Name="MyHost"
-                         Style="{DynamicResource TextBoxStyle}"
+                         Style="{StaticResource TextBoxStyle}"
                          CharacterCasing="Upper"
                          MaxLength="64"
                          />
@@ -53,7 +55,7 @@
                                />
                 </Border>
                 <TextBox Name="MyAlias"
-                         Style="{DynamicResource TextBoxStyle}"
+                         Style="{StaticResource TextBoxStyle}"
                          MaxLength="64"
                          />
             </DockPanel>
@@ -62,13 +64,13 @@
         <!-- Buttons -->
         <Border Grid.Row="1" Background="#f0f0f0" BorderBrush="#dfdfdf" BorderThickness="0,1,0,0">
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
-                <Button Style="{DynamicResource ButtonStandardStyle}"
+                <Button Style="{StaticResource ButtonStandardStyle}"
                         IsDefault="True"
                         Margin="0,0,8,0"
                         Click="Save_Click"
                         Width="100"
                         Content="{x:Static resource:Strings.DialogButton_Save}" />
-                <Button Style="{DynamicResource ButtonStandardStyle}"
+                <Button Style="{StaticResource ButtonStandardStyle}"
                         Width="100"
                         IsCancel="True"
                         Content="{x:Static resource:Strings.DialogButton_Cancel}" />

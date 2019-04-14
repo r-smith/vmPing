@@ -1,12 +1,11 @@
 ﻿<Window x:Class="vmPing.Views.DialogWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:resource="clr-namespace:vmPing.Properties"
-        mc:Ignorable="d"
         Title="vmPing"
-        Height="200" Width="400"
+        UseLayoutRounding="True"
+        Height="200"
+        Width="400"
         ResizeMode="NoResize"
         Background="White"
         WindowStartupLocation="CenterOwner"
@@ -48,12 +47,12 @@
         <!-- Buttons -->
         <Border Grid.Row="1" Background="#f0f0f0" BorderBrush="#dfdfdf" BorderThickness="0,1,0,0">
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
-                <Button Style="{DynamicResource ButtonStandardStyle}"
+                <Button Style="{StaticResource ButtonStandardStyle}"
                         Name="OK"
                         Click="OK_Click"
                         Width="100"
                         Content="{x:Static resource:Strings.DialogButton_OK}" />
-                <Button Style="{DynamicResource ButtonStandardStyle}"
+                <Button Style="{StaticResource ButtonStandardStyle}"
                         Name="Cancel"
                         Margin="8,0,0,0"
                         Width="100"

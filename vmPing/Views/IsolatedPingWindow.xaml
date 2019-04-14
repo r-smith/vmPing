@@ -4,8 +4,11 @@
         xmlns:classes="clr-namespace:vmPing.Classes"
         xmlns:controls="clr-namespace:vmPing.Controls"
         Title="{Binding Hostname, StringFormat='vmPing - {0}'}"
-        Height="400" Width="800"
-        MinHeight="200" MinWidth="350"
+        UseLayoutRounding="True"
+        Height="400"
+        Width="800"
+        MinHeight="200"
+        MinWidth="350"
         Background="White">
 
     <Window.Resources>
@@ -19,7 +22,7 @@
     </Window.Resources>
 
     <!-- Items Control -->
-    <Border BorderBrush="#111" BorderThickness="0,1,0,0" Margin="0,0,0,0" SnapsToDevicePixels="True" CornerRadius="0"
+    <Border BorderBrush="#111" BorderThickness="0,1,0,0" Margin="0,0,0,0" CornerRadius="0"
             Background="{Binding Status, Converter={StaticResource ProbeStatusToBackgroundBrushConverter}}">
         <Grid>
             <Grid.RowDefinitions>

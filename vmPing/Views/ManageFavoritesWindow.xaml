@@ -1,19 +1,19 @@
 ﻿<Window x:Class="vmPing.Views.ManageFavoritesWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:resource="clr-namespace:vmPing.Properties"
-        mc:Ignorable="d"
+        Title="{x:Static resource:Strings.ManageFavorites_WindowTitle}"
+        UseLayoutRounding="True"
+        Height="475"
+        Width="550"
+        MinHeight="300"
+        MinWidth="425"
         WindowStartupLocation="CenterScreen"
         Background="#fff"
         ResizeMode="CanResize"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
-        SourceInitialized="Window_SourceInitialized"
-        Title="{x:Static resource:Strings.ManageFavorites_WindowTitle}"
-        Height="475" Width="550"
-        MinHeight="300" MinWidth="425">
+        SourceInitialized="Window_SourceInitialized">
 
     <Grid Margin="9">
         <Grid.RowDefinitions>
@@ -24,7 +24,7 @@
 
         <TextBlock Grid.Row="0"
                    Text="{x:Static resource:Strings.ManageFavorites_Header}"
-                   Style="{DynamicResource ResourceKey=OptionHeaderTextStyle}"
+                   Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"
                    />
         <Border Grid.Row="1" BorderBrush="#acacac" BorderThickness="1">
             <Grid>
@@ -109,7 +109,7 @@
                                  BorderThickness="0"
                                  SelectionMode="Single"
                                  Margin="5"
-                                 ItemContainerStyle="{DynamicResource ListBoxItemNoHighlightStyle}" />
+                                 ItemContainerStyle="{StaticResource ListBoxItemNoHighlightStyle}" />
                     </Border>
                 </DockPanel>
 
@@ -122,7 +122,7 @@
                 <Button Click="Edit_Click"
                         Margin="9"
                         Width="90"
-                        Style="{DynamicResource ButtonSecondaryStyle}"
+                        Style="{StaticResource ButtonSecondaryStyle}"
                         IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
                         HorizontalAlignment="Right"
                         Content="{x:Static resource:Strings.DialogButton_Edit}" />
@@ -130,7 +130,7 @@
                         Click="Remove_Click"
                         Margin="9"
                         Width="90"
-                        Style="{DynamicResource ButtonSecondaryStyle}"
+                        Style="{StaticResource ButtonSecondaryStyle}"
                         IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
                         HorizontalAlignment="Right"
                         Content="{x:Static resource:Strings.DialogButton_Remove}">

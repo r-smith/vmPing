@@ -1,0 +1,47 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!--
+        Icon: vmPing Logo (Simple)
+        Credit: Ryan Smith
+    -->
+    <DrawingImage x:Key="icon.vmping-logo-simple">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V384 H384 V0 H0 Z">
+                <DrawingGroup Opacity="1" Transform="4,0,0,4,3,0">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing>
+                            <GeometryDrawing.Pen>
+                                <Pen Brush="#FF000000" Thickness="12" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                            </GeometryDrawing.Pen>
+                            <GeometryDrawing.Geometry>
+                                <EllipseGeometry RadiusX="33" RadiusY="33" Center="48,48" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing Geometry="F0 M384,384z M0,0z M5.25,48L29.25,48">
+                            <GeometryDrawing.Pen>
+                                <Pen Brush="#FF000000" Thickness="12" StartLineCap="Square" EndLineCap="Square" LineJoin="Miter" />
+                            </GeometryDrawing.Pen>
+                        </GeometryDrawing>
+                        <GeometryDrawing Geometry="F0 M384,384z M0,0z M65.25,48L89.25,48">
+                            <GeometryDrawing.Pen>
+                                <Pen Brush="#FF000000" Thickness="12" StartLineCap="Square" EndLineCap="Square" LineJoin="Miter" />
+                            </GeometryDrawing.Pen>
+                        </GeometryDrawing>
+                        <GeometryDrawing Geometry="F0 M384,384z M0,0z M48,66L48,90">
+                            <GeometryDrawing.Pen>
+                                <Pen Brush="#FF000000" Thickness="12" StartLineCap="Square" EndLineCap="Square" LineJoin="Miter" />
+                            </GeometryDrawing.Pen>
+                        </GeometryDrawing>
+                        <GeometryDrawing Geometry="F0 M384,384z M0,0z M48,6L48,30">
+                            <GeometryDrawing.Pen>
+                                <Pen Brush="#FF000000" Thickness="12" StartLineCap="Square" EndLineCap="Square" LineJoin="Miter" />
+                            </GeometryDrawing.Pen>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+</ResourceDictionary>

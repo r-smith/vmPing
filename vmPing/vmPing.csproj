@@ -147,6 +147,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ResourceDictionaries\Icons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ResourceDictionaries\ListBoxStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -291,9 +295,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\bomb-16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\vmPing-96.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\stopCircle-16.png" />

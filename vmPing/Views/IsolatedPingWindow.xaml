@@ -88,14 +88,17 @@
 
 
             <!-- vmPing icon -->
-            <Image Source="/Resources/vmPing-96.png"
+            <Image Source="{StaticResource icon.vmping-logo-simple}"
                    Grid.Row="1"
-                   Width="72"
-                   Height="72"
+                   MaxWidth="128"
+                   MaxHeight="128"
+                   MinWidth="16"
+                   MinHeight="16"
+                   Margin="20"
                    Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
-                   Opacity="0.03" />
-
-
+                   Opacity="0.03"/>
+            
+            
             <!-- Hostname section -->
             <Label Grid.Row="0"
                    FontWeight="SemiBold"

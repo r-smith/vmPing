@@ -247,7 +247,7 @@
                                             <Setter Property="Background" Value="#00000000" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
-                                                    <Setter Property="Background" Value="#80202020" />
+                                                    <Setter Property="Background" Value="#88888888" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -291,14 +291,15 @@
                                                         CornerRadius="0"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
-                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_close_14_0_ffffff_none.png"
+                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_close_14_0_000000_none.png"
                                                            Width="14" Height="14"
-                                                           Opacity="0.8" />
+                                                           Opacity="0.9" />
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
                                                         <Setter TargetName="controlButton_border" Property="Background" Value="Black" />
                                                         <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
+                                                        <Setter TargetName="controlButton_image" Property="Source" Value="/Resources/font-awesome_4-7-0_close_14_0_ffffff_none.png" />
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
                                                         <Setter TargetName="controlButton_border" Property="Background" Value="#444" />
@@ -338,14 +339,15 @@
                                                         CornerRadius="0"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
-                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_window-restore_14_0_ffffff_none.png"
+                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_window-restore_14_0_000000_none.png"
                                                            Width="14" Height="14"
-                                                           Opacity="0.8" />
+                                                           Opacity="0.9" />
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
                                                         <Setter TargetName="controlButton_border" Property="Background" Value="Black" />
                                                         <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
+                                                        <Setter TargetName="controlButton_image" Property="Source" Value="/Resources/font-awesome_4-7-0_window-restore_14_0_ffffff_none.png" />
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
                                                         <Setter TargetName="controlButton_border" Property="Background" Value="#444" />
@@ -385,14 +387,15 @@
                                                         CornerRadius="0"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
-                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_pencil_14_0_ffffff_none.png"
+                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_pencil_14_0_000000_none.png"
                                                            Width="14" Height="14"
-                                                           Opacity="0.8" />
+                                                           Opacity="0.9" />
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
                                                         <Setter TargetName="controlButton_border" Property="Background" Value="Black" />
                                                         <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
+                                                        <Setter TargetName="controlButton_image" Property="Source" Value="/Resources/font-awesome_4-7-0_pencil_14_0_ffffff_none.png" />
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
                                                         <Setter TargetName="controlButton_border" Property="Background" Value="#444" />

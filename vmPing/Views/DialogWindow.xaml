@@ -5,13 +5,13 @@
         Title="vmPing"
         UseLayoutRounding="True"
         Height="200"
-        Width="400"
+        Width="480"
         ResizeMode="NoResize"
         Background="White"
         WindowStartupLocation="CenterOwner"
         SizeToContent="Height"
         ShowInTaskbar="False">
-    
+
     <Grid Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -26,27 +26,29 @@
             <DockPanel HorizontalAlignment="Left" Margin="0,0,0,3">
                 <Image Name="MyIcon"
                        Source="/Resources/caution-40.png"
-                       Width="40"
-                       Height="40"/>
+                       Width="32"
+                       Height="32"/>
                 <TextBlock Name="MyTitle"
                            Text="Warning"
-                           Foreground="#333"
-                           Margin="20,0,0,0"
+                           Foreground="#000000"
+                           Margin="15,0,0,0"
                            VerticalAlignment="Center"
                            FontSize="16"
-                           FontWeight="Bold"/>
+                           FontFamily="Arial"
+                           FontWeight="SemiBold"/>
             </DockPanel>
             <TextBlock Grid.Row="1"
                        Name="Body"
-                       FontSize="14"
-                       Margin="60,0,0,10"
-                       Foreground="#005ace"
+                       FontSize="13"
+                       FontFamily="Arial"
+                       Margin="47,10,0,20"
+                       Foreground="#202020"
                        Text="This is warning text"  TextWrapping="Wrap"/>
         </Grid>
 
         <!-- Buttons -->
         <Border Grid.Row="1" Background="#f0f0f0" BorderBrush="#dfdfdf" BorderThickness="0,1,0,0">
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
                 <Button Style="{StaticResource ButtonStandardStyle}"
                         Name="OK"
                         Click="OK_Click"

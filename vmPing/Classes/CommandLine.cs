@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 
 namespace vmPing.Classes
@@ -58,14 +59,19 @@ namespace vmPing.Classes
                     case "-h":
                     case "--help":
                         MessageBox.Show(
-                            $"Command Line Usage:{Environment.NewLine}vmPing [-i interval] [-w timeout] [<target_host>...]",
+                            $"Command Line Usage:{Environment.NewLine}vmPing [-i interval] [-w timeout] [<target_host>...] [<path_to_list_of_hosts>...]",
                             "vmPing Help",
                             MessageBoxButton.OK,
                             MessageBoxImage.Information);
                         Application.Current.Shutdown();
                         break;
                     default:
-                        hostnames.Add(args[index]);
+                        // If an invalid argument is supplied, check to see if the argument is a valid path name.
+                        //   If so, attempt to parse and read hosts from the file.  If not, use the argument as a hostname.
+                        if (File.Exists(args[index]))
+                            hostnames.AddRange(ReadHostsFromFile(args[index]));
+                        else
+                            hostnames.Add(args[index]);
                         break;
                 }
             }
@@ -74,7 +80,7 @@ namespace vmPing.Classes
             if (errorMessage.Length > 0)
             {
                 MessageBox.Show(
-                    $"{errorMessage}{Environment.NewLine}{Environment.NewLine}Command Line Usage:{Environment.NewLine}vmPing [-i interval] [-w timeout] [<target_host>...]",
+                    $"{errorMessage}{Environment.NewLine}{Environment.NewLine}Command Line Usage:{Environment.NewLine}vmPing [-i interval] [-w timeout] [<target_host>...] [<path_to_list_of_hosts>...]",
                     "vmPing Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
@@ -87,6 +93,24 @@ namespace vmPing.Classes
             }
 
             return hostnames;
+        }
+
+
+        private static List<string> ReadHostsFromFile(string path)
+        {
+            try
+            {
+                return new List<string>(File.ReadAllLines(path));
+            }
+            catch
+            {
+                MessageBox.Show(
+                    $"Failed parsing {path}",
+                    "vmPing Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return new List<string>();
+            }
         }
     }
 }

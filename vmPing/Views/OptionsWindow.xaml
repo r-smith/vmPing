@@ -236,11 +236,12 @@
                                 ToolTipService.InitialShowDelay="0"
                                 ToolTipService.ShowDuration="60000">
                             <Border.ToolTip>
-                                <ToolTip>
-                                    <TextBlock Width="275"
+                                <ToolTip Background="#404040">
+                                    <TextBlock Width="300"
                                                Margin="5,1"
                                                FontSize="14"
                                                TextWrapping="Wrap"
+                                               Foreground="#f2f2f2"
                                                Text="The don't fragment flag instructs routers to discard the packet if it is too big. This can be used to determine the MTU."/>
                                 </ToolTip>
                             </Border.ToolTip>
@@ -248,20 +249,8 @@
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    Width="16" Height="16"
-                                   Opacity="0.8"/>
+                                   Opacity="0.9"/>
                         </Border>
-                        <!--<DockPanel DockPanel.Dock="Right"
-                                    HorizontalAlignment="Right"
-                                    Width="240">
-                            <Image Source="/Resources/font-awesome_4-7-0_info-circle_16_0_268bd2_none.png"
-                                   Width="16" Height="16"
-                                   Opacity="0.8"
-                                   VerticalAlignment="Top" Margin="0,2,5,0"/>
-                            <TextBlock TextWrapping="Wrap"
-                                       Foreground="#a0a0a0"
-                                       FontSize="12"
-                                       Text="The don't fragment flag instructs routers to discard the packet if it is too big. This can be used to determine the MTU."/>
-                        </DockPanel>-->
                     </DockPanel>
                 </DockPanel>
             </TabItem>
@@ -397,25 +386,98 @@
                                Text="Log Output"
                                Style="{StaticResource OptionHeaderTextStyle}" />
 
-                    <CheckBox DockPanel.Dock="Top"
-                              Name="IsLogOutputEnabled"
-                              Content="Write ping output to plain text files"
-                              IsChecked="True"
-                              Margin="20,15,0,30"
-                              FontSize="14" />
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="20,15,0,0">
+                        <CheckBox DockPanel.Dock="Top"
+                                  Name="IsLogOutputEnabled"
+                                  Content="Write ping output to plain text files"
+                                  IsChecked="True"
+                                  VerticalAlignment="Center"
+                                  FontSize="14" />
+                        <Border DockPanel.Dock="Left"
+                                Background="Transparent"
+                                Margin="8,1,0,0"
+                                Padding="3"
+                                ToolTipService.InitialShowDelay="0"
+                                ToolTipService.ShowDuration="60000">
+                            <Border.ToolTip>
+                                <ToolTip Background="#404040">
+                                    <TextBlock Width="300"
+                                               Margin="5,1"
+                                               FontSize="14"
+                                               TextWrapping="Wrap"
+                                               Foreground="#f2f2f2"
+                                               Text="When this option is enabled, all ping output is written to a text file.  You specify the base directory, and vmPing will generate a separate log file for each host (hostname.txt)."/>
+                                </ToolTip>
+                            </Border.ToolTip>
+                            <Image Source="/Resources/font-awesome_4-7-0_info-circle_16_0_268bd2_none.png"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Bottom"
+                                   Width="16" Height="16"
+                                   Opacity="0.9"/>
+                        </Border>
+                    </StackPanel>
                     <Grid DockPanel.Dock="Top"
-                          Margin="20,0"
+                          Margin="41,10,20,0"
                           VerticalAlignment="Top"
                           Visibility="{Binding IsChecked, ElementName=IsLogOutputEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <StackPanel>
                             <TextBlock Style="{StaticResource EmailOptionsTextBlock}"
                                        HorizontalAlignment="Left"
-                                       Text="Log path" />
+                                       Text="Log path (base directory)" />
                             <TextBox Style="{StaticResource TextBoxStyle}"
-                                     Margin="0,5,0,10"
+                                     Margin="0,5,0,8"
                                      Name="LogPath" />
                             <Button Style="{StaticResource ButtonSecondaryStyle}"
                                     Click="BrowseLogPath_Click"
+                                    Width="70"
+                                    Content="Browse"
+                                    HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="20,15,0,0">
+                        <CheckBox DockPanel.Dock="Top"
+                                  Name="IsLogStatusChangesEnabled"
+                                  Content="Log status changes to text file"
+                                  IsChecked="True"
+                                  VerticalAlignment="Center"
+                                  FontSize="14" />
+                        <Border DockPanel.Dock="Left"
+                                Background="Transparent"
+                                Margin="8,1,0,0"
+                                Padding="3"
+                                ToolTipService.InitialShowDelay="0"
+                                ToolTipService.ShowDuration="60000">
+                            <Border.ToolTip>
+                                <ToolTip Background="#404040">
+                                    <TextBlock Width="300"
+                                               Margin="5,1"
+                                               FontSize="14"
+                                               TextWrapping="Wrap"
+                                               Foreground="#f2f2f2"
+                                               Text="When this option is enabled, all status changes are written to a text file.  A status change is when a host you are pinging goes down, or a down host comes back up.  The text file is saved in a tab delimited format that is suitable for Excel or database imports."/>
+                                </ToolTip>
+                            </Border.ToolTip>
+                            <Image Source="/Resources/font-awesome_4-7-0_info-circle_16_0_268bd2_none.png"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Width="16" Height="16"
+                                   Opacity="1"/>
+                        </Border>
+                    </StackPanel>
+                    <Grid DockPanel.Dock="Top"
+                          Margin="41,10,20,0"
+                          VerticalAlignment="Top"
+                          Visibility="{Binding IsChecked, ElementName=IsLogStatusChangesEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource EmailOptionsTextBlock}"
+                                       HorizontalAlignment="Left"
+                                       Text="Log path" />
+                            <TextBox Style="{StaticResource TextBoxStyle}"
+                                     Margin="0,5,0,8"
+                                     Name="LogStatusChangesPath" />
+                            <Button Style="{StaticResource ButtonSecondaryStyle}"
+                                    Click="BrowseLogStatusChangesPath_Click"
                                     Width="70"
                                     Content="Browse"
                                     HorizontalAlignment="Right"/>

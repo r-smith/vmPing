@@ -331,6 +331,14 @@ namespace vmPing.Classes
                 xmlDocument: xd,
                 name: "LogPath",
                 value: ApplicationOptions.LogPath != null ? ApplicationOptions.LogPath.ToString() : string.Empty));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "IsLogStatusChangesEnabled",
+                value: ApplicationOptions.IsLogStatusChangesEnabled.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "LogStatusChangesPath",
+                value: ApplicationOptions.LogStatusChangesPath != null ? ApplicationOptions.LogStatusChangesPath.ToString() : string.Empty));
 
             return configuration;
         }
@@ -552,6 +560,14 @@ namespace vmPing.Classes
             if (options.TryGetValue("LogPath", out optionValue))
             {
                 ApplicationOptions.LogPath = optionValue;
+            }
+            if (options.TryGetValue("IsLogStatusChangesEnabled", out optionValue))
+            {
+                ApplicationOptions.IsLogStatusChangesEnabled = bool.Parse(optionValue);
+            }
+            if (options.TryGetValue("LogStatusChangesPath", out optionValue))
+            {
+                ApplicationOptions.LogStatusChangesPath = optionValue;
             }
 
             if (options.TryGetValue("EmailUser", out optionValue))

@@ -84,6 +84,8 @@ namespace vmPing.Views
         {
             LogPath.Text = ApplicationOptions.LogPath;
             IsLogOutputEnabled.IsChecked = ApplicationOptions.IsLogOutputEnabled;
+            LogStatusChangesPath.Text = ApplicationOptions.LogStatusChangesPath;
+            IsLogStatusChangesEnabled.IsChecked = ApplicationOptions.IsLogStatusChangesEnabled;
         }
 
         private void PopulateAdvancedOptions()
@@ -361,6 +363,32 @@ namespace vmPing.Views
                 ApplicationOptions.IsLogOutputEnabled = false;
             }
 
+            if (IsLogStatusChangesEnabled.IsChecked == true)
+            {
+                try
+                {
+                    if (Path.GetFileName(LogStatusChangesPath.Text).IndexOfAny(Path.GetInvalidFileNameChars()) >= 0 ||
+                        !Directory.Exists(Path.GetDirectoryName(LogStatusChangesPath.Text)) ||
+                        Path.GetFileName(LogStatusChangesPath.Text).Length < 1)
+                    {
+                        MessageBox.Show(Path.GetFileName(LogStatusChangesPath.Text));
+                        throw new Exception();
+                    }
+                }
+                catch
+                {
+                    ShowError("The specified path does not exist.  Please enter a valid path.", LogOutputTab, LogStatusChangesPath);
+                    return false;
+                }
+
+                ApplicationOptions.IsLogStatusChangesEnabled = true;
+                ApplicationOptions.LogStatusChangesPath = LogStatusChangesPath.Text;
+            }
+            else
+            {
+                ApplicationOptions.IsLogStatusChangesEnabled = false;
+            }
+
             return true;
         }
 
@@ -465,6 +493,16 @@ namespace vmPing.Views
 
             if (result == System.Windows.Forms.DialogResult.OK)
                 LogPath.Text = dialog.SelectedPath;
+        }
+
+        private void BrowseLogStatusChangesPath_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            dialog.Description = "Select a location for the log files.";
+            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+                LogStatusChangesPath.Text = dialog.SelectedPath + "\\vmping-status.txt";
         }
 
         private void UpdateByteCount()

@@ -3,8 +3,8 @@ vmPing
 
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
-###### (Latest version is 1.3.0 released on April 11, 2019)
-### [Click here to download the latest .exe](https://github.com/R-Smith/vmPing/releases/download/v1.3.0/vmPing.exe)
+###### (Latest version is 1.3.1 released on April 15, 2019)
+### [Click here to download the latest .exe](https://github.com/R-Smith/vmPing/releases/download/v1.3.1/vmPing.exe)
 ### [Click here to download the source](https://github.com/R-Smith/vmPing/archive/master.zip)
 
 ##### Notes
@@ -12,6 +12,17 @@ vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple h
 * .NET 4.5 or greater is required.
 
 [![Join the chat at https://gitter.im/vmPing/Lobby](https://badges.gitter.im/vmPing/Lobby.svg)](https://gitter.im/vmPing/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+
+### Changes for v1.3.1
+* __New traceroute probe!__  In the hostname box, type __'T/name_or_ip'__ and it'll perform a traceroute right in a probe window.  This feature will become more apparent in a future release, and additional probe types are planned.  Eventually, the old separate traceroute window will go away.
+* New option to log status changes to a text file.  This option only writes to the log when a host goes down or up.  The output is in a tab delimited format that is suitable for Excel or database imports.  Note: vmPing does not lock the file, so logging will fail if the file is opened by Excel and vmPing tries to write to the file.
+* Fix for vmPing no longer reading hostnames from the command line.
+* New command line option to specify a file containing a list of hostnames.  One host per line.  The file is read at startup and vmPing immediately begins pinging each host.  Remember to use quotes if your file path contains spaces.  Usage:  __'vmPing.exe <path_to_file>'__
+* Darkened the default color for DNS and traceroute probes.  This is not yet customizable.
+* The control bar that appears when you hover over a probe window is now darker (50% black with 50% transparency).  The icons are now darker and the highlight style was changed to accommodate the new colors.
+* Re-styled the custom dialog window so it's wider and uses a smaller font.
+* Extra tooltips explaining the options under Options -> Log Output.
 
 
 ### Changes for v1.3.0
@@ -54,13 +65,10 @@ Here are the visible changes:
 * When saving a new favorite set, if you haven't entered any hosts names, you will now get an error.
 
 
-### Changes for v1.2.8
+### Older changes
 * Re-designed the options window, dialog popups, and the alias/favorites management windows.  Everything has a more consistent look.  No more fixed and unmovable dialog windows.  Email alerts and logging options are now found in the options window.
 * When renaming an alias, if you set a blank name for the title, it deletes the alias entry rather than creating a blank alias.
 * Bug fix: A crash would occur if you started a ping and then stopped it before any probes were sent - such as during DNS resolution. (Thanks @ichantio)
-
-
-### Older changes
 * Aliases can now be managed from the main drop down menu.
 * Keyboard focus now automatically shifts each time you add a new host monitor window.
 * Aliases are now persistent and are saved to your local vmPing configuration file.

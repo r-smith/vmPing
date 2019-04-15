@@ -86,18 +86,6 @@
                 </ListBox>
             </DockPanel>
 
-
-            <!-- vmPing icon -->
-            <Image Source="{StaticResource icon.vmping-logo-simple}"
-                   Grid.Row="1"
-                   MaxWidth="128"
-                   MaxHeight="128"
-                   MinWidth="16"
-                   MinHeight="16"
-                   Margin="20"
-                   Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
-                   Opacity="0.03"/>
-            
             
             <!-- Hostname section -->
             <Label Grid.Row="0"

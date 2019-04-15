@@ -8,7 +8,7 @@
         public const string Color_Probe_Background_Down = "#dc322f";
         public const string Color_Probe_Background_Indeterminate = "#dfdf00";
         public const string Color_Probe_Background_Error = "#b58900";
-        public const string Color_Probe_Background_Scanner = "#666666";
+        public const string Color_Probe_Background_Scanner = "#505050";
 
         // Default probe foreground colors.
         public const string Color_Probe_Foreground_Inactive = "#839496";
@@ -26,7 +26,7 @@
         public const string Color_Statistics_Foreground_Error = "#ffffff";
 
         // Default alias / probe title colors.
-        public const string Color_Alias_Foreground_Inactive = "#444444";
+        public const string Color_Alias_Foreground_Inactive = "#000000";
         public const string Color_Alias_Foreground_Up = "#ffff00";
         public const string Color_Alias_Foreground_Down = "#ffff00";
         public const string Color_Alias_Foreground_Indeterminate = "#ffffff";

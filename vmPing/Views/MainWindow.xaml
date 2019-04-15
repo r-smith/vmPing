@@ -247,7 +247,7 @@
                                             <Setter Property="Background" Value="#00000000" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
-                                                    <Setter Property="Background" Value="#09000000" />
+                                                    <Setter Property="Background" Value="#80202020" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -274,8 +274,8 @@
 
                                     <!-- Button: Delete / Remove -->
                                     <Button Grid.Column="3"
-                                            Padding="5,3"
-                                            Margin="0,0,3,0"
+                                            Padding="6,3"
+                                            Margin="0,0,0,0"
                                             Background="Transparent"
                                             HorizontalAlignment="Right"
                                             IsTabStop="False"
@@ -286,24 +286,23 @@
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
                                                 <Border Name="controlButton_border"
-                                                        BorderThickness="1"
+                                                        BorderThickness="0"
                                                         BorderBrush="Transparent"
-                                                        CornerRadius="3"
+                                                        CornerRadius="0"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
-                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_close_14_0_000000_none.png"
+                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_close_14_0_ffffff_none.png"
                                                            Width="14" Height="14"
-                                                           Opacity="0.4" />
+                                                           Opacity="0.8" />
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="BorderBrush" Value="#33000000" />
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="Black" />
                                                         <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="White" />
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#dddddd" />
-                                                        <Setter TargetName="controlButton_border" Property="BorderBrush" Value="Black" />
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#444" />
+                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="0.4" />
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>
@@ -322,7 +321,7 @@
 
                                     <!-- Button: Isolated View -->
                                     <Button Grid.Column="2"
-                                            Padding="5,3"
+                                            Padding="6,3"
                                             Margin="0,0,1,0"
                                             Background="Transparent"
                                             HorizontalAlignment="Right"
@@ -334,24 +333,23 @@
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
                                                 <Border Name="controlButton_border"
-                                                        BorderThickness="1"
+                                                        BorderThickness="0"
                                                         BorderBrush="Transparent"
-                                                        CornerRadius="3"
+                                                        CornerRadius="0"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
-                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_window-restore_14_0_000000_none.png"
+                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_window-restore_14_0_ffffff_none.png"
                                                            Width="14" Height="14"
-                                                           Opacity="0.4" />
+                                                           Opacity="0.8" />
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="BorderBrush" Value="#33000000" />
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="Black" />
                                                         <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="White" />
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#dddddd" />
-                                                        <Setter TargetName="controlButton_border" Property="BorderBrush" Value="Black" />
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#444" />
+                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="0.4" />
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>
@@ -370,7 +368,7 @@
 
                                     <!-- Button: Edit Alias -->
                                     <Button Grid.Column="1"
-                                            Padding="5,3"
+                                            Padding="6,3"
                                             Margin="0,0,1,0"
                                             Background="Transparent"
                                             HorizontalAlignment="Right"
@@ -378,29 +376,27 @@
                                             ToolTip="{x:Static resource:Strings.Tooltip_EditAlias}"
                                             ToolTipService.InitialShowDelay="1500"
                                             ToolTipService.ShowDuration="2000"
-                                            Click="EditAlias_Click"
-                                            >
+                                            Click="EditAlias_Click">
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
                                                 <Border Name="controlButton_border"
-                                                        BorderThickness="1"
+                                                        BorderThickness="0"
                                                         BorderBrush="Transparent"
-                                                        CornerRadius="3"
+                                                        CornerRadius="0"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
-                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_pencil_14_0_000000_none.png"
+                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_pencil_14_0_ffffff_none.png"
                                                            Width="14" Height="14"
-                                                           Opacity="0.4" />
+                                                           Opacity="0.8" />
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="BorderBrush" Value="#33000000" />
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="Black" />
                                                         <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="White" />
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#dddddd" />
-                                                        <Setter TargetName="controlButton_border" Property="BorderBrush" Value="Black" />
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#444" />
+                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="0.4" />
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>

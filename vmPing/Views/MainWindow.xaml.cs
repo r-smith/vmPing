@@ -48,7 +48,10 @@ namespace vmPing.Views
             {
                 AddProbe(hosts.Count);
                 for (int i = 0; i < hosts.Count; ++i)
+                {
+                    _ProbeCollection[i].Hostname = hosts[i].ToUpper();
                     _ProbeCollection[i].StartStop();
+                }
             }
             else
             {

@@ -11,16 +11,6 @@
         MinWidth="350"
         Background="White">
 
-    <Window.Resources>
-        <!-- Value converters -->
-        <classes:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        <classes:ProbeStatusToBackgroundBrushConverter x:Key="ProbeStatusToBackgroundBrushConverter" />
-        <classes:ProbeStatusToForegroundBrushConverter x:Key="ProbeStatusToForegroundBrushConverter" />
-        <classes:ProbeStatusToStatisticsBrushConverter x:Key="ProbeStatusToStatisticsBrushConverter" />
-        <classes:ProbeTypeToFontSizeConverter x:Key="ProbeTypeToFontSizeConverter" />
-        <classes:ProbeTypeToVisibilityConverter x:Key="ProbeTypeToVisibilityConverter" />
-    </Window.Resources>
-
     <!-- Items Control -->
     <Border BorderBrush="#111" BorderThickness="0,1,0,0" Margin="0,0,0,0" CornerRadius="0"
             Background="{Binding Status, Converter={StaticResource ProbeStatusToBackgroundBrushConverter}}">

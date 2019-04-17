@@ -13,10 +13,6 @@
         Loaded="Window_Loaded">
 
     <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <classes:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
-        <classes:StringToBrushConverter x:Key="StringToBrushConverter" />
-
         <Style TargetType="StackPanel" x:Key="EmailOptionsStackPanel">
             <Setter Property="Margin" Value="0,4,20,3" />
             <Setter Property="Orientation" Value="Horizontal" />

@@ -107,7 +107,7 @@ namespace vmPing.Classes
             // If logging is enabled, write the response to a file.
             if (ApplicationOptions.IsLogOutputEnabled && ApplicationOptions.LogPath.Length > 0)
             {
-                var logPath = $@"{ApplicationOptions.LogPath}\{Hostname}.txt";
+                var logPath = $@"{ApplicationOptions.LogPath}\{Util.GetSafeFilename(Hostname)}.txt";
                 try
                 {
                     using (System.IO.StreamWriter outputFile = new System.IO.StreamWriter(@logPath, true))

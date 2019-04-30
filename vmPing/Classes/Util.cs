@@ -133,6 +133,15 @@ namespace vmPing.Classes
         }
 
 
+        public static string GetSafeFilename(string filename)
+        {
+            // Manually defining invalid characters rather than using Path.GetInvalidFileNameChars(),
+            // as that method seems to be missing several invalid filename characters.
+            char[] invalidCharacters = { '<', '>', ':', '"', '/', '\\', '|', '?', '*' };
+            return string.Join("_", filename.Split(invalidCharacters));
+        }
+
+
         public static string DecryptStringAES(string cipherText)
         {
             if (string.IsNullOrEmpty(cipherText))

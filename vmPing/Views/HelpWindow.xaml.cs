@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace vmPing.Views
 {
@@ -9,21 +10,25 @@ namespace vmPing.Views
     /// </summary>
     public partial class HelpWindow : Window
     {
-        public static HelpWindow openWindow = null;
+        public static HelpWindow _OpenWindow = null;
 
         public HelpWindow()
         {
             InitializeComponent();
 
             Version version = typeof(MainWindow).Assembly.GetName().Version;
-            tbVersion.Text = $"Version: {version.Major}.{version.Minor}.{version.Build}";
+            Version.Inlines.Clear();
+            Version.Inlines.Add(new Run($"Version: {version.Major}.{version.Minor}.{version.Build}"));
 
             // Generate copyright text based on the current year.
-            txtCopyright.Text = $"Copyright \u00a9 {DateTime.Now.Year.ToString()} Ryan Smith";
+            //Copyright.Text = $"Copyright \u00a9 {DateTime.Now.Year.ToString()} Ryan Smith";
+            Copyright.Inlines.Clear();
+            Copyright.Inlines.Add(new Run($"Copyright \u00a9 {DateTime.Now.Year.ToString()} Ryan Smith"));
 
             // Set initial focus to scrollviewer.  That way you can scroll the help window with the keyboard
             // without having to first click in the window.
-            mainScrollViewer.Focus();
+            MainDocument.Focus();
+
         }
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
@@ -34,6 +39,7 @@ namespace vmPing.Views
             }
             catch
             {
+                // TODO
             }
             finally
             {
@@ -41,15 +47,39 @@ namespace vmPing.Views
             }
         }
 
+        private void Intro_Selected(object sender, RoutedEventArgs e)
+        {
+            Intro.BringIntoView();
+        }
+
+        private void BasicUsage_Selected(object sender, RoutedEventArgs e)
+        {
+            BasicUsage.BringIntoView();
+        }
+
+        private void ExtraFeatures_Selected(object sender, RoutedEventArgs e)
+        {
+            ExtraFeatures.BringIntoView();
+        }
+
+        private void Options_Selected(object sender, RoutedEventArgs e)
+        {
+            Options.BringIntoView();
+        }
+
+        private void CommandLineUsage_Selected(object sender, RoutedEventArgs e)
+        {
+            CommandLineUsage.BringIntoView();
+        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            openWindow = this;
+            _OpenWindow = this;
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            openWindow = null;
+            _OpenWindow = null;
         }
     }
 }

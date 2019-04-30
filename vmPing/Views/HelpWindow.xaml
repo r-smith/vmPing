@@ -1,227 +1,320 @@
 ﻿<Window x:Class="vmPing.Views.HelpWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="vmPing Help" Height="450" Width="475"
-        MinWidth="325" MinHeight="250"
-        WindowStartupLocation="CenterOwner"
-        ShowInTaskbar="True"
-        Closed="Window_Closed"
+        Title="vmPing Help"
+        UseLayoutRounding="True"
+        Height="575"
+        Width="750"
+        WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
-        FocusManager.FocusedElement="{Binding ElementName=txtVersion}">
-    
+        Closed="Window_Closed">
+
     <Window.Resources>
-        <Style TargetType="ScrollViewer">
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        </Style>
         <Style TargetType="TextBlock">
             <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="FontSize" Value="14" />
-        </Style>
-        <Style BasedOn="{StaticResource {x:Type TextBlock}}"
-               TargetType="TextBlock"
-               x:Key="TitleText">
-            <Setter Property="Margin" Value="0,0,0,0" />
-            <Setter Property="FontSize" Value="22" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
-        </Style>
-        <Style BasedOn="{StaticResource {x:Type TextBlock}}"
-               TargetType="TextBlock"
-               x:Key="VersionText">
-            <Setter Property="FontSize" Value="12" />
-            <Setter Property="Foreground" Value="#AAAAAA" />
-            <Setter Property="Margin" Value="0,0,0,0" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
-        </Style>
-        <Style BasedOn="{StaticResource {x:Type TextBlock}}"
-               TargetType="TextBlock"
-               x:Key="HeaderText">
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Margin" Value="0,40,0,-10" />
-            <Setter Property="Foreground" Value="#3333AA" />
             <Setter Property="FontSize" Value="16" />
         </Style>
-        <Style BasedOn="{StaticResource {x:Type TextBlock}}"
-               TargetType="TextBlock"
-               x:Key="SubHeaderText">
+        <Style TargetType="Paragraph">
+            <Setter Property="TextAlignment" Value="Left" />
+            <Setter Property="FontFamily" Value="Segoe UI, Arial" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+
+        <!-- Title style -->
+        <Style x:Key="TitleText"
+               BasedOn="{StaticResource {x:Type TextBlock}}"
+               TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,0,0,0" />
+            <Setter Property="FontSize" Value="26" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+
+        <!-- HyperLink style -->
+        <Style x:Key="HyperlinkStyle"
+               BasedOn="{StaticResource {x:Type Hyperlink}}"
+               TargetType="Hyperlink">
+            <Setter Property="TextDecorations" Value="None" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Foreground" Value="#6c71c4" />
+        </Style>
+
+        <!-- Version style -->
+        <Style x:Key="VersionText"
+               BasedOn="{StaticResource {x:Type Paragraph}}"
+               TargetType="Paragraph">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Foreground" Value="#707070" />
+            <Setter Property="Margin" Value="0,0,0,0" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+
+        <!-- Section header style -->
+        <Style x:Key="HeaderText"
+               BasedOn="{StaticResource {x:Type Paragraph}}"
+               TargetType="Paragraph">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="0,40,0,0" />
+            <Setter Property="Foreground" Value="#4040c0" />
+            <Setter Property="FontSize" Value="26" />
+        </Style>
+
+        <!-- Sub-header style -->
+        <Style x:Key="SubHeaderText"
+               BasedOn="{StaticResource {x:Type Paragraph}}"
+               TargetType="Paragraph">
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Margin" Value="0,25,0,0" />
-            <Setter Property="Foreground" Value="#444444" />
+            <Setter Property="Foreground" Value="#404040" />
+            <Setter Property="FontSize" Value="16" />
         </Style>
-        <Style BasedOn="{StaticResource {x:Type TextBlock}}"
-               TargetType="TextBlock"
-               x:Key="ParagraphText">
-        <Setter Property="Margin" Value="25,1,0,0" />
-        <Setter Property="Foreground" Value="#666666" />
+
+        <!-- Paragraph style -->
+        <Style x:Key="ParagraphText"
+               BasedOn="{StaticResource {x:Type Paragraph}}"
+               TargetType="Paragraph">
+            <Setter Property="Margin" Value="0,2,0,0" />
+            <Setter Property="Foreground" Value="#606060" />
         </Style>
     </Window.Resources>
-    
-    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="15" Name="mainScrollViewer">
-        <ScrollViewer.Background>
-            <LinearGradientBrush>
-                <GradientStop Color="AliceBlue" Offset="0" />
-                <GradientStop Color="White" Offset="1.5" />
-            </LinearGradientBrush>
-        </ScrollViewer.Background>
-        
-        <Grid>
-            <StackPanel Margin="0,0,0,25">
-                <!-- Title and description -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,10">
-                    <Image Source="/vmPing.ico" Width="32" Height="32" Margin="0,0,18,0" />
-                    <TextBlock Style="{StaticResource TitleText}"
-                               VerticalAlignment="Center"
-                               Text="vmPing">
-                        <TextBlock.Effect>
-                            <DropShadowEffect ShadowDepth="4" Direction="330" Color="Black" Opacity="0.15" BlurRadius="4" />
-                        </TextBlock.Effect>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TreeView Name="tree" FontSize="10pt" BorderThickness="0" Padding="0,20,20,20" Margin="0">
+            <TreeViewItem Header="Intro"
+                          Selected="Intro_Selected" />
+            <TreeViewItem Header="Basic Usage"
+                          Selected="BasicUsage_Selected" />
+            <TreeViewItem Header="Extra Features"
+                          Selected="ExtraFeatures_Selected" />
+            <TreeViewItem Header="Options"
+                          Selected="Options_Selected" />
+            <TreeViewItem Header="Command Line Usage"
+                          Selected="CommandLineUsage_Selected" />
+        </TreeView>
+        <GridSplitter Grid.Column="1" Width="4"
+                      HorizontalAlignment="Center"
+                      BorderBrush="Black"
+                      BorderThickness="0"
+                      VerticalAlignment="Stretch" />
+
+        <FlowDocumentScrollViewer Name="MainDocument" Grid.Column="2" FocusVisualStyle="{x:Null}">
+            <FlowDocument>
+                <!-- Logo and title -->
+                <BlockUIContainer>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,20">
+                        <Image Source="/vmPing.ico" Width="32" Height="32" Margin="0,0,12,0" />
+                        <TextBlock Style="{StaticResource TitleText}"
+                                   VerticalAlignment="Center"
+                                   Text="vmPing">
+                            <TextBlock.Effect>
+                                <DropShadowEffect ShadowDepth="4" Direction="330" Color="Black" Opacity="0.15" BlurRadius="4" />
+                            </TextBlock.Effect>
+                        </TextBlock>
+                    </StackPanel>
+                </BlockUIContainer>
+
+                <!-- Link to homepage -->
+                <Paragraph TextAlignment="Center">
+                    <Hyperlink NavigateUri="https://github.com/R-Smith/vmPing"
+                               RequestNavigate="Hyperlink_RequestNavigate"
+                               Style="{StaticResource HyperlinkStyle}">
+                        https://github.com/R-Smith/vmPing
+                    </Hyperlink>
+                </Paragraph>
+
+                <!-- Version -->
+                <Paragraph Name="Version"
+                           Style="{StaticResource  VersionText}"
+                           Margin="0,3,0,0">
+                    Version X.XXXX.XXXX
+                </Paragraph>
+                <Paragraph Name="Copyright"
+                           Style="{StaticResource VersionText}">
+                    Copyright (C) Ryan Smith
+                </Paragraph>
+
+                <!-- Intro section -->
+                <BlockUIContainer>
+                    <Rectangle Margin="0,30,0,0" HorizontalAlignment="Stretch" Fill="#f0f0f0" Height="1" />
+                </BlockUIContainer>
+                <Paragraph Name="Intro" Margin="0,5"
+                           Foreground="#073642">
+                    vmPing is a network utility that allows you to quickly monitor the availability of multiple hosts.
+                    Host monitors are easily added and removed, and dynamically resize with the application window.
+                    Color-coding allows you to tell at a glance the status of each host.
+                </Paragraph>
+                <BlockUIContainer>
+                    <Rectangle HorizontalAlignment="Stretch" Fill="#f0f0f0" Height="1" />
+                </BlockUIContainer>
+
+                <!-- Basic Usage section -->
+                <Paragraph Name="BasicUsage"
+                           Style="{StaticResource HeaderText}">
+                    Basic Usage
+                </Paragraph>
+                <Paragraph Style="{StaticResource SubHeaderText}">
+                    Application overview
+                </Paragraph>
+                <Paragraph Style="{StaticResource ParagraphText}">
+
+                </Paragraph>
+                <Paragraph Style="{StaticResource SubHeaderText}">
+                    Monitor a host
+                </Paragraph>
+                <Paragraph Style="{StaticResource ParagraphText}">
+                    Enter a hostname or IP address into the textbox, then press Enter or click Ping.
+                    vmPing will continuosly ping the host until you click Stop.
+                    Responses are displayed in the output area above the textbox.
+                    The output section will turn green when the host is responding and red when it is not responding.
+                    If an error occurrs, the output area will turn orange.
+                </Paragraph>
+                <Paragraph Style="{StaticResource SubHeaderText}">
+                    Add a host monitor
+                </Paragraph>
+                <Paragraph Style="{StaticResource ParagraphText}">
+                    <Run>Click</Run>
+                    <Image Source="/Resources/add-16.png" Width="14" Height="14" Margin="3,0,0,0"/>
+                    <Run FontWeight="SemiBold">Add Host</Run>
+                    <Run>from the menu bar, or use the keyboard shortcut,</Run>
+                    <Run FontWeight="SemiBold">Alt-A</Run> .
+                </Paragraph>
+                <Paragraph Style="{StaticResource SubHeaderText}">
+                    Remove a host monitor
+                </Paragraph>
+                <Paragraph Style="{StaticResource ParagraphText}">
+                    When you hover your mouse over a host monitor, an X icon will appear in the top-right corner.
+                    Click the X icon to remove that instance.
+                </Paragraph>
+                <Paragraph Style="{StaticResource SubHeaderText}">
+                    Columns
+                </Paragraph>
+                <Paragraph Style="{StaticResource ParagraphText}">
+                    Click Columns in the menu bar then move the slider to the desired number of columns.
+                    This sets the number of host monitors to display in a single row.
+                    Additional rows will be created as needed.
+                </Paragraph>
+
+                <!-- Extra Features section -->
+                <Paragraph Name="ExtraFeatures"
+                           Style="{StaticResource HeaderText}">
+                    Extra Features
+                </Paragraph>
+                <Paragraph Style="{StaticResource SubHeaderText}">
+                    Port Monitor
+                </Paragraph>
+                <Paragraph Style="{StaticResource ParagraphText}">
+                    To monitor a specific TCP port, simply enter the hostname or IP address followed by a colon and the desired port number.
+                    vmPing will then continuously try to connect to the given port and display whether or not the connection is successful.
+                    Example -
+                    <Bold>SERVER01:80</Bold> , will monitor port 80 on SERVER01.
+                </Paragraph>
+                <Paragraph Style="{StaticResource SubHeaderText}">
+                    Trace Route
+                </Paragraph>
+                <Paragraph Style="{StaticResource ParagraphText}">
+                    The trace route utility is used to measure network delays and determine the path taken to the given destination host.
+                    The utlity can be accessed from the dropdown icon in the top right or by pressing Ctrl-T.
+                </Paragraph>
+                <Paragraph Style="{StaticResource SubHeaderText}">
+                    Flood Host
+                </Paragraph>
+                <Paragraph Style="{StaticResource ParagraphText}">
+                    The flood host utility is used to generate a significant amount of ICMP packets.
+                    To limit the flow, the utility waits until a reply is received before sending the next ICMP packet.
+                    The utlity can be accessed from dropdown icon in the top right or by pressing Ctrl-F.
+                </Paragraph>
+
+                <!-- Options section -->
+                <Paragraph Name="Options"
+                           Style="{StaticResource HeaderText}">
+                    Options
+                </Paragraph>
+                <Paragraph Style="{StaticResource SubHeaderText}">
+                    Ping interval
+                </Paragraph>
+                <Paragraph Style="{StaticResource ParagraphText}">
+                    The time to wait between sending each packet.  The time can be specified in seconds, minutes, or hours.
+                </Paragraph>
+                <Paragraph Style="{StaticResource SubHeaderText}">
+                    Ping timeout
+                </Paragraph>
+                <Paragraph Style="{StaticResource ParagraphText}">
+                    The maximum time to wait for a response, in seconds.
+                </Paragraph>
+                <Paragraph Style="{StaticResource SubHeaderText}">
+                    Send email when host goes down or up
+                </Paragraph>
+                <Paragraph Style="{StaticResource ParagraphText}">
+                    Send an email each time a host changes status (from down to up or from up to down).
+                    A mail server, recipient email address, and from email address must all be specified.
+                </Paragraph>
+                <Paragraph Style="{StaticResource SubHeaderText}">
+                    Keep window always on top
+                </Paragraph>
+                <Paragraph Style="{StaticResource ParagraphText}">
+                    The vmPing window will remain on top of all other application windows.
+                </Paragraph>
+                <Paragraph Style="{StaticResource SubHeaderText}">
+                    Log all output to files
+                </Paragraph>
+                <Paragraph Style="{StaticResource ParagraphText}">
+                    Write all ping responses to a text file.
+                    The file will be named &lt;hostname&gt;.txt and will be saved to the specified directory.
+                    If the file already exists, new output will be appended to the existing file.
+                </Paragraph>
+
+                <!-- Command Line Usage section -->
+                <Paragraph Name="CommandLineUsage"
+                           Style="{StaticResource HeaderText}">
+                    Command Line Usage
+                </Paragraph>
+                <Paragraph Style="{StaticResource SubHeaderText}">
+                    Usage: vmPing [-i interval] [-w timeout] [&lt;target_host>...]
+                </Paragraph>
+
+                <!-- TODO: Convert to table-->
+                <!--<DockPanel>
+                    <TextBlock Style="{StaticResource ParagraphText}"
+                                   FontFamily="Consolas Courier New"
+                                   FontSize="14"
+                                   Width="90">
+                            -i interval
                     </TextBlock>
-                </StackPanel>
-
-                <TextBlock HorizontalAlignment="Center">
-                <Hyperlink NavigateUri="https://github.com/R-Smith/vmPing"
-                           RequestNavigate="Hyperlink_RequestNavigate"
-                           TextDecorations="None"
-                           FontSize="13"
-                           Foreground="#6c71c4">
-                    https://github.com/R-Smith/vmPing
-                </Hyperlink>
-                </TextBlock>
-                <TextBlock Style="{StaticResource VersionText}"
-                           Name="tbVersion"
-                           Text="Version X.XXXX.XXXX" />
-                <TextBlock Style="{StaticResource VersionText}"
-                           Name="txtCopyright"
-                           Text="Copyright (C) 2016 Ryan Smith" />
-                <TextBlock Margin="0,20,0,0"
-                           Foreground="#773333"
-                           Text="vmPing is a network utility that allows you to quickly monitor the availability of multiple hosts.  Host monitors can be added and removed, and dynamically resize with the application window.  Color-coding allows you to tell at a glance the status of each host."
-                           />
-                
-                <!-- Basic Usage -->
-                <TextBlock Style="{StaticResource HeaderText}"
-                           Text="Basic Usage"
-                           />
-                <TextBlock Style="{StaticResource SubHeaderText}"
-                           Text="Monitor a host"
-                           />
-                <TextBlock Style="{StaticResource ParagraphText}"
-                           Text="Enter a hostname or IP address into the textbox, then press Enter or click Ping.  vmPing will continuosly ping the host until you click Stop.  Responses are displayed in the output area above the textbox.  The output section will turn green when the host is responding and red when it is not responding.  If an error occurrs, the output area will turn orange."
-                           />
-                <TextBlock Style="{StaticResource SubHeaderText}"
-                           Text="Add a host monitor"
-                           />
-                <TextBlock Style="{StaticResource ParagraphText}"
-                           Text="Click Add Host from the menu bar or use the keyboard shortcut, Alt-A or Ctrl-A"
-                           />
-                <TextBlock Style="{StaticResource SubHeaderText}"
-                           Text="Remove a host monitor"
-                           />
-                <TextBlock Style="{StaticResource ParagraphText}"
-                           Text="When you hover your mouse over a host monitor, an X icon will appear in the top-right corner.  Click the X icon to remove that instance."
-                           />
-                <TextBlock Style="{StaticResource SubHeaderText}"
-                           Text="Columns"
-                           />
-                <TextBlock Style="{StaticResource ParagraphText}"
-                           Text="Click Columns in the menu bar then move the slider to the desired number of columns.  This sets the number of host monitors to display in a single row.  Additional rows will be created as needed."
-                           />
-
-                <!-- Basic Usage -->
-                <TextBlock Style="{StaticResource HeaderText}"
-                           Text="Extra Features"
-                           />
-                <TextBlock Style="{StaticResource SubHeaderText}"
-                           Text="Port Monitor"
-                           />
-                <TextBlock Style="{StaticResource ParagraphText}"
-                           Text="To monitor a specific TCP port, simply enter the hostname or IP address followed by a colon and the desired port number.  vmPing will then continuously try to connect to the given port and display whether or not the connection is successful.  Example - SERVER01:80, will monitor port 80 on SERVER01."
-                           />
-                <TextBlock Style="{StaticResource SubHeaderText}"
-                           Text="Trace Route"
-                           />
-                <TextBlock Style="{StaticResource ParagraphText}"
-                           Text="The trace route utility is used to measure network delays and determine the path taken to the given destination host .  The utlity can be accessed from the dropdown icon in the top right or by pressing Ctrl-T."
-                           />
-                <TextBlock Style="{StaticResource SubHeaderText}"
-                           Text="Flood Host"
-                           />
-                <TextBlock Style="{StaticResource ParagraphText}"
-                           Text="The flood host utility is used to generate a significant amount of ICMP packets.  To limit the flow, the utility waits until a reply is received before sending the next ICMP packet.  The utlity can be accessed from dropdown icon in the top right or by pressing Ctrl-F."
-                           />
-                
-                <!-- Options -->
-                <TextBlock Style="{StaticResource HeaderText}"
-                           Text="Options"
-                           />
-                <TextBlock Style="{StaticResource SubHeaderText}"
-                           Text="Ping interval"
-                           />
-                <TextBlock Style="{StaticResource ParagraphText}"
-                           Text="The time to wait between sending each packet.  The time can be specified in seconds, minutes, or hours."
-                           />
-                <TextBlock Style="{StaticResource SubHeaderText}"
-                           Text="Ping timeout"
-                           />
-                <TextBlock Style="{StaticResource ParagraphText}"
-                           Text="The maximum time to wait for a response, in seconds."
-                           />
-                <TextBlock Style="{StaticResource SubHeaderText}"
-                           Text="Send email when host goes down or up"
-                           />
-                <TextBlock Style="{StaticResource ParagraphText}"
-                           Text="Send an email each time a host changes status (from down to up or from up to down).  A mail server, recipient email address, and from email address must all be specified."
-                           />
-                <TextBlock Style="{StaticResource SubHeaderText}"
-                           Text="Keep window always on top"
-                           />
-                <TextBlock Style="{StaticResource ParagraphText}"
-                           Text="The vmPing window will remain on top of all other application windows."
-                           />
-                <TextBlock Style="{StaticResource SubHeaderText}"
-                           Text="Log all output to files"
-                           />
-                <TextBlock Style="{StaticResource ParagraphText}"
-                           Text="Write all ping responses to a text file.  The file will be named &lt;hostname&gt;.txt and will be saved to the specified directory.  If the file already exists, new output will be appended to the existing file."
-                           />
-
-                <!-- Command Line -->
-                <TextBlock Style="{StaticResource HeaderText}"
-                           Text="Command Line Usage"
-                           />
-                <TextBlock Style="{StaticResource SubHeaderText}"
-                           Text="Usage: vmPing [-i interval] [-w timeout] [&lt;target_host>...]"
-                           />
-                <DockPanel>
                     <TextBlock Style="{StaticResource ParagraphText}"
-                               Text="-i interval"
-                               Width="70"
-                               />
-                    <TextBlock Style="{StaticResource ParagraphText}" TextWrapping="Wrap"
-                           Text="Time, in seconds, to wait between sending each ping."
-                           />
+                                   TextWrapping="Wrap">
+                            Time, in seconds, to wait between sending each ping.
+                    </TextBlock>
                 </DockPanel>
                 <DockPanel>
                     <TextBlock Style="{StaticResource ParagraphText}"
-                               Text="-w timeout"
-                               Width="70"
-                               />
-                    <TextBlock Style="{StaticResource ParagraphText}" TextWrapping="Wrap"
-                           Text="Timeout, in seconds, to wait for each reply."
-                           />
+                                   FontFamily="Consolas Courier New"
+                                   FontSize="14"
+                                   Width="90">
+                            -w timeout
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource ParagraphText}"
+                                   TextWrapping="Wrap">
+                            Timeout, in seconds, to wait for each reply.
+                    </TextBlock>
                 </DockPanel>
                 <DockPanel>
                     <TextBlock Style="{StaticResource ParagraphText}"
-                               Text="target_host"
-                               Width="70"
-                               />
-                    <TextBlock Style="{StaticResource ParagraphText}"
-                               Text="Ping the specified host.  Multiple hostnames may be specified."
-                               />
-                </DockPanel>
-            </StackPanel>
-            
-            <Button IsCancel="True" Width="1" Height="1" BorderBrush="Transparent" BorderThickness="0" Background="Transparent" />
-        </Grid>
-    </ScrollViewer>
+                                   FontFamily="Consolas Courier New"
+                                   FontSize="14"
+                                   Width="90">
+                            target_host
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource ParagraphText}">
+                            Ping the specified host.  Multiple hostnames may be specified.
+                    </TextBlock>
+                </DockPanel>-->
+            </FlowDocument>
+        </FlowDocumentScrollViewer>
+    </Grid>
 </Window>

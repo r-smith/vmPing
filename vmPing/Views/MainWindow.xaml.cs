@@ -196,13 +196,13 @@ namespace vmPing.Views
 
         private void HelpExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            if (HelpWindow.openWindow == null)
+            if (HelpWindow._OpenWindow == null)
             {
                 new HelpWindow().Show();
             }
             else
             {
-                HelpWindow.openWindow.Activate();
+                HelpWindow._OpenWindow.Activate();
             }
         }
 

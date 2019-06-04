@@ -28,7 +28,7 @@ namespace vmPing.Views
             PopulateLayoutOptions();
         }
 
-        private void ShowError(string message, TabItem tabItem, System.Windows.Controls.Control control)
+        private void ShowError(string message, TabItem tabItem, Control control)
         {
             tabItem.Focus();
             var errorWindow = DialogWindow.ErrorWindow(message);

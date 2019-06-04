@@ -5,8 +5,10 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using vmPing.Views;
 using System.Media;
+
+using vmPing.Views;
+
 
 namespace vmPing.Classes
 {

@@ -13,6 +13,20 @@
         Loaded="Window_Loaded">
 
     <Window.Resources>
+        <Style TargetType="StackPanel" x:Key="AudioOptionsStackPanel">
+            <Setter Property="Margin" Value="0,4,20,3" />
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="DockPanel.Dock" Value="Top" />
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="AudioOptionsTextBlock">
+            <Setter Property="Margin" Value="0,0,12,0" />
+            <Setter Property="Foreground" Value="#555" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+        
         <Style TargetType="StackPanel" x:Key="EmailOptionsStackPanel">
             <Setter Property="Margin" Value="0,4,20,3" />
             <Setter Property="Orientation" Value="Horizontal" />
@@ -117,7 +131,6 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-
 
             <!-- TAB: Advanced -->
             <TabItem Header="Advanced" Name="AdvancedTab">
@@ -251,7 +264,6 @@
                 </DockPanel>
             </TabItem>
 
-
             <!-- TAB: Email Alerts -->
             <TabItem Header="Email Alerts" Name="EmailAlertsTab">
                 <DockPanel>
@@ -372,8 +384,60 @@
                 </DockPanel>
             </TabItem>
 
+            <!-- TAB: Audio Alerts -->
+            <TabItem Header="Audio Alerts" Name="AudioAlertTab">
+                <DockPanel>
 
-            <!-- TAB: Email Alerts -->
+                    <!-- Header -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Audio Alerts"
+                               Style="{StaticResource OptionHeaderTextStyle}" />
+
+                    <CheckBox DockPanel.Dock="Top"
+                              Name="IsAudioAlertEnabled"
+                              Content="Enable audio alerts"
+                              Click="IsAudioAlertEnabled_Click"
+                              IsChecked="True"
+                              Margin="20,15,0,15"
+                              FontSize="14" />
+
+                    <DockPanel LastChildFill="False"
+                               DockPanel.Dock="Top"
+                               Margin="20,0,20,0"
+                               Visibility="{Binding IsChecked, ElementName=IsAudioAlertEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                        <!-- Separator -->
+                        <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" />
+
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Audio File Information"
+                                   Style="{StaticResource OptionSubHeaderTextStyle}" />
+
+                        <!-- Audio File -->
+                        <Grid DockPanel.Dock="Top"
+                          Margin="41,10,20,0"
+                          VerticalAlignment="Top"
+                          Visibility="{Binding IsChecked, ElementName=IsLogStatusChangesEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource EmailOptionsTextBlock}"
+                                       HorizontalAlignment="Left"
+                                       Text="Audio file path" />
+                                <TextBox Style="{StaticResource TextBoxStyle}"
+                                     Margin="0,5,0,8"
+                                     Name="AudioFilePath" />
+                                <Button Style="{StaticResource ButtonSecondaryStyle}"
+                                    Click="AudioFilePath_Click"
+                                    Width="70"
+                                    Content="Browse"
+                                    HorizontalAlignment="Right"/>
+                            </StackPanel>
+                        </Grid>
+
+                    </DockPanel>
+                </DockPanel>
+            </TabItem>
+
+            <!-- TAB: Log Output -->
             <TabItem Header="Log Output" Name="LogOutputTab">
                 <DockPanel>
 

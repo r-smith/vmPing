@@ -19,6 +19,8 @@ namespace vmPing.Classes
         public static int AlertThreshold { get; set; } = 2;
         public static bool IsEmailAlertEnabled { get; set; } = false;
         public static bool IsEmailAuthenticationRequired { get; set; } = false;
+        public static bool IsAudioAlertEnabled { get; set; } = false;
+        public static string AudioFilePath { get; set; }
         public static string EmailServer { get; set; }
         public static string EmailUser { get; set; }
         public static string EmailPassword { get; set; }

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using vmPing.Views;
+using System.Media;
 
 namespace vmPing.Classes
 {
@@ -199,6 +200,12 @@ namespace vmPing.Classes
 
             if (ApplicationOptions.IsLogStatusChangesEnabled && ApplicationOptions.LogStatusChangesPath.Length > 0)
                 WriteToStatusChangesLog(status);
+
+            if ((status.Status == ProbeStatus.Down) && (ApplicationOptions.IsAudioAlertEnabled))
+            {
+                SoundPlayer player = new SoundPlayer(ApplicationOptions.AudioFilePath);
+                player.Play();
+            }
         }
     }
 }

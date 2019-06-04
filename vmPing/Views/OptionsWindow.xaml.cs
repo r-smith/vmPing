@@ -22,12 +22,13 @@ namespace vmPing.Views
 
             PopulateGeneralOptions();
             PopulateEmailAlertOptions();
+            PopulateAudioAlertOptions();
             PopulateLogOutputOptions();
             PopulateAdvancedOptions();
             PopulateLayoutOptions();
         }
 
-        private void ShowError(string message, TabItem tabItem, Control control)
+        private void ShowError(string message, TabItem tabItem, System.Windows.Controls.Control control)
         {
             tabItem.Focus();
             var errorWindow = DialogWindow.ErrorWindow(message);
@@ -78,6 +79,11 @@ namespace vmPing.Views
             SmtpPassword.Password = ApplicationOptions.EmailPassword;
             EmailRecipientAddress.Text = ApplicationOptions.EmailRecipient;
             EmailFromAddress.Text = ApplicationOptions.EmailFromAddress;
+        }
+        private void PopulateAudioAlertOptions()
+        {
+            IsAudioAlertEnabled.IsChecked = ApplicationOptions.IsAudioAlertEnabled;
+            AudioFilePath.Text = ApplicationOptions.AudioFilePath;            
         }
 
         private void PopulateLogOutputOptions()
@@ -138,6 +144,9 @@ namespace vmPing.Views
                 return;
 
             if (SaveEmailAlertOptions() == false)
+                return;
+
+            if (SaveAudioAlertOptions() == false)
                 return;
 
             if (SaveLogOutputOptions() == false)
@@ -345,6 +354,36 @@ namespace vmPing.Views
             }
         }
 
+        private bool SaveAudioAlertOptions()
+        {
+            if(IsAudioAlertEnabled.IsChecked == true)
+            {
+                try
+                {
+                    if (Path.GetFileName(AudioFilePath.Text).IndexOfAny(Path.GetInvalidFileNameChars()) >= 0 ||
+                        !Directory.Exists(Path.GetDirectoryName(AudioFilePath.Text)) ||
+                        Path.GetFileName(AudioFilePath.Text).Length < 1)
+                    {
+                        MessageBox.Show(Path.GetFileName(AudioFilePath.Text));
+                        throw new Exception();
+                    }
+                }
+                catch
+                {
+                    ShowError("The specified path does not exist.  Please enter a valid path.", AudioAlertTab, AudioFilePath);
+                    return false;
+                }
+                ApplicationOptions.IsAudioAlertEnabled = true;
+                ApplicationOptions.AudioFilePath = AudioFilePath.Text;
+            }
+            else
+            {
+                ApplicationOptions.IsAudioAlertEnabled = false;
+            }
+
+            return true;
+        }
+
         private bool SaveLogOutputOptions()
         {
             if (IsLogOutputEnabled.IsChecked == true)
@@ -485,6 +524,12 @@ namespace vmPing.Views
                 SmtpUsername.Focus();
         }
 
+        private void IsAudioAlertEnabled_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsEmailAlertsEnabled.IsChecked == true && SmtpServer.Text.Length == 0)
+                AudioFilePath.Focus();
+        }
+
         private void BrowseLogPath_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -503,6 +548,18 @@ namespace vmPing.Views
 
             if (result == System.Windows.Forms.DialogResult.OK)
                 LogStatusChangesPath.Text = dialog.SelectedPath + "\\vmping-status.txt";
+        }
+
+        private void AudioFilePath_Click(object sender, RoutedEventArgs e)
+        {
+            System.Console.WriteLine(AudioFilePath.Text);
+            var audiofileDialog = new System.Windows.Forms.OpenFileDialog();
+            audiofileDialog.Title = "Select an audio file";
+            audiofileDialog.RestoreDirectory = true;
+            audiofileDialog.Multiselect = false;
+                          
+            if (audiofileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                AudioFilePath.Text = audiofileDialog.FileName;
         }
 
         private void UpdateByteCount()

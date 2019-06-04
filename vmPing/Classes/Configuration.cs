@@ -325,6 +325,14 @@ namespace vmPing.Classes
                 value: ApplicationOptions.EmailFromAddress != null ? ApplicationOptions.EmailFromAddress.ToString() : string.Empty));
             configuration.AppendChild(GenerateOptionNode(
                 xmlDocument: xd,
+                name: "IsAudioAlertEnabled",
+                value: ApplicationOptions.IsAudioAlertEnabled.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "AudioFilePath",
+                value: ApplicationOptions.AudioFilePath != null ? ApplicationOptions.AudioFilePath.ToString() : string.Empty));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
                 name: "IsLogOutputEnabled",
                 value: ApplicationOptions.IsLogOutputEnabled.ToString()));
             configuration.AppendChild(GenerateOptionNode(
@@ -552,6 +560,14 @@ namespace vmPing.Classes
             if (options.TryGetValue("EmailFromAddress", out optionValue))
             {
                 ApplicationOptions.EmailFromAddress = optionValue;
+            }
+            if (options.TryGetValue("IsAudioAlertEnabled", out optionValue))
+            {
+                ApplicationOptions.IsAudioAlertEnabled = bool.Parse(optionValue);
+            }
+            if (options.TryGetValue("AudioFilePath", out optionValue))
+            {
+                ApplicationOptions.AudioFilePath = optionValue;
             }
             if (options.TryGetValue("IsLogOutputEnabled", out optionValue))
             {

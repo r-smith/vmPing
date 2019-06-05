@@ -524,12 +524,6 @@ namespace vmPing.Views
                 SmtpUsername.Focus();
         }
 
-        private void IsAudioAlertEnabled_Click(object sender, RoutedEventArgs e)
-        {
-            if (IsEmailAlertsEnabled.IsChecked == true && SmtpServer.Text.Length == 0)
-                AudioFilePath.Focus();
-        }
-
         private void BrowseLogPath_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new System.Windows.Forms.FolderBrowserDialog();

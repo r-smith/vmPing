@@ -382,7 +382,6 @@
                     <CheckBox DockPanel.Dock="Top"
                               Name="IsAudioAlertEnabled"
                               Content="Enable audio alerts"
-                              Click="IsAudioAlertEnabled_Click"
                               IsChecked="True"
                               Margin="20,15,0,15"
                               FontSize="14" />

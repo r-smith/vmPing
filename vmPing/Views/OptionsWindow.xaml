@@ -13,14 +13,14 @@
         Loaded="Window_Loaded">
 
     <Window.Resources>
-        <Style TargetType="StackPanel" x:Key="EmailOptionsStackPanel">
+        <Style TargetType="StackPanel" x:Key="OptionsStackPanel">
             <Setter Property="Margin" Value="0,4,20,3" />
             <Setter Property="Orientation" Value="Horizontal" />
             <Setter Property="HorizontalAlignment" Value="Left" />
             <Setter Property="DockPanel.Dock" Value="Top" />
         </Style>
 
-        <Style TargetType="TextBlock" x:Key="EmailOptionsTextBlock">
+        <Style TargetType="TextBlock" x:Key="OptionsTextBlock">
             <Setter Property="Margin" Value="0,0,12,0" />
             <Setter Property="Foreground" Value="#555" />
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -117,7 +117,6 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-
 
             <!-- TAB: Advanced -->
             <TabItem Header="Advanced" Name="AdvancedTab">
@@ -251,7 +250,6 @@
                 </DockPanel>
             </TabItem>
 
-
             <!-- TAB: Email Alerts -->
             <TabItem Header="Email Alerts" Name="EmailAlertsTab">
                 <DockPanel>
@@ -282,9 +280,9 @@
                                    Style="{StaticResource OptionSubHeaderTextStyle}" />
 
                         <!-- SMTP Server-->
-                        <StackPanel Style="{StaticResource EmailOptionsStackPanel}">
+                        <StackPanel Style="{StaticResource OptionsStackPanel}">
                             <Grid Width="120">
-                                <TextBlock Style="{StaticResource EmailOptionsTextBlock}"
+                                <TextBlock Style="{StaticResource OptionsTextBlock}"
                                            Text="SMTP server" />
                             </Grid>
                             <TextBox Style="{StaticResource TextBoxStyle}"
@@ -293,9 +291,9 @@
                         </StackPanel>
 
                         <!-- Smtp Port -->
-                        <StackPanel Style="{StaticResource EmailOptionsStackPanel}">
+                        <StackPanel Style="{StaticResource OptionsStackPanel}">
                             <Grid Width="120">
-                                <TextBlock Style="{StaticResource EmailOptionsTextBlock}"
+                                <TextBlock Style="{StaticResource OptionsTextBlock}"
                                            Text="Port" />
                             </Grid>
                             <TextBox Style="{StaticResource TextBoxStyle}"
@@ -317,9 +315,9 @@
                         <StackPanel DockPanel.Dock="Top"
                                     Visibility="{Binding IsChecked, ElementName=IsSmtpAuthenticationRequired, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <!-- Smtp User -->
-                            <StackPanel Style="{StaticResource EmailOptionsStackPanel}">
+                            <StackPanel Style="{StaticResource OptionsStackPanel}">
                                 <Grid Width="120">
-                                    <TextBlock Style="{StaticResource EmailOptionsTextBlock}"
+                                    <TextBlock Style="{StaticResource OptionsTextBlock}"
                                                Text="Username" />
                                 </Grid>
                                 <TextBox Style="{StaticResource TextBoxStyle}"
@@ -328,9 +326,9 @@
                             </StackPanel>
 
                             <!-- Smtp Password -->
-                            <StackPanel Style="{StaticResource EmailOptionsStackPanel}">
+                            <StackPanel Style="{StaticResource OptionsStackPanel}">
                                 <Grid Width="120">
-                                    <TextBlock Style="{StaticResource EmailOptionsTextBlock}"
+                                    <TextBlock Style="{StaticResource OptionsTextBlock}"
                                                Text="Password" />
                                 </Grid>
                                 <PasswordBox Style="{StaticResource PasswordBoxStyle}"
@@ -347,9 +345,9 @@
                                    Style="{StaticResource OptionSubHeaderTextStyle}" />
 
                         <!-- Recipient Address-->
-                        <StackPanel Style="{StaticResource EmailOptionsStackPanel}">
+                        <StackPanel Style="{StaticResource OptionsStackPanel}">
                             <Grid Width="120">
-                                <TextBlock Style="{StaticResource EmailOptionsTextBlock}"
+                                <TextBlock Style="{StaticResource OptionsTextBlock}"
                                            Text="Recipient address" />
                             </Grid>
                             <TextBox Style="{StaticResource TextBoxStyle}"
@@ -359,9 +357,9 @@
                         </StackPanel>
 
                         <!-- From Address-->
-                        <StackPanel Style="{StaticResource EmailOptionsStackPanel}">
+                        <StackPanel Style="{StaticResource OptionsStackPanel}">
                             <Grid Width="120">
-                                <TextBlock Style="{StaticResource EmailOptionsTextBlock}"
+                                <TextBlock Style="{StaticResource OptionsTextBlock}"
                                            Text="From address" />
                             </Grid>
                             <TextBox Style="{StaticResource TextBoxStyle}"
@@ -372,8 +370,60 @@
                 </DockPanel>
             </TabItem>
 
+            <!-- TAB: Audio Alerts -->
+            <TabItem Header="Audio Alerts" Name="AudioAlertTab">
+                <DockPanel>
 
-            <!-- TAB: Email Alerts -->
+                    <!-- Header -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Audio Alerts"
+                               Style="{StaticResource OptionHeaderTextStyle}" />
+
+                    <CheckBox DockPanel.Dock="Top"
+                              Name="IsAudioAlertEnabled"
+                              Content="Enable audio alerts"
+                              Click="IsAudioAlertEnabled_Click"
+                              IsChecked="True"
+                              Margin="20,15,0,15"
+                              FontSize="14" />
+
+                    <DockPanel LastChildFill="False"
+                               DockPanel.Dock="Top"
+                               Margin="20,0,20,0"
+                               Visibility="{Binding IsChecked, ElementName=IsAudioAlertEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                        <!-- Separator -->
+                        <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" />
+
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Audio File Information"
+                                   Style="{StaticResource OptionSubHeaderTextStyle}" />
+
+                        <!-- Audio File -->
+                        <Grid DockPanel.Dock="Top"
+                          Margin="41,10,20,0"
+                          VerticalAlignment="Top"
+                          Visibility="{Binding IsChecked, ElementName=IsLogStatusChangesEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource OptionsTextBlock}"
+                                       HorizontalAlignment="Left"
+                                       Text="Audio file path" />
+                                <TextBox Style="{StaticResource TextBoxStyle}"
+                                     Margin="0,5,0,8"
+                                     Name="AudioFilePath" />
+                                <Button Style="{StaticResource ButtonSecondaryStyle}"
+                                    Click="AudioFilePath_Click"
+                                    Width="70"
+                                    Content="Browse"
+                                    HorizontalAlignment="Right"/>
+                            </StackPanel>
+                        </Grid>
+
+                    </DockPanel>
+                </DockPanel>
+            </TabItem>
+
+            <!-- TAB: Log Output -->
             <TabItem Header="Log Output" Name="LogOutputTab">
                 <DockPanel>
 
@@ -417,7 +467,7 @@
                           VerticalAlignment="Top"
                           Visibility="{Binding IsChecked, ElementName=IsLogOutputEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <StackPanel>
-                            <TextBlock Style="{StaticResource EmailOptionsTextBlock}"
+                            <TextBlock Style="{StaticResource OptionsTextBlock}"
                                        HorizontalAlignment="Left"
                                        Text="Log path (base directory)" />
                             <TextBox Style="{StaticResource TextBoxStyle}"
@@ -466,7 +516,7 @@
                           VerticalAlignment="Top"
                           Visibility="{Binding IsChecked, ElementName=IsLogStatusChangesEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <StackPanel>
-                            <TextBlock Style="{StaticResource EmailOptionsTextBlock}"
+                            <TextBlock Style="{StaticResource OptionsTextBlock}"
                                        HorizontalAlignment="Left"
                                        Text="Log path" />
                             <TextBox Style="{StaticResource TextBoxStyle}"

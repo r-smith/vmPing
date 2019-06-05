@@ -364,7 +364,6 @@ namespace vmPing.Views
                         !Directory.Exists(Path.GetDirectoryName(AudioFilePath.Text)) ||
                         Path.GetFileName(AudioFilePath.Text).Length < 1)
                     {
-                        MessageBox.Show(Path.GetFileName(AudioFilePath.Text));
                         throw new Exception();
                     }
                 }
@@ -410,7 +409,6 @@ namespace vmPing.Views
                         !Directory.Exists(Path.GetDirectoryName(LogStatusChangesPath.Text)) ||
                         Path.GetFileName(LogStatusChangesPath.Text).Length < 1)
                     {
-                        MessageBox.Show(Path.GetFileName(LogStatusChangesPath.Text));
                         throw new Exception();
                     }
                 }

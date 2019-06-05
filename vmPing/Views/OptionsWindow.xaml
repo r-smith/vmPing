@@ -402,8 +402,7 @@
                         <!-- Audio File -->
                         <Grid DockPanel.Dock="Top"
                           Margin="41,10,20,0"
-                          VerticalAlignment="Top"
-                          Visibility="{Binding IsChecked, ElementName=IsLogStatusChangesEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                          VerticalAlignment="Top">
                             <StackPanel>
                                 <TextBlock Style="{StaticResource OptionsTextBlock}"
                                        HorizontalAlignment="Left"

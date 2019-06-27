@@ -100,7 +100,22 @@ namespace vmPing.Classes
         {
             try
             {
-                return new List<string>(File.ReadAllLines(path));
+                
+                var linesInFile = new List<string>(File.ReadAllLines(path));
+                var hostsInFile = new List<string>();
+
+                foreach (var line in linesInFile)
+                {
+                    if (line == String.Empty)
+                        continue;
+
+                    if (!Char.IsLetterOrDigit(line[0]))
+                        continue;
+                    
+                    hostsInFile.Add(line.Trim());
+                }
+
+                return hostsInFile;
             }
             catch
             {

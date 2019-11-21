@@ -522,6 +522,18 @@ namespace vmPing.Views
                 SmtpUsername.Focus();
         }
 
+        private void TestEmail_Click(object sender, RoutedEventArgs e)
+        {
+            Util.SendTestEmail(
+                serverAddress: SmtpServer.Text,
+                serverPort: SmtpPort.Text,
+                isAuthRequired: IsSmtpAuthenticationRequired.IsChecked == true ? true : false,
+                username: SmtpUsername.Text,
+                password: SmtpPassword.SecurePassword,
+                mailFrom: EmailFromAddress.Text,
+                mailRecipient: EmailRecipientAddress.Text);
+        }
+
         private void BrowseLogPath_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new System.Windows.Forms.FolderBrowserDialog();

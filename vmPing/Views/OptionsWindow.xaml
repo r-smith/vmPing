@@ -20,6 +20,11 @@
             <Setter Property="DockPanel.Dock" Value="Top" />
         </Style>
 
+        <Style TargetType="DockPanel" x:Key="OptionsDockPanel">
+            <Setter Property="Margin" Value="0,4,0,3" />
+            <Setter Property="DockPanel.Dock" Value="Top" />
+        </Style>
+
         <Style TargetType="TextBlock" x:Key="OptionsTextBlock">
             <Setter Property="Margin" Value="0,0,12,0" />
             <Setter Property="Foreground" Value="#555" />
@@ -252,122 +257,131 @@
 
             <!-- TAB: Email Alerts -->
             <TabItem Header="Email Alerts" Name="EmailAlertsTab">
-                <DockPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <DockPanel>
 
-                    <!-- Header -->
-                    <TextBlock DockPanel.Dock="Top"
-                               Text="Email Alerts"
-                               Style="{StaticResource OptionHeaderTextStyle}" />
-
-                    <CheckBox DockPanel.Dock="Top"
-                              Name="IsEmailAlertsEnabled"
-                              Content="Enable email alerts"
-                              Click="IsEmailAlertsEnabled_Click"
-                              IsChecked="True"
-                              Margin="20,15,0,15"
-                              FontSize="14" />
-
-                    <DockPanel LastChildFill="False"
-                               DockPanel.Dock="Top"
-                               Margin="20,0,20,0"
-                               Visibility="{Binding IsChecked, ElementName=IsEmailAlertsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
-
-                        <!-- Separator -->
-                        <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" />
-
+                        <!-- Header -->
                         <TextBlock DockPanel.Dock="Top"
-                                   Text="Server Information"
-                                   Style="{StaticResource OptionSubHeaderTextStyle}" />
+                                   Text="Email Alerts"
+                                   Style="{StaticResource OptionHeaderTextStyle}" />
 
-                        <!-- SMTP Server-->
-                        <StackPanel Style="{StaticResource OptionsStackPanel}">
-                            <Grid Width="120">
-                                <TextBlock Style="{StaticResource OptionsTextBlock}"
-                                           Text="SMTP server" />
-                            </Grid>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
-                                     Name="SmtpServer"
-                                     Width="250" />
-                        </StackPanel>
 
-                        <!-- Smtp Port -->
-                        <StackPanel Style="{StaticResource OptionsStackPanel}">
-                            <Grid Width="120">
-                                <TextBlock Style="{StaticResource OptionsTextBlock}"
-                                           Text="Port" />
-                            </Grid>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
-                                     Name="SmtpPort"
-                                     MaxLength="5"
-                                     Width="75" />
-                        </StackPanel>
-
-                        <!-- Authentication section -->
-                        <!-- Smtp Authentication -->
                         <CheckBox DockPanel.Dock="Top"
-                                  Name="IsSmtpAuthenticationRequired"
-                                  Content="This server requires authentication"
-                                  Click="IsSmtpAuthenticationRequired_Click"
-                                  Foreground="#888"
-                                  FontSize="13"
-                                  Margin="120,8,0,0"
-                                  HorizontalAlignment="Left" />
-                        <StackPanel DockPanel.Dock="Top"
-                                    Visibility="{Binding IsChecked, ElementName=IsSmtpAuthenticationRequired, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <!-- Smtp User -->
-                            <StackPanel Style="{StaticResource OptionsStackPanel}">
+                                  Name="IsEmailAlertsEnabled"
+                                  Content="Enable email alerts"
+                                  Click="IsEmailAlertsEnabled_Click"
+                                  IsChecked="True"
+                                  Margin="20,15,0,15"
+                                  FontSize="14" />
+
+                        <DockPanel LastChildFill="False"
+                                   DockPanel.Dock="Top"
+                                   Margin="20,0,20,0"
+                                   Visibility="{Binding IsChecked, ElementName=IsEmailAlertsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                            <!-- Separator -->
+                            <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" />
+
+                            <TextBlock DockPanel.Dock="Top"
+                                       Text="Server Information"
+                                       Style="{StaticResource OptionSubHeaderTextStyle}" />
+
+                            <!-- SMTP Server-->
+                            <DockPanel Style="{StaticResource OptionsDockPanel}">
                                 <Grid Width="120">
                                     <TextBlock Style="{StaticResource OptionsTextBlock}"
-                                               Text="Username" />
+                                               Text="SMTP server" />
                                 </Grid>
                                 <TextBox Style="{StaticResource TextBoxStyle}"
-                                         Name="SmtpUsername"
-                                         Width="250" />
-                            </StackPanel>
+                                         Name="SmtpServer" />
+                            </DockPanel>
 
-                            <!-- Smtp Password -->
-                            <StackPanel Style="{StaticResource OptionsStackPanel}">
+                            <!-- Smtp Port -->
+                            <DockPanel Style="{StaticResource OptionsDockPanel}">
                                 <Grid Width="120">
                                     <TextBlock Style="{StaticResource OptionsTextBlock}"
-                                               Text="Password" />
+                                               Text="Port" />
                                 </Grid>
-                                <PasswordBox Style="{StaticResource PasswordBoxStyle}"
-                                             Name="SmtpPassword"
-                                             Width="250" />
+                                <TextBox Style="{StaticResource TextBoxStyle}"
+                                         Name="SmtpPort"
+                                         HorizontalAlignment="Left"
+                                         MaxLength="5"
+                                         Width="75" />
+                            </DockPanel>
+
+                            <!-- Authentication section -->
+                            <!-- Smtp Authentication -->
+                            <CheckBox DockPanel.Dock="Top"
+                                      Name="IsSmtpAuthenticationRequired"
+                                      Content="This server requires authentication"
+                                      Click="IsSmtpAuthenticationRequired_Click"
+                                      Foreground="#888"
+                                      FontSize="13"
+                                      Margin="120,8,0,0"
+                                      HorizontalAlignment="Left" />
+                            <StackPanel DockPanel.Dock="Top"
+                                        Visibility="{Binding IsChecked, ElementName=IsSmtpAuthenticationRequired, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <!-- Smtp User -->
+                                <DockPanel Style="{StaticResource OptionsDockPanel}">
+                                    <Grid Width="120">
+                                        <TextBlock Style="{StaticResource OptionsTextBlock}"
+                                                   Text="Username" />
+                                    </Grid>
+                                    <TextBox Style="{StaticResource TextBoxStyle}"
+                                             Name="SmtpUsername" />
+                                </DockPanel>
+
+                                <!-- Smtp Password -->
+                                <DockPanel Style="{StaticResource OptionsDockPanel}">
+                                    <Grid Width="120">
+                                        <TextBlock Style="{StaticResource OptionsTextBlock}"
+                                                   Text="Password" />
+                                    </Grid>
+                                    <PasswordBox Style="{StaticResource PasswordBoxStyle}"
+                                                 Name="SmtpPassword" />
+                                </DockPanel>
                             </StackPanel>
-                        </StackPanel>
 
-                        <!-- Separator -->
-                        <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" Margin="0,15,0,0" />
+                            <!-- Separator -->
+                            <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" Margin="0,15,0,0" />
 
-                        <TextBlock DockPanel.Dock="Top"
-                                   Text="Email Settings"
-                                   Style="{StaticResource OptionSubHeaderTextStyle}" />
+                            <TextBlock DockPanel.Dock="Top"
+                                       Text="Email Settings"
+                                       Style="{StaticResource OptionSubHeaderTextStyle}" />
 
-                        <!-- Recipient Address-->
-                        <StackPanel Style="{StaticResource OptionsStackPanel}">
-                            <Grid Width="120">
-                                <TextBlock Style="{StaticResource OptionsTextBlock}"
-                                           Text="Recipient address" />
-                            </Grid>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
-                                     Name="EmailRecipientAddress"
-                                     LostFocus="EmailRecipientAddress_LostFocus"
-                                     Width="250" />
-                        </StackPanel>
+                            <!-- Recipient Address-->
+                            <DockPanel Style="{StaticResource OptionsDockPanel}">
+                                <Grid Width="120">
+                                    <TextBlock Style="{StaticResource OptionsTextBlock}"
+                                               Text="Recipient address" />
+                                </Grid>
+                                <TextBox Style="{StaticResource TextBoxStyle}"
+                                         Name="EmailRecipientAddress"
+                                         LostFocus="EmailRecipientAddress_LostFocus" />
+                            </DockPanel>
 
-                        <!-- From Address-->
-                        <StackPanel Style="{StaticResource OptionsStackPanel}">
-                            <Grid Width="120">
-                                <TextBlock Style="{StaticResource OptionsTextBlock}"
-                                           Text="From address" />
-                            </Grid>
-                            <TextBox Style="{StaticResource TextBoxStyle}"
-                                     Name="EmailFromAddress"
-                                     Width="250" />
-                        </StackPanel>
+                            <!-- From Address-->
+                            <DockPanel Style="{StaticResource OptionsDockPanel}">
+                                <Grid Width="120">
+                                    <TextBlock Style="{StaticResource OptionsTextBlock}"
+                                               Text="From address" />
+                                </Grid>
+                                <TextBox Style="{StaticResource TextBoxStyle}"
+                                         Name="EmailFromAddress" />
+                            </DockPanel>
+                            
+                            <!-- Test button -->
+                            <Button Style="{StaticResource ButtonSecondaryStyle}"
+                                    Visibility="{Binding IsChecked, ElementName=IsEmailAlertsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    DockPanel.Dock="Bottom"
+                                    Click="TestEmail_Click"
+                                    Width="70"
+                                    Margin="0,25,0,10"
+                                    Content="Test"
+                                    HorizontalAlignment="Right"/>
+                        </DockPanel>
                     </DockPanel>
-                </DockPanel>
+                </ScrollViewer>
             </TabItem>
 
             <!-- TAB: Audio Alerts -->

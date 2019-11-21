@@ -83,7 +83,7 @@ namespace vmPing.Classes
             {
                 if (value != hostname)
                 {
-                    hostname = value;
+                    hostname = value.Trim();
                     NotifyPropertyChanged("Hostname");
                 }
             }

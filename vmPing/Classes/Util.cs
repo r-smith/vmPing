@@ -146,11 +146,11 @@ namespace vmPing.Classes
                 Rfc2898DeriveBytes key = new Rfc2898DeriveBytes("https://github.com/R-Smith/vmPing" + Environment.MachineName, Encoding.ASCII.GetBytes(Environment.UserName + "@@vmping-salt@@"));
 
                 // Create a RijndaelManaged object.
-                aesAlgorithm = new RijndaelManaged
-                {
-                    Padding = PaddingMode.PKCS7,
-                    Key = key.GetBytes(aesAlgorithm.KeySize / 8)
-                };
+                aesAlgorithm = new RijndaelManaged();
+                aesAlgorithm.Padding = PaddingMode.PKCS7;
+                aesAlgorithm.Key = key.GetBytes(aesAlgorithm.KeySize / 8);
+
+                if (key != null) key.Dispose();
 
                 // Create a decryptor to perform the stream transform.
                 ICryptoTransform encryptor = aesAlgorithm.CreateEncryptor(aesAlgorithm.Key, aesAlgorithm.IV);
@@ -177,6 +177,7 @@ namespace vmPing.Classes
                 // Clear the RijndaelManaged object.
                 if (aesAlgorithm != null)
                     aesAlgorithm.Clear();
+                aesAlgorithm.Dispose();
             }
 
             // Return the encrypted bytes from the memory stream.

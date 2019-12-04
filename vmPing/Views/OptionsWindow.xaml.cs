@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Media;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -564,6 +565,21 @@ namespace vmPing.Views
                           
             if (audiofileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 AudioFilePath.Text = audiofileDialog.FileName;
+        }
+
+        private void AudioFileTest_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                using (SoundPlayer player = new SoundPlayer(AudioFilePath.Text))
+                {
+                    player.Play();
+                }
+            }
+            catch
+            {
+                ShowError("Unable to play audio file.", AudioAlertTab, AudioFilePath);
+            }
         }
 
         private void UpdateByteCount()

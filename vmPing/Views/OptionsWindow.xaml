@@ -369,7 +369,7 @@
                                 <TextBox Style="{StaticResource TextBoxStyle}"
                                          Name="EmailFromAddress" />
                             </DockPanel>
-                            
+
                             <!-- Test button -->
                             <Button Style="{StaticResource ButtonSecondaryStyle}"
                                     Visibility="{Binding IsChecked, ElementName=IsEmailAlertsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -414,20 +414,43 @@
 
                         <!-- Audio File -->
                         <Grid DockPanel.Dock="Top"
-                          Margin="41,10,20,0"
-                          VerticalAlignment="Top">
+                              Margin="20,10,0,0"
+                              VerticalAlignment="Top">
                             <StackPanel>
                                 <TextBlock Style="{StaticResource OptionsTextBlock}"
-                                       HorizontalAlignment="Left"
-                                       Text="Audio file path" />
+                                           HorizontalAlignment="Left"
+                                           Text="Audio file path" />
                                 <TextBox Style="{StaticResource TextBoxStyle}"
-                                     Margin="0,5,0,8"
-                                     Name="AudioFilePath" />
-                                <Button Style="{StaticResource ButtonSecondaryStyle}"
-                                    Click="AudioFilePath_Click"
-                                    Width="70"
-                                    Content="Browse"
-                                    HorizontalAlignment="Right"/>
+                                         Margin="0,5,0,8"
+                                         Name="AudioFilePath" />
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <!-- Test button -->
+                                    <Grid>
+                                        <Grid.Style>
+                                            <Style TargetType="Grid">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Text.Length, ElementName=AudioFilePath}" Value="0">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Grid.Style>
+                                        <Button Style="{StaticResource ButtonSecondaryStyle}"
+                                                Click="AudioFileTest_Click"
+                                                Width="70"
+                                                Margin="0,0,10,0"
+                                                Content="Test"
+                                                HorizontalAlignment="Right">
+                                        </Button>
+                                    </Grid>
+                                    
+                                    <!-- Browse button -->
+                                    <Button Style="{StaticResource ButtonSecondaryStyle}"
+                                            Click="AudioFilePath_Click"
+                                            Width="70"
+                                            Content="Browse"
+                                            HorizontalAlignment="Right"/>
+                                </StackPanel>
                             </StackPanel>
                         </Grid>
 

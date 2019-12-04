@@ -566,6 +566,8 @@ namespace vmPing.Views
                 audiofileDialog.Title = "Select an audio file";
                 audiofileDialog.RestoreDirectory = true;
                 audiofileDialog.Multiselect = false;
+                audiofileDialog.Filter = "WAV files (*.wav)|*.wav|All files|*.*";
+                audiofileDialog.DefaultExt = ".wav";
 
                 if (audiofileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     AudioFilePath.Text = audiofileDialog.FileName;

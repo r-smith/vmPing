@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using vmPing.Properties;
+using vmPing.Views;
 
 namespace vmPing.Classes
 {
@@ -109,7 +110,7 @@ namespace vmPing.Classes
                 }
                 catch (Exception ex)
                 {
-                    Util.ShowError(ex.Message);
+                    DialogWindow.ErrorWindow(ex.Message).ShowDialog();
                     return false;
                 }
             }

@@ -209,8 +209,10 @@ namespace vmPing.Classes
 
             if ((status.Status == ProbeStatus.Down) && (ApplicationOptions.IsAudioAlertEnabled))
             {
-                SoundPlayer player = new SoundPlayer(ApplicationOptions.AudioFilePath);
-                player.Play();
+                using (SoundPlayer player = new SoundPlayer(ApplicationOptions.AudioFilePath))
+                {
+                    player.Play();
+                }
             }
         }
     }

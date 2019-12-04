@@ -201,7 +201,11 @@ namespace vmPing.Classes
             }
 
             if (ApplicationOptions.IsLogStatusChangesEnabled && ApplicationOptions.LogStatusChangesPath.Length > 0)
+            {
+                mutex.WaitOne();
                 WriteToStatusChangesLog(status);
+                mutex.ReleaseMutex();
+            }
 
             if ((status.Status == ProbeStatus.Down) && (ApplicationOptions.IsAudioAlertEnabled))
             {

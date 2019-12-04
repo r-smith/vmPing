@@ -209,9 +209,20 @@ namespace vmPing.Classes
 
             if ((status.Status == ProbeStatus.Down) && (ApplicationOptions.IsAudioAlertEnabled))
             {
-                using (SoundPlayer player = new SoundPlayer(ApplicationOptions.AudioFilePath))
+                try
                 {
-                    player.Play();
+                    using (SoundPlayer player = new SoundPlayer(ApplicationOptions.AudioFilePath))
+                    {
+                        player.Play();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ApplicationOptions.IsAudioAlertEnabled = false;
+                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        DialogWindow.ErrorWindow($"Failed to play audio file. Audio alerts have been disabled. {ex.Message}").ShowDialog();
+                    }));
                 }
             }
         }

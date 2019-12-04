@@ -537,34 +537,39 @@ namespace vmPing.Views
 
         private void BrowseLogPath_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            dialog.Description = "Select a location for the log files.";
-            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                dialog.Description = "Select a location for the log files.";
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
 
-            if (result == System.Windows.Forms.DialogResult.OK)
-                LogPath.Text = dialog.SelectedPath;
+                if (result == System.Windows.Forms.DialogResult.OK)
+                    LogPath.Text = dialog.SelectedPath;
+            }
         }
 
         private void BrowseLogStatusChangesPath_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            dialog.Description = "Select a location for the log files.";
-            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                dialog.Description = "Select a location for the log files.";
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
 
-            if (result == System.Windows.Forms.DialogResult.OK)
-                LogStatusChangesPath.Text = dialog.SelectedPath + "\\vmping-status.txt";
+                if (result == System.Windows.Forms.DialogResult.OK)
+                    LogStatusChangesPath.Text = dialog.SelectedPath + "\\vmping-status.txt";
+            }
         }
 
         private void AudioFilePath_Click(object sender, RoutedEventArgs e)
         {
-            System.Console.WriteLine(AudioFilePath.Text);
-            var audiofileDialog = new System.Windows.Forms.OpenFileDialog();
-            audiofileDialog.Title = "Select an audio file";
-            audiofileDialog.RestoreDirectory = true;
-            audiofileDialog.Multiselect = false;
-                          
-            if (audiofileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                AudioFilePath.Text = audiofileDialog.FileName;
+            using (var audiofileDialog = new System.Windows.Forms.OpenFileDialog())
+            {
+                audiofileDialog.Title = "Select an audio file";
+                audiofileDialog.RestoreDirectory = true;
+                audiofileDialog.Multiselect = false;
+
+                if (audiofileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    AudioFilePath.Text = audiofileDialog.FileName;
+            }
         }
 
         private void AudioFileTest_Click(object sender, RoutedEventArgs e)
@@ -598,7 +603,7 @@ namespace vmPing.Views
             }
         }
 
-        private void PacketData_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void PacketData_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateByteCount();
         }

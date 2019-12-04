@@ -50,6 +50,7 @@ namespace vmPing.Views
                 for (int i = 0; i < hosts.Count; ++i)
                 {
                     _ProbeCollection[i].Hostname = hosts[i].ToUpper();
+                    _ProbeCollection[i].Alias = _Aliases.ContainsKey(_ProbeCollection[i].Hostname) ? _Aliases[_ProbeCollection[i].Hostname] : null;
                     _ProbeCollection[i].StartStop();
                 }
             }
@@ -301,6 +302,7 @@ namespace vmPing.Views
                         for (int i = 0; i < favorite.Hostnames.Count; ++i)
                         {
                             _ProbeCollection[i].Hostname = favorite.Hostnames[i].ToUpper();
+                            _ProbeCollection[i].Alias = _Aliases.ContainsKey(_ProbeCollection[i].Hostname) ? _Aliases[_ProbeCollection[i].Hostname] : null;
                             _ProbeCollection[i].StartStop();
                         }
                     }

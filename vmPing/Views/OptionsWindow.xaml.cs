@@ -3,6 +3,7 @@ using System.IO;
 using System.Media;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -84,7 +85,7 @@ namespace vmPing.Views
         private void PopulateAudioAlertOptions()
         {
             IsAudioAlertEnabled.IsChecked = ApplicationOptions.IsAudioAlertEnabled;
-            AudioFilePath.Text = ApplicationOptions.AudioFilePath;            
+            AudioFilePath.Text = ApplicationOptions.AudioFilePath;
         }
 
         private void PopulateLogOutputOptions()
@@ -357,7 +358,7 @@ namespace vmPing.Views
 
         private bool SaveAudioAlertOptions()
         {
-            if(IsAudioAlertEnabled.IsChecked == true)
+            if (IsAudioAlertEnabled.IsChecked == true)
             {
                 try
                 {
@@ -523,16 +524,39 @@ namespace vmPing.Views
                 SmtpUsername.Focus();
         }
 
-        private void TestEmail_Click(object sender, RoutedEventArgs e)
+        private async void TestEmail_Click(object sender, RoutedEventArgs e)
         {
-            Util.SendTestEmail(
-                serverAddress: SmtpServer.Text,
-                serverPort: SmtpPort.Text,
-                isAuthRequired: IsSmtpAuthenticationRequired.IsChecked == true ? true : false,
-                username: SmtpUsername.Text,
-                password: SmtpPassword.SecurePassword,
-                mailFrom: EmailFromAddress.Text,
-                mailRecipient: EmailRecipientAddress.Text);
+            TestEmailButton.IsEnabled = false;
+            TestEmailButton.Content = "Testing...";
+            var serverAddress = SmtpServer.Text;
+            var serverPort = SmtpPort.Text;
+            var isAuthRequired = IsSmtpAuthenticationRequired.IsChecked == true ? true : false;
+            var username = SmtpUsername.Text;
+            var password = SmtpPassword.SecurePassword;
+            var mailFrom = EmailFromAddress.Text;
+            var mailRecipient = EmailRecipientAddress.Text;
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    Util.SendTestEmail(
+                        serverAddress,
+                        serverPort,
+                        isAuthRequired,
+                        username,
+                        password,
+                        mailFrom,
+                        mailRecipient);
+                }
+                catch (Exception ex)
+                {
+                    Application.Current.Dispatcher.BeginInvoke(
+                        new Action(() => ShowError(ex.Message, EmailAlertsTab, TestEmailButton)));
+                }
+            });
+            TestEmailButton.IsEnabled = true;
+            TestEmailButton.Content = "Test";
         }
 
         private void BrowseLogPath_Click(object sender, RoutedEventArgs e)

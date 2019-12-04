@@ -372,6 +372,7 @@
 
                             <!-- Test button -->
                             <Button Style="{StaticResource ButtonSecondaryStyle}"
+                                    Name="TestEmailButton"
                                     Visibility="{Binding IsChecked, ElementName=IsEmailAlertsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
                                     DockPanel.Dock="Bottom"
                                     Click="TestEmail_Click"

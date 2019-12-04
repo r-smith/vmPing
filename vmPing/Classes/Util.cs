@@ -68,7 +68,7 @@ namespace vmPing.Classes
         }
 
 
-        public static bool SendTestEmail(
+        public static void SendTestEmail(
             string serverAddress,
             string serverPort,
             bool isAuthRequired,
@@ -85,37 +85,27 @@ namespace vmPing.Classes
 
             using (var smtpClient = new SmtpClient())
             {
-                try
+                smtpClient.Host = serverAddress;
+
+                if (serverPort.Length > 0)
+                    smtpClient.Port = Int32.Parse(serverPort);
+
+                fromAddress = new MailAddress(mailFrom, mailFromFriendly);
+
+                if (isAuthRequired)
+                    smtpClient.Credentials = new NetworkCredential(username, password);
+
+                using (var message = new MailMessage())
                 {
-                    smtpClient.Host = serverAddress;
+                    message.From = fromAddress;
+                    message.Subject = mailSubject;
+                    message.Body = mailBody;
+                    message.To.Add(mailRecipient);
 
-                    if (serverPort.Length > 0)
-                        smtpClient.Port = Int32.Parse(serverPort);
-
-                    fromAddress = new MailAddress(mailFrom, mailFromFriendly);
-
-                    if (isAuthRequired)
-                        smtpClient.Credentials = new NetworkCredential(username, password);
-
-                    using (var message = new MailMessage())
-                    {
-                        message.From = fromAddress;
-                        message.Subject = mailSubject;
-                        message.Body = mailBody;
-                        message.To.Add(mailRecipient);
-
-                        //Send the email.
-                        smtpClient.Send(message);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    DialogWindow.ErrorWindow(ex.Message).ShowDialog();
-                    return false;
+                    //Send the email.
+                    smtpClient.Send(message);
                 }
             }
-
-            return true;
         }
 
 

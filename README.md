@@ -6,7 +6,7 @@ vmPing
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
 **[Click here to download the latest release](https://github.com/R-Smith/vmPing/releases/latest/download/vmPing.exe)**
-##### (1.3.2 released on June 5, 2019)
+##### (1.3.3 released on December 4, 2019)
 
 ##### Notes
 * There is no installer.  Just run the .exe.
@@ -27,6 +27,17 @@ Screenshots
 
 Recent Changes
 --------------
+### Version 1.3.3
+* Improved handling of loading hosts from a text file to account for empty lines and comments.  Thanks @larntz for adding this feature!
+* Added a __Test__ button to the __Email Alerts__ tab so that you can validate and test email alerting.  Thanks @bodagetta for the suggestion.
+* Added a __Test__ button to the __Audio Alerts__ tab that plays the audio file you've selected.
+* Added simple informational text to the __Email Alerts__ and __Audio Alerts__ tabs.
+* Bug fix:  Logging status changes would fail if multiple hosts changed status at the same time.  This has been corrected.  Thanks @Sola1991 for the bug report.
+* Bug fix:  When setting a default configuration that includes email alerts with authentication, the config write would fail.  This has been corrected.  Thanks @WNDNCG for the bug report.
+* Bug fix:  Aliases would not show when loading hosts from the command line or after selecting a favorite set.  This has been corrected.  Thanks @MeatyFresh for the bug report.
+* Bug fix:  Added error checking to audio alert playback.
+
+
 ### Version 1.3.2
 * New option to trigger playing a sound when a host goes down.  The setting is found under the Audio Alerts tab on the options window.  Thanks @larntz for adding this feature!
 * Bug fix:  Using the log file feature would not work on IPv6 hosts or hosts doing a TCP port ping due to invalid characters in the file name that was being generated.  This is now checked and logging will work in those situations.

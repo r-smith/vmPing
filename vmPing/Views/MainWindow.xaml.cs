@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,6 +16,7 @@ namespace vmPing.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+
         private ObservableCollection<Probe> _ProbeCollection = new ObservableCollection<Probe>();
         private Dictionary<string, string> _Aliases = new Dictionary<string, string>();
 
@@ -26,13 +28,14 @@ namespace vmPing.Views
         public static RoutedCommand FloodHostCommand = new RoutedCommand();
         public static RoutedCommand AddMonitorCommand = new RoutedCommand();
 
+        public static MainWindow Instance;
 
         public MainWindow()
         {
+            Instance = this;
             InitializeComponent();
             InitializeAplication();
         }
-
 
         private void InitializeAplication()
         {
@@ -62,7 +65,6 @@ namespace vmPing.Views
             ColumnCount.Value = _ProbeCollection.Count;
             ProbeItemsControl.ItemsSource = _ProbeCollection;
         }
-
 
         private void UpdatePopupOptionIsCheckedState()
         {
@@ -123,6 +125,16 @@ namespace vmPing.Views
         {
             for (; numberOfProbes > 0; --numberOfProbes)
                 _ProbeCollection.Add(new Probe());
+        }
+
+        public void AddProbe(string host)
+        {
+            _ProbeCollection.Add(new Probe());
+            int probeIndex = _ProbeCollection.Count - 1;
+            _ProbeCollection[probeIndex].Hostname = host.ToUpper();
+            _ProbeCollection[probeIndex].Alias = _Aliases.ContainsKey(_ProbeCollection[probeIndex].Hostname) ? _Aliases[_ProbeCollection[probeIndex].Hostname] : null;
+            _ProbeCollection[probeIndex].StartStop();
+                
         }
 
 

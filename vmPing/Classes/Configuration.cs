@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Xml;
 using vmPing.Properties;
@@ -16,6 +17,12 @@ namespace vmPing.Classes
         public static bool Exists()
         {
             return File.Exists(Path);
+        }
+
+        public static bool PortableModeExists()
+        {
+            var portableModePath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\vmPing.xml";
+            return File.Exists(portableModePath);
         }
 
         public static bool IsReady()
@@ -364,8 +371,16 @@ namespace vmPing.Classes
 
         public static void Load()
         {
-            if (!Exists())
-                return;
+            if (PortableModeExists())
+            {
+                Path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\vmPing.xml";
+                ParentFolder = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ;
+            }
+            else
+            {
+                if (!Exists())
+                    return;
+            }
 
             try
             {

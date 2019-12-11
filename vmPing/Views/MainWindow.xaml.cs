@@ -41,9 +41,9 @@ namespace vmPing.Views
         {
             InitializeCommandBindings();
             Configuration.UpgradeConfigurationFile();
+            Configuration.Load();
             LoadFavorites();
             LoadAliases();
-            Configuration.Load();
             UpdatePopupOptionIsCheckedState();
 
             List<string> hosts = CommandLine.ParseArguments();

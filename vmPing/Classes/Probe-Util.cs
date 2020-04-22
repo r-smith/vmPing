@@ -164,41 +164,42 @@ namespace vmPing.Classes
 
         private void TriggerStatusChange(StatusChangeLog status)
         {
-            if (ApplicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.Always ||
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (ApplicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.Always ||
                 (ApplicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.WhenMinimized &&
                 Application.Current.MainWindow.WindowState == WindowState.Minimized))
-            {
-                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    mutex.WaitOne();
+                    if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
                     {
-                        mutex.WaitOne();
-                        if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
-                        {
-                            // Mark all existing status changes as read.
-                            for (int i = 0; i < StatusChangeLog.Count; ++i)
-                                StatusChangeLog[i].HasStatusBeenCleared = true;
-                        }
-                        StatusChangeLog.Add(status);
-                        mutex.ReleaseMutex();
+                        // Mark all existing status changes as read.
+                        for (int i = 0; i < StatusChangeLog.Count; ++i)
+                            StatusChangeLog[i].HasStatusBeenCleared = true;
+                    }
+                    StatusChangeLog.Add(status);
+                    mutex.ReleaseMutex();
 
-                        if (StatusWindow != null && StatusWindow.IsLoaded)
-                        {
-                            if (StatusWindow.WindowState == WindowState.Minimized)
-                                StatusWindow.WindowState = WindowState.Normal;
-                            StatusWindow.Focus();
-                        }
-                        else if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
-                        {
-                            new PopupNotificationWindow(StatusChangeLog).Show();
-                        }
-                    }));
-            }
+                    if (StatusWindow != null && StatusWindow.IsLoaded)
+                    {
+                        if (StatusWindow.WindowState == WindowState.Minimized)
+                            StatusWindow.WindowState = WindowState.Normal;
+                        StatusWindow.Focus();
+                    }
+                    else if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
+                    {
+                        new PopupNotificationWindow(StatusChangeLog).Show();
+                    }
+                }
+                else
+                {
+                    mutex.WaitOne();
+                    StatusChangeLog.Add(status);
+                    mutex.ReleaseMutex();
+                }
+            }));
 
-            else
-            {
-                mutex.WaitOne();
-                StatusChangeLog.Add(status);
-                mutex.ReleaseMutex();
-            }
+            
 
             if (ApplicationOptions.IsLogStatusChangesEnabled && ApplicationOptions.LogStatusChangesPath.Length > 0)
             {

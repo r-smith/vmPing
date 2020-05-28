@@ -172,6 +172,7 @@
                                  Width="80"
                                  VerticalContentAlignment="Center"
                                  Padding="3,0,0,0"
+                                 Text="32"
                                  MaxLength="5"
                                  FontSize="14"
                                  Visibility="{Binding IsChecked, ElementName=PacketSizeOption, Converter={StaticResource BooleanToHiddenVisibilityConverter}}" />
@@ -203,7 +204,15 @@
                                  FontSize="14"
                                  Visibility="{Binding IsChecked, ElementName=UseCustomPacketOption, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     </DockPanel>
-
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                        <CheckBox Content="Hex Mode"
+                                  Name="HexMode"
+                                  Foreground="#555555"
+                                  VerticalContentAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Left"
+                                  FontSize="14" />
+                    </StackPanel>
                     <!-- Total packet size -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
                         <TextBlock Foreground="#268bd2"

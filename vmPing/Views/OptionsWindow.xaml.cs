@@ -95,16 +95,25 @@ namespace vmPing.Views
             LogStatusChangesPath.Text = ApplicationOptions.LogStatusChangesPath;
             IsLogStatusChangesEnabled.IsChecked = ApplicationOptions.IsLogStatusChangesEnabled;
         }
+        private static string ByteArrayToHexString(byte[] ba)
+        {
+            StringBuilder hex = new StringBuilder(ba.Length * 2);
+            foreach (byte b in ba)
+                hex.AppendFormat("{0:x2}", b);
+            return hex.ToString();
+        }
 
         private void PopulateAdvancedOptions()
         {
             TTL.Text = ApplicationOptions.TTL.ToString();
             DontFragment.IsChecked = ApplicationOptions.DontFragment;
+            HexMode.IsChecked = ApplicationOptions.HexMode;
 
             if (ApplicationOptions.UseCustomBuffer)
             {
                 UseCustomPacketOption.IsChecked = true;
-                PacketData.Text = Encoding.ASCII.GetString(ApplicationOptions.Buffer);
+                if (ApplicationOptions.HexMode) PacketData.Text = ByteArrayToHexString(ApplicationOptions.Buffer);
+               else PacketData.Text = Encoding.ASCII.GetString(ApplicationOptions.Buffer);
             }
             else
             {
@@ -231,7 +240,25 @@ namespace vmPing.Views
 
             return true;
         }
+        private static byte[] HexStringToByteArray(string hexString)
+        {
+            if ((hexString.Length & 1) != 0)
+            {
+                throw new ArgumentException("Input must have even number of characters");
+            }
+            byte[] ret = new byte[hexString.Length / 2];
+            for (int i = 0; i < ret.Length; i++)
+            {
+                int high = hexString[i * 2];
+                int low = hexString[i * 2 + 1];
+                high = (high & 0xf) + ((high & 0x40) >> 6) * 9;
+                low = (low & 0xf) + ((low & 0x40) >> 6) * 9;
 
+                ret[i] = (byte)((high << 4) | low);
+            }
+
+            return ret;
+        }
 
         private bool SaveAdvancedOptions()
         {
@@ -269,7 +296,16 @@ namespace vmPing.Views
             else
             {
                 // Use custom packet data.
-                ApplicationOptions.Buffer = Encoding.ASCII.GetBytes(PacketData.Text);
+                if (HexMode.IsChecked.HasValue && HexMode.IsChecked.Value)
+                {
+                    if ((PacketData.Text.Length & 1) != 0)
+                    {
+                        ShowError("hex string length must have even number of characters", AdvancedTab, PacketData);
+                    }
+                    else ApplicationOptions.Buffer =HexStringToByteArray(PacketData.Text);
+                }
+                else ApplicationOptions.Buffer = Encoding.ASCII.GetBytes(PacketData.Text);
+                
                 ApplicationOptions.UseCustomBuffer = true;
             }
 
@@ -278,6 +314,9 @@ namespace vmPing.Views
                 ApplicationOptions.DontFragment = true;
             else
                 ApplicationOptions.DontFragment = false;
+
+            if (HexMode.IsChecked == true) ApplicationOptions.HexMode = true;
+            else ApplicationOptions.HexMode = false;
 
             // Update ping options (TTL / Don't fragment settings)
             ApplicationOptions.UpdatePingOptions();
@@ -615,6 +654,7 @@ namespace vmPing.Views
 
         private void UpdateByteCount()
         {
+            if(Bytes==null)return;
             var regex = new Regex("^\\d+$");
             if (PacketSizeOption.IsChecked == true)
             {
@@ -625,7 +665,8 @@ namespace vmPing.Views
             }
             else
             {
-                Bytes.Text = (PacketData.Text.Length + 28).ToString();
+                if(HexMode.IsChecked==true) Bytes.Text = (PacketData.Text.Length/2 + 28).ToString();
+               else Bytes.Text = (PacketData.Text.Length + 28).ToString();
             }
         }
 

@@ -258,6 +258,10 @@ namespace vmPing.Classes
                 value: ApplicationOptions.DontFragment.ToString()));
             configuration.AppendChild(GenerateOptionNode(
                 xmlDocument: xd,
+                name: "HexMode",
+                value: ApplicationOptions.HexMode.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
                 name: "UseCustomBuffer",
                 value: ApplicationOptions.UseCustomBuffer.ToString()));
             configuration.AppendChild(GenerateOptionNode(
@@ -524,6 +528,10 @@ namespace vmPing.Classes
             if (options.TryGetValue("DontFragment", out optionValue))
             {
                 ApplicationOptions.DontFragment = bool.Parse(optionValue);
+            }
+            if (options.TryGetValue("HexMode", out optionValue))
+            {
+                ApplicationOptions.HexMode = bool.Parse(optionValue);
             }
             if (options.TryGetValue("UseCustomBuffer", out optionValue))
             {

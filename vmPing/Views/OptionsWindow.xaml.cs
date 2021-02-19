@@ -84,8 +84,10 @@ namespace vmPing.Views
         }
         private void PopulateAudioAlertOptions()
         {
-            IsAudioAlertEnabled.IsChecked = ApplicationOptions.IsAudioDownAlertEnabled;
+            IsAudioDownAlertEnabled.IsChecked = ApplicationOptions.IsAudioDownAlertEnabled;
             AudioDownFilePath.Text = ApplicationOptions.AudioDownFilePath;
+            IsAudioUpAlertEnabled.IsChecked = ApplicationOptions.IsAudioUpAlertEnabled;
+            AudioUpFilePath.Text = ApplicationOptions.AudioUpFilePath;
         }
 
         private void PopulateLogOutputOptions()
@@ -358,7 +360,7 @@ namespace vmPing.Views
 
         private bool SaveAudioAlertOptions()
         {
-            if (IsAudioAlertEnabled.IsChecked == true)
+            if (IsAudioDownAlertEnabled.IsChecked == true)
             {
                 try
                 {
@@ -380,6 +382,30 @@ namespace vmPing.Views
             else
             {
                 ApplicationOptions.IsAudioDownAlertEnabled = false;
+            }
+
+            if (IsAudioUpAlertEnabled.IsChecked == true)
+            {
+                try
+                {
+                    if (Path.GetFileName(AudioUpFilePath.Text).IndexOfAny(Path.GetInvalidFileNameChars()) >= 0 ||
+                        !Directory.Exists(Path.GetDirectoryName(AudioUpFilePath.Text)) ||
+                        Path.GetFileName(AudioUpFilePath.Text).Length < 1)
+                    {
+                        throw new Exception();
+                    }
+                }
+                catch
+                {
+                    ShowError("The specified path does not exist.  Please enter a valid path.", AudioAlertTab, AudioUpFilePath);
+                    return false;
+                }
+                ApplicationOptions.IsAudioUpAlertEnabled = true;
+                ApplicationOptions.AudioUpFilePath = AudioUpFilePath.Text;
+            }
+            else
+            {
+                ApplicationOptions.IsAudioUpAlertEnabled = false;
             }
 
             return true;
@@ -583,7 +609,17 @@ namespace vmPing.Views
             }
         }
 
-        private void AudioFilePath_Click(object sender, RoutedEventArgs e)
+        private void AudioDownBrowse_Click(object sender, RoutedEventArgs e)
+        {
+            AudioFileBrowse(AudioDownFilePath);
+        }
+
+        private void AudioUpBrowse_Click(object sender, RoutedEventArgs e)
+        {
+            AudioFileBrowse(AudioUpFilePath);
+        }
+
+        private void AudioFileBrowse(TextBox tb)
         {
             using (var audiofileDialog = new System.Windows.Forms.OpenFileDialog())
             {
@@ -594,22 +630,32 @@ namespace vmPing.Views
                 audiofileDialog.DefaultExt = ".wav";
 
                 if (audiofileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                    AudioDownFilePath.Text = audiofileDialog.FileName;
+                    tb.Text = audiofileDialog.FileName;
             }
         }
 
-        private void AudioFileTest_Click(object sender, RoutedEventArgs e)
+        private void AudioDownPlay_Click(object sender, RoutedEventArgs e)
+        {
+            AudioFilePlay(AudioDownFilePath.Text);
+        }
+
+        private void AudioUpPlay_Click(object sender, RoutedEventArgs e)
+        {
+            AudioFilePlay(AudioUpFilePath.Text);
+        }
+
+        private void AudioFilePlay(string path)
         {
             try
             {
-                using (SoundPlayer player = new SoundPlayer(AudioDownFilePath.Text))
+                using (var player = new SoundPlayer(path))
                 {
                     player.Play();
                 }
             }
             catch
             {
-                ShowError("Unable to play audio file.", AudioAlertTab, AudioDownFilePath);
+                ShowError("Unable to play audio file.", AudioAlertTab, AudioAlertTab);
             }
         }
 

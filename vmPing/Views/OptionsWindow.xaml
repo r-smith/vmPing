@@ -271,6 +271,7 @@
                                       Content="Enable email alerts"
                                       Click="IsEmailAlertsEnabled_Click"
                                       IsChecked="True"
+                                      VerticalContentAlignment="Center"
                                       VerticalAlignment="Center"
                                       FontSize="14" />
                             <Border DockPanel.Dock="Left"
@@ -341,6 +342,7 @@
                                       Foreground="#888"
                                       FontSize="13"
                                       Margin="120,8,0,0"
+                                      VerticalContentAlignment="Center"
                                       HorizontalAlignment="Left" />
                             <StackPanel DockPanel.Dock="Top"
                                         Visibility="{Binding IsChecked, ElementName=IsSmtpAuthenticationRequired, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -417,12 +419,14 @@
                                Text="Audio Alerts"
                                Style="{StaticResource OptionHeaderTextStyle}" />
 
-                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="20,15,0,15">
+                    <!-- Audio Alert Down: checkbox / tooltip -->
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="20,15,0,0">
                         <CheckBox DockPanel.Dock="Top"
-                                  Name="IsAudioAlertEnabled"
-                                  Content="Enable audio alerts"
+                                  Name="IsAudioDownAlertEnabled"
+                                  Content="Enable audio alert: host down"
                                   IsChecked="True"
                                   VerticalAlignment="Center"
+                                  VerticalContentAlignment="Center"
                                   FontSize="14" />
                         <Border DockPanel.Dock="Left"
                                 Background="Transparent"
@@ -448,61 +452,126 @@
                         </Border>
                     </StackPanel>
 
-                    <DockPanel LastChildFill="False"
-                               DockPanel.Dock="Top"
-                               Margin="20,0,20,0"
-                               Visibility="{Binding IsChecked, ElementName=IsAudioAlertEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
-
-                        <!-- Separator -->
-                        <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" />
-
-                        <TextBlock DockPanel.Dock="Top"
-                                   Text="Audio File Information"
-                                   Style="{StaticResource OptionSubHeaderTextStyle}" />
-
-                        <!-- Audio File -->
-                        <Grid DockPanel.Dock="Top"
-                              Margin="20,10,0,0"
-                              VerticalAlignment="Top">
-                            <StackPanel>
-                                <TextBlock Style="{StaticResource OptionsTextBlock}"
-                                           HorizontalAlignment="Left"
-                                           Text="Audio file path" />
-                                <TextBox Style="{StaticResource TextBoxStyle}"
-                                         Margin="0,5,0,8"
-                                         Name="AudioDownFilePath" />
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                    <!-- Test button -->
-                                    <Grid>
-                                        <Grid.Style>
-                                            <Style TargetType="Grid">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Text.Length, ElementName=AudioDownFilePath}" Value="0">
-                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Grid.Style>
-                                        <Button Style="{StaticResource ButtonSecondaryStyle}"
-                                                Click="AudioFileTest_Click"
-                                                Width="70"
-                                                Margin="0,0,10,0"
-                                                Content="Play"
-                                                HorizontalAlignment="Right">
-                                        </Button>
-                                    </Grid>
-
-                                    <!-- Browse button -->
+                    <!-- Audio Alert Down: Filepath / play button / browse button -->
+                    <Grid DockPanel.Dock="Top"
+                          Margin="41,10,20,0"
+                          VerticalAlignment="Top"
+                          Visibility="{Binding IsChecked, ElementName=IsAudioDownAlertEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource OptionsTextBlock}"
+                                       HorizontalAlignment="Left"
+                                       Text="Audio file path" />
+                            <TextBox Style="{StaticResource TextBoxStyle}"
+                                     Margin="0,5,0,8"
+                                     Name="AudioDownFilePath" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <!-- Play button -->
+                                <Grid>
+                                    <Grid.Style>
+                                        <Style TargetType="Grid">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Text.Length, ElementName=AudioDownFilePath}" Value="0">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
                                     <Button Style="{StaticResource ButtonSecondaryStyle}"
-                                            Click="AudioFilePath_Click"
+                                            Click="AudioDownPlay_Click"
                                             Width="70"
-                                            Content="Browse"
-                                            HorizontalAlignment="Right"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </Grid>
+                                            Margin="0,0,10,0"
+                                            Content="Play"
+                                            HorizontalAlignment="Right">
+                                    </Button>
+                                </Grid>
 
-                    </DockPanel>
+                                <!-- Browse button -->
+                                <Button Style="{StaticResource ButtonSecondaryStyle}"
+                                        Click="AudioDownBrowse_Click"
+                                        Width="70"
+                                        Content="Browse"
+                                        HorizontalAlignment="Right"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+
+                    <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" Margin="20,20,20,5"
+                               Visibility="{Binding IsChecked, ElementName=IsAudioDownAlertEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    
+                    <!-- Audio Alert Up: checkbox / tooltip -->
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="20,15,0,0">
+                        <CheckBox Name="IsAudioUpAlertEnabled"
+                                  Content="Enable audio alert: host up"
+                                  IsChecked="True"
+                                  VerticalAlignment="Center"
+                                  VerticalContentAlignment="Center"
+                                  FontSize="14" />
+                        <Border DockPanel.Dock="Left"
+                                Background="Transparent"
+                                Margin="8,1,0,0"
+                                Padding="3"
+                                ToolTipService.InitialShowDelay="0"
+                                ToolTipService.ShowDuration="60000">
+                            <Border.ToolTip>
+                                <ToolTip Background="#404040">
+                                    <TextBlock Width="300"
+                                               Margin="5,1"
+                                               FontSize="14"
+                                               TextWrapping="Wrap"
+                                               Foreground="#f2f2f2"
+                                               Text="If this option is enabled, an audio file is played whenever a host comes up."/>
+                                </ToolTip>
+                            </Border.ToolTip>
+                            <Image Source="/Resources/font-awesome_4-7-0_info-circle_16_0_268bd2_none.png"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Bottom"
+                                   Width="16" Height="16"
+                                   Opacity="0.9"/>
+                        </Border>
+                    </StackPanel>
+                    
+                    <!-- Audio Alert Down: Filepath / play button / browse button -->
+                    <Grid DockPanel.Dock="Top"
+                          Margin="41,10,20,0"
+                          VerticalAlignment="Top"
+                          Visibility="{Binding IsChecked, ElementName=IsAudioUpAlertEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource OptionsTextBlock}"
+                                       HorizontalAlignment="Left"
+                                       Text="Audio file path" />
+                            <TextBox Style="{StaticResource TextBoxStyle}"
+                                     Margin="0,5,0,8"
+                                     Name="AudioUpFilePath" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <!-- Play button -->
+                                <Grid>
+                                    <Grid.Style>
+                                        <Style TargetType="Grid">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Text.Length, ElementName=AudioUpFilePath}" Value="0">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
+                                    <Button Style="{StaticResource ButtonSecondaryStyle}"
+                                            Click="AudioUpPlay_Click"
+                                            Width="70"
+                                            Margin="0,0,10,0"
+                                            Content="Play"
+                                            HorizontalAlignment="Right">
+                                    </Button>
+                                </Grid>
+
+                                <!-- Browse button -->
+                                <Button Style="{StaticResource ButtonSecondaryStyle}"
+                                        Click="AudioUpBrowse_Click"
+                                        Width="70"
+                                        Content="Browse"
+                                        HorizontalAlignment="Right"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
                 </DockPanel>
             </TabItem>
 
@@ -520,6 +589,7 @@
                                   Name="IsLogOutputEnabled"
                                   Content="Write ping output to plain text files"
                                   IsChecked="True"
+                                  VerticalContentAlignment="Center"
                                   VerticalAlignment="Center"
                                   FontSize="14" />
                         <Border DockPanel.Dock="Left"
@@ -569,6 +639,7 @@
                                   Name="IsLogStatusChangesEnabled"
                                   Content="Log status changes to text file"
                                   IsChecked="True"
+                                  VerticalContentAlignment="Center"
                                   VerticalAlignment="Center"
                                   FontSize="14" />
                         <Border DockPanel.Dock="Left"

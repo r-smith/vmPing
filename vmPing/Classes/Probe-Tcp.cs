@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -14,13 +15,14 @@ namespace vmPing.Classes
         {
             InitializeProbe();
 
-            var hostAndPort = Hostname.Split(':');
-            string host = hostAndPort[0];
+            var host = Hostname.Substring(0, Hostname.LastIndexOf(':'));
+            host = host.Trim(new[] { '[', ']' });
+            var port = Hostname.Substring(Hostname.LastIndexOf(':') + 1);
             int portnumber;
             bool isPortOpen = false;
 
             // Check if port is invalid.
-            if (!(int.TryParse(hostAndPort[1], out portnumber) && portnumber >= 1 && portnumber <= 65535))
+            if (!(int.TryParse(port, out portnumber) && portnumber >= 1 && portnumber <= 65535))
             {
                 // Error.
                 await Application.Current.Dispatcher.BeginInvoke(
@@ -42,14 +44,43 @@ namespace vmPing.Classes
                 return;
             }
 
-            int errorCode = 0;
+            // Determine whether target is IPv4 or IPv6. Necessary for TcpClient class.
+            var ipVersion = AddressFamily.InterNetwork;
+            try
+            {
+                switch (Uri.CheckHostName(host))
+                {
+                    case UriHostNameType.IPv4:
+                        ipVersion = AddressFamily.InterNetwork;
+                        break;
+                    case UriHostNameType.IPv6:
+                        ipVersion = AddressFamily.InterNetworkV6;
+                        break;
+                    case UriHostNameType.Dns:
+                        var ipAddresses = await Dns.GetHostAddressesAsync(host);
+                        cancellationToken.ThrowIfCancellationRequested();
+                        host = ipAddresses[0].ToString();
+                        ipVersion = ipAddresses[0].AddressFamily;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.Dispatcher.BeginInvoke(
+                            new Action(() => AddHistory("Error: " + ex.Message)));
+                StopProbe(ProbeStatus.Error);
+                return;
+            }
 
+            int errorCode = 0;
             var stopwatch = System.Diagnostics.Stopwatch.StartNew();
             while (!cancellationToken.IsCancellationRequested)
             {
                 stopwatch.Restart();
 
-                using (var client = new TcpClient())
+                using (var client = new TcpClient(ipVersion))
                 {
                     Statistics.Sent++;
                     DisplayStatistics();
@@ -120,6 +151,14 @@ namespace vmPing.Classes
                         isPortOpen = false;
                         errorCode = ex.ErrorCode;
                     }
+                    catch (Exception ex)
+                    {
+                        // Unexpected error ocurred. Report error and stop probe.
+                        await Application.Current.Dispatcher.BeginInvoke(
+                            new Action(() => AddHistory("Error: " + ex.Message)));
+                        StopProbe(ProbeStatus.Error);
+                        return;
+                    }
                     client.Close();
                 }
 
@@ -139,9 +178,9 @@ namespace vmPing.Classes
         private void DisplayTcpReply(bool isPortOpen, int portnumber, int errorCode, long elapsedTime)
         {
             // Prefix the ping reply output with a timestamp.
-            var pingOutput = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  {Strings.Probe_Port} {portnumber.ToString()}: ");
+            var pingOutput = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  {Strings.Probe_Port} {portnumber}: ");
             if (isPortOpen)
-                pingOutput.Append($"{Strings.Probe_PortOpen}  [{elapsedTime.ToString()}{Strings.Milliseconds_Symbol}]");
+                pingOutput.Append($"{Strings.Probe_PortOpen}  [{elapsedTime}{Strings.Milliseconds_Symbol}]");
             else
             {
                 pingOutput.Append(Strings.Probe_PortClosed);

@@ -39,7 +39,7 @@ namespace vmPing.Classes
                     Hostname = Hostname.Substring(2);
                     PerformTraceroute(CancelSource.Token);
                 }
-                else if (Hostname.Count(f => f == ':') == 1)
+                else if (Hostname.Count(f => f == ':') == 1 || Hostname.Contains("]:"))
                 {
                     Type = ProbeType.Ping;
                     Task.Run(() => PerformTcpProbe(CancelSource.Token), CancelSource.Token);

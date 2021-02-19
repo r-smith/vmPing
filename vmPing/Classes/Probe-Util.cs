@@ -208,18 +208,18 @@ namespace vmPing.Classes
                 mutex.ReleaseMutex();
             }
 
-            if ((status.Status == ProbeStatus.Down) && (ApplicationOptions.IsAudioAlertEnabled))
+            if ((status.Status == ProbeStatus.Down) && (ApplicationOptions.IsAudioDownAlertEnabled))
             {
                 try
                 {
-                    using (SoundPlayer player = new SoundPlayer(ApplicationOptions.AudioFilePath))
+                    using (SoundPlayer player = new SoundPlayer(ApplicationOptions.AudioDownFilePath))
                     {
                         player.Play();
                     }
                 }
                 catch (Exception ex)
                 {
-                    ApplicationOptions.IsAudioAlertEnabled = false;
+                    ApplicationOptions.IsAudioDownAlertEnabled = false;
                     Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                     {
                         DialogWindow.ErrorWindow($"Failed to play audio file. Audio alerts have been disabled. {ex.Message}").ShowDialog();

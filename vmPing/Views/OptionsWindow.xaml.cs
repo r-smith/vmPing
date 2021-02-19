@@ -84,8 +84,8 @@ namespace vmPing.Views
         }
         private void PopulateAudioAlertOptions()
         {
-            IsAudioAlertEnabled.IsChecked = ApplicationOptions.IsAudioAlertEnabled;
-            AudioFilePath.Text = ApplicationOptions.AudioFilePath;
+            IsAudioAlertEnabled.IsChecked = ApplicationOptions.IsAudioDownAlertEnabled;
+            AudioDownFilePath.Text = ApplicationOptions.AudioDownFilePath;
         }
 
         private void PopulateLogOutputOptions()
@@ -362,24 +362,24 @@ namespace vmPing.Views
             {
                 try
                 {
-                    if (Path.GetFileName(AudioFilePath.Text).IndexOfAny(Path.GetInvalidFileNameChars()) >= 0 ||
-                        !Directory.Exists(Path.GetDirectoryName(AudioFilePath.Text)) ||
-                        Path.GetFileName(AudioFilePath.Text).Length < 1)
+                    if (Path.GetFileName(AudioDownFilePath.Text).IndexOfAny(Path.GetInvalidFileNameChars()) >= 0 ||
+                        !Directory.Exists(Path.GetDirectoryName(AudioDownFilePath.Text)) ||
+                        Path.GetFileName(AudioDownFilePath.Text).Length < 1)
                     {
                         throw new Exception();
                     }
                 }
                 catch
                 {
-                    ShowError("The specified path does not exist.  Please enter a valid path.", AudioAlertTab, AudioFilePath);
+                    ShowError("The specified path does not exist.  Please enter a valid path.", AudioAlertTab, AudioDownFilePath);
                     return false;
                 }
-                ApplicationOptions.IsAudioAlertEnabled = true;
-                ApplicationOptions.AudioFilePath = AudioFilePath.Text;
+                ApplicationOptions.IsAudioDownAlertEnabled = true;
+                ApplicationOptions.AudioDownFilePath = AudioDownFilePath.Text;
             }
             else
             {
-                ApplicationOptions.IsAudioAlertEnabled = false;
+                ApplicationOptions.IsAudioDownAlertEnabled = false;
             }
 
             return true;
@@ -594,7 +594,7 @@ namespace vmPing.Views
                 audiofileDialog.DefaultExt = ".wav";
 
                 if (audiofileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                    AudioFilePath.Text = audiofileDialog.FileName;
+                    AudioDownFilePath.Text = audiofileDialog.FileName;
             }
         }
 
@@ -602,14 +602,14 @@ namespace vmPing.Views
         {
             try
             {
-                using (SoundPlayer player = new SoundPlayer(AudioFilePath.Text))
+                using (SoundPlayer player = new SoundPlayer(AudioDownFilePath.Text))
                 {
                     player.Play();
                 }
             }
             catch
             {
-                ShowError("Unable to play audio file.", AudioAlertTab, AudioFilePath);
+                ShowError("Unable to play audio file.", AudioAlertTab, AudioDownFilePath);
             }
         }
 

@@ -325,12 +325,20 @@ namespace vmPing.Classes
                 value: ApplicationOptions.EmailFromAddress != null ? ApplicationOptions.EmailFromAddress.ToString() : string.Empty));
             configuration.AppendChild(GenerateOptionNode(
                 xmlDocument: xd,
-                name: "IsAudioAlertEnabled",
-                value: ApplicationOptions.IsAudioAlertEnabled.ToString()));
+                name: "IsAudioUpAlertEnabled",
+                value: ApplicationOptions.IsAudioUpAlertEnabled.ToString()));
             configuration.AppendChild(GenerateOptionNode(
                 xmlDocument: xd,
-                name: "AudioFilePath",
-                value: ApplicationOptions.AudioFilePath != null ? ApplicationOptions.AudioFilePath.ToString() : string.Empty));
+                name: "IsAudioDownAlertEnabled",
+                value: ApplicationOptions.IsAudioDownAlertEnabled.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "AudioUpFilePath",
+                value: ApplicationOptions.AudioUpFilePath != null ? ApplicationOptions.AudioUpFilePath.ToString() : string.Empty));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "AudioDownFilePath",
+                value: ApplicationOptions.AudioDownFilePath != null ? ApplicationOptions.AudioDownFilePath.ToString() : string.Empty));
             configuration.AppendChild(GenerateOptionNode(
                 xmlDocument: xd,
                 name: "IsLogOutputEnabled",
@@ -563,11 +571,29 @@ namespace vmPing.Classes
             }
             if (options.TryGetValue("IsAudioAlertEnabled", out optionValue))
             {
-                ApplicationOptions.IsAudioAlertEnabled = bool.Parse(optionValue);
+                // For compatibility with version 1.3.4 and lower.
+                ApplicationOptions.IsAudioDownAlertEnabled = bool.Parse(optionValue);
+            }
+            if (options.TryGetValue("IsAudioUpAlertEnabled", out optionValue))
+            {
+                ApplicationOptions.IsAudioUpAlertEnabled = bool.Parse(optionValue);
+            }
+            if (options.TryGetValue("IsAudioDownAlertEnabled", out optionValue))
+            {
+                ApplicationOptions.IsAudioDownAlertEnabled = bool.Parse(optionValue);
             }
             if (options.TryGetValue("AudioFilePath", out optionValue))
             {
-                ApplicationOptions.AudioFilePath = optionValue;
+                // For compatibility with version 1.3.4 and lower.
+                ApplicationOptions.AudioDownFilePath = optionValue;
+            }
+            if (options.TryGetValue("AudioUpFilePath", out optionValue))
+            {
+                ApplicationOptions.AudioUpFilePath = optionValue;
+            }
+            if (options.TryGetValue("AudioDownFilePath", out optionValue))
+            {
+                ApplicationOptions.AudioDownFilePath = optionValue;
             }
             if (options.TryGetValue("IsLogOutputEnabled", out optionValue))
             {

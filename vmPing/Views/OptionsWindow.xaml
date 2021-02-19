@@ -470,14 +470,14 @@
                                            Text="Audio file path" />
                                 <TextBox Style="{StaticResource TextBoxStyle}"
                                          Margin="0,5,0,8"
-                                         Name="AudioFilePath" />
+                                         Name="AudioDownFilePath" />
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                     <!-- Test button -->
                                     <Grid>
                                         <Grid.Style>
                                             <Style TargetType="Grid">
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Text.Length, ElementName=AudioFilePath}" Value="0">
+                                                    <DataTrigger Binding="{Binding Text.Length, ElementName=AudioDownFilePath}" Value="0">
                                                         <Setter Property="Visibility" Value="Collapsed" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -487,7 +487,7 @@
                                                 Click="AudioFileTest_Click"
                                                 Width="70"
                                                 Margin="0,0,10,0"
-                                                Content="Test"
+                                                Content="Play"
                                                 HorizontalAlignment="Right">
                                         </Button>
                                     </Grid>

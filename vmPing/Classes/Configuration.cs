@@ -329,12 +329,12 @@ namespace vmPing.Classes
                 value: ApplicationOptions.IsAudioUpAlertEnabled.ToString()));
             configuration.AppendChild(GenerateOptionNode(
                 xmlDocument: xd,
-                name: "IsAudioDownAlertEnabled",
-                value: ApplicationOptions.IsAudioDownAlertEnabled.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
                 name: "AudioUpFilePath",
                 value: ApplicationOptions.AudioUpFilePath != null ? ApplicationOptions.AudioUpFilePath.ToString() : string.Empty));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "IsAudioDownAlertEnabled",
+                value: ApplicationOptions.IsAudioDownAlertEnabled.ToString()));
             configuration.AppendChild(GenerateOptionNode(
                 xmlDocument: xd,
                 name: "AudioDownFilePath",

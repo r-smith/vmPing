@@ -38,5 +38,9 @@
         public const int DefaultTimeout = 2000;       // In miliseconds.
         public const int DefaultTTL = 64;
         public const int DefaultInterval = 2000;      // In miliseconds.
+
+        // Default audio alert file paths.
+        public const string DefaultAudioDownFilePath = @"%WINDIR%\Media\Windows Notify Email.wav";
+        public const string DefaultAudioUpFilePath = @"%WINDIR%\Media\Windows Unlock.wav";
     }
 }

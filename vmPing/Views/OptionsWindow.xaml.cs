@@ -659,6 +659,28 @@ namespace vmPing.Views
             }
         }
 
+        private void IsAudioDownAlertEnabled_Click(object sender, RoutedEventArgs e)
+        {
+            if (AudioDownFilePath.Text.Length == 0)
+            {
+                if (File.Exists(Environment.ExpandEnvironmentVariables(Constants.DefaultAudioDownFilePath)))
+                {
+                    AudioDownFilePath.Text = Environment.ExpandEnvironmentVariables(Constants.DefaultAudioDownFilePath);
+                }
+            }
+        }
+
+        private void IsAudioUpAlertEnabled_Click(object sender, RoutedEventArgs e)
+        {
+            if (AudioUpFilePath.Text.Length == 0)
+            {
+                if (File.Exists(Environment.ExpandEnvironmentVariables(Constants.DefaultAudioUpFilePath)))
+                {
+                    AudioUpFilePath.Text = Environment.ExpandEnvironmentVariables(Constants.DefaultAudioUpFilePath);
+                }
+            }
+        }
+
         private void UpdateByteCount()
         {
             var regex = new Regex("^\\d+$");

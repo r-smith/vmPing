@@ -423,6 +423,7 @@
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="20,15,0,0">
                         <CheckBox DockPanel.Dock="Top"
                                   Name="IsAudioDownAlertEnabled"
+                                  Click="IsAudioDownAlertEnabled_Click"
                                   Content="Enable audio alert: host down"
                                   IsChecked="True"
                                   VerticalAlignment="Center"
@@ -501,6 +502,7 @@
                     <!-- Audio Alert Up: checkbox / tooltip -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="20,15,0,0">
                         <CheckBox Name="IsAudioUpAlertEnabled"
+                                  Click="IsAudioUpAlertEnabled_Click"
                                   Content="Enable audio alert: host up"
                                   IsChecked="True"
                                   VerticalAlignment="Center"

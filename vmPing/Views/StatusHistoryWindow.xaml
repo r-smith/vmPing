@@ -68,6 +68,7 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0"
                                                Text="{Binding StatusAsGlyph}"
@@ -105,13 +106,32 @@
                                                VerticalAlignment="Center"
                                                Padding="9,0,0,0" />
                                     <TextBlock Grid.Column="3"
+                                               Text="{Binding Alias, TargetNullValue='', StringFormat='({0})'}"
+                                               FontSize="17"
+                                               Foreground="White"
+                                               VerticalAlignment="Center"
+                                               Padding="5,0,0,0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <Trigger Property="Text" Value="">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </Trigger>
+                                                    <Trigger Property="Text" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <TextBlock Grid.Column="4"
                                                Text="{x:Static resource:Strings.StatusChange_Verb}"
                                                FontSize="17"
                                                Foreground="White"
                                                VerticalAlignment="Center"
                                                Opacity="0.9"
                                                Padding="5,0" />
-                                    <TextBlock Grid.Column="4"
+                                    <TextBlock Grid.Column="5"
                                                Text="{Binding StatusAsString}"
                                                FontSize="17"
                                                VerticalAlignment="Center">

@@ -7,8 +7,18 @@ namespace vmPing.Classes
     {
         public DateTime Timestamp { get; set; }
         public string Hostname { get; set; }
+        public string Alias { get; set; }
         public ProbeStatus Status { get; set; }
         public bool HasStatusBeenCleared { get; set; }
+
+        public string AliasIfExistOrHostname
+        {
+            get
+            {
+                return (Alias != null && Alias.Length > 0) ? Alias : Hostname;
+            }
+
+        }
         public string StatusAsString
         {
             get

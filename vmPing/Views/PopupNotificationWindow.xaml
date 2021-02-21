@@ -221,7 +221,7 @@
                                                Opacity="0.6"
                                                Padding="6,0,0,0" />
                                     <TextBlock Grid.Column="2"
-                                               Text="{Binding Hostname}"
+                                               Text="{Binding AliasIfExistOrHostname}"
                                                FontSize="17"
                                                Foreground="White"
                                                VerticalAlignment="Center"

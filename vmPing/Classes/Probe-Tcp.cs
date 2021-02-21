@@ -103,7 +103,7 @@ namespace vmPing.Classes
                         // Check for status change.
                         if (Status == ProbeStatus.Down)
                         {
-                            TriggerStatusChange(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Status = ProbeStatus.Up });
+                            TriggerStatusChange(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Up });
                             if (ApplicationOptions.IsEmailAlertEnabled)
                                 Util.SendEmail("up", Hostname);
                         }
@@ -132,7 +132,7 @@ namespace vmPing.Classes
                         if (Status == ProbeStatus.Indeterminate && IndeterminateCount >= ApplicationOptions.AlertThreshold)
                         {
                             Status = ProbeStatus.Down;
-                            TriggerStatusChange(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Status = ProbeStatus.Down });
+                            TriggerStatusChange(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Down });
                             if (ApplicationOptions.IsEmailAlertEnabled)
                                 Util.SendEmail("down", Hostname);
                         }

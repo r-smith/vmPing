@@ -13,7 +13,7 @@ namespace vmPing.Classes
 {
     class Util
     {
-        public static void SendEmail(string hostStatus, string hostName)
+        public static void SendEmail(string hostStatus, string hostName, string hostAlias)
         {
             var serverAddress = ApplicationOptions.EmailServer;
             var serverUser = ApplicationOptions.EmailUser;
@@ -23,8 +23,16 @@ namespace vmPing.Classes
             var mailFromFriendly = "vmPing";
             var mailToAddress = ApplicationOptions.EmailRecipient;
             var mailSubject = $"[vmPing] {hostName} <> {Strings.Email_Host} {hostStatus}";
+            if (hostAlias != null && hostAlias.Length > 0)
+            {
+                hostAlias = $"({hostAlias}) ";
+            }
+            else
+            {
+                hostAlias = string.Empty;
+            }
             var mailBody =
-                $"{hostName} {Strings.Email_Verb} {hostStatus}.{Environment.NewLine}" +
+                $"{hostName} {hostAlias}{Strings.Email_Verb} {hostStatus}.{Environment.NewLine}" +
                 $"{DateTime.Now.ToLongDateString()}  {DateTime.Now.ToLongTimeString()}";
 
             var message = new MailMessage();

@@ -49,7 +49,7 @@ namespace vmPing.Classes
                             {
                                 TriggerStatusChange(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Up });
                                 if (ApplicationOptions.IsEmailAlertEnabled)
-                                    Util.SendEmail("up", Hostname);
+                                    Util.SendEmail("up", Hostname, Alias);
                             }
 
                             Status = ProbeStatus.Up;
@@ -66,7 +66,7 @@ namespace vmPing.Classes
                                 Status = ProbeStatus.Down;
                                 TriggerStatusChange(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Down });
                                 if (ApplicationOptions.IsEmailAlertEnabled)
-                                    Util.SendEmail("down", Hostname);
+                                    Util.SendEmail("down", Hostname, Alias);
                             }
 
                             switch (reply.Status)
@@ -109,7 +109,7 @@ namespace vmPing.Classes
                         {
                             TriggerStatusChange(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Error });
                             if (ApplicationOptions.IsEmailAlertEnabled)
-                                Util.SendEmail("error", Hostname);
+                                Util.SendEmail("error", Hostname, Alias);
                         }
 
                         StopProbe(ProbeStatus.Error);

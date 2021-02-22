@@ -40,6 +40,7 @@ namespace vmPing.Views
 
         public static DialogWindow ErrorWindow(string message)
         {
+            System.Media.SystemSounds.Exclamation.Play();
             return new DialogWindow(
                 icon: DialogIcon.Error,
                 title: Strings.DialogTitle_Error,
@@ -50,6 +51,7 @@ namespace vmPing.Views
 
         public static DialogWindow WarningWindow(string message, string confirmButtonText)
         {
+            System.Media.SystemSounds.Exclamation.Play();
             return new DialogWindow(
                 icon: DialogIcon.Warning,
                 title: Strings.DialogTitle_Warning,

@@ -365,7 +365,7 @@ namespace vmPing.Views
                 try
                 {
                     if (Path.GetFileName(AudioDownFilePath.Text).IndexOfAny(Path.GetInvalidFileNameChars()) >= 0 ||
-                        !Directory.Exists(Path.GetDirectoryName(AudioDownFilePath.Text)) ||
+                        !File.Exists(AudioDownFilePath.Text) ||
                         Path.GetFileName(AudioDownFilePath.Text).Length < 1)
                     {
                         throw new Exception();
@@ -389,7 +389,7 @@ namespace vmPing.Views
                 try
                 {
                     if (Path.GetFileName(AudioUpFilePath.Text).IndexOfAny(Path.GetInvalidFileNameChars()) >= 0 ||
-                        !Directory.Exists(Path.GetDirectoryName(AudioUpFilePath.Text)) ||
+                        !File.Exists(AudioUpFilePath.Text) ||
                         Path.GetFileName(AudioUpFilePath.Text).Length < 1)
                     {
                         throw new Exception();

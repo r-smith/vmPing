@@ -244,7 +244,7 @@ namespace vmPing.Views
             // Validate TTL.
             if (!regex.IsMatch(TTL.Text) || int.Parse(TTL.Text) < 1 || int.Parse(TTL.Text) > 255)
             {
-                ShowError("Please enter a valid TTL between 1 and 255.", AdvancedTab, TTL);
+                ShowError("Please enter a valid time to live (TTL) between 1 and 255.", AdvancedTab, TTL);
                 return false;
             }
 
@@ -297,7 +297,7 @@ namespace vmPing.Views
 
                 if (SmtpServer.Text.Length == 0)
                 {
-                    ShowError("Please enter a valid address for your outgoing mail server.", EmailAlertsTab, SmtpServer);
+                    ShowError("Please enter a valid SMTP server address.", EmailAlertsTab, SmtpServer);
                     return false;
                 }
                 else if (SmtpPort.Text.Length == 0 || !regex.IsMatch(SmtpPort.Text))
@@ -307,12 +307,12 @@ namespace vmPing.Views
                 }
                 else if (EmailRecipientAddress.Text.Length == 0)
                 {
-                    ShowError("Please enter a valid recipient email address.  This is the address that will receive alerts.", EmailAlertsTab, EmailRecipientAddress);
+                    ShowError("Please enter a valid recipient email address. This address will receive email alerts from vmPing.", EmailAlertsTab, EmailRecipientAddress);
                     return false;
                 }
                 else if (EmailFromAddress.Text.Length == 0)
                 {
-                    ShowError("Please enter a valid 'from' address.  This address will appear as the sender for any alerts that are sent.", EmailAlertsTab, EmailFromAddress);
+                    ShowError("Please enter a valid 'from' address. This address appears as the sender for any alerts that are sent.", EmailAlertsTab, EmailFromAddress);
                     return false;
                 }
                 if (IsSmtpAuthenticationRequired.IsChecked == true)
@@ -343,7 +343,7 @@ namespace vmPing.Views
                 {
                     MessageBox.Show(
                         "You have chosen to save your SMTP credentials to disk." + Environment.NewLine + Environment.NewLine +
-                        "While the data is stored in an encrypted format, anyone with access to your vmPing configuration file can decrypt the data.",
+                        "While the data is stored in an encrypted format, anyone with access to your vmPing configuration file could potentially decrypt the data.",
                         "vmPing Warning",
                         MessageBoxButton.OK,
                         MessageBoxImage.Warning);
@@ -373,7 +373,7 @@ namespace vmPing.Views
                 }
                 catch
                 {
-                    ShowError("The specified path does not exist.  Please enter a valid path.", AudioAlertTab, AudioDownFilePath);
+                    ShowError("The specified path does not exist. Please enter a valid path.", AudioAlertTab, AudioDownFilePath);
                     return false;
                 }
                 ApplicationOptions.IsAudioDownAlertEnabled = true;
@@ -397,7 +397,7 @@ namespace vmPing.Views
                 }
                 catch
                 {
-                    ShowError("The specified path does not exist.  Please enter a valid path.", AudioAlertTab, AudioUpFilePath);
+                    ShowError("The specified path does not exist. Please enter a valid path.", AudioAlertTab, AudioUpFilePath);
                     return false;
                 }
                 ApplicationOptions.IsAudioUpAlertEnabled = true;

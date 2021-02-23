@@ -33,6 +33,8 @@ namespace vmPing.Classes
         public static string LogPath { get; set; }
         public static bool IsLogStatusChangesEnabled { get; set; } = false;
         public static string LogStatusChangesPath { get; set; }
+        public static bool IsAutoDismissEnabled { get; set; } = false;
+        public static int AutoDismissMilliseconds { get; set; } = 7000;
         public static PopupNotificationOption PopupOption { get; set; } = PopupNotificationOption.Always;
         public static int TTL { get; set; } = Constants.DefaultTTL;
         public static bool DontFragment { get; set; } = false;

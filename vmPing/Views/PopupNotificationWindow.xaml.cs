@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 using vmPing.Classes;
 
 namespace vmPing.Views
@@ -17,6 +18,8 @@ namespace vmPing.Views
     /// </summary>
     public partial class PopupNotificationWindow : Window
     {
+        private DispatcherTimer _AutoDismissTimer;
+
         public PopupNotificationWindow(ObservableCollection<StatusChangeLog> statusChangeLog)
         {
             InitializeComponent();
@@ -28,10 +31,30 @@ namespace vmPing.Views
             StatusHistoryList.ItemsSource = filteredChangeLog;
 
             ((INotifyCollectionChanged)StatusHistoryList.Items).CollectionChanged += PopupNotificationWindow_CollectionChanged;
+
+            _AutoDismissTimer = new DispatcherTimer();
+            _AutoDismissTimer.Tick += new EventHandler(AutoDismissTimer_Tick);
+            if (ApplicationOptions.IsAutoDismissEnabled)
+            {
+                _AutoDismissTimer.Interval = TimeSpan.FromMilliseconds(ApplicationOptions.AutoDismissMilliseconds);
+                _AutoDismissTimer.Start();
+            }
+        }
+
+        private void AutoDismissTimer_Tick(object sender, EventArgs e)
+        {
+            if (ApplicationOptions.IsAutoDismissEnabled)
+                Close();
         }
 
         private void PopupNotificationWindow_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            if (ApplicationOptions.IsAutoDismissEnabled)
+            {
+                _AutoDismissTimer.Stop();
+                _AutoDismissTimer.Interval = TimeSpan.FromMilliseconds(ApplicationOptions.AutoDismissMilliseconds);
+                _AutoDismissTimer.Start();
+            }
             ScaleWindowSize();
             ScrollToEnd();
         }

@@ -274,6 +274,14 @@ namespace vmPing.Classes
                 value: ApplicationOptions.PopupOption.ToString()));
             configuration.AppendChild(GenerateOptionNode(
                 xmlDocument: xd,
+                name: "IsAutoDismissEnabled",
+                value: ApplicationOptions.IsAutoDismissEnabled.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "AutoDismissMilliseconds",
+                value: ApplicationOptions.AutoDismissMilliseconds.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
                 name: "IsEmailAlertEnabled",
                 value: ApplicationOptions.IsEmailAlertEnabled.ToString()));
             configuration.AppendChild(GenerateOptionNode(
@@ -557,6 +565,14 @@ namespace vmPing.Classes
                     ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
                 else
                     ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Never;
+            }
+            if (options.TryGetValue("IsAutoDismissEnabled", out optionValue))
+            {
+                ApplicationOptions.IsAutoDismissEnabled = bool.Parse(optionValue);
+            }
+            if (options.TryGetValue("AutoDismissMilliseconds", out optionValue))
+            {
+                ApplicationOptions.AutoDismissMilliseconds = int.Parse(optionValue);
             }
             if (options.TryGetValue("IsEmailAlertEnabled", out optionValue))
             {

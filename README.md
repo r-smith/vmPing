@@ -6,7 +6,7 @@ vmPing
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
 **[Click here to download the latest release](https://github.com/R-Smith/vmPing/releases/latest/download/vmPing.exe)**
-##### (1.3.4 released on April 22, 2020)
+##### (1.3.8 released on February 23, 2021)
 
 ##### Notes
 * There is no installer.  Just run the .exe.
@@ -27,6 +27,15 @@ Screenshots
 
 Recent Changes
 --------------
+### Version 1.3.8
+* __New options window.__ The options window was given a minor makeover and now uses a vertical tab layout. This allows room for additional option screens in the future.
+* New Notifications tab in the options window for configuring popup notifications. You can now save a default popup notification setting.
+* New feature to auto-dismiss popup notifications. This is currently configured through the Notifications tab in the options window.
+* New feature to play a sound when a host comes up (previously you could only play sounds when a host went down).
+* If you have an alias set for a host, the alias is now shown in popup notifications and email alerts.
+* Bug fix: TCP port pings to IPv6 targets now work. If pinging a port on an IPv6 address, wrap the address in brackets, such as *[::1]:443* where *::1* is the target IPv6 address and *443* is the target TCP port.
+
+
 ### Version 1.3.4
 * Bug fix: A crash would occur if popup notifications were set to display only when minimized and a host status change occurred.  Thanks @chuckbales for the bug report!
 

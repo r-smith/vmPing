@@ -12,7 +12,6 @@
         BorderBrush="#636363"
         BorderThickness="1"
         Topmost="True"
-        Closing="Window_Closing"
         ShowActivated="False"
         MouseLeftButtonUp="Window_MouseLeftButtonUp"
         AllowsTransparency="True">

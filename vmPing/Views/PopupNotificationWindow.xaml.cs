@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using vmPing.Classes;
 
@@ -104,15 +103,6 @@ namespace vmPing.Views
             Rect desktopWorkingArea = SystemParameters.WorkArea;
             Left = desktopWorkingArea.Right - Width;
             Top = desktopWorkingArea.Bottom - Height;
-        }
-
-        private void Window_Closing(object sender, CancelEventArgs e)
-        {
-            Closing -= Window_Closing;
-            e.Cancel = true;
-            var anim = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
-            anim.Completed += (s, _) => Close();
-            BeginAnimation(OpacityProperty, anim);
         }
 
         private void Window_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)

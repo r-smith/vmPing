@@ -256,7 +256,10 @@ namespace vmPing.Views
             if (OptionsWindow.openWindow == null)
             {
                 // Open the options window.
-                new OptionsWindow().Show();
+                var optionsWnd = new OptionsWindow();
+                optionsWnd.Owner = this;
+                optionsWnd.ShowDialog();
+                UpdatePopupOptionIsCheckedState();
             }
             else
             {

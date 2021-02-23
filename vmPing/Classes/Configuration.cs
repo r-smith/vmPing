@@ -270,6 +270,10 @@ namespace vmPing.Classes
                 value: ApplicationOptions.AlertThreshold.ToString()));
             configuration.AppendChild(GenerateOptionNode(
                 xmlDocument: xd,
+                name: "PopupNotifications",
+                value: ApplicationOptions.PopupOption.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
                 name: "IsEmailAlertEnabled",
                 value: ApplicationOptions.IsEmailAlertEnabled.ToString()));
             configuration.AppendChild(GenerateOptionNode(
@@ -544,6 +548,15 @@ namespace vmPing.Classes
             if (options.TryGetValue("AlertThreshold", out optionValue))
             {
                 ApplicationOptions.AlertThreshold = int.Parse(optionValue);
+            }
+            if (options.TryGetValue("PopupNotifications", out optionValue))
+            {
+                if (optionValue.Equals(ApplicationOptions.PopupNotificationOption.Always.ToString()))
+                    ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Always;
+                else if (optionValue.Equals(ApplicationOptions.PopupNotificationOption.WhenMinimized.ToString()))
+                    ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
+                else
+                    ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Never;
             }
             if (options.TryGetValue("IsEmailAlertEnabled", out optionValue))
             {

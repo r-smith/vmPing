@@ -22,7 +22,7 @@
         </Style>
 
         <Style TargetType="DockPanel" x:Key="OptionsDockPanel">
-            <Setter Property="Margin" Value="0,4,0,3" />
+            <Setter Property="Margin" Value="0,3,0,3" />
             <Setter Property="DockPanel.Dock" Value="Top" />
         </Style>
 
@@ -34,10 +34,10 @@
         </Style>
 
         <Style TargetType="TextBlock" x:Key="OptionSubHeaderTextStyle">
-            <Setter Property="Margin" Value="0,0,0,8" />
+            <Setter Property="Margin" Value="0,0,0,4" />
             <Setter Property="Foreground" Value="#268bd2" />
-            <Setter Property="HorizontalAlignment" Value="Right" />
-            <Setter Property="FontSize" Value="12" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="FontSize" Value="13" />
             <Setter Property="FontWeight" Value="SemiBold" />
         </Style>
     </Window.Resources>
@@ -51,21 +51,14 @@
         <TabControl Style="{StaticResource TabControlStyle}" TabStripPlacement="Left" HorizontalContentAlignment="Left">
             <!-- TAB: General -->
             <TabItem Header="General" Name="GeneralTab" Style="{DynamicResource TabItemStyle}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0"
+                <DockPanel Margin="20,0,20,20" LastChildFill="False">
+                    <TextBlock DockPanel.Dock="Top"
                                Text="Probe Options"
                                Style="{StaticResource OptionHeaderTextStyle}" />
                     <!-- Probes: Ping Interval -->
-                    <StackPanel Grid.Row="1"
+                    <StackPanel DockPanel.Dock="Top"
                                 Orientation="Horizontal"
-                                Margin="20,10,0,0">
+                                Margin="0,10,0,0">
                         <Label Content="Ping interval:"
                                Width="110"
                                FontSize="14"
@@ -85,9 +78,9 @@
                     </StackPanel>
 
                     <!-- Probes: Ping Timeout -->
-                    <StackPanel Grid.Row="2"
+                    <StackPanel DockPanel.Dock="Top"
                                 Orientation="Horizontal"
-                                Margin="20,10,0,0">
+                                Margin="0,10,0,0">
                         <Label Content="Ping timeout:"
                                Width="110"
                                FontSize="14"
@@ -102,12 +95,12 @@
                         <Label Content="Seconds" Margin="10,0,0,0" FontSize="14" Foreground="#555555" />
                     </StackPanel>
 
-                    <Separator Grid.Row="3" Height="1" Background="#ccc" Margin="20,20,20,5" />
+                    <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" Margin="0,20,0,5" />
 
                     <!-- Alert Threshold -->
-                    <StackPanel Grid.Row="4"
+                    <StackPanel DockPanel.Dock="Top"
                                 Orientation="Horizontal"
-                                Margin="20,10,0,0">
+                                Margin="0,10,0,0">
                         <Label Content="Alert threshold:"
                                Width="110"
                                FontSize="14"
@@ -121,7 +114,7 @@
                                  FontSize="14" />
                         <Label Content="dropped pings" Margin="10,0,0,0" FontSize="14" Foreground="#555555" />
                     </StackPanel>
-                </Grid>
+                </DockPanel>
             </TabItem>
 
             <!-- TAB: Advanced -->
@@ -206,7 +199,7 @@
                     </DockPanel>
 
                     <!-- Total packet size -->
-                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left" Margin="20,15,0,0">
                         <TextBlock Foreground="#268bd2"
                                    Text="Total packet size:" />
                         <TextBlock Foreground="#dc322f"
@@ -259,14 +252,14 @@
             <!-- TAB: Email Alerts -->
             <TabItem Header="Email Alerts" Name="EmailAlertsTab" Style="{DynamicResource TabItemStyle}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <DockPanel>
+                    <DockPanel Margin="20,0,20,20">
 
                         <!-- Header -->
                         <TextBlock DockPanel.Dock="Top"
                                    Text="Email Alerts"
                                    Style="{StaticResource OptionHeaderTextStyle}" />
 
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="20,15,0,15">
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,15">
                             <CheckBox DockPanel.Dock="Top"
                                       Name="IsEmailAlertsEnabled"
                                       Content="Enable email alerts"
@@ -301,12 +294,10 @@
 
                         <DockPanel LastChildFill="False"
                                    DockPanel.Dock="Top"
-                                   Margin="20,0,20,0"
+                                   Margin="0"
                                    Visibility="{Binding IsChecked, ElementName=IsEmailAlertsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
-
-                            <!-- Separator -->
-                            <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" />
-
+                            
+                            <!-- Server information subheading -->
                             <TextBlock DockPanel.Dock="Top"
                                        Text="Server Information"
                                        Style="{StaticResource OptionSubHeaderTextStyle}" />
@@ -367,12 +358,11 @@
                                                  Name="SmtpPassword" />
                                 </DockPanel>
                             </StackPanel>
-
-                            <!-- Separator -->
-                            <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" Margin="0,15,0,0" />
-
+                            
+                            <!-- Email addresses subheading -->
                             <TextBlock DockPanel.Dock="Top"
-                                       Text="Email Settings"
+                                       Text="Email Addresses"
+                                       Margin="0,12,0,5"
                                        Style="{StaticResource OptionSubHeaderTextStyle}" />
 
                             <!-- Recipient Address-->
@@ -400,12 +390,12 @@
                             <Button Style="{StaticResource ButtonSecondaryStyle}"
                                     Name="TestEmailButton"
                                     Visibility="{Binding IsChecked, ElementName=IsEmailAlertsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    DockPanel.Dock="Bottom"
+                                    DockPanel.Dock="Top"
                                     Click="TestEmail_Click"
-                                    Width="70"
-                                    Margin="0,25,0,10"
+                                    Width="100"
+                                    Margin="0,23,0,0"
                                     Content="Test"
-                                    HorizontalAlignment="Right"/>
+                                    HorizontalAlignment="Left"/>
                         </DockPanel>
                     </DockPanel>
                 </ScrollViewer>
@@ -413,7 +403,7 @@
 
             <!-- TAB: Audio Alerts -->
             <TabItem Header="Audio Alerts" Name="AudioAlertTab" Style="{DynamicResource TabItemStyle}">
-                <DockPanel>
+                <DockPanel Margin="20,0,20,20">
 
                     <!-- Header -->
                     <TextBlock DockPanel.Dock="Top"
@@ -421,7 +411,7 @@
                                Style="{StaticResource OptionHeaderTextStyle}" />
 
                     <!-- Audio Alert Down: checkbox / tooltip -->
-                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="20,15,0,0">
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,0">
                         <CheckBox DockPanel.Dock="Top"
                                   Name="IsAudioDownAlertEnabled"
                                   Click="IsAudioDownAlertEnabled_Click"
@@ -456,7 +446,7 @@
 
                     <!-- Audio Alert Down: Filepath / play button / browse button -->
                     <Grid DockPanel.Dock="Top"
-                          Margin="41,10,20,0"
+                          Margin="30,10,0,0"
                           VerticalAlignment="Top"
                           Visibility="{Binding IsChecked, ElementName=IsAudioDownAlertEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <StackPanel>
@@ -466,7 +456,13 @@
                             <TextBox Style="{StaticResource TextBoxStyle}"
                                      Margin="0,5,0,8"
                                      Name="AudioDownFilePath" />
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <!-- Browse button -->
+                                <Button Style="{StaticResource ButtonSecondaryStyle}"
+                                        Click="AudioDownBrowse_Click"
+                                        Width="70"
+                                        Content="Browse"/>
+
                                 <!-- Play button -->
                                 <Grid>
                                     <Grid.Style>
@@ -481,27 +477,20 @@
                                     <Button Style="{StaticResource ButtonSecondaryStyle}"
                                             Click="AudioDownPlay_Click"
                                             Width="70"
-                                            Margin="0,0,10,0"
-                                            Content="Play"
-                                            HorizontalAlignment="Right">
+                                            Margin="10,0,0,0"
+                                            Content="Play">
                                     </Button>
                                 </Grid>
-
-                                <!-- Browse button -->
-                                <Button Style="{StaticResource ButtonSecondaryStyle}"
-                                        Click="AudioDownBrowse_Click"
-                                        Width="70"
-                                        Content="Browse"
-                                        HorizontalAlignment="Right"/>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
-
-                    <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" Margin="20,20,20,5"
+                    
+                    <!-- Hidden separator -->
+                    <Separator DockPanel.Dock="Top" Height="1" Background="Transparent" Margin="0,20,0,0"
                                Visibility="{Binding IsChecked, ElementName=IsAudioDownAlertEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     
                     <!-- Audio Alert Up: checkbox / tooltip -->
-                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="20,15,0,0">
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,0">
                         <CheckBox Name="IsAudioUpAlertEnabled"
                                   Click="IsAudioUpAlertEnabled_Click"
                                   Content="Enable audio alert: host up"
@@ -535,7 +524,7 @@
                     
                     <!-- Audio Alert Down: Filepath / play button / browse button -->
                     <Grid DockPanel.Dock="Top"
-                          Margin="41,10,20,0"
+                          Margin="30,10,0,0"
                           VerticalAlignment="Top"
                           Visibility="{Binding IsChecked, ElementName=IsAudioUpAlertEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <StackPanel>
@@ -545,7 +534,13 @@
                             <TextBox Style="{StaticResource TextBoxStyle}"
                                      Margin="0,5,0,8"
                                      Name="AudioUpFilePath" />
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <!-- Browse button -->
+                                <Button Style="{StaticResource ButtonSecondaryStyle}"
+                                        Click="AudioUpBrowse_Click"
+                                        Width="70"
+                                        Content="Browse"/>
+                                
                                 <!-- Play button -->
                                 <Grid>
                                     <Grid.Style>
@@ -560,18 +555,10 @@
                                     <Button Style="{StaticResource ButtonSecondaryStyle}"
                                             Click="AudioUpPlay_Click"
                                             Width="70"
-                                            Margin="0,0,10,0"
-                                            Content="Play"
-                                            HorizontalAlignment="Right">
+                                            Margin="10,0,0,0"
+                                            Content="Play">
                                     </Button>
                                 </Grid>
-
-                                <!-- Browse button -->
-                                <Button Style="{StaticResource ButtonSecondaryStyle}"
-                                        Click="AudioUpBrowse_Click"
-                                        Width="70"
-                                        Content="Browse"
-                                        HorizontalAlignment="Right"/>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
@@ -580,14 +567,15 @@
 
             <!-- TAB: Log Output -->
             <TabItem Header="Log Output" Name="LogOutputTab" Style="{DynamicResource TabItemStyle}">
-                <DockPanel>
+                <DockPanel Margin="20,0,20,20">
 
                     <!-- Header -->
                     <TextBlock DockPanel.Dock="Top"
                                Text="Log Output"
                                Style="{StaticResource OptionHeaderTextStyle}" />
-
-                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="20,15,0,0">
+                    
+                    <!-- Log all ping output -->
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,0">
                         <CheckBox DockPanel.Dock="Top"
                                   Name="IsLogOutputEnabled"
                                   Content="Write ping output to plain text files"
@@ -619,7 +607,7 @@
                         </Border>
                     </StackPanel>
                     <Grid DockPanel.Dock="Top"
-                          Margin="41,10,20,0"
+                          Margin="30,10,0,0"
                           VerticalAlignment="Top"
                           Visibility="{Binding IsChecked, ElementName=IsLogOutputEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <StackPanel>
@@ -633,11 +621,16 @@
                                     Click="BrowseLogPath_Click"
                                     Width="70"
                                     Content="Browse"
-                                    HorizontalAlignment="Right"/>
+                                    HorizontalAlignment="Left"/>
                         </StackPanel>
                     </Grid>
 
-                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="20,15,0,0">
+                    <!-- Hidden separator -->
+                    <Separator DockPanel.Dock="Top" Height="1" Background="Transparent" Margin="0,20,0,0"
+                               Visibility="{Binding IsChecked, ElementName=IsLogOutputEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    
+                    <!-- Log status changes -->
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,0">
                         <CheckBox DockPanel.Dock="Top"
                                   Name="IsLogStatusChangesEnabled"
                                   Content="Log status changes to text file"
@@ -669,7 +662,7 @@
                         </Border>
                     </StackPanel>
                     <Grid DockPanel.Dock="Top"
-                          Margin="41,10,20,0"
+                          Margin="30,10,0,0"
                           VerticalAlignment="Top"
                           Visibility="{Binding IsChecked, ElementName=IsLogStatusChangesEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <StackPanel>
@@ -683,7 +676,7 @@
                                     Click="BrowseLogStatusChangesPath_Click"
                                     Width="70"
                                     Content="Browse"
-                                    HorizontalAlignment="Right"/>
+                                    HorizontalAlignment="Left"/>
                         </StackPanel>
                     </Grid>
                 </DockPanel>
@@ -695,7 +688,7 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <DockPanel LastChildFill="False"
                                Name="ColorsDockPanel"
-                               Margin="20,0">
+                               Margin="20,0,20,20">
 
                         <!-- Header -->
                         <TextBlock DockPanel.Dock="Top"
@@ -703,186 +696,202 @@
                                    Style="{StaticResource OptionHeaderTextStyle}" />
 
                         <!-- Probe background colors -->
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Probe Background] : Inactive" VerticalAlignment="Center" />
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Probe Background"
+                                   Margin="0,10,0,0"
+                                   Style="{StaticResource OptionSubHeaderTextStyle}" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Inactive" VerticalAlignment="Center" />
                             <TextBox Name="BackgroundColor_Probe_Inactive"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=BackgroundColor_Probe_Inactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Probe Background] : Up" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Up" VerticalAlignment="Center" />
                             <TextBox Name="BackgroundColor_Probe_Up"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=BackgroundColor_Probe_Up, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Probe Background] : Down" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Down" VerticalAlignment="Center" />
                             <TextBox Name="BackgroundColor_Probe_Down"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=BackgroundColor_Probe_Down, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Probe Background] : Indeterminate" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Indeterminate" VerticalAlignment="Center" />
                             <TextBox Name="BackgroundColor_Probe_Indeterminate"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=BackgroundColor_Probe_Indeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Probe Background] : Error" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Error" VerticalAlignment="Center" />
                             <TextBox Name="BackgroundColor_Probe_Error"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=BackgroundColor_Probe_Error, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
 
                         <!-- Probe foreground colors -->
-                        <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="#ccc" Margin="0,20,0,0" />
+                        <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="Transparent" Margin="0,20,0,0" />
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Probe Foreground"
+                                   Margin="0"
+                                   Style="{StaticResource OptionSubHeaderTextStyle}" />
 
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Probe Foreground] : Inactive" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Inactive" VerticalAlignment="Center" />
                             <TextBox Name="ForegroundColor_Probe_Inactive"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=ForegroundColor_Probe_Inactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Probe Foreground] : Up" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Up" VerticalAlignment="Center" />
                             <TextBox Name="ForegroundColor_Probe_Up"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=ForegroundColor_Probe_Up, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Probe Foreground] : Down" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Down" VerticalAlignment="Center" />
                             <TextBox Name="ForegroundColor_Probe_Down"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=ForegroundColor_Probe_Down, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Probe Foreground] : Indeterminate" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Indeterminate" VerticalAlignment="Center" />
                             <TextBox Name="ForegroundColor_Probe_Indeterminate"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=ForegroundColor_Probe_Indeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Probe Foreground] : Error" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Error" VerticalAlignment="Center" />
                             <TextBox Name="ForegroundColor_Probe_Error"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=ForegroundColor_Probe_Error, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
 
                         <!-- Statistics foreground colors -->
-                        <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="#ccc" Margin="0,20,0,0" />
+                        <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="Transparent" Margin="0,20,0,0" />
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Statistics Foreground"
+                                   Margin="0"
+                                   Style="{StaticResource OptionSubHeaderTextStyle}" />
 
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Statistics Foreground] : Inactive" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Inactive" VerticalAlignment="Center" />
                             <TextBox Name="ForegroundColor_Stats_Inactive"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=ForegroundColor_Stats_Inactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Statistics Foreground] : Up" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Up" VerticalAlignment="Center" />
                             <TextBox Name="ForegroundColor_Stats_Up"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=ForegroundColor_Stats_Up, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Statistics Foreground] : Down" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Down" VerticalAlignment="Center" />
                             <TextBox Name="ForegroundColor_Stats_Down"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=ForegroundColor_Stats_Down, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Statistics Foreground] : Indeterminate" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Indeterminate" VerticalAlignment="Center" />
                             <TextBox Name="ForegroundColor_Stats_Indeterminate"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=ForegroundColor_Stats_Indeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,10">
-                            <TextBlock Width="230" Text="[Statistics Foreground] : Error" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,10">
+                            <TextBlock Width="150" Text="Error" VerticalAlignment="Center" />
                             <TextBox Name="ForegroundColor_Stats_Error"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=ForegroundColor_Stats_Error, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
 
                         <!-- Alias foreground colors -->
-                        <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="#ccc" Margin="0,20,0,0" />
+                        <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="Transparent" Margin="0,20,0,0" />
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Alias Foreground"
+                                   Margin="0"
+                                   Style="{StaticResource OptionSubHeaderTextStyle}" />
 
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Alias Foreground] : Inactive" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Inactive" VerticalAlignment="Center" />
                             <TextBox Name="ForegroundColor_Alias_Inactive"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=ForegroundColor_Alias_Inactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Alias Foreground] : Up" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Up" VerticalAlignment="Center" />
                             <TextBox Name="ForegroundColor_Alias_Up"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=ForegroundColor_Alias_Up, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Alias Foreground] : Down" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Down" VerticalAlignment="Center" />
                             <TextBox Name="ForegroundColor_Alias_Down"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=ForegroundColor_Alias_Down, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Width="230" Text="[Alias Foreground] : Indeterminate" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Indeterminate" VerticalAlignment="Center" />
                             <TextBox Name="ForegroundColor_Alias_Indeterminate"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=ForegroundColor_Alias_Indeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,10">
-                            <TextBlock Width="230" Text="[Alias Foreground] : Error" VerticalAlignment="Center" />
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,10">
+                            <TextBlock Width="150" Text="Error" VerticalAlignment="Center" />
                             <TextBox Name="ForegroundColor_Alias_Error"
                                      Style="{StaticResource HtmlTextBoxStyle}"
                                      PreviewTextInput="HtmlColor_PreviewTextInput" />
                             <Border Background="{Binding ElementName=ForegroundColor_Alias_Error, Path=Text, Converter={StaticResource StringToBrushConverter}}"
-                                    BorderBrush="Black" BorderThickness="1"  Width="50" Margin="15,0,0,0"/>
+                                    BorderBrush="Black" BorderThickness="1"  Width="80" Margin="15,0,0,0"/>
                         </StackPanel>
 
                         <!-- Restore defaults button -->
-                        <Grid DockPanel.Dock="Top" Margin="0,15,0,10">
+                        <Grid DockPanel.Dock="Top" Margin="0,15,0,0">
                             <Button Style="{StaticResource ButtonSecondaryStyle}"
                                     Click="RestoreDefaultColors_Click"
                                     Padding="15,5"
                                     Content="Restore Defaults"
-                                    HorizontalAlignment="Right"/>
+                                    HorizontalAlignment="Left"/>
                         </Grid>
                     </DockPanel>
                 </ScrollViewer>

@@ -394,6 +394,7 @@ namespace vmPing.Classes
 
                 LoadConfigurationNode(xd.SelectNodes("/vmping/configuration/option"));
                 LoadColorsNode(xd.SelectNodes("/vmping/colors/option"));
+                ApplicationOptions.UpdatePingOptions();
             }
 
             catch (Exception ex)

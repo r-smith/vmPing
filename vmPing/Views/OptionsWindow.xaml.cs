@@ -1,12 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Media;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using vmPing.Classes;
 
 namespace vmPing.Views
@@ -17,6 +19,16 @@ namespace vmPing.Views
     public partial class OptionsWindow : Window
     {
         public static OptionsWindow openWindow = null;
+
+        [DllImport("user32.dll")]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        [DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        private const int GWL_STYLE = -16;
+
+        private const int WS_MAXIMIZEBOX = 0x10000; //maximize button
+        private const int WS_MINIMIZEBOX = 0x20000; //minimize button
 
         public OptionsWindow()
         {
@@ -736,6 +748,22 @@ namespace vmPing.Views
             ForegroundColor_Alias_Down.Text = Constants.Color_Alias_Foreground_Down;
             ForegroundColor_Alias_Error.Text = Constants.Color_Alias_Foreground_Error;
             ForegroundColor_Alias_Indeterminate.Text = Constants.Color_Alias_Foreground_Indeterminate;
+        }
+
+        private void Window_SourceInitialized(object sender, EventArgs e)
+        {
+            HideMinimizeAndMaximizeButtons();
+        }
+
+        protected void HideMinimizeAndMaximizeButtons()
+        {
+            IntPtr _windowHandle = new WindowInteropHelper(this).Handle;
+            if (_windowHandle == null)
+            {
+                return;
+            }
+
+            SetWindowLong(_windowHandle, GWL_STYLE, GetWindowLong(_windowHandle, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_MINIMIZEBOX);
         }
     }
 }

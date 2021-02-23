@@ -4,13 +4,14 @@
         xmlns:classes="clr-namespace:vmPing.Classes"
         Title="vmPing - Options"
         UseLayoutRounding="True"
-        Height="540"
-        Width="475"
+        Height="540" MinHeight="540"
+        Width="580" MinWidth="580"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize"
-        Background="#F4F4F4"
+        ResizeMode="CanResize"
+        Background="#e1e1e1"
         Closed="Window_Closed"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        SourceInitialized="Window_SourceInitialized">
 
     <Window.Resources>
         <Style TargetType="StackPanel" x:Key="OptionsStackPanel">
@@ -41,15 +42,15 @@
         </Style>
     </Window.Resources>
 
-    <Grid Margin="9">
+    <Grid Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TabControl Style="{StaticResource TabControlStyle}">
+        <TabControl Style="{StaticResource TabControlStyle}" TabStripPlacement="Left" HorizontalContentAlignment="Left">
             <!-- TAB: General -->
-            <TabItem Header="General" Name="GeneralTab">
+            <TabItem Header="General" Name="GeneralTab" Style="{DynamicResource TabItemStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -124,7 +125,7 @@
             </TabItem>
 
             <!-- TAB: Advanced -->
-            <TabItem Header="Advanced" Name="AdvancedTab">
+            <TabItem Header="Advanced" Name="AdvancedTab" Style="{DynamicResource TabItemStyle}">
                 <DockPanel LastChildFill="False" Margin="20,0,20,20">
 
                     <!-- Header -->
@@ -256,7 +257,7 @@
             </TabItem>
 
             <!-- TAB: Email Alerts -->
-            <TabItem Header="Email Alerts" Name="EmailAlertsTab">
+            <TabItem Header="Email Alerts" Name="EmailAlertsTab" Style="{DynamicResource TabItemStyle}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <DockPanel>
 
@@ -411,7 +412,7 @@
             </TabItem>
 
             <!-- TAB: Audio Alerts -->
-            <TabItem Header="Audio Alerts" Name="AudioAlertTab">
+            <TabItem Header="Audio Alerts" Name="AudioAlertTab" Style="{DynamicResource TabItemStyle}">
                 <DockPanel>
 
                     <!-- Header -->
@@ -578,7 +579,7 @@
             </TabItem>
 
             <!-- TAB: Log Output -->
-            <TabItem Header="Log Output" Name="LogOutputTab">
+            <TabItem Header="Log Output" Name="LogOutputTab" Style="{DynamicResource TabItemStyle}">
                 <DockPanel>
 
                     <!-- Header -->
@@ -690,7 +691,7 @@
 
 
             <!-- TAB: Layout -->
-            <TabItem Header="Layout" Name="LayoutTab">
+            <TabItem Header="Layout" Name="LayoutTab" Style="{DynamicResource TabItemStyle}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <DockPanel LastChildFill="False"
                                Name="ColorsDockPanel"
@@ -891,24 +892,22 @@
 
 
         <!-- Button Section -->
-        <DockPanel Grid.Row="1" Margin="0,9,0,0" HorizontalAlignment="Right">
-            <CheckBox Name="SaveAsDefaults" DockPanel.Dock="Top" HorizontalAlignment="Right">Save as application defaults</CheckBox>
-            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,9,0,0" HorizontalAlignment="Right">
-                <Button Style="{StaticResource ButtonStandardStyle}"
-                    Click="btnOk_Click"
-                    Margin="0,0,9,0"
-                    Width="70"
-                    Content="OK" />
-                <Button Style="{StaticResource ButtonStandardStyle}"
-                    Click="btnCancel_Click"
-                    Margin="0,0,9,0"
-                    Width="70"
-                    Content="Cancel" />
-                <Button Style="{StaticResource ButtonStandardStyle}"
-                    Width="70"
-                    IsEnabled="False"
-                    Content="Apply" />
-            </StackPanel>
-        </DockPanel>
+        <Border Grid.Row="1" BorderBrush="#dfdfdf" Background="#f0f0f0" BorderThickness="0,1,0,0">
+            <DockPanel Margin="9" HorizontalAlignment="Right">
+                <CheckBox Name="SaveAsDefaults" DockPanel.Dock="Top" HorizontalAlignment="Right">Save as application defaults</CheckBox>
+                <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,9,0,0" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource ButtonStandardStyle}"
+                            Click="btnOk_Click"
+                            Margin="0,0,9,0"
+                            Width="100"
+                            Content="OK" />
+                    <Button Style="{StaticResource ButtonStandardStyle}"
+                            Click="btnCancel_Click"
+                            Margin="0"
+                            Width="100"
+                            Content="Cancel" />
+                </StackPanel>
+            </DockPanel>
+        </Border>
     </Grid>
 </Window>

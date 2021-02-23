@@ -101,6 +101,8 @@ namespace vmPing.Views
                     PopupsAlwaysOption.IsChecked = true;
                     break;
             }
+            IsAutoDismissEnabled.IsChecked = ApplicationOptions.IsAutoDismissEnabled;
+            AutoDismissInterval.Text = (ApplicationOptions.AutoDismissMilliseconds / 1000).ToString();
         }
 
         private void PopulateEmailAlertOptions()
@@ -272,6 +274,24 @@ namespace vmPing.Views
 
         private bool SaveNotificationOptions()
         {
+            if (IsAutoDismissEnabled.IsChecked == true)
+            {
+                if (int.TryParse(AutoDismissInterval.Text, out int result) && result > 0 && result < 100)
+                {
+                    ApplicationOptions.AutoDismissMilliseconds = result * 1000;
+                    ApplicationOptions.IsAutoDismissEnabled = true;
+                }
+                else
+                {
+                    ShowError("Please enter a valid number of seconds for the auto-dismiss interval.", NotificationsTab, AutoDismissInterval);
+                    return false;
+                }
+            }
+            else
+            {
+                ApplicationOptions.IsAutoDismissEnabled = false;
+            }
+
             if (PopupsMinimizedOption.IsChecked == true)
                 ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
             else if (PopupsAlwaysOption.IsChecked == true)

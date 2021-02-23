@@ -254,10 +254,41 @@
                 <DockPanel Margin="20,0,20,20" LastChildFill="False">
                     
                     <!-- Header -->
-                    <TextBlock DockPanel.Dock="Top"
-                               Text="Popup Notifications"
-                               Style="{StaticResource OptionHeaderTextStyle}" />
-
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="False">
+                        <TextBlock DockPanel.Dock="Left"
+                                   Text="Popup Notifications"
+                                   Style="{StaticResource OptionHeaderTextStyle}" />
+                        <Border DockPanel.Dock="Left"
+                                Background="Transparent"
+                                Margin="8,1,0,0"
+                                Padding="3"
+                                VerticalAlignment="Center"
+                                ToolTipService.InitialShowDelay="0"
+                                ToolTipService.ShowDuration="60000">
+                            <Border.ToolTip>
+                                <ToolTip Background="#404040">
+                                    <TextBlock Width="300"
+                                               Margin="5,1"
+                                               FontSize="14"
+                                               TextWrapping="Wrap"
+                                               Foreground="#f2f2f2">
+                                        <Run Text="Popup notifications are displayed when a host you are monitoring changes status (goes down or up)."/>
+                                        <LineBreak/>
+                                        <LineBreak/>
+                                        <Run Text="You can disable notifications entirely, choose to show them only when vmPing is minimized, or always show notifications."/>
+                                    </TextBlock>
+                                </ToolTip>
+                            </Border.ToolTip>
+                            <Image Source="/Resources/font-awesome_4-7-0_info-circle_16_0_268bd2_none.png"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Width="16" Height="16"
+                                   Opacity="0.9"/>
+                        </Border>
+                    </DockPanel>
+                    
+                    
+                    <!-- Popup notification option radio button group -->
                     <RadioButton DockPanel.Dock="Top"
                                  GroupName="PopupNotifications"
                                  Content="Disabled"
@@ -265,8 +296,9 @@
                                  Margin="0,15,0,0"
                                  VerticalAlignment="Center"
                                  VerticalContentAlignment="Center"
+                                 HorizontalAlignment="Left"
                                  FontSize="14"
-                                 Foreground="#555555" />
+                                 Foreground="#333" />
                     <RadioButton DockPanel.Dock="Top"
                                  GroupName="PopupNotifications"
                                  Content="Show when minimized"
@@ -274,17 +306,68 @@
                                  Margin="0,6"
                                  VerticalAlignment="Center"
                                  VerticalContentAlignment="Center"
+                                 HorizontalAlignment="Left"
                                  FontSize="14"
-                                 Foreground="#555555" />
+                                 Foreground="#333" />
                     <RadioButton DockPanel.Dock="Top"
                                  GroupName="PopupNotifications"
                                  Content="Always show"
                                  Name="PopupsAlwaysOption"
                                  VerticalAlignment="Center"
                                  VerticalContentAlignment="Center"
+                                 HorizontalAlignment="Left"
                                  IsChecked="True"
                                  FontSize="14"
-                                 Foreground="#555555" />
+                                 Foreground="#333" />
+                    
+                    <!-- Auto-dismiss enabled checkbox -->
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,20,0,5">
+                        <CheckBox DockPanel.Dock="Left"
+                                  Name="IsAutoDismissEnabled"
+                                  Content="Auto-dismiss notifications"
+                                  IsChecked="True"
+                                  VerticalContentAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Left"
+                                  FontSize="14" />
+                        <Border DockPanel.Dock="Left"
+                                Background="Transparent"
+                                Margin="8,1,0,0"
+                                Padding="3"
+                                ToolTipService.InitialShowDelay="0"
+                                ToolTipService.ShowDuration="60000">
+                            <Border.ToolTip>
+                                <ToolTip Background="#404040">
+                                    <TextBlock Width="300"
+                                               Margin="5,1"
+                                               FontSize="14"
+                                               TextWrapping="Wrap"
+                                               Foreground="#f2f2f2"
+                                               Text="When enabled, popup notifications will automatically close after the specified number of seconds."/>
+                                </ToolTip>
+                            </Border.ToolTip>
+                            <Image Source="/Resources/font-awesome_4-7-0_info-circle_16_0_268bd2_none.png"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Width="16" Height="16"
+                                   Opacity="0.9"/>
+                        </Border>
+                    </DockPanel>
+                    
+                    <!-- Auto-dismiss interval textbox -->
+                    <StackPanel DockPanel.Dock="Top"
+                                Visibility="{Binding IsChecked, ElementName=IsAutoDismissEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Margin="50,0,0,0"
+                                Orientation="Horizontal">
+                        <TextBox Name="AutoDismissInterval"
+                                 PreviewTextInput="txtNumericTextbox_PreviewTextInput"
+                                 Width="60"
+                                 VerticalContentAlignment="Center"
+                                 Padding="3,0,0,0"
+                                 MaxLength="2"
+                                 FontSize="14" />
+                        <Label Content="Seconds" Margin="10,0,0,0" FontSize="14" Foreground="#555555" />
+                    </StackPanel>
                 </DockPanel>
             </TabItem>
             

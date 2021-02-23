@@ -35,6 +35,7 @@ namespace vmPing.Views
             InitializeComponent();
 
             PopulateGeneralOptions();
+            PopulateNotificationOptions();
             PopulateEmailAlertOptions();
             PopulateAudioAlertOptions();
             PopulateLogOutputOptions();
@@ -81,6 +82,25 @@ namespace vmPing.Views
             txtPingTimeout.Text = pingTimeout.ToString();
             txtAlertThreshold.Text = ApplicationOptions.AlertThreshold.ToString();
             cboPingInterval.Text = pingIntervalText;
+        }
+
+        private void PopulateNotificationOptions()
+        {
+            PopupsDisabledOption.IsChecked = false;
+            PopupsMinimizedOption.IsChecked = false;
+            PopupsAlwaysOption.IsChecked = false;
+            switch (ApplicationOptions.PopupOption)
+            {
+                case ApplicationOptions.PopupNotificationOption.Never:
+                    PopupsDisabledOption.IsChecked = true;
+                    break;
+                case ApplicationOptions.PopupNotificationOption.WhenMinimized:
+                    PopupsMinimizedOption.IsChecked = true;
+                    break;
+                case ApplicationOptions.PopupNotificationOption.Always:
+                    PopupsAlwaysOption.IsChecked = true;
+                    break;
+            }
         }
 
         private void PopulateEmailAlertOptions()
@@ -157,6 +177,9 @@ namespace vmPing.Views
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
             if (SaveGeneralOptions() == false)
+                return;
+
+            if (SaveNotificationOptions() == false)
                 return;
 
             if (SaveEmailAlertOptions() == false)
@@ -242,6 +265,19 @@ namespace vmPing.Views
                 alertThreshold = 1;
 
             ApplicationOptions.AlertThreshold = alertThreshold;
+
+            return true;
+        }
+
+
+        private bool SaveNotificationOptions()
+        {
+            if (PopupsMinimizedOption.IsChecked == true)
+                ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
+            else if (PopupsAlwaysOption.IsChecked == true)
+                ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Always;
+            else
+                ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Never;
 
             return true;
         }

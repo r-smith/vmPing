@@ -248,7 +248,46 @@
                     </DockPanel>
                 </DockPanel>
             </TabItem>
+            
+            <!-- TAB: Notifications -->
+            <TabItem Header="Notifications" Name="NotificationsTab" Style="{DynamicResource TabItemStyle}">
+                <DockPanel Margin="20,0,20,20" LastChildFill="False">
+                    
+                    <!-- Header -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Popup Notifications"
+                               Style="{StaticResource OptionHeaderTextStyle}" />
 
+                    <RadioButton DockPanel.Dock="Top"
+                                 GroupName="PopupNotifications"
+                                 Content="Disabled"
+                                 Name="PopupsDisabledOption"
+                                 Margin="0,15,0,0"
+                                 VerticalAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontSize="14"
+                                 Foreground="#555555" />
+                    <RadioButton DockPanel.Dock="Top"
+                                 GroupName="PopupNotifications"
+                                 Content="Show when minimized"
+                                 Name="PopupsMinimizedOption"
+                                 Margin="0,6"
+                                 VerticalAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontSize="14"
+                                 Foreground="#555555" />
+                    <RadioButton DockPanel.Dock="Top"
+                                 GroupName="PopupNotifications"
+                                 Content="Always show"
+                                 Name="PopupsAlwaysOption"
+                                 VerticalAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 IsChecked="True"
+                                 FontSize="14"
+                                 Foreground="#555555" />
+                </DockPanel>
+            </TabItem>
+            
             <!-- TAB: Email Alerts -->
             <TabItem Header="Email Alerts" Name="EmailAlertsTab" Style="{DynamicResource TabItemStyle}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">

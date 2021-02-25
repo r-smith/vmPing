@@ -14,12 +14,18 @@
         Topmost="True"
         ShowActivated="False"
         MouseLeftButtonUp="Window_MouseLeftButtonUp"
+        RenderTransformOrigin="1,1"
         AllowsTransparency="True">
+    <Window.RenderTransform>
+        <ScaleTransform x:Name="scaleTransform" ScaleX="1" ScaleY="1"/>
+    </Window.RenderTransform>
     <Window.Triggers>
         <EventTrigger RoutedEvent="Window.Loaded">
             <BeginStoryboard>
                 <Storyboard>
                     <DoubleAnimation Duration="00:00:00.3" Storyboard.TargetProperty="Opacity" From="0" To="0.99" />
+                    <DoubleAnimation Duration="00:00:00.2" Storyboard.TargetName="scaleTransform" Storyboard.TargetProperty="ScaleX" From="0" To="1" />
+                    <DoubleAnimation Duration="00:00:00.2" Storyboard.TargetName="scaleTransform" Storyboard.TargetProperty="ScaleY" From="0" To="1" />
                 </Storyboard>
             </BeginStoryboard>
         </EventTrigger>

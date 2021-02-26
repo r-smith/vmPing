@@ -2,10 +2,11 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:resource="clr-namespace:vmPing.Properties"
-        Title="vmPing"
+        Title="New Alias"
         UseLayoutRounding="True"
-        Height="205"
-        Width="390"
+        Height="Auto"
+        Width="400"
+        SizeToContent="Height"
         ResizeMode="NoResize"
         Background="#fff"
         WindowStartupLocation="CenterOwner"
@@ -45,7 +46,7 @@
             </DockPanel>
 
             <!-- Alias TextBox-->
-            <DockPanel DockPanel.Dock="Top">
+            <DockPanel DockPanel.Dock="Top" Margin="0,0,0,10">
                 <Border Width="50" Margin="0,0,15,0">
                     <TextBlock Text="{x:Static resource:Strings.NewAlias_Alias}"
                                FontSize="14"
@@ -63,15 +64,15 @@
 
         <!-- Buttons -->
         <Border Grid.Row="1" Background="#f0f0f0" BorderBrush="#dfdfdf" BorderThickness="0,1,0,0">
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="9">
                 <Button Style="{StaticResource ButtonStandardStyle}"
                         IsDefault="True"
-                        Margin="0,0,8,0"
+                        Margin="0,0,9,0"
                         Click="Save_Click"
-                        Width="100"
+                        Width="85"
                         Content="{x:Static resource:Strings.DialogButton_Save}" />
                 <Button Style="{StaticResource ButtonStandardStyle}"
-                        Width="100"
+                        Width="85"
                         IsCancel="True"
                         Content="{x:Static resource:Strings.DialogButton_Cancel}" />
             </StackPanel>

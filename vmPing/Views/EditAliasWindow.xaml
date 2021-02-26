@@ -5,7 +5,7 @@
         Title="Edit Alias"
         UseLayoutRounding="True"
         Height="Auto"
-        Width="390"
+        Width="400"
         ResizeMode="NoResize"
         Background="#fff"
         SizeToContent="Height"
@@ -32,7 +32,7 @@
             <TextBox DockPanel.Dock="Top"
                      Name="MyAlias"
                      Style="{StaticResource TextBoxStyle}"
-                     Margin="0,4,0,10"
+                     Margin="0,0,0,10"
                      MaxLength="64"
                      />
         </DockPanel>

@@ -61,17 +61,17 @@ namespace vmPing.Views
 
             if (ApplicationOptions.PingInterval >= 3600000 && ApplicationOptions.PingInterval % 3600000 == 0)
             {
-                pingIntervalText = "Hours";
+                pingIntervalText = "hours";
                 pingIntervalDivisor = 3600000;
             }
             else if (ApplicationOptions.PingInterval >= 60000 && ApplicationOptions.PingInterval % 60000 == 0)
             {
-                pingIntervalText = "Minutes";
+                pingIntervalText = "minutes";
                 pingIntervalDivisor = 60000;
             }
             else
             {
-                pingIntervalText = "Seconds";
+                pingIntervalText = "seconds";
                 pingIntervalDivisor = 1000;
             }
 
@@ -231,13 +231,13 @@ namespace vmPing.Views
 
             switch (cboPingInterval.Text)
             {
-                case "Seconds":
+                case "seconds":
                     multiplier = 1000;
                     break;
-                case "Minutes":
+                case "minutes":
                     multiplier = 1000 * 60;
                     break;
-                case "Hours":
+                case "hours":
                     multiplier = 1000 * 60 * 60;
                     break;
             }

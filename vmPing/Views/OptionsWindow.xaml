@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:classes="clr-namespace:vmPing.Classes"
-        Title="vmPing - Options"
+        Title="Options"
         UseLayoutRounding="True"
         Height="540" MinHeight="540"
         Width="580" MinWidth="580"
@@ -71,9 +71,9 @@
                                  MaxLength="5"
                                  FontSize="14" />
                         <ComboBox Name="cboPingInterval" Width="100" Margin="10,0,0,0" VerticalContentAlignment="Center" FontSize="14" Foreground="#555555">
-                            <ComboBoxItem Content="Seconds" IsSelected="True" />
-                            <ComboBoxItem Content="Minutes" />
-                            <ComboBoxItem Content="Hours" />
+                            <ComboBoxItem Content="seconds" IsSelected="True" />
+                            <ComboBoxItem Content="minutes" />
+                            <ComboBoxItem Content="hours" />
                         </ComboBox>
                     </StackPanel>
 
@@ -92,7 +92,7 @@
                                  Padding="3,0,0,0"
                                  MaxLength="2"
                                  FontSize="14" />
-                        <Label Content="Seconds" Margin="10,0,0,0" FontSize="14" Foreground="#555555" />
+                        <Label Content="seconds" Margin="10,0,0,0" FontSize="14" Foreground="#555555" />
                     </StackPanel>
 
                     <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" Margin="0,20,0,5" />
@@ -366,7 +366,7 @@
                                  Padding="3,0,0,0"
                                  MaxLength="2"
                                  FontSize="14" />
-                        <Label Content="Seconds" Margin="10,0,0,0" FontSize="14" Foreground="#555555" />
+                        <Label Content="seconds" Margin="10,0,0,0" FontSize="14" Foreground="#555555" />
                     </StackPanel>
                 </DockPanel>
             </TabItem>
@@ -1025,17 +1025,17 @@
         <!-- Button Section -->
         <Border Grid.Row="1" BorderBrush="#dfdfdf" Background="#f0f0f0" BorderThickness="0,1,0,0">
             <DockPanel Margin="9" HorizontalAlignment="Right">
-                <CheckBox Name="SaveAsDefaults" DockPanel.Dock="Top" HorizontalAlignment="Right">Save as application defaults</CheckBox>
+                <CheckBox Name="SaveAsDefaults" DockPanel.Dock="Top" HorizontalAlignment="Right">Save as vmPing defaults</CheckBox>
                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,9,0,0" HorizontalAlignment="Right">
                     <Button Style="{StaticResource ButtonStandardStyle}"
                             Click="btnOk_Click"
                             Margin="0,0,9,0"
-                            Width="100"
+                            Width="85"
                             Content="OK" />
                     <Button Style="{StaticResource ButtonStandardStyle}"
                             Click="btnCancel_Click"
-                            Margin="0"
-                            Width="100"
+                            IsCancel="True"
+                            Width="85"
                             Content="Cancel" />
                 </StackPanel>
             </DockPanel>

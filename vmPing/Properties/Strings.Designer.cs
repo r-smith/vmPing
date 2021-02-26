@@ -385,7 +385,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to vmPing - Aliases.
+        ///   Looks up a localized string similar to Aliases.
         /// </summary>
         public static string ManageAliases_WindowTitle {
             get {
@@ -430,7 +430,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to vmPing - Favorites.
+        ///   Looks up a localized string similar to Favorites.
         /// </summary>
         public static string ManageFavorites_WindowTitle {
             get {
@@ -619,7 +619,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Title.
+        ///   Looks up a localized string similar to Enter a title.
         /// </summary>
         public static string NewFavorite_Title {
             get {

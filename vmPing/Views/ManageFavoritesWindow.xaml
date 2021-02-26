@@ -47,7 +47,7 @@
                 <DockPanel Grid.Column="1" Margin="10,20,20,20" Name="ContentsSection">
                     
                     <!-- Title bar for contents section -->
-                    <Border DockPanel.Dock="Top" Background="#eee8d5" BorderThickness="1,1,1,0" BorderBrush="#888" CornerRadius="7,7,0,0">
+                    <Border DockPanel.Dock="Top" Background="#eee8d5" BorderThickness="1,1,1,0" BorderBrush="#888" CornerRadius="6,6,0,0">
                         <DockPanel>
                             <Grid DockPanel.Dock="Top">
                                 <!-- Contents title -->
@@ -55,14 +55,14 @@
                                            Text="{x:Static resource:Strings.ManageFavorites_HostsInSet}"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
-                                           FontSize="13"
+                                           FontSize="12"
                                            Margin="0"
-                                           Foreground="#666"
-                                           FontWeight="Bold" />
+                                           Foreground="#444"
+                                           FontWeight="SemiBold" />
 
                                 <!-- Button: Close -->
                                 <Button Name="btnClose"
-                                        Padding="5"
+                                        Padding="5,4"
                                         Margin="0"
                                         Background="Transparent"
                                         HorizontalAlignment="Right"
@@ -102,7 +102,7 @@
                     </Border>
 
                     <!-- Contents List -->
-                    <Border DockPanel.Dock="Top" Background="#fefefc" BorderThickness="1" BorderBrush="#888" CornerRadius="0,0,7,7">
+                    <Border DockPanel.Dock="Top" Background="#fefefc" BorderThickness="1" BorderBrush="#888" CornerRadius="0,0,6,6">
                         <ListBox Name="Contents"
                                  Foreground="#005ace"
                                  Background="Transparent"
@@ -121,7 +121,7 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Click="Edit_Click"
                         Margin="9"
-                        Width="90"
+                        Width="85"
                         Style="{StaticResource ButtonSecondaryStyle}"
                         IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
                         HorizontalAlignment="Right"
@@ -129,7 +129,7 @@
                 <Button Name="Remove"
                         Click="Remove_Click"
                         Margin="9"
-                        Width="90"
+                        Width="85"
                         Style="{StaticResource ButtonSecondaryStyle}"
                         IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
                         HorizontalAlignment="Right"

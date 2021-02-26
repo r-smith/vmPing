@@ -231,7 +231,7 @@
     <comment>/// See ManageFavorites_Warn_DeleteA for usage when translating</comment>
   </data>
   <data name="ManageAliases_WindowTitle" xml:space="preserve">
-    <value>vmPing - Aliases</value>
+    <value>Aliases</value>
   </data>
   <data name="ManageFavorites_Header" xml:space="preserve">
     <value>Manage Favorites</value>
@@ -247,7 +247,7 @@
     <value>from your favorites?</value>
   </data>
   <data name="ManageFavorites_WindowTitle" xml:space="preserve">
-    <value>vmPing - Favorites</value>
+    <value>Favorites</value>
   </data>
   <data name="Menu_Aliases" xml:space="preserve">
     <value>Aliases</value>
@@ -310,7 +310,7 @@
     <value>Selected Hosts</value>
   </data>
   <data name="NewFavorite_Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Enter a title</value>
   </data>
   <data name="NewFavorite_Warn_AlreadyExists" xml:space="preserve">
     <value>already exists.  Would you like to overwrite?</value>

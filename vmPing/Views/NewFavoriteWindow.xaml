@@ -2,10 +2,10 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:resource="clr-namespace:vmPing.Properties"
-        Title="vmPing"
+        Title="New Favorite Set"
         UseLayoutRounding="True"
-        Height="350"
-        Width="360"
+        Height="370"
+        Width="450"
         ResizeMode="NoResize"
         Background="#fff"
         WindowStartupLocation="CenterOwner"
@@ -22,25 +22,26 @@
                        Text="{x:Static resource:Strings.NewFavorite_Header}"
                        Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"
                        />
-            <DockPanel DockPanel.Dock="Top"
-                       Margin="0,10,0,10">
-                <TextBlock Text="{x:Static resource:Strings.NewFavorite_Title}"
-                           FontSize="14"
-                           VerticalAlignment="Center"
-                           Foreground="#555"
-                           />
-                <TextBox Name="MyTitle"
-                         Style="{StaticResource TextBoxStyle}"
-                         Margin="10,0,0,0"
-                         MaxLength="64"
-                         />
-            </DockPanel>
+
+            <TextBlock DockPanel.Dock="Top"
+                       Margin="0,10,0,0"
+                       Foreground="#555"
+                       FontSize="14"
+                       VerticalAlignment="Center"
+                       Text="{x:Static resource:Strings.NewFavorite_Title}"
+                       />
+            <TextBox DockPanel.Dock="Top"
+                     Name="MyTitle"
+                     Style="{StaticResource TextBoxStyle}"
+                     Margin="0,4,0,10"
+                     MaxLength="64"
+                     />
 
             <!-- Section for contents of selected favorite -->
-            <DockPanel DockPanel.Dock="Top" Margin="10" Name="ContentsSection">
+            <DockPanel DockPanel.Dock="Top" Margin="0,10" Name="ContentsSection">
 
                 <!-- Title bar for contents section -->
-                <Border DockPanel.Dock="Top" Background="#eee8d5" BorderThickness="1,1,1,0" BorderBrush="#888" CornerRadius="7,7,0,0">
+                <Border DockPanel.Dock="Top" Background="#eee8d5" BorderThickness="1,1,1,0" BorderBrush="#888" CornerRadius="6,6,0,0">
                     <DockPanel>
                         <!-- Contents title -->
                         <TextBlock DockPanel.Dock="Top"
@@ -48,14 +49,14 @@
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    FontSize="12"
-                                   Margin="0"
-                                   Foreground="#666"
+                                   Margin="2"
+                                   Foreground="#444"
                                    FontWeight="SemiBold" />
                     </DockPanel>
                 </Border>
 
                 <!-- Contents List -->
-                <Border DockPanel.Dock="Top" Background="#fefefc" BorderThickness="1" BorderBrush="#888" CornerRadius="0,0,7,7">
+                <Border DockPanel.Dock="Top" Background="#fefefc" BorderThickness="1" BorderBrush="#888" CornerRadius="0,0,6,6">
                     <ListBox Name="Contents"
                              Foreground="#005ace"
                              Background="Transparent"
@@ -69,15 +70,15 @@
 
         <!-- Buttons -->
         <Border Grid.Row="1" Background="#f0f0f0" BorderBrush="#dfdfdf" BorderThickness="0,1,0,0">
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="9">
                 <Button Style="{StaticResource ButtonStandardStyle}"
                         IsDefault="True"
-                        Margin="0,0,8,0"
+                        Margin="0,0,9,0"
                         Click="Save_Click"
-                        Width="100"
+                        Width="85"
                         Content="{x:Static resource:Strings.DialogButton_Save}" />
                 <Button Style="{StaticResource ButtonStandardStyle}"
-                        Width="100"
+                        Width="85"
                         IsCancel="True"
                         Content="{x:Static resource:Strings.DialogButton_Cancel}" />
             </StackPanel>

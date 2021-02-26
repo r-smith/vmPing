@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using vmPing.Classes;
@@ -20,6 +21,7 @@ namespace vmPing.Views
             InitializeComponent();
 
             Contents.ItemsSource = hostList;
+            MyColumnCount.Text = columnCount.ToString();
 
             HostList = hostList;
             ColumnCount = columnCount;
@@ -31,6 +33,17 @@ namespace vmPing.Views
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
+            // Validate column count.
+            if (int.TryParse(MyColumnCount.Text, out ColumnCount) == false || ColumnCount < 1 || ColumnCount > 10)
+            {
+                var errorWindow = DialogWindow.ErrorWindow("Please enter a valid number of columns (between 1 and 10).");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
+                MyColumnCount.Focus();
+                MyColumnCount.SelectAll();
+                return;
+            }
+
             // Validate favorite name.
             if (Favorite.IsTitleInvalid(MyTitle.Text))
             {
@@ -66,6 +79,13 @@ namespace vmPing.Views
         {
             Favorite.Save(MyTitle.Text, HostList, ColumnCount);
             DialogResult = true;
+        }
+
+        private void MyColumnCount_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var regex = new Regex("[^0-9.-]+");
+            if (regex.IsMatch(e.Text))
+                e.Handled = true;
         }
     }
 }

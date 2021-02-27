@@ -17,16 +17,27 @@ namespace vmPing.Views
     {
         private List<string> HostList;
         private int ColumnCount;
+        private bool IsExisting = false;
+        private string OriginalTitle;
 
-        public NewFavoriteWindow(List<string> hostList, int columnCount)
+        public NewFavoriteWindow(List<string> hostList, int columnCount, bool isEditExisting = false, string title = "")
         {
             InitializeComponent();
 
             HostList = hostList;
             ColumnCount = columnCount;
+            IsExisting = isEditExisting;
+            OriginalTitle = title;
 
             MyHosts.Text = string.Join(Environment.NewLine, hostList).Trim();
             MyColumnCount.Text = columnCount.ToString();
+            MyTitle.Text = title;
+
+            if (isEditExisting)
+            {
+                this.Title = "Edit Favorite Set";
+                Header.Text = "Edit an Existing Favorite Set";
+            }
 
             // Set initial focus to text box.
             Loaded += (sender, e) =>
@@ -60,8 +71,8 @@ namespace vmPing.Views
             // Split host list to array, trim each item, then convert to list.
             HostList = MyHosts.Text.Trim().Split(new char[] { ',', '\n' }).Select(host => host.Trim()).ToList();
 
-            // Check if favorite title already exists.
-            if (Favorite.TitleExists(MyTitle.Text))
+            // Check if favorite title already exists and not editing an existing favorite.
+            if (!IsExisting && Favorite.TitleExists(MyTitle.Text))
             {
                 var warningWindow = DialogWindow.WarningWindow(
                     message: $"{MyTitle.Text} {Strings.NewFavorite_Warn_AlreadyExists}",
@@ -82,6 +93,10 @@ namespace vmPing.Views
 
         private void SaveFavorite()
         {
+            // Check if renaming the title of an existing favorite set.
+            if (IsExisting && !MyTitle.Text.Equals(OriginalTitle))
+                Favorite.Rename(originalTitle: OriginalTitle, newTitle: MyTitle.Text);
+            // Save.
             Favorite.Save(MyTitle.Text, HostList, ColumnCount);
             DialogResult = true;
         }

@@ -20,6 +20,7 @@
         <DockPanel Grid.Row="0" Margin="9">
             <!-- Header -->
             <TextBlock DockPanel.Dock="Top"
+                       Name="Header"
                        Text="{x:Static resource:Strings.NewFavorite_Header}"
                        Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"
                        />

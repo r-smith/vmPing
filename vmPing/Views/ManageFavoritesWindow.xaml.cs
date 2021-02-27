@@ -14,6 +14,7 @@ namespace vmPing.Views
     public partial class ManageFavoritesWindow : Window
     {
         public static ManageFavoritesWindow openWindow = null;
+        private Favorite SelectedFavorite = null;
 
         [DllImport("user32.dll")]
         private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
@@ -52,7 +53,7 @@ namespace vmPing.Views
             var dialogWindow = new DialogWindow(
                 DialogWindow.DialogIcon.Warning,
                 Strings.DialogTitle_ConfirmDelete,
-                $"{Strings.ManageFavorites_Warn_DeleteA} {Favorites.SelectedItem.ToString()} {Strings.ManageFavorites_Warn_DeleteB}",
+                $"{Strings.ManageFavorites_Warn_DeleteA} {Favorites.SelectedItem} {Strings.ManageFavorites_Warn_DeleteB}",
                 Strings.DialogButton_Remove,
                 true);
             dialogWindow.Owner = this;
@@ -71,11 +72,11 @@ namespace vmPing.Views
                 return;
             }
 
-            var favorite = Favorite.GetContents(Favorites.SelectedItem.ToString());
+            SelectedFavorite = Favorite.GetContents(Favorites.SelectedItem.ToString());
             ContentsSection.Visibility = Visibility.Visible;
             Contents.ItemsSource = null;
             Contents.Items.Clear();
-            Contents.ItemsSource = favorite.Hostnames;
+            Contents.ItemsSource = SelectedFavorite.Hostnames;
         }
 
         private void CloseContents_Click(object sender, RoutedEventArgs e)
@@ -88,10 +89,13 @@ namespace vmPing.Views
             if (Favorites.SelectedIndex < 0)
                 return;
 
-            var editFavoriteWindow = new EditFavoriteWindow(Favorites.SelectedItem.ToString());
-            editFavoriteWindow.Owner = this;
-
-            if (editFavoriteWindow.ShowDialog() == true)
+            var newFavoriteWindow = new NewFavoriteWindow(
+                hostList: SelectedFavorite.Hostnames,
+                columnCount: SelectedFavorite.ColumnCount,
+                isEditExisting: true,
+                title: Favorites.SelectedItem.ToString());
+            newFavoriteWindow.Owner = this;
+            if (newFavoriteWindow.ShowDialog() == true)
             {
                 RefreshFavoriteList();
             }

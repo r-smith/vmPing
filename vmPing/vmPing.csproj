@@ -97,9 +97,6 @@
     <Compile Include="Views\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EditFavoriteWindow.xaml.cs">
-      <DependentUpon>EditFavoriteWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\FloodHostWindow.xaml.cs">
       <DependentUpon>FloodHostWindow.xaml</DependentUpon>
     </Compile>
@@ -188,10 +185,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DialogWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\EditFavoriteWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

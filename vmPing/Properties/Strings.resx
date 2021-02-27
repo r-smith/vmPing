@@ -157,10 +157,6 @@
     <value>Alias for:</value>
     <comment>Parsed as:  Alias for: {hostname}</comment>
   </data>
-  <data name="EditFavorite_Rename" xml:space="preserve">
-    <value>Rename:</value>
-    <comment>Parsed as:  Rename: {FavoriteTitle}</comment>
-  </data>
   <data name="Email_Down" xml:space="preserve">
     <value>down</value>
   </data>

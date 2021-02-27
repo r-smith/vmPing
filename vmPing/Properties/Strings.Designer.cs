@@ -178,15 +178,6 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rename:.
-        /// </summary>
-        public static string EditFavorite_Rename {
-            get {
-                return ResourceManager.GetString("EditFavorite_Rename", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to down.
         /// </summary>
         public static string Email_Down {

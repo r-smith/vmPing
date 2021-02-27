@@ -392,22 +392,9 @@ namespace vmPing.Views
         {
             // Display add to favorites window.
             var currentHostList = new List<string>();
-            var haveAnyHostnamesBeenEntered = false;
 
             for (int i = 0; i < _ProbeCollection.Count; ++i)
-            {
                 currentHostList.Add(_ProbeCollection[i].Hostname);
-                if (!string.IsNullOrWhiteSpace(_ProbeCollection[i].Hostname))
-                    haveAnyHostnamesBeenEntered = true;
-            }
-
-            if (!haveAnyHostnamesBeenEntered)
-            {
-                var errorWindow = DialogWindow.ErrorWindow(Strings.Error_NoHostsForFavorite);
-                errorWindow.Owner = this;
-                errorWindow.ShowDialog();
-                return;
-            }
 
             var addToFavoritesWindow = new NewFavoriteWindow(currentHostList, (int)ColumnCount.Value);
             addToFavoritesWindow.Owner = this;

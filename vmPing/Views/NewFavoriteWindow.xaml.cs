@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
@@ -20,11 +22,11 @@ namespace vmPing.Views
         {
             InitializeComponent();
 
-            Contents.ItemsSource = hostList;
-            MyColumnCount.Text = columnCount.ToString();
-
             HostList = hostList;
             ColumnCount = columnCount;
+
+            MyHosts.Text = string.Join(Environment.NewLine, hostList).Trim();
+            MyColumnCount.Text = columnCount.ToString();
 
             // Set initial focus to text box.
             Loaded += (sender, e) =>
@@ -54,6 +56,9 @@ namespace vmPing.Views
                 MyTitle.SelectAll();
                 return;
             }
+
+            // Split host list to array, trim each item, then convert to list.
+            HostList = MyHosts.Text.Trim().Split(new char[] { ',', '\n' }).Select(host => host.Trim()).ToList();
 
             // Check if favorite title already exists.
             if (Favorite.TitleExists(MyTitle.Text))

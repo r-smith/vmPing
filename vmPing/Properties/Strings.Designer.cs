@@ -295,15 +295,6 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not entered any hostnames.  Please setup vmPing with the hosts you would like to save as a favorite set..
-        /// </summary>
-        public static string Error_NoHostsForFavorite {
-            get {
-                return ResourceManager.GetString("Error_NoHostsForFavorite", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Failed to read configuration file..
         /// </summary>
         public static string Error_ReadConfig {
@@ -511,7 +502,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save Current Layout to Favorites.
+        ///   Looks up a localized string similar to Create New Favorite Set.
         /// </summary>
         public static string Menu_SaveToFavorites {
             get {

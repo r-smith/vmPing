@@ -198,9 +198,6 @@
   <data name="Error_LoadConfig" xml:space="preserve">
     <value>Failed to load configuration file.</value>
   </data>
-  <data name="Error_NoHostsForFavorite" xml:space="preserve">
-    <value>You have not entered any hostnames.  Please setup vmPing with the hosts you would like to save as a favorite set.</value>
-  </data>
   <data name="Error_ReadConfig" xml:space="preserve">
     <value>Failed to read configuration file.</value>
   </data>
@@ -274,7 +271,7 @@
     <value>Popup Notifications</value>
   </data>
   <data name="Menu_SaveToFavorites" xml:space="preserve">
-    <value>Save Current Layout to Favorites</value>
+    <value>Create New Favorite Set</value>
   </data>
   <data name="Menu_StatusHistory" xml:space="preserve">
     <value>Status History</value>

@@ -43,13 +43,28 @@ namespace vmPing.Views
             PopulateLayoutOptions();
         }
 
-        private void ShowError(string message, TabItem tabItem, Control control)
+        private bool? ShowError(string message, TabItem tabItem, Control control, bool isWarning = false)
         {
-            tabItem.Focus();
-            var errorWindow = DialogWindow.ErrorWindow(message);
+            // Switch to specified tab.
+            if (tabItem != null)
+                tabItem.Focus();
+
+            // Show warning or error?
+            DialogWindow errorWindow;
+            if (isWarning == true)
+                errorWindow = DialogWindow.WarningWindow(message, "Save");
+            else
+                errorWindow = DialogWindow.ErrorWindow(message);
+
+            // Display dialog and capture result.
             errorWindow.Owner = this;
-            errorWindow.ShowDialog();
-            control.Focus();
+            var result = errorWindow.ShowDialog();
+
+            // Set focus to specified control.
+            if (control != null)
+                control.Focus();
+
+            return result;
         }
 
         private void PopulateGeneralOptions()
@@ -409,12 +424,13 @@ namespace vmPing.Views
 
                 if (IsSmtpAuthenticationRequired.IsChecked == true && SaveAsDefaults.IsChecked == true)
                 {
-                    MessageBox.Show(
-                        "You have chosen to save your SMTP credentials to disk." + Environment.NewLine + Environment.NewLine +
+                    bool? result = ShowError("You have chosen to save your email credentials to disk." + Environment.NewLine + Environment.NewLine +
                         "While the data is stored in an encrypted format, anyone with access to your vmPing configuration file could potentially decrypt the data.",
-                        "vmPing Warning",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Warning);
+                        tabItem: EmailAlertsTab,
+                        control: IsSmtpAuthenticationRequired,
+                        isWarning: true);
+                    if (result == false)
+                        return false;
                 }
 
                 return true;

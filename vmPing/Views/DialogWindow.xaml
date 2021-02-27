@@ -18,32 +18,34 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Margin="20,10,20,15">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <DockPanel HorizontalAlignment="Left" Margin="0,0,0,3">
-                <Image Name="MyIcon"
-                       Source="/Resources/caution-40.png"
-                       Width="32"
-                       Height="32"/>
-                <TextBlock Name="MyTitle"
+        <Grid Grid.Row="0" Margin="20,10,20,35">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <!--<DockPanel HorizontalAlignment="Left" Margin="0,0,0,3">-->
+            <Image Name="MyIcon"
+                   Source="/Resources/caution-40.png"
+                   VerticalAlignment="Top"
+                   Width="32"
+                   Height="32"/>
+            <DockPanel Grid.Column="1" Margin="15,7,0,0">
+                <TextBlock DockPanel.Dock="Top"
+                           Name="MyTitle"
                            Text="Warning"
                            Foreground="#000000"
-                           Margin="15,0,0,0"
                            VerticalAlignment="Center"
-                           FontSize="16"
+                           FontSize="15"
                            FontFamily="Arial"
                            FontWeight="SemiBold"/>
+                <TextBlock DockPanel.Dock="Top"
+                           Name="Body"
+                           FontSize="13"
+                           FontFamily="Arial"
+                           Margin="0,15,0,0"
+                           Foreground="#202020"
+                           Text="This is warning text"  TextWrapping="Wrap"/>
             </DockPanel>
-            <TextBlock Grid.Row="1"
-                       Name="Body"
-                       FontSize="13"
-                       FontFamily="Arial"
-                       Margin="47,10,0,20"
-                       Foreground="#202020"
-                       Text="This is warning text"  TextWrapping="Wrap"/>
         </Grid>
 
         <!-- Buttons -->
@@ -53,6 +55,7 @@
                         Name="OK"
                         Click="OK_Click"
                         Width="100"
+                        IsCancel="{Binding Visibility, ElementName=Cancel, Converter={StaticResource InverseHiddenToBoolConverter}}"
                         Content="{x:Static resource:Strings.DialogButton_OK}" />
                 <Button Style="{StaticResource ButtonStandardStyle}"
                         Name="Cancel"

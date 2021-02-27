@@ -13,7 +13,8 @@ namespace vmPing.Views
         public enum DialogIcon
         {
             Warning,
-            Error
+            Error,
+            None
         }
 
         public DialogWindow(DialogIcon icon, string title, string body, string confirmationText, bool isCancelButtonVisible)
@@ -34,6 +35,9 @@ namespace vmPing.Views
                     break;
                 case DialogIcon.Error:
                     MyIcon.Source = new BitmapImage(new Uri(@"/Resources/font-awesome_4-7-0_exclamation-circle_40_0_c0392b_none.png", UriKind.Relative));
+                    break;
+                case DialogIcon.None:
+                    MyIcon.Visibility = Visibility.Collapsed;
                     break;
             }
         }

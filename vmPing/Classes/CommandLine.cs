@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
+using vmPing.Views;
 
 namespace vmPing.Classes
 {
@@ -17,6 +18,8 @@ namespace vmPing.Classes
             const int MaxInterval = 86400;
             const int MinimumTimeout = 1;
             const int MaxTimeout = 60;
+
+            const string CommandLineUsage = "vmPing [-i interval] [-w timeout] [<target_host>...] [<path_to_list_of_hosts>...]";
 
             for (var index = 1; index < args.Length; ++index)
             {
@@ -58,11 +61,14 @@ namespace vmPing.Classes
                     case "-?":
                     case "-h":
                     case "--help":
-                        MessageBox.Show(
-                            $"Command Line Usage:{Environment.NewLine}vmPing [-i interval] [-w timeout] [<target_host>...] [<path_to_list_of_hosts>...]",
-                            "vmPing Help",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Information);
+                        var dialogWindow = new DialogWindow(
+                            icon: DialogWindow.DialogIcon.None,
+                            title: "Command Line Usage",
+                            body: CommandLineUsage,
+                            confirmationText: "OK",
+                            isCancelButtonVisible: false);
+                        dialogWindow.Topmost = true;
+                        dialogWindow.ShowDialog();
                         Application.Current.Shutdown();
                         break;
                     default:
@@ -79,11 +85,10 @@ namespace vmPing.Classes
             // Display error message if any problems were encountered while parsing the arguments.
             if (errorMessage.Length > 0)
             {
-                MessageBox.Show(
-                    $"{errorMessage}{Environment.NewLine}{Environment.NewLine}Command Line Usage:{Environment.NewLine}vmPing [-i interval] [-w timeout] [<target_host>...] [<path_to_list_of_hosts>...]",
-                    "vmPing Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var dialogWindow = DialogWindow.ErrorWindow(
+                    $"{errorMessage}{Environment.NewLine}Command line usage:{Environment.NewLine}{CommandLineUsage}");
+                dialogWindow.Topmost = true;
+                dialogWindow.ShowDialog();
                 Application.Current.Shutdown();
             }
 

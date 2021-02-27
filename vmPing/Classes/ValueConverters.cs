@@ -71,6 +71,20 @@ namespace vmPing.Classes
         }
     }
 
+    public class InverseHiddenToBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            // Returns true if visibility is hidden or collapsed.
+            return (Visibility)value == Visibility.Hidden || (Visibility)value == Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
+
     public class BooleanToImageConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

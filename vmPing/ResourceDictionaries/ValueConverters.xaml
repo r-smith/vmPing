@@ -7,6 +7,7 @@
     <classes:InverseBooleanConverter x:Key="InverseBooleanConverter" />
     <classes:BooleanToImageConverter x:Key="BooleanToImageConverter" />
     <classes:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+    <classes:InverseHiddenToBoolConverter x:Key="InverseHiddenToBoolConverter" />
     <classes:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="{x:Static resource:Strings.Button_Ping}" TrueValue="{x:Static resource:Strings.Button_Stop}" />
     <classes:ProbeStatusToBackgroundBrushConverter x:Key="ProbeStatusToBackgroundBrushConverter" />
     <classes:ProbeStatusToForegroundBrushConverter x:Key="ProbeStatusToForegroundBrushConverter" />

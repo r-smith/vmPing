@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -91,6 +92,16 @@ namespace vmPing.Views
             editFavoriteWindow.Owner = this;
 
             if (editFavoriteWindow.ShowDialog() == true)
+            {
+                RefreshFavoriteList();
+            }
+        }
+
+        private void New_Click(object sender, RoutedEventArgs e)
+        {
+            var newFavoriteWindow = new NewFavoriteWindow(new List<string>(), 2);
+            newFavoriteWindow.Owner = this;
+            if (newFavoriteWindow.ShowDialog() == true)
             {
                 RefreshFavoriteList();
             }

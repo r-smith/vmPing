@@ -119,6 +119,12 @@
 
         <Border Grid.Row="2" Background="#f8f8f8" BorderThickness="1,0,1,1" BorderBrush="#acacac">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Click="New_Click"
+                        Margin="9"
+                        Width="85"
+                        Style="{StaticResource ButtonSecondaryStyle}"
+                        HorizontalAlignment="Right"
+                        Content="{x:Static resource:Strings.DialogButton_New}" />
                 <Button Click="Edit_Click"
                         Margin="9"
                         Width="85"

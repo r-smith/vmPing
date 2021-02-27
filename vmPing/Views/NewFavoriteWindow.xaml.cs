@@ -68,8 +68,17 @@ namespace vmPing.Views
                 return;
             }
 
-            // Split host list to array, trim each item, then convert to list.
+            // Split host list to array, trim each item, then convert to list. Ensure at least one host was entered.
             HostList = MyHosts.Text.Trim().Split(new char[] { ',', '\n' }).Select(host => host.Trim()).ToList();
+            if (HostList.All(x => string.IsNullOrWhiteSpace(x)))
+            {
+                var errorWindow = DialogWindow.ErrorWindow("You have not entered any hosts. Provide at least one host for this favorite set.");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
+                MyHosts.Focus();
+                MyHosts.SelectAll();
+                return;
+            }
 
             // Check if favorite title already exists and not editing an existing favorite.
             if (!IsExisting && Favorite.TitleExists(MyTitle.Text))

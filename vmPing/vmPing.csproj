@@ -270,12 +270,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\grid-16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\add-16.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\vmPing-16.png" />
   </ItemGroup>
   <ItemGroup>

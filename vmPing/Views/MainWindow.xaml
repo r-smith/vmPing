@@ -129,7 +129,7 @@
                     <AccessText Text="{x:Static resource:Strings.Toolbar_Add}" VerticalAlignment="Center" />
                 </MenuItem.Header>
                 <MenuItem.Icon>
-                    <Image Source="/Resources/add-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                    <Image Source="{StaticResource icon.add}" VerticalAlignment="Center" Width="16" Height="16" />
                 </MenuItem.Icon>
             </MenuItem>
 
@@ -139,7 +139,7 @@
                     <AccessText Text="{x:Static resource:Strings.Toolbar_Columns}" VerticalAlignment="Center" />
                 </MenuItem.Header>
                 <MenuItem.Icon>
-                    <Image Source="/Resources/grid-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                    <Image Source="{StaticResource icon.columns-grid}" VerticalAlignment="Center" Width="16" Height="16" />
                 </MenuItem.Icon>
                 <!-- Columns slider -->
                 <StackPanel Orientation="Horizontal">

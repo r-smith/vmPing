@@ -14,6 +14,9 @@
         ContentRendered="Window_ContentRendered">
 
     <Window.Resources>
+        <!-- Override default context menu animation to turn off -->
+        <PopupAnimation x:Key="{x:Static SystemParameters.MenuPopupAnimationKey}">None</PopupAnimation>
+
         <!-- Style for hostname textbox -->
         <ControlTemplate x:Key="TextBoxBaseControlTemplatez" TargetType="{x:Type TextBoxBase}">
             <Border Background="{TemplateBinding Background}"

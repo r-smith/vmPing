@@ -413,6 +413,7 @@
                                             ToolTip="{x:Static resource:Strings.Tooltip_EditAlias}"
                                             ToolTipService.InitialShowDelay="1500"
                                             ToolTipService.ShowDuration="2000"
+                                            IsEnabled="{Binding ElementName=Hostname, Path=Text, Converter={StaticResource StringLengthToBoolConverter}}"
                                             Click="EditAlias_Click">
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
@@ -434,6 +435,9 @@
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
                                                         <Setter TargetName="controlButton_border" Property="Background" Value="#444" />
+                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="0.4" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
                                                         <Setter TargetName="controlButton_image" Property="Opacity" Value="0.4" />
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>

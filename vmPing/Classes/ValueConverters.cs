@@ -369,4 +369,18 @@ namespace vmPing.Classes
             throw new NotImplementedException();
         }
     }
+
+    public class StringLengthToBoolConverter : IValueConverter
+    {
+        // Return true if string length is greater than 0.
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((string)value).Length > 0;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

@@ -23,4 +23,5 @@
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <classes:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
     <classes:StringToBrushConverter x:Key="StringToBrushConverter" />
+    <classes:StringLengthToBoolConverter x:Key="StringLengthToBoolConverter" />
 </ResourceDictionary>

@@ -14,22 +14,43 @@
         ContentRendered="Window_ContentRendered">
 
     <Window.Resources>
-        <!-- Override default context menu animation to turn off -->
+        <!-- Override default context menu animation: set to no animation -->
         <PopupAnimation x:Key="{x:Static SystemParameters.MenuPopupAnimationKey}">None</PopupAnimation>
 
-        <!-- Style for hostname textbox -->
-        <ControlTemplate x:Key="TextBoxBaseControlTemplatez" TargetType="{x:Type TextBoxBase}">
-            <Border Background="{TemplateBinding Background}"
-                    x:Name="Bd"
-                    CornerRadius="0,0,0,0"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    BorderBrush="{TemplateBinding BorderBrush}">
-                <ScrollViewer x:Name="PART_ContentHost" />
-            </Border>
+        <!-- Template for hostname textbox -->
+        <ControlTemplate x:Key="TextBoxControlTemplate" TargetType="{x:Type TextBox}">
+            <Grid>
+                <Border x:Name="border"
+                        CornerRadius="0"
+                        SnapsToDevicePixels="True"
+                        Background="{TemplateBinding Background}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}">
+                    <ScrollViewer x:Name="PART_ContentHost" />
+                </Border>
+                <TextBlock x:Name="placeholderText"
+                           Text="Enter a hostname"
+                           Visibility="Hidden"
+                           FontSize="12"
+                           Opacity="0.3"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Padding="5,0,0,0"
+                           IsHitTestVisible="False"/>
+            </Grid>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
                     <Setter Property="Foreground" Value="#333388" />
                 </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="Text" Value=""/>
+                        <Condition Property="IsKeyboardFocused" Value="True"/>
+                    </MultiTrigger.Conditions>
+                    <MultiTrigger.Setters>
+                        <Setter Property="Visibility" TargetName="placeholderText" Value="Visible"/>
+                    </MultiTrigger.Setters>
+                </MultiTrigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
 
@@ -566,7 +587,7 @@
                                          Padding="0,0,0,0"
                                          Text="{Binding Hostname, UpdateSourceTrigger=PropertyChanged}"
                                          IsEnabled="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}"
-                                         Template="{StaticResource TextBoxBaseControlTemplatez}"
+                                         Template="{StaticResource TextBoxControlTemplate}"
                                          Loaded="Hostname_Loaded"
                                          TextChanged="Hostname_TextChanged"
                                          KeyDown="Hostname_KeyDown" />

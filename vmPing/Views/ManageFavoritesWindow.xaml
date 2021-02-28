@@ -62,7 +62,7 @@
 
                                 <!-- Button: Close -->
                                 <Button Name="btnClose"
-                                        Padding="5,4"
+                                        Padding="5,2"
                                         Margin="0"
                                         Background="Transparent"
                                         HorizontalAlignment="Right"
@@ -77,10 +77,10 @@
                                                     Padding="{TemplateBinding Padding}"
                                                     Background="{TemplateBinding Background}">
                                                 <Image Name="controlButton_image"
-                                                       Source="/Resources/font-awesome_4-7-0_close_14_0_000000_none.png"
+                                                       Source="{StaticResource icon.window-close-black}"
                                                        Opacity="0.3"
-                                                       Width="12"
-                                                       Height="12"
+                                                       Width="13"
+                                                       Height="13"
                                                        />
                                             </Border>
                                             <ControlTemplate.Triggers>

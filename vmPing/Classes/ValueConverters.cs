@@ -90,9 +90,9 @@ namespace vmPing.Classes
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if ((bool)value == false)
-                return new BitmapImage(new Uri(@"/Resources/play-16.png", UriKind.Relative));
+                return (DrawingImage)Application.Current.Resources["icon.play"];
             else
-                return new BitmapImage(new Uri(@"/Resources/stopCircle-16.png", UriKind.Relative));
+                return (DrawingImage)Application.Current.Resources["icon.stop-circle"];
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -321,9 +321,9 @@ namespace vmPing.Classes
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if ((int)value > 0)
-                return new BitmapImage(new Uri(@"/Resources/stopCircle-16.png", UriKind.Relative));
+                return (DrawingImage)Application.Current.Resources["icon.stop-circle"];
             else
-                return new BitmapImage(new Uri(@"/Resources/play-16.png", UriKind.Relative));
+                return (DrawingImage)Application.Current.Resources["icon.play"];
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

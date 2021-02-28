@@ -1,6 +1,5 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Media.Imaging;
+﻿using System.Windows;
+using System.Windows.Media;
 using vmPing.Properties;
 
 namespace vmPing.Views
@@ -14,6 +13,7 @@ namespace vmPing.Views
         {
             Warning,
             Error,
+            Info,
             None
         }
 
@@ -31,10 +31,13 @@ namespace vmPing.Views
             switch (icon)
             {
                 case DialogIcon.Warning:
-                    MyIcon.Source = new BitmapImage(new Uri(@"/Resources/caution-40.png", UriKind.Relative));
+                    MyIcon.Source = (DrawingImage)Application.Current.Resources["icon.exclamation-triangle"];
                     break;
                 case DialogIcon.Error:
-                    MyIcon.Source = new BitmapImage(new Uri(@"/Resources/font-awesome_4-7-0_exclamation-circle_40_0_c0392b_none.png", UriKind.Relative));
+                    MyIcon.Source = (DrawingImage)Application.Current.Resources["icon.exclamation-circle"];
+                    break;
+                case DialogIcon.Info:
+                    MyIcon.Source = (DrawingImage)Application.Current.Resources["icon.info-circle"];
                     break;
                 case DialogIcon.None:
                     MyIcon.Visibility = Visibility.Collapsed;

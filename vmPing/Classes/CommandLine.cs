@@ -62,7 +62,7 @@ namespace vmPing.Classes
                     case "-h":
                     case "--help":
                         var dialogWindow = new DialogWindow(
-                            icon: DialogWindow.DialogIcon.None,
+                            icon: DialogWindow.DialogIcon.Info,
                             title: "Command Line Usage",
                             body: CommandLineUsage,
                             confirmationText: "OK",

@@ -225,7 +225,7 @@
                                   FontSize="14"/>
                         <Border DockPanel.Dock="Left"
                                 Background="Transparent"
-                                Margin="8,1,0,0"
+                                Margin="8,0,0,0"
                                 Padding="3"
                                 ToolTipService.InitialShowDelay="0"
                                 ToolTipService.ShowDuration="60000">
@@ -239,11 +239,8 @@
                                                Text="The don't fragment flag instructs routers to discard the packet if it is too big. This can be used to determine the MTU."/>
                                 </ToolTip>
                             </Border.ToolTip>
-                            <Image Source="/Resources/font-awesome_4-7-0_info-circle_16_0_268bd2_none.png"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Width="16" Height="16"
-                                   Opacity="0.9"/>
+                            <Image Source="{StaticResource icon.question-circle}"
+                                   Width="16" Height="16"/>
                         </Border>
                     </DockPanel>
                 </DockPanel>
@@ -260,7 +257,7 @@
                                    Style="{StaticResource OptionHeaderTextStyle}" />
                         <Border DockPanel.Dock="Left"
                                 Background="Transparent"
-                                Margin="8,1,0,0"
+                                Margin="8,0,0,0"
                                 Padding="3"
                                 VerticalAlignment="Center"
                                 ToolTipService.InitialShowDelay="0"
@@ -279,11 +276,8 @@
                                     </TextBlock>
                                 </ToolTip>
                             </Border.ToolTip>
-                            <Image Source="/Resources/font-awesome_4-7-0_info-circle_16_0_268bd2_none.png"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Width="16" Height="16"
-                                   Opacity="0.9"/>
+                            <Image Source="{StaticResource icon.question-circle}"
+                                   Width="16" Height="16"/>
                         </Border>
                     </DockPanel>
                     
@@ -332,7 +326,7 @@
                                   FontSize="14" />
                         <Border DockPanel.Dock="Left"
                                 Background="Transparent"
-                                Margin="8,1,0,0"
+                                Margin="8,0,0,0"
                                 Padding="3"
                                 ToolTipService.InitialShowDelay="0"
                                 ToolTipService.ShowDuration="60000">
@@ -346,11 +340,8 @@
                                                Text="When enabled, popup notifications will automatically close after the specified number of seconds."/>
                                 </ToolTip>
                             </Border.ToolTip>
-                            <Image Source="/Resources/font-awesome_4-7-0_info-circle_16_0_268bd2_none.png"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Width="16" Height="16"
-                                   Opacity="0.9"/>
+                            <Image Source="{StaticResource icon.question-circle}"
+                                   Width="16" Height="16"/>
                         </Border>
                     </DockPanel>
                     
@@ -392,7 +383,7 @@
                                       FontSize="14" />
                             <Border DockPanel.Dock="Left"
                                     Background="Transparent"
-                                    Margin="8,1,0,0"
+                                    Margin="8,0,0,0"
                                     Padding="3"
                                     ToolTipService.InitialShowDelay="0"
                                     ToolTipService.ShowDuration="60000">
@@ -406,11 +397,8 @@
                                                    Text="If this option is enabled, an email is sent whenever a host goes down or up."/>
                                     </ToolTip>
                                 </Border.ToolTip>
-                                <Image Source="/Resources/font-awesome_4-7-0_info-circle_16_0_268bd2_none.png"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Bottom"
-                                       Width="16" Height="16"
-                                       Opacity="0.9"/>
+                                <Image Source="{StaticResource icon.question-circle}"
+                                   Width="16" Height="16"/>
                             </Border>
                         </StackPanel>
 
@@ -544,7 +532,7 @@
                                   FontSize="14" />
                         <Border DockPanel.Dock="Left"
                                 Background="Transparent"
-                                Margin="8,1,0,0"
+                                Margin="8,0,0,0"
                                 Padding="3"
                                 ToolTipService.InitialShowDelay="0"
                                 ToolTipService.ShowDuration="60000">
@@ -558,11 +546,8 @@
                                                Text="If this option is enabled, an audio file is played whenever a host goes down."/>
                                 </ToolTip>
                             </Border.ToolTip>
-                            <Image Source="/Resources/font-awesome_4-7-0_info-circle_16_0_268bd2_none.png"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Bottom"
-                                   Width="16" Height="16"
-                                   Opacity="0.9"/>
+                            <Image Source="{StaticResource icon.question-circle}"
+                                   Width="16" Height="16"/>
                         </Border>
                     </StackPanel>
 
@@ -622,8 +607,8 @@
                                   FontSize="14" />
                         <Border DockPanel.Dock="Left"
                                 Background="Transparent"
-                                Margin="8,1,0,0"
-                                Padding="3"
+                                Margin="8,0,0,0"
+                                Padding="2"
                                 ToolTipService.InitialShowDelay="0"
                                 ToolTipService.ShowDuration="60000">
                             <Border.ToolTip>
@@ -636,11 +621,8 @@
                                                Text="If this option is enabled, an audio file is played whenever a host comes up."/>
                                 </ToolTip>
                             </Border.ToolTip>
-                            <Image Source="/Resources/font-awesome_4-7-0_info-circle_16_0_268bd2_none.png"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Bottom"
-                                   Width="16" Height="16"
-                                   Opacity="0.9"/>
+                            <Image Source="{StaticResource icon.question-circle}"
+                                   Width="16" Height="16"/>
                         </Border>
                     </StackPanel>
                     
@@ -707,7 +689,7 @@
                                   FontSize="14" />
                         <Border DockPanel.Dock="Left"
                                 Background="Transparent"
-                                Margin="8,1,0,0"
+                                Margin="8,0,0,0"
                                 Padding="3"
                                 ToolTipService.InitialShowDelay="0"
                                 ToolTipService.ShowDuration="60000">
@@ -721,11 +703,8 @@
                                                Text="If this option is enabled, all ping output is written to a text file.  You specify the base directory, and vmPing will generate a separate log file for each host (hostname.txt)."/>
                                 </ToolTip>
                             </Border.ToolTip>
-                            <Image Source="/Resources/font-awesome_4-7-0_info-circle_16_0_268bd2_none.png"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Bottom"
-                                   Width="16" Height="16"
-                                   Opacity="0.9"/>
+                            <Image Source="{StaticResource icon.question-circle}"
+                                   Width="16" Height="16"/>
                         </Border>
                     </StackPanel>
                     <Grid DockPanel.Dock="Top"
@@ -762,7 +741,7 @@
                                   FontSize="14" />
                         <Border DockPanel.Dock="Left"
                                 Background="Transparent"
-                                Margin="8,1,0,0"
+                                Margin="8,0,0,0"
                                 Padding="3"
                                 ToolTipService.InitialShowDelay="0"
                                 ToolTipService.ShowDuration="60000">
@@ -776,11 +755,8 @@
                                                Text="If this option is enabled, all status changes are written to a text file.  A status change is when a host you are pinging goes down, or a down host comes back up.  The text file is saved in a tab delimited format that is suitable for Excel or database imports."/>
                                 </ToolTip>
                             </Border.ToolTip>
-                            <Image Source="/Resources/font-awesome_4-7-0_info-circle_16_0_268bd2_none.png"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Width="16" Height="16"
-                                   Opacity="1"/>
+                            <Image Source="{StaticResource icon.question-circle}"
+                                   Width="16" Height="16"/>
                         </Border>
                     </StackPanel>
                     <Grid DockPanel.Dock="Top"

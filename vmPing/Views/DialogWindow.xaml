@@ -23,9 +23,8 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <!--<DockPanel HorizontalAlignment="Left" Margin="0,0,0,3">-->
             <Image Name="MyIcon"
-                   Source="/Resources/caution-40.png"
+                   Source="{StaticResource icon.exclamation-triangle}"
                    VerticalAlignment="Top"
                    Width="32"
                    Height="32"/>

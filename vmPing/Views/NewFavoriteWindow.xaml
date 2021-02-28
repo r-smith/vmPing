@@ -74,7 +74,7 @@
                                />
                     <Border DockPanel.Dock="Left"
                             Background="Transparent"
-                            Margin="8,1,0,0"
+                            Margin="8,0,0,0"
                             Padding="3"
                             ToolTipService.InitialShowDelay="0"
                             ToolTipService.ShowDuration="60000">
@@ -88,11 +88,8 @@
                                            Text="Enter the hosts to include in this favorite set. Hostnames can be entered either one per line or comma-separated."/>
                             </ToolTip>
                         </Border.ToolTip>
-                        <Image Source="/Resources/font-awesome_4-7-0_info-circle_16_0_268bd2_none.png"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Bottom"
-                               Width="16" Height="16"
-                               Opacity="0.9"/>
+                        <Image Source="{StaticResource icon.question-circle}"
+                               Width="16" Height="16"/>
                     </Border>
                 </StackPanel>
                 

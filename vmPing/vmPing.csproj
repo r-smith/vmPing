@@ -276,12 +276,6 @@
     <Resource Include="Resources\add-16.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\play-16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\questionMark-16.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\vmPing-16.png" />
   </ItemGroup>
   <ItemGroup>
@@ -292,42 +286,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\bomb-16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\stopCircle-16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\caution-40.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\cancelWhite-16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\font-awesome_4-7-0_close_14_0_000000_none.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\font-awesome_4-7-0_window-restore_14_0_000000_none.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\font-awesome_4-7-0_pencil_14_0_000000_none.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\font-awesome_4-7-0_chevron-circle-down_16_0_000000_none.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\font-awesome_4-7-0_close_14_0_ffffff_none.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\font-awesome_4-7-0_window-restore_14_0_ffffff_none.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\font-awesome_4-7-0_exclamation-circle_40_0_c0392b_none.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\font-awesome_4-7-0_info-circle_16_0_268bd2_none.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\font-awesome_4-7-0_pencil_14_0_ffffff_none.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -56,6 +56,56 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
+        <!-- Custom itemcontroltemplate to remove right padding -->
+        <ControlTemplate x:Key="MenuItemControlTemplate1" TargetType="{x:Type MenuItem}">
+            <Border x:Name="templateRoot" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                <Grid VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter x:Name="Icon" Content="{TemplateBinding Icon}" ContentSource="Icon" HorizontalAlignment="Center" Height="16" Margin="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" Width="16"/>
+                    <Path x:Name="GlyphPanel" Data="F1M10,1.2L4.7,9.1 4.5,9.1 0,5.2 1.3,3.5 4.3,6.1 8.3,0 10,1.2z" Fill="{TemplateBinding Foreground}" FlowDirection="LeftToRight" Margin="0" Visibility="Collapsed" VerticalAlignment="Center"/>
+                    <Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" Placement="Bottom">
+                        <Border x:Name="SubMenuBorder" BorderBrush="#FF999999" BorderThickness="1" Background="#FFF0F0F0" Padding="2">
+                            <ScrollViewer x:Name="SubMenuScrollViewer" Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}}">
+                                <Grid RenderOptions.ClearTypeHint="Enabled">
+                                    <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                        <Rectangle x:Name="OpaqueRect" Fill="{Binding Background, ElementName=SubMenuBorder}" Height="{Binding ActualHeight, ElementName=SubMenuBorder}" Width="{Binding ActualWidth, ElementName=SubMenuBorder}"/>
+                                    </Canvas>
+                                    <Rectangle Fill="#FFD7D7D7" HorizontalAlignment="Left" Margin="29,2,0,2" Width="1"/>
+                                    <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Cycle" Grid.IsSharedSizeScope="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" KeyboardNavigation.TabNavigation="Cycle"/>
+                                </Grid>
+                            </ScrollViewer>
+                        </Border>
+                    </Popup>
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsSuspendingPopupAnimation" Value="True">
+                    <Setter Property="PopupAnimation" TargetName="PART_Popup" Value="None"/>
+                </Trigger>
+                <Trigger Property="Icon" Value="{x:Null}">
+                    <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
+                    <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+                </Trigger>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" TargetName="templateRoot" Value="#3D26A0DA"/>
+                    <Setter Property="BorderBrush" TargetName="templateRoot" Value="#FF26A0DA"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="#FF707070"/>
+                    <Setter Property="Fill" TargetName="GlyphPanel" Value="#FF707070"/>
+                </Trigger>
+                <Trigger Property="CanContentScroll" SourceName="SubMenuScrollViewer" Value="False">
+                    <Setter Property="Canvas.Top" TargetName="OpaqueRect" Value="{Binding VerticalOffset, ElementName=SubMenuScrollViewer}"/>
+                    <Setter Property="Canvas.Left" TargetName="OpaqueRect" Value="{Binding HorizontalOffset, ElementName=SubMenuScrollViewer}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
     </Window.Resources>
 
 
@@ -129,16 +179,15 @@
                 </MenuItem.Icon>
             </MenuItem>
             <!-- DEBUG -->
-            <!-- <MenuItem Header="{Binding Path=(classes:Probe.ActiveCount)}" /> --> 
+            <!-- <MenuItem Header="{Binding Path=(classes:Probe.ActiveCount)}" /> -->
 
 
             <!-- Menu Item: Extras -->
-            <MenuItem Width="28"
-                      Margin="0,0,5,0"
-                      DockPanel.Dock="Right"
-                      >
+            <MenuItem Width="32"
+                      Margin="0,0,6,0"
+                      DockPanel.Dock="Right" Template="{DynamicResource MenuItemControlTemplate1}">
                 <MenuItem.Icon>
-                    <Image Source="/Resources/font-awesome_4-7-0_chevron-circle-down_16_0_000000_none.png" VerticalAlignment="Center" Width="16" Height="16" />
+                    <Image Source="{StaticResource icon.chevron-circle-down}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="16" Height="16" />
                 </MenuItem.Icon>
 
                 <MenuItem Name="mnuProbeOptions"
@@ -146,7 +195,7 @@
                           InputGestureText="F10"
                           Click="mnuProbeOptions_Click"
                           Padding="0,5" />
-                
+
                 <Separator Padding="0,6" />
 
                 <MenuItem Header="{x:Static resource:Strings.Menu_StatusHistory}" Click="mnuStatusHistory_Click" />
@@ -201,7 +250,7 @@
 
                 <MenuItem Header="{x:Static resource:Strings.Menu_Help}" x:Name="HelpMenu" InputGestureText="F1" Padding="0,5">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/questionMark-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                        <Image Source="{StaticResource icon.question-circle-black}" VerticalAlignment="Center" Width="16" Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -274,7 +323,7 @@
                                                         CornerRadius="0"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
-                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_close_14_0_000000_none.png"
+                                                    <Image Name="controlButton_image" Source="{StaticResource icon.window-close-black}"
                                                            Width="14" Height="14"
                                                            Opacity="0.9" />
                                                 </Border>
@@ -282,7 +331,7 @@
                                                     <Trigger Property="IsMouseOver" Value="True">
                                                         <Setter TargetName="controlButton_border" Property="Background" Value="Black" />
                                                         <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
-                                                        <Setter TargetName="controlButton_image" Property="Source" Value="/Resources/font-awesome_4-7-0_close_14_0_ffffff_none.png" />
+                                                        <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.window-close-white}" />
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
                                                         <Setter TargetName="controlButton_border" Property="Background" Value="#444" />
@@ -322,7 +371,7 @@
                                                         CornerRadius="0"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
-                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_window-restore_14_0_000000_none.png"
+                                                    <Image Name="controlButton_image" Source="{StaticResource icon.window-restore-black}"
                                                            Width="14" Height="14"
                                                            Opacity="0.9" />
                                                 </Border>
@@ -330,7 +379,7 @@
                                                     <Trigger Property="IsMouseOver" Value="True">
                                                         <Setter TargetName="controlButton_border" Property="Background" Value="Black" />
                                                         <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
-                                                        <Setter TargetName="controlButton_image" Property="Source" Value="/Resources/font-awesome_4-7-0_window-restore_14_0_ffffff_none.png" />
+                                                        <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.window-restore-white}" />
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
                                                         <Setter TargetName="controlButton_border" Property="Background" Value="#444" />
@@ -370,7 +419,7 @@
                                                         CornerRadius="0"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
-                                                    <Image Name="controlButton_image" Source="/Resources/font-awesome_4-7-0_pencil_14_0_000000_none.png"
+                                                    <Image Name="controlButton_image" Source="{StaticResource icon.pencil-black}"
                                                            Width="14" Height="14"
                                                            Opacity="0.9" />
                                                 </Border>
@@ -378,7 +427,7 @@
                                                     <Trigger Property="IsMouseOver" Value="True">
                                                         <Setter TargetName="controlButton_border" Property="Background" Value="Black" />
                                                         <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
-                                                        <Setter TargetName="controlButton_image" Property="Source" Value="/Resources/font-awesome_4-7-0_pencil_14_0_ffffff_none.png" />
+                                                        <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.pencil-white}" />
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
                                                         <Setter TargetName="controlButton_border" Property="Background" Value="#444" />
@@ -460,7 +509,7 @@
                                                      Background="Transparent"
                                                      BorderThickness="0"
                                                      Cursor="Arrow" />-->
-                                            <!--<TextBlock Text="{Binding}" Loaded="TextBlock_Loaded" />--><!--
+                                    <!--<TextBlock Text="{Binding}" Loaded="TextBlock_Loaded" />--><!--
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>-->
                                 </ListBox>
@@ -529,7 +578,7 @@
                                                     CornerRadius="4"
                                                     Background="{TemplateBinding Background}">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
-                                                    <Image Source="{Binding IsActive, Converter={StaticResource BooleanToImageConverter}}"
+                                                    <Image Source="{Binding IsActive, Converter={StaticResource BooleanToImageConverter}}" Width="16" Height="16"
                                                            Margin="0,6" />
                                                     <TextBlock Text="{Binding IsActive, Converter={StaticResource BoolToStringConverter}}"
                                                                Visibility="{Binding ElementName=lbHistory, Path=ActualWidth, Converter={StaticResource ButtonTextVisibilityConverter}}"

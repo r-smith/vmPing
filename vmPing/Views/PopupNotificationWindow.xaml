@@ -63,7 +63,7 @@
                                 Padding="{TemplateBinding Padding}"
                                 Background="{TemplateBinding Background}">
                             <Image Name="controlButton_image"
-                                   Source="/Resources/font-awesome_4-7-0_window-restore_14_0_ffffff_none.png"
+                                   Source="{StaticResource icon.window-restore-white}"
                                    Width="12"
                                    Height="12"
                                    />
@@ -111,7 +111,7 @@
                                 Padding="{TemplateBinding Padding}"
                                 Background="{TemplateBinding Background}">
                             <Image Name="controlButton_image"
-                                   Source="/Resources/font-awesome_4-7-0_close_14_0_ffffff_none.png"
+                                   Source="{StaticResource icon.window-close-white}"
                                    Width="12"
                                    Height="12"
                                    />

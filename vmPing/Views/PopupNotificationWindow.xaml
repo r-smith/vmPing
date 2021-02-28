@@ -52,6 +52,9 @@
                     Background="Transparent"
                     HorizontalAlignment="Right"
                     IsTabStop="False"
+                    ToolTip="Open status history window"
+                    ToolTipService.InitialShowDelay="1500"
+                    ToolTipService.ShowDuration="2000"
                     Click="Maximize_Click">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
@@ -71,9 +74,8 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="controlButton_border" Property="Background" Value="#000" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="controlButton_border" Property="Opacity" Value="1" />
+                                <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.window-restore-blue}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="controlButton_border" Property="BorderBrush" Value="White" />
@@ -100,6 +102,9 @@
                     Background="Transparent"
                     HorizontalAlignment="Right"
                     IsTabStop="False"
+                    ToolTip="Close"
+                    ToolTipService.InitialShowDelay="1500"
+                    ToolTipService.ShowDuration="2000"
                     Click="Close_Click">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
@@ -119,9 +124,8 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="controlButton_border" Property="Background" Value="#000" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="controlButton_border" Property="Opacity" Value="1" />
+                                <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.window-close-red}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="controlButton_border" Property="BorderBrush" Value="White" />

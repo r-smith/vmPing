@@ -556,20 +556,29 @@ namespace vmPing.Views
             }
         }
 
-        // Experimenting with multi-color listbox items.
-        //private void TextBlock_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //    var tb = sender as TextBlock;
-        //    var message = tb.Text;
-        //    tb.Text = string.Empty;
-        //    foreach (var letter in message)
-        //    {
-        //        if (char.IsControl(letter)) tb.Inlines.Add(letter.ToString());
-        //        else if (char.IsSymbol(letter))
-        //            tb.Inlines.Add(new Run(letter.ToString()) { Foreground = Brushes.Red });
-        //        else
-        //            tb.Inlines.Add(new Run(letter.ToString()) { Foreground = Brushes.Green });
-        //    }
-        //}
+        private void DockPanel_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                if (_ProbeCollection.Count < 1)
+                    return;
+
+                var data = new DataObject();
+                data.SetData("Source", (sender as DockPanel).DataContext as Probe);
+                DragDrop.DoDragDrop(sender as DependencyObject, data, DragDropEffects.Move);
+                e.Handled = true;
+            }
+        }
+
+        private void DockPanel_Drop(object sender, DragEventArgs e)
+        {
+            var source = e.Data.GetData("Source") as Probe;
+            if (source != null)
+            {
+                int newIndex = _ProbeCollection.IndexOf((sender as DockPanel).DataContext as Probe);
+                _ProbeCollection.RemoveAt(_ProbeCollection.IndexOf(source));
+                _ProbeCollection.Insert(newIndex, source);
+            }
+        }
     }
 }

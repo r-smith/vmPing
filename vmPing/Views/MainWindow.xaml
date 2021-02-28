@@ -294,7 +294,7 @@
                             </Grid.RowDefinitions>
 
                             <!-- Ping output section -->
-                            <DockPanel>
+                            <DockPanel Background="Transparent" AllowDrop="True" PreviewMouseMove="DockPanel_PreviewMouseMove" Drop="DockPanel_Drop">
 
                                 <!-- Ping title bar / button section -->
                                 <Grid DockPanel.Dock="Top">
@@ -528,18 +528,6 @@
                                             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                                         </Style>
                                     </ListBox.ItemContainerStyle>
-                                    <!-- Experimenting with multi-color listbox items -->
-                                    <!--<ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            --><!--<TextBox Text="{Binding Mode=OneWay}"
-                                                     Foreground="{Binding ElementName=lbHistory, Path=Foreground}"
-                                                     IsReadOnly="True"
-                                                     Background="Transparent"
-                                                     BorderThickness="0"
-                                                     Cursor="Arrow" />-->
-                                    <!--<TextBlock Text="{Binding}" Loaded="TextBlock_Loaded" />--><!--
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>-->
                                 </ListBox>
                             </DockPanel>
 
@@ -548,6 +536,7 @@
                             <Image Source="{StaticResource icon.vmping-logo-simple}"
                                    Width="72"
                                    Height="72"
+                                   IsHitTestVisible="False"
                                    Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanToVisibilityConverter}, NotifyOnTargetUpdated=True}"
                                    TargetUpdated="Logo_TargetUpdated"
                                    Opacity="0.03" />

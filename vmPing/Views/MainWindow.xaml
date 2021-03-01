@@ -325,7 +325,8 @@
                                            Padding="5,0,0,0"
                                            Margin="0"
                                            FontWeight="SemiBold"
-                                           Foreground="{Binding Status, Converter={StaticResource ProbeStatusToAliasBrushConverter}}">
+                                           Foreground="{Binding Status, Converter={StaticResource ProbeStatusToAliasBrushConverter}}"
+                                           AllowDrop="True" PreviewMouseMove="DockPanel_PreviewMouseMove" Drop="DockPanel_Drop">
                                     </Label>
 
                                     <!-- Button: Delete / Remove -->
@@ -513,8 +514,7 @@
                                          controls:ListBoxBehavior.ScrollOnNewItem="True"
                                          FocusVisualStyle="{x:Null}"
                                          FontFamily="Consolas"
-                                         FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}"
-                                         AllowDrop="True" PreviewMouseMove="DockPanel_PreviewMouseMove" Drop="DockPanel_Drop">
+                                         FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="{x:Type ListBoxItem}">
                                             <Setter Property="Background" Value="Transparent" />

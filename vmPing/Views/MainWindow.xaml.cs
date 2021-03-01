@@ -564,7 +564,7 @@ namespace vmPing.Views
                     return;
 
                 var data = new DataObject();
-                data.SetData("Source", (sender as ListBox).DataContext as Probe);
+                data.SetData("Source", (sender as Label).DataContext as Probe);
                 DragDrop.DoDragDrop(sender as DependencyObject, data, DragDropEffects.Move);
                 e.Handled = true;
             }
@@ -575,7 +575,7 @@ namespace vmPing.Views
             var source = e.Data.GetData("Source") as Probe;
             if (source != null)
             {
-                int newIndex = _ProbeCollection.IndexOf((sender as ListBox).DataContext as Probe);
+                int newIndex = _ProbeCollection.IndexOf((sender as Label).DataContext as Probe);
                 _ProbeCollection.RemoveAt(_ProbeCollection.IndexOf(source));
                 _ProbeCollection.Insert(newIndex, source);
             }

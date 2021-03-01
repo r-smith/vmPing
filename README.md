@@ -6,7 +6,7 @@ vmPing
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
 **[Click here to download the latest release](https://github.com/R-Smith/vmPing/releases/latest/download/vmPing.exe)**
-##### (1.3.9 released on February 28, 2021)
+##### (1.3.10 released on February 28, 2021)
 
 ##### Notes
 * There is no installer.  Just run the .exe.
@@ -27,7 +27,8 @@ Screenshots
 
 Recent Changes
 --------------
-### Version 1.3.9
+### Version 1.3.10
+* If you downloaded version 1.3.9, please replace it with version 1.3.10. The new drag & drop feature introduced a bug that disabled the button toolbar on each probe window. This is fixed in 1.3.10.
 * __Drag & drop reordering.__ Click and hold anywhere on a probe, then drag to the desired new location, and release.
 * Full control over creating and editing favorite sets. When creating or editing a favorite, you are now given a large multi-line textbox for entering hosts within the favorite. Hosts in the textbox can be one per line, comma-separated, or any combination of new lines and commas.
 * Numerous minor UI changes.

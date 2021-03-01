@@ -294,7 +294,7 @@
                             </Grid.RowDefinitions>
 
                             <!-- Ping output section -->
-                            <DockPanel Background="Transparent" AllowDrop="True" PreviewMouseMove="DockPanel_PreviewMouseMove" Drop="DockPanel_Drop">
+                            <DockPanel>
 
                                 <!-- Ping title bar / button section -->
                                 <Grid DockPanel.Dock="Top">
@@ -513,7 +513,8 @@
                                          controls:ListBoxBehavior.ScrollOnNewItem="True"
                                          FocusVisualStyle="{x:Null}"
                                          FontFamily="Consolas"
-                                         FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}">
+                                         FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}"
+                                         AllowDrop="True" PreviewMouseMove="DockPanel_PreviewMouseMove" Drop="DockPanel_Drop">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="{x:Type ListBoxItem}">
                                             <Setter Property="Background" Value="Transparent" />

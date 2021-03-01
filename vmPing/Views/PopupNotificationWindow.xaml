@@ -75,7 +75,7 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="controlButton_border" Property="Background" Value="#000" />
                                 <Setter TargetName="controlButton_border" Property="Opacity" Value="1" />
-                                <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.window-restore-blue}"/>
+                                <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.window-restore-white}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="controlButton_border" Property="BorderBrush" Value="White" />
@@ -125,7 +125,7 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="controlButton_border" Property="Background" Value="#000" />
                                 <Setter TargetName="controlButton_border" Property="Opacity" Value="1" />
-                                <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.window-close-red}"/>
+                                <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.window-close-white}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="controlButton_border" Property="BorderBrush" Value="White" />

@@ -74,28 +74,28 @@ namespace vmPing.Controls
         static void ListBox_Loaded(object sender, RoutedEventArgs e)
         {
             var listBox = (ListBox)sender;
-            var incc = listBox.Items as INotifyCollectionChanged;
-            if (incc == null) return;
+            if (!(listBox.Items is INotifyCollectionChanged notify)) return;
             listBox.Loaded -= ListBox_Loaded;
             Associations[listBox] = new Capture(listBox);
+            if (listBox.Items.Count > 1) listBox.ScrollIntoView(listBox.Items[listBox.Items.Count - 1]);
         }
 
         class Capture : IDisposable
         {
             private readonly ListBox listBox;
-            private readonly INotifyCollectionChanged incc;
+            private readonly INotifyCollectionChanged notify;
 
             public Capture(ListBox listBox)
             {
                 this.listBox = listBox;
-                incc = listBox.ItemsSource as INotifyCollectionChanged;
-                if (incc != null)
+                notify = listBox.ItemsSource as INotifyCollectionChanged;
+                if (notify != null)
                 {
-                    incc.CollectionChanged += incc_CollectionChanged;
+                    notify.CollectionChanged += Notify_CollectionChanged;
                 }
             }
 
-            void incc_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+            void Notify_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
             {
                 if (e.Action == NotifyCollectionChangedAction.Add)
                 {
@@ -106,8 +106,8 @@ namespace vmPing.Controls
 
             public void Dispose()
             {
-                if (incc != null)
-                    incc.CollectionChanged -= incc_CollectionChanged;
+                if (notify != null)
+                    notify.CollectionChanged -= Notify_CollectionChanged;
             }
         }
     }

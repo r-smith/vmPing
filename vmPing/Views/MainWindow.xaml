@@ -294,7 +294,7 @@
                             </Grid.RowDefinitions>
 
                             <!-- Ping output section -->
-                            <DockPanel>
+                            <DockPanel AllowDrop="True" Drop="Probe_Drop">
 
                                 <!-- Ping title bar / button section -->
                                 <Grid DockPanel.Dock="Top">
@@ -326,7 +326,7 @@
                                            Margin="0"
                                            FontWeight="SemiBold"
                                            Foreground="{Binding Status, Converter={StaticResource ProbeStatusToAliasBrushConverter}}"
-                                           AllowDrop="True" PreviewMouseMove="DockPanel_PreviewMouseMove" Drop="DockPanel_Drop">
+                                           AllowDrop="True" Drop="Probe_Drop" PreviewMouseMove="ProbeTitle_PreviewMouseMove">
                                     </Label>
 
                                     <!-- Button: Delete / Remove -->

@@ -556,13 +556,11 @@ namespace vmPing.Views
             }
         }
 
-        private void DockPanel_PreviewMouseMove(object sender, MouseEventArgs e)
+        private void ProbeTitle_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                if (_ProbeCollection.Count < 1)
-                    return;
-
+                
                 var data = new DataObject();
                 data.SetData("Source", (sender as Label).DataContext as Probe);
                 DragDrop.DoDragDrop(sender as DependencyObject, data, DragDropEffects.Move);
@@ -570,14 +568,33 @@ namespace vmPing.Views
             }
         }
 
-        private void DockPanel_Drop(object sender, DragEventArgs e)
+        private void Probe_Drop(object sender, DragEventArgs e)
         {
             var source = e.Data.GetData("Source") as Probe;
             if (source != null)
             {
-                int newIndex = _ProbeCollection.IndexOf((sender as Label).DataContext as Probe);
-                _ProbeCollection.RemoveAt(_ProbeCollection.IndexOf(source));
-                _ProbeCollection.Insert(newIndex, source);
+                int newIndex;
+                if (sender is Label)
+                {
+                    newIndex = _ProbeCollection.IndexOf((sender as Label).DataContext as Probe);
+                    e.Handled = true;
+                }
+                else if (sender is DockPanel)
+                {
+                    newIndex = _ProbeCollection.IndexOf((sender as DockPanel).DataContext as Probe);
+                    e.Handled = true;
+                }
+                else
+                {
+                    return;
+                }
+
+                int prevIndex = _ProbeCollection.IndexOf(source);
+                if (newIndex != prevIndex)
+                {
+                    _ProbeCollection.RemoveAt(prevIndex);
+                    _ProbeCollection.Insert(newIndex, source);
+                }
             }
         }
     }

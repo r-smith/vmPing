@@ -41,7 +41,7 @@
 
             <!-- Contents of selected favorite -->
             <Border Name="ContentsSection"
-                    Background="#efeff2"
+                    Background="#e8e8e8"
                     BorderThickness="0,1,1,1" BorderBrush="#acacac">
                 <DockPanel>
                     <!-- Contents title -->

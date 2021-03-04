@@ -107,7 +107,10 @@
                          AcceptsReturn="True"
                          VerticalContentAlignment="Top"
                          VerticalScrollBarVisibility="Auto"
-                         TextWrapping="Wrap"/>
+                         TextWrapping="Wrap"
+                         AllowDrop="True"
+                         PreviewDragOver="MyHosts_PreviewDragOver"
+                         Drop="MyHosts_Drop"/>
             </DockPanel>
         </DockPanel>
 

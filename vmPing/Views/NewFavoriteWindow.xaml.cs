@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -144,6 +145,30 @@ namespace vmPing.Views
             }
 
             SetWindowLong(_windowHandle, GWL_STYLE, GetWindowLong(_windowHandle, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_MINIMIZEBOX);
+        }
+
+        private void MyHosts_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                try
+                {
+                    string[] docPath = (string[])e.Data.GetData(DataFormats.FileDrop);
+                    MyHosts.Text = File.ReadAllText(docPath[0]);
+                }
+                catch
+                {
+                    var dialog = DialogWindow.ErrorWindow("File could not be opened. Make sure the file is a plain text file.");
+                    dialog.Owner = this;
+                    dialog.ShowDialog();
+                }
+            }
+        }
+
+        private void MyHosts_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.Copy;
+            e.Handled = true;
         }
     }
 }

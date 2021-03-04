@@ -627,7 +627,8 @@
 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="{Binding ElementName=ColumnCount, Path=Value}" />
+                    <!-- ColumnCount.Tag is updated to contain the lesser the two values: ColumnCount.Value and _ProbeCollection.Count -->
+                    <UniformGrid Columns="{Binding ElementName=ColumnCount, Path=Tag}" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

@@ -59,6 +59,9 @@ namespace vmPing.Views
                 AddProbe(2);
             }
 
+            // Set initial ColumnCount values. Value is what's set visually on the slider control.
+            // Tag is updated to be the lesser of the values ColumnCount.Value and _ProbeCollection.Count.
+            // The actual number of grid columns is bound to the tag value.
             ColumnCount.Value = _ProbeCollection.Count;
             ProbeItemsControl.ItemsSource = _ProbeCollection;
         }
@@ -134,8 +137,10 @@ namespace vmPing.Views
 
         private void ColumnCount_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (ColumnCount.Value > _ProbeCollection.Count)
-                ColumnCount.Value = _ProbeCollection.Count;
+            // When the ColumnCount slider value is changed, update Tag to be the lesser of
+            // ColumnCount.Value and _ProbeCollection.Count.
+            // The visual column count is bound to the Tag value.
+            ColumnCount.Tag = ColumnCount.Value > _ProbeCollection.Count ? _ProbeCollection.Count : (int)ColumnCount.Value;
         }
 
 
@@ -170,8 +175,9 @@ namespace vmPing.Views
                 probe.StartStop();
             }
             _ProbeCollection.Remove(probe);
-            if (ColumnCount.Value > _ProbeCollection.Count)
-                ColumnCount.Value = _ProbeCollection.Count;
+
+            // Update column count.
+            ColumnCount.Tag = ColumnCount.Value > _ProbeCollection.Count ? _ProbeCollection.Count : (int)ColumnCount.Value;
         }
 
 
@@ -242,6 +248,7 @@ namespace vmPing.Views
         private void AddMonitorExecute(object sender, ExecutedRoutedEventArgs e)
         {
             _ProbeCollection.Add(new Probe());
+            ColumnCount.Tag = ColumnCount.Value > _ProbeCollection.Count ? _ProbeCollection.Count : (int)ColumnCount.Value;
         }
 
 

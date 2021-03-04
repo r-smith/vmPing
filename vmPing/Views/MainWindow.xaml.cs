@@ -265,8 +265,11 @@ namespace vmPing.Views
                 // Open the options window.
                 var optionsWnd = new OptionsWindow();
                 optionsWnd.Owner = this;
-                optionsWnd.ShowDialog();
-                UpdatePopupOptionIsCheckedState();
+                if (optionsWnd.ShowDialog() == true)
+                {
+                    UpdatePopupOptionIsCheckedState();
+                    RefreshProbeColors();
+                }
             }
             else
             {
@@ -275,6 +278,11 @@ namespace vmPing.Views
             }
         }
 
+        private void RefreshProbeColors()
+        {
+            for (int i = 0; i < _ProbeCollection.Count; ++i)
+                _ProbeCollection[i].Status = _ProbeCollection[i].Status;
+        }
 
         private void RemoveAllProbes()
         {

@@ -22,126 +22,71 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <!-- Header -->
         <TextBlock Grid.Row="0"
                    Text="{x:Static resource:Strings.ManageFavorites_Header}"
                    Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"
                    />
-        <Border Grid.Row="1" BorderBrush="#acacac" BorderThickness="1">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width=".9*" />
-                </Grid.ColumnDefinitions>
-                
-                <!-- Favorites List -->
-                <ListBox Grid.Column="0"
-                         Name="Favorites"
-                         SelectionMode="Single"
-                         SelectionChanged="Favorites_SelectionChanged"
-                         BorderThickness="0"
-                         Background="#fff"
-                         FontSize="13"
-                         Margin="0" />
-                
-                <!-- Section for contents of selected favorite -->
-                <DockPanel Grid.Column="1" Margin="10,20,20,20" Name="ContentsSection">
-                    
-                    <!-- Title bar for contents section -->
-                    <Border DockPanel.Dock="Top" Background="#eee8d5" BorderThickness="1,1,1,0" BorderBrush="#888" CornerRadius="6,6,0,0">
-                        <DockPanel>
-                            <Grid DockPanel.Dock="Top">
-                                <!-- Contents title -->
-                                <TextBlock DockPanel.Dock="Top"
-                                           Text="{x:Static resource:Strings.ManageFavorites_HostsInSet}"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           FontSize="12"
-                                           Margin="0"
-                                           Foreground="#444"
-                                           FontWeight="SemiBold" />
 
-                                <!-- Button: Close -->
-                                <Button Name="btnClose"
-                                        Padding="5,2"
-                                        Margin="0"
-                                        Background="Transparent"
-                                        HorizontalAlignment="Right"
-                                        IsTabStop="False"
-                                        Click="CloseContents_Click">
-                                    <Button.Template>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Name="controlButton_border"
-                                                    BorderThickness="1"
-                                                    BorderBrush="Transparent"
-                                                    CornerRadius="4"
-                                                    Padding="{TemplateBinding Padding}"
-                                                    Background="{TemplateBinding Background}">
-                                                <Image Name="controlButton_image"
-                                                       Source="{StaticResource icon.window-close-black}"
-                                                       Opacity="0.3"
-                                                       Width="13"
-                                                       Height="13"
-                                                       />
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="controlButton_border" Property="BorderBrush" Value="#33000000" />
-                                                    <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
-                                                    <Setter TargetName="controlButton_border" Property="Background" Value="White" />
-                                                </Trigger>
-                                                <Trigger Property="IsPressed" Value="True">
-                                                    <Setter TargetName="controlButton_border" Property="Background" Value="#dddddd" />
-                                                    <Setter TargetName="controlButton_border" Property="BorderBrush" Value="Black" />
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
-                            </Grid>
-                        </DockPanel>
-                    </Border>
+        <!-- Main content -->
+        <UniformGrid Grid.Row="1" Rows="1">
+            <!-- Favorites list -->
+            <ListBox Name="Favorites"
+                     SelectionMode="Single"
+                     SelectionChanged="Favorites_SelectionChanged"
+                     BorderThickness="1"
+                     BorderBrush="#acacac"
+                     Background="#fff"
+                     FontSize="13"/>
 
-                    <!-- Contents List -->
-                    <Border DockPanel.Dock="Top" Background="#fefefc" BorderThickness="1" BorderBrush="#888" CornerRadius="0,0,6,6">
-                        <ListBox Name="Contents"
-                                 Foreground="#005ace"
-                                 Background="Transparent"
-                                 BorderThickness="0"
-                                 SelectionMode="Single"
-                                 Margin="5"
-                                 ItemContainerStyle="{StaticResource ListBoxItemNoHighlightStyle}" />
-                    </Border>
+            <!-- Contents of selected favorite -->
+            <Border Name="ContentsSection"
+                    Background="#efeff2"
+                    BorderThickness="0,1,1,1" BorderBrush="#acacac">
+                <DockPanel>
+                    <!-- Contents title -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="{x:Static resource:Strings.ManageFavorites_HostsInSet}"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               FontSize="14"
+                               Padding="5,5"
+                               Foreground="#333"
+                               Background="Transparent"
+                               FontWeight="SemiBold" />
+
+                    <!-- Contents list -->
+                    <ListBox Name="Contents"
+                             Foreground="#065bb2"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             SelectionMode="Single"
+                             FontFamily="Consolas"
+                             FontSize="15"
+                             ItemContainerStyle="{StaticResource ListBoxItemNoHighlightStyle}" />
                 </DockPanel>
+            </Border>
+        </UniformGrid>
 
-            </Grid>
-        </Border>
-
-
-        <Border Grid.Row="2" Background="#f8f8f8" BorderThickness="1,0,1,1" BorderBrush="#acacac">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Click="New_Click"
-                        Margin="9"
-                        Width="85"
-                        Style="{StaticResource ButtonSecondaryStyle}"
-                        HorizontalAlignment="Right"
-                        Content="{x:Static resource:Strings.DialogButton_New}" />
-                <Button Click="Edit_Click"
-                        Margin="9"
-                        Width="85"
-                        Style="{StaticResource ButtonSecondaryStyle}"
-                        IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
-                        HorizontalAlignment="Right"
-                        Content="{x:Static resource:Strings.DialogButton_Edit}" />
-                <Button Name="Remove"
-                        Click="Remove_Click"
-                        Margin="9"
-                        Width="85"
-                        Style="{StaticResource ButtonSecondaryStyle}"
-                        IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
-                        HorizontalAlignment="Right"
-                        Content="{x:Static resource:Strings.DialogButton_Remove}">
-                </Button>
-            </StackPanel>
-        </Border>
+        <!-- Buttons section -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,9,0,0">
+            <Button Click="New_Click"
+                    Width="85"
+                    Style="{StaticResource ButtonSecondaryStyle}"
+                    Content="{x:Static resource:Strings.DialogButton_New}" />
+            <Button Click="Edit_Click"
+                    Margin="15,0"
+                    Width="85"
+                    Style="{StaticResource ButtonSecondaryStyle}"
+                    IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
+                    Content="{x:Static resource:Strings.DialogButton_Edit}" />
+            <Button Name="Remove"
+                    Click="Remove_Click"
+                    Width="85"
+                    Style="{StaticResource ButtonSecondaryStyle}"
+                    IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
+                    Content="{x:Static resource:Strings.DialogButton_Remove}">
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>

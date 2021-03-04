@@ -230,7 +230,7 @@
     <value>Manage Favorites</value>
   </data>
   <data name="ManageFavorites_HostsInSet" xml:space="preserve">
-    <value>Hosts in Set</value>
+    <value>Hosts in Favorite</value>
   </data>
   <data name="ManageFavorites_Warn_DeleteA" xml:space="preserve">
     <value>Are you sure you want to remove</value>

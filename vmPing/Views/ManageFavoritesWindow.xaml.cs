@@ -79,11 +79,6 @@ namespace vmPing.Views
             Contents.ItemsSource = SelectedFavorite.Hostnames;
         }
 
-        private void CloseContents_Click(object sender, RoutedEventArgs e)
-        {
-            ContentsSection.Visibility = Visibility.Collapsed;
-        }
-
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
             if (Favorites.SelectedIndex < 0)

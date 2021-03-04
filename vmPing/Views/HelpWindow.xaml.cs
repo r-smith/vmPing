@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Input;
 
 namespace vmPing.Views
 {
@@ -80,6 +81,11 @@ namespace vmPing.Views
         private void Window_Closed(object sender, EventArgs e)
         {
             _OpenWindow = null;
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape) Close();
         }
     }
 }

@@ -6,6 +6,7 @@
         Height="575"
         Width="750"
         WindowStartupLocation="CenterScreen"
+        PreviewKeyDown="Window_PreviewKeyDown"
         Loaded="Window_Loaded"
         Closed="Window_Closed">
 

@@ -146,8 +146,8 @@
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
 
-            <!-- Menu Item: Add Monitor -->
-            <MenuItem x:Name="AddMonitorMenu"
+            <!-- Menu Item: Add Probe -->
+            <MenuItem x:Name="AddProbeMenu"
                       Margin="6,0">
                 <MenuItem.Header>
                     <AccessText Text="{x:Static resource:Strings.Toolbar_Add}" VerticalAlignment="Center" />
@@ -214,15 +214,16 @@
                     <Image Source="{StaticResource icon.chevron-circle-down}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="16" Height="16" />
                 </MenuItem.Icon>
 
-                <MenuItem Name="mnuProbeOptions"
+                <MenuItem Name="OptionsMenu"
                           Header="{x:Static resource:Strings.Menu_Options}"
                           InputGestureText="F10"
-                          Click="mnuProbeOptions_Click"
                           Padding="0,5" />
 
                 <Separator Padding="0,6" />
 
                 <MenuItem Header="{x:Static resource:Strings.Menu_StatusHistory}" Click="mnuStatusHistory_Click" />
+
+                <MenuItem Name="MultiInputMenu" Header="Input Addresses" InputGestureText="F2"/>
 
                 <MenuItem Header="{x:Static resource:Strings.Menu_PopupNotifications}">
                     <MenuItem Name="PopupNever"

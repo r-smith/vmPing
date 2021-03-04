@@ -18,13 +18,14 @@ namespace vmPing.Views
         private ObservableCollection<Probe> _ProbeCollection = new ObservableCollection<Probe>();
         private Dictionary<string, string> _Aliases = new Dictionary<string, string>();
 
-        public static RoutedCommand ProbeOptionsCommand = new RoutedCommand();
+        public static RoutedCommand OptionsCommand = new RoutedCommand();
         public static RoutedCommand StartStopCommand = new RoutedCommand();
         public static RoutedCommand HelpCommand = new RoutedCommand();
         public static RoutedCommand NewInstanceCommand = new RoutedCommand();
         public static RoutedCommand TraceRouteCommand = new RoutedCommand();
         public static RoutedCommand FloodHostCommand = new RoutedCommand();
-        public static RoutedCommand AddMonitorCommand = new RoutedCommand();
+        public static RoutedCommand AddProbeCommand = new RoutedCommand();
+        public static RoutedCommand MultiInputCommand = new RoutedCommand();
 
 
         public MainWindow()
@@ -90,35 +91,40 @@ namespace vmPing.Views
 
         private void InitializeCommandBindings()
         {
-            CommandBindings.Add(new CommandBinding(ProbeOptionsCommand, ProbeOptionsExecute));
+            CommandBindings.Add(new CommandBinding(OptionsCommand, OptionsExecute));
             CommandBindings.Add(new CommandBinding(StartStopCommand, StartStopExecute));
             CommandBindings.Add(new CommandBinding(HelpCommand, HelpExecute));
             CommandBindings.Add(new CommandBinding(NewInstanceCommand, NewInstanceExecute));
             CommandBindings.Add(new CommandBinding(TraceRouteCommand, TraceRouteExecute));
             CommandBindings.Add(new CommandBinding(FloodHostCommand, FloodHostExecute));
-            CommandBindings.Add(new CommandBinding(AddMonitorCommand, AddMonitorExecute));
+            CommandBindings.Add(new CommandBinding(AddProbeCommand, AddProbeExecute));
+            CommandBindings.Add(new CommandBinding(MultiInputCommand, MultiInputWindowExecute));
 
-            var kgProbeOptions = new KeyGesture(Key.F10);
+            var kgOptions = new KeyGesture(Key.F10);
             var kgStartStop = new KeyGesture(Key.F5);
             var kgHelp = new KeyGesture(Key.F1);
             var kgNewInstance = new KeyGesture(Key.N, ModifierKeys.Control);
             var kgTraceRoute = new KeyGesture(Key.T, ModifierKeys.Control);
             var kgFloodHost = new KeyGesture(Key.F, ModifierKeys.Control);
-            var kgAddMonitor = new KeyGesture(Key.A, ModifierKeys.Control);
-            InputBindings.Add(new InputBinding(ProbeOptionsCommand, kgProbeOptions));
+            var kgAddProbe = new KeyGesture(Key.A, ModifierKeys.Control);
+            var kgMultiInput = new KeyGesture(Key.F2);
+            InputBindings.Add(new InputBinding(OptionsCommand, kgOptions));
             InputBindings.Add(new InputBinding(StartStopCommand, kgStartStop));
             InputBindings.Add(new InputBinding(HelpCommand, kgHelp));
             InputBindings.Add(new InputBinding(NewInstanceCommand, kgNewInstance));
             InputBindings.Add(new InputBinding(TraceRouteCommand, kgTraceRoute));
             InputBindings.Add(new InputBinding(FloodHostCommand, kgFloodHost));
-            InputBindings.Add(new InputBinding(AddMonitorCommand, kgAddMonitor));
+            InputBindings.Add(new InputBinding(AddProbeCommand, kgAddProbe));
+            InputBindings.Add(new InputBinding(MultiInputCommand, kgMultiInput));
 
+            OptionsMenu.Command = OptionsCommand;
             StartStopMenu.Command = StartStopCommand;
             HelpMenu.Command = HelpCommand;
             NewInstanceMenu.Command = NewInstanceCommand;
             TraceRouteMenu.Command = TraceRouteCommand;
             FloodHostMenu.Command = FloodHostCommand;
-            AddMonitorMenu.Command = AddMonitorCommand;
+            AddProbeMenu.Command = AddProbeCommand;
+            MultiInputMenu.Command = MultiInputCommand;
         }
 
 
@@ -181,9 +187,32 @@ namespace vmPing.Views
         }
 
 
-        private void ProbeOptionsExecute(object sender, ExecutedRoutedEventArgs e)
+        private void MultiInputWindowExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            DisplayOptionsWindow();
+            var wnd = new MultiInputWindow();
+            wnd.Owner = this;
+            if (wnd.ShowDialog() == true)
+            {
+                RemoveAllProbes();
+
+                if (wnd.Addresses.Count < 1)
+                    AddProbe();
+                else
+                {
+                    AddProbe(numberOfProbes: wnd.Addresses.Count);
+                    for (int i = 0; i < wnd.Addresses.Count; ++i)
+                    {
+                        _ProbeCollection[i].Hostname = wnd.Addresses[i].ToUpper();
+                        _ProbeCollection[i].Alias = _Aliases.ContainsKey(_ProbeCollection[i].Hostname) ? _Aliases[_ProbeCollection[i].Hostname] : null;
+                        _ProbeCollection[i].StartStop();
+                    }
+                }
+
+                // Trigger refresh on ColumnCount (To update binding on window grid, if needed).
+                double count = ColumnCount.Value;
+                ColumnCount.Value = 1;
+                ColumnCount.Value = count;
+            }
         }
 
 
@@ -245,20 +274,13 @@ namespace vmPing.Views
         }
 
 
-        private void AddMonitorExecute(object sender, ExecutedRoutedEventArgs e)
+        private void AddProbeExecute(object sender, ExecutedRoutedEventArgs e)
         {
             _ProbeCollection.Add(new Probe());
             ColumnCount.Tag = ColumnCount.Value > _ProbeCollection.Count ? _ProbeCollection.Count : (int)ColumnCount.Value;
         }
 
-
-        private void mnuProbeOptions_Click(object sender, RoutedEventArgs e)
-        {
-            DisplayOptionsWindow();
-        }
-
-
-        private void DisplayOptionsWindow()
+        private void OptionsExecute(object sender, ExecutedRoutedEventArgs e)
         {
             if (OptionsWindow.openWindow == null)
             {
@@ -325,6 +347,7 @@ namespace vmPing.Views
                         }
                     }
 
+                    ColumnCount.Value = 1;  // Ensure window's grid column binding is updated, if needed.
                     ColumnCount.Value = favorite.ColumnCount;
                     this.Title = $"{selectedFavorite.Header} - vmPing";
                 };

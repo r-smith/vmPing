@@ -83,12 +83,15 @@
                             ToolTipService.ShowDuration="60000">
                         <Border.ToolTip>
                             <ToolTip Background="#404040">
-                                <TextBlock Width="300"
+                                <TextBlock Width="380"
                                            Margin="5,1"
                                            FontSize="14"
                                            TextWrapping="Wrap"
-                                           Foreground="#f2f2f2"
-                                           Text="Enter the hosts to include in this favorite set. Hostnames can be entered either one per line or comma-separated."/>
+                                           Foreground="#f2f2f2">
+                                    Type a list of addresses to include in this favorite set.<LineBreak/>
+                                    Enter either one per line or comma separated.<LineBreak/><LineBreak/>
+                                    If you have a text file containing hosts, drag and drop it here.
+                                </TextBlock>
                             </ToolTip>
                         </Border.ToolTip>
                         <Image Source="{StaticResource icon.question-circle}"

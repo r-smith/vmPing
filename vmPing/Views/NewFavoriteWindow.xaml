@@ -6,7 +6,10 @@
         UseLayoutRounding="True"
         Height="450"
         Width="450"
-        ResizeMode="NoResize"
+        MinHeight="350"
+        MinWidth="300"
+        ResizeMode="CanResize"
+        SourceInitialized="Window_SourceInitialized"
         Background="#fff"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False">

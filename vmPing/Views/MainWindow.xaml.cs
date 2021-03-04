@@ -326,6 +326,7 @@ namespace vmPing.Views
                     }
 
                     ColumnCount.Value = favorite.ColumnCount;
+                    this.Title = $"{selectedFavorite.Header} - vmPing";
                 };
 
                 mnuFavorites.Items.Add(menuItem);

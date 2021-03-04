@@ -180,7 +180,7 @@
                 </Paragraph>
                 <Paragraph Style="{StaticResource ParagraphText}">
                     <Run>Click</Run>
-                    <Image Source="/Resources/add-16.png" Width="14" Height="14" Margin="3,0,0,0"/>
+                    <Image Source="{StaticResource icon.add}" Width="14" Height="14" Margin="3,0,0,0"/>
                     <Run FontWeight="SemiBold">Add Host</Run>
                     <Run>from the menu bar, or use the keyboard shortcut,</Run>
                     <Run FontWeight="SemiBold">Alt-A</Run> .

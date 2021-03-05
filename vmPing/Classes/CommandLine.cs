@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using vmPing.Views;
 
@@ -103,32 +104,42 @@ namespace vmPing.Classes
 
         private static List<string> ReadHostsFromFile(string path)
         {
+            const long MaxSizeInBytes = 10240;
+
             try
             {
-                
+                // Check file size.
+                long length = new FileInfo(path).Length;
+                if (length > MaxSizeInBytes) throw new FileFormatException();
+
+                // Read file into a list of strings, so that each line can get checked.
                 var linesInFile = new List<string>(File.ReadAllLines(path));
-                var hostsInFile = new List<string>();
 
-                foreach (var line in linesInFile)
-                {
-                    if (line == String.Empty)
-                        continue;
+                // Get a list of valid lines.
+                // Valid lines must not be empty and must being with a letter, digit, or '[' character (for IPv6).
+                var validLines = linesInFile
+                    .Where(x => !string.IsNullOrWhiteSpace(x) &&
+                                (char.IsLetterOrDigit(x[0]) || x[0] == '['));
 
-                    if (!Char.IsLetterOrDigit(line[0]))
-                        continue;
-                    
-                    hostsInFile.Add(line.Trim());
-                }
-
-                return hostsInFile;
+                // Convert list to multiline string (with each line trimmed).
+                return validLines.Select(x => x.Trim()).ToList();
+            }
+            catch (FileFormatException)
+            {
+                var dialog = DialogWindow.ErrorWindow(
+                    $"The file is too large and cannot be opened. The maximum file size is {MaxSizeInBytes / 1024} kb." +
+                    $"{Environment.NewLine}{Environment.NewLine}{path}");
+                dialog.Topmost = true;
+                dialog.ShowDialog();
+                return new List<string>();
             }
             catch
             {
-                MessageBox.Show(
-                    $"Failed parsing {path}",
-                    "vmPing Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var dialog = DialogWindow.ErrorWindow(
+                    "Failed parsing file." +
+                    $"{Environment.NewLine}{Environment.NewLine}{path}");
+                dialog.Topmost = true;
+                dialog.ShowDialog();
                 return new List<string>();
             }
         }

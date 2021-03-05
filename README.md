@@ -14,6 +14,11 @@ vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple h
 * .NET 4.5 or greater is required.
 
 
+Code Signing Certificate
+------------------------
+I'm looking to purchase a code signing certificate and would welcome any donations. So far I have received $25. I would purchase through https://www.ksoftware.net and is currently priced at $84 for 1-year, $159 for 2-year, and $209 for 3-year (length of certificate is the duration it can be used for signing and signed code remains valid after expiration). This would get rid of the warning Windows gives when opening an unsigned application and also help with antivirus vendors that automatically flag unsigned applications.
+
+
 Screenshots
 -----------
 ##### Main Window

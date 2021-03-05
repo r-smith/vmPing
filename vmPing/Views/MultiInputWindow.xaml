@@ -9,7 +9,9 @@
         Height="450" MinHeight="250"
         Width="350" MinWidth="280"
         Background="#f8f8f8"
-        WindowStartupLocation="CenterOwner">
+        WindowStartupLocation="CenterOwner"
+        SourceInitialized="Window_SourceInitialized"
+        ShowInTaskbar="False">
     <Window.Resources>
         <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
             <Setter Property="Background" Value="White"/>

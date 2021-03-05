@@ -6,7 +6,7 @@ vmPing
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
 **[Click here to download the latest release](https://github.com/R-Smith/vmPing/releases/latest/download/vmPing.exe)**
-##### (1.3.11 released on March 1, 2021)
+##### (1.3.12 released on March 4, 2021)
 
 ##### Notes
 * There is no installer.  Just run the .exe.
@@ -27,6 +27,15 @@ Screenshots
 
 Recent Changes
 --------------
+### Version 1.3.12
+* __New multi-address input.__ Access using the keyboard shortcut F2 or by clicking the option in vmPing's menu. This displays a window with a multi-line textbox. Type your target addresses one per line or comma-separated, click OK, and vmPing populates with your targets and immediately begins pinging. So simple. If you have a text file containing addresses, just drag and drop it onto the window.
+* Column count can now be set to anything (within the limits). Previously the column count could never be set higher than the number of probes. This has always annoyed me. Now you can choose any column count and it'll stick. An example would be: Two probes. Set column count to four. vmPing displays two columns since there's only two probes. But as you add more probes, new columns will be made until the four column count is satisfied.
+* Improved drag & drop re-ordering of probes. This was a little buggy when first introduced in v1.3.9, but should now perform well. Usage: Hovering your mouse over a probe displays the usual probe title bar. Click and hold in the title bar area, then drag to the desired new location, and release.
+* Loading a favorite sets the application title bar to the title of the favorite.
+* On the Create New Favorite Set window, you can now drag & drop a text file right onto the list of addresses.
+* Minor UI style changes on the Manage Aliases and Manage Favorites window.
+
+
 ### Version 1.3.11
 * The recent drag & drop feature was causing issues. Please update to this version if you downloaded 1.3.9-10. The drag & drop functionality is still there, but you must click and drag on the bar that appears across the top of each probe window.
 

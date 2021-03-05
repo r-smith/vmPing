@@ -61,12 +61,37 @@ namespace vmPing.Views
 
         private void MyAddresses_Drop(object sender, DragEventArgs e)
         {
+            const long MaxSizeInBytes = 10240;
+
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 try
                 {
+                    // Get path(s). We only work with the first element, in cases of multiple files.
                     string[] docPath = (string[])e.Data.GetData(DataFormats.FileDrop);
-                    MyAddresses.Text = File.ReadAllText(docPath[0]);
+
+                    // Check file size.
+                    long length = new FileInfo(docPath[0]).Length;
+                    if (length > MaxSizeInBytes) throw new FileFormatException();
+
+                    // Read file into a list of strings, so that each line can get checked.
+                    var linesInFile = new List<string>(File.ReadAllLines(docPath[0]));
+
+                    // Get a list of valid lines.
+                    // Valid lines must not be empty and must being with a letter, digit, or '[' character (for IPv6).
+                    var validLines = linesInFile
+                        .Where(x => !string.IsNullOrWhiteSpace(x) &&
+                                    (char.IsLetterOrDigit(x[0]) || x[0] == '['));
+
+                    // Convert list to multiline string (with each line trimmed).
+                    MyAddresses.Text = string.Join(Environment.NewLine, validLines.Select(x => x.Trim()));
+                }
+                catch (FileFormatException)
+                {
+                    var dialog = DialogWindow.ErrorWindow(
+                        $"The file is too large and cannot be opened. The maximum file size is {MaxSizeInBytes / 1024} kb.");
+                    dialog.Owner = this;
+                    dialog.ShowDialog();
                 }
                 catch
                 {

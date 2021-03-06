@@ -1,7 +1,8 @@
 vmPing
 ======
 [![Donate to this project using PayPal](https://img.shields.io/badge/Donate-PayPal-green.svg?style=flat)](https://paypal.me/SmithRyn/15)
-[![Join the chat at https://gitter.im/vmPing/Lobby](https://badges.gitter.im/vmPing/Lobby.svg)](https://gitter.im/vmPing/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the Discord chat](https://img.shields.io/discord/817276291262447697.svg?style=flat)](https://discord.gg/Guf66Zk6US)
+[![Total downloads](https://img.shields.io/github/downloads/r-smith/vmping/total)](https://github.com/R-Smith/vmPing/releases)
 
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
@@ -11,6 +12,11 @@ vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple h
 ##### Notes
 * There is no installer.  Just run the .exe.
 * .NET 4.5 or greater is required.
+
+
+Code Signing Certificate
+------------------------
+I'm looking to purchase a code signing certificate and would welcome any donations. So far I have received $25. I would purchase through https://www.ksoftware.net and is currently priced at $84 for 1-year, $159 for 2-year, and $209 for 3-year (length of certificate is the duration it can be used for signing and signed code remains valid after expiration). This would get rid of the warning Windows gives when opening an unsigned application and also help with antivirus vendors that automatically flag unsigned applications.
 
 
 Screenshots

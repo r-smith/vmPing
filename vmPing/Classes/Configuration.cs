@@ -9,35 +9,45 @@ namespace vmPing.Classes
 {
     class Configuration
     {
-        public static string Path = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
-        public static string ParentFolder = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing");
-        public static string OldPath = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPingFavorites.xml");
+
+        public static string FilePath = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
+        private static string OldPath = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPingFavorites.xml");
+
+        static Configuration()
+        {
+            // Constructor: Determine the location of vmPing configuration file.
+            // If a configuration file is found in the current directory, update FilePath.
+            // Otherwise the default location is used (%LocalAppData%\vmPing).
+            if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "vmPing.xml"))
+                FilePath = AppDomain.CurrentDomain.BaseDirectory + "vmPing.xml";
+        }
 
         public static bool Exists()
         {
-            return File.Exists(Path);
+            return File.Exists(FilePath);
         }
 
         public static bool IsReady()
         {
-            if (!Directory.Exists(ParentFolder))
+            if (!File.Exists(FilePath))
             {
-                try
+                // Configuration file does not exist. Create directory if it also doesn't exist.
+                if (!Directory.Exists(Path.GetDirectoryName(FilePath)))
                 {
-                    Directory.CreateDirectory(ParentFolder);
+                    try
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
+                    }
+                    catch (Exception ex)
+                    {
+                        Util.ShowError($"{Strings.Error_CreateDirectory} {ex.Message}");
+                        return false;
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Util.ShowError($"{Strings.Error_CreateDirectory} {ex.Message}");
-                    return false;
-                }
-            }
 
-            if (!File.Exists(Path))
-            {
+                // Directory should be ready. Create a basic XML configuration file.
                 try
                 {
-                    // Generate new xml configuration file.
                     var xmlFile = new XmlDocument();
                     var rootNode = xmlFile.CreateElement("vmping");
                     xmlFile.AppendChild(rootNode);
@@ -46,7 +56,7 @@ namespace vmPing.Classes
                     rootNode.AppendChild(xmlFile.CreateElement("configuration"));
                     rootNode.AppendChild(xmlFile.CreateElement("favorites"));
 
-                    xmlFile.Save(Path);
+                    xmlFile.Save(FilePath);
                 }
                 catch (Exception ex)
                 {
@@ -61,9 +71,9 @@ namespace vmPing.Classes
 
         public static void UpgradeConfigurationFile()
         {
-            if (!Directory.Exists(ParentFolder))
+            if (!Directory.Exists(Path.GetDirectoryName(FilePath)))
                 return;
-            if (File.Exists(Path))
+            if (File.Exists(FilePath))
                 return;
 
             if (File.Exists(OldPath))
@@ -83,7 +93,7 @@ namespace vmPing.Classes
                     newRootNode.AppendChild(newXmlFile.CreateElement("configuration"));
                     newRootNode.AppendChild(newXmlFile.ImportNode(oldRootNode, true));
 
-                    newXmlFile.Save(Path);
+                    newXmlFile.Save(FilePath);
                 }
                 catch (Exception ex)
                 {
@@ -112,7 +122,7 @@ namespace vmPing.Classes
             try
             {
                 var xd = new XmlDocument();
-                xd.Load(Configuration.Path);
+                xd.Load(FilePath);
 
                 // Check if configuration node already exists.  If so, delete it.
                 XmlNode nodeRoot = xd.SelectSingleNode("/vmping");
@@ -132,7 +142,7 @@ namespace vmPing.Classes
 
                 nodeRoot.AppendChild(configuration);
                 nodeRoot.AppendChild(colors);
-                xd.Save(Configuration.Path);
+                xd.Save(FilePath);
             }
 
             catch (Exception ex)
@@ -390,7 +400,7 @@ namespace vmPing.Classes
             try
             {
                 var xd = new XmlDocument();
-                xd.Load(Path);
+                xd.Load(FilePath);
 
                 LoadConfigurationNode(xd.SelectNodes("/vmping/configuration/option"));
                 LoadColorsNode(xd.SelectNodes("/vmping/colors/option"));

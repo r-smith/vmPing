@@ -21,7 +21,7 @@ namespace vmPing.Classes
             try
             {
                 var xd = new XmlDocument();
-                xd.Load(Configuration.Path);
+                xd.Load(Configuration.FilePath);
 
                 XmlNode nodeTitleSearch = xd.SelectSingleNode($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(title)}]");
                 if (nodeTitleSearch != null)
@@ -47,7 +47,7 @@ namespace vmPing.Classes
             try
             {
                 var xd = new XmlDocument();
-                xd.Load(Configuration.Path);
+                xd.Load(Configuration.FilePath);
 
                 foreach (XmlNode node in xd.SelectNodes("/vmping/favorites/favorite"))
                     favoriteTitles.Add(node.Attributes["title"].Value);
@@ -75,7 +75,7 @@ namespace vmPing.Classes
                 favorite.Hostnames = new List<string>();
 
                 var xd = new XmlDocument();
-                xd.Load(Configuration.Path);
+                xd.Load(Configuration.FilePath);
 
                 XmlNode nodeFavorite = xd.SelectSingleNode($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(favoriteTitle)}]");
                 favorite.ColumnCount = int.Parse(nodeFavorite.Attributes["columncount"].Value);
@@ -107,7 +107,7 @@ namespace vmPing.Classes
             try
             {
                 var xd = new XmlDocument();
-                xd.Load(Configuration.Path);
+                xd.Load(Configuration.FilePath);
 
                 // Check if title already exists.
                 XmlNode nodeRoot = xd.SelectSingleNode("/vmping/favorites");
@@ -117,7 +117,7 @@ namespace vmPing.Classes
                     node.Attributes["title"].Value = newTitle;
                 }
 
-                xd.Save(Configuration.Path);
+                xd.Save(Configuration.FilePath);
             }
 
             catch (Exception ex)
@@ -135,7 +135,7 @@ namespace vmPing.Classes
             try
             {
                 var xd = new XmlDocument();
-                xd.Load(Configuration.Path);
+                xd.Load(Configuration.FilePath);
 
                 XmlNode nodeRoot = xd.SelectSingleNode("/vmping/favorites");
 
@@ -157,7 +157,7 @@ namespace vmPing.Classes
                     favorite.AppendChild(xmlElement);
                 }
                 nodeRoot.AppendChild(favorite);
-                xd.Save(Configuration.Path);
+                xd.Save(Configuration.FilePath);
             }
 
             catch (Exception ex)
@@ -174,7 +174,7 @@ namespace vmPing.Classes
             try
             {
                 var xd = new XmlDocument();
-                xd.Load(Configuration.Path);
+                xd.Load(Configuration.FilePath);
 
                 // Search for favorite by title.
                 XmlNode nodeRoot = xd.SelectSingleNode("/vmping/favorites");
@@ -183,7 +183,7 @@ namespace vmPing.Classes
                     // Found title.  Delete all versions.
                     nodeRoot.RemoveChild(node);
                 }
-                xd.Save(Configuration.Path);
+                xd.Save(Configuration.FilePath);
             }
 
             catch (Exception ex)

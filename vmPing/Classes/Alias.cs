@@ -15,7 +15,7 @@ namespace vmPing.Classes
             try
             {
                 var xd = new XmlDocument();
-                xd.Load(Configuration.Path);
+                xd.Load(Configuration.FilePath);
 
                 var aliases = new Dictionary<string, string>();
                 foreach (XmlNode node in xd.SelectNodes("/vmping/aliases/alias"))
@@ -39,7 +39,7 @@ namespace vmPing.Classes
             try
             {
                 var xd = new XmlDocument();
-                xd.Load(Configuration.Path);
+                xd.Load(Configuration.FilePath);
 
                 XmlNode nodeRoot = xd.SelectSingleNode("/vmping/aliases");
 
@@ -54,7 +54,7 @@ namespace vmPing.Classes
                 aliasEntry.SetAttribute("host", hostname.ToUpper());
                 aliasEntry.InnerText = alias;
                 nodeRoot.AppendChild(aliasEntry);
-                xd.Save(Configuration.Path);
+                xd.Save(Configuration.FilePath);
             }
 
             catch (Exception ex)
@@ -68,11 +68,11 @@ namespace vmPing.Classes
         {
             if (!Configuration.Exists())
                 return;
-            
+
             try
             {
                 var xd = new XmlDocument();
-                xd.Load(Configuration.Path);
+                xd.Load(Configuration.FilePath);
 
                 // Search for alias.
                 XmlNode nodeRoot = xd.SelectSingleNode("/vmping/aliases");
@@ -81,7 +81,7 @@ namespace vmPing.Classes
                     // Found title.  Delete all versions.
                     nodeRoot.RemoveChild(node);
                 }
-                xd.Save(Configuration.Path);
+                xd.Save(Configuration.FilePath);
             }
 
             catch (Exception ex)

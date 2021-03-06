@@ -9,9 +9,7 @@ namespace vmPing.Classes
 {
     class Configuration
     {
-
         public static string FilePath = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPing.xml");
-        private static string OldPath = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\vmPing\vmPingFavorites.xml");
 
         static Configuration()
         {
@@ -66,40 +64,6 @@ namespace vmPing.Classes
             }
 
             return true;
-        }
-
-
-        public static void UpgradeConfigurationFile()
-        {
-            if (!Directory.Exists(Path.GetDirectoryName(FilePath)))
-                return;
-            if (File.Exists(FilePath))
-                return;
-
-            if (File.Exists(OldPath))
-            {
-                try
-                {
-                    // Upgrade old configuration file.
-                    var newXmlFile = new XmlDocument();
-                    var newRootNode = newXmlFile.CreateElement("vmping");
-                    newXmlFile.AppendChild(newRootNode);
-
-                    var oldXmlFile = new XmlDocument();
-                    oldXmlFile.Load(OldPath);
-                    var oldRootNode = oldXmlFile.FirstChild;
-
-                    newRootNode.AppendChild(newXmlFile.CreateElement("aliases"));
-                    newRootNode.AppendChild(newXmlFile.CreateElement("configuration"));
-                    newRootNode.AppendChild(newXmlFile.ImportNode(oldRootNode, true));
-
-                    newXmlFile.Save(FilePath);
-                }
-                catch (Exception ex)
-                {
-                    Util.ShowError($"{Strings.Error_UpgradeConfig} {ex.Message}");
-                }
-            }
         }
 
 

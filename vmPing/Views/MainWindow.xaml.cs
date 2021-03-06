@@ -38,7 +38,6 @@ namespace vmPing.Views
         private void InitializeAplication()
         {
             InitializeCommandBindings();
-            Configuration.UpgradeConfigurationFile();
             LoadFavorites();
             LoadAliases();
             Configuration.Load();
@@ -599,7 +598,7 @@ namespace vmPing.Views
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                
+
                 var data = new DataObject();
                 data.SetData("Source", (sender as Label).DataContext as Probe);
                 DragDrop.DoDragDrop(sender as DependencyObject, data, DragDropEffects.Move);

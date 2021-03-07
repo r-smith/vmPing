@@ -90,6 +90,9 @@
     <Compile Include="Views\MultiInputWindow.xaml.cs">
       <DependentUpon>MultiInputWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\NewConfigurationWindow.xaml.cs">
+      <DependentUpon>NewConfigurationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\StatusHistoryWindow.xaml.cs">
       <DependentUpon>StatusHistoryWindow.xaml</DependentUpon>
     </Compile>
@@ -180,6 +183,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MultiInputWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NewConfigurationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Windows;
 using System.Xml;
 using vmPing.Properties;
+using vmPing.Views;
 
 namespace vmPing.Classes
 {
@@ -29,7 +31,31 @@ namespace vmPing.Classes
         {
             if (!File.Exists(FilePath))
             {
-                // Configuration file does not exist. Create directory if it also doesn't exist.
+                // Configuration file does not exist. Prompt if and where file should be created.
+                var newConfigWindow = new NewConfigurationWindow();
+
+                // Try to determine window that should be owner. Is there a better way?
+                // Currently checks owned windows of main window, plus owned windows of any child windows.
+                var mainOwnedWindows = Application.Current.MainWindow.OwnedWindows;
+                if (mainOwnedWindows.Count > 0)
+                {
+                    newConfigWindow.Owner = mainOwnedWindows[0].OwnedWindows.Count > 0
+                        ? mainOwnedWindows[0].OwnedWindows[0]
+                        : mainOwnedWindows[0];
+                }
+                else
+                {
+                    newConfigWindow.Owner = Application.Current.MainWindow;
+                }
+
+                // Display new config prompt. Configuration.FilePath is updated if user chooses portable mode.
+                if (newConfigWindow.ShowDialog() == false)
+                {
+                    // User decided not to create a configuration file.
+                    return false;
+                }
+
+                // Create directory if it also doesn't exist.
                 if (!Directory.Exists(Path.GetDirectoryName(FilePath)))
                 {
                     try

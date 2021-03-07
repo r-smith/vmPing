@@ -284,12 +284,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\vmPing-16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\route-16.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="vmPing.ico" />
   </ItemGroup>
   <ItemGroup>

@@ -257,7 +257,7 @@
 
                 <MenuItem Header="{x:Static resource:Strings.Menu_TraceRoute}" x:Name="TraceRouteMenu" InputGestureText="Ctrl-T" Padding="0,5">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/route-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                        <Image Source="{StaticResource icon.route}" VerticalAlignment="Center" Width="16" Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="{x:Static resource:Strings.Menu_FloodHost}" x:Name="FloodHostMenu" InputGestureText="Ctrl-F" Padding="0,5">
@@ -267,7 +267,7 @@
                 </MenuItem>
                 <MenuItem Header="vmPing" x:Name="NewInstanceMenu" InputGestureText="Ctrl-N" Padding="0,5">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/vmPing-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                        <Image Source="{StaticResource icon.vmping-logo-simple}" VerticalAlignment="Center" Width="16" Height="16" />
                     </MenuItem.Icon>
                 </MenuItem>
 

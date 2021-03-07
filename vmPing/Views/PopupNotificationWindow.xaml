@@ -274,7 +274,7 @@
         <StackPanel Grid.Row="3"
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
-            <Image Source="/Resources/vmPing-16.png"
+            <Image Source="{StaticResource icon.vmping-logo-simple}"
                    Width="16"
                    Height="16" />
             <TextBlock Grid.Row="3"

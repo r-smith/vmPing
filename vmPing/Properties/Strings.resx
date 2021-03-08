@@ -272,8 +272,8 @@
   <data name="Menu_StatusHistory" xml:space="preserve">
     <value>Status History</value>
   </data>
-  <data name="Menu_TraceRoute" xml:space="preserve">
-    <value>Trace Route</value>
+  <data name="Menu_Traceroute" xml:space="preserve">
+    <value>Traceroute</value>
   </data>
   <data name="Milliseconds_Symbol" xml:space="preserve">
     <value>ms</value>

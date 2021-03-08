@@ -511,11 +511,11 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trace Route.
+        ///   Looks up a localized string similar to Traceroute.
         /// </summary>
-        public static string Menu_TraceRoute {
+        public static string Menu_Traceroute {
             get {
-                return ResourceManager.GetString("Menu_TraceRoute", resourceCulture);
+                return ResourceManager.GetString("Menu_Traceroute", resourceCulture);
             }
         }
         

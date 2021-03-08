@@ -255,7 +255,7 @@
 
                 <Separator Padding="0,6" />
 
-                <MenuItem Header="{x:Static resource:Strings.Menu_TraceRoute}" x:Name="TraceRouteMenu" InputGestureText="Ctrl-T" Padding="0,5">
+                <MenuItem Header="{x:Static resource:Strings.Menu_TraceRoute}" x:Name="TracerouteMenu" InputGestureText="Ctrl-T" Padding="0,5">
                     <MenuItem.Icon>
                         <Image Source="{StaticResource icon.route}" VerticalAlignment="Center" Width="16" Height="16" />
                     </MenuItem.Icon>

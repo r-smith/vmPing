@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -12,64 +11,59 @@ using vmPing.Classes;
 namespace vmPing.Views
 {
     /// <summary>
-    /// TraceRouteWindow is a tool for performing a network traceroute to a given host.
+    /// TracerouteWindow is a tool for performing a network traceroute to a given host.
     /// </summary>
-    public partial class TraceRouteWindow : Window
+    public partial class TracerouteWindow : Window
     {
-        NetworkRoute _route = new NetworkRoute();
+        internal NetworkRoute Route { get; set; } = new NetworkRoute();
 
-        internal NetworkRoute Route { get => _route; set => _route = value; }
-
-        public TraceRouteWindow()
+        public TracerouteWindow()
         {
             InitializeComponent();
 
-            DataContext = _route;
-            dgTrace.ItemsSource = _route.networkRoute;
+            DataContext = Route;
+            TraceData.ItemsSource = Route.networkRoute;
 
             // Set initial focus to text box.
             Loaded += (sender, e) =>
                 MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
 
-
-        private void btnTraceRoute_Click(object sender, RoutedEventArgs e)
+        private void Trace_Click(object sender, RoutedEventArgs e)
         {
-            if (!_route.IsActive)
+            if (!Route.IsActive)
             {
-                if (txtHostname.Text.Length == 0)
+                if (Hostname.Text.Length == 0)
                     return;
 
-                if (_route.BgWorker != null)
-                    _route.BgWorker.CancelAsync();
+                if (Route.BgWorker != null)
+                    Route.BgWorker.CancelAsync();
 
-                tbTraceStatus.Text = "Tracing Route...";
-                _route.DestinationHost = txtHostname.Text;
-                _route.MaxHops = 30;
-                _route.PingTimeout = 2000;
-                _route.networkRoute.Clear();
-                _route.IsActive = true;
+                TraceStatus.Text = "Tracing Route...";
+                Route.DestinationHost = Hostname.Text;
+                Route.MaxHops = 30;
+                Route.PingTimeout = 2000;
+                Route.networkRoute.Clear();
+                Route.IsActive = true;
 
-                _route.BgWorker = new BackgroundWorker();
-                _route.ResetEvent = new AutoResetEvent(false);
-                _route.BgWorker.DoWork += new DoWorkEventHandler(backgroundThread_TraceRoute);
-                _route.BgWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundThread_ProgressChanged);
-                _route.BgWorker.WorkerSupportsCancellation = true;
-                _route.BgWorker.WorkerReportsProgress = true;
-                _route.BgWorker.RunWorkerAsync();
+                Route.BgWorker = new BackgroundWorker();
+                Route.ResetEvent = new AutoResetEvent(false);
+                Route.BgWorker.DoWork += new DoWorkEventHandler(BackgroundThread_TraceRoute);
+                Route.BgWorker.ProgressChanged += new ProgressChangedEventHandler(BackgroundThread_ProgressChanged);
+                Route.BgWorker.WorkerSupportsCancellation = true;
+                Route.BgWorker.WorkerReportsProgress = true;
+                Route.BgWorker.RunWorkerAsync();
             }
             else
             {
-                _route.BgWorker.CancelAsync();
-                _route.ResetEvent.WaitOne();
-                _route.IsActive = false;
-                tbTraceStatus.Text = "Trace Cancelled";
+                Route.BgWorker.CancelAsync();
+                Route.ResetEvent.WaitOne();
+                Route.IsActive = false;
+                TraceStatus.Text = "Trace Cancelled";
             }
         }
 
-
-
-        public void backgroundThread_TraceRoute(object sender, DoWorkEventArgs e)
+        public void BackgroundThread_TraceRoute(object sender, DoWorkEventArgs e)
         {
             var bgWorker = sender as BackgroundWorker;
 
@@ -77,18 +71,17 @@ namespace vmPing.Views
             var pingOptions = new PingOptions(1, true);
             PingReply pingReply;
             var timer = new Stopwatch();
-            _route.Timer = timer;
+            Route.Timer = timer;
 
-            while (!bgWorker.CancellationPending && _route.IsActive && pingOptions.Ttl <= _route.MaxHops)
+            while (!bgWorker.CancellationPending && Route.IsActive && pingOptions.Ttl <= Route.MaxHops)
             {
-                IPAddress ipAddress;
-                if (IPAddress.TryParse(_route.DestinationHost, out ipAddress))
+                if (IPAddress.TryParse(Route.DestinationHost, out IPAddress ipAddress))
                 {
-                    _route.DestinationIp = ipAddress;
+                    Route.DestinationIp = ipAddress;
                 }
                 else
                 {
-                    try { _route.DestinationIp = Dns.GetHostEntry(_route.DestinationHost).AddressList[0]; }
+                    try { Route.DestinationIp = Dns.GetHostEntry(Route.DestinationHost).AddressList[0]; }
                     catch { bgWorker.ReportProgress(-1); break; }
                 }
 
@@ -96,14 +89,14 @@ namespace vmPing.Views
                 {
                     try
                     {
-                        _route.Timer.Reset();
-                        _route.Timer.Start();
-                        pingReply = ping.Send(_route.DestinationIp, _route.PingTimeout, pingBuffer, pingOptions);
+                        Route.Timer.Reset();
+                        Route.Timer.Start();
+                        pingReply = ping.Send(Route.DestinationIp, Route.PingTimeout, pingBuffer, pingOptions);
                         if (pingReply.Status == IPStatus.TimedOut)
                         {
-                            _route.Timer.Reset();
-                            _route.Timer.Start();
-                            pingReply = ping.Send(_route.DestinationIp, _route.PingTimeout, pingBuffer, pingOptions);
+                            Route.Timer.Reset();
+                            Route.Timer.Start();
+                            pingReply = ping.Send(Route.DestinationIp, Route.PingTimeout, pingBuffer, pingOptions);
                         }
 
                         if (!bgWorker.CancellationPending)
@@ -112,7 +105,7 @@ namespace vmPing.Views
                         if (pingReply.Status == IPStatus.Success)
                             break;
 
-                        _route.ResetEvent.Set();
+                        Route.ResetEvent.Set();
                         Thread.Sleep(100);
                         ++pingOptions.Ttl;
                     }
@@ -122,18 +115,17 @@ namespace vmPing.Views
             }
 
             e.Cancel = true;
-            _route.ResetEvent.Set();
-            _route.IsActive = false;
+            Route.ResetEvent.Set();
+            Route.IsActive = false;
         }
 
-
-        private void backgroundThread_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void BackgroundThread_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            _route.Timer.Stop();
+            Route.Timer.Stop();
 
             if (e.ProgressPercentage < 0)
             {
-                tbTraceStatus.Text = "Invalid Hostname";
+                TraceStatus.Text = "Invalid Hostname";
                 return;
             }
 
@@ -144,16 +136,16 @@ namespace vmPing.Views
                 node.HostAddress = pingReply.Address.ToString();
             node.ReplyStatus = pingReply.Status;
             node.HopId = e.ProgressPercentage;
-            node.RoundTripTime = _route.Timer.ElapsedMilliseconds;
+            node.RoundTripTime = Route.Timer.ElapsedMilliseconds;
 
             if (node.ReplyStatus == IPStatus.TimedOut)
                 node.HostAddress = "Timed Out";
-            
-            if (node.ReplyStatus == IPStatus.Success)
-                tbTraceStatus.Text = "Trace Complete";
 
-            _route.networkRoute.Add(node);
-            dgTrace.ScrollIntoView(dgTrace.Items[_route.networkRoute.Count - 1]);
+            if (node.ReplyStatus == IPStatus.Success)
+                TraceStatus.Text = "Trace Complete";
+
+            Route.networkRoute.Add(node);
+            TraceData.ScrollIntoView(TraceData.Items[Route.networkRoute.Count - 1]);
         }
     }
 }

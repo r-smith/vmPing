@@ -22,7 +22,7 @@ namespace vmPing.Views
         public static RoutedCommand StartStopCommand = new RoutedCommand();
         public static RoutedCommand HelpCommand = new RoutedCommand();
         public static RoutedCommand NewInstanceCommand = new RoutedCommand();
-        public static RoutedCommand TraceRouteCommand = new RoutedCommand();
+        public static RoutedCommand TracerouteCommand = new RoutedCommand();
         public static RoutedCommand FloodHostCommand = new RoutedCommand();
         public static RoutedCommand AddProbeCommand = new RoutedCommand();
         public static RoutedCommand MultiInputCommand = new RoutedCommand();
@@ -94,7 +94,7 @@ namespace vmPing.Views
             CommandBindings.Add(new CommandBinding(StartStopCommand, StartStopExecute));
             CommandBindings.Add(new CommandBinding(HelpCommand, HelpExecute));
             CommandBindings.Add(new CommandBinding(NewInstanceCommand, NewInstanceExecute));
-            CommandBindings.Add(new CommandBinding(TraceRouteCommand, TraceRouteExecute));
+            CommandBindings.Add(new CommandBinding(TracerouteCommand, TracerouteExecute));
             CommandBindings.Add(new CommandBinding(FloodHostCommand, FloodHostExecute));
             CommandBindings.Add(new CommandBinding(AddProbeCommand, AddProbeExecute));
             CommandBindings.Add(new CommandBinding(MultiInputCommand, MultiInputWindowExecute));
@@ -103,7 +103,7 @@ namespace vmPing.Views
             var kgStartStop = new KeyGesture(Key.F5);
             var kgHelp = new KeyGesture(Key.F1);
             var kgNewInstance = new KeyGesture(Key.N, ModifierKeys.Control);
-            var kgTraceRoute = new KeyGesture(Key.T, ModifierKeys.Control);
+            var kgTraceroute = new KeyGesture(Key.T, ModifierKeys.Control);
             var kgFloodHost = new KeyGesture(Key.F, ModifierKeys.Control);
             var kgAddProbe = new KeyGesture(Key.A, ModifierKeys.Control);
             var kgMultiInput = new KeyGesture(Key.F2);
@@ -111,7 +111,7 @@ namespace vmPing.Views
             InputBindings.Add(new InputBinding(StartStopCommand, kgStartStop));
             InputBindings.Add(new InputBinding(HelpCommand, kgHelp));
             InputBindings.Add(new InputBinding(NewInstanceCommand, kgNewInstance));
-            InputBindings.Add(new InputBinding(TraceRouteCommand, kgTraceRoute));
+            InputBindings.Add(new InputBinding(TracerouteCommand, kgTraceroute));
             InputBindings.Add(new InputBinding(FloodHostCommand, kgFloodHost));
             InputBindings.Add(new InputBinding(AddProbeCommand, kgAddProbe));
             InputBindings.Add(new InputBinding(MultiInputCommand, kgMultiInput));
@@ -120,7 +120,7 @@ namespace vmPing.Views
             StartStopMenu.Command = StartStopCommand;
             HelpMenu.Command = HelpCommand;
             NewInstanceMenu.Command = NewInstanceCommand;
-            TraceRouteMenu.Command = TraceRouteCommand;
+            TracerouteMenu.Command = TracerouteCommand;
             FloodHostMenu.Command = FloodHostCommand;
             AddProbeMenu.Command = AddProbeCommand;
             MultiInputMenu.Command = MultiInputCommand;
@@ -261,9 +261,9 @@ namespace vmPing.Views
         }
 
 
-        private void TraceRouteExecute(object sender, ExecutedRoutedEventArgs e)
+        private void TracerouteExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            new TraceRouteWindow().Show();
+            new TracerouteWindow().Show();
         }
 
 

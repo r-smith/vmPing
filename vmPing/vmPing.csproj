@@ -128,8 +128,8 @@
     <Compile Include="Views\PopupNotificationWindow.xaml.cs">
       <DependentUpon>PopupNotificationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\TraceRouteWindow.xaml.cs">
-      <DependentUpon>TraceRouteWindow.xaml</DependentUpon>
+    <Compile Include="Views\TracerouteWindow.xaml.cs">
+      <DependentUpon>TracerouteWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NewFavoriteWindow.xaml.cs">
       <DependentUpon>NewFavoriteWindow.xaml</DependentUpon>
@@ -250,7 +250,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\TraceRouteWindow.xaml">
+    <Page Include="Views\TracerouteWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

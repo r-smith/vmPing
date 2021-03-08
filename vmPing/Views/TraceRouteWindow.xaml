@@ -1,31 +1,55 @@
-﻿<Window x:Class="vmPing.Views.TraceRouteWindow"
+﻿<Window x:Class="vmPing.Views.TracerouteWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:vmPing.Views"
         xmlns:classes="clr-namespace:vmPing.Classes"
-        Title="vmPing - Trace Route" Height="464" Width="400"
-        ResizeMode="CanMinimize"
-        Background="#002b36">
+        Title="Traceroute"
+        Height="460" MinHeight="300"
+        Width="520" MinWidth="350"
+        Background="#252526">
 
     <Window.Resources>
         <!-- Value converters -->
-        <classes:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="Trace Route" TrueValue="Stop Trace"/>
+        <classes:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="Trace" TrueValue="Stop"/>
         <classes:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         <classes:BooleanToImageConverter x:Key="BooleanToImageConverter" />
-        
-        <!-- Style for hostname textbox -->
-        <ControlTemplate x:Key="TextBoxBaseControlTemplatez" TargetType="{x:Type TextBoxBase}">
-            <Border Background="{TemplateBinding Background}"
-                    x:Name="Bd"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    BorderBrush="{TemplateBinding BorderBrush}">
-                <ScrollViewer x:Name="PART_ContentHost" />
-            </Border>
+
+        <!-- Template for hostname textbox -->
+        <ControlTemplate x:Key="TextBoxControlTemplate" TargetType="{x:Type TextBox}">
+            <Grid>
+                <Border x:Name="border"
+                        CornerRadius="0"
+                        SnapsToDevicePixels="True"
+                        Background="{TemplateBinding Background}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}">
+                    <ScrollViewer x:Name="PART_ContentHost" />
+                </Border>
+                <TextBlock x:Name="placeholderText"
+                           Text="Enter target address"
+                           Visibility="Hidden"
+                           FontSize="12"
+                           FontWeight="SemiBold"
+                           FontFamily="Segoe UI"
+                           Opacity="0.3"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Padding="10,0,0,0"
+                           IsHitTestVisible="False"/>
+            </Grid>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Background" Value="#EEEEFF" />
                     <Setter Property="Foreground" Value="#333388" />
                 </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="Text" Value=""/>
+                        <Condition Property="IsKeyboardFocused" Value="True"/>
+                    </MultiTrigger.Conditions>
+                    <MultiTrigger.Setters>
+                        <Setter Property="Visibility" TargetName="placeholderText" Value="Visible"/>
+                    </MultiTrigger.Setters>
+                </MultiTrigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </Window.Resources>
@@ -37,26 +61,27 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            
+
             <!-- Hostname textbox -->
-            <TextBox Name="txtHostname"
-                     FontSize="18" FontWeight="Bold"
+            <TextBox Name="Hostname"
+                     FontSize="18"
+                     Padding="2"
+                     FontWeight="SemiBold"
+                     FontFamily="Consolas"
                      BorderThickness="2,2,0,2"
                      BorderBrush="Black"
                      VerticalContentAlignment="Center"
-                     CharacterCasing="Upper"
-                     Template="{StaticResource TextBoxBaseControlTemplatez}"
-                     IsEnabled="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}"
-                     />
+                     Template="{StaticResource TextBoxControlTemplate}"
+                     IsEnabled="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}"/>
 
             <!-- Trace Route button -->
-            <Button Name="btnTraceRoute"
-                    Click="btnTraceRoute_Click"
+            <Button Name="Trace"
+                    Click="Trace_Click"
                     Grid.Column="1"
                     IsDefault="True"
                     FontSize="14"
                     Padding="0,6"
-                    Width="125"
+                    Width="100"
                     Background="#268bd2">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
@@ -81,14 +106,14 @@
                 </Button.Template>
             </Button>
         </Grid>
-
-
+        
+        <!-- Status indicator-->
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
             <TextBlock Text=""
-                   Name="tbTraceStatus"
-                   Margin="0,0,15,6"
-                   Foreground="#b58900"
-                   FontSize="18" FontWeight="Bold">
+                       Name="TraceStatus"
+                       Margin="0,0,15,6"
+                       Foreground="#ecce51"
+                       FontSize="18" FontWeight="SemiBold">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
                         <Style.Triggers>
@@ -97,9 +122,9 @@
                                     <BeginStoryboard>
                                         <Storyboard RepeatBehavior="Forever" AutoReverse="True" >
                                             <DoubleAnimation Storyboard.TargetProperty="(TextBlock.Opacity)"
-                                                         From="1" To=".2"
-                                                         BeginTime="0:0:0.0"
-                                                         Duration="0:0:0.4" />
+                                                             From="1" To=".2"
+                                                             BeginTime="0:0:0.0"
+                                                             Duration="0:0:0.4" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </DataTrigger.EnterActions>
@@ -107,7 +132,7 @@
                                     <BeginStoryboard>
                                         <Storyboard>
                                             <DoubleAnimation Storyboard.TargetProperty="(TextBlock.Opacity)"
-                                                         From="1" To="1" Duration="0:0:0.0" FillBehavior="HoldEnd" />
+                                                             From="1" To="1" Duration="0:0:0.0" FillBehavior="HoldEnd" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </DataTrigger.ExitActions>
@@ -116,26 +141,12 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-            <TextBlock Text=""
-                       Margin="0,0,15,0"
-                       FontSize="18" FontWeight="Bold"
-                       Foreground="#b58900"
-                       Visibility="Collapsed">
-            </TextBlock>
-            <TextBlock Text="[Resolving Hostnames...]"
-                       Name="tbDnsStatus"
-                       Margin="0,0,15,0"
-                       FontSize="18" FontWeight="Bold"
-                       Foreground="#d33682"
-                       Visibility="Collapsed">
-            </TextBlock>
         </StackPanel>
         
-        
-        
-        <DataGrid Name="dgTrace"
+        <!-- Trace result data -->
+        <DataGrid Name="TraceData"
                   DockPanel.Dock="Top"
-                  Margin="0,10,0,0"
+                  Margin="10,15,10,4"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   SelectionMode="Single" SelectionUnit="FullRow"
@@ -146,10 +157,9 @@
                   HorizontalGridLinesBrush="Transparent" VerticalGridLinesBrush="Transparent"
                   BorderBrush="Transparent" BorderThickness="0"
                   FontSize="17" FontFamily="Consolas"
-                  Background="#002b36" Foreground="#fdf6e3"
-                  RowBackground="#002b36"
-                  AlternatingRowBackground="#073642"
-                  >
+                  Background="#252526" Foreground="#fdf6e3"
+                  RowBackground="#252526"
+                  AlternatingRowBackground="#202020">
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell">
                     <Setter Property="BorderThickness" Value="0" />
@@ -165,12 +175,13 @@
                 </Style>
             </DataGrid.ColumnHeaderStyle>
             <DataGrid.Columns>
-
+                
+                <!-- Hop ID -->
                 <DataGridTextColumn Binding="{Binding HopId}" Header="Hop">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
-                            <Setter Property="FontWeight"  Value="Bold" />
-                            <Setter Property="Foreground" Value="#93a1a1" />
+                            <Setter Property="FontWeight"  Value="Regular" />
+                            <Setter Property="Foreground" Value="#999" />
                             <Setter Property="IsHitTestVisible" Value="False"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
@@ -180,11 +191,13 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-
+                
+                <!-- IP address -->
                 <DataGridTextColumn Binding="{Binding HostAddress}" Header="IP Address">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Padding" Value="15,1" />
+                            <Setter Property="Foreground" Value="#b6fab4"/>
                             <Setter Property="Text" Value="{Binding HostAddress}" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding HostAddress}" Value="Timed Out">
@@ -200,11 +213,12 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-
+                
+                <!-- Round trip time -->
                 <DataGridTextColumn Binding="{Binding RoundTripTime, StringFormat=[{0} ms]}" Header="RTT">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
-                            <Setter Property="Foreground" Value="#268bd2" />
+                            <Setter Property="Foreground" Value="#61b8ff" />
                             <Setter Property="IsHitTestVisible" Value="False"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
@@ -225,22 +239,6 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-
-                <DataGridTextColumn Binding="{Binding HostName}" Header="Hostname" Visibility="Collapsed">
-                    <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Setter Property="Foreground" Value="#859900" />
-                            <Setter Property="IsHitTestVisible" Value="False"/>
-                        </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Padding" Value="10,1,0,1" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-
-                <DataGridTextColumn Binding="{Binding ReplyStatus}" Header="ICMP Reply" Visibility="Collapsed" />
             </DataGrid.Columns>
 
         </DataGrid>

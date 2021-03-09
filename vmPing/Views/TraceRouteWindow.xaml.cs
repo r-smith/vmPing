@@ -68,7 +68,7 @@ namespace vmPing.Views
             var bgWorker = sender as BackgroundWorker;
 
             var pingBuffer = Encoding.ASCII.GetBytes(Constants.DefaultIcmpData);
-            var pingOptions = new PingOptions(1, true);
+            var pingOptions = new PingOptions(ttl: 1, dontFragment: true);
             PingReply pingReply;
             var timer = new Stopwatch();
             Route.Timer = timer;

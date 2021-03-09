@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:vmPing.Views"
         xmlns:classes="clr-namespace:vmPing.Classes"
+        UseLayoutRounding="True"
         Title="Traceroute"
         Height="460" MinHeight="300"
         Width="520" MinWidth="350"
-        Background="#252526">
+        Background="#e1e1e1">
 
     <Window.Resources>
         <!-- Value converters -->
@@ -39,7 +40,8 @@
             </Grid>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Foreground" Value="#333388" />
+                    <Setter Property="Foreground" Value="#333" />
+                    <Setter Property="Background" Value="#b8b8b8" />
                 </Trigger>
                 <MultiTrigger>
                     <MultiTrigger.Conditions>
@@ -55,7 +57,7 @@
     </Window.Resources>
 
 
-    <DockPanel LastChildFill="True" >
+    <DockPanel LastChildFill="True" Margin="15">
         <Grid DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -64,11 +66,11 @@
 
             <!-- Hostname textbox -->
             <TextBox Name="Hostname"
-                     FontSize="18"
-                     Padding="2"
-                     FontWeight="SemiBold"
+                     FontSize="20"
+                     Padding="3,2"
+                     FontWeight="Regular"
                      FontFamily="Consolas"
-                     BorderThickness="2,2,0,2"
+                     BorderThickness="1,1,0,1"
                      BorderBrush="Black"
                      VerticalContentAlignment="Center"
                      Template="{StaticResource TextBoxControlTemplate}"
@@ -82,10 +84,11 @@
                     FontSize="14"
                     Padding="0,6"
                     Width="100"
-                    Background="#268bd2">
+                    Background="#268bd2"
+                    Style="{StaticResource ButtonStandardStyle}">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border Name="traceRouteButton_border" BorderThickness="2" BorderBrush="Black"
+                        <Border Name="traceRouteButton_border" BorderThickness="1" BorderBrush="Black"
                                 Background="{TemplateBinding Background}"
                                 Padding="{TemplateBinding Padding}">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -108,12 +111,14 @@
         </Grid>
         
         <!-- Status indicator-->
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
+        <Border DockPanel.Dock="Bottom" Background="#282828" BorderBrush="Black" BorderThickness="1,0,1,1" UseLayoutRounding="True" SnapsToDevicePixels="True">
             <TextBlock Text=""
                        Name="TraceStatus"
-                       Margin="0,0,15,6"
+                       Margin="9,4"
                        Foreground="#ecce51"
-                       FontSize="18" FontWeight="SemiBold">
+                       VerticalAlignment="Center"
+                       FontSize="18"
+                       FontWeight="SemiBold">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
                         <Style.Triggers>
@@ -141,12 +146,13 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-        </StackPanel>
-        
+        </Border>
+
         <!-- Trace result data -->
         <DataGrid Name="TraceData"
                   DockPanel.Dock="Top"
-                  Margin="10,15,10,4"
+                  Margin="0,15,0,0"
+                  Padding="10,0,0,0"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   SelectionMode="Single" SelectionUnit="FullRow"
@@ -155,10 +161,11 @@
                   CanUserResizeRows="False" CanUserSortColumns="False"
                   HeadersVisibility="None"
                   HorizontalGridLinesBrush="Transparent" VerticalGridLinesBrush="Transparent"
-                  BorderBrush="Transparent" BorderThickness="0"
+                  BorderBrush="Black"
+                  BorderThickness="1,1,1,0"
                   FontSize="17" FontFamily="Consolas"
-                  Background="#252526" Foreground="#fdf6e3"
-                  RowBackground="#252526"
+                  Background="#202020" Foreground="#fdf6e3"
+                  RowBackground="#202020"
                   AlternatingRowBackground="#202020">
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell">

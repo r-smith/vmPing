@@ -11,6 +11,7 @@
         MinWidth="360"
         Background="#fff"
         ResizeMode="CanResize"
+        PreviewKeyDown="Window_PreviewKeyDown"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
         SourceInitialized="Window_SourceInitialized">

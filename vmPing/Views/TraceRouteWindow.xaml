@@ -223,10 +223,10 @@
                             <Setter Property="VerticalAlignment" Value="Center"/>
                             <Setter Property="Text" Value="{Binding HostAddress}" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding HostAddress}" Value="Timed Out">
+                                <DataTrigger Binding="{Binding HostAddress}" Value="Timed out">
                                     <Setter Property="Foreground" Value="#dc322f" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding HostAddress}" Value="Invalid Hostname">
+                                <DataTrigger Binding="{Binding HostAddress}" Value="Invalid hostname">
                                     <Setter Property="Foreground" Value="#dc322f" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding HostAddress}" Value="0.0.0.0">

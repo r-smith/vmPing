@@ -7,7 +7,7 @@ vmPing
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
 **[Click here to download the latest release](https://github.com/R-Smith/vmPing/releases/latest/download/vmPing.exe)**
-##### (1.3.12 released on March 4, 2021)
+##### (1.3.14 released on March 9, 2021)
 
 ##### Notes
 * There is no installer.  Just run the .exe.
@@ -33,6 +33,11 @@ Screenshots
 
 Recent Changes
 --------------
+### Version 1.3.14
+* __Portable mode.__ Previously, your configuration file had to be stored at %LocalAppData%\vmPing\vmPing.xml. The configuration file includes all favorites, aliases, and default settings for the application. Now vmPing.xml can reside in the same folder as the application, making everything easily portable. Additionally for new users, a simple prompt is displayed if you do anything that would require saving an initial config file. The prompt informs of config file creation, and gives an opportunity to select portable mode if you want your config file created alongside vmPing.exe.
+* There's a whole new look to the traceroute window. Check it out. An MTR feature isn't there yet, but should follow in a future release.
+
+
 ### Version 1.3.12
 * __New multi-address input.__ Access using the keyboard shortcut F2 or by clicking the option in vmPing's menu. This displays a window with a multi-line textbox. Type your target addresses one per line or comma-separated, click OK, and vmPing populates with your targets and immediately begins pinging. So simple. If you have a text file containing addresses, just drag and drop it onto the window.
 * Column count can now be set to anything (within the limits). Previously the column count could never be set higher than the number of probes. This has always annoyed me. Now you can choose any column count and it'll stick. An example would be: Two probes. Set column count to four. vmPing displays two columns since there's only two probes. But as you add more probes, new columns will be made until the four column count is satisfied.

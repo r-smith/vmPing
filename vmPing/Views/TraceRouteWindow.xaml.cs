@@ -4,7 +4,9 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using vmPing.Classes;
 
@@ -39,7 +41,12 @@ namespace vmPing.Views
                 if (Route.BgWorker != null)
                     Route.BgWorker.CancelAsync();
 
-                TraceStatus.Text = "Tracing Route...";
+                // Reset width for IP address column.
+                TraceData.Columns[1].Width = new DataGridLength(100.0);
+                TraceData.Columns[1].Width = new DataGridLength(1.0, DataGridLengthUnitType.Auto);
+
+                TraceStatus.Text = "Tracing route...";
+                TraceStatus.Visibility = Visibility.Visible;
                 Route.DestinationHost = Hostname.Text;
                 Route.MaxHops = 30;
                 Route.PingTimeout = 2000;
@@ -50,6 +57,7 @@ namespace vmPing.Views
                 Route.ResetEvent = new AutoResetEvent(false);
                 Route.BgWorker.DoWork += new DoWorkEventHandler(BackgroundThread_TraceRoute);
                 Route.BgWorker.ProgressChanged += new ProgressChangedEventHandler(BackgroundThread_ProgressChanged);
+                Route.BgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(BgWorker_RunWorkerCompleted);
                 Route.BgWorker.WorkerSupportsCancellation = true;
                 Route.BgWorker.WorkerReportsProgress = true;
                 Route.BgWorker.RunWorkerAsync();
@@ -59,8 +67,20 @@ namespace vmPing.Views
                 Route.BgWorker.CancelAsync();
                 Route.ResetEvent.WaitOne();
                 Route.IsActive = false;
-                TraceStatus.Text = "Trace Cancelled";
+                TraceStatus.Text = "\u2022 Trace cancelled";
+                Hostname.Focus();
             }
+        }
+
+        private void BgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Task.Delay(100).ContinueWith(_ =>
+                {
+                    Application.Current.Dispatcher.Invoke(new System.Action(() =>
+                    {
+                        Hostname.Focus();
+                    }));
+                });
         }
 
         public void BackgroundThread_TraceRoute(object sender, DoWorkEventArgs e)
@@ -125,7 +145,7 @@ namespace vmPing.Views
 
             if (e.ProgressPercentage < 0)
             {
-                TraceStatus.Text = "Invalid Hostname";
+                TraceStatus.Text = "\u2022 Invalid hostname";
                 return;
             }
 
@@ -139,10 +159,10 @@ namespace vmPing.Views
             node.RoundTripTime = Route.Timer.ElapsedMilliseconds;
 
             if (node.ReplyStatus == IPStatus.TimedOut)
-                node.HostAddress = "Timed Out";
+                node.HostAddress = "Timed out";
 
             if (node.ReplyStatus == IPStatus.Success)
-                TraceStatus.Text = "Trace Complete";
+                TraceStatus.Text = "\u2605 Trace complete";
 
             Route.networkRoute.Add(node);
             TraceData.ScrollIntoView(TraceData.Items[Route.networkRoute.Count - 1]);

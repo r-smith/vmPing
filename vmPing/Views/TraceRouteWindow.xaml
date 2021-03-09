@@ -58,6 +58,10 @@
 
 
     <DockPanel LastChildFill="True" Margin="15">
+        <TextBlock DockPanel.Dock="Top"
+                   Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"
+                   Margin="0,5,0,10"
+                   Text="Trace Route to Destination"/>
         <Grid DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -70,7 +74,7 @@
                      Padding="3,2"
                      FontWeight="Regular"
                      FontFamily="Consolas"
-                     BorderThickness="1,1,0,1"
+                     BorderThickness="1,1,1,1"
                      BorderBrush="Black"
                      VerticalContentAlignment="Center"
                      Template="{StaticResource TextBoxControlTemplate}"
@@ -81,11 +85,14 @@
                     Click="Trace_Click"
                     Grid.Column="1"
                     IsDefault="True"
+                    IsCancel="{Binding IsActive}"
                     FontSize="14"
                     Padding="0,6"
+                    Margin="10,0,0,0"
                     Width="100"
-                    Background="#268bd2"
-                    Style="{StaticResource ButtonStandardStyle}">
+                    Content="Trace"
+                    Foreground="Black"
+                    Style="{StaticResource ButtonStandardStyle}" Background="WhiteSmoke">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border Name="traceRouteButton_border" BorderThickness="1" BorderBrush="Black"
@@ -99,25 +106,26 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="traceRouteButton_border" Property="Background" Value="#369be2" />
+                                <Setter TargetName="traceRouteButton_border" Property="Background" Value="#fff" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="traceRouteButton_border" Property="Background" Value="#167bc2" />
+                                <Setter TargetName="traceRouteButton_border" Property="Background" Value="#ccc" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Button.Template>
             </Button>
         </Grid>
-        
+
         <!-- Status indicator-->
-        <Border DockPanel.Dock="Bottom" Background="#282828" BorderBrush="Black" BorderThickness="1,0,1,1" UseLayoutRounding="True" SnapsToDevicePixels="True">
+        <Border DockPanel.Dock="Bottom" Background="#141414" BorderBrush="Black" BorderThickness="1,1,1,1" UseLayoutRounding="True" SnapsToDevicePixels="True">
             <TextBlock Text=""
+                       Visibility="Collapsed"
                        Name="TraceStatus"
-                       Margin="9,4"
+                       Margin="9,3"
                        Foreground="#ecce51"
                        VerticalAlignment="Center"
-                       FontSize="18"
+                       FontSize="16"
                        FontWeight="SemiBold">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
@@ -151,22 +159,22 @@
         <!-- Trace result data -->
         <DataGrid Name="TraceData"
                   DockPanel.Dock="Top"
-                  Margin="0,15,0,0"
-                  Padding="10,0,0,0"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  SelectionMode="Single" SelectionUnit="FullRow"
-                  CanUserAddRows="False" CanUserDeleteRows="False"
-                  CanUserReorderColumns="False" CanUserResizeColumns="False"
-                  CanUserResizeRows="False" CanUserSortColumns="False"
-                  HeadersVisibility="None"
-                  HorizontalGridLinesBrush="Transparent" VerticalGridLinesBrush="Transparent"
+                  Margin="0,20,0,0"
+                  Padding="0"
+                  CanUserSortColumns="False"
+                  HorizontalGridLinesBrush="Black"
+                  VerticalGridLinesBrush="Black"
+                  GridLinesVisibility="Horizontal"
+                  ColumnWidth="SizeToCells"
                   BorderBrush="Black"
                   BorderThickness="1,1,1,0"
-                  FontSize="17" FontFamily="Consolas"
-                  Background="#202020" Foreground="#fdf6e3"
+                  FontSize="17"
+                  FontFamily="Consolas"
+                  Background="#202020"
+                  Foreground="#fdf6e3"
                   RowBackground="#202020"
-                  AlternatingRowBackground="#202020">
+                  AlternatingRowBackground="#282828"
+                  Style="{StaticResource DataGridStyle}">
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell">
                     <Setter Property="BorderThickness" Value="0" />
@@ -176,35 +184,43 @@
             </DataGrid.CellStyle>
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="FontWeight"  Value="Bold" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                    <Setter Property="FontFamily" Value="Segoe UI" />
+                    <Setter Property="FontSize" Value="14" />
+                    <Setter Property="Padding" Value="5,0,0,0"/>
+                    <Setter Property="BorderThickness" Value="2,2,1,2" />
+                    <Setter Property="BorderBrush" Value="#ddd" />
                     <Setter Property="Background" Value="#999" />
                     <Setter Property="Foreground" Value="#111" />
                 </Style>
             </DataGrid.ColumnHeaderStyle>
             <DataGrid.Columns>
-                
+
                 <!-- Hop ID -->
-                <DataGridTextColumn Binding="{Binding HopId}" Header="Hop">
+                <DataGridTextColumn Binding="{Binding HopId}" Header="Hop" Width="50" MinWidth="40">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
                             <Setter Property="FontWeight"  Value="Regular" />
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
                             <Setter Property="Foreground" Value="#999" />
                             <Setter Property="IsHitTestVisible" Value="False"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Padding" Value="10,1" />
+                            <Setter Property="Padding" Value="15,1,25,1" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                
+
                 <!-- IP address -->
-                <DataGridTextColumn Binding="{Binding HostAddress}" Header="IP Address">
+                <DataGridTextColumn Binding="{Binding HostAddress}" Header="IP Address" Width="Auto" MinWidth="100">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Padding" Value="15,1" />
+                            <Setter Property="Padding" Value="5,1,35,1" />
                             <Setter Property="Foreground" Value="#b6fab4"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
                             <Setter Property="Text" Value="{Binding HostAddress}" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding HostAddress}" Value="Timed Out">
@@ -220,18 +236,19 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                
+
                 <!-- Round trip time -->
-                <DataGridTextColumn Binding="{Binding RoundTripTime, StringFormat=[{0} ms]}" Header="RTT">
+                <DataGridTextColumn Binding="{Binding RoundTripTime, StringFormat=[{0} ms]}" Header="RTT" Width="*">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
                             <Setter Property="Foreground" Value="#61b8ff" />
                             <Setter Property="IsHitTestVisible" Value="False"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Padding" Value="40,1,0,1" />
+                            <Setter Property="Padding" Value="5,1" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding HostAddress}" Value="Timed Out">
                                     <Setter Property="Visibility" Value="Hidden" />

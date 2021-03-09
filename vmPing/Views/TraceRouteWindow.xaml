@@ -250,10 +250,10 @@
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Padding" Value="5,1" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding HostAddress}" Value="Timed Out">
+                                <DataTrigger Binding="{Binding HostAddress}" Value="Timed out">
                                     <Setter Property="Visibility" Value="Hidden" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding HostAddress}" Value="Invalid Hostname">
+                                <DataTrigger Binding="{Binding HostAddress}" Value="Invalid hostname">
                                     <Setter Property="Visibility" Value="Hidden" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding HostAddress}" Value="{x:Null}">

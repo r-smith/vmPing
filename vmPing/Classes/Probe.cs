@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -60,8 +61,20 @@ namespace vmPing.Classes
             set
             {
                 history = value;
+                history.CollectionChanged += History_CollectionChanged;
                 NotifyPropertyChanged("History");
             }
+        }
+        public string HistoryAsString
+        {
+            get
+            {
+                return string.Join(Environment.NewLine, History);
+            }
+        }
+        void History_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            NotifyPropertyChanged("HistoryAsString");
         }
 
         private ProbeType type = ProbeType.Ping;

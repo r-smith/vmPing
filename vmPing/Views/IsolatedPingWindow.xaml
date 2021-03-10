@@ -3,12 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:classes="clr-namespace:vmPing.Classes"
         xmlns:controls="clr-namespace:vmPing.Controls"
-        Title="{Binding Hostname, StringFormat='vmPing - {0}'}"
+        Title="{Binding Hostname, StringFormat='{}{0} - vmPing'}"
         UseLayoutRounding="True"
-        Height="400"
-        Width="800"
+        Height="500"
+        Width="450"
         MinHeight="200"
-        MinWidth="350"
+        MinWidth="300"
         Background="White">
 
     <!-- Items Control -->
@@ -22,7 +22,7 @@
 
             <!-- Ping output section -->
             <DockPanel Grid.Row="1">
-
+                
                 <!-- Ping statistics textblock -->
                 <Label Name="lblStats"
                        DockPanel.Dock="Bottom"
@@ -48,7 +48,23 @@
                 </Label>
 
                 <!-- Ping history listbox -->
-                <ListBox Name="lbHistory"
+                <TextBox x:Name="History"
+                         IsReadOnly="True"
+                         IsTabStop="False"
+                         Background="Transparent"
+                         Foreground="{Binding Status, Converter={StaticResource ProbeStatusToForegroundBrushConverter}}"
+                         HorizontalScrollBarVisibility="Disabled"
+                         VerticalScrollBarVisibility="Auto"
+                         FontFamily="Consolas"
+                         BorderThickness="0"
+                         Cursor="Arrow"
+                         SelectionOpacity="0.5"
+                         TextChanged="History_TextChanged"
+                         SelectionChanged="History_SelectionChanged"
+                         FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}"
+                         Text="{Binding Path=HistoryAsString, Mode=OneWay}">
+                </TextBox>
+                <!--<ListBox Name="lbHistory"
                          BorderThickness="0"
                          Background="Transparent"
                          Foreground="{Binding Status, Converter={StaticResource ProbeStatusToForegroundBrushConverter}}"
@@ -73,7 +89,7 @@
                             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                         </Style>
                     </ListBox.ItemContainerStyle>
-                </ListBox>
+                </ListBox>-->
             </DockPanel>
 
             

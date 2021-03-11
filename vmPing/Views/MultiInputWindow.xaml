@@ -113,7 +113,7 @@
             <Button Style="{StaticResource ButtonStandardStyle}"
                     Content="OK"
                     Width="85"
-                    Click="Button_Click"/>
+                    Click="OK_Click"/>
             <Button Style="{StaticResource ButtonStandardStyle}"
                     Content="Cancel"
                     Width="85"

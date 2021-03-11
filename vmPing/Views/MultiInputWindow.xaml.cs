@@ -20,8 +20,8 @@ namespace vmPing.Views
         [DllImport("user32.dll")]
         private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
+        // Constants to support hiding minimize and maximize buttons.
         private const int GWL_STYLE = -16;
-
         private const int WS_MAXIMIZEBOX = 0x10000; //maximize button
         private const int WS_MINIMIZEBOX = 0x20000; //minimize button
 
@@ -39,16 +39,26 @@ namespace vmPing.Views
             }
         }
 
-        public MultiInputWindow()
+        public MultiInputWindow(List<string> addresses = null)
         {
             InitializeComponent();
 
             // Set initial focus to text box.
             Loaded += (sender, e) =>
                 MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+            // Pre-populate textbox if any addresses were supplied.
+            if (addresses != null
+                && addresses.Count > 0
+                && !addresses.All(x => string.IsNullOrWhiteSpace(x))
+                )
+            {
+                // Convert list to multiline string.
+                MyAddresses.Text = string.Join(Environment.NewLine, addresses);
+            }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void OK_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
         }

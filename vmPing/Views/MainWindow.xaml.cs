@@ -188,7 +188,15 @@ namespace vmPing.Views
 
         private void MultiInputWindowExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            var wnd = new MultiInputWindow();
+            // Get list of current addresses to send to multi-input window.
+            var addresses = new List<string>();
+            for (int i = 0; i < _ProbeCollection.Count; ++i)
+            {
+                if (!string.IsNullOrWhiteSpace(_ProbeCollection[i].Hostname))
+                    addresses.Add(_ProbeCollection[i].Hostname.Trim());
+            }
+
+            var wnd = new MultiInputWindow(addresses);
             wnd.Owner = this;
             if (wnd.ShowDialog() == true)
             {

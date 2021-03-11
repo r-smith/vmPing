@@ -191,7 +191,7 @@ namespace vmPing.Views
         }
 
 
-        private void btnOk_Click(object sender, RoutedEventArgs e)
+        private void OK_Click(object sender, RoutedEventArgs e)
         {
             if (SaveGeneralOptions() == false)
                 return;
@@ -217,7 +217,7 @@ namespace vmPing.Views
             if (SaveAsDefaults.IsChecked == true)
                 Configuration.WriteConfigurationOptions();
 
-            Close();
+            DialogResult = true;
         }
 
 
@@ -599,11 +599,6 @@ namespace vmPing.Views
                 e.Handled = true;
         }
 
-
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
 
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

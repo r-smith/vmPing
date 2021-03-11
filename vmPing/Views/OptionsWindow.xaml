@@ -1004,12 +1004,12 @@
                 <CheckBox Name="SaveAsDefaults" DockPanel.Dock="Top" HorizontalAlignment="Right">Save as vmPing defaults</CheckBox>
                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,9,0,0" HorizontalAlignment="Right">
                     <Button Style="{StaticResource ButtonStandardStyle}"
-                            Click="btnOk_Click"
+                            Click="OK_Click"
                             Margin="0,0,9,0"
+                            IsDefault="True"
                             Width="85"
                             Content="OK" />
                     <Button Style="{StaticResource ButtonStandardStyle}"
-                            Click="btnCancel_Click"
                             IsCancel="True"
                             Width="85"
                             Content="Cancel" />

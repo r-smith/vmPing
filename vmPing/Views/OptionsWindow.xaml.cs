@@ -93,9 +93,9 @@ namespace vmPing.Views
             pingInterval /= pingIntervalDivisor;
             pingTimeout /= 1000;
 
-            txtPingInterval.Text = pingInterval.ToString();
-            txtPingTimeout.Text = pingTimeout.ToString();
-            txtAlertThreshold.Text = ApplicationOptions.AlertThreshold.ToString();
+            PingInterval.Text = pingInterval.ToString();
+            PingTimeout.Text = pingTimeout.ToString();
+            AlertThreshold.Text = ApplicationOptions.AlertThreshold.ToString();
             cboPingInterval.Text = pingIntervalText;
         }
 
@@ -223,19 +223,19 @@ namespace vmPing.Views
 
         private bool SaveGeneralOptions()
         {
-            if (txtPingInterval.Text.Length == 0)
+            if (PingInterval.Text.Length == 0)
             {
-                ShowError("Please enter a valid ping interval.", GeneralTab, txtPingInterval);
+                ShowError("Please enter a valid ping interval.", GeneralTab, PingInterval);
                 return false;
             }
-            else if (txtPingTimeout.Text.Length == 0)
+            else if (PingTimeout.Text.Length == 0)
             {
-                ShowError("Please enter a valid ping timeout.", GeneralTab, txtPingTimeout);
+                ShowError("Please enter a valid ping timeout.", GeneralTab, PingTimeout);
                 return false;
             }
-            else if (txtAlertThreshold.Text.Length == 0)
+            else if (AlertThreshold.Text.Length == 0)
             {
-                ShowError("Please enter a valid alert threshold.", GeneralTab, txtAlertThreshold);
+                ShowError("Please enter a valid alert threshold.", GeneralTab, AlertThreshold);
                 return false;
             }
 
@@ -257,7 +257,7 @@ namespace vmPing.Views
                     break;
             }
 
-            if (int.TryParse(txtPingInterval.Text, out pingInterval) && pingInterval > 0 && pingInterval <= 86400)
+            if (int.TryParse(PingInterval.Text, out pingInterval) && pingInterval > 0 && pingInterval <= 86400)
                 pingInterval *= multiplier;
             else
                 pingInterval = Constants.DefaultInterval;
@@ -267,7 +267,7 @@ namespace vmPing.Views
             // Ping timeout
             int pingTimeout;
 
-            if (int.TryParse(txtPingTimeout.Text, out pingTimeout) && pingTimeout > 0 && pingTimeout <= 60)
+            if (int.TryParse(PingTimeout.Text, out pingTimeout) && pingTimeout > 0 && pingTimeout <= 60)
                 pingTimeout *= 1000;
             else
                 pingTimeout = Constants.DefaultTimeout;
@@ -277,7 +277,7 @@ namespace vmPing.Views
             // Alert threshold
             int alertThreshold;
 
-            var isThresholdValid = int.TryParse(txtAlertThreshold.Text, out alertThreshold) && alertThreshold > 0 && alertThreshold <= 60;
+            var isThresholdValid = int.TryParse(AlertThreshold.Text, out alertThreshold) && alertThreshold > 0 && alertThreshold <= 60;
             if (!isThresholdValid)
                 alertThreshold = 1;
 
@@ -584,7 +584,7 @@ namespace vmPing.Views
         }
 
 
-        private void txtNumericTextbox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void NumericTextbox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             var regex = new Regex("[^0-9.-]+");
             if (regex.IsMatch(e.Text))

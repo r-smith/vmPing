@@ -20,6 +20,7 @@
                 <ResourceDictionary Source="ResourceDictionaries/TabControlStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/TextBoxStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/TextBoxHtmlStyle.xaml"/>
+                <ResourceDictionary Source="ResourceDictionaries/ToolTipStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

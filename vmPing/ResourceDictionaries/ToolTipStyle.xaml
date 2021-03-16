@@ -15,7 +15,7 @@
                         <Border.ToolTip>
                             <ToolTip Background="#404040">
                                 <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                                  Margin="5,1"
+                                                  Margin="5"
                                                   Width="{TemplateBinding MaxWidth}">
                                     <ContentPresenter.Resources>
                                         <Style TargetType="{x:Type TextBlock}">

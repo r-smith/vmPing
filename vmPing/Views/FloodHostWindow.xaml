@@ -77,7 +77,6 @@
                      BorderThickness="2,2,0,2"
                      BorderBrush="Black"
                      VerticalContentAlignment="Center"
-                     CharacterCasing="Upper"
                      Template="{StaticResource TextBoxBaseControlTemplatez}"
                      IsEnabled="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}"
                      />

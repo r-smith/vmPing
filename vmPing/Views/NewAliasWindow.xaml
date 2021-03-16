@@ -34,15 +34,11 @@
                                FontSize="14"
                                VerticalAlignment="Center"
                                Foreground="#555"
-                               HorizontalAlignment="Right"
-                               />
+                               HorizontalAlignment="Right"/>
                 </Border>
                 <TextBox Name="MyHost"
                          Style="{StaticResource TextBoxStyle}"
-                         CharacterCasing="Upper"
-                         MaxLength="64"
-                         />
-
+                         MaxLength="64"/>
             </DockPanel>
 
             <!-- Alias TextBox-->

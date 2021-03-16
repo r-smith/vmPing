@@ -19,7 +19,7 @@ namespace vmPing.Classes
 
                 var aliases = new Dictionary<string, string>();
                 foreach (XmlNode node in xd.SelectNodes("/vmping/aliases/alias"))
-                    aliases.Add(node.Attributes["host"].Value, node.InnerText);
+                    aliases.Add(node.Attributes["host"].Value.ToLower(), node.InnerText);
                 return aliases;
             }
 
@@ -36,6 +36,9 @@ namespace vmPing.Classes
             if (!Configuration.IsReady())
                 return;
 
+            // Convert to lowercase for consistent lookups / comparisons.
+            hostname = hostname.ToLower();
+
             try
             {
                 var xd = new XmlDocument();
@@ -51,7 +54,7 @@ namespace vmPing.Classes
                 }
 
                 XmlElement aliasEntry = xd.CreateElement("alias");
-                aliasEntry.SetAttribute("host", hostname.ToUpper());
+                aliasEntry.SetAttribute("host", hostname);
                 aliasEntry.InnerText = alias;
                 nodeRoot.AppendChild(aliasEntry);
                 xd.Save(Configuration.FilePath);
@@ -68,6 +71,9 @@ namespace vmPing.Classes
         {
             if (!Configuration.Exists())
                 return;
+
+            // Convert to lowercase for consistent lookups / comparisons.
+            key = key.ToLower();
 
             try
             {

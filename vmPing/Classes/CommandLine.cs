@@ -93,11 +93,6 @@ namespace vmPing.Classes
                 Application.Current.Shutdown();
             }
 
-            for (int i = 0; i < hostnames.Count; ++i)
-            {
-                hostnames[i] = hostnames[i].ToUpper();
-            }
-
             return hostnames;
         }
 

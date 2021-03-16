@@ -574,7 +574,6 @@
                                          BorderBrush="#20000000"
                                          VerticalContentAlignment="Center"
                                          Background="Transparent"
-                                         CharacterCasing="Upper"
                                          Padding="0,0,0,0"
                                          Text="{Binding Hostname, UpdateSourceTrigger=PropertyChanged}"
                                          IsEnabled="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}"

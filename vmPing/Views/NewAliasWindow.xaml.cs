@@ -45,7 +45,7 @@ namespace vmPing.Views
             }
 
             // Checks passed.  Add alias entry.
-            Alias.AddAlias(MyHost.Text.ToUpper(), MyAlias.Text);
+            Alias.AddAlias(MyHost.Text, MyAlias.Text);
             DialogResult = true;
         }
     }

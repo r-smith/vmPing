@@ -49,8 +49,10 @@ namespace vmPing.Views
                 AddProbe(hosts.Count);
                 for (int i = 0; i < hosts.Count; ++i)
                 {
-                    _ProbeCollection[i].Hostname = hosts[i].ToUpper();
-                    _ProbeCollection[i].Alias = _Aliases.ContainsKey(_ProbeCollection[i].Hostname) ? _Aliases[_ProbeCollection[i].Hostname] : null;
+                    _ProbeCollection[i].Hostname = hosts[i];
+                    _ProbeCollection[i].Alias = _Aliases.ContainsKey(_ProbeCollection[i].Hostname.ToLower())
+                        ? _Aliases[_ProbeCollection[i].Hostname.ToLower()]
+                        : null;
                     _ProbeCollection[i].StartStop();
                 }
             }
@@ -209,8 +211,10 @@ namespace vmPing.Views
                     AddProbe(numberOfProbes: wnd.Addresses.Count);
                     for (int i = 0; i < wnd.Addresses.Count; ++i)
                     {
-                        _ProbeCollection[i].Hostname = wnd.Addresses[i].ToUpper();
-                        _ProbeCollection[i].Alias = _Aliases.ContainsKey(_ProbeCollection[i].Hostname) ? _Aliases[_ProbeCollection[i].Hostname] : null;
+                        _ProbeCollection[i].Hostname = wnd.Addresses[i];
+                        _ProbeCollection[i].Alias = _Aliases.ContainsKey(_ProbeCollection[i].Hostname.ToLower())
+                            ? _Aliases[_ProbeCollection[i].Hostname.ToLower()]
+                            : null;
                         _ProbeCollection[i].StartStop();
                     }
                 }
@@ -348,8 +352,10 @@ namespace vmPing.Views
                         AddProbe(numberOfProbes: favorite.Hostnames.Count);
                         for (int i = 0; i < favorite.Hostnames.Count; ++i)
                         {
-                            _ProbeCollection[i].Hostname = favorite.Hostnames[i].ToUpper();
-                            _ProbeCollection[i].Alias = _Aliases.ContainsKey(_ProbeCollection[i].Hostname) ? _Aliases[_ProbeCollection[i].Hostname] : null;
+                            _ProbeCollection[i].Hostname = favorite.Hostnames[i];
+                            _ProbeCollection[i].Alias = _Aliases.ContainsKey(_ProbeCollection[i].Hostname.ToLower())
+                                ? _Aliases[_ProbeCollection[i].Hostname.ToLower()]
+                                : null;
                             _ProbeCollection[i].StartStop();
                         }
                     }
@@ -382,8 +388,8 @@ namespace vmPing.Views
 
             foreach (var probe in _ProbeCollection)
             {
-                probe.Alias = probe.Hostname != null && _Aliases.ContainsKey(probe.Hostname)
-                    ? _Aliases[probe.Hostname]
+                probe.Alias = probe.Hostname != null && _Aliases.ContainsKey(probe.Hostname.ToLower())
+                    ? _Aliases[probe.Hostname.ToLower()]
                     : string.Empty;
             }
         }
@@ -528,8 +534,8 @@ namespace vmPing.Views
             if (string.IsNullOrEmpty(probe.Hostname))
                 return;
 
-            if (_Aliases.ContainsKey(probe.Hostname))
-                probe.Alias = _Aliases[probe.Hostname];
+            if (_Aliases.ContainsKey(probe.Hostname.ToLower()))
+                probe.Alias = _Aliases[probe.Hostname.ToLower()];
             else
                 probe.Alias = string.Empty;
 
@@ -573,7 +579,9 @@ namespace vmPing.Views
             var probe = (sender as TextBox).DataContext as Probe;
             if (probe.Hostname != null)
             {
-                probe.Alias = _Aliases.ContainsKey(probe.Hostname) ? _Aliases[probe.Hostname] : null;
+                probe.Alias = _Aliases.ContainsKey(probe.Hostname.ToLower())
+                    ? _Aliases[probe.Hostname.ToLower()]
+                    : null;
             }
         }
 

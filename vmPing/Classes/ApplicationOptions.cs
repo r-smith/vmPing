@@ -13,7 +13,13 @@ namespace vmPing.Classes
             Never,
             WhenMinimized
         }
-        
+        public enum StartMode
+        {
+            Blank,
+            MultiInput,
+            Favorite
+        }
+
         public static int PingInterval { get; set; } = Constants.DefaultInterval;
         public static int PingTimeout { get; set; } = Constants.DefaultTimeout;
         public static int AlertThreshold { get; set; } = 2;
@@ -41,6 +47,10 @@ namespace vmPing.Classes
         public static bool UseCustomBuffer { get; set; } = false;
         public static byte[] Buffer { get; set; }
         public static PingOptions GetPingOptions { get; }
+        public static StartMode InitialStartMode { get; set; } = StartMode.Favorite;
+        public static int InitialProbeCount { get; set; } = 2;
+        public static int InitialColumnCount { get; set; } = 2;
+        public static string InitialFavorite { get; set; } = null;
 
         // Font sizes.
         //public static string FontFamily_Alias { get; set; }

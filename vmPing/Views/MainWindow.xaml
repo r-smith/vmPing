@@ -11,6 +11,7 @@
         MinHeight="200"
         MinWidth="350"
         Background="White"
+        Loaded="Window_Loaded"
         ContentRendered="Window_ContentRendered">
 
     <Window.Resources>

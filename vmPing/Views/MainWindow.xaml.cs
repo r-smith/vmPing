@@ -43,7 +43,10 @@ namespace vmPing.Views
             Configuration.Load();
             UpdatePopupOptionIsCheckedState();
 
+            // Parse command line arguments.
             List<string> hosts = CommandLine.ParseArguments();
+
+            // Add initial probes.
             if (hosts.Count > 0)
             {
                 AddProbe(hosts.Count);
@@ -58,16 +61,42 @@ namespace vmPing.Views
             }
             else
             {
-                AddProbe(2);
+                AddProbe(
+                    (ApplicationOptions.InitialProbeCount > 0)
+                        ? ApplicationOptions.InitialProbeCount
+                        : 2);
             }
 
             // Set initial ColumnCount values. Value is what's set visually on the slider control.
             // Tag is updated to be the lesser of the values ColumnCount.Value and _ProbeCollection.Count.
             // The actual number of grid columns is bound to the tag value.
-            ColumnCount.Value = _ProbeCollection.Count;
+            ColumnCount.Value = ApplicationOptions.InitialColumnCount > 0
+                ? ApplicationOptions.InitialColumnCount
+                : 2;
+            ColumnCount.Tag = ColumnCount.Value > _ProbeCollection.Count
+                ? _ProbeCollection.Count
+                : (int)ColumnCount.Value;
+
+            // Set items source for main GUI ItemsControl.
             ProbeItemsControl.ItemsSource = _ProbeCollection;
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            switch (ApplicationOptions.InitialStartMode)
+            {
+                case ApplicationOptions.StartMode.MultiInput:
+                    MultiInputWindowExecute(null, null);
+                    break;
+                case ApplicationOptions.StartMode.Favorite:
+                    if (ApplicationOptions.InitialFavorite != null
+                        && !string.IsNullOrWhiteSpace(ApplicationOptions.InitialFavorite))
+                    {
+                        LoadFavorite(ApplicationOptions.InitialFavorite);
+                    }
+                    break;
+            }
+        }
 
         private void UpdatePopupOptionIsCheckedState()
         {
@@ -341,34 +370,37 @@ namespace vmPing.Views
                 menuItem.Header = fav;
                 menuItem.Click += (s, r) =>
                 {
-                    RemoveAllProbes();
-
-                    var selectedFavorite = s as MenuItem;
-                    var favorite = Favorite.GetContents(selectedFavorite.Header.ToString());
-                    if (favorite.Hostnames.Count < 1)
-                        AddProbe();
-                    else
-                    {
-                        AddProbe(numberOfProbes: favorite.Hostnames.Count);
-                        for (int i = 0; i < favorite.Hostnames.Count; ++i)
-                        {
-                            _ProbeCollection[i].Hostname = favorite.Hostnames[i];
-                            _ProbeCollection[i].Alias = _Aliases.ContainsKey(_ProbeCollection[i].Hostname.ToLower())
-                                ? _Aliases[_ProbeCollection[i].Hostname.ToLower()]
-                                : null;
-                            _ProbeCollection[i].StartStop();
-                        }
-                    }
-
-                    ColumnCount.Value = 1;  // Ensure window's grid column binding is updated, if needed.
-                    ColumnCount.Value = favorite.ColumnCount;
-                    this.Title = $"{selectedFavorite.Header} - vmPing";
+                    LoadFavorite((s as MenuItem).Header.ToString());
                 };
 
                 mnuFavorites.Items.Add(menuItem);
             }
         }
 
+        private void LoadFavorite(string favoriteTitle)
+        {
+            RemoveAllProbes();
+
+            var favorite = Favorite.GetContents(favoriteTitle);
+            if (favorite.Hostnames.Count < 1)
+                AddProbe();
+            else
+            {
+                AddProbe(numberOfProbes: favorite.Hostnames.Count);
+                for (int i = 0; i < favorite.Hostnames.Count; ++i)
+                {
+                    _ProbeCollection[i].Hostname = favorite.Hostnames[i];
+                    _ProbeCollection[i].Alias = _Aliases.ContainsKey(_ProbeCollection[i].Hostname.ToLower())
+                        ? _Aliases[_ProbeCollection[i].Hostname.ToLower()]
+                        : null;
+                    _ProbeCollection[i].StartStop();
+                }
+            }
+
+            ColumnCount.Value = 1;  // Ensure window's grid column binding is updated, if needed.
+            ColumnCount.Value = favorite.ColumnCount;
+            this.Title = $"{favoriteTitle} - vmPing";
+        }
 
         private void LoadAliases()
         {

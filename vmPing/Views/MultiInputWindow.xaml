@@ -69,29 +69,13 @@
             <TextBlock DockPanel.Dock="Left"
                        Text="Enter addresses to ping"
                        Style="{StaticResource OptionHeaderTextStyle}" />
-            <Border DockPanel.Dock="Left"
-                    Background="Transparent"
-                    Margin="8,0,0,0"
-                    Padding="3"
-                    VerticalAlignment="Center"
-                    ToolTipService.InitialShowDelay="0"
-                    ToolTipService.ShowDuration="60000">
-                <Border.ToolTip>
-                    <ToolTip Background="#404040">
-                        <TextBlock Width="250"
-                                   Margin="5,1"
-                                   FontSize="14"
-                                   TextWrapping="Wrap"
-                                   Foreground="#f2f2f2">
-                            Type a list of addresses to ping.<LineBreak/>
-                            Enter one per line or comma separated.<LineBreak/><LineBreak/>
-                            If you have a text file containing hosts,<LineBreak/>drag and drop it here.
-                        </TextBlock>
-                    </ToolTip>
-                </Border.ToolTip>
-                <Image Source="{StaticResource icon.question-circle}"
-                       Width="16" Height="16"/>
-            </Border>
+            <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" MaxWidth="250">
+                <TextBlock>
+                    Type a list of addresses to ping.<LineBreak/>
+                    Enter one per line or comma separated.<LineBreak/><LineBreak/>
+                    If you have a text file containing hosts,<LineBreak/>drag and drop it here.
+                </TextBlock>
+            </Label>
         </DockPanel>
 
         <!-- Input -->

@@ -223,25 +223,9 @@
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Left"
                                   FontSize="14"/>
-                        <Border DockPanel.Dock="Left"
-                                Background="Transparent"
-                                Margin="8,0,0,0"
-                                Padding="3"
-                                ToolTipService.InitialShowDelay="0"
-                                ToolTipService.ShowDuration="60000">
-                            <Border.ToolTip>
-                                <ToolTip Background="#404040">
-                                    <TextBlock Width="300"
-                                               Margin="5,1"
-                                               FontSize="14"
-                                               TextWrapping="Wrap"
-                                               Foreground="#f2f2f2"
-                                               Text="The don't fragment flag instructs routers to discard the packet if it is too big. This can be used to determine the MTU."/>
-                                </ToolTip>
-                            </Border.ToolTip>
-                            <Image Source="{StaticResource icon.question-circle}"
-                                   Width="16" Height="16"/>
-                        </Border>
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
+                            The don't fragment flag instructs routers to discard the packet if it is too big. This can be used to determine the MTU.
+                        </Label>
                     </DockPanel>
                 </DockPanel>
             </TabItem>
@@ -255,30 +239,14 @@
                         <TextBlock DockPanel.Dock="Left"
                                    Text="Popup Notifications"
                                    Style="{StaticResource OptionHeaderTextStyle}" />
-                        <Border DockPanel.Dock="Left"
-                                Background="Transparent"
-                                Margin="8,0,0,0"
-                                Padding="3"
-                                VerticalAlignment="Center"
-                                ToolTipService.InitialShowDelay="0"
-                                ToolTipService.ShowDuration="60000">
-                            <Border.ToolTip>
-                                <ToolTip Background="#404040">
-                                    <TextBlock Width="300"
-                                               Margin="5,1"
-                                               FontSize="14"
-                                               TextWrapping="Wrap"
-                                               Foreground="#f2f2f2">
-                                        <Run Text="Popup notifications are displayed when a host you are monitoring changes status (goes down or up)."/>
-                                        <LineBreak/>
-                                        <LineBreak/>
-                                        <Run Text="You can disable notifications entirely, choose to show them only when vmPing is minimized, or always show notifications."/>
-                                    </TextBlock>
-                                </ToolTip>
-                            </Border.ToolTip>
-                            <Image Source="{StaticResource icon.question-circle}"
-                                   Width="16" Height="16"/>
-                        </Border>
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
+                            <TextBlock>
+                                Popup notifications are displayed when a host you are monitoring changes status (goes down or up).
+                                <LineBreak/>
+                                <LineBreak/>
+                                You can disable notifications entirely, choose to show them only when vmPing is minimized, or always show notifications.
+                            </TextBlock>
+                        </Label>
                     </DockPanel>
                     
                     
@@ -324,25 +292,9 @@
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Left"
                                   FontSize="14" />
-                        <Border DockPanel.Dock="Left"
-                                Background="Transparent"
-                                Margin="8,0,0,0"
-                                Padding="3"
-                                ToolTipService.InitialShowDelay="0"
-                                ToolTipService.ShowDuration="60000">
-                            <Border.ToolTip>
-                                <ToolTip Background="#404040">
-                                    <TextBlock Width="300"
-                                               Margin="5,1"
-                                               FontSize="14"
-                                               TextWrapping="Wrap"
-                                               Foreground="#f2f2f2"
-                                               Text="When enabled, popup notifications will automatically close after the specified number of seconds."/>
-                                </ToolTip>
-                            </Border.ToolTip>
-                            <Image Source="{StaticResource icon.question-circle}"
-                                   Width="16" Height="16"/>
-                        </Border>
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
+                            When enabled, popup notifications will automatically close after the specified number of seconds.
+                        </Label>
                     </DockPanel>
                     
                     <!-- Auto-dismiss interval textbox -->
@@ -381,25 +333,9 @@
                                       VerticalContentAlignment="Center"
                                       VerticalAlignment="Center"
                                       FontSize="14" />
-                            <Border DockPanel.Dock="Left"
-                                    Background="Transparent"
-                                    Margin="8,0,0,0"
-                                    Padding="3"
-                                    ToolTipService.InitialShowDelay="0"
-                                    ToolTipService.ShowDuration="60000">
-                                <Border.ToolTip>
-                                    <ToolTip Background="#404040">
-                                        <TextBlock Width="300"
-                                                   Margin="5,1"
-                                                   FontSize="14"
-                                                   TextWrapping="Wrap"
-                                                   Foreground="#f2f2f2"
-                                                   Text="If this option is enabled, an email is sent whenever a host goes down or up."/>
-                                    </ToolTip>
-                                </Border.ToolTip>
-                                <Image Source="{StaticResource icon.question-circle}"
-                                       Width="16" Height="16"/>
-                            </Border>
+                            <Label Style="{StaticResource LabelToolTip}">
+                                If this option is enabled, an email is sent whenever a host goes down or up.
+                            </Label>
                         </StackPanel>
 
                         <DockPanel LastChildFill="False"
@@ -523,33 +459,16 @@
 
                     <!-- Audio Alert Down: checkbox / tooltip -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,0">
-                        <CheckBox DockPanel.Dock="Top"
-                                  Name="IsAudioDownAlertEnabled"
+                        <CheckBox Name="IsAudioDownAlertEnabled"
                                   Click="IsAudioDownAlertEnabled_Click"
                                   Content="Enable audio alert: host down"
                                   IsChecked="True"
                                   VerticalAlignment="Center"
                                   VerticalContentAlignment="Center"
                                   FontSize="14" />
-                        <Border DockPanel.Dock="Left"
-                                Background="Transparent"
-                                Margin="8,0,0,0"
-                                Padding="3"
-                                ToolTipService.InitialShowDelay="0"
-                                ToolTipService.ShowDuration="60000">
-                            <Border.ToolTip>
-                                <ToolTip Background="#404040">
-                                    <TextBlock Width="300"
-                                               Margin="5,1"
-                                               FontSize="14"
-                                               TextWrapping="Wrap"
-                                               Foreground="#f2f2f2"
-                                               Text="If this option is enabled, an audio file is played whenever a host goes down."/>
-                                </ToolTip>
-                            </Border.ToolTip>
-                            <Image Source="{StaticResource icon.question-circle}"
-                                   Width="16" Height="16"/>
-                        </Border>
+                        <Label Style="{StaticResource LabelToolTip}">
+                            If this option is enabled, an audio file is played whenever a host goes down.
+                        </Label>
                     </StackPanel>
 
                     <!-- Audio Alert Down: Filepath / play button / browse button -->
@@ -606,25 +525,9 @@
                                   VerticalAlignment="Center"
                                   VerticalContentAlignment="Center"
                                   FontSize="14" />
-                        <Border DockPanel.Dock="Left"
-                                Background="Transparent"
-                                Margin="8,0,0,0"
-                                Padding="2"
-                                ToolTipService.InitialShowDelay="0"
-                                ToolTipService.ShowDuration="60000">
-                            <Border.ToolTip>
-                                <ToolTip Background="#404040">
-                                    <TextBlock Width="300"
-                                               Margin="5,1"
-                                               FontSize="14"
-                                               TextWrapping="Wrap"
-                                               Foreground="#f2f2f2"
-                                               Text="If this option is enabled, an audio file is played whenever a host comes up."/>
-                                </ToolTip>
-                            </Border.ToolTip>
-                            <Image Source="{StaticResource icon.question-circle}"
-                                   Width="16" Height="16"/>
-                        </Border>
+                        <Label Style="{StaticResource LabelToolTip}">
+                            If this option is enabled, an audio file is played whenever a host comes up.
+                        </Label>
                     </StackPanel>
                     
                     <!-- Audio Alert Down: Filepath / play button / browse button -->
@@ -681,32 +584,16 @@
                     
                     <!-- Log all ping output -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,0">
-                        <CheckBox DockPanel.Dock="Top"
-                                  Name="IsLogOutputEnabled"
+                        <CheckBox Name="IsLogOutputEnabled"
                                   Content="Write ping output to plain text files"
                                   IsChecked="True"
                                   VerticalContentAlignment="Center"
                                   VerticalAlignment="Center"
                                   FontSize="14" />
-                        <Border DockPanel.Dock="Left"
-                                Background="Transparent"
-                                Margin="8,0,0,0"
-                                Padding="3"
-                                ToolTipService.InitialShowDelay="0"
-                                ToolTipService.ShowDuration="60000">
-                            <Border.ToolTip>
-                                <ToolTip Background="#404040">
-                                    <TextBlock Width="300"
-                                               Margin="5,1"
-                                               FontSize="14"
-                                               TextWrapping="Wrap"
-                                               Foreground="#f2f2f2"
-                                               Text="If this option is enabled, all ping output is written to a text file.  You specify the base directory, and vmPing will generate a separate log file for each host (hostname.txt)."/>
-                                </ToolTip>
-                            </Border.ToolTip>
-                            <Image Source="{StaticResource icon.question-circle}"
-                                   Width="16" Height="16"/>
-                        </Border>
+                        <Label Style="{StaticResource LabelToolTip}">
+                            If this option is enabled, all ping output is written to a text file.
+                            You specify the base directory, and vmPing will generate a separate log file for each host (hostname.txt).
+                        </Label>
                     </StackPanel>
                     <Grid DockPanel.Dock="Top"
                           Margin="30,10,0,0"
@@ -733,32 +620,17 @@
                     
                     <!-- Log status changes -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,0">
-                        <CheckBox DockPanel.Dock="Top"
-                                  Name="IsLogStatusChangesEnabled"
+                        <CheckBox Name="IsLogStatusChangesEnabled"
                                   Content="Log status changes to text file"
                                   IsChecked="True"
                                   VerticalContentAlignment="Center"
                                   VerticalAlignment="Center"
                                   FontSize="14" />
-                        <Border DockPanel.Dock="Left"
-                                Background="Transparent"
-                                Margin="8,0,0,0"
-                                Padding="3"
-                                ToolTipService.InitialShowDelay="0"
-                                ToolTipService.ShowDuration="60000">
-                            <Border.ToolTip>
-                                <ToolTip Background="#404040">
-                                    <TextBlock Width="300"
-                                               Margin="5,1"
-                                               FontSize="14"
-                                               TextWrapping="Wrap"
-                                               Foreground="#f2f2f2"
-                                               Text="If this option is enabled, all status changes are written to a text file.  A status change is when a host you are pinging goes down, or a down host comes back up.  The text file is saved in a tab delimited format that is suitable for Excel or database imports."/>
-                                </ToolTip>
-                            </Border.ToolTip>
-                            <Image Source="{StaticResource icon.question-circle}"
-                                   Width="16" Height="16"/>
-                        </Border>
+                        <Label Style="{StaticResource LabelToolTip}">
+                            When enabled, this option writes all status changes to a text file.
+                            A status change is when a host you are pinging goes down, or a down host comes back up.
+                            The text file is saved in a tab delimited format that is suitable for Excel or database imports.
+                        </Label>
                     </StackPanel>
                     <Grid DockPanel.Dock="Top"
                           Margin="30,10,0,0"

@@ -270,6 +270,22 @@ namespace vmPing.Classes
                 value: ApplicationOptions.AlertThreshold.ToString()));
             configuration.AppendChild(GenerateOptionNode(
                 xmlDocument: xd,
+                name: "InitialStartMode",
+                value: ApplicationOptions.InitialStartMode.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "InitialProbeCount",
+                value: ApplicationOptions.InitialProbeCount.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "InitialColumnCount",
+                value: ApplicationOptions.InitialColumnCount.ToString()));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
+                name: "InitialFavorite",
+                value: ApplicationOptions.InitialFavorite != null ? ApplicationOptions.InitialFavorite : string.Empty));
+            configuration.AppendChild(GenerateOptionNode(
+                xmlDocument: xd,
                 name: "PopupNotifications",
                 value: ApplicationOptions.PopupOption.ToString()));
             configuration.AppendChild(GenerateOptionNode(
@@ -557,6 +573,27 @@ namespace vmPing.Classes
             if (options.TryGetValue("AlertThreshold", out optionValue))
             {
                 ApplicationOptions.AlertThreshold = int.Parse(optionValue);
+            }
+            if (options.TryGetValue("InitialStartMode", out optionValue))
+            {
+                if (optionValue.Equals(ApplicationOptions.StartMode.Favorite.ToString()))
+                    ApplicationOptions.InitialStartMode = ApplicationOptions.StartMode.Favorite;
+                else if (optionValue.Equals(ApplicationOptions.StartMode.MultiInput.ToString()))
+                    ApplicationOptions.InitialStartMode = ApplicationOptions.StartMode.MultiInput;
+                else
+                    ApplicationOptions.InitialStartMode = ApplicationOptions.StartMode.Blank;
+            }
+            if (options.TryGetValue("InitialProbeCount", out optionValue))
+            {
+                ApplicationOptions.InitialProbeCount = int.Parse(optionValue);
+            }
+            if (options.TryGetValue("InitialColumnCount", out optionValue))
+            {
+                ApplicationOptions.InitialColumnCount = int.Parse(optionValue);
+            }
+            if (options.TryGetValue("InitialFavorite", out optionValue))
+            {
+                ApplicationOptions.InitialFavorite = optionValue;
             }
             if (options.TryGetValue("PopupNotifications", out optionValue))
             {

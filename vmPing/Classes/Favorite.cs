@@ -78,12 +78,22 @@ namespace vmPing.Classes
                 xd.Load(Configuration.FilePath);
 
                 XmlNode nodeFavorite = xd.SelectSingleNode($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(favoriteTitle)}]");
-                favorite.ColumnCount = int.Parse(nodeFavorite.Attributes["columncount"].Value);
+                if (nodeFavorite != null)
+                {
+                    favorite.ColumnCount = int.Parse(nodeFavorite.Attributes["columncount"].Value);
 
-                foreach (XmlNode node in xd.SelectNodes($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(favoriteTitle)}]/host"))
-                    favorite.Hostnames.Add(node.InnerText);
+                    foreach (XmlNode node in xd.SelectNodes($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(favoriteTitle)}]/host"))
+                        favorite.Hostnames.Add(node.InnerText);
+                }
+                else
+                {
+                    throw new KeyNotFoundException();
+                }
             }
-
+            catch (KeyNotFoundException)
+            {
+                Util.ShowError($"The requested favorite was not found: {favoriteTitle}");
+            }
             catch (Exception ex)
             {
                 Util.ShowError($"{Strings.Error_ReadConfig} {ex.Message}");

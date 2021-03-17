@@ -7,7 +7,7 @@ vmPing
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
 **[Click here to download the latest release](https://github.com/R-Smith/vmPing/releases/latest/download/vmPing.exe)**
-##### (1.3.14 released on March 9, 2021)
+##### (1.3.15 released on March 17, 2021)
 
 ##### Notes
 * There is no installer.  Just run the .exe.
@@ -33,6 +33,13 @@ Screenshots
 
 Recent Changes
 --------------
+### Version 1.3.15
+* __Startup mode__. You can now configure how vmPing starts. Choose between a blank window (this is the normal, default mode), show the list input window, or load a favorite. For the blank window, you can also set the number of blank probes and initial column count. You will find startup mode settings on the General tab in the Options window. Don't forget to select *Save as vmPing defaults* to make your settings persist.
+* When you open the list input window, it now pre-populates with the addresses of the current pings.
+* Forced uppercase has been removed from all text boxes.
+* Dates and times should now display formatted according to your set region in Windows.
+
+
 ### Version 1.3.14
 * __Portable mode.__ Previously, your configuration file had to be stored at %LocalAppData%\vmPing\vmPing.xml. The configuration file includes all favorites, aliases, and default settings for the application. Now vmPing.xml can reside in the same folder as the application, making everything easily portable. Additionally for new users, a simple prompt is displayed if you do anything that would require saving an initial config file. The prompt informs of config file creation, and gives an opportunity to select portable mode if you want your config file created alongside vmPing.exe.
 * There's a whole new look to the traceroute window. Check it out. An MTR feature isn't there yet, but should follow in a future release.

@@ -114,6 +114,104 @@
                                  FontSize="14" />
                         <Label Content="dropped pings" Margin="10,0,0,0" FontSize="14" Foreground="#555555" />
                     </StackPanel>
+                    
+                    <!-- Startup header -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Startup "
+                               Margin="0,25,0,10"
+                               Style="{StaticResource OptionHeaderTextStyle}"/>
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Choose how vmPing should start:"
+                               Margin="0,0,0,5"
+                               FontSize="14"
+                               Foreground="#555555" />
+                    <!-- Startup mode selection -->
+                    <ComboBox DockPanel.Dock="Top"
+                              Name="StartupMode" Width="200"
+                              VerticalContentAlignment="Center"
+                              HorizontalAlignment="Left"
+                              FontSize="14"
+                              Foreground="#555555">
+                        <ComboBoxItem Content="Blank (default)" Tag="Standard" IsSelected="True"/>
+                        <ComboBoxItem Content="List input window" Tag="Standard"/>
+                        <ComboBoxItem Content="Load a favorite" Tag="Favorite"/>
+                    </ComboBox>
+                    <!-- Initial probe / column count -->
+                    <StackPanel DockPanel.Dock="Top"
+                                Orientation="Horizontal"
+                                Margin="0,13,0,0">
+                        <!-- Style to control visibility based on selected startup mode -->
+                        <StackPanel.Style>
+                            <Style>
+                                <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=StartupMode, Path=SelectedItem.Tag}" Value="Standard">
+                                        <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <!-- Probe count -->
+                        <StackPanel Margin="0,0,30,0">
+                            <TextBlock Text="Probe count:"
+                                       FontSize="14"
+                                       Margin="0,0,0,4"
+                                       Foreground="#555555" />
+                            <TextBox Name="InitialProbeCount"
+                                     PreviewTextInput="NumericTextbox_PreviewTextInput"
+                                     Width="60"
+                                     VerticalContentAlignment="Center"
+                                     HorizontalAlignment="Left"
+                                     Padding="3"
+                                     MaxLength="2"
+                                     FontSize="14" />
+                        </StackPanel>
+                        <!-- Column count-->
+                        <StackPanel>
+                            <TextBlock Text="Column count:"
+                                       FontSize="14"
+                                       Margin="0,0,0,4"
+                                       Foreground="#555555" />
+                            <TextBox Name="InitialColumnCount"
+                                     PreviewTextInput="NumericTextbox_PreviewTextInput"
+                                     Width="60"
+                                     VerticalContentAlignment="Center"
+                                     HorizontalAlignment="Left"
+                                     Padding="3"
+                                     MaxLength="2"
+                                     FontSize="14" />
+                        </StackPanel>
+                    </StackPanel>
+                    <!-- Select a favorite -->
+                    <StackPanel DockPanel.Dock="Top"
+                                Orientation="Horizontal"
+                                Margin="0,13,0,0">
+                        <!-- Style to control visibility based on selected startup mode -->
+                        <StackPanel.Style>
+                            <Style>
+                                <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=StartupMode, Path=SelectedItem.Tag}" Value="Favorite">
+                                        <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <!-- Favorite selection -->
+                        <StackPanel Margin="0,0,35,0">
+                            <TextBlock Text="Select a favorite:"
+                                       FontSize="14"
+                                       Margin="0,0,0,4"
+                                       Foreground="#555555" />
+                            <ComboBox DockPanel.Dock="Top"
+                                      Name="InitialFavorite" Width="250"
+                                      VerticalContentAlignment="Center"
+                                      HorizontalAlignment="Left"
+                                      FontSize="14"
+                                      Foreground="#555555">
+                            </ComboBox>
+                        </StackPanel>
+                    </StackPanel>
                 </DockPanel>
             </TabItem>
 

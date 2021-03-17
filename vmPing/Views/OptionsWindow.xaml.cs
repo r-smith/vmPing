@@ -97,6 +97,16 @@ namespace vmPing.Views
             PingTimeout.Text = pingTimeout.ToString();
             AlertThreshold.Text = ApplicationOptions.AlertThreshold.ToString();
             cboPingInterval.Text = pingIntervalText;
+
+            // Get startup mode settings.
+            InitialProbeCount.Text = ApplicationOptions.InitialProbeCount.ToString();
+            InitialColumnCount.Text = ApplicationOptions.InitialColumnCount.ToString();
+            StartupMode.SelectedIndex = (int)ApplicationOptions.InitialStartMode;
+            InitialFavorite.ItemsSource = Favorite.GetTitles();
+            InitialFavorite.Text =
+                (ApplicationOptions.InitialFavorite == null)
+                ? string.Empty
+                : ApplicationOptions.InitialFavorite;
         }
 
         private void PopulateNotificationOptions()
@@ -239,8 +249,7 @@ namespace vmPing.Views
                 return false;
             }
 
-
-            // Ping interval
+            // Ping interval.
             int pingInterval;
             int multiplier = 1000;
 
@@ -261,20 +270,17 @@ namespace vmPing.Views
                 pingInterval *= multiplier;
             else
                 pingInterval = Constants.DefaultInterval;
-
             ApplicationOptions.PingInterval = pingInterval;
 
-            // Ping timeout
+            // Ping timeout.
             int pingTimeout;
-
             if (int.TryParse(PingTimeout.Text, out pingTimeout) && pingTimeout > 0 && pingTimeout <= 60)
                 pingTimeout *= 1000;
             else
                 pingTimeout = Constants.DefaultTimeout;
-
             ApplicationOptions.PingTimeout = pingTimeout;
 
-            // Alert threshold
+            // Alert threshold.
             int alertThreshold;
 
             var isThresholdValid = int.TryParse(AlertThreshold.Text, out alertThreshold) && alertThreshold > 0 && alertThreshold <= 60;
@@ -282,6 +288,47 @@ namespace vmPing.Views
                 alertThreshold = 1;
 
             ApplicationOptions.AlertThreshold = alertThreshold;
+
+            // Startup mode.
+            ApplicationOptions.InitialStartMode = (ApplicationOptions.StartMode)StartupMode.SelectedIndex;
+            switch (StartupMode.SelectedIndex)
+            {
+                case ((int)ApplicationOptions.StartMode.Blank):
+                case ((int)ApplicationOptions.StartMode.MultiInput):
+                    // Initial probe count.
+                    int count;
+                    if (int.TryParse(InitialProbeCount.Text, out count))
+                    {
+                        if (count < 1)
+                            count = 1;
+                        else if (count > 20)
+                            count = 2;
+                    }
+                    else
+                    {
+                        count = 2;
+                    }
+                    ApplicationOptions.InitialProbeCount = count;
+
+                    // Initial column count.
+                    if (int.TryParse(InitialColumnCount.Text, out count))
+                    {
+                        if (count < 1)
+                            count = 1;
+                        else if (count > 10)
+                            count = 10;
+                    }
+                    else
+                    {
+                        count = 2;
+                    }
+                    ApplicationOptions.InitialColumnCount = count;
+                    break;
+                case ((int)ApplicationOptions.StartMode.Favorite):
+                    // Initial favorite.
+                    ApplicationOptions.InitialFavorite = InitialFavorite.Text;
+                    break;
+            }
 
             return true;
         }

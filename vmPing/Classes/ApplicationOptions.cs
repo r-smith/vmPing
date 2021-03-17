@@ -15,9 +15,11 @@ namespace vmPing.Classes
         }
         public enum StartMode
         {
-            Blank,
-            MultiInput,
-            Favorite
+            // Clarify default index values.
+            // Index values are used to set combobox in options GUI.
+            Blank = 0,
+            MultiInput = 1,
+            Favorite = 2
         }
 
         public static int PingInterval { get; set; } = Constants.DefaultInterval;
@@ -47,7 +49,7 @@ namespace vmPing.Classes
         public static bool UseCustomBuffer { get; set; } = false;
         public static byte[] Buffer { get; set; }
         public static PingOptions GetPingOptions { get; }
-        public static StartMode InitialStartMode { get; set; } = StartMode.Favorite;
+        public static StartMode InitialStartMode { get; set; } = StartMode.Blank;
         public static int InitialProbeCount { get; set; } = 2;
         public static int InitialColumnCount { get; set; } = 2;
         public static string InitialFavorite { get; set; } = null;

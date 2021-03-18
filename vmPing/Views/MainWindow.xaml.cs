@@ -43,16 +43,24 @@ namespace vmPing.Views
             Configuration.Load();
             UpdatePopupOptionIsCheckedState();
 
-            // Parse command line arguments.
-            List<string> hosts = CommandLine.ParseArguments();
+            // Set items source for main GUI ItemsControl.
+            ProbeItemsControl.ItemsSource = _ProbeCollection;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Parse command line arguments. Get any host addresses entered on command line.
+            List<string> cliHosts = CommandLine.ParseArguments();
 
             // Add initial probes.
-            if (hosts.Count > 0)
+            if (cliHosts.Count > 0)
             {
-                AddProbe(hosts.Count);
-                for (int i = 0; i < hosts.Count; ++i)
+                // Host addresses were entered on the command line.
+                // Add addresses to probe collection and begin pinging.
+                AddProbe(cliHosts.Count);
+                for (int i = 0; i < cliHosts.Count; ++i)
                 {
-                    _ProbeCollection[i].Hostname = hosts[i];
+                    _ProbeCollection[i].Hostname = cliHosts[i];
                     _ProbeCollection[i].Alias = _Aliases.ContainsKey(_ProbeCollection[i].Hostname.ToLower())
                         ? _Aliases[_ProbeCollection[i].Hostname.ToLower()]
                         : null;
@@ -61,10 +69,27 @@ namespace vmPing.Views
             }
             else
             {
+                // No addresses entered on the command line.
+                // Add initial blank probes.
                 AddProbe(
                     (ApplicationOptions.InitialProbeCount > 0)
                         ? ApplicationOptions.InitialProbeCount
                         : 2);
+
+                // Determine statup mode.
+                switch (ApplicationOptions.InitialStartMode)
+                {
+                    case ApplicationOptions.StartMode.MultiInput:
+                        MultiInputWindowExecute(null, null);
+                        break;
+                    case ApplicationOptions.StartMode.Favorite:
+                        if (ApplicationOptions.InitialFavorite != null
+                            && !string.IsNullOrWhiteSpace(ApplicationOptions.InitialFavorite))
+                        {
+                            LoadFavorite(ApplicationOptions.InitialFavorite);
+                        }
+                        break;
+                }
             }
 
             // Set initial ColumnCount values. Value is what's set visually on the slider control.
@@ -76,26 +101,6 @@ namespace vmPing.Views
             ColumnCount.Tag = ColumnCount.Value > _ProbeCollection.Count
                 ? _ProbeCollection.Count
                 : (int)ColumnCount.Value;
-
-            // Set items source for main GUI ItemsControl.
-            ProbeItemsControl.ItemsSource = _ProbeCollection;
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            switch (ApplicationOptions.InitialStartMode)
-            {
-                case ApplicationOptions.StartMode.MultiInput:
-                    MultiInputWindowExecute(null, null);
-                    break;
-                case ApplicationOptions.StartMode.Favorite:
-                    if (ApplicationOptions.InitialFavorite != null
-                        && !string.IsNullOrWhiteSpace(ApplicationOptions.InitialFavorite))
-                    {
-                        LoadFavorite(ApplicationOptions.InitialFavorite);
-                    }
-                    break;
-            }
         }
 
         private void UpdatePopupOptionIsCheckedState()

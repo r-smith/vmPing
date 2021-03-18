@@ -4,6 +4,7 @@
     <!-- TabControl style -->
     <Style TargetType="{x:Type TabControl}">
         <Setter Property="Padding" Value="0"/>
+        <Setter Property="Margin" Value="0"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="White"/>
@@ -22,7 +23,7 @@
                             <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
                             <RowDefinition x:Name="RowDefinition1" Height="*"/>
                         </Grid.RowDefinitions>
-                        <TabPanel x:Name="HeaderPanel" Background="Transparent" Grid.Column="0" IsItemsHost="True" Margin="2,2,2,0" Grid.Row="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
+                        <TabPanel x:Name="HeaderPanel" Background="Transparent" Grid.Column="0" IsItemsHost="True" Margin="0" Grid.Row="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
                         <Border x:Name="ContentPanel" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="0" KeyboardNavigation.DirectionalNavigation="Contained" Grid.Row="1" KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
                             <ContentPresenter x:Name="PART_SelectedContentHost" ContentTemplate="{TemplateBinding SelectedContentTemplate}" Content="{TemplateBinding SelectedContent}" ContentStringFormat="{TemplateBinding SelectedContentStringFormat}" ContentSource="SelectedContent" Margin="{TemplateBinding Padding}"/>
                         </Border>
@@ -37,7 +38,7 @@
                             <Setter Property="Width" TargetName="ColumnDefinition1" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
-                            <Setter Property="Margin" TargetName="HeaderPanel" Value="2,2,0,2"/>
+                            <Setter Property="Margin" TargetName="HeaderPanel" Value="0"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{StaticResource {x:Static SystemColors.GrayTextBrushKey}}"/>
@@ -67,21 +68,34 @@
     <SolidColorBrush x:Key="TabItem.Selected.Foreground" Color="Black"/>
 
     <!-- TabItem style -->
+    <DataTemplate x:Key="TabHeader">
+        <TextBlock Text="{Binding}"
+                   FontSize="13"
+                   Foreground="{StaticResource TabItem.Static.Foreground}"/>
+    </DataTemplate>
+    <DataTemplate x:Key="TabSelectedHeader">
+        <TextBlock Text="{Binding}"
+                   FontSize="13"
+                   FontWeight="SemiBold"
+                   Foreground="{StaticResource TabItem.Selected.Foreground}"/>
+    </DataTemplate>
     <Style TargetType="{x:Type TabItem}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Background" Value="{StaticResource TabItem.Static.Background}"/>
         <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Margin" Value="0,0,2,0"/>
-        <Setter Property="Padding" Value="10,8,17,8"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="MinWidth" Value="130"/>
+        <Setter Property="Padding" Value="12,8,15,8"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="HeaderTemplate" Value="{StaticResource TabHeader}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
                     <Border x:Name="mainBorder"
                             BorderBrush="Transparent"
-                            BorderThickness="7,0,0,0"
+                            BorderThickness="8,0,0,0"
                             Background="{TemplateBinding Background}"
                             Margin="0">
                         <ContentPresenter x:Name="contentPresenter"
@@ -103,6 +117,7 @@
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="BorderBrush" Value="{StaticResource TabItem.Selected.Border}" TargetName="mainBorder"/>
+                            <Setter Property="HeaderTemplate" Value="{StaticResource TabSelectedHeader}"/>
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>

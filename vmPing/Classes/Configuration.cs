@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using System.Xml;
+using System.Xml.Linq;
 using vmPing.Properties;
 using vmPing.Views;
 
@@ -72,15 +73,13 @@ namespace vmPing.Classes
                 // Directory should be ready. Create a basic XML configuration file.
                 try
                 {
-                    var xmlFile = new XmlDocument();
-                    var rootNode = xmlFile.CreateElement("vmping");
-                    xmlFile.AppendChild(rootNode);
-
-                    rootNode.AppendChild(xmlFile.CreateElement("aliases"));
-                    rootNode.AppendChild(xmlFile.CreateElement("configuration"));
-                    rootNode.AppendChild(xmlFile.CreateElement("favorites"));
-
-                    xmlFile.Save(FilePath);
+                    var xd = new XDocument(
+                        new XElement("vmping",
+                            new XElement("aliases"),
+                            new XElement("favorites"),
+                            new XElement("configuration"),
+                            new XElement("colors")));
+                    xd.Save(FilePath);
                 }
                 catch (Exception ex)
                 {
@@ -92,7 +91,6 @@ namespace vmPing.Classes
             return true;
         }
 
-
         public static string GetEscapedXpath(string xpath)
         {
             if (!xpath.Contains("'"))
@@ -103,7 +101,6 @@ namespace vmPing.Classes
                 return "concat('" + xpath.Replace("'", "',\"'\",'") + "')";
         }
 
-
         public static void WriteConfigurationOptions()
         {
             if (IsReady() == false)
@@ -111,27 +108,21 @@ namespace vmPing.Classes
 
             try
             {
-                var xd = new XmlDocument();
-                xd.Load(FilePath);
+                // Open XML configuration file and get root <vmping> node.
+                var xd = XDocument.Load(FilePath);
+                XElement rootNode = xd.Element("vmping");
+                
+                // Generate new <configuration> and <colors> nodes.
+                XElement configuration = GenerateConfigurationNode();
+                XElement colors = GenerateColorsNode();
 
-                // Check if configuration node already exists.  If so, delete it.
-                XmlNode nodeRoot = xd.SelectSingleNode("/vmping");
-                foreach (XmlNode node in xd.SelectNodes($"/vmping/configuration"))
-                {
-                    nodeRoot.RemoveChild(node);
-                }
+                // Delete old <configuration> and <colors> nodes from XML file (they will be recreated).
+                rootNode.Descendants("configuration").Remove();
+                rootNode.Descendants("colors").Remove();
 
-                // Check if colors node already exists.  If so, delete it.
-                foreach (XmlNode node in xd.SelectNodes($"/vmping/colors"))
-                {
-                    nodeRoot.RemoveChild(node);
-                }
-
-                XmlElement configuration = GenerateConfigurationNode(xd);
-                XmlElement colors = GenerateColorsNode(xd);
-
-                nodeRoot.AppendChild(configuration);
-                nodeRoot.AppendChild(colors);
+                // Add the newly generated <configuration> and <colors> nodes, and then save the XML file.
+                rootNode.Add(configuration);
+                rootNode.Add(colors);
                 xd.Save(FilePath);
             }
 
@@ -141,262 +132,211 @@ namespace vmPing.Classes
             }
         }
 
-
-        private static XmlElement GenerateColorsNode(XmlDocument xd)
+        private static XElement GenerateConfigurationNode()
         {
-            XmlElement colors = xd.CreateElement("colors");
-
-            // Write probe background colors.
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Probe.Background.Inactive",
-                value: ApplicationOptions.BackgroundColor_Probe_Inactive));
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Probe.Background.Up",
-                value: ApplicationOptions.BackgroundColor_Probe_Up));
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Probe.Background.Down",
-                value: ApplicationOptions.BackgroundColor_Probe_Down));
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Probe.Background.Indeterminate",
-                value: ApplicationOptions.BackgroundColor_Probe_Indeterminate));
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Probe.Background.Error",
-                value: ApplicationOptions.BackgroundColor_Probe_Error));
-
-            // Write probe foreground colors.
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Probe.Foreground.Inactive",
-                value: ApplicationOptions.ForegroundColor_Probe_Inactive));
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Probe.Foreground.Up",
-                value: ApplicationOptions.ForegroundColor_Probe_Up));
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Probe.Foreground.Down",
-                value: ApplicationOptions.ForegroundColor_Probe_Down));
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Probe.Foreground.Indeterminate",
-                value: ApplicationOptions.ForegroundColor_Probe_Indeterminate));
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Probe.Foreground.Error",
-                value: ApplicationOptions.ForegroundColor_Probe_Error));
-
-            // Write statistics foreground colors.
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Statistics.Foreground.Inactive",
-                value: ApplicationOptions.ForegroundColor_Stats_Inactive));
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Statistics.Foreground.Up",
-                value: ApplicationOptions.ForegroundColor_Stats_Up));
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Statistics.Foreground.Down",
-                value: ApplicationOptions.ForegroundColor_Stats_Down));
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Statistics.Foreground.Indeterminate",
-                value: ApplicationOptions.ForegroundColor_Stats_Indeterminate));
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Statistics.Foreground.Error",
-                value: ApplicationOptions.ForegroundColor_Stats_Error));
-
-            // Write alias foreground colors.
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Alias.Foreground.Inactive",
-                value: ApplicationOptions.ForegroundColor_Alias_Inactive));
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Alias.Foreground.Up",
-                value: ApplicationOptions.ForegroundColor_Alias_Up));
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Alias.Foreground.Down",
-                value: ApplicationOptions.ForegroundColor_Alias_Down));
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Alias.Foreground.Indeterminate",
-                value: ApplicationOptions.ForegroundColor_Alias_Indeterminate));
-            colors.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Alias.Foreground.Error",
-                value: ApplicationOptions.ForegroundColor_Alias_Error));
-
-            return colors;
-        }
-
-        private static XmlElement GenerateConfigurationNode(XmlDocument xd)
-        {
-            XmlElement configuration = xd.CreateElement("configuration");
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "PingInterval",
-                value: ApplicationOptions.PingInterval.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "PingTimeout",
-                value: ApplicationOptions.PingTimeout.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "TTL",
-                value: ApplicationOptions.TTL.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "DontFragment",
-                value: ApplicationOptions.DontFragment.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "UseCustomBuffer",
-                value: ApplicationOptions.UseCustomBuffer.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "Buffer",
-                value: Encoding.ASCII.GetString(ApplicationOptions.Buffer)));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "AlertThreshold",
-                value: ApplicationOptions.AlertThreshold.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "InitialStartMode",
-                value: ApplicationOptions.InitialStartMode.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "InitialProbeCount",
-                value: ApplicationOptions.InitialProbeCount.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "InitialColumnCount",
-                value: ApplicationOptions.InitialColumnCount.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "InitialFavorite",
-                value: ApplicationOptions.InitialFavorite != null ? ApplicationOptions.InitialFavorite : string.Empty));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "PopupNotifications",
-                value: ApplicationOptions.PopupOption.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "IsAutoDismissEnabled",
-                value: ApplicationOptions.IsAutoDismissEnabled.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "AutoDismissMilliseconds",
-                value: ApplicationOptions.AutoDismissMilliseconds.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "IsEmailAlertEnabled",
-                value: ApplicationOptions.IsEmailAlertEnabled.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "EmailServer",
-                value: ApplicationOptions.EmailServer != null ? ApplicationOptions.EmailServer.ToString() : string.Empty));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "EmailPort",
-                value: ApplicationOptions.EmailPort != null ? ApplicationOptions.EmailPort.ToString() : string.Empty));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "IsEmailAuthenticationRequired",
-                value: ApplicationOptions.IsEmailAuthenticationRequired.ToString()));
-
-            if (!string.IsNullOrWhiteSpace(ApplicationOptions.EmailUser))
-            {
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "EmailUser",
-                    value: Util.EncryptStringAES(ApplicationOptions.EmailUser)));
-            }
-            else
-            {
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "EmailUser",
-                    value: string.Empty));
-            }
-
-            if (!string.IsNullOrWhiteSpace(ApplicationOptions.EmailPassword))
-            {
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "EmailPassword",
-                    value: Util.EncryptStringAES(ApplicationOptions.EmailPassword)));
-            }
-            else
-            {
-                configuration.AppendChild(GenerateOptionNode(
-                    xmlDocument: xd,
-                    name: "EmailPassword",
-                    value: string.Empty));
-            }
-
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "EmailRecipient",
-                value: ApplicationOptions.EmailRecipient != null ? ApplicationOptions.EmailRecipient.ToString() : string.Empty));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "EmailFromAddress",
-                value: ApplicationOptions.EmailFromAddress != null ? ApplicationOptions.EmailFromAddress.ToString() : string.Empty));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "IsAudioUpAlertEnabled",
-                value: ApplicationOptions.IsAudioUpAlertEnabled.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "AudioUpFilePath",
-                value: ApplicationOptions.AudioUpFilePath != null ? ApplicationOptions.AudioUpFilePath.ToString() : string.Empty));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "IsAudioDownAlertEnabled",
-                value: ApplicationOptions.IsAudioDownAlertEnabled.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "AudioDownFilePath",
-                value: ApplicationOptions.AudioDownFilePath != null ? ApplicationOptions.AudioDownFilePath.ToString() : string.Empty));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "IsLogOutputEnabled",
-                value: ApplicationOptions.IsLogOutputEnabled.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "LogPath",
-                value: ApplicationOptions.LogPath != null ? ApplicationOptions.LogPath.ToString() : string.Empty));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "IsLogStatusChangesEnabled",
-                value: ApplicationOptions.IsLogStatusChangesEnabled.ToString()));
-            configuration.AppendChild(GenerateOptionNode(
-                xmlDocument: xd,
-                name: "LogStatusChangesPath",
-                value: ApplicationOptions.LogStatusChangesPath != null ? ApplicationOptions.LogStatusChangesPath.ToString() : string.Empty));
+            // In XML, options are written as:
+            // <configuration>
+            //   <option name="MyOptionName">myValue</option>
+            // </configuration>
+            XElement configuration = new XElement("configuration");
+            configuration.Add(
+                new XElement("option",
+                    new XAttribute("name", "PingInterval"),
+                    ApplicationOptions.PingInterval),
+                new XElement("option",
+                    new XAttribute("name", "PingTimeout"),
+                    ApplicationOptions.PingTimeout),
+                new XElement("option",
+                    new XAttribute("name", "TTL"),
+                    ApplicationOptions.TTL),
+                new XElement("option",
+                    new XAttribute("name", "DontFragment"),
+                    ApplicationOptions.DontFragment),
+                new XElement("option",
+                    new XAttribute("name", "UseCustomBuffer"),
+                    ApplicationOptions.UseCustomBuffer),
+                new XElement("option",
+                    new XAttribute("name", "Buffer"),
+                    Encoding.ASCII.GetString(ApplicationOptions.Buffer)),
+                new XElement("option",
+                    new XAttribute("name", "AlertThreshold"),
+                    ApplicationOptions.AlertThreshold),
+                new XComment(" [InitialStartMode] Blank, MultiInput, Favorite "),
+                new XElement("option",
+                    new XAttribute("name", "InitialStartMode"),
+                    ApplicationOptions.InitialStartMode),
+                new XElement("option",
+                    new XAttribute("name", "InitialProbeCount"),
+                    ApplicationOptions.InitialProbeCount),
+                new XElement("option",
+                    new XAttribute("name", "InitialColumnCount"),
+                    ApplicationOptions.InitialColumnCount),
+                new XElement("option",
+                    new XAttribute("name", "InitialFavorite"),
+                    string.IsNullOrWhiteSpace(ApplicationOptions.InitialFavorite)
+                        ? string.Empty
+                        : ApplicationOptions.InitialFavorite),
+                new XComment(" [PopupNotifications] Always, Never, WhenMinimized "),
+                new XElement("option",
+                    new XAttribute("name", "PopupNotifications"),
+                    ApplicationOptions.PopupOption),
+                new XElement("option",
+                    new XAttribute("name", "IsAutoDismissEnabled"),
+                    ApplicationOptions.IsAutoDismissEnabled),
+                new XElement("option",
+                    new XAttribute("name", "AutoDismissMilliseconds"),
+                    ApplicationOptions.AutoDismissMilliseconds),
+                new XElement("option",
+                    new XAttribute("name", "IsEmailAlertEnabled"),
+                    ApplicationOptions.IsEmailAlertEnabled),
+                new XElement("option",
+                    new XAttribute("name", "EmailServer"),
+                    string.IsNullOrWhiteSpace(ApplicationOptions.EmailServer)
+                        ? string.Empty
+                        : ApplicationOptions.EmailServer),
+                new XElement("option",
+                    new XAttribute("name", "EmailPort"),
+                    string.IsNullOrWhiteSpace(ApplicationOptions.EmailPort)
+                        ? string.Empty
+                        : ApplicationOptions.EmailPort),
+                new XElement("option",
+                    new XAttribute("name", "IsEmailAuthenticationRequired"),
+                    ApplicationOptions.IsEmailAuthenticationRequired),
+                new XElement("option",
+                    new XAttribute("name", "EmailUser"),
+                    string.IsNullOrWhiteSpace(ApplicationOptions.EmailUser)
+                        ? string.Empty
+                        : Util.EncryptStringAES(ApplicationOptions.EmailUser)),
+                new XElement("option",
+                    new XAttribute("name", "EmailPassword"),
+                    string.IsNullOrWhiteSpace(ApplicationOptions.EmailPassword)
+                        ? string.Empty
+                        : Util.EncryptStringAES(ApplicationOptions.EmailPassword)),
+                new XElement("option",
+                    new XAttribute("name", "EmailRecipient"),
+                    string.IsNullOrWhiteSpace(ApplicationOptions.EmailRecipient)
+                        ? string.Empty
+                        : ApplicationOptions.EmailRecipient),
+                new XElement("option",
+                    new XAttribute("name", "EmailFromAddress"),
+                    string.IsNullOrWhiteSpace(ApplicationOptions.EmailFromAddress)
+                        ? string.Empty
+                        : ApplicationOptions.EmailFromAddress),
+                new XElement("option",
+                    new XAttribute("name", "IsAudioUpAlertEnabled"),
+                    ApplicationOptions.IsAudioUpAlertEnabled),
+                new XElement("option",
+                    new XAttribute("name", "AudioUpFilePath"),
+                    string.IsNullOrWhiteSpace(ApplicationOptions.AudioUpFilePath)
+                        ? string.Empty
+                        : ApplicationOptions.AudioUpFilePath),
+                new XElement("option",
+                    new XAttribute("name", "IsAudioDownAlertEnabled"),
+                    ApplicationOptions.IsAudioDownAlertEnabled),
+                new XElement("option",
+                    new XAttribute("name", "AudioDownFilePath"),
+                    string.IsNullOrWhiteSpace(ApplicationOptions.AudioDownFilePath)
+                        ? string.Empty
+                        : ApplicationOptions.AudioDownFilePath),
+                new XElement("option",
+                    new XAttribute("name", "IsLogOutputEnabled"),
+                    ApplicationOptions.IsLogOutputEnabled),
+                new XElement("option",
+                    new XAttribute("name", "LogPath"),
+                    string.IsNullOrWhiteSpace(ApplicationOptions.LogPath)
+                        ? string.Empty
+                        : ApplicationOptions.LogPath),
+                new XElement("option",
+                    new XAttribute("name", "IsLogStatusChangesEnabled"),
+                    ApplicationOptions.IsLogStatusChangesEnabled),
+                new XElement("option",
+                    new XAttribute("name", "LogStatusChangesPath"),
+                    string.IsNullOrWhiteSpace(ApplicationOptions.LogStatusChangesPath)
+                        ? string.Empty
+                        : ApplicationOptions.LogStatusChangesPath));
 
             return configuration;
         }
 
-
-        private static XmlElement GenerateOptionNode(XmlDocument xmlDocument, string name, string value)
+        private static XElement GenerateColorsNode()
         {
-            XmlElement option = xmlDocument.CreateElement("option");
-            option.SetAttribute("name", name);
-            option.InnerText = value;
+            // In XML, options are written as:
+            // <colors>
+            //   <option name="MyOptionName">myValue</option>
+            // </colors>
+            XElement colors = new XElement("colors");
+            colors.Add(
+                // Probe background colors.
+                new XComment(" Probe background "),
+                new XElement("option",
+                    new XAttribute("name", "Probe.Background.Inactive"),
+                    ApplicationOptions.BackgroundColor_Probe_Inactive),
+                new XElement("option",
+                    new XAttribute("name", "Probe.Background.Up"),
+                    ApplicationOptions.BackgroundColor_Probe_Up),
+                new XElement("option",
+                    new XAttribute("name", "Probe.Background.Down"),
+                    ApplicationOptions.BackgroundColor_Probe_Down),
+                new XElement("option",
+                    new XAttribute("name", "Probe.Background.Indeterminate"),
+                    ApplicationOptions.BackgroundColor_Probe_Indeterminate),
+                new XElement("option",
+                    new XAttribute("name", "Probe.Background.Error"),
+                    ApplicationOptions.BackgroundColor_Probe_Error),
+                // Probe foreground colors.
+                new XComment(" Probe foreground "),
+                new XElement("option",
+                    new XAttribute("name", "Probe.Foreground.Inactive"),
+                    ApplicationOptions.ForegroundColor_Probe_Inactive),
+                new XElement("option",
+                    new XAttribute("name", "Probe.Foreground.Up"),
+                    ApplicationOptions.ForegroundColor_Probe_Up),
+                new XElement("option",
+                    new XAttribute("name", "Probe.Foreground.Down"),
+                    ApplicationOptions.ForegroundColor_Probe_Down),
+                new XElement("option",
+                    new XAttribute("name", "Probe.Foreground.Indeterminate"),
+                    ApplicationOptions.ForegroundColor_Probe_Indeterminate),
+                new XElement("option",
+                    new XAttribute("name", "Probe.Foreground.Error"),
+                    ApplicationOptions.ForegroundColor_Probe_Error),
+                // Statisitcs foreground colors.
+                new XComment(" Statistics foreground "),
+                new XElement("option",
+                    new XAttribute("name", "Statistics.Foreground.Inactive"),
+                    ApplicationOptions.ForegroundColor_Stats_Inactive),
+                new XElement("option",
+                    new XAttribute("name", "Statistics.Foreground.Up"),
+                    ApplicationOptions.ForegroundColor_Stats_Up),
+                new XElement("option",
+                    new XAttribute("name", "Statistics.Foreground.Down"),
+                    ApplicationOptions.ForegroundColor_Stats_Down),
+                new XElement("option",
+                    new XAttribute("name", "Statistics.Foreground.Indeterminate"),
+                    ApplicationOptions.ForegroundColor_Stats_Indeterminate),
+                new XElement("option",
+                    new XAttribute("name", "Statistics.Foreground.Error"),
+                    ApplicationOptions.ForegroundColor_Stats_Error),
+                // Alias foreground colors.
+                new XComment(" Alias foreground "),
+                new XElement("option",
+                    new XAttribute("name", "Alias.Foreground.Inactive"),
+                    ApplicationOptions.ForegroundColor_Alias_Inactive),
+                new XElement("option",
+                    new XAttribute("name", "Alias.Foreground.Up"),
+                    ApplicationOptions.ForegroundColor_Alias_Up),
+                new XElement("option",
+                    new XAttribute("name", "Alias.Foreground.Down"),
+                    ApplicationOptions.ForegroundColor_Alias_Down),
+                new XElement("option",
+                    new XAttribute("name", "Alias.Foreground.Indeterminate"),
+                    ApplicationOptions.ForegroundColor_Alias_Indeterminate),
+                new XElement("option",
+                    new XAttribute("name", "Alias.Foreground.Error"),
+                    ApplicationOptions.ForegroundColor_Alias_Error));
 
-            return option;
+            return colors;
         }
-
 
         public static void Load()
         {
@@ -418,7 +358,6 @@ namespace vmPing.Classes
                 Util.ShowError($"{Strings.Error_LoadConfig} {ex.Message}");
             }
         }
-
 
         private static void LoadColorsNode(XmlNodeList nodeList)
         {
@@ -536,7 +475,6 @@ namespace vmPing.Classes
                     ApplicationOptions.ForegroundColor_Alias_Error = optionValue;
             }
         }
-
 
         private static void LoadConfigurationNode(XmlNodeList nodeList)
         {

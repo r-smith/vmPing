@@ -42,7 +42,7 @@ namespace vmPing.Views
             LoadFavorites();
             LoadAliases();
             Configuration.Load();
-            UpdatePopupOptionIsCheckedState();
+            RefreshGuiState();
 
             // Set items source for main GUI ItemsControl.
             ProbeItemsControl.ItemsSource = _ProbeCollection;
@@ -104,8 +104,9 @@ namespace vmPing.Views
                 : (int)ColumnCount.Value;
         }
 
-        private void UpdatePopupOptionIsCheckedState()
+        private void RefreshGuiState()
         {
+            // Set popup option on menu bar.
             PopupAlways.IsChecked = false;
             PopupNever.IsChecked = false;
             PopupWhenMinimized.IsChecked = false;
@@ -122,6 +123,9 @@ namespace vmPing.Views
                     PopupWhenMinimized.IsChecked = true;
                     break;
             }
+
+            // Set always on top state.
+            Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
         }
 
 
@@ -335,7 +339,7 @@ namespace vmPing.Views
                 optionsWnd.Owner = this;
                 if (optionsWnd.ShowDialog() == true)
                 {
-                    UpdatePopupOptionIsCheckedState();
+                    RefreshGuiState();
                     RefreshProbeColors();
                 }
             }

@@ -12,6 +12,8 @@
         MinWidth="350"
         Background="White"
         Loaded="Window_Loaded"
+        StateChanged="Window_StateChanged"
+        Closing="Window_Closing"
         ContentRendered="Window_ContentRendered">
 
     <Window.Resources>

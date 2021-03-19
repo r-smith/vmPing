@@ -17,6 +17,7 @@ namespace vmPing.Views
     {
         private ObservableCollection<Probe> _ProbeCollection = new ObservableCollection<Probe>();
         private Dictionary<string, string> _Aliases = new Dictionary<string, string>();
+        private System.Windows.Forms.NotifyIcon NotifyIcon;
 
         public static RoutedCommand OptionsCommand = new RoutedCommand();
         public static RoutedCommand StartStopCommand = new RoutedCommand();
@@ -687,6 +688,37 @@ namespace vmPing.Views
                     _ProbeCollection.Insert(newIndex, source);
                 }
             }
+        }
+
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized && ApplicationOptions.IsMinimizeToTrayEnabled)
+            {
+                Visibility = Visibility.Hidden;
+                if (NotifyIcon == null)
+                {
+                    NotifyIcon = new System.Windows.Forms.NotifyIcon
+                    {
+                        Icon = new System.Drawing.Icon(@"../../vmPing.ico"),
+                        Text = "vmPing"
+                    };
+                    NotifyIcon.Click += NotifyIcon_Click;
+                }
+                NotifyIcon.Visible = true;
+            }
+        }
+
+        private void NotifyIcon_Click(object sender, EventArgs e)
+        {
+            NotifyIcon.Visible = false;
+            Visibility = Visibility.Visible;
+            Show();
+            WindowState = WindowState.Normal;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (NotifyIcon != null) NotifyIcon.Dispose();
         }
     }
 }

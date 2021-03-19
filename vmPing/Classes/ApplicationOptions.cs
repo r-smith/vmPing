@@ -53,6 +53,7 @@ namespace vmPing.Classes
         public static int InitialProbeCount { get; set; } = 2;
         public static int InitialColumnCount { get; set; } = 2;
         public static string InitialFavorite { get; set; } = null;
+        public static bool IsMinimizeToTrayEnabled { get; set; } = false;
 
         // Font sizes.
         //public static string FontFamily_Alias { get; set; }

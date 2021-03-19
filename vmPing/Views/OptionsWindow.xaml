@@ -235,11 +235,8 @@
                                      Content="Packet data size"
                                      Name="PacketSizeOption"
                                      Checked="PacketSizeOption_Checked"
-                                     VerticalAlignment="Center"
                                      IsChecked="True"
-                                     Width="160"
-                                     FontSize="14"
-                                     Foreground="#555555" />
+                                     Width="160"/>
                         <TextBox Name="PacketSize"
                                  PreviewTextInput="NumericTextbox_PreviewTextInput"
                                  TextChanged="PacketData_TextChanged"
@@ -259,9 +256,7 @@
                                      Checked="UseCustomPacketOption_Checked"
                                      DockPanel.Dock="Left"
                                      VerticalAlignment="Top"
-                                     Width="160"
-                                     FontSize="14"
-                                     Foreground="#555555" />
+                                     Width="160"/>
                         <TextBox Name="PacketData"
                                  TextChanged="PacketData_TextChanged"
                                  Height="80"
@@ -325,32 +320,17 @@
                                  GroupName="PopupNotifications"
                                  Content="Disabled"
                                  Name="PopupsDisabledOption"
-                                 Margin="0,15,0,0"
-                                 VerticalAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 HorizontalAlignment="Left"
-                                 FontSize="14"
-                                 Foreground="#333" />
+                                 Margin="0,15,0,0"/>
                     <RadioButton DockPanel.Dock="Top"
                                  GroupName="PopupNotifications"
                                  Content="Show when minimized"
                                  Name="PopupsMinimizedOption"
-                                 Margin="0,6"
-                                 VerticalAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 HorizontalAlignment="Left"
-                                 FontSize="14"
-                                 Foreground="#333" />
+                                 Margin="0,6"/>
                     <RadioButton DockPanel.Dock="Top"
                                  GroupName="PopupNotifications"
                                  Content="Always show"
                                  Name="PopupsAlwaysOption"
-                                 VerticalAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 HorizontalAlignment="Left"
-                                 IsChecked="True"
-                                 FontSize="14"
-                                 Foreground="#333" />
+                                 IsChecked="True"/>
                     
                     <!-- Auto-dismiss enabled checkbox -->
                     <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,20,0,5">

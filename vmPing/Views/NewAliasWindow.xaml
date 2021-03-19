@@ -37,7 +37,6 @@
                                HorizontalAlignment="Right"/>
                 </Border>
                 <TextBox Name="MyHost"
-                         Style="{StaticResource TextBoxStyle}"
                          MaxLength="64"/>
             </DockPanel>
 
@@ -52,9 +51,7 @@
                                />
                 </Border>
                 <TextBox Name="MyAlias"
-                         Style="{StaticResource TextBoxStyle}"
-                         MaxLength="64"
-                         />
+                         MaxLength="64"/>
             </DockPanel>
         </DockPanel>
 

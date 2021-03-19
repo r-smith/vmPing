@@ -31,10 +31,8 @@
             <!-- Alias TextBox-->
             <TextBox DockPanel.Dock="Top"
                      Name="MyAlias"
-                     Style="{StaticResource TextBoxStyle}"
                      Margin="0,0,0,10"
-                     MaxLength="64"
-                     />
+                     MaxLength="64"/>
         </DockPanel>
 
         <!-- Buttons -->

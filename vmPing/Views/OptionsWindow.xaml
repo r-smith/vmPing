@@ -66,10 +66,7 @@
                         <TextBox Name="PingInterval"
                                  PreviewTextInput="NumericTextbox_PreviewTextInput"
                                  Width="60"
-                                 VerticalContentAlignment="Center"
-                                 Padding="3,0,0,0"
-                                 MaxLength="5"
-                                 FontSize="14" />
+                                 MaxLength="5"/>
                         <ComboBox Name="PingIntervalUnits" Width="100" Margin="10,0,0,0" VerticalContentAlignment="Center" FontSize="14">
                             <ComboBoxItem Content="seconds" IsSelected="True" />
                             <ComboBoxItem Content="minutes" />
@@ -88,10 +85,7 @@
                         <TextBox Name="PingTimeout"
                                  PreviewTextInput="NumericTextbox_PreviewTextInput"
                                  Width="60"
-                                 VerticalContentAlignment="Center"
-                                 Padding="3,0,0,0"
-                                 MaxLength="2"
-                                 FontSize="14" />
+                                 MaxLength="2"/>
                         <Label Content="seconds" Margin="10,0,0,0" FontSize="14" Foreground="#555555" />
                     </StackPanel>
 
@@ -108,10 +102,7 @@
                         <TextBox Name="AlertThreshold"
                                  PreviewTextInput="NumericTextbox_PreviewTextInput"
                                  Width="60"
-                                 VerticalContentAlignment="Center"
-                                 Padding="3,0,0,0"
-                                 MaxLength="2"
-                                 FontSize="14" />
+                                 MaxLength="2"/>
                         <Label Content="dropped pings" Margin="10,0,0,0" FontSize="14" Foreground="#555555" />
                     </StackPanel>
                     
@@ -160,11 +151,8 @@
                             <TextBox Name="InitialProbeCount"
                                      PreviewTextInput="NumericTextbox_PreviewTextInput"
                                      Width="60"
-                                     VerticalContentAlignment="Center"
                                      HorizontalAlignment="Left"
-                                     Padding="3"
-                                     MaxLength="2"
-                                     FontSize="14" />
+                                     MaxLength="2"/>
                         </StackPanel>
                         <!-- Column count-->
                         <StackPanel>
@@ -175,11 +163,8 @@
                             <TextBox Name="InitialColumnCount"
                                      PreviewTextInput="NumericTextbox_PreviewTextInput"
                                      Width="60"
-                                     VerticalContentAlignment="Center"
                                      HorizontalAlignment="Left"
-                                     Padding="3"
-                                     MaxLength="2"
-                                     FontSize="14" />
+                                     MaxLength="2"/>
                         </StackPanel>
                     </StackPanel>
                     <!-- Select a favorite -->
@@ -235,10 +220,7 @@
                         <TextBox Name="TTL"
                                  PreviewTextInput="NumericTextbox_PreviewTextInput"
                                  Width="80"
-                                 VerticalContentAlignment="Center"
-                                 Padding="3,0,0,0"
-                                 MaxLength="3"
-                                 FontSize="14" />
+                                 MaxLength="3"/>
                         <Label Content="hops" Margin="10,0,0,0" FontSize="14" Foreground="#555555" />
                     </StackPanel>
 
@@ -262,10 +244,7 @@
                                  PreviewTextInput="NumericTextbox_PreviewTextInput"
                                  TextChanged="PacketData_TextChanged"
                                  Width="80"
-                                 VerticalContentAlignment="Center"
-                                 Padding="3,0,0,0"
                                  MaxLength="5"
-                                 FontSize="14"
                                  Visibility="{Binding IsChecked, ElementName=PacketSizeOption, Converter={StaticResource BooleanToHiddenVisibilityConverter}}" />
                         <Label Content="bytes" Margin="10,0,0,0" FontSize="14" Foreground="#555555"
                                Visibility="{Binding IsChecked, ElementName=PacketSizeOption, Converter={StaticResource BooleanToHiddenVisibilityConverter}}" />
@@ -290,9 +269,7 @@
                                  VerticalContentAlignment="Top"
                                  TextWrapping="Wrap"
                                  VerticalScrollBarVisibility="Auto"
-                                 Padding="3"
                                  MaxLength="65500"
-                                 FontSize="14"
                                  Visibility="{Binding IsChecked, ElementName=UseCustomPacketOption, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     </DockPanel>
 
@@ -403,10 +380,7 @@
                         <TextBox Name="AutoDismissInterval"
                                  PreviewTextInput="NumericTextbox_PreviewTextInput"
                                  Width="60"
-                                 VerticalContentAlignment="Center"
-                                 Padding="3,0,0,0"
-                                 MaxLength="2"
-                                 FontSize="14" />
+                                 MaxLength="2"/>
                         <Label Content="seconds" Margin="10,0,0,0" FontSize="14" Foreground="#555555" />
                     </StackPanel>
                 </DockPanel>
@@ -452,8 +426,7 @@
                                     <TextBlock Style="{StaticResource OptionsTextBlock}"
                                                Text="SMTP server" />
                                 </Grid>
-                                <TextBox Style="{StaticResource TextBoxStyle}"
-                                         Name="SmtpServer" />
+                                <TextBox Name="SmtpServer" />
                             </DockPanel>
 
                             <!-- Smtp Port -->
@@ -462,9 +435,8 @@
                                     <TextBlock Style="{StaticResource OptionsTextBlock}"
                                                Text="Port" />
                                 </Grid>
-                                <TextBox Style="{StaticResource TextBoxStyle}"
+                                <TextBox Name="SmtpPort"
                                          PreviewTextInput="NumericTextbox_PreviewTextInput"
-                                         Name="SmtpPort"
                                          HorizontalAlignment="Left"
                                          MaxLength="5"
                                          Width="75" />
@@ -479,6 +451,7 @@
                                       Foreground="#888"
                                       FontSize="13"
                                       Margin="120,8,0,0"
+                                      IsChecked="True"
                                       VerticalContentAlignment="Center"
                                       HorizontalAlignment="Left" />
                             <StackPanel DockPanel.Dock="Top"
@@ -489,8 +462,7 @@
                                         <TextBlock Style="{StaticResource OptionsTextBlock}"
                                                    Text="Username" />
                                     </Grid>
-                                    <TextBox Style="{StaticResource TextBoxStyle}"
-                                             Name="SmtpUsername" />
+                                    <TextBox Name="SmtpUsername"/>
                                 </DockPanel>
 
                                 <!-- Smtp Password -->
@@ -499,8 +471,7 @@
                                         <TextBlock Style="{StaticResource OptionsTextBlock}"
                                                    Text="Password" />
                                     </Grid>
-                                    <PasswordBox Style="{StaticResource PasswordBoxStyle}"
-                                                 Name="SmtpPassword" />
+                                    <PasswordBox Name="SmtpPassword" />
                                 </DockPanel>
                             </StackPanel>
                             
@@ -516,8 +487,7 @@
                                     <TextBlock Style="{StaticResource OptionsTextBlock}"
                                                Text="Recipient address" />
                                 </Grid>
-                                <TextBox Style="{StaticResource TextBoxStyle}"
-                                         Name="EmailRecipientAddress"
+                                <TextBox Name="EmailRecipientAddress"
                                          LostFocus="EmailRecipientAddress_LostFocus" />
                             </DockPanel>
 
@@ -527,8 +497,7 @@
                                     <TextBlock Style="{StaticResource OptionsTextBlock}"
                                                Text="From address" />
                                 </Grid>
-                                <TextBox Style="{StaticResource TextBoxStyle}"
-                                         Name="EmailFromAddress" />
+                                <TextBox Name="EmailFromAddress" />
                             </DockPanel>
 
                             <!-- Test button -->
@@ -578,9 +547,8 @@
                             <TextBlock Style="{StaticResource OptionsTextBlock}"
                                        HorizontalAlignment="Left"
                                        Text="Audio file path" />
-                            <TextBox Style="{StaticResource TextBoxStyle}"
-                                     Margin="0,5,0,8"
-                                     Name="AudioDownFilePath" />
+                            <TextBox Name="AudioDownFilePath"
+                                     Margin="0,5,0,8"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                 <!-- Browse button -->
                                 <Button Style="{StaticResource ButtonSecondaryStyle}"
@@ -637,9 +605,8 @@
                             <TextBlock Style="{StaticResource OptionsTextBlock}"
                                        HorizontalAlignment="Left"
                                        Text="Audio file path" />
-                            <TextBox Style="{StaticResource TextBoxStyle}"
-                                     Margin="0,5,0,8"
-                                     Name="AudioUpFilePath" />
+                            <TextBox Name="AudioUpFilePath"
+                                     Margin="0,5,0,8"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                 <!-- Browse button -->
                                 <Button Style="{StaticResource ButtonSecondaryStyle}"
@@ -701,9 +668,8 @@
                             <TextBlock Style="{StaticResource OptionsTextBlock}"
                                        HorizontalAlignment="Left"
                                        Text="Log path (base directory)" />
-                            <TextBox Style="{StaticResource TextBoxStyle}"
-                                     Margin="0,5,0,8"
-                                     Name="LogPath" />
+                            <TextBox Name="LogPath"
+                                     Margin="0,5,0,8"/>
                             <Button Style="{StaticResource ButtonSecondaryStyle}"
                                     Click="BrowseLogPath_Click"
                                     Width="70"
@@ -738,9 +704,8 @@
                             <TextBlock Style="{StaticResource OptionsTextBlock}"
                                        HorizontalAlignment="Left"
                                        Text="Log path" />
-                            <TextBox Style="{StaticResource TextBoxStyle}"
-                                     Margin="0,5,0,8"
-                                     Name="LogStatusChangesPath" />
+                            <TextBox Name="LogStatusChangesPath"
+                                     Margin="0,5,0,8"/>
                             <Button Style="{StaticResource ButtonSecondaryStyle}"
                                     Click="BrowseLogStatusChangesPath_Click"
                                     Width="70"

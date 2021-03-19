@@ -42,10 +42,8 @@
                                VerticalAlignment="Center"
                                />
                     <TextBox Name="MyTitle"
-                             Style="{StaticResource TextBoxStyle}"
                              Margin="0,4,0,0"
-                             MaxLength="64"
-                             />
+                             MaxLength="64"/>
                 </StackPanel>
                 
                 <!-- Columns -->
@@ -57,11 +55,9 @@
                                />
                     <TextBox DockPanel.Dock="Top"
                              Name="MyColumnCount"
-                             Style="{StaticResource TextBoxStyle}"
                              Margin="0,4,0,0"
                              MaxLength="2"
-                             PreviewTextInput="MyColumnCount_PreviewTextInput"
-                             />
+                             PreviewTextInput="MyColumnCount_PreviewTextInput"/>
                 </StackPanel>
             </Grid>
             
@@ -84,7 +80,6 @@
                 
                 <!-- Multiline input for hosts -->
                 <TextBox x:Name="MyHosts"
-                         Style="{StaticResource TextBoxStyle}"
                          FontFamily="Consolas"
                          FontSize="15"
                          Height="Auto"

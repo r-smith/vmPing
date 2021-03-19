@@ -17,7 +17,6 @@
                 <ResourceDictionary Source="ResourceDictionaries/DataGridStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/ListBoxStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/OptionsHeaderStyle.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/PasswordBoxStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/TabControlStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/TextBoxStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/TextBoxHtmlStyle.xaml"/>

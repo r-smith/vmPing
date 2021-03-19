@@ -173,9 +173,7 @@ namespace vmPing.Classes
                     ApplicationOptions.InitialColumnCount),
                 new XElement("option",
                     new XAttribute("name", "InitialFavorite"),
-                    string.IsNullOrWhiteSpace(ApplicationOptions.InitialFavorite)
-                        ? string.Empty
-                        : ApplicationOptions.InitialFavorite),
+                    ApplicationOptions.InitialFavorite ?? string.Empty),
                 new XComment(" [PopupNotifications] Always, Never, WhenMinimized "),
                 new XElement("option",
                     new XAttribute("name", "PopupNotifications"),
@@ -191,14 +189,10 @@ namespace vmPing.Classes
                     ApplicationOptions.IsEmailAlertEnabled),
                 new XElement("option",
                     new XAttribute("name", "EmailServer"),
-                    string.IsNullOrWhiteSpace(ApplicationOptions.EmailServer)
-                        ? string.Empty
-                        : ApplicationOptions.EmailServer),
+                    ApplicationOptions.EmailServer ?? string.Empty),
                 new XElement("option",
                     new XAttribute("name", "EmailPort"),
-                    string.IsNullOrWhiteSpace(ApplicationOptions.EmailPort)
-                        ? string.Empty
-                        : ApplicationOptions.EmailPort),
+                    ApplicationOptions.EmailPort ?? string.Empty),
                 new XElement("option",
                     new XAttribute("name", "IsEmailAuthenticationRequired"),
                     ApplicationOptions.IsEmailAuthenticationRequired),
@@ -214,46 +208,34 @@ namespace vmPing.Classes
                         : Util.EncryptStringAES(ApplicationOptions.EmailPassword)),
                 new XElement("option",
                     new XAttribute("name", "EmailRecipient"),
-                    string.IsNullOrWhiteSpace(ApplicationOptions.EmailRecipient)
-                        ? string.Empty
-                        : ApplicationOptions.EmailRecipient),
+                    ApplicationOptions.EmailRecipient ?? string.Empty),
                 new XElement("option",
                     new XAttribute("name", "EmailFromAddress"),
-                    string.IsNullOrWhiteSpace(ApplicationOptions.EmailFromAddress)
-                        ? string.Empty
-                        : ApplicationOptions.EmailFromAddress),
+                    ApplicationOptions.EmailFromAddress ?? string.Empty),
                 new XElement("option",
                     new XAttribute("name", "IsAudioUpAlertEnabled"),
                     ApplicationOptions.IsAudioUpAlertEnabled),
                 new XElement("option",
                     new XAttribute("name", "AudioUpFilePath"),
-                    string.IsNullOrWhiteSpace(ApplicationOptions.AudioUpFilePath)
-                        ? string.Empty
-                        : ApplicationOptions.AudioUpFilePath),
+                    ApplicationOptions.AudioUpFilePath ?? string.Empty),
                 new XElement("option",
                     new XAttribute("name", "IsAudioDownAlertEnabled"),
                     ApplicationOptions.IsAudioDownAlertEnabled),
                 new XElement("option",
                     new XAttribute("name", "AudioDownFilePath"),
-                    string.IsNullOrWhiteSpace(ApplicationOptions.AudioDownFilePath)
-                        ? string.Empty
-                        : ApplicationOptions.AudioDownFilePath),
+                    ApplicationOptions.AudioDownFilePath ?? string.Empty),
                 new XElement("option",
                     new XAttribute("name", "IsLogOutputEnabled"),
                     ApplicationOptions.IsLogOutputEnabled),
                 new XElement("option",
                     new XAttribute("name", "LogPath"),
-                    string.IsNullOrWhiteSpace(ApplicationOptions.LogPath)
-                        ? string.Empty
-                        : ApplicationOptions.LogPath),
+                    ApplicationOptions.LogPath ?? string.Empty),
                 new XElement("option",
                     new XAttribute("name", "IsLogStatusChangesEnabled"),
                     ApplicationOptions.IsLogStatusChangesEnabled),
                 new XElement("option",
                     new XAttribute("name", "LogStatusChangesPath"),
-                    string.IsNullOrWhiteSpace(ApplicationOptions.LogStatusChangesPath)
-                        ? string.Empty
-                        : ApplicationOptions.LogStatusChangesPath));
+                    ApplicationOptions.LogStatusChangesPath ?? string.Empty));
 
             return configuration;
         }

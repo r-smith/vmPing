@@ -6,7 +6,7 @@
     <SolidColorBrush x:Key="ComboBox.Static.Border" Color="#abadb3"/>
     <SolidColorBrush x:Key="ComboBox.MouseOver.Glyph" Color="#000000"/>
     <SolidColorBrush x:Key="ComboBox.MouseOver.Background" Color="#f2f4f5"/>
-    <SolidColorBrush x:Key="ComboBox.MouseOver.Border" Color="#000000"/>
+    <SolidColorBrush x:Key="ComboBox.MouseOver.Border" Color="#303030"/>
     <SolidColorBrush x:Key="ComboBox.Pressed.Glyph" Color="#000000"/>
     <SolidColorBrush x:Key="ComboBox.Pressed.Background" Color="#e6e8e8"/>
     <SolidColorBrush x:Key="ComboBox.Pressed.Border" Color="#000000"/>
@@ -171,9 +171,12 @@
     <Style TargetType="{x:Type ComboBox}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{StaticResource ComboBox.Static.Background}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource ComboBox.Static.Border}"/>
         <Setter Property="Foreground" Value="#111"/>
+        <Setter Property="BorderBrush" Value="{StaticResource ComboBox.Static.Border}"/>
         <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="Padding" Value="6,3,5,3"/>

@@ -14,16 +14,14 @@ namespace vmPing.Views
     /// </summary>
     public partial class ManageFavoritesWindow : Window
     {
-        public static ManageFavoritesWindow openWindow = null;
         private Favorite SelectedFavorite = null;
 
+        // Imports and constants for hiding minimize and maximize buttons.
         [DllImport("user32.dll")]
         private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
         [DllImport("user32.dll")]
         private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-
         private const int GWL_STYLE = -16;
-
         private const int WS_MAXIMIZEBOX = 0x10000; //maximize button
         private const int WS_MINIMIZEBOX = 0x20000; //minimize button
 
@@ -31,7 +29,6 @@ namespace vmPing.Views
         public ManageFavoritesWindow()
         {
             InitializeComponent();
-
             RefreshFavoriteList();
         }
 
@@ -107,23 +104,9 @@ namespace vmPing.Views
             }
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            openWindow = this;
-        }
-
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            openWindow = null;
-        }
-
         private void Window_SourceInitialized(object sender, EventArgs e)
         {
-            HideMinimizeAndMaximizeButtons();
-        }
-
-        protected void HideMinimizeAndMaximizeButtons()
-        {
+            // Hide minimize and maximize buttons.
             IntPtr _windowHandle = new WindowInteropHelper(this).Handle;
             if (_windowHandle == null)
             {

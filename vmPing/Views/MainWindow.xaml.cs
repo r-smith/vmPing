@@ -35,7 +35,6 @@ namespace vmPing.Views
             InitializeAplication();
         }
 
-
         private void InitializeAplication()
         {
             InitializeCommandBindings();
@@ -128,7 +127,6 @@ namespace vmPing.Views
             Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
         }
 
-
         private void InitializeCommandBindings()
         {
             CommandBindings.Add(new CommandBinding(OptionsCommand, OptionsExecute));
@@ -167,19 +165,16 @@ namespace vmPing.Views
             MultiInputMenu.Command = MultiInputCommand;
         }
 
-
         public void AddProbe(int numberOfProbes = 1)
         {
             for (; numberOfProbes > 0; --numberOfProbes)
                 _ProbeCollection.Add(new Probe());
         }
 
-
         public void ProbeStartStop_Click(object sender, EventArgs e)
         {
             ((Probe)((Button)sender).DataContext).StartStop();
         }
-
 
         private void ColumnCount_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -188,7 +183,6 @@ namespace vmPing.Views
             // The visual column count is bound to the Tag value.
             ColumnCount.Tag = ColumnCount.Value > _ProbeCollection.Count ? _ProbeCollection.Count : (int)ColumnCount.Value;
         }
-
 
         private void Hostname_KeyDown(object sender, KeyEventArgs e)
         {
@@ -208,7 +202,6 @@ namespace vmPing.Views
             }
         }
 
-
         private void RemoveProbe_Click(object sender, RoutedEventArgs e)
         {
             if (_ProbeCollection.Count <= 1)
@@ -225,7 +218,6 @@ namespace vmPing.Views
             // Update column count.
             ColumnCount.Tag = ColumnCount.Value > _ProbeCollection.Count ? _ProbeCollection.Count : (int)ColumnCount.Value;
         }
-
 
         private void MultiInputWindowExecute(object sender, ExecutedRoutedEventArgs e)
         {
@@ -265,7 +257,6 @@ namespace vmPing.Views
             }
         }
 
-
         private void StartStopExecute(object sender, ExecutedRoutedEventArgs e)
         {
             string toggleStatus = StartStopMenuHeader.Text;
@@ -279,7 +270,6 @@ namespace vmPing.Views
             }
         }
 
-
         private void HelpExecute(object sender, ExecutedRoutedEventArgs e)
         {
             if (HelpWindow._OpenWindow == null)
@@ -291,7 +281,6 @@ namespace vmPing.Views
                 HelpWindow._OpenWindow.Activate();
             }
         }
-
 
         private void NewInstanceExecute(object sender, ExecutedRoutedEventArgs e)
         {
@@ -311,18 +300,15 @@ namespace vmPing.Views
             }
         }
 
-
         private void TracerouteExecute(object sender, ExecutedRoutedEventArgs e)
         {
             new TracerouteWindow().Show();
         }
 
-
         private void FloodHostExecute(object sender, ExecutedRoutedEventArgs e)
         {
             new FloodHostWindow().Show();
         }
-
 
         private void AddProbeExecute(object sender, ExecutedRoutedEventArgs e)
         {
@@ -332,21 +318,13 @@ namespace vmPing.Views
 
         private void OptionsExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            if (OptionsWindow.openWindow == null)
+            // Open the options window.
+            var optionsWnd = new OptionsWindow();
+            optionsWnd.Owner = this;
+            if (optionsWnd.ShowDialog() == true)
             {
-                // Open the options window.
-                var optionsWnd = new OptionsWindow();
-                optionsWnd.Owner = this;
-                if (optionsWnd.ShowDialog() == true)
-                {
-                    RefreshGuiState();
-                    RefreshProbeColors();
-                }
-            }
-            else
-            {
-                // Options window is already open.  Activate it.
-                OptionsWindow.openWindow.Activate();
+                RefreshGuiState();
+                RefreshProbeColors();
             }
         }
 
@@ -481,7 +459,6 @@ namespace vmPing.Views
             return menuItem;
         }
 
-
         private void mnuAddToFavorites_Click(object sender, RoutedEventArgs e)
         {
             // Display add to favorites window.
@@ -500,36 +477,20 @@ namespace vmPing.Views
 
         private void mnuManageFavorites_Click(object sender, RoutedEventArgs e)
         {
-            if (ManageFavoritesWindow.openWindow == null)
-            {
-                // Open the favorites window.
-                var manageFavoritesWindow = new ManageFavoritesWindow();
-                manageFavoritesWindow.Owner = this;
-                manageFavoritesWindow.ShowDialog();
-                LoadFavorites();
-            }
-            else
-            {
-                // Favorites window is already open.  Activate it.
-                ManageFavoritesWindow.openWindow.Activate();
-            }
+            // Open the favorites window.
+            var manageFavoritesWindow = new ManageFavoritesWindow();
+            manageFavoritesWindow.Owner = this;
+            manageFavoritesWindow.ShowDialog();
+            LoadFavorites();
         }
 
         private void mnuManageAliases_Click(object sender, RoutedEventArgs e)
         {
-            if (ManageAliasesWindow.openWindow == null)
-            {
-                // Open the aliases window.
-                var manageAliasesWindow = new ManageAliasesWindow();
-                manageAliasesWindow.Owner = this;
-                manageAliasesWindow.ShowDialog();
-                LoadAliases();
-            }
-            else
-            {
-                // Aliases window is already open.  Activate it.
-                ManageAliasesWindow.openWindow.Activate();
-            }
+            // Open the aliases window.
+            var manageAliasesWindow = new ManageAliasesWindow();
+            manageAliasesWindow.Owner = this;
+            manageAliasesWindow.ShowDialog();
+            LoadAliases();
         }
 
         private void PopupAlways_Click(object sender, RoutedEventArgs e)

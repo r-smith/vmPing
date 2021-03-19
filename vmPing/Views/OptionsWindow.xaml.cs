@@ -18,15 +18,12 @@ namespace vmPing.Views
     /// </summary>
     public partial class OptionsWindow : Window
     {
-        public static OptionsWindow openWindow = null;
-
+        // Imports and constants for hiding minimize and maximize buttons.
         [DllImport("user32.dll")]
         private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
         [DllImport("user32.dll")]
         private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-
         private const int GWL_STYLE = -16;
-
         private const int WS_MAXIMIZEBOX = 0x10000; //maximize button
         private const int WS_MINIMIZEBOX = 0x20000; //minimize button
 
@@ -230,7 +227,6 @@ namespace vmPing.Views
             DialogResult = true;
         }
 
-
         private bool SaveGeneralOptions()
         {
             if (PingInterval.Text.Length == 0)
@@ -333,7 +329,6 @@ namespace vmPing.Views
             return true;
         }
 
-
         private bool SaveNotificationOptions()
         {
             if (IsAutoDismissEnabled.IsChecked == true)
@@ -363,7 +358,6 @@ namespace vmPing.Views
 
             return true;
         }
-
 
         private bool SaveAdvancedOptions()
         {
@@ -416,7 +410,6 @@ namespace vmPing.Views
 
             return true;
         }
-
 
         private bool SaveEmailAlertOptions()
         {
@@ -638,24 +631,11 @@ namespace vmPing.Views
                 e.Handled = true;
         }
 
-
         private void HtmlColor_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             var regex = new Regex("[#a-fA-F0-9]");
             if (!regex.IsMatch(e.Text))
                 e.Handled = true;
-        }
-
-
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            openWindow = this;
-        }
-
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            openWindow = null;
         }
 
         private void EmailRecipientAddress_LostFocus(object sender, RoutedEventArgs e)
@@ -866,11 +846,7 @@ namespace vmPing.Views
 
         private void Window_SourceInitialized(object sender, EventArgs e)
         {
-            HideMinimizeAndMaximizeButtons();
-        }
-
-        protected void HideMinimizeAndMaximizeButtons()
-        {
+            // Hide minimize and maximize buttons.
             IntPtr _windowHandle = new WindowInteropHelper(this).Handle;
             if (_windowHandle == null)
             {

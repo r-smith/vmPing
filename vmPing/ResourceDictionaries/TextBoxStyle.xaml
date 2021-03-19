@@ -5,7 +5,7 @@
     <SolidColorBrush x:Key="TextBox.Static.Background" Color="#ffffff"/>
     <SolidColorBrush x:Key="TextBox.Static.Foreground" Color="#111"/>
     <SolidColorBrush x:Key="TextBox.Static.Border" Color="#abadb3"/>
-    <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#000000"/>
+    <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#303030"/>
     <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#007acc"/>
     <Style TargetType="{x:Type TextBox}">
         <Setter Property="Background" Value="{StaticResource TextBox.Static.Background}"/>

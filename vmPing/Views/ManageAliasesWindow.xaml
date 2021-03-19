@@ -12,20 +12,17 @@
         Background="#fff"
         ResizeMode="CanResize"
         PreviewKeyDown="Window_PreviewKeyDown"
-        Loaded="Window_Loaded"
-        Closed="Window_Closed"
         SourceInitialized="Window_SourceInitialized">
 
     <Grid Margin="9">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0"
                    Text="{x:Static resource:Strings.ManageAliases_Header}"
-                   Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"
-                   />
+                   Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"/>
 
         <DataGrid Grid.Row="1"
                   Name="AliasesDataGrid"
@@ -37,11 +34,11 @@
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsSelected, RelativeSource= {RelativeSource AncestorType={x:Type DataGridRow}}}" Value="True">
-                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="Foreground" Value="White"/>
                                 </DataTrigger>
                             </Style.Triggers>
-                            <Setter Property="Padding" Value="7,2,10,2" />
-                            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                            <Setter Property="Padding" Value="7,2,10,2"/>
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
@@ -51,12 +48,12 @@
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsSelected, RelativeSource= {RelativeSource AncestorType={x:Type DataGridRow}}}" Value="True">
-                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="Foreground" Value="White"/>
                                 </DataTrigger>
                             </Style.Triggers>
-                            <Setter Property="Padding" Value="7,2,10,2" />
-                            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
-                            <Setter Property="Foreground" Value="#6c71c4" />
+                            <Setter Property="Padding" Value="7,2,10,2"/>
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            <Setter Property="Foreground" Value="#6c71c4"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
@@ -68,18 +65,18 @@
             <Button Click="New_Click"
                     Width="85"
                     Style="{StaticResource ButtonSecondaryStyle}"
-                    Content="{x:Static resource:Strings.DialogButton_New}" />
+                    Content="{x:Static resource:Strings.DialogButton_New}"/>
             <Button Click="Edit_Click"
                     Margin="15,0"
                     Width="85"
                     Style="{StaticResource ButtonSecondaryStyle}"
                     IsEnabled="{Binding ElementName=AliasesDataGrid, Path=SelectedItems.Count}"
-                    Content="{x:Static resource:Strings.DialogButton_Edit}" />
+                    Content="{x:Static resource:Strings.DialogButton_Edit}"/>
             <Button Click="Remove_Click"
                     Width="85"
                     Style="{StaticResource ButtonSecondaryStyle}"
                     IsEnabled="{Binding ElementName=AliasesDataGrid, Path=SelectedItems.Count}"
-                    Content="{x:Static resource:Strings.DialogButton_Remove}" />
+                    Content="{x:Static resource:Strings.DialogButton_Remove}"/>
         </StackPanel>
     </Grid>
 </Window>

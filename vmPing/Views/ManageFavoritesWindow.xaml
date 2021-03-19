@@ -12,22 +12,19 @@
         Background="#fff"
         ResizeMode="CanResize"
         PreviewKeyDown="Window_PreviewKeyDown"
-        Loaded="Window_Loaded"
-        Closed="Window_Closed"
         SourceInitialized="Window_SourceInitialized">
 
     <Grid Margin="9">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
         <TextBlock Grid.Row="0"
                    Text="{x:Static resource:Strings.ManageFavorites_Header}"
-                   Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"
-                   />
+                   Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"/>
 
         <!-- Main content -->
         <UniformGrid Grid.Row="1" Rows="1">
@@ -54,7 +51,7 @@
                                Padding="5,5"
                                Foreground="#333"
                                Background="Transparent"
-                               FontWeight="SemiBold" />
+                               FontWeight="SemiBold"/>
 
                     <!-- Contents list -->
                     <ListBox Name="Contents"
@@ -64,7 +61,7 @@
                              SelectionMode="Single"
                              FontFamily="Consolas"
                              FontSize="15"
-                             ItemContainerStyle="{StaticResource ListBoxItemNoHighlightStyle}" />
+                             ItemContainerStyle="{StaticResource ListBoxItemNoHighlightStyle}"/>
                 </DockPanel>
             </Border>
         </UniformGrid>
@@ -74,20 +71,19 @@
             <Button Click="New_Click"
                     Width="85"
                     Style="{StaticResource ButtonSecondaryStyle}"
-                    Content="{x:Static resource:Strings.DialogButton_New}" />
+                    Content="{x:Static resource:Strings.DialogButton_New}"/>
             <Button Click="Edit_Click"
                     Margin="15,0"
                     Width="85"
                     Style="{StaticResource ButtonSecondaryStyle}"
                     IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
-                    Content="{x:Static resource:Strings.DialogButton_Edit}" />
+                    Content="{x:Static resource:Strings.DialogButton_Edit}"/>
             <Button Name="Remove"
                     Click="Remove_Click"
                     Width="85"
                     Style="{StaticResource ButtonSecondaryStyle}"
                     IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
-                    Content="{x:Static resource:Strings.DialogButton_Remove}">
-            </Button>
+                    Content="{x:Static resource:Strings.DialogButton_Remove}"/>
         </StackPanel>
     </Grid>
 </Window>

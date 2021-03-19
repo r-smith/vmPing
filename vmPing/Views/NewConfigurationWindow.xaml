@@ -64,10 +64,8 @@
                 <!-- Portable mode checkbox -->
                 <CheckBox DockPanel.Dock="Left"
                           Name="PortableMode"
-                          VerticalAlignment="Center"
-                          VerticalContentAlignment="Center"
                           Padding="5,0,10,0"
-                          Foreground="#333"
+                          Foreground="#111"
                           Click="PortableMode_Click"
                           Content="Portable mode"/>
                 <!-- Buttons -->

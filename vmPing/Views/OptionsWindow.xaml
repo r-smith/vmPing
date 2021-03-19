@@ -4,7 +4,7 @@
         xmlns:classes="clr-namespace:vmPing.Classes"
         Title="Options"
         UseLayoutRounding="True"
-        Height="540" MinHeight="540"
+        Height="540" MinHeight="500"
         Width="580" MinWidth="580"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResize"
@@ -51,7 +51,7 @@
         <TabControl TabStripPlacement="Left" HorizontalContentAlignment="Left">
             <!-- Tab: General -->
             <TabItem Header="General" Name="GeneralTab">
-                <DockPanel Margin="20,0,20,20" LastChildFill="False">
+                <DockPanel Margin="20,0" LastChildFill="False">
                     <TextBlock DockPanel.Dock="Top"
                                Text="Probe Options"
                                Style="{StaticResource OptionHeaderTextStyle}" />
@@ -202,7 +202,7 @@
 
             <!-- Tab: Advanced -->
             <TabItem Header="Advanced" Name="AdvancedTab">
-                <DockPanel LastChildFill="False" Margin="20,0,20,20">
+                <DockPanel Margin="20,0" LastChildFill="False">
 
                     <!-- Header -->
                     <TextBlock DockPanel.Dock="Top"
@@ -292,12 +292,7 @@
                     <DockPanel DockPanel.Dock="Top" LastChildFill="False">
                         <CheckBox DockPanel.Dock="Left"
                                   Name="DontFragment"
-                                  Content="Don't fragment"
-                                  Foreground="#555555"
-                                  VerticalContentAlignment="Center"
-                                  VerticalAlignment="Center"
-                                  HorizontalAlignment="Left"
-                                  FontSize="14"/>
+                                  Content="Don't fragment"/>
                         <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
                             The don't fragment flag instructs routers to discard the packet if it is too big. This can be used to determine the MTU.
                         </Label>
@@ -307,7 +302,7 @@
             
             <!-- Tab: Notifications -->
             <TabItem Header="Notifications" Name="NotificationsTab">
-                <DockPanel Margin="20,0,20,20" LastChildFill="False">
+                <DockPanel Margin="20,0" LastChildFill="False">
                     
                     <!-- Header -->
                     <DockPanel DockPanel.Dock="Top" LastChildFill="False">
@@ -362,11 +357,7 @@
                         <CheckBox DockPanel.Dock="Left"
                                   Name="IsAutoDismissEnabled"
                                   Content="Auto-dismiss notifications"
-                                  IsChecked="True"
-                                  VerticalContentAlignment="Center"
-                                  VerticalAlignment="Center"
-                                  HorizontalAlignment="Left"
-                                  FontSize="14" />
+                                  IsChecked="True"/>
                         <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
                             When enabled, popup notifications will automatically close after the specified number of seconds.
                         </Label>
@@ -389,7 +380,7 @@
             <!-- Tab: Email Alerts -->
             <TabItem Header="Email Alerts" Name="EmailAlertsTab">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <DockPanel Margin="20,0,20,20">
+                    <DockPanel Margin="20,0">
 
                         <!-- Header -->
                         <TextBlock DockPanel.Dock="Top"
@@ -401,10 +392,7 @@
                                       Name="IsEmailAlertsEnabled"
                                       Content="Enable email alerts"
                                       Click="IsEmailAlertsEnabled_Click"
-                                      IsChecked="True"
-                                      VerticalContentAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      FontSize="14" />
+                                      IsChecked="True"/>
                             <Label Style="{StaticResource LabelToolTip}">
                                 If this option is enabled, an email is sent whenever a host goes down or up.
                             </Label>
@@ -450,10 +438,7 @@
                                       Click="IsSmtpAuthenticationRequired_Click"
                                       Foreground="#888"
                                       FontSize="13"
-                                      Margin="120,8,0,0"
-                                      IsChecked="True"
-                                      VerticalContentAlignment="Center"
-                                      HorizontalAlignment="Left" />
+                                      Margin="120,8,0,0"/>
                             <StackPanel DockPanel.Dock="Top"
                                         Visibility="{Binding IsChecked, ElementName=IsSmtpAuthenticationRequired, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <!-- Smtp User -->
@@ -507,7 +492,7 @@
                                     DockPanel.Dock="Top"
                                     Click="TestEmail_Click"
                                     Width="100"
-                                    Margin="0,23,0,0"
+                                    Margin="0,18,0,0"
                                     Content="Test"
                                     HorizontalAlignment="Left"/>
                         </DockPanel>
@@ -517,7 +502,7 @@
 
             <!-- Tab: Audio Alerts -->
             <TabItem Header="Audio Alerts" Name="AudioAlertTab">
-                <DockPanel Margin="20,0,20,20">
+                <DockPanel Margin="20,0">
 
                     <!-- Header -->
                     <TextBlock DockPanel.Dock="Top"
@@ -529,10 +514,7 @@
                         <CheckBox Name="IsAudioDownAlertEnabled"
                                   Click="IsAudioDownAlertEnabled_Click"
                                   Content="Enable audio alert: host down"
-                                  IsChecked="True"
-                                  VerticalAlignment="Center"
-                                  VerticalContentAlignment="Center"
-                                  FontSize="14" />
+                                  IsChecked="True"/>
                         <Label Style="{StaticResource LabelToolTip}">
                             If this option is enabled, an audio file is played whenever a host goes down.
                         </Label>
@@ -587,10 +569,7 @@
                         <CheckBox Name="IsAudioUpAlertEnabled"
                                   Click="IsAudioUpAlertEnabled_Click"
                                   Content="Enable audio alert: host up"
-                                  IsChecked="True"
-                                  VerticalAlignment="Center"
-                                  VerticalContentAlignment="Center"
-                                  FontSize="14" />
+                                  IsChecked="True"/>
                         <Label Style="{StaticResource LabelToolTip}">
                             If this option is enabled, an audio file is played whenever a host comes up.
                         </Label>
@@ -640,7 +619,7 @@
 
             <!-- TAB: Log Output -->
             <TabItem Header="Log Output" Name="LogOutputTab">
-                <DockPanel Margin="20,0,20,20">
+                <DockPanel Margin="20,0">
 
                     <!-- Header -->
                     <TextBlock DockPanel.Dock="Top"
@@ -651,10 +630,7 @@
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,0">
                         <CheckBox Name="IsLogOutputEnabled"
                                   Content="Write ping output to plain text files"
-                                  IsChecked="True"
-                                  VerticalContentAlignment="Center"
-                                  VerticalAlignment="Center"
-                                  FontSize="14" />
+                                  IsChecked="True"/>
                         <Label Style="{StaticResource LabelToolTip}">
                             If this option is enabled, all ping output is written to a text file.
                             You specify the base directory, and vmPing will generate a separate log file for each host (hostname.txt).
@@ -686,10 +662,7 @@
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,0">
                         <CheckBox Name="IsLogStatusChangesEnabled"
                                   Content="Log status changes to text file"
-                                  IsChecked="True"
-                                  VerticalContentAlignment="Center"
-                                  VerticalAlignment="Center"
-                                  FontSize="14" />
+                                  IsChecked="True"/>
                         <Label Style="{StaticResource LabelToolTip}">
                             When enabled, this option writes all status changes to a text file.
                             A status change is when a host you are pinging goes down, or a down host comes back up.
@@ -937,7 +910,12 @@
         <!-- Button Section -->
         <Border Grid.Row="1" BorderBrush="#dfdfdf" Background="#f0f0f0" BorderThickness="0,1,0,0">
             <DockPanel Margin="9" HorizontalAlignment="Right">
-                <CheckBox Name="SaveAsDefaults" DockPanel.Dock="Top" HorizontalAlignment="Right">Save as vmPing defaults</CheckBox>
+                <CheckBox DockPanel.Dock="Top"
+                          Name="SaveAsDefaults"
+                          Content="Save as vmPing defaults"
+                          FontSize="13"
+                          Foreground="#111"
+                          HorizontalAlignment="Right"/>
                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,9,0,0" HorizontalAlignment="Right">
                     <Button Style="{StaticResource ButtonStandardStyle}"
                             Click="OK_Click"

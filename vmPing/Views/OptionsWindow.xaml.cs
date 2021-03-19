@@ -69,24 +69,24 @@ namespace vmPing.Views
 
         private void PopulateGeneralOptions()
         {
-            string pingIntervalText;
+            string pingIntervalUnits;
             int pingIntervalDivisor;
             int pingInterval = ApplicationOptions.PingInterval;
             int pingTimeout = ApplicationOptions.PingTimeout;
 
             if (ApplicationOptions.PingInterval >= 3600000 && ApplicationOptions.PingInterval % 3600000 == 0)
             {
-                pingIntervalText = "hours";
+                pingIntervalUnits = "hours";
                 pingIntervalDivisor = 3600000;
             }
             else if (ApplicationOptions.PingInterval >= 60000 && ApplicationOptions.PingInterval % 60000 == 0)
             {
-                pingIntervalText = "minutes";
+                pingIntervalUnits = "minutes";
                 pingIntervalDivisor = 60000;
             }
             else
             {
-                pingIntervalText = "seconds";
+                pingIntervalUnits = "seconds";
                 pingIntervalDivisor = 1000;
             }
 
@@ -96,7 +96,7 @@ namespace vmPing.Views
             PingInterval.Text = pingInterval.ToString();
             PingTimeout.Text = pingTimeout.ToString();
             AlertThreshold.Text = ApplicationOptions.AlertThreshold.ToString();
-            cboPingInterval.Text = pingIntervalText;
+            PingIntervalUnits.Text = pingIntervalUnits;
 
             // Get startup mode settings.
             InitialProbeCount.Text = ApplicationOptions.InitialProbeCount.ToString();
@@ -253,7 +253,7 @@ namespace vmPing.Views
             int pingInterval;
             int multiplier = 1000;
 
-            switch (cboPingInterval.Text)
+            switch (PingIntervalUnits.Text)
             {
                 case "seconds":
                     multiplier = 1000;

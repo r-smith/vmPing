@@ -70,7 +70,7 @@
                                  Padding="3,0,0,0"
                                  MaxLength="5"
                                  FontSize="14" />
-                        <ComboBox Name="cboPingInterval" Width="100" Margin="10,0,0,0" VerticalContentAlignment="Center" FontSize="14" Foreground="#555555">
+                        <ComboBox Name="PingIntervalUnits" Width="100" Margin="10,0,0,0" VerticalContentAlignment="Center" FontSize="14">
                             <ComboBoxItem Content="seconds" IsSelected="True" />
                             <ComboBoxItem Content="minutes" />
                             <ComboBoxItem Content="hours" />
@@ -127,11 +127,11 @@
                                Foreground="#555555" />
                     <!-- Startup mode selection -->
                     <ComboBox DockPanel.Dock="Top"
-                              Name="StartupMode" Width="200"
+                              Name="StartupMode"
+                              Width="200"
                               VerticalContentAlignment="Center"
                               HorizontalAlignment="Left"
-                              FontSize="14"
-                              Foreground="#555555">
+                              FontSize="14">
                         <ComboBoxItem Content="Blank (default)" Tag="Standard" IsSelected="True"/>
                         <ComboBoxItem Content="List input window" Tag="Standard"/>
                         <ComboBoxItem Content="Load a favorite" Tag="Favorite"/>
@@ -204,11 +204,11 @@
                                        Margin="0,0,0,4"
                                        Foreground="#555555" />
                             <ComboBox DockPanel.Dock="Top"
-                                      Name="InitialFavorite" Width="250"
+                                      Name="InitialFavorite"
+                                      Width="250"
                                       VerticalContentAlignment="Center"
                                       HorizontalAlignment="Left"
-                                      FontSize="14"
-                                      Foreground="#555555">
+                                      FontSize="14">
                             </ComboBox>
                         </StackPanel>
                     </StackPanel>

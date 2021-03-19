@@ -22,6 +22,7 @@
                 <ResourceDictionary Source="ResourceDictionaries/TextBoxStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/TextBoxHtmlStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/ToolTipStyle.xaml"/>
+                <ResourceDictionary Source="ResourceDictionaries/ComboBoxStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

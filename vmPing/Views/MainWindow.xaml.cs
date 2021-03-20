@@ -348,8 +348,8 @@ namespace vmPing.Views
         private void LoadFavorites()
         {
             // Clear existing favorites menu.
-            for (int i = mnuFavorites.Items.Count - 1; i > 2; --i)
-                mnuFavorites.Items.RemoveAt(i);
+            for (int i = FavoritesMenu.Items.Count - 1; i > 2; --i)
+                FavoritesMenu.Items.RemoveAt(i);
 
             // Load favorites.
             foreach (var fav in Favorite.GetTitles())
@@ -361,7 +361,7 @@ namespace vmPing.Views
                     LoadFavorite((s as MenuItem).Header.ToString());
                 };
 
-                mnuFavorites.Items.Add(menuItem);
+                FavoritesMenu.Items.Add(menuItem);
             }
         }
 
@@ -397,13 +397,13 @@ namespace vmPing.Views
             aliasList.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
 
             // Clear existing aliases menu.
-            for (int i = mnuAliases.Items.Count - 1; i > 1; --i)
-                mnuAliases.Items.RemoveAt(i);
+            for (int i = AliasesMenu.Items.Count - 1; i > 1; --i)
+                AliasesMenu.Items.RemoveAt(i);
 
             // Load aliases.
             foreach (var alias in aliasList)
             {
-                mnuAliases.Items.Add(BuildAliasMenuItem(alias, false));
+                AliasesMenu.Items.Add(BuildAliasMenuItem(alias, false));
             }
 
             foreach (var probe in _ProbeCollection)
@@ -459,23 +459,24 @@ namespace vmPing.Views
             return menuItem;
         }
 
-        private void mnuAddToFavorites_Click(object sender, RoutedEventArgs e)
+        private void CreateFavorite_Click(object sender, RoutedEventArgs e)
         {
-            // Display add to favorites window.
-            var currentHostList = new List<string>();
-
-            for (int i = 0; i < _ProbeCollection.Count; ++i)
-                currentHostList.Add(_ProbeCollection[i].Hostname);
-
-            var addToFavoritesWindow = new NewFavoriteWindow(currentHostList, (int)ColumnCount.Value);
-            addToFavoritesWindow.Owner = this;
-            if (addToFavoritesWindow.ShowDialog() == true)
+            // Display new favorite window => Pass in current addresses and column count.
+            // If window title ends with " - vmPing", then user currently has a
+            // favorite loaded. Pass the title of that favorite to the new window.
+            const string favTitle = " - vmPing";
+            var newFavoriteWindow = new NewFavoriteWindow(
+                hostList: _ProbeCollection.Select(x => x.Hostname).ToList(),
+                columnCount: (int)ColumnCount.Value,
+                title: Title.EndsWith(favTitle) ? Title.Remove(Title.Length - favTitle.Length) : string.Empty);
+            newFavoriteWindow.Owner = this;
+            if (newFavoriteWindow.ShowDialog() == true)
             {
                 LoadFavorites();
             }
         }
 
-        private void mnuManageFavorites_Click(object sender, RoutedEventArgs e)
+        private void ManageFavorites_Click(object sender, RoutedEventArgs e)
         {
             // Open the favorites window.
             var manageFavoritesWindow = new ManageFavoritesWindow();
@@ -484,7 +485,7 @@ namespace vmPing.Views
             LoadFavorites();
         }
 
-        private void mnuManageAliases_Click(object sender, RoutedEventArgs e)
+        private void ManageAliases_Click(object sender, RoutedEventArgs e)
         {
             // Open the aliases window.
             var manageAliasesWindow = new ManageAliasesWindow();
@@ -551,7 +552,7 @@ namespace vmPing.Views
             }
         }
 
-        private void mnuStatusHistory_Click(object sender, RoutedEventArgs e)
+        private void StatusHistory_Click(object sender, RoutedEventArgs e)
         {
             if (Probe.StatusWindow == null || Probe.StatusWindow.IsLoaded == false)
             {

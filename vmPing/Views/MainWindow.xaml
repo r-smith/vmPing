@@ -140,7 +140,6 @@
     <DockPanel Background="#aaa">
         <!-- Menu bar -->
         <Menu DockPanel.Dock="Top"
-              Name="menuMain"
               FontStretch="Normal"
               Style="{StaticResource MenuStyle1}">
             <Menu.ItemsPanel>
@@ -224,7 +223,7 @@
 
                 <Separator Padding="0,6" />
 
-                <MenuItem Header="{x:Static resource:Strings.Menu_StatusHistory}" Click="mnuStatusHistory_Click" />
+                <MenuItem Header="{x:Static resource:Strings.Menu_StatusHistory}" Click="StatusHistory_Click" />
 
                 <MenuItem Name="MultiInputMenu" Header="Input Addresses" InputGestureText="F2"/>
 
@@ -246,13 +245,13 @@
 
                 <Separator Padding="0,6" />
 
-                <MenuItem Header="{x:Static resource:Strings.Menu_FavoriteSets}" x:Name="mnuFavorites">
-                    <MenuItem Header="{x:Static resource:Strings.Menu_SaveToFavorites}" Click="mnuAddToFavorites_Click" />
-                    <MenuItem Header="{x:Static resource:Strings.Menu_ManageFavorites}" Click="mnuManageFavorites_Click" />
+                <MenuItem Header="{x:Static resource:Strings.Menu_FavoriteSets}" x:Name="FavoritesMenu">
+                    <MenuItem Header="{x:Static resource:Strings.Menu_SaveToFavorites}" Click="CreateFavorite_Click" />
+                    <MenuItem Header="{x:Static resource:Strings.Menu_ManageFavorites}" Click="ManageFavorites_Click" />
                     <Separator Padding="0,6" />
                 </MenuItem>
-                <MenuItem Header="{x:Static resource:Strings.Menu_Aliases}" x:Name="mnuAliases">
-                    <MenuItem Header="{x:Static resource:Strings.Menu_ManageAliases}" Click="mnuManageAliases_Click" />
+                <MenuItem Header="{x:Static resource:Strings.Menu_Aliases}" x:Name="AliasesMenu">
+                    <MenuItem Header="{x:Static resource:Strings.Menu_ManageAliases}" Click="ManageAliases_Click" />
                     <Separator Padding="0,6" />
                 </MenuItem>
 

@@ -27,26 +27,44 @@
                    Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"/>
 
         <!-- Main content -->
-        <UniformGrid Grid.Row="1" Rows="1">
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="50"/>
+                <ColumnDefinition Width="2"/>
+                <ColumnDefinition Width=".85*" MinWidth="50"/>
+            </Grid.ColumnDefinitions>
             <!-- Favorites list -->
             <ListBox Name="Favorites"
-                     SelectionMode="Single"
+                     Grid.ColumnSpan="3"
                      SelectionChanged="Favorites_SelectionChanged"
-                     BorderThickness="1"
-                     BorderBrush="#acacac"
-                     Background="#fff"
-                     FontSize="13"/>
-
+                     HorizontalAlignment="Stretch"
+                     Style="{StaticResource FavoritesListBox}"
+                     ItemContainerStyle="{StaticResource FavoritesListBoxItemsStyle}"/>
+            
+            <!-- Grid splitter -->
+            <GridSplitter Grid.Column="1"
+                          Background="#303030"
+                          HorizontalAlignment="Stretch"
+                          Focusable="False"
+                          Visibility="{Binding ElementName=ContentsSection, Path=Visibility}"/>
+            
             <!-- Contents of selected favorite -->
             <Border Name="ContentsSection"
-                    Background="#e8e8e8"
-                    BorderThickness="0,1,1,1" BorderBrush="#acacac">
+                    Grid.Column="2"
+                    Background="#f4f4f4"
+                    BorderBrush="#303030"
+                    Visibility="Visible"
+                    VerticalAlignment="Stretch"
+                    BorderThickness="1">
                 <DockPanel>
                     <!-- Contents title -->
                     <TextBlock DockPanel.Dock="Top"
+                               Name="FavoriteTitle"
                                Text="{x:Static resource:Strings.ManageFavorites_HostsInSet}"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Center"
+                               TextWrapping="NoWrap"
+                               TextTrimming="CharacterEllipsis"
                                FontSize="14"
                                Padding="5,5"
                                Foreground="#333"
@@ -55,7 +73,7 @@
 
                     <!-- Contents list -->
                     <ListBox Name="Contents"
-                             Foreground="#065bb2"
+                             Foreground="#007acc"
                              Background="Transparent"
                              BorderThickness="0"
                              SelectionMode="Single"
@@ -64,26 +82,26 @@
                              ItemContainerStyle="{StaticResource ListBoxItemNoHighlightStyle}"/>
                 </DockPanel>
             </Border>
-        </UniformGrid>
+        </Grid>
 
         <!-- Buttons section -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,9,0,0">
             <Button Click="New_Click"
                     Width="85"
                     Style="{StaticResource ButtonSecondaryStyle}"
-                    Content="{x:Static resource:Strings.DialogButton_New}"/>
+                    Content="_New"/>
             <Button Click="Edit_Click"
                     Margin="15,0"
                     Width="85"
                     Style="{StaticResource ButtonSecondaryStyle}"
                     IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
-                    Content="{x:Static resource:Strings.DialogButton_Edit}"/>
+                    Content="_Edit"/>
             <Button Name="Remove"
                     Click="Remove_Click"
                     Width="85"
                     Style="{StaticResource ButtonSecondaryStyle}"
                     IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
-                    Content="{x:Static resource:Strings.DialogButton_Remove}"/>
+                    Content="_Remove"/>
         </StackPanel>
     </Grid>
 </Window>

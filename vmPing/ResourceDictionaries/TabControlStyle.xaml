@@ -49,16 +49,6 @@
         </Setter>
     </Style>
 
-    <Style x:Key="FocusVisual">
-        <Setter Property="Control.Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <SolidColorBrush x:Key="TabItem.Static.Background" Color="Transparent"/>
     <SolidColorBrush x:Key="TabItem.Static.Foreground" Color="#444"/>
     <SolidColorBrush x:Key="TabItem.MouseOver.Background" Color="#faf9f8"/>

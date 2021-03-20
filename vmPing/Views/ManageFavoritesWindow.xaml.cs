@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using vmPing.Classes;
@@ -66,15 +67,20 @@ namespace vmPing.Views
         {
             if (Favorites.SelectedIndex < 0)
             {
+                Grid.SetColumnSpan(Favorites, 3);
+                Favorites.BorderThickness = new Thickness(1.0);
                 ContentsSection.Visibility = Visibility.Collapsed;
                 return;
             }
 
-            SelectedFavorite = Favorite.GetContents(Favorites.SelectedItem.ToString());
+            Grid.SetColumnSpan(Favorites, 1);
+            Favorites.BorderThickness = new Thickness(1.0, 1.0, 0, 1.0);
             ContentsSection.Visibility = Visibility.Visible;
+            SelectedFavorite = Favorite.GetContents(Favorites.SelectedItem.ToString());
             Contents.ItemsSource = null;
             Contents.Items.Clear();
             Contents.ItemsSource = SelectedFavorite.Hostnames;
+            FavoriteTitle.Text = Favorites.SelectedItem.ToString();
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)

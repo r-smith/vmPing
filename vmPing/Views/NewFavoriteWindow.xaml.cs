@@ -50,7 +50,7 @@ namespace vmPing.Views
             if (isEditExisting)
             {
                 this.Title = "Edit Favorite Set";
-                Header.Text = "Edit an Existing Favorite Set";
+                Header.Text = "Edit an Existing Favorite";
             }
 
             // Set initial focus to text box.

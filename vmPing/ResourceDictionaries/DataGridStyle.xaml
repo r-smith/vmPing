@@ -1,10 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero">
+                    xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
 
     <!-- DataGrid style -->
     <Style x:Key="DataGridStyle" TargetType="{x:Type DataGrid}">
         <Style.Resources>
+            <!-- Column header gripper -->
             <Style x:Key="ColumnHeaderGripperStyle" TargetType="{x:Type Thumb}">
                 <Setter Property="Width" Value="8"/>
                 <Setter Property="Background" Value="Transparent"/>
@@ -17,6 +18,8 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            
+            <!-- Column header -->
             <Style TargetType="{x:Type DataGridColumnHeader}">
                 <Setter Property="FontSize" Value="12" />
                 <Setter Property="FontWeight"  Value="Bold" />
@@ -37,13 +40,13 @@
                                         </Grid.ColumnDefinitions>
                                         <ContentPresenter Grid.Column="0" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                                         <Path x:Name="SortArrow"
-                                                  Grid.Column="1"
-                                                  HorizontalAlignment="Right" VerticalAlignment="Center"                                           
-                                                  Width="8" Height="6" Margin="2,0,5,0"
-                                                  Stretch="Fill" Opacity="0.5" Fill="White"
-                                                  RenderTransformOrigin="0.5,0.4"
-                                                  Visibility="Collapsed"
-                                                  Data="M0,0 L1,0 0.5,1 z" />
+                                              Grid.Column="1"
+                                              HorizontalAlignment="Right" VerticalAlignment="Center"                                           
+                                              Width="8" Height="6" Margin="2,0,5,0"
+                                              Stretch="Fill" Opacity="0.5" Fill="White"
+                                              RenderTransformOrigin="0.5,0.4"
+                                              Visibility="Collapsed"
+                                              Data="M0,0 L1,0 0.5,1 z" />
                                     </Grid>
                                 </Themes:DataGridHeaderBorder>
                                 <Thumb x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left" Style="{StaticResource ColumnHeaderGripperStyle}"/>
@@ -67,25 +70,49 @@
                 </Setter>
             </Style>
         </Style.Resources>
-
+        
+        <!-- Cell and row style -->
         <Setter Property="CellStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type DataGridCell}">
                     <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     <Setter Property="IsTabStop" Value="False" />
+                    <Setter Property="Padding" Value="0,1"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="{x:Static SystemColors.HighlightBrush}" />
-                            <Setter Property="Foreground" Value="{x:Static SystemColors.HighlightTextBrush}" />
+                            <Setter Property="Background" Value="#d0303030" />
+                            <Setter Property="Foreground" Value="#ffffff" />
+                            <Setter Property="FontWeight" Value="SemiBold"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
             </Setter.Value>
         </Setter>
-
+        <Setter Property="RowStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#30303030" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        
+        <!-- DataGrid style -->
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="#acacac" />
+        <Setter Property="BorderBrush" Value="#abadb3" />
         <Setter Property="IsReadOnly" Value="True" />
         <Setter Property="AutoGenerateColumns" Value="False" />
         <Setter Property="SelectionMode" Value="Single" />
@@ -97,11 +124,11 @@
         <Setter Property="CanUserResizeRows" Value="False" />
         <Setter Property="CanUserSortColumns" Value="True" />
         <Setter Property="HeadersVisibility" Value="Column" />
-        <Setter Property="Background" Value="White" />
-        <Setter Property="Foreground" Value="#222" />
-        <Setter Property="RowBackground" Value="#fefefe" />
+        <Setter Property="Background" Value="#ffffff" />
+        <Setter Property="Foreground" Value="#111" />
+        <Setter Property="RowBackground" Value="#ffffff" />
         <Setter Property="GridLinesVisibility" Value="None" />
-        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontSize" Value="14" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Template">
             <Setter.Value>

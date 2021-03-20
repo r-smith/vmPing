@@ -13,14 +13,11 @@
                 <ResourceDictionary Source="ResourceDictionaries/Icons.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/ValueConverters.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/ButtonStyle.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/ButtonStandardStyle.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/ButtonSecondaryStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/DataGridStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/ListBoxStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/OptionsHeaderStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/TabControlStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/TextBoxStyle.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/TextBoxHtmlStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/ToolTipStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/ComboBoxStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/CheckBoxStyle.xaml"/>

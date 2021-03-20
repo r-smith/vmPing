@@ -58,7 +58,16 @@
             </MultiTrigger>
         </Style.Triggers>
     </Style>
+
+    <!-- HTML TextBox style -->
+    <Style x:Key="HtmlTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+        <Setter Property="FontFamily" Value="Consolas"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="MaxLength" Value="9"/>
+        <Setter Property="Width" Value="80"/>
+    </Style>
     
+    <!-- PasswordBox style -->
     <Style TargetType="{x:Type PasswordBox}">
         <Setter Property="Background" Value="{StaticResource TextBox.Static.Background}"/>
         <Setter Property="Foreground" Value="{StaticResource TextBox.Static.Foreground}"/>

@@ -94,8 +94,11 @@ namespace vmPing.Views
                 return;
             }
 
-            // Check if favorite title already exists and not editing an existing favorite.
-            if (!IsExisting && Favorite.TitleExists(MyTitle.Text))
+            // If creating a new favorite: Check and display warning if title already exists.
+            // If editing a favorite and title has changed: Check and display warning if title already exists.
+            // If editing a favorite and title has not changed: Proceed with save. No warning displayed.
+            if ( (!IsExisting && Favorite.TitleExists(MyTitle.Text))
+                || (IsExisting && !string.Equals(OriginalTitle, MyTitle.Text) && Favorite.TitleExists(MyTitle.Text)) )
             {
                 var warningWindow = DialogWindow.WarningWindow(
                     message: $"{MyTitle.Text} {Strings.NewFavorite_Warn_AlreadyExists}",

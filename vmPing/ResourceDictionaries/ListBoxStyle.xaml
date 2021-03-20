@@ -72,16 +72,18 @@
     
     <!-- Favorites ListBox items style-->
     <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#30303030"/>
+    <SolidColorBrush x:Key="Item.MouseOver.Border" Color="#50303030"/>
     <SolidColorBrush x:Key="Item.Selected.Background" Color="#d0303030"/>
     <SolidColorBrush x:Key="Item.Selected.Foreground" Color="#ffffff"/>
+    <SolidColorBrush x:Key="Item.Selected.Border" Color="#303030"/>
     <Style x:Key="FavoritesListBoxItemsStyle" TargetType="{x:Type ListBoxItem}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <Setter Property="Padding" Value="4,3"/>
+        <Setter Property="Padding" Value="4,2"/>
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderThickness" Value="0,1"/>
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -92,9 +94,11 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.MouseOver.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.MouseOver.Border}"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.Selected.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.Selected.Border}"/>
                             <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{StaticResource Item.Selected.Foreground}"/>
                             <Setter Property="TextElement.FontWeight" TargetName="Bd" Value="SemiBold"/>
                         </Trigger>

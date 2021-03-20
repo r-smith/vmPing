@@ -65,18 +65,18 @@
             <Button Click="New_Click"
                     Width="85"
                     Style="{StaticResource ButtonSecondaryStyle}"
-                    Content="{x:Static resource:Strings.DialogButton_New}"/>
+                    Content="_New"/>
             <Button Click="Edit_Click"
                     Margin="15,0"
                     Width="85"
                     Style="{StaticResource ButtonSecondaryStyle}"
                     IsEnabled="{Binding ElementName=AliasesDataGrid, Path=SelectedItems.Count}"
-                    Content="{x:Static resource:Strings.DialogButton_Edit}"/>
+                    Content="_Edit"/>
             <Button Click="Remove_Click"
                     Width="85"
                     Style="{StaticResource ButtonSecondaryStyle}"
                     IsEnabled="{Binding ElementName=AliasesDataGrid, Path=SelectedItems.Count}"
-                    Content="{x:Static resource:Strings.DialogButton_Remove}"/>
+                    Content="_Remove"/>
         </StackPanel>
     </Grid>
 </Window>

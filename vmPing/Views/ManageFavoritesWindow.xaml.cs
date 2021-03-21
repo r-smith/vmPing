@@ -74,7 +74,6 @@ namespace vmPing.Views
             }
 
             Grid.SetColumnSpan(Favorites, 1);
-            Favorites.BorderThickness = new Thickness(1.0, 1.0, 0, 1.0);
             ContentsSection.Visibility = Visibility.Visible;
             SelectedFavorite = Favorite.GetContents(Favorites.SelectedItem.ToString());
             Contents.ItemsSource = null;

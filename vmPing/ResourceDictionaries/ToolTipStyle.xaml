@@ -9,7 +9,7 @@
                     <Border Background="Transparent"
                             Margin="8,0,0,0"
                             Padding="3"
-                            ToolTipService.InitialShowDelay="0"
+                            ToolTipService.InitialShowDelay="250"
                             ToolTipService.ShowDuration="60000"
                             SnapsToDevicePixels="true">
                         <Border.ToolTip>

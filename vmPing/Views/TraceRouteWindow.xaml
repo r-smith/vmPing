@@ -12,8 +12,8 @@
     <Window.Resources>
         <!-- Value converters -->
         <classes:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="Trace" TrueValue="Stop"/>
-        <classes:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-        <classes:BooleanToImageConverter x:Key="BooleanToImageConverter" />
+        <classes:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <classes:BooleanToImageConverter x:Key="BooleanToImageConverter"/>
 
         <!-- Template for hostname textbox -->
         <ControlTemplate x:Key="TextBoxControlTemplate" TargetType="{x:Type TextBox}">
@@ -24,7 +24,7 @@
                         Background="{TemplateBinding Background}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         BorderBrush="{TemplateBinding BorderBrush}">
-                    <ScrollViewer x:Name="PART_ContentHost" />
+                    <ScrollViewer x:Name="PART_ContentHost"/>
                 </Border>
                 <TextBlock x:Name="placeholderText"
                            Text="Enter target address"
@@ -40,8 +40,8 @@
             </Grid>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Foreground" Value="#333" />
-                    <Setter Property="Background" Value="#b8b8b8" />
+                    <Setter Property="Foreground" Value="#333"/>
+                    <Setter Property="Background" Value="#b8b8b8"/>
                 </Trigger>
                 <MultiTrigger>
                     <MultiTrigger.Conditions>
@@ -64,8 +64,8 @@
                    Text="Trace Route to Destination"/>
         <Grid DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <!-- Hostname textbox -->
@@ -75,7 +75,7 @@
                      FontWeight="Regular"
                      FontFamily="Consolas"
                      BorderThickness="1,1,1,1"
-                     BorderBrush="Black"
+                     BorderBrush="#303030"
                      VerticalContentAlignment="Center"
                      Template="{StaticResource TextBoxControlTemplate}"
                      IsEnabled="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}"/>
@@ -95,21 +95,21 @@
                     Style="{StaticResource ButtonStandardStyle}" Background="WhiteSmoke">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border Name="traceRouteButton_border" BorderThickness="1" BorderBrush="Black"
+                        <Border Name="traceRouteButton_border" BorderThickness="1" BorderBrush="#303030"
                                 Background="{TemplateBinding Background}"
                                 Padding="{TemplateBinding Padding}">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <Image Source="{Binding IsActive, Converter={StaticResource BooleanToImageConverter}}"
-                                       Margin="0,0,8,0" Width="16" Height="16" />
-                                <TextBlock Text="{Binding IsActive, Converter={StaticResource BoolToStringConverter}}" />
+                                       Margin="0,0,8,0" Width="16" Height="16"/>
+                                <TextBlock Text="{Binding IsActive, Converter={StaticResource BoolToStringConverter}}"/>
                             </StackPanel>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="traceRouteButton_border" Property="Background" Value="#fff" />
+                                <Setter TargetName="traceRouteButton_border" Property="Background" Value="#fff"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="traceRouteButton_border" Property="Background" Value="#ccc" />
+                                <Setter TargetName="traceRouteButton_border" Property="Background" Value="#ccc"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -137,7 +137,7 @@
                                             <DoubleAnimation Storyboard.TargetProperty="(TextBlock.Opacity)"
                                                              From="1" To=".2"
                                                              BeginTime="0:0:0.0"
-                                                             Duration="0:0:0.4" />
+                                                             Duration="0:0:0.4"/>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </DataTrigger.EnterActions>
@@ -145,7 +145,7 @@
                                     <BeginStoryboard>
                                         <Storyboard>
                                             <DoubleAnimation Storyboard.TargetProperty="(TextBlock.Opacity)"
-                                                             From="1" To="1" Duration="0:0:0.0" FillBehavior="HoldEnd" />
+                                                             From="1" To="1" Duration="0:0:0.0" FillBehavior="HoldEnd"/>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </DataTrigger.ExitActions>
@@ -177,21 +177,21 @@
                   Style="{StaticResource DataGridStyle}">
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell">
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                     <Setter Property="IsHitTestVisible" Value="False"/>
                 </Style>
             </DataGrid.CellStyle>
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="FontWeight" Value="SemiBold" />
-                    <Setter Property="FontFamily" Value="Segoe UI" />
-                    <Setter Property="FontSize" Value="14" />
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="FontFamily" Value="Segoe UI"/>
+                    <Setter Property="FontSize" Value="14"/>
                     <Setter Property="Padding" Value="5,0,0,0"/>
-                    <Setter Property="BorderThickness" Value="2,2,1,2" />
-                    <Setter Property="BorderBrush" Value="#ddd" />
-                    <Setter Property="Background" Value="#999" />
-                    <Setter Property="Foreground" Value="#111" />
+                    <Setter Property="BorderThickness" Value="2,2,1,2"/>
+                    <Setter Property="BorderBrush" Value="#ddd"/>
+                    <Setter Property="Background" Value="#999"/>
+                    <Setter Property="Foreground" Value="#111"/>
                 </Style>
             </DataGrid.ColumnHeaderStyle>
             <DataGrid.Columns>
@@ -200,16 +200,16 @@
                 <DataGridTextColumn Binding="{Binding HopId}" Header="Hop" Width="50" MinWidth="40">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
-                            <Setter Property="FontWeight"  Value="Regular" />
+                            <Setter Property="FontWeight"  Value="Regular"/>
                             <Setter Property="HorizontalAlignment" Value="Right"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
-                            <Setter Property="Foreground" Value="#999" />
+                            <Setter Property="Foreground" Value="#999"/>
                             <Setter Property="IsHitTestVisible" Value="False"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Padding" Value="15,1,25,1" />
+                            <Setter Property="Padding" Value="15,1,25,1"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
@@ -218,19 +218,19 @@
                 <DataGridTextColumn Binding="{Binding HostAddress}" Header="IP Address" Width="Auto" MinWidth="100">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Padding" Value="5,1,35,1" />
+                            <Setter Property="Padding" Value="5,1,35,1"/>
                             <Setter Property="Foreground" Value="#b6fab4"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
-                            <Setter Property="Text" Value="{Binding HostAddress}" />
+                            <Setter Property="Text" Value="{Binding HostAddress}"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding HostAddress}" Value="Timed out">
-                                    <Setter Property="Foreground" Value="#dc322f" />
+                                    <Setter Property="Foreground" Value="#dc322f"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding HostAddress}" Value="Invalid hostname">
-                                    <Setter Property="Foreground" Value="#dc322f" />
+                                    <Setter Property="Foreground" Value="#dc322f"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding HostAddress}" Value="0.0.0.0">
-                                    <Setter Property="Foreground" Value="#dc322f" />
+                                    <Setter Property="Foreground" Value="#dc322f"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -241,23 +241,23 @@
                 <DataGridTextColumn Binding="{Binding RoundTripTime, StringFormat=[{0} ms]}" Header="RTT" Width="*">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
-                            <Setter Property="Foreground" Value="#61b8ff" />
+                            <Setter Property="Foreground" Value="#61b8ff"/>
                             <Setter Property="IsHitTestVisible" Value="False"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Padding" Value="5,1" />
+                            <Setter Property="Padding" Value="5,1"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding HostAddress}" Value="Timed out">
-                                    <Setter Property="Visibility" Value="Hidden" />
+                                    <Setter Property="Visibility" Value="Hidden"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding HostAddress}" Value="Invalid hostname">
-                                    <Setter Property="Visibility" Value="Hidden" />
+                                    <Setter Property="Visibility" Value="Hidden"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding HostAddress}" Value="{x:Null}">
-                                    <Setter Property="Visibility" Value="Hidden" />
+                                    <Setter Property="Visibility" Value="Hidden"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>

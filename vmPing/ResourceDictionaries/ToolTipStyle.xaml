@@ -13,7 +13,7 @@
                             ToolTipService.ShowDuration="60000"
                             SnapsToDevicePixels="true">
                         <Border.ToolTip>
-                            <ToolTip Background="#404040">
+                            <ToolTip Background="#3a3a3a" BorderBrush="#101010" BorderThickness="1">
                                 <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                                   Margin="5"
                                                   Width="{TemplateBinding MaxWidth}">

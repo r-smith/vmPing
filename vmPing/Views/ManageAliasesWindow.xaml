@@ -53,7 +53,7 @@
                             </Style.Triggers>
                             <Setter Property="Padding" Value="7,2,10,2"/>
                             <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-                            <Setter Property="Foreground" Value="#007acc"/>
+                            <Setter Property="Foreground" Value="#0067b8"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>

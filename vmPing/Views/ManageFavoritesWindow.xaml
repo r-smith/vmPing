@@ -5,8 +5,8 @@
         Title="{x:Static resource:Strings.ManageFavorites_WindowTitle}"
         UseLayoutRounding="True"
         Height="475"
-        Width="550"
         MinHeight="300"
+        Width="580"
         MinWidth="425"
         WindowStartupLocation="CenterScreen"
         Background="#fff"
@@ -58,7 +58,8 @@
                     BorderThickness="1">
                 <DockPanel>
                     <!-- Contents title -->
-                    <TextBlock DockPanel.Dock="Top"
+                    <Border DockPanel.Dock="Top" BorderThickness="0,0,0,1" BorderBrush="#303030" Background="#303030">
+                        <TextBlock DockPanel.Dock="Top"
                                Name="FavoriteTitle"
                                Text="{x:Static resource:Strings.ManageFavorites_HostsInSet}"
                                HorizontalAlignment="Left"
@@ -67,18 +68,20 @@
                                TextTrimming="CharacterEllipsis"
                                FontSize="14"
                                Padding="5,5"
-                               Foreground="#333"
+                               Foreground="#fff"
                                Background="Transparent"
                                FontWeight="SemiBold"/>
+                    </Border>
 
                     <!-- Contents list -->
                     <ListBox Name="Contents"
-                             Foreground="#007acc"
+                             Foreground="#0067b8"
                              Background="Transparent"
                              BorderThickness="0"
+                             Margin="0,5,0,0"
                              SelectionMode="Single"
                              FontFamily="Consolas"
-                             FontSize="15"
+                             FontSize="16"
                              ItemContainerStyle="{StaticResource ListBoxItemNoHighlightStyle}"/>
                 </DockPanel>
             </Border>

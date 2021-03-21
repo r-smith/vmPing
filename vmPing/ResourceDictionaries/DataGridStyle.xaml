@@ -21,7 +21,7 @@
             
             <!-- Column header -->
             <Style TargetType="{x:Type DataGridColumnHeader}">
-                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="FontSize" Value="13"/>
                 <Setter Property="FontWeight" Value="Bold"/>
                 <Setter Property="Background" Value="#bbb"/>
                 <Setter Property="Foreground" Value="#333"/>

@@ -24,7 +24,8 @@ namespace vmPing.Views
         {
             History.SelectionStart = SelStart;
             History.SelectionLength = SelLength;
-            History.ScrollToEnd();
+            Application.Current.Dispatcher.BeginInvoke(
+                new Action(() => History.ScrollToEnd()));
         }
 
         private void History_SelectionChanged(object sender, RoutedEventArgs e)

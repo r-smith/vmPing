@@ -26,7 +26,7 @@
                 <Label Name="lblStats"
                        DockPanel.Dock="Bottom"
                        HorizontalAlignment="Left"
-                       Width="{Binding ElementName=lbHistory, Path=ActualWidth}"
+                       Width="{Binding ElementName=History, Path=ActualWidth}"
                        Content="{Binding StatisticsText, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
                        Background="Transparent"
                        Foreground="{Binding Status, Converter={StaticResource ProbeStatusToStatisticsBrushConverter}}"

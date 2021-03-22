@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using vmPing.Classes;
 
@@ -30,6 +31,12 @@ namespace vmPing.Views
         {
             SelStart = History.SelectionStart;
             SelLength = History.SelectionLength;
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            (DataContext as Probe).IsolatedWindow = null;
+            DataContext = null;
         }
     }
 }

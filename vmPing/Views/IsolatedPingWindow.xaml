@@ -7,7 +7,8 @@
         Width="450"
         MinHeight="200"
         MinWidth="300"
-        Background="White">
+        Background="White"
+        Closed="Window_Closed">
 
     <!-- Items Control -->
     <Border BorderBrush="#111" BorderThickness="0,1,0,0" Margin="0,0,0,0" CornerRadius="0"

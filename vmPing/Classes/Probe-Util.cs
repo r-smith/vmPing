@@ -21,7 +21,6 @@ namespace vmPing.Classes
             {
                 // Stopping probe.
                 StopProbe(ProbeStatus.Inactive);
-                WriteFinalStatisticsToHistory();
             }
             else
             {
@@ -43,11 +42,23 @@ namespace vmPing.Classes
                 {
                     Type = ProbeType.Ping;
                     Task.Run(() => PerformTcpProbe(CancelSource.Token), CancelSource.Token);
+                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        mutex.WaitOne();
+                        StatusChangeLog.Add(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Start });
+                        mutex.ReleaseMutex();
+                    }));
                 }
                 else
                 {
                     Type = ProbeType.Ping;
                     Task.Run(() => PerformIcmpProbe(CancelSource.Token), CancelSource.Token);
+                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        mutex.WaitOne();
+                        StatusChangeLog.Add(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Start });
+                        mutex.ReleaseMutex();
+                    }));
                 }
             }
         }
@@ -68,6 +79,15 @@ namespace vmPing.Classes
             CancelSource.Cancel();
             Status = status;
             IsActive = false;
+
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                mutex.WaitOne();
+                if (status != ProbeStatus.Error)
+                    WriteFinalStatisticsToHistory();
+                StatusChangeLog.Add(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Stop });
+                mutex.ReleaseMutex();
+            }));
         }
 
 

@@ -26,7 +26,11 @@ namespace vmPing.Views
             PositionWindow();
 
             ICollectionView filteredChangeLog = new CollectionViewSource { Source = statusChangeLog }.View;
-            filteredChangeLog.Filter = p => (p as StatusChangeLog).HasStatusBeenCleared == false;
+            filteredChangeLog.Filter = item =>
+            {
+                StatusChangeLog entry = item as StatusChangeLog;
+                return entry.HasStatusBeenCleared == false && entry.Status != ProbeStatus.Start && entry.Status != ProbeStatus.Stop;
+            };
             StatusHistoryList.ItemsSource = filteredChangeLog;
 
             ((INotifyCollectionChanged)StatusHistoryList.Items).CollectionChanged += PopupNotificationWindow_CollectionChanged;

@@ -18,7 +18,9 @@ namespace vmPing.Classes
         Error,
         Indeterminate,
         Inactive,
-        Scanner
+        Scanner,
+        Start,
+        Stop
     }
 
 

@@ -339,7 +339,7 @@ namespace vmPing.Views
             foreach (var probe in _ProbeCollection)
             {
                 if (probe.IsActive)
-                    probe.CancelSource.Cancel();
+                    probe.StartStop();
             }
             _ProbeCollection.Clear();
             Probe.ActiveCount = 0;

@@ -35,6 +35,12 @@ namespace vmPing.Classes
                     case ProbeStatus.Error:
                         returnString = Strings.StatusChange_Error;
                         break;
+                    case ProbeStatus.Start:
+                        returnString = "started";
+                        break;
+                    case ProbeStatus.Stop:
+                        returnString = "stopped";
+                        break;
                 }
                 return returnString;
             }
@@ -53,6 +59,10 @@ namespace vmPing.Classes
                         break;
                     case ProbeStatus.Up:
                         returnString = "t";
+                        break;
+                    case ProbeStatus.Start:
+                    case ProbeStatus.Stop:
+                        returnString = "h";
                         break;
                 }
                 return returnString;

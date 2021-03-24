@@ -1,9 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Media;
 using vmPing.Classes;
 
 namespace vmPing.Views
@@ -17,23 +15,30 @@ namespace vmPing.Views
         {
             InitializeComponent();
 
-            StatusHistoryList.ItemsSource = statusChangeLog;
+            StatusHistory.ItemsSource = statusChangeLog;
 
-            ((INotifyCollectionChanged)StatusHistoryList.Items).CollectionChanged += PopupNotificationWindow_CollectionChanged;
+            ((INotifyCollectionChanged)StatusHistory.Items).CollectionChanged += StatusHistory_CollectionChanged;
 
             // When initially displaying the window, automatically scroll to the most recent entry.
-            if (StatusHistoryList.Items.Count > 0)
-                StatusHistoryList.ScrollIntoView(StatusHistoryList.Items[StatusHistoryList.Items.Count - 1]);
+            if (StatusHistory.Items.Count > 0)
+                StatusHistory.ScrollIntoView(StatusHistory.Items[StatusHistory.Items.Count - 1]);
         }
 
-        private void PopupNotificationWindow_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void StatusHistory_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (StatusHistoryList.Items.Count > 0)
+            if (StatusHistory.Items.Count > 0)
             {
-                if (VisualTreeHelper.GetChild(StatusHistoryList, 0) is Decorator border)
+                // Autoscroll to bottom only if no sorting has been set on any column (default)
+                // or if timestamp column [1] is set to sort ascending.
+                if (StatusHistory.Columns[1]?.SortDirection != ListSortDirection.Ascending)
                 {
-                    if (border.Child is ScrollViewer scroll) scroll.ScrollToEnd();
+                    for (int i = 0; i < StatusHistory.Columns.Count; ++i)
+                    {
+                        if (StatusHistory.Columns[i].SortDirection != null)
+                            return;
+                    }
                 }
+                StatusHistory.ScrollIntoView(StatusHistory.Items[StatusHistory.Items.Count - 1]);
             }
         }
     }

@@ -19,7 +19,6 @@
     <classes:HostnameFontsizeConverter x:Key="HostnameFontsizeConverter" />
     <classes:ButtonTextVisibilityConverter x:Key="ButtonTextVisibilityConverter" />
     <classes:ProbeTypeToFontSizeConverter x:Key="ProbeTypeToFontSizeConverter" />
-    <classes:ProbeTypeToVisibilityConverter x:Key="ProbeTypeToVisibilityConverter" />
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <classes:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
     <classes:StringToBrushConverter x:Key="StringToBrushConverter" />

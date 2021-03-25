@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using vmPing.Properties;
 
 namespace vmPing.Classes
@@ -57,7 +56,7 @@ namespace vmPing.Classes
             throw new NotImplementedException();
         }
     }
-    
+
     public class InverseBooleanToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -342,25 +341,6 @@ namespace vmPing.Classes
                     return ApplicationOptions.FontSize_Probe;
                 default:
                     return ApplicationOptions.FontSize_Scanner;
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class ProbeTypeToVisibilityConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            switch ((ProbeType)value)
-            {
-                case ProbeType.Ping:
-                    return Visibility.Visible;
-                default:
-                    return Visibility.Collapsed;
             }
         }
 

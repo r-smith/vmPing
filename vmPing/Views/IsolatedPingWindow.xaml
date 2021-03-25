@@ -24,9 +24,21 @@
                 
                 <!-- Ping statistics -->
                 <DockPanel DockPanel.Dock="Bottom"
-                           Background="Transparent"
-                           Visibility="{Binding Type, Converter={StaticResource ProbeTypeToVisibilityConverter}}"
-                           Margin="0,0,0,3">
+                           Background="Transparent">
+                    <DockPanel.Style>
+                        <Style TargetType="{x:Type DockPanel}">
+                            <!-- Statistics are show only if: ProbeType = Ping and Statistics.Sent != 0 -->
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=Type}" Value="Ping">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=Statistics.Sent}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DockPanel.Style>
                     <DockPanel.Resources>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="DockPanel.Dock" Value="Left"/>
@@ -36,15 +48,15 @@
                             <Setter Property="Foreground" Value="{Binding Status, Converter={StaticResource ProbeStatusToStatisticsBrushConverter}}"/>
                         </Style>
                     </DockPanel.Resources>
-                    <TextBlock Text="Sent: " Opacity="0.7" Padding="6,0,0,0" />
+                    <TextBlock Text="Sent: " Opacity="0.7" Padding="6,0,0,3" />
                     <TextBlock Text="{Binding Statistics.Sent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}">
                         <TextBlock.Triggers>
                             <EventTrigger RoutedEvent="Binding.TargetUpdated">
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                                         AutoReverse="True"
-                                                                         From="1.0" To="0.75" Duration="0:0:0.3"/>
+                                                         AutoReverse="True"
+                                                         From="1.0" To="0.75" Duration="0:0:0.3"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger>
@@ -57,8 +69,8 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                                         AutoReverse="True"
-                                                                         From="1.0" To="0.75" Duration="0:0:0.3"/>
+                                                         AutoReverse="True"
+                                                         From="1.0" To="0.75" Duration="0:0:0.3"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger>
@@ -71,8 +83,8 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                                         AutoReverse="True"
-                                                                         From="1.0" To="0.75" Duration="0:0:0.3"/>
+                                                         AutoReverse="True"
+                                                         From="1.0" To="0.75" Duration="0:0:0.3"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger>

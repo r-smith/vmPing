@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Media;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Media;
-
 using vmPing.Views;
-
 
 namespace vmPing.Classes
 {
@@ -63,16 +61,13 @@ namespace vmPing.Classes
             }
         }
 
-
         private void InitializeProbe()
         {
             IsActive = true;
             Status = ProbeStatus.Inactive;
-            StatisticsText = string.Empty;
+            Statistics.Reset();
             History = new ObservableCollection<string>();
-            Statistics = new PingStatistics();
         }
-
 
         private void StopProbe(ProbeStatus status)
         {
@@ -89,7 +84,6 @@ namespace vmPing.Classes
                 mutex.ReleaseMutex();
             }));
         }
-
 
         private async Task<bool> IsHostInvalid(string host, CancellationToken cancellationToken)
         {
@@ -124,7 +118,6 @@ namespace vmPing.Classes
             }
         }
 
-
         private void WriteToLog(string message)
         {
             // If logging is enabled, write the response to a file.
@@ -149,7 +142,6 @@ namespace vmPing.Classes
             }
         }
 
-
         private void WriteToStatusChangesLog(StatusChangeLog status)
         {
             // If logging is enabled, write the status change to a file.
@@ -173,14 +165,12 @@ namespace vmPing.Classes
             }
         }
 
-
         private void DisplayStatistics()
         {
             // TODO: This should be a computed property.
             StatisticsText =
                 $"Sent: {Statistics.Sent} Received: {Statistics.Received} Lost: {Statistics.Lost}";
         }
-
 
         private void TriggerStatusChange(StatusChangeLog status)
         {
@@ -218,8 +208,6 @@ namespace vmPing.Classes
                     mutex.ReleaseMutex();
                 }
             }));
-
-            
 
             if (ApplicationOptions.IsLogStatusChangesEnabled && ApplicationOptions.LogStatusChangesPath.Length > 0)
             {

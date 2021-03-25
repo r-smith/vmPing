@@ -498,7 +498,8 @@
                                                 <Storyboard>
                                                     <DoubleAnimation Storyboard.TargetName="lblStats"
                                                                      Storyboard.TargetProperty="Opacity"
-                                                                     From="0.0" To="1.0" Duration="0:0:0.3"/>
+                                                                     AutoReverse="True"
+                                                                     From="1.0" To="0.7" Duration="0:0:0.15"/>
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </EventTrigger>

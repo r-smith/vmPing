@@ -48,7 +48,7 @@
                             <Setter Property="Foreground" Value="{Binding Status, Converter={StaticResource ProbeStatusToStatisticsBrushConverter}}"/>
                         </Style>
                     </DockPanel.Resources>
-                    <TextBlock Text="Sent: " Opacity="0.7" Padding="6,0,0,3" />
+                    <TextBlock Text="Sent: " Opacity="0.8" Padding="6,0,0,3" />
                     <TextBlock Text="{Binding Statistics.Sent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}">
                         <TextBlock.Triggers>
                             <EventTrigger RoutedEvent="Binding.TargetUpdated">
@@ -62,7 +62,7 @@
                             </EventTrigger>
                         </TextBlock.Triggers>
                     </TextBlock>
-                    <TextBlock Text="  Received: " Opacity="0.7"/>
+                    <TextBlock Text="  Received: " Opacity="0.8"/>
                     <TextBlock Text="{Binding Statistics.Received, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}">
                         <TextBlock.Triggers>
                             <EventTrigger RoutedEvent="Binding.TargetUpdated">
@@ -76,7 +76,7 @@
                             </EventTrigger>
                         </TextBlock.Triggers>
                     </TextBlock>
-                    <TextBlock Text="  Lost: " Opacity="0.7"/>
+                    <TextBlock Text="  Lost: " Opacity="0.8"/>
                     <TextBlock Text="{Binding Statistics.Lost, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}">
                         <TextBlock.Triggers>
                             <EventTrigger RoutedEvent="Binding.TargetUpdated">
@@ -111,6 +111,16 @@
                          FontFamily="Consolas"
                          FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}"
                          Text="{Binding Path=HistoryAsString, Mode=OneWay}">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type ScrollBar}">
+                            <Setter Property="Opacity" Value="0.4"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                    <Setter Property="Opacity" Value="1.0"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Resources>
                 </TextBox>
             </DockPanel>
 

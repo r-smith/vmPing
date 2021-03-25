@@ -54,7 +54,7 @@ namespace vmPing.Classes
 
         public IsolatedPingWindow IsolatedWindow { get; set; }
         public int IndeterminateCount { get; set; }
-        public PingStatistics Statistics { get; set; }
+        public PingStatistics Statistics { get; set; } = new PingStatistics();
         public int SelStart { get; set; }
         public int SelLength { get; set; }
         public CancellationTokenSource CancelSource { get; set; }

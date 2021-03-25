@@ -29,7 +29,7 @@
                         Background="{TemplateBinding Background}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         BorderBrush="{TemplateBinding BorderBrush}">
-                    <ScrollViewer x:Name="PART_ContentHost" />
+                    <ScrollViewer x:Name="PART_ContentHost"/>
                 </Border>
                 <TextBlock x:Name="placeholderText"
                            Text="Enter a hostname"
@@ -43,7 +43,7 @@
             </Grid>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Foreground" Value="#333388" />
+                    <Setter Property="Foreground" Value="#333388"/>
                 </Trigger>
                 <MultiTrigger>
                     <MultiTrigger.Conditions>
@@ -152,20 +152,20 @@
             <MenuItem x:Name="AddProbeMenu"
                       Margin="6,0">
                 <MenuItem.Header>
-                    <AccessText Text="{x:Static resource:Strings.Toolbar_Add}" VerticalAlignment="Center" />
+                    <AccessText Text="{x:Static resource:Strings.Toolbar_Add}" VerticalAlignment="Center"/>
                 </MenuItem.Header>
                 <MenuItem.Icon>
-                    <Image Source="{StaticResource icon.add}" VerticalAlignment="Center" Width="16" Height="16" />
+                    <Image Source="{StaticResource icon.add}" VerticalAlignment="Center" Width="16" Height="16"/>
                 </MenuItem.Icon>
             </MenuItem>
 
             <!-- Menu Item: Columns -->
             <MenuItem Margin="6,0">
                 <MenuItem.Header>
-                    <AccessText Text="{x:Static resource:Strings.Toolbar_Columns}" VerticalAlignment="Center" />
+                    <AccessText Text="{x:Static resource:Strings.Toolbar_Columns}" VerticalAlignment="Center"/>
                 </MenuItem.Header>
                 <MenuItem.Icon>
-                    <Image Source="{StaticResource icon.columns-grid}" VerticalAlignment="Center" Width="16" Height="16" />
+                    <Image Source="{StaticResource icon.columns-grid}" VerticalAlignment="Center" Width="16" Height="16"/>
                 </MenuItem.Icon>
                 <!-- Columns slider -->
                 <StackPanel Orientation="Horizontal">
@@ -174,7 +174,7 @@
                            Width="30"
                            HorizontalContentAlignment="Center"
                            VerticalContentAlignment="Center"
-                           />
+                          />
                     <Slider Name="ColumnCount"
                             Minimum="1" Maximum="10"
                             Value="3"
@@ -185,7 +185,7 @@
                             Foreground="Gray"
                             Margin="0,5"
                             ValueChanged="ColumnCount_ValueChanged"
-                            />
+                           />
                 </StackPanel>
             </MenuItem>
 
@@ -195,17 +195,17 @@
                 <MenuItem.Header>
                     <AccessText Name="StartStopMenuHeader"
                                 VerticalAlignment="Center"
-                                Text="{Binding Path=(classes:Probe.ActiveCount), Converter={StaticResource ProbeCountToGlobalStartStopText}}" />
+                                Text="{Binding Path=(classes:Probe.ActiveCount), Converter={StaticResource ProbeCountToGlobalStartStopText}}"/>
                 </MenuItem.Header>
                 <MenuItem.Icon>
                     <Image Name="StartStopMenuImage"
                            VerticalAlignment="Center"
                            Width="16" Height="16"
-                           Source="{Binding Path=(classes:Probe.ActiveCount), Converter={StaticResource ProbeCountToGlobalStartStopIcon}}" />
+                           Source="{Binding Path=(classes:Probe.ActiveCount), Converter={StaticResource ProbeCountToGlobalStartStopIcon}}"/>
                 </MenuItem.Icon>
             </MenuItem>
             <!-- DEBUG -->
-            <!-- <MenuItem Header="{Binding Path=(classes:Probe.ActiveCount)}" /> -->
+            <!-- <MenuItem Header="{Binding Path=(classes:Probe.ActiveCount)}"/> -->
 
 
             <!-- Menu Item: Extras -->
@@ -213,17 +213,17 @@
                       Margin="0,0,6,0"
                       DockPanel.Dock="Right" Template="{DynamicResource MenuItemControlTemplate1}">
                 <MenuItem.Icon>
-                    <Image Source="{StaticResource icon.chevron-circle-down}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="16" Height="16" />
+                    <Image Source="{StaticResource icon.chevron-circle-down}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="16" Height="16"/>
                 </MenuItem.Icon>
 
                 <MenuItem Name="OptionsMenu"
                           Header="{x:Static resource:Strings.Menu_Options}"
                           InputGestureText="F10"
-                          Padding="0,5" />
+                          Padding="0,5"/>
 
-                <Separator Padding="0,6" />
+                <Separator Padding="0,6"/>
 
-                <MenuItem Header="{x:Static resource:Strings.Menu_StatusHistory}" Click="StatusHistory_Click" />
+                <MenuItem Header="{x:Static resource:Strings.Menu_StatusHistory}" Click="StatusHistory_Click"/>
 
                 <MenuItem Name="MultiInputMenu" Header="Input Addresses" InputGestureText="F2"/>
 
@@ -231,53 +231,53 @@
                     <MenuItem Name="PopupNever"
                               Header="{x:Static resource:Strings.Notification_Never}"
                               Click="PopupNever_Click"
-                              IsCheckable="True" />
+                              IsCheckable="True"/>
                     <MenuItem Name="PopupWhenMinimized"
                               Header="{x:Static resource:Strings.Notification_WhenMinimized}"
                               Click="PopupWhenMinimized_Click"
-                              IsCheckable="True" />
+                              IsCheckable="True"/>
                     <MenuItem Name="PopupAlways"
                               Header="{x:Static resource:Strings.Notification_Always}"
                               Click="PopupAlways_Click"
                               IsCheckable="True"
-                               />
+                              />
                 </MenuItem>
 
-                <Separator Padding="0,6" />
+                <Separator Padding="0,6"/>
 
                 <MenuItem Header="{x:Static resource:Strings.Menu_FavoriteSets}" x:Name="FavoritesMenu">
-                    <MenuItem Header="{x:Static resource:Strings.Menu_SaveToFavorites}" Click="CreateFavorite_Click" />
-                    <MenuItem Header="{x:Static resource:Strings.Menu_ManageFavorites}" Click="ManageFavorites_Click" />
-                    <Separator Padding="0,6" />
+                    <MenuItem Header="{x:Static resource:Strings.Menu_SaveToFavorites}" Click="CreateFavorite_Click"/>
+                    <MenuItem Header="{x:Static resource:Strings.Menu_ManageFavorites}" Click="ManageFavorites_Click"/>
+                    <Separator Padding="0,6"/>
                 </MenuItem>
                 <MenuItem Header="{x:Static resource:Strings.Menu_Aliases}" x:Name="AliasesMenu">
-                    <MenuItem Header="{x:Static resource:Strings.Menu_ManageAliases}" Click="ManageAliases_Click" />
-                    <Separator Padding="0,6" />
+                    <MenuItem Header="{x:Static resource:Strings.Menu_ManageAliases}" Click="ManageAliases_Click"/>
+                    <Separator Padding="0,6"/>
                 </MenuItem>
 
-                <Separator Padding="0,6" />
+                <Separator Padding="0,6"/>
 
                 <MenuItem Header="{x:Static resource:Strings.Menu_Traceroute}" x:Name="TracerouteMenu" InputGestureText="Ctrl-T" Padding="0,5">
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource icon.route}" VerticalAlignment="Center" Width="16" Height="16" />
+                        <Image Source="{StaticResource icon.route}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="{x:Static resource:Strings.Menu_FloodHost}" x:Name="FloodHostMenu" InputGestureText="Ctrl-F" Padding="0,5">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/bomb-16.png" VerticalAlignment="Center" Width="16" Height="16" />
+                        <Image Source="/Resources/bomb-16.png" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="vmPing" x:Name="NewInstanceMenu" InputGestureText="Ctrl-N" Padding="0,5">
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource icon.vmping-logo-simple}" VerticalAlignment="Center" Width="16" Height="16" />
+                        <Image Source="{StaticResource icon.vmping-logo-simple}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <Separator Padding="0,6" />
+                <Separator Padding="0,6"/>
 
                 <MenuItem Header="{x:Static resource:Strings.Menu_Help}" x:Name="HelpMenu" InputGestureText="F1" Padding="0,5">
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource icon.question-circle-black}" VerticalAlignment="Center" Width="16" Height="16" />
+                        <Image Source="{StaticResource icon.question-circle-black}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -292,8 +292,8 @@
                             Background="{Binding Status, Converter={StaticResource ProbeStatusToBackgroundBrushConverter}}">
                         <Grid Name="gridItemsControl">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
                             <!-- Ping output section -->
@@ -303,20 +303,20 @@
                                 <Grid DockPanel.Dock="Top">
                                     <Grid.Style>
                                         <Style TargetType="{x:Type Grid}">
-                                            <Setter Property="Background" Value="#00000000" />
+                                            <Setter Property="Background" Value="#00000000"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
-                                                    <Setter Property="Background" Value="#88888888" />
+                                                    <Setter Property="Background" Value="#88888888"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </Grid.Style>
 
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
                                     <!-- Alias section -->
@@ -353,27 +353,27 @@
                                                         Background="{TemplateBinding Background}">
                                                     <Image Name="controlButton_image" Source="{StaticResource icon.window-close-black}"
                                                            Width="14" Height="14"
-                                                           Opacity="0.9" />
+                                                           Opacity="0.9"/>
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="Black" />
-                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
-                                                        <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.window-close-white}" />
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="Black"/>
+                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="1"/>
+                                                        <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.window-close-white}"/>
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#444" />
-                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="0.4" />
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#444"/>
+                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="0.4"/>
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>
                                         </Button.Template>
                                         <Button.Style>
                                             <Style TargetType="{x:Type Button}">
-                                                <Setter Property="Visibility" Value="Hidden" />
+                                                <Setter Property="Visibility" Value="Hidden"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" />
+                                                        <Setter Property="Visibility" Value="Visible"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -401,27 +401,27 @@
                                                         Background="{TemplateBinding Background}">
                                                     <Image Name="controlButton_image" Source="{StaticResource icon.window-restore-black}"
                                                            Width="14" Height="14"
-                                                           Opacity="0.9" />
+                                                           Opacity="0.9"/>
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="Black" />
-                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
-                                                        <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.window-restore-white}" />
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="Black"/>
+                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="1"/>
+                                                        <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.window-restore-white}"/>
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#444" />
-                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="0.4" />
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#444"/>
+                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="0.4"/>
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>
                                         </Button.Template>
                                         <Button.Style>
                                             <Style TargetType="{x:Type Button}">
-                                                <Setter Property="Visibility" Value="Hidden" />
+                                                <Setter Property="Visibility" Value="Hidden"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" />
+                                                        <Setter Property="Visibility" Value="Visible"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -450,30 +450,30 @@
                                                         Background="{TemplateBinding Background}">
                                                     <Image Name="controlButton_image" Source="{StaticResource icon.pencil-black}"
                                                            Width="14" Height="14"
-                                                           Opacity="0.9" />
+                                                           Opacity="0.9"/>
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="Black" />
-                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="1" />
-                                                        <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.pencil-white}" />
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="Black"/>
+                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="1"/>
+                                                        <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.pencil-white}"/>
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#444" />
-                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="0.4" />
+                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#444"/>
+                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="0.4"/>
                                                     </Trigger>
                                                     <Trigger Property="IsEnabled" Value="False">
-                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="0.4" />
+                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="0.4"/>
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>
                                         </Button.Template>
                                         <Button.Style>
                                             <Style TargetType="{x:Type Button}">
-                                                <Setter Property="Visibility" Value="Hidden" />
+                                                <Setter Property="Visibility" Value="Hidden"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" />
+                                                        <Setter Property="Visibility" Value="Visible"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -498,7 +498,7 @@
                                                 <Storyboard>
                                                     <DoubleAnimation Storyboard.TargetName="lblStats"
                                                                      Storyboard.TargetProperty="Opacity"
-                                                                     From="0.0" To="1.0" Duration="0:0:0.3" />
+                                                                     From="0.0" To="1.0" Duration="0:0:0.3"/>
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </EventTrigger>
@@ -520,15 +520,15 @@
                                          FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}">
                                     <ListBox.ItemContainerStyle>
                                         <Style TargetType="{x:Type ListBoxItem}">
-                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="Background" Value="Transparent"/>
                                             <Setter Property="Template">
                                                 <Setter.Value>
                                                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                        <ContentPresenter />
+                                                        <ContentPresenter/>
                                                     </ControlTemplate>
                                                 </Setter.Value>
                                             </Setter>
-                                            <Setter Property="IsTabStop" Value="False" />
+                                            <Setter Property="IsTabStop" Value="False"/>
                                             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                                         </Style>
                                     </ListBox.ItemContainerStyle>
@@ -543,19 +543,19 @@
                                    IsHitTestVisible="False"
                                    Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanToVisibilityConverter}, NotifyOnTargetUpdated=True}"
                                    TargetUpdated="Logo_TargetUpdated"
-                                   Opacity="0.03" />
+                                   Opacity="0.03"/>
 
 
                             <!-- Hostname and ping button section -->
                             <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
                                 <!-- Border to set background color and top border for this section -->
-                                <Border Grid.ColumnSpan="3" Background="#e8ffffff" BorderThickness="0,1,0,0" BorderBrush="#20000000" />
+                                <Border Grid.ColumnSpan="3" Background="#e8ffffff" BorderThickness="0,1,0,0" BorderBrush="#20000000"/>
 
                                 <!-- Status glyph -->
                                 <TextBlock Grid.Column="0"
@@ -582,7 +582,7 @@
                                          Template="{StaticResource TextBoxControlTemplate}"
                                          Loaded="Hostname_Loaded"
                                          TextChanged="Hostname_TextChanged"
-                                         KeyDown="Hostname_KeyDown" />
+                                         KeyDown="Hostname_KeyDown"/>
 
                                 <!-- Ping button -->
                                 <Button Click="ProbeStartStop_Click"
@@ -599,22 +599,22 @@
                                                     Background="{TemplateBinding Background}">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
                                                     <Image Source="{Binding IsActive, Converter={StaticResource BooleanToImageConverter}}" Width="16" Height="16"
-                                                           Margin="0,6" />
+                                                           Margin="0,6"/>
                                                     <TextBlock Text="{Binding IsActive, Converter={StaticResource BoolToStringConverter}}"
                                                                Visibility="{Binding ElementName=lbHistory, Path=ActualWidth, Converter={StaticResource ButtonTextVisibilityConverter}}"
                                                                Foreground="Black"
                                                                FontSize="13"
                                                                VerticalAlignment="Center"
-                                                               Margin="8,0,0,0" />
+                                                               Margin="8,0,0,0"/>
                                                 </StackPanel>
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="pingButton_border" Property="Background" Value="#f0f0f0" />
-                                                    <Setter TargetName="pingButton_border" Property="BorderBrush" Value="#ff2e6da4" />
+                                                    <Setter TargetName="pingButton_border" Property="Background" Value="#f0f0f0"/>
+                                                    <Setter TargetName="pingButton_border" Property="BorderBrush" Value="#ff2e6da4"/>
                                                 </Trigger>
                                                 <Trigger Property="IsPressed" Value="True">
-                                                    <Setter TargetName="pingButton_border" Property="Background" Value="#d8d8d8" />
+                                                    <Setter TargetName="pingButton_border" Property="Background" Value="#d8d8d8"/>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -630,7 +630,7 @@
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <!-- ColumnCount.Tag is updated to contain the lesser the two values: ColumnCount.Value and _ProbeCollection.Count -->
-                    <UniformGrid Columns="{Binding ElementName=ColumnCount, Path=Tag}" />
+                    <UniformGrid Columns="{Binding ElementName=ColumnCount, Path=Tag}"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

@@ -22,7 +22,7 @@
             <!-- Ping output section -->
             <DockPanel Grid.Row="1">
                 
-                <!-- Ping statistics textblock -->
+                <!-- Ping statistics -->
                 <Label Name="lblStats"
                        DockPanel.Dock="Bottom"
                        HorizontalAlignment="Left"
@@ -39,14 +39,15 @@
                                 <Storyboard>
                                     <DoubleAnimation Storyboard.TargetName="lblStats"
                                                      Storyboard.TargetProperty="Opacity"
-                                                     From="0.0" To="1.0" Duration="0:0:0.3" />
+                                                     AutoReverse="True"
+                                                     From="1.0" To="0.7" Duration="0:0:0.15"/>
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>
                     </Label.Triggers>
                 </Label>
 
-                <!-- Ping history listbox -->
+                <!-- Ping history -->
                 <TextBox x:Name="History"
                          IsReadOnly="True"
                          IsTabStop="False"
@@ -57,39 +58,15 @@
                          VerticalContentAlignment="Top"
                          BorderThickness="0"
                          Cursor="Arrow"
-                         SelectionOpacity="0.5"
+                         IsInactiveSelectionHighlightEnabled="True"
+                         SelectionBrush="Black"
+                         SelectionOpacity="0.4"
                          TextChanged="History_TextChanged"
                          SelectionChanged="History_SelectionChanged"
                          FontFamily="Consolas"
                          FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}"
                          Text="{Binding Path=HistoryAsString, Mode=OneWay}">
                 </TextBox>
-                <!--<ListBox Name="lbHistory"
-                         BorderThickness="0"
-                         Background="Transparent"
-                         Foreground="{Binding Status, Converter={StaticResource ProbeStatusToForegroundBrushConverter}}"
-                         ItemsSource="{Binding History}"
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                         IsTabStop="False"
-                         IsTextSearchEnabled="False"
-                         controls:ListBoxBehavior.ScrollOnNewItem="True"
-                         FontFamily="Consolas"
-                         FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}">
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListBoxItem}">
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                        <ContentPresenter />
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="IsTabStop" Value="False" />
-                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                </ListBox>-->
             </DockPanel>
 
             

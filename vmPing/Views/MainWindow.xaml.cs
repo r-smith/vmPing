@@ -697,7 +697,8 @@ namespace vmPing.Views
             var tb = sender as TextBox;
             tb.SelectionStart = (tb.DataContext as Probe).SelStart;
             tb.SelectionLength = (tb.DataContext as Probe).SelLength;
-            tb.ScrollToEnd();
+            if (!tb.IsMouseCaptureWithin && tb.SelectionLength == 0)
+                tb.ScrollToEnd();
         }
 
         private void History_SelectionChanged(object sender, RoutedEventArgs e)

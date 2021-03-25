@@ -24,8 +24,8 @@ namespace vmPing.Views
         {
             History.SelectionStart = SelStart;
             History.SelectionLength = SelLength;
-            Application.Current.Dispatcher.BeginInvoke(
-                new Action(() => History.ScrollToEnd()));
+            if (!History.IsMouseCaptureWithin && History.SelectionLength == 0)
+                History.ScrollToEnd();
         }
 
         private void History_SelectionChanged(object sender, RoutedEventArgs e)

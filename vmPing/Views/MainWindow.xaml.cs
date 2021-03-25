@@ -618,12 +618,17 @@ namespace vmPing.Views
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-
                 var data = new DataObject();
                 data.SetData("Source", (sender as Label).DataContext as Probe);
                 DragDrop.DoDragDrop(sender as DependencyObject, data, DragDropEffects.Move);
                 e.Handled = true;
             }
+        }
+
+        private void History_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.Move;
+            e.Handled = true;
         }
 
         private void Probe_Drop(object sender, DragEventArgs e)
@@ -685,6 +690,21 @@ namespace vmPing.Views
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (NotifyIcon != null) NotifyIcon.Dispose();
+        }
+
+        private void History_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var tb = sender as TextBox;
+            tb.SelectionStart = (tb.DataContext as Probe).SelStart;
+            tb.SelectionLength = (tb.DataContext as Probe).SelLength;
+            tb.ScrollToEnd();
+        }
+
+        private void History_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            var tb = sender as TextBox;
+            (tb.DataContext as Probe).SelStart = tb.SelectionStart;
+            (tb.DataContext as Probe).SelLength = tb.SelectionLength;
         }
     }
 }

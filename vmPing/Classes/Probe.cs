@@ -55,6 +55,8 @@ namespace vmPing.Classes
         public IsolatedPingWindow IsolatedWindow { get; set; }
         public int IndeterminateCount { get; set; }
         public PingStatistics Statistics { get; set; }
+        public int SelStart { get; set; }
+        public int SelLength { get; set; }
         public CancellationTokenSource CancelSource { get; set; }
         private ObservableCollection<string> history;
         public ObservableCollection<string> History
@@ -71,7 +73,7 @@ namespace vmPing.Classes
         {
             get
             {
-                return string.Join(Environment.NewLine, History);
+                return History != null ? string.Join(Environment.NewLine, History) : string.Empty;
             }
         }
         void History_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

@@ -83,7 +83,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <!-- Custom itemcontroltemplate to remove right padding -->
         <ControlTemplate x:Key="MenuItemControlTemplate1" TargetType="{x:Type MenuItem}">
             <Border x:Name="templateRoot" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
@@ -134,9 +134,8 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </Window.Resources>
-
-
-    <!-- MASTER DOCKPANEL -->
+    
+    <!-- Root DockPanel -->
     <DockPanel Background="#aaa">
         <!-- Menu bar -->
         <Menu DockPanel.Dock="Top"
@@ -173,8 +172,7 @@
                            Margin="0,0,15,0"
                            Width="30"
                            HorizontalContentAlignment="Center"
-                           VerticalContentAlignment="Center"
-                          />
+                           VerticalContentAlignment="Center"/>
                     <Slider Name="ColumnCount"
                             Minimum="1" Maximum="10"
                             Value="3"
@@ -184,8 +182,7 @@
                             Width="200"
                             Foreground="Gray"
                             Margin="0,5"
-                            ValueChanged="ColumnCount_ValueChanged"
-                           />
+                            ValueChanged="ColumnCount_ValueChanged"/>
                 </StackPanel>
             </MenuItem>
 
@@ -208,14 +205,14 @@
             <!-- <MenuItem Header="{Binding Path=(classes:Probe.ActiveCount)}"/> -->
 
 
-            <!-- Menu Item: Extras -->
+            <!-- Menu Item: Main menu dropdown -->
             <MenuItem Width="32"
                       Margin="0,0,6,0"
                       DockPanel.Dock="Right" Template="{DynamicResource MenuItemControlTemplate1}">
                 <MenuItem.Icon>
                     <Image Source="{StaticResource icon.chevron-circle-down}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="16" Height="16"/>
                 </MenuItem.Icon>
-
+                
                 <MenuItem Name="OptionsMenu"
                           Header="{x:Static resource:Strings.Menu_Options}"
                           InputGestureText="F10"
@@ -288,7 +285,7 @@
         <ItemsControl Name="ProbeItemsControl" IsTabStop="False" Focusable="False" BorderThickness="0,1,0,0" BorderBrush="#111" Margin="0,0,-2,-2">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="#111" BorderThickness="0,0,2,2" Margin="0,0,0,0" CornerRadius="0"
+                    <Border BorderBrush="#111" BorderThickness="0,0,2,2" Margin="0" CornerRadius="0"
                             Background="{Binding Status, Converter={StaticResource ProbeStatusToBackgroundBrushConverter}}">
                         <Grid Name="gridItemsControl">
                             <Grid.RowDefinitions>
@@ -332,7 +329,7 @@
                                            AllowDrop="True" Drop="Probe_Drop" PreviewMouseMove="ProbeTitle_PreviewMouseMove">
                                     </Label>
 
-                                    <!-- Button: Delete / Remove -->
+                                    <!-- Button: Remove probe -->
                                     <Button Grid.Column="3"
                                             Padding="6,3"
                                             Margin="0,0,0,0"
@@ -380,7 +377,7 @@
                                         </Button.Style>
                                     </Button>
 
-                                    <!-- Button: Isolated View -->
+                                    <!-- Button: Isolated view -->
                                     <Button Grid.Column="2"
                                             Padding="6,3"
                                             Margin="0,0,1,0"
@@ -428,7 +425,7 @@
                                         </Button.Style>
                                     </Button>
 
-                                    <!-- Button: Edit Alias -->
+                                    <!-- Button: Edit alias -->
                                     <Button Grid.Column="1"
                                             Padding="6,3"
                                             Margin="0,0,1,0"
@@ -481,11 +478,11 @@
                                     </Button>
                                 </Grid>
 
-                                <!-- Ping statistics textblock -->
+                                <!-- Ping statistics -->
                                 <Label Name="lblStats"
                                        DockPanel.Dock="Bottom"
                                        HorizontalAlignment="Left"
-                                       Width="{Binding ElementName=lbHistory, Path=ActualWidth}"
+                                       Width="{Binding ElementName=History, Path=ActualWidth}"
                                        Content="{Binding StatisticsText, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
                                        Background="Transparent"
                                        Foreground="{Binding Status, Converter={StaticResource ProbeStatusToStatisticsBrushConverter}}"
@@ -506,34 +503,26 @@
                                     </Label.Triggers>
                                 </Label>
 
-                                <!-- Ping history listbox -->
-                                <ListBox Name="lbHistory"
+                                <!-- Ping history -->
+                                <TextBox x:Name="History"
+                                         TextChanged="History_TextChanged"
+                                         SelectionChanged="History_SelectionChanged"
+                                         PreviewDragOver="History_PreviewDragOver"
+                                         PreviewDragEnter="History_PreviewDragOver"
+                                         IsReadOnly="True"
+                                         IsTabStop="False"
+                                         Cursor="Arrow"
                                          BorderThickness="0"
                                          Background="Transparent"
                                          Foreground="{Binding Status, Converter={StaticResource ProbeStatusToForegroundBrushConverter}}"
-                                         ItemsSource="{Binding History}"
-                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                         IsTabStop="False"
-                                         IsTextSearchEnabled="False"
-                                         controls:ListBoxBehavior.ScrollOnNewItem="True"
-                                         FocusVisualStyle="{x:Null}"
+                                         HorizontalScrollBarVisibility="Disabled"
+                                         VerticalScrollBarVisibility="Auto"
+                                         VerticalContentAlignment="Top"
+                                         SelectionBrush="Black"
+                                         SelectionOpacity="0.4"
                                          FontFamily="Consolas"
-                                         FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}">
-                                    <ListBox.ItemContainerStyle>
-                                        <Style TargetType="{x:Type ListBoxItem}">
-                                            <Setter Property="Background" Value="Transparent"/>
-                                            <Setter Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                        <ContentPresenter/>
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                            <Setter Property="IsTabStop" Value="False"/>
-                                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                                        </Style>
-                                    </ListBox.ItemContainerStyle>
-                                </ListBox>
+                                         FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}"
+                                         Text="{Binding Path=HistoryAsString, Mode=OneWay}"/>
                             </DockPanel>
 
 
@@ -545,7 +534,6 @@
                                    Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanToVisibilityConverter}, NotifyOnTargetUpdated=True}"
                                    TargetUpdated="Logo_TargetUpdated"
                                    Opacity="0.03"/>
-
 
                             <!-- Hostname and ping button section -->
                             <Grid Grid.Row="1">
@@ -572,7 +560,7 @@
                                 <TextBox Name="Hostname"
                                          Grid.Column="1"
                                          FontWeight="SemiBold"
-                                         FontSize="{Binding ElementName=lbHistory, Path=ActualWidth, Converter={StaticResource HostnameFontsizeConverter}}"
+                                         FontSize="{Binding ElementName=History, Path=ActualWidth, Converter={StaticResource HostnameFontsizeConverter}}"
                                          BorderThickness="0,0,0,0"
                                          BorderBrush="#20000000"
                                          VerticalContentAlignment="Center"
@@ -602,7 +590,7 @@
                                                     <Image Source="{Binding IsActive, Converter={StaticResource BooleanToImageConverter}}" Width="16" Height="16"
                                                            Margin="0,6"/>
                                                     <TextBlock Text="{Binding IsActive, Converter={StaticResource BoolToStringConverter}}"
-                                                               Visibility="{Binding ElementName=lbHistory, Path=ActualWidth, Converter={StaticResource ButtonTextVisibilityConverter}}"
+                                                               Visibility="{Binding ElementName=History, Path=ActualWidth, Converter={StaticResource ButtonTextVisibilityConverter}}"
                                                                Foreground="Black"
                                                                FontSize="13"
                                                                VerticalAlignment="Center"

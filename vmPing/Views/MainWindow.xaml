@@ -345,7 +345,7 @@
                                                 <Border Name="controlButton_border"
                                                         BorderThickness="0"
                                                         BorderBrush="Transparent"
-                                                        CornerRadius="0"
+                                                        CornerRadius="1,0,0,1"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
                                                     <Image Name="controlButton_image" Source="{StaticResource icon.window-close-black}"
@@ -393,7 +393,7 @@
                                                 <Border Name="controlButton_border"
                                                         BorderThickness="0"
                                                         BorderBrush="Transparent"
-                                                        CornerRadius="0"
+                                                        CornerRadius="1"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
                                                     <Image Name="controlButton_image" Source="{StaticResource icon.window-restore-black}"
@@ -442,7 +442,7 @@
                                                 <Border Name="controlButton_border"
                                                         BorderThickness="0"
                                                         BorderBrush="Transparent"
-                                                        CornerRadius="0"
+                                                        CornerRadius="1"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
                                                     <Image Name="controlButton_image" Source="{StaticResource icon.pencil-black}"
@@ -569,8 +569,8 @@
                                          FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}"
                                          Text="{Binding Path=HistoryAsString, Mode=OneWay}">
                                     <TextBox.Resources>
-                                        <Style TargetType="{x:Type ScrollBar}">
-                                            <Setter Property="Opacity" Value="0.4"/>
+                                        <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource PingScrollBarStyle}">
+                                            <Setter Property="Opacity" Value="0.2"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
                                                     <Setter Property="Opacity" Value="1.0"/>

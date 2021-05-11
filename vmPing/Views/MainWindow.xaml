@@ -627,8 +627,8 @@
                                          Template="{StaticResource TextBoxControlTemplate}"
                                          Loaded="Hostname_Loaded"
                                          TextChanged="Hostname_TextChanged"
-                                         KeyDown="Hostname_KeyDown"
-                           ToolTip="Examples:&#10;Ping: 'github.com'  |  Trace route:  'T/google.de'  |  DNS Resolution:  'D/google.com'&#10;TCP-Test: 'github.com:80'  |  Comments:  '#8.8.8.8 does nothing'"/>
+                                         KeyDown="Hostname_KeyDown"/>
+
                                 <!-- Ping button -->
                                 <Button Click="ProbeStartStop_Click"
                                         Grid.Column="2"

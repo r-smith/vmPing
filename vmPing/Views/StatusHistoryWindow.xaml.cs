@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Input;
 using vmPing.Classes;
 
 namespace vmPing.Views
@@ -40,6 +41,11 @@ namespace vmPing.Views
                 }
                 StatusHistory.ScrollIntoView(StatusHistory.Items[StatusHistory.Items.Count - 1]);
             }
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape) Close();
         }
     }
 }

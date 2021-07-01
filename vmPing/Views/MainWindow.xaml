@@ -220,7 +220,7 @@
 
                 <Separator Padding="0,6"/>
 
-                <MenuItem Header="{x:Static resource:Strings.Menu_StatusHistory}" Click="StatusHistory_Click"/>
+                <MenuItem Name="StatusHistoryMenu" Header="{x:Static resource:Strings.Menu_StatusHistory}" InputGestureText="F12"/>
 
                 <MenuItem Name="MultiInputMenu" Header="Input Addresses" InputGestureText="F2"/>
 

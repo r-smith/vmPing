@@ -27,7 +27,7 @@ namespace vmPing.Views
         public static RoutedCommand FloodHostCommand = new RoutedCommand();
         public static RoutedCommand AddProbeCommand = new RoutedCommand();
         public static RoutedCommand MultiInputCommand = new RoutedCommand();
-
+        public static RoutedCommand StatusHistoryCommand = new RoutedCommand();
 
         public MainWindow()
         {
@@ -137,23 +137,35 @@ namespace vmPing.Views
             CommandBindings.Add(new CommandBinding(FloodHostCommand, FloodHostExecute));
             CommandBindings.Add(new CommandBinding(AddProbeCommand, AddProbeExecute));
             CommandBindings.Add(new CommandBinding(MultiInputCommand, MultiInputWindowExecute));
+            CommandBindings.Add(new CommandBinding(StatusHistoryCommand, StatusHistoryExecute));
 
-            var kgOptions = new KeyGesture(Key.F10);
-            var kgStartStop = new KeyGesture(Key.F5);
-            var kgHelp = new KeyGesture(Key.F1);
-            var kgNewInstance = new KeyGesture(Key.N, ModifierKeys.Control);
-            var kgTraceroute = new KeyGesture(Key.T, ModifierKeys.Control);
-            var kgFloodHost = new KeyGesture(Key.F, ModifierKeys.Control);
-            var kgAddProbe = new KeyGesture(Key.A, ModifierKeys.Control);
-            var kgMultiInput = new KeyGesture(Key.F2);
-            InputBindings.Add(new InputBinding(OptionsCommand, kgOptions));
-            InputBindings.Add(new InputBinding(StartStopCommand, kgStartStop));
-            InputBindings.Add(new InputBinding(HelpCommand, kgHelp));
-            InputBindings.Add(new InputBinding(NewInstanceCommand, kgNewInstance));
-            InputBindings.Add(new InputBinding(TracerouteCommand, kgTraceroute));
-            InputBindings.Add(new InputBinding(FloodHostCommand, kgFloodHost));
-            InputBindings.Add(new InputBinding(AddProbeCommand, kgAddProbe));
-            InputBindings.Add(new InputBinding(MultiInputCommand, kgMultiInput));
+            InputBindings.Add(new InputBinding(
+                OptionsCommand,
+                new KeyGesture(Key.F10)));
+            InputBindings.Add(new InputBinding(
+                StartStopCommand,
+                new KeyGesture(Key.F5)));
+            InputBindings.Add(new InputBinding(
+                HelpCommand,
+                new KeyGesture(Key.F1)));
+            InputBindings.Add(new InputBinding(
+                NewInstanceCommand,
+                new KeyGesture(Key.N, ModifierKeys.Control)));
+            InputBindings.Add(new InputBinding(
+                TracerouteCommand,
+                new KeyGesture(Key.T, ModifierKeys.Control)));
+            InputBindings.Add(new InputBinding(
+                FloodHostCommand,
+                new KeyGesture(Key.F, ModifierKeys.Control)));
+            InputBindings.Add(new InputBinding(
+                AddProbeCommand,
+                new KeyGesture(Key.A, ModifierKeys.Control)));
+            InputBindings.Add(new InputBinding(
+                MultiInputCommand,
+                new KeyGesture(Key.F2)));
+            InputBindings.Add(new InputBinding(
+                StatusHistoryCommand,
+                new KeyGesture(Key.F12)));
 
             OptionsMenu.Command = OptionsCommand;
             StartStopMenu.Command = StartStopCommand;
@@ -163,6 +175,7 @@ namespace vmPing.Views
             FloodHostMenu.Command = FloodHostCommand;
             AddProbeMenu.Command = AddProbeCommand;
             MultiInputMenu.Command = MultiInputCommand;
+            StatusHistoryMenu.Command = StatusHistoryCommand;
         }
 
         public void AddProbe(int numberOfProbes = 1)
@@ -552,7 +565,7 @@ namespace vmPing.Views
             }
         }
 
-        private void StatusHistory_Click(object sender, RoutedEventArgs e)
+        private void StatusHistoryExecute(object sender, ExecutedRoutedEventArgs e)
         {
             if (Probe.StatusWindow == null || Probe.StatusWindow.IsLoaded == false)
             {

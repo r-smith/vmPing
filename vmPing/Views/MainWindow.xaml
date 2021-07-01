@@ -570,7 +570,7 @@
                                          Text="{Binding Path=HistoryAsString, Mode=OneWay}">
                                     <TextBox.Resources>
                                         <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource PingScrollBarStyle}">
-                                            <Setter Property="Opacity" Value="0.2"/>
+                                            <Setter Property="Opacity" Value="0.7"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
                                                     <Setter Property="Opacity" Value="1.0"/>

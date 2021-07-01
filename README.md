@@ -7,7 +7,7 @@ vmPing
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
 **[Click here to download the latest release](https://github.com/R-Smith/vmPing/releases/latest/download/vmPing.exe)**
-##### (1.3.15 released on March 17, 2021)
+##### (1.3.16 released on July 1, 2021)
 
 ##### Notes
 * There is no installer.  Just run the .exe.
@@ -16,7 +16,7 @@ vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple h
 
 Code Signing Certificate
 ------------------------
-I'm looking to purchase a code signing certificate and would welcome any donations. So far I have received $55.23. I would purchase through https://www.ksoftware.net and is currently priced at $84 for 1-year, $159 for 2-year, and $209 for 3-year (length of certificate is the duration it can be used for signing and signed code remains valid after expiration). This would get rid of the warning Windows gives when opening an unsigned application and also help with antivirus vendors that automatically flag unsigned applications.
+I've received an amazing $305.23 in contributions! Thank you so much everyone! I'm working on obtaining a code signing certificate to use for all future releases.
 
 
 Screenshots
@@ -33,6 +33,21 @@ Screenshots
 
 Recent Changes
 --------------
+### Version 1.3.16
+* Fix: Command line arguments now take precedence over your startup configuration.
+* Fix: When changing the title of a favorite, you are now given a warning if the new title already exists.
+* The text in each probe window is now selectable. Right-click or CTRL-C to copy. Scrolling is paused while text is selected. Select text from left to right. Selecting text from right to left will not work properly while the probe is active.
+* Probe starts and stops are now recorded to the Status History window.
+* New Status History window. The data is now displayed as a sortable grid. Filtering and additional options will be included in the next release.
+* Keyboard shortcut, F12, opens the Status History window.
+* Custom, slimmer, scroll bar style for the probe windows.
+* The blinking animation on the stats line when a response is recorded is now much more subtle.
+* Stats previously only updated when a response was received or lost. Stats now also update each time a probe is sent.
+* Keyboard shortcuts for buttons on the Manage Aliases and Manage Favorites windows.
+* Minor style changes to look of the Manage Aliases and Manage Favorites windows.
+* Minor style changes to most Windows controls (tab items, drop down boxes, check boxes, radio buttons, text boxes, buttons, etc). Styles should now be more consistent throughout the application.
+
+
 ### Version 1.3.15
 * __Startup mode__. You can now configure how vmPing starts. Choose between a blank window (this is the normal, default mode), show the list input window, or load a favorite. For the blank window, you can also set the number of blank probes and initial column count. You will find startup mode settings on the General tab in the Options window. Don't forget to select *Save as vmPing defaults* to make your settings persist.
 * When you open the list input window, it now pre-populates with the addresses of the current pings.

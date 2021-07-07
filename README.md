@@ -7,16 +7,11 @@ vmPing
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
 **[Click here to download the latest release](https://github.com/R-Smith/vmPing/releases/latest/download/vmPing.exe)**
-##### (1.3.16 released on July 1, 2021)
+##### (1.3.17 released on July 7, 2021)
 
 ##### Notes
 * There is no installer.  Just run the .exe.
 * .NET 4.5 or greater is required.
-
-
-Code Signing Certificate
-------------------------
-I've received an amazing $305.23 in contributions! Thank you so much everyone! I'm working on obtaining a code signing certificate to use for all future releases.
 
 
 Screenshots
@@ -33,6 +28,13 @@ Screenshots
 
 Recent Changes
 --------------
+### Version 1.3.17
+* Fix: Windows XP/7 would crash when opening the Status History window. This was due to an incompatible reference added in 1.3.16.
+* Status History window now has filters. Type in the box to filter by name or address. The different status types are filterable as well: ups, downs, starts, and stops.
+* When a system error is encountered while pinging (example: network interface disabled in Windows), vmPing will mark as lost and continue ping attempts. Previously, the pinging would stop entirely.
+* Code signed! I purchased a 3-year certificate with your contributions. The pre-compiled binary on this release and all future releases should be code signed. This will get rid of Windows Smart Screen warnings, untrusted publisher errors, and false flagging by antivirus vendors that alert on unsigned executables. You might still see Smart Screen warnings for now since it's reputation-based and this is a brand new cert.
+
+
 ### Version 1.3.16
 * Fix: Command line arguments now take precedence over your startup configuration.
 * Fix: When changing the title of a favorite, you are now given a warning if the new title already exists.

@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using vmPing.Classes;
 
@@ -12,11 +13,15 @@ namespace vmPing.Views
     /// </summary>
     public partial class StatusHistoryWindow : Window
     {
+        ICollectionView _statusHistoryView;
+
         public StatusHistoryWindow(ObservableCollection<StatusChangeLog> statusChangeLog)
         {
             InitializeComponent();
 
-            StatusHistory.ItemsSource = statusChangeLog;
+            _statusHistoryView = CollectionViewSource.GetDefaultView(statusChangeLog);
+            _statusHistoryView.Filter = AddressFilter;
+            StatusHistory.ItemsSource = _statusHistoryView;
 
             ((INotifyCollectionChanged)StatusHistory.Items).CollectionChanged += StatusHistory_CollectionChanged;
 
@@ -46,6 +51,46 @@ namespace vmPing.Views
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape) Close();
+        }
+
+        private void TextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            _statusHistoryView.Refresh();
+        }
+
+        private bool AddressFilter(object item)
+        {
+            bool statusMatch = false;
+            var entry = item as StatusChangeLog;
+
+            if (FilterStart.IsChecked == true && entry.Status == ProbeStatus.Start)
+                statusMatch = true;
+            if (FilterStop.IsChecked == true && entry.Status == ProbeStatus.Stop)
+                statusMatch = true;
+            if (FilterUp.IsChecked == true && entry.Status == ProbeStatus.Up)
+                statusMatch = true;
+            if (FilterDown.IsChecked == true && entry.Status == ProbeStatus.Down)
+                statusMatch = true;
+
+            if (statusMatch)
+            {
+                var filterText = AddressFilterField.Text.ToUpper();
+                if (!string.IsNullOrEmpty(entry.Alias) && entry.Alias.ToUpper().Contains(filterText))
+                    return true;
+                else if (!string.IsNullOrEmpty(entry.Hostname) && entry.Hostname.ToUpper().Contains(filterText))
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void Filter_Click(object sender, RoutedEventArgs e)
+        {
+            _statusHistoryView.Refresh();
         }
     }
 }

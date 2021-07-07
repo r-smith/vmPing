@@ -4,10 +4,10 @@
         xmlns:resource="clr-namespace:vmPing.Properties"
         Title="{x:Static resource:Strings.StatusHistory_WindowTitle}"
         UseLayoutRounding="True"
-        Height="350"
-        Width="650"
-        MinHeight="200"
-        MinWidth="350"
+        Height="400"
+        Width="720"
+        MinHeight="250"
+        MinWidth="400"
         Background="#313132"
         PreviewKeyDown="Window_PreviewKeyDown">
 
@@ -62,10 +62,10 @@
                                     <Setter Property="Foreground" Value="#859900" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding StatusAsString}" Value="started">
-                                    <Setter Property="Foreground" Value="#60bd50ff" />
+                                    <Setter Property="Foreground" Value="#61b8ff" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding StatusAsString}" Value="stopped">
-                                    <Setter Property="Foreground" Value="#080808" />
+                                    <Setter Property="Foreground" Value="#ecce51" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -148,7 +148,7 @@
         </DataGrid>
         
         <!-- Placeholder text for no items in history -->
-        <Border Background="#313132">
+        <!--<Border Background="#313132">
             <Border.Style>
                 <Style TargetType="Border">
                     <Setter Property="Visibility" Value="Collapsed" />
@@ -173,23 +173,69 @@
                            Margin="0,10,0,0"
                            Text="{x:Static resource:Strings.StatusHistory_NoChangesDescription}" />
             </StackPanel>
-        </Border>
+        </Border>-->
         
-        <!-- Logo -->
-        <StackPanel Grid.Row="1"
-                    HorizontalAlignment="Right"
-                    Orientation="Horizontal">
-            <Image Source="{StaticResource icon.vmping-logo-simple}"
-                   Width="16"
-                   Height="16" />
-            <TextBlock Grid.Row="3"
-                       Text="vmPing"
-                       FontSize="13"
-                       Foreground="White"
-                       Opacity="0.5"
-                       Margin="7,0,5,0"
-                       HorizontalAlignment="Right"
-                       VerticalAlignment="Center"/>
-        </StackPanel>
+        <!-- Filter section -->
+        <DockPanel Grid.Row="1">
+            <!-- Logo -->
+            <StackPanel DockPanel.Dock="Right"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        Orientation="Horizontal">
+                <Image Source="{StaticResource icon.vmping-logo-simple}"
+                       Width="16"
+                       Height="16" />
+                <TextBlock Grid.Row="3"
+                           Text="vmPing"
+                           FontSize="13"
+                           Foreground="White"
+                           Opacity="0.5"
+                           Margin="7,0,5,0"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+            <!-- Filter section -->
+            <DockPanel DockPanel.Dock="Left" Margin="12,6,6,12">
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="Filter" Foreground="#ecce51" Margin="0,0,0,2" Opacity="0.8"/>
+                    <TextBox x:Name="AddressFilterField"
+                             Style="{StaticResource DarkModeTextBoxStyle}"
+                             Width="300"
+                             KeyUp="TextBox_KeyUp"/>
+                </StackPanel>
+                <StackPanel Margin="15,0,0,0">
+                    <TextBlock Text="Include" Foreground="#ecce51" Margin="0,0,0,2" Opacity="0.8"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Grid Width="100">
+                            <CheckBox x:Name="FilterUp"
+                                      Style="{StaticResource DarkModeCheckBoxStyle}"
+                                      Content="Up"
+                                      IsChecked="True"
+                                      Width="100"
+                                      Click="Filter_Click"/>
+                        </Grid>
+                        <CheckBox x:Name="FilterStart"
+                                  Style="{StaticResource DarkModeCheckBoxStyle}"
+                                  Content="Start"
+                                  IsChecked="True"
+                                  Click="Filter_Click" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Grid Width="100">
+                            <CheckBox x:Name="FilterDown"
+                                      Style="{StaticResource DarkModeCheckBoxStyle}"
+                                      Content="Down"
+                                      IsChecked="True"
+                                      Click="Filter_Click"/>
+                        </Grid>
+                        <CheckBox x:Name="FilterStop"
+                                  Style="{StaticResource DarkModeCheckBoxStyle}"
+                                  Content="Stop"
+                                  IsChecked="True"
+                                  Click="Filter_Click" />
+                    </StackPanel>
+                </StackPanel>
+            </DockPanel>
+        </DockPanel>
     </Grid>
 </Window>

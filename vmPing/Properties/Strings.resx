@@ -383,7 +383,7 @@
     <value>When a host changes between down or up, it'll show up here</value>
   </data>
   <data name="StatusHistory_WindowTitle" xml:space="preserve">
-    <value>vmPing - Status History</value>
+    <value>Status History</value>
   </data>
   <data name="Toolbar_Add" xml:space="preserve">
     <value>_Add Host</value>

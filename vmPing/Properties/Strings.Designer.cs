@@ -835,7 +835,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to vmPing - Status History.
+        ///   Looks up a localized string similar to Status History.
         /// </summary>
         public static string StatusHistory_WindowTitle {
             get {

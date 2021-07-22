@@ -32,6 +32,7 @@
                   Background="#202020"
                   Foreground="#fdf6e3"
                   RowBackground="#202020"
+                  KeyboardNavigation.TabNavigation="None"
                   Style="{StaticResource DataGridStyle}">
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell">
@@ -211,7 +212,6 @@
                                       Style="{StaticResource DarkModeCheckBoxStyle}"
                                       Content="Up"
                                       IsChecked="True"
-                                      Width="100"
                                       Click="Filter_Click"/>
                         </Grid>
                         <CheckBox x:Name="FilterStart"

@@ -27,6 +27,17 @@
         </Setter>
     </Style>
     
+    <!-- Dark mode CheckBox focus visual -->
+    <Style x:Key="DarkOptionMarkFocusVisual">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle Margin="20,0,0,0" SnapsToDevicePixels="true" Stroke="#ccc" StrokeThickness="1" StrokeDashArray="1 2"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
     <!-- CheckBox style -->
     <Style TargetType="{x:Type CheckBox}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
@@ -183,7 +194,7 @@
                     <!-- Triggers -->
                     <ControlTemplate.Triggers>
                         <Trigger Property="HasContent" Value="true">
-                            <Setter Property="FocusVisualStyle" Value="{StaticResource OptionMarkFocusVisual}"/>
+                            <Setter Property="FocusVisualStyle" Value="{StaticResource DarkOptionMarkFocusVisual}"/>
                             <Setter Property="Padding" Value="6,-2,6,0"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">

@@ -549,26 +549,33 @@
                                 </DockPanel>
 
                                 <!-- Ping history -->
-                                <TextBox x:Name="History"
-                                         TextChanged="History_TextChanged"
-                                         SelectionChanged="History_SelectionChanged"
-                                         PreviewDragOver="History_PreviewDragOver"
-                                         PreviewDragEnter="History_PreviewDragOver"
-                                         IsReadOnly="True"
-                                         IsTabStop="False"
-                                         Cursor="Arrow"
+                                <ListBox x:Name="History"
                                          BorderThickness="0"
                                          Background="Transparent"
                                          Foreground="{Binding Status, Converter={StaticResource ProbeStatusToForegroundBrushConverter}}"
-                                         HorizontalScrollBarVisibility="Disabled"
-                                         VerticalScrollBarVisibility="Auto"
-                                         VerticalContentAlignment="Top"
-                                         SelectionBrush="Black"
-                                         SelectionOpacity="0.4"
+                                         ItemsSource="{Binding History}"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         IsTabStop="False"
+                                         IsTextSearchEnabled="False"
+                                         controls:ListBoxBehavior.ScrollOnNewItem="True"
+                                         FocusVisualStyle="{x:Null}"
                                          FontFamily="Consolas"
-                                         FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}"
-                                         Text="{Binding Path=HistoryAsString, Mode=OneWay}">
-                                    <TextBox.Resources>
+                                         FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="{x:Type ListBoxItem}">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                        <ContentPresenter />
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="IsTabStop" Value="False"/>
+                                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    <!--<TextBox.Resources>
                                         <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource PingScrollBarStyle}">
                                             <Setter Property="Opacity" Value="0.7"/>
                                             <Style.Triggers>
@@ -577,8 +584,8 @@
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
-                                    </TextBox.Resources>
-                                </TextBox>
+                                    </TextBox.Resources>-->
+                                </ListBox>
                             </DockPanel>
 
 

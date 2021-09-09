@@ -575,7 +575,7 @@
                                             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                                         </Style>
                                     </ListBox.ItemContainerStyle>
-                                    <!--<TextBox.Resources>
+                                    <ListBox.Resources>
                                         <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource PingScrollBarStyle}">
                                             <Setter Property="Opacity" Value="0.7"/>
                                             <Style.Triggers>
@@ -584,7 +584,7 @@
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
-                                    </TextBox.Resources>-->
+                                    </ListBox.Resources>
                                 </ListBox>
                             </DockPanel>
 

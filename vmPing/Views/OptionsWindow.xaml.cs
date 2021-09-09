@@ -464,17 +464,6 @@ namespace vmPing.Views
                 ApplicationOptions.EmailFromAddress = EmailFromAddress.Text;
                 ApplicationOptions.IsEmailSslEnabled = IsSmtpSslEnabled.IsChecked == true ? true : false;
 
-                if (IsSmtpAuthenticationRequired.IsChecked == true && SaveAsDefaults.IsChecked == true)
-                {
-                    bool? result = ShowError("You have chosen to save your email credentials to disk." + Environment.NewLine + Environment.NewLine +
-                        "While the data is stored in an encrypted format, anyone with access to your vmPing configuration file could potentially decrypt the data.",
-                        tabItem: EmailAlertsTab,
-                        control: IsSmtpAuthenticationRequired,
-                        isWarning: true);
-                    if (result == false)
-                        return false;
-                }
-
                 return true;
             }
             else

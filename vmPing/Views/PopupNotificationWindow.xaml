@@ -4,16 +4,18 @@
         xmlns:resource="clr-namespace:vmPing.Properties"
         UseLayoutRounding="True"
         Height="95"
-        Width="500"
+        MinWidth="500"
+        SizeToContent="Width"
         ResizeMode="NoResize"
         WindowStyle="None"
         ShowInTaskbar="False"
-        Background="#313130"
+        Background="#282829"
         BorderBrush="#636363"
         BorderThickness="1"
         Topmost="True"
         ShowActivated="False"
         MouseLeftButtonUp="Window_MouseLeftButtonUp"
+        SizeChanged="Window_SizeChanged"
         RenderTransformOrigin="1,1"
         AllowsTransparency="True">
     <Window.RenderTransform>
@@ -37,14 +39,14 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
+
         <!-- Buttons -->
         <Grid HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            
+
             <!-- Button: Maximize / Dedicated Window -->
             <Button Grid.Column="0"
                     Padding="6"
@@ -68,8 +70,7 @@
                             <Image Name="controlButton_image"
                                    Source="{StaticResource icon.window-restore-white}"
                                    Width="12"
-                                   Height="12"
-                                   />
+                                   Height="12"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -94,7 +95,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            
+
             <!-- Button: Close -->
             <Button Grid.Column="1"
                     Padding="6"
@@ -118,8 +119,7 @@
                             <Image Name="controlButton_image"
                                    Source="{StaticResource icon.window-close-white}"
                                    Width="12"
-                                   Height="12"
-                                   />
+                                   Height="12"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -147,128 +147,99 @@
         </Grid>
 
         <!-- Status change log -->
-        <ListView Name="StatusHistoryList"
-                  Grid.Row="1"
-                  Background="Transparent"
-                  SelectionMode="Single"
-                  BorderThickness="0"
-                  IsTabStop="False"
-                  FocusVisualStyle="{x:Null}"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  VerticalAlignment="Top"
-                  MouseLeftButtonUp="Window_MouseLeftButtonUp"
-                  >
-            <ListView.Resources>
-                <!-- Hide the header row of the listview -->
-                <Style TargetType="GridViewColumnHeader">
-                    <Setter Property="Visibility"
-                            Value="Collapsed" />
-                </Style>
-            </ListView.Resources>
-
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
+        <ListBox Name="StatusHistoryList"
+                 Grid.Row="1"
+                 Background="Transparent"
+                 SelectionMode="Single"
+                 BorderThickness="0"
+                 IsTabStop="False"
+                 MaxWidth="1200"
+                 FocusVisualStyle="{x:Null}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 VerticalAlignment="Top"
+                 MouseLeftButtonUp="Window_MouseLeftButtonUp">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="Template">
                         <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                <Border BorderBrush="Transparent"
-                                        BorderThickness="0"
-                                        Background="{TemplateBinding Background}">
-                                    <GridViewRowPresenter HorizontalAlignment="Stretch"
-                                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                          Width="Auto"
-                                                          Margin="0"
-                                                          Content="{TemplateBinding Content}"/>
-                                </Border>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <ContentPresenter />
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
                 </Style>
-            </ListView.ItemContainerStyle>
+            </ListBox.ItemContainerStyle>
 
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Width="500">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0"
-                                               Text="{Binding StatusAsGlyph}"
-                                               FontSize="18"
-                                               FontFamily="Marlett"
-                                               VerticalAlignment="Center"
-                                               Padding="5,0,0,0">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding StatusAsString}" Value="DOWN">
-                                                        <Setter Property="Foreground" Value="#dc322f" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding StatusAsString}" Value="[ERROR]">
-                                                        <Setter Property="Foreground" Value="#dc322f" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding StatusAsString}" Value="UP">
-                                                        <Setter Property="Foreground" Value="#859900" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-                                    <TextBlock Grid.Column="1"
-                                               Text="{Binding Timestamp, StringFormat='[{0}]'}"
-                                               FontSize="15"
-                                               Foreground="White"
-                                               VerticalAlignment="Center"
-                                               Opacity="0.6"
-                                               Padding="6,0,0,0" />
-                                    <TextBlock Grid.Column="2"
-                                               Text="{Binding AliasIfExistOrHostname}"
-                                               FontSize="17"
-                                               Foreground="White"
-                                               VerticalAlignment="Center"
-                                               Padding="9,0,0,0" />
-                                    <TextBlock Grid.Column="3"
-                                               Text="{x:Static resource:Strings.StatusChange_Verb}"
-                                               FontSize="17"
-                                               Foreground="White"
-                                               VerticalAlignment="Center"
-                                               Opacity="0.9"
-                                               Padding="5,0" />
-                                    <TextBlock Grid.Column="4"
-                                               Text="{Binding StatusAsString}"
-                                               FontSize="17"
-                                               VerticalAlignment="Center">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Down}">
-                                                        <Setter Property="Foreground" Value="#dc322f" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Error}">
-                                                        <Setter Property="Foreground" Value="#dc322f" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Up}">
-                                                        <Setter Property="Foreground" Value="#859900" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-                                </Grid>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+                        <TextBlock DockPanel.Dock="Left"
+                                   Text="{Binding StatusAsGlyph}"
+                                   FontSize="18"
+                                   FontFamily="Marlett"
+                                   VerticalAlignment="Center"
+                                   Padding="5,0,0,0">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding StatusAsString}" Value="DOWN">
+                                            <Setter Property="Foreground" Value="#dc322f" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding StatusAsString}" Value="[ERROR]">
+                                            <Setter Property="Foreground" Value="#dc322f" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding StatusAsString}" Value="UP">
+                                            <Setter Property="Foreground" Value="#859900" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock DockPanel.Dock="Left"
+                                   Text="{Binding Timestamp, StringFormat='[{0}]'}"
+                                   FontSize="15"
+                                   Foreground="White"
+                                   VerticalAlignment="Center"
+                                   Opacity="0.6"
+                                   Padding="6,0,0,0" />
+                        <TextBlock DockPanel.Dock="Left"
+                                   Text="{Binding AliasIfExistOrHostname}"
+                                   FontSize="17"
+                                   Foreground="White"
+                                   VerticalAlignment="Center"
+                                   Padding="9,0,0,0" />
+                        <TextBlock DockPanel.Dock="Left"
+                                   Text="{x:Static resource:Strings.StatusChange_Verb}"
+                                   FontSize="17"
+                                   Foreground="White"
+                                   VerticalAlignment="Center"
+                                   Opacity="0.9"
+                                   Padding="5,0" />
+                        <TextBlock DockPanel.Dock="Left"
+                                   Text="{Binding StatusAsString}"
+                                   FontSize="17"
+                                   VerticalAlignment="Center">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Down}">
+                                            <Setter Property="Foreground" Value="#dc322f" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Error}">
+                                            <Setter Property="Foreground" Value="#dc322f" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Up}">
+                                            <Setter Property="Foreground" Value="#859900" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         
         <!-- Logo -->
         <StackPanel Grid.Row="3"

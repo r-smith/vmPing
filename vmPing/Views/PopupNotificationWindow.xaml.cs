@@ -23,8 +23,6 @@ namespace vmPing.Views
         {
             InitializeComponent();
 
-            PositionWindow();
-
             ICollectionView filteredChangeLog = new CollectionViewSource { Source = statusChangeLog }.View;
             filteredChangeLog.Filter = item =>
             {
@@ -80,32 +78,28 @@ namespace vmPing.Views
             {
                 case 1:
                     Height = 95;
-                    PositionWindow();
                     break;
                 case 2:
                     Height = 110;
-                    PositionWindow();
                     break;
                 case 3:
                     Height = 126;
-                    PositionWindow();
                     break;
                 case 4:
                     Height = 147;
-                    PositionWindow();
                     break;
                 case 5:
                     Height = 172;
-                    PositionWindow();
                     break;
             }
+            PositionWindow(width: Width);
         }
 
-        private void PositionWindow()
+        private void PositionWindow(double width)
         {
             // PositionWindow places the window in the lower right corner of the screen.
             Rect desktopWorkingArea = SystemParameters.WorkArea;
-            Left = desktopWorkingArea.Right - Width;
+            Left = desktopWorkingArea.Right - width;
             Top = desktopWorkingArea.Bottom - Height;
         }
 
@@ -135,6 +129,11 @@ namespace vmPing.Views
             }
 
             Close();
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            PositionWindow(width: e.NewSize.Width);
         }
     }
 }

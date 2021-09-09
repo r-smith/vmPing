@@ -47,6 +47,7 @@ namespace vmPing.Classes
                     fromAddress = new MailAddress(mailFromAddress);
 
                 smtpClient.Host = serverAddress;
+                smtpClient.EnableSsl = ApplicationOptions.IsEmailSslEnabled;
 
                 if (ApplicationOptions.IsEmailAuthenticationRequired)
                 {
@@ -79,19 +80,20 @@ namespace vmPing.Classes
         public static void SendTestEmail(
             string serverAddress,
             string serverPort,
+            bool isSslEnabled,
             bool isAuthRequired,
             string username,
             System.Security.SecureString password,
             string mailFrom,
             string mailRecipient)
         {
-            var mailFromFriendly = "vmPing";
-            var mailSubject = $"[vmPing] Test Email Notification";
-            var mailBody =
+            string mailFromFriendly = "vmPing";
+            string mailSubject = $"[vmPing] Test Email Notification";
+            string mailBody =
                 $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()} - This is a test email notification sent by vmPing.";
             MailAddress fromAddress;
 
-            using (var smtpClient = new SmtpClient())
+            using (SmtpClient smtpClient = new SmtpClient())
             {
                 smtpClient.Host = serverAddress;
 
@@ -103,7 +105,9 @@ namespace vmPing.Classes
                 if (isAuthRequired)
                     smtpClient.Credentials = new NetworkCredential(username, password);
 
-                using (var message = new MailMessage())
+                smtpClient.EnableSsl = isSslEnabled;
+
+                using (MailMessage message = new MailMessage())
                 {
                     message.From = fromAddress;
                     message.Subject = mailSubject;

@@ -194,6 +194,9 @@ namespace vmPing.Classes
                     new XAttribute("name", "EmailPort"),
                     ApplicationOptions.EmailPort ?? string.Empty),
                 new XElement("option",
+                    new XAttribute("name", "IsEmailSslEnabled"),
+                    ApplicationOptions.IsEmailSslEnabled),
+                new XElement("option",
                     new XAttribute("name", "IsEmailAuthenticationRequired"),
                     ApplicationOptions.IsEmailAuthenticationRequired),
                 new XElement("option",
@@ -547,6 +550,10 @@ namespace vmPing.Classes
             if (options.TryGetValue("EmailPort", out optionValue))
             {
                 ApplicationOptions.EmailPort = optionValue;
+            }
+            if (options.TryGetValue("IsEmailSslEnabled", out optionValue))
+            {
+                ApplicationOptions.IsEmailSslEnabled = bool.Parse(optionValue);
             }
             if (options.TryGetValue("EmailRecipient", out optionValue))
             {

@@ -131,6 +131,7 @@ namespace vmPing.Views
         {
             IsEmailAlertsEnabled.IsChecked = ApplicationOptions.IsEmailAlertEnabled;
             IsSmtpAuthenticationRequired.IsChecked = ApplicationOptions.IsEmailAuthenticationRequired;
+            IsSmtpSslEnabled.IsChecked = ApplicationOptions.IsEmailSslEnabled;
             SmtpServer.Text = ApplicationOptions.EmailServer;
             SmtpPort.Text = ApplicationOptions.EmailPort;
             SmtpUsername.Text = ApplicationOptions.EmailUser;
@@ -461,6 +462,7 @@ namespace vmPing.Views
                 ApplicationOptions.EmailPassword = SmtpPassword.Password;
                 ApplicationOptions.EmailRecipient = EmailRecipientAddress.Text;
                 ApplicationOptions.EmailFromAddress = EmailFromAddress.Text;
+                ApplicationOptions.IsEmailSslEnabled = IsSmtpSslEnabled.IsChecked == true ? true : false;
 
                 if (IsSmtpAuthenticationRequired.IsChecked == true && SaveAsDefaults.IsChecked == true)
                 {
@@ -662,6 +664,7 @@ namespace vmPing.Views
             TestEmailButton.Content = "Testing...";
             var serverAddress = SmtpServer.Text;
             var serverPort = SmtpPort.Text;
+            var isSslEnabled = IsSmtpSslEnabled.IsChecked == true ? true : false;
             var isAuthRequired = IsSmtpAuthenticationRequired.IsChecked == true ? true : false;
             var username = SmtpUsername.Text;
             var password = SmtpPassword.SecurePassword;
@@ -675,6 +678,7 @@ namespace vmPing.Views
                     Util.SendTestEmail(
                         serverAddress,
                         serverPort,
+                        isSslEnabled,
                         isAuthRequired,
                         username,
                         password,

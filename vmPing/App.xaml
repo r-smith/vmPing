@@ -23,6 +23,7 @@
                 <ResourceDictionary Source="ResourceDictionaries/CheckBoxStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/RadioButtonStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/ScrollBarStyle.xaml"/>
+                <ResourceDictionary Source="ResourceDictionaries/WindowChrome.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

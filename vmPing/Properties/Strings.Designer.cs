@@ -817,7 +817,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No status changes.
+        ///   Looks up a localized string similar to No status history.
         /// </summary>
         public static string StatusHistory_NoChanges {
             get {

@@ -54,7 +54,7 @@
                            Text="{Binding Path=Title,
                                  RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                 </TextBlock>
-                
+
                 <!-- Minimize button -->
                 <Button Grid.Column="4"
                         Click="OnMinimizeButtonClick"
@@ -111,25 +111,15 @@
                           StrokeThickness="1" />
                 </Button>
             </Grid>
-            
+
             <!-- History DataGrid -->
             <DataGrid Name="StatusHistory"
                       Grid.Row="1"
-                      DockPanel.Dock="Top"
-                      Margin="0,30,0,0"
-                      Padding="0"
-                      HorizontalGridLinesBrush="#303030"
-                      GridLinesVisibility="Horizontal"
-                      ColumnWidth="SizeToCells"
-                      BorderBrush="Black"
-                      BorderThickness="0,1,0,1"
                       FontSize="16"
                       FontFamily="Consolas"
                       Background="#202020"
                       Foreground="#fdf6e3"
-                      RowBackground="#202020"
-                      KeyboardNavigation.TabNavigation="None"
-                      Style="{StaticResource DataGridStyle}">
+                      Style="{StaticResource StatusHistoryDataGridStyle}">
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="BorderThickness" Value="0"/>
@@ -139,37 +129,7 @@
                 </DataGrid.CellStyle>
                 <DataGrid.Columns>
 
-                    <!-- Glyph -->
-                    <DataGridTextColumn Binding="{Binding StatusAsGlyph}" Header="">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Padding" Value="5,1"/>
-                                <Setter Property="FontFamily" Value="Marlett"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="IsHitTestVisible" Value="False"/>
-                                <Setter Property="FontSize" Value="18"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding StatusAsString}" Value="DOWN">
-                                        <Setter Property="Foreground" Value="#dc322f" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding StatusAsString}" Value="[ERROR]">
-                                        <Setter Property="Foreground" Value="#dc322f" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding StatusAsString}" Value="UP">
-                                        <Setter Property="Foreground" Value="#859900" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding StatusAsString}" Value="started">
-                                        <Setter Property="Foreground" Value="#61b8ff" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding StatusAsString}" Value="stopped">
-                                        <Setter Property="Foreground" Value="#ecce51" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
-                    <!-- Timestamp -->
+                    <!-- Timestamp and status glyph -->
                     <DataGridTextColumn Binding="{Binding Timestamp}" Header="Timestamp" MinWidth="90">
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource {x:Type DataGridCell}}">
@@ -182,9 +142,37 @@
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type DataGridCell}">
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Timestamp, StringFormat=d }" Foreground="#989899" Padding="5,1,0,0"/>
+                                                <TextBlock Text="{Binding StatusAsGlyph}">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Setter Property="Padding" Value="3,2,0,2"/>
+                                                            <Setter Property="FontFamily" Value="Marlett"/>
+                                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                                            <Setter Property="IsHitTestVisible" Value="False"/>
+                                                            <Setter Property="FontSize" Value="12"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding StatusAsString}" Value="DOWN">
+                                                                    <Setter Property="Foreground" Value="#dc322f" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding StatusAsString}" Value="[ERROR]">
+                                                                    <Setter Property="Foreground" Value="#dc322f" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding StatusAsString}" Value="UP">
+                                                                    <Setter Property="Foreground" Value="#859900" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding StatusAsString}" Value="started">
+                                                                    <Setter Property="Foreground" Value="#61b8ff" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding StatusAsString}" Value="stopped">
+                                                                    <Setter Property="Foreground" Value="#ecce51" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBlock Text="{Binding Timestamp, StringFormat=d }" Foreground="#989899" Padding="4,2,0,0"/>
                                                 <TextBlock Text=" "/>
-                                                <TextBlock Text="{Binding Timestamp, StringFormat=T}" Foreground="#e0e0e1" Padding="0,1,25,1"/>
+                                                <TextBlock Text="{Binding Timestamp, StringFormat=T}" Foreground="#e0e0e1" Padding="0,2,25,2"/>
                                             </StackPanel>
                                         </ControlTemplate>
                                     </Setter.Value>
@@ -197,7 +185,7 @@
                     <DataGridTextColumn Binding="{Binding Hostname}" Header="Address" MinWidth="90">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Padding" Value="5,1,25,1"/>
+                                <Setter Property="Padding" Value="5,2,25,2"/>
                                 <Setter Property="Foreground" Value="#b6fab4"/>
                                 <Setter Property="VerticalAlignment" Value="Center"/>
                             </Style>
@@ -208,7 +196,7 @@
                     <DataGridTextColumn Binding="{Binding Alias}" Header="Alias" MinWidth="50">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Padding" Value="5,1,25,1"/>
+                                <Setter Property="Padding" Value="5,2,25,2"/>
                                 <Setter Property="Foreground" Value="#f4f4f4"/>
                                 <Setter Property="VerticalAlignment" Value="Center"/>
                             </Style>
@@ -219,7 +207,7 @@
                     <DataGridTextColumn Binding="{Binding StatusAsString}" Header="Status" Width="*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Padding" Value="5,1"/>
+                                <Setter Property="Padding" Value="5,2"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Down}">
                                         <Setter Property="Foreground" Value="#dc322f" />
@@ -243,35 +231,7 @@
                 </DataGrid.Columns>
 
             </DataGrid>
-
-            <!-- Placeholder text for no items in history -->
-            <!--<Border Background="#313132">
-            <Border.Style>
-                <Style TargetType="Border">
-                    <Setter Property="Visibility" Value="Collapsed" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Items.Count, ElementName=StatusHistory}" Value="0">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Border.Style>
-            <StackPanel Grid.Row="0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
-                <TextBlock Foreground="#f0f0f0"
-                           FontSize="24"
-                           HorizontalAlignment="Center"
-                           Text="{x:Static resource:Strings.StatusHistory_NoChanges}" />
-                <TextBlock Foreground="#888"
-                           Width="200"
-                           TextWrapping="Wrap"
-                           HorizontalAlignment="Center"
-                           Margin="0,10,0,0"
-                           Text="{x:Static resource:Strings.StatusHistory_NoChangesDescription}" />
-            </StackPanel>
-        </Border>-->
-
+            
             <!-- Filter section -->
             <DockPanel Grid.Row="2">
                 <!-- Logo -->
@@ -333,6 +293,30 @@
                     </StackPanel>
                 </DockPanel>
             </DockPanel>
+            
+            <!-- Overlay for no items in history -->
+            <Border Background="#0e0e0e" Grid.Row="1">
+                <Border.Style>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Items.Count, ElementName=StatusHistory}" Value="0">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Foreground="#ffd43b"
+                               FontSize="32"
+                               HorizontalAlignment="Center"
+                               Text="{x:Static resource:Strings.StatusHistory_NoChanges}" />
+                    <TextBlock Foreground="#e8e8e8"
+                               TextWrapping="Wrap"
+                               Margin="0,10,0,0"
+                               Text="{x:Static resource:Strings.StatusHistory_NoChangesDescription}" />
+                </StackPanel>
+            </Border>
         </Grid>
     </Border>
 </Window>

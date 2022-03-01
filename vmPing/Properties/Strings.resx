@@ -377,7 +377,7 @@
     <comment>Example:   127.0.0.1 "is" DOWN</comment>
   </data>
   <data name="StatusHistory_NoChanges" xml:space="preserve">
-    <value>No status changes</value>
+    <value>No status history</value>
   </data>
   <data name="StatusHistory_NoChangesDescription" xml:space="preserve">
     <value>When a host changes between down or up, it'll show up here</value>

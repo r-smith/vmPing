@@ -65,7 +65,7 @@
     <SolidColorBrush x:Key="DarkTextBox.Static.Border" Color="#abadb3"/>
     <SolidColorBrush x:Key="DarkTextBox.MouseOver.Border" Color="#00bfff"/>
     <SolidColorBrush x:Key="DarkTextBox.Focus.Border" Color="#007acc"/>
-    <Style x:Key="DarkModeTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+    <Style x:Key="TextBoxStyle.Dark" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="Background" Value="{StaticResource DarkTextBox.Static.Background}"/>
         <Setter Property="Foreground" Value="{StaticResource DarkTextBox.Static.Foreground}"/>
         <Setter Property="BorderBrush" Value="{StaticResource DarkTextBox.Static.Border}"/>

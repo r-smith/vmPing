@@ -144,7 +144,7 @@
     <SolidColorBrush x:Key="DarkOptionMark.Pressed.Border" Color="#000"/>
     <SolidColorBrush x:Key="DarkOptionMark.Pressed.Glyph" Color="#888"/>
     <SolidColorBrush x:Key="DarkOptionMark.Static.Glyph" Color="#00bfff"/>
-    <Style x:Key="DarkModeCheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+    <Style x:Key="CheckBoxStyle.Dark" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
         <Setter Property="Background" Value="{StaticResource DarkOptionMark.Static.Background}"/>
         <Setter Property="Foreground" Value="{StaticResource DarkOptionMark.Foreground}"/>
         <Setter Property="BorderBrush" Value="{StaticResource DarkOptionMark.Static.Border}"/>

@@ -296,7 +296,7 @@
                     <StackPanel DockPanel.Dock="Left">
                         <TextBlock Text="Filter" Foreground="#ecce51" Margin="0,0,0,2" Opacity="0.8"/>
                         <TextBox x:Name="AddressFilterField"
-                                 Style="{StaticResource DarkModeTextBoxStyle}"
+                                 Style="{StaticResource TextBoxStyle.Dark}"
                                  Width="300"
                                  KeyUp="TextBox_KeyUp"/>
                     </StackPanel>
@@ -305,13 +305,13 @@
                         <StackPanel Orientation="Horizontal">
                             <Grid Width="100">
                                 <CheckBox x:Name="FilterUp"
-                                          Style="{StaticResource DarkModeCheckBoxStyle}"
+                                          Style="{StaticResource CheckBoxStyle.Dark}"
                                           Content="Up"
                                           IsChecked="True"
                                           Click="Filter_Click"/>
                             </Grid>
                             <CheckBox x:Name="FilterStart"
-                                      Style="{StaticResource DarkModeCheckBoxStyle}"
+                                      Style="{StaticResource CheckBoxStyle.Dark}"
                                       Content="Start"
                                       IsChecked="True"
                                       Click="Filter_Click" />
@@ -319,13 +319,13 @@
                         <StackPanel Orientation="Horizontal">
                             <Grid Width="100">
                                 <CheckBox x:Name="FilterDown"
-                                          Style="{StaticResource DarkModeCheckBoxStyle}"
+                                          Style="{StaticResource CheckBoxStyle.Dark}"
                                           Content="Down"
                                           IsChecked="True"
                                           Click="Filter_Click"/>
                             </Grid>
                             <CheckBox x:Name="FilterStop"
-                                      Style="{StaticResource DarkModeCheckBoxStyle}"
+                                      Style="{StaticResource CheckBoxStyle.Dark}"
                                       Content="Stop"
                                       IsChecked="True"
                                       Click="Filter_Click" />

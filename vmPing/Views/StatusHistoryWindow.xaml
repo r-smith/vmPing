@@ -11,6 +11,10 @@
         Background="#313132"
         PreviewKeyDown="Window_PreviewKeyDown">
 
+    <Window.Resources>
+        <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ScrollBarStyle.Dark}"/>
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

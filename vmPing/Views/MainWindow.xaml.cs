@@ -147,7 +147,7 @@ namespace vmPing.Views
                 new KeyGesture(Key.F5)));
             InputBindings.Add(new InputBinding(
                 HelpCommand,
-                new KeyGesture(Key.F1)));
+                new KeyGesture(Constants.HelpKeyBinding)));
             InputBindings.Add(new InputBinding(
                 NewInstanceCommand,
                 new KeyGesture(Key.N, ModifierKeys.Control)));
@@ -165,7 +165,7 @@ namespace vmPing.Views
                 new KeyGesture(Key.F2)));
             InputBindings.Add(new InputBinding(
                 StatusHistoryCommand,
-                new KeyGesture(Key.F12)));
+                new KeyGesture(Constants.StatusHistoryKeyBinding)));
 
             OptionsMenu.Command = OptionsCommand;
             StartStopMenu.Command = StartStopCommand;

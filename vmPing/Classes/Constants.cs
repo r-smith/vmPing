@@ -1,4 +1,6 @@
-﻿namespace vmPing.Classes
+﻿using System.Windows.Input;
+
+namespace vmPing.Classes
 {
     class Constants
     {
@@ -42,5 +44,10 @@
         // Default audio alert file paths.
         public const string DefaultAudioDownFilePath = @"%WINDIR%\Media\Windows Notify Email.wav";
         public const string DefaultAudioUpFilePath = @"%WINDIR%\Media\Windows Unlock.wav";
+
+        // Key bindings.
+        public const Key StatusHistoryKeyBinding = Key.F12;
+        public const Key HelpKeyBinding = Key.F1;
+
     }
 }

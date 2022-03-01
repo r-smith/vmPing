@@ -50,7 +50,11 @@ namespace vmPing.Views
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape) Close();
+            if (e.Key == Key.Escape || e.Key == Constants.StatusHistoryKeyBinding)
+            {
+                e.Handled = true;
+                Close();
+            }
         }
 
         private void TextBox_KeyUp(object sender, KeyEventArgs e)

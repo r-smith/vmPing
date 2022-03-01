@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
+using vmPing.Classes;
 
 namespace vmPing.Views
 {
@@ -85,7 +86,11 @@ namespace vmPing.Views
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape) Close();
+            if (e.Key == Key.Escape || e.Key == Constants.HelpKeyBinding)
+            {
+                e.Handled = true;
+                Close();
+            }
         }
     }
 }

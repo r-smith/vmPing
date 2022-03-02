@@ -234,34 +234,17 @@
             
             <!-- Filter section -->
             <DockPanel Grid.Row="2">
-                <!-- Logo --><!--
-                <StackPanel DockPanel.Dock="Right"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"
-                            Orientation="Horizontal">
-                    <Image Source="{StaticResource icon.vmping-logo-simple}"
-                           Width="16"
-                           Height="16" />
-                    <TextBlock Grid.Row="3"
-                               Text="vmPing"
-                               FontSize="13"
-                               Foreground="White"
-                               Opacity="0.5"
-                               Margin="7,0,5,0"
-                               HorizontalAlignment="Right"
-                               VerticalAlignment="Center"/>
-                </StackPanel>-->
                 <!-- Filter section -->
                 <DockPanel DockPanel.Dock="Left" Margin="12,6,6,12">
                     <StackPanel DockPanel.Dock="Left">
-                        <TextBlock Text="Filter" Foreground="#ecce51" Margin="0,0,0,2" Opacity="0.8"/>
+                        <TextBlock Text="Filter" Foreground="#ecce51" Margin="0,0,0,2"/>
                         <TextBox x:Name="AddressFilterField"
                                  Style="{StaticResource TextBoxStyle.Dark}"
                                  Width="300"
                                  KeyUp="TextBox_KeyUp"/>
                     </StackPanel>
                     <StackPanel Margin="15,0,0,0">
-                        <TextBlock Text="Include" Foreground="#ecce51" Margin="0,0,0,2" Opacity="0.8"/>
+                        <TextBlock Text="Include" Foreground="#ecce51" Margin="0,0,0,2"/>
                         <StackPanel Orientation="Horizontal">
                             <Grid Width="100">
                                 <CheckBox x:Name="FilterUp"
@@ -293,7 +276,7 @@
                     </StackPanel>
                     <StackPanel DockPanel.Dock="Left" Margin="25,0,0,0" HorizontalAlignment="Left">
                         <TextBlock/>
-                        <Button Style="{StaticResource ButtonStandardStyle}"
+                        <Button Style="{StaticResource ButtonStyle.Dark}"
                                 Content="Export"
                                 Click="Export_Click"
                                 Width="100"/>

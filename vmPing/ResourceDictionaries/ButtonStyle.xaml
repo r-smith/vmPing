@@ -170,6 +170,22 @@
         <Setter Property="Background" Value="#3f3f46"/>
         <Setter Property="BorderBrush" Value="#abadb3"/>
         <Setter Property="Foreground" Value="#ffffff"/>
+        <Setter Property="FocusVisualStyle">
+            <Setter.Value>
+                <Style>
+                    <Setter Property="Control.Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Rectangle Margin="2"
+                                           Stroke="#abadb3"
+                                           StrokeThickness="1"
+                                           StrokeDashArray="1 2"/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">

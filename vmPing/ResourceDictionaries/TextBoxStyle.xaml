@@ -91,7 +91,6 @@
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="true">
                             <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource DarkTextBox.Focus.Border}"/>
-                            <Setter Property="BorderThickness" TargetName="border" Value="1,1,1,2"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -158,6 +158,16 @@
         </DrawingImage.Drawing>
     </DrawingImage>
     
+    <!-- Icon: delete -->
+    <!-- Credit: Ryan Smith-->
+    <DrawingImage x:Key="icon.delete">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V512 H320 V0 H0 Z">
+                <GeometryDrawing Brush="#0097fb" Geometry="F1 M320,512z M0,0z M193.94,256L296.5,153.44 317.65,132.29C320.77,129.17,320.77,124.1,317.65,120.98L295.02,98.35C291.9,95.23,286.83,95.23,283.71,98.35L160,222.06 36.29,98.34C33.17,95.22,28.1,95.22,24.98,98.34L2.34,120.97C-0.78,124.09,-0.78,129.16,2.34,132.28L126.06,256 2.34,379.71C-0.78,382.83,-0.78,387.9,2.34,391.02L24.97,413.65C28.09,416.77,33.16,416.77,36.28,413.65L160,289.94 262.56,392.5 283.71,413.65C286.83,416.77,291.9,416.77,295.02,413.65L317.65,391.02C320.77,387.9,320.77,382.83,317.65,379.71L193.94,256z" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
     <!-- Font Awesome: chevron-circle-down-solid -->
     <DrawingImage x:Key="icon.chevron-circle-down">
         <DrawingImage.Drawing>

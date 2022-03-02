@@ -90,7 +90,7 @@ namespace vmPing.Views
 
             if (statusMatch)
             {
-                var filterText = AddressFilterField.Text.ToUpper();
+                var filterText = FilterField.Text.ToUpper();
                 if (!string.IsNullOrEmpty(entry.Alias) && entry.Alias.ToUpper().Contains(filterText))
                     return true;
                 else if (!string.IsNullOrEmpty(entry.Hostname) && entry.Hostname.ToUpper().Contains(filterText))
@@ -106,6 +106,12 @@ namespace vmPing.Views
 
         private void Filter_Click(object sender, RoutedEventArgs e)
         {
+            _statusHistoryView.Refresh();
+        }
+
+        private void FilterClear_Click(object sender, RoutedEventArgs e)
+        {
+            FilterField.Clear();
             _statusHistoryView.Refresh();
         }
 

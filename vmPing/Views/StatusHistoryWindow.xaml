@@ -236,13 +236,47 @@
             <DockPanel Grid.Row="2">
                 <!-- Filter section -->
                 <DockPanel DockPanel.Dock="Left" Margin="12,6,6,12">
+                    <!-- Filter -->
                     <StackPanel DockPanel.Dock="Left">
                         <TextBlock Text="Filter" Foreground="#ecce51" Margin="0,0,0,2"/>
-                        <TextBox x:Name="AddressFilterField"
-                                 Style="{StaticResource TextBoxStyle.Dark}"
-                                 Width="300"
-                                 KeyUp="TextBox_KeyUp"/>
+                        <!-- Filter -->
+                        <Grid>
+                            <!-- Textbox -->
+                            <TextBox x:Name="FilterField"
+                                     Style="{StaticResource TextBoxStyle.Dark}"
+                                     Width="300"
+                                     KeyUp="TextBox_KeyUp"/>
+                            <!-- Clear button -->
+                            <Button HorizontalAlignment="Right"
+                                    Width="20"
+                                    Margin="1"
+                                    Click="FilterClear_Click"
+                                    Focusable="False"
+                                    IsTabStop="False">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Border>
+                                            <Border.Style>
+                                                <Style TargetType="{x:Type Border}">
+                                                    <Setter Property="Background" Value="#00000000"/>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="#1d1d20"/>
+                                                        </Trigger>
+                                                        <DataTrigger Binding="{Binding Path=Text, ElementName=FilterField}" Value="">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <Image Source="{StaticResource icon.delete}" Width="13" Height="13"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </Grid>
                     </StackPanel>
+                    <!-- Filter checkbox options -->
                     <StackPanel Margin="15,0,0,0">
                         <TextBlock Text="Include" Foreground="#ecce51" Margin="0,0,0,2"/>
                         <StackPanel Orientation="Horizontal">
@@ -274,6 +308,7 @@
                                       Click="Filter_Click" />
                         </StackPanel>
                     </StackPanel>
+                    <!-- Export button -->
                     <StackPanel DockPanel.Dock="Left" Margin="25,0,0,0" HorizontalAlignment="Left">
                         <TextBlock/>
                         <Button Style="{StaticResource ButtonStyle.Dark}"

@@ -6,9 +6,11 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
 using vmPing.Classes;
 
 namespace vmPing.Views
@@ -50,7 +52,11 @@ namespace vmPing.Views
                             return;
                     }
                 }
-                StatusHistory.ScrollIntoView(StatusHistory.Items[StatusHistory.Items.Count - 1]);
+                if (VisualTreeHelper.GetChild(StatusHistory, 0) is Decorator border)
+                {
+                    ScrollViewer scroll = border.Child as ScrollViewer;
+                    scroll?.ScrollToEnd();
+                }
             }
         }
 

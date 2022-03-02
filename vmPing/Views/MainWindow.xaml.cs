@@ -138,7 +138,7 @@ namespace vmPing.Views
             CommandBindings.Add(new CommandBinding(AddProbeCommand, AddProbeExecute));
             CommandBindings.Add(new CommandBinding(MultiInputCommand, MultiInputWindowExecute));
             CommandBindings.Add(new CommandBinding(StatusHistoryCommand, StatusHistoryExecute));
-
+            
             InputBindings.Add(new InputBinding(
                 OptionsCommand,
                 new KeyGesture(Key.F10)));
@@ -563,6 +563,7 @@ namespace vmPing.Views
             {
                 LoadAliases();
             }
+            Focus();
         }
 
         private void StatusHistoryExecute(object sender, ExecutedRoutedEventArgs e)

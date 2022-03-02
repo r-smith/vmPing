@@ -2,7 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -99,6 +101,64 @@ namespace vmPing.Views
         private void Filter_Click(object sender, RoutedEventArgs e)
         {
             _statusHistoryView.Refresh();
+        }
+
+        private void Export_Click(object sender, RoutedEventArgs e)
+        {
+            using (System.Windows.Forms.SaveFileDialog exportDialog = new System.Windows.Forms.SaveFileDialog())
+            {
+                exportDialog.Title = "Export";
+                exportDialog.RestoreDirectory = true;
+                exportDialog.OverwritePrompt = true;
+                exportDialog.AddExtension = true;
+                exportDialog.AutoUpgradeEnabled = true;
+                exportDialog.Filter = "CSV (Comma delimited)|*.csv|Text (Tab delimited)|*.txt|Text (Space delimited)|*.txt";
+                exportDialog.FileName = "status-history.csv";
+                if (exportDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK && exportDialog.FileName != "")
+                {
+                    switch (exportDialog.FilterIndex)
+                    {
+                        // Note: FilterIndex is not zero-based. The first index is 1.
+                        case 1:
+                            // CSV.
+                            WriteCollectionToFile(filePath: exportDialog.FileName, delimeter: ',');
+                            break;
+                        case 2:
+                            // Tab Delimited.
+                            WriteCollectionToFile(filePath: exportDialog.FileName, delimeter: '\t');
+                            break;
+                        case 3:
+                            // Space delimited.
+                            WriteCollectionToFile(filePath: exportDialog.FileName, delimeter: ' ');
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void WriteCollectionToFile(string filePath, char delimeter)
+        {
+            Cursor = Cursors.Wait;
+            StringBuilder sb = new StringBuilder();
+            foreach (StatusChangeLog s in _statusHistoryView)
+            {
+                sb.AppendLine($"{s.Timestamp}{delimeter}{s.Hostname}{delimeter}{s.Alias?.Replace(",", "")}{delimeter}{s.StatusAsString}");
+            }
+
+            try
+            {
+                using (StreamWriter writer = File.CreateText(filePath))
+                {
+                    writer.Write(sb.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                DialogWindow.ErrorWindow($"Failed to write to '{filePath}'. {ex.Message}");
+            }
+            Cursor = Cursors.Arrow;
         }
 
         private void Window_StateChanged(object sender, System.EventArgs e)

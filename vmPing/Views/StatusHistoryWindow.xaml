@@ -7,7 +7,7 @@
         Height="400"
         Width="720"
         MinHeight="250"
-        MinWidth="400"
+        MinWidth="600"
         Background="#313132"
         WindowStyle="None"
         PreviewKeyDown="Window_PreviewKeyDown"
@@ -234,7 +234,7 @@
             
             <!-- Filter section -->
             <DockPanel Grid.Row="2">
-                <!-- Logo -->
+                <!-- Logo --><!--
                 <StackPanel DockPanel.Dock="Right"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Bottom"
@@ -250,7 +250,7 @@
                                Margin="7,0,5,0"
                                HorizontalAlignment="Right"
                                VerticalAlignment="Center"/>
-                </StackPanel>
+                </StackPanel>-->
                 <!-- Filter section -->
                 <DockPanel DockPanel.Dock="Left" Margin="12,6,6,12">
                     <StackPanel DockPanel.Dock="Left">
@@ -290,6 +290,13 @@
                                       IsChecked="True"
                                       Click="Filter_Click" />
                         </StackPanel>
+                    </StackPanel>
+                    <StackPanel DockPanel.Dock="Left" Margin="25,0,0,0" HorizontalAlignment="Left">
+                        <TextBlock/>
+                        <Button Style="{StaticResource ButtonStandardStyle}"
+                                Content="Export"
+                                Click="Export_Click"
+                                Width="100"/>
                     </StackPanel>
                 </DockPanel>
             </DockPanel>

@@ -192,13 +192,13 @@
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding StatusAsString}" Value="DOWN">
+                                        <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Down}">
                                             <Setter Property="Foreground" Value="#dc322f" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding StatusAsString}" Value="[ERROR]">
+                                        <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Error}">
                                             <Setter Property="Foreground" Value="#dc322f" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding StatusAsString}" Value="UP">
+                                        <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Up}">
                                             <Setter Property="Foreground" Value="#859900" />
                                         </DataTrigger>
                                     </Style.Triggers>

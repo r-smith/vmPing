@@ -781,7 +781,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DOWN.
+        ///   Looks up a localized string similar to down.
         /// </summary>
         public static string StatusChange_Down {
             get {
@@ -790,7 +790,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [ERROR].
+        ///   Looks up a localized string similar to [error].
         /// </summary>
         public static string StatusChange_Error {
             get {
@@ -799,7 +799,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UP.
+        ///   Looks up a localized string similar to up.
         /// </summary>
         public static string StatusChange_Up {
             get {

@@ -7,7 +7,7 @@ vmPing
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
 **[Click here to download the latest release](https://github.com/R-Smith/vmPing/releases/latest/download/vmPing.exe)**
-##### (1.3.18 released on September 9, 2021)
+##### (1.3.19 released on March 3, 2022)
 
 ##### Notes
 * There is no installer.  Just run the .exe.
@@ -28,6 +28,14 @@ Screenshots
 
 Recent Changes
 --------------
+### Version 1.3.19
+* The _Status History_ window now has the ability to export. When exporting, you have three delimiter options: comma (CSV), tab, or space.
+* The _Status History_ window has a new, cleaner look with a custom window border.
+* Added a _clear_ button to the filter box on the _Status History_ window.
+* Auto-scrolling now pauses while clicking (and holding) the scrollbar within each probe window. The ability to completely toggle auto-scrolling is planned.
+* Various minor visual style updates.
+
+
 ### Version 1.3.18
 * Fix for crashes and performance issues. Issue #70 and Issue #72. Ping output text is no longer selectable. Selectable text was added in version 1.3.15 and this has been causing problems. I will look for another way to reintroduce selectable text in a later version. For now, you can click the icon to open a probe in a separate window and the separate window has selectable text.
 * Popup notification window now scales its size to match its contents. Issue #67.

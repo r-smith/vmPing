@@ -183,7 +183,9 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+                        <!-- Status glyph -->
                         <TextBlock DockPanel.Dock="Left"
+                                   Name="StatusIndicator"
                                    Text="{Binding StatusAsGlyph}"
                                    FontSize="18"
                                    FontFamily="Marlett"
@@ -205,6 +207,7 @@
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
+                        <!-- Timestamp -->
                         <TextBlock DockPanel.Dock="Left"
                                    Text="{Binding Timestamp, StringFormat='[{0}]'}"
                                    FontSize="15"
@@ -212,39 +215,27 @@
                                    VerticalAlignment="Center"
                                    Opacity="0.6"
                                    Padding="6,0,0,0" />
+                        <!-- Hostname (or alias) -->
                         <TextBlock DockPanel.Dock="Left"
                                    Text="{Binding AliasIfExistOrHostname}"
                                    FontSize="17"
                                    Foreground="White"
                                    VerticalAlignment="Center"
                                    Padding="9,0,0,0" />
+                        <!-- Arrow symbol -->
                         <TextBlock DockPanel.Dock="Left"
-                                   Text="{x:Static resource:Strings.StatusChange_Verb}"
+                                   Text="🠖"
                                    FontSize="17"
                                    Foreground="White"
                                    VerticalAlignment="Center"
-                                   Opacity="0.9"
+                                   Opacity="0.6"
                                    Padding="5,0" />
+                        <!-- Status -->
                         <TextBlock DockPanel.Dock="Left"
                                    Text="{Binding StatusAsString}"
                                    FontSize="17"
-                                   VerticalAlignment="Center">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Down}">
-                                            <Setter Property="Foreground" Value="#dc322f" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Error}">
-                                            <Setter Property="Foreground" Value="#dc322f" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Up}">
-                                            <Setter Property="Foreground" Value="#859900" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
+                                   VerticalAlignment="Center"
+                                   Foreground="{Binding ElementName=StatusIndicator, Path=Foreground}"/>
                     </DockPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

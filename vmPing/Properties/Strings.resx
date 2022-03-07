@@ -369,12 +369,20 @@
   <data name="StatusChange_Error" xml:space="preserve">
     <value>[error]</value>
   </data>
+  <data name="StatusChange_LatencyHigh" xml:space="preserve">
+    <value>high latency</value>
+  </data>
+  <data name="StatusChange_LatencyNormal" xml:space="preserve">
+    <value>normal latency</value>
+  </data>
+  <data name="StatusChange_Start" xml:space="preserve">
+    <value>started</value>
+  </data>
+  <data name="StatusChange_Stop" xml:space="preserve">
+    <value>stopped</value>
+  </data>
   <data name="StatusChange_Up" xml:space="preserve">
     <value>up</value>
-  </data>
-  <data name="StatusChange_Verb" xml:space="preserve">
-    <value>is</value>
-    <comment>Example:   127.0.0.1 "is" down</comment>
   </data>
   <data name="StatusHistory_NoChanges" xml:space="preserve">
     <value>No status history</value>

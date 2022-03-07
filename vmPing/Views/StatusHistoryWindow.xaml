@@ -160,10 +160,10 @@
                                                                 <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Up}">
                                                                     <Setter Property="Foreground" Value="#859900" />
                                                                 </DataTrigger>
-                                                                <DataTrigger Binding="{Binding StatusAsString}" Value="started">
+                                                                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Start}">
                                                                     <Setter Property="Foreground" Value="#61b8ff" />
                                                                 </DataTrigger>
-                                                                <DataTrigger Binding="{Binding StatusAsString}" Value="stopped">
+                                                                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Stop}">
                                                                     <Setter Property="Foreground" Value="#ecce51" />
                                                                 </DataTrigger>
                                                             </Style.Triggers>
@@ -218,10 +218,10 @@
                                     <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Up}">
                                         <Setter Property="Foreground" Value="#859900" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding StatusAsString}" Value="started">
+                                    <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Start}">
                                         <Setter Property="Foreground" Value="#61b8ff" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding StatusAsString}" Value="stopped">
+                                    <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Stop}">
                                         <Setter Property="Foreground" Value="#ecce51" />
                                     </DataTrigger>
                                 </Style.Triggers>

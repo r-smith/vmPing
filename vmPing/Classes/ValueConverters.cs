@@ -112,6 +112,7 @@ namespace vmPing.Classes
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Down);
                 case ProbeStatus.Error:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Error);
+                case ProbeStatus.LatencyHigh:
                 case ProbeStatus.Indeterminate:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Indeterminate);
                 case ProbeStatus.Scanner:
@@ -139,6 +140,7 @@ namespace vmPing.Classes
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Down);
                 case ProbeStatus.Error:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Error);
+                case ProbeStatus.LatencyHigh:
                 case ProbeStatus.Indeterminate:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Indeterminate);
                 case ProbeStatus.Scanner:
@@ -166,6 +168,7 @@ namespace vmPing.Classes
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Down);
                 case ProbeStatus.Error:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Error);
+                case ProbeStatus.LatencyHigh:
                 case ProbeStatus.Indeterminate:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Indeterminate);
                 default:
@@ -191,6 +194,7 @@ namespace vmPing.Classes
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Down);
                 case ProbeStatus.Error:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Error);
+                case ProbeStatus.LatencyHigh:
                 case ProbeStatus.Indeterminate:
                     return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Indeterminate);
                 case ProbeStatus.Scanner:
@@ -273,23 +277,18 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var returnString = string.Empty;
             switch ((ProbeStatus)value)
             {
-                case ProbeStatus.Error:
-                    //returnString = "r";
-                    break;
-                case ProbeStatus.Down:
-                    returnString = "u";
-                    break;
-                case ProbeStatus.Indeterminate:
-                    returnString = "i";
-                    break;
                 case ProbeStatus.Up:
-                    returnString = "t";
-                    break;
+                    return "t";
+                case ProbeStatus.Down:
+                    return "u";
+                case ProbeStatus.LatencyHigh:
+                case ProbeStatus.Indeterminate:
+                    return "i";
+                default:
+                    return string.Empty;
             }
-            return returnString;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

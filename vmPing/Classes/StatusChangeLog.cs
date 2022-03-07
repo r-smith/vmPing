@@ -23,26 +23,25 @@ namespace vmPing.Classes
         {
             get
             {
-                string returnString = string.Empty;
                 switch (Status)
                 {
                     case ProbeStatus.Down:
-                        returnString = Strings.StatusChange_Down;
-                        break;
+                        return Strings.StatusChange_Down;
                     case ProbeStatus.Up:
-                        returnString = Strings.StatusChange_Up;
-                        break;
+                        return Strings.StatusChange_Up;
                     case ProbeStatus.Error:
-                        returnString = Strings.StatusChange_Error;
-                        break;
+                        return Strings.StatusChange_Error;
                     case ProbeStatus.Start:
-                        returnString = "started";
-                        break;
+                        return Strings.StatusChange_Start;
                     case ProbeStatus.Stop:
-                        returnString = "stopped";
-                        break;
+                        return Strings.StatusChange_Stop;
+                    case ProbeStatus.LatencyHigh:
+                        return Strings.StatusChange_LatencyHigh;
+                    case ProbeStatus.LatencyNormal:
+                        return Strings.StatusChange_LatencyNormal;
+                    default:
+                        return string.Empty;
                 }
-                return returnString;
             }
         }
 
@@ -50,22 +49,16 @@ namespace vmPing.Classes
         {
             get
             {
-                string returnString = string.Empty;
                 switch (Status)
                 {
                     case ProbeStatus.Error:
                     case ProbeStatus.Down:
-                        returnString = "u";
-                        break;
+                        return "u";
                     case ProbeStatus.Up:
-                        returnString = "t";
-                        break;
-                    case ProbeStatus.Start:
-                    case ProbeStatus.Stop:
-                        returnString = "h";
-                        break;
+                        return "t";
+                    default:
+                        return "h";
                 }
-                return returnString;
             }
         }
     }

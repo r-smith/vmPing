@@ -799,20 +799,47 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to high latency.
+        /// </summary>
+        public static string StatusChange_LatencyHigh {
+            get {
+                return ResourceManager.GetString("StatusChange_LatencyHigh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to normal latency.
+        /// </summary>
+        public static string StatusChange_LatencyNormal {
+            get {
+                return ResourceManager.GetString("StatusChange_LatencyNormal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to started.
+        /// </summary>
+        public static string StatusChange_Start {
+            get {
+                return ResourceManager.GetString("StatusChange_Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to stopped.
+        /// </summary>
+        public static string StatusChange_Stop {
+            get {
+                return ResourceManager.GetString("StatusChange_Stop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to up.
         /// </summary>
         public static string StatusChange_Up {
             get {
                 return ResourceManager.GetString("StatusChange_Up", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to is.
-        /// </summary>
-        public static string StatusChange_Verb {
-            get {
-                return ResourceManager.GetString("StatusChange_Verb", resourceCulture);
             }
         }
         

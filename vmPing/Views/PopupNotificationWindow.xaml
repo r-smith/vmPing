@@ -203,6 +203,12 @@
                                         <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Up}">
                                             <Setter Property="Foreground" Value="#859900" />
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_LatencyHigh}">
+                                            <Setter Property="Foreground" Value="#ecce51" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_LatencyNormal}">
+                                            <Setter Property="Foreground" Value="#61b8ff" />
+                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>

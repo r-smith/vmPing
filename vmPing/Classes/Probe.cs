@@ -16,6 +16,8 @@ namespace vmPing.Classes
         Up,
         Down,
         Error,
+        LatencyHigh,
+        LatencyNormal,
         Indeterminate,
         Inactive,
         Scanner,

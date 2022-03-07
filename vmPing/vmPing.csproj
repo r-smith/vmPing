@@ -77,7 +77,6 @@
     <Compile Include="Classes\Util.cs" />
     <Compile Include="Classes\ValueConverters.cs" />
     <Compile Include="Controls\AutoScrollListBox.cs" />
-    <Compile Include="Controls\ListBoxBehavior.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

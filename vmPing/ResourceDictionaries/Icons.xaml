@@ -297,4 +297,18 @@
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
+
+    <!-- Icon: down-arrow-scroll-indicator -->
+    <DrawingImage x:Key="icon.down-arrow-scroll-indicator">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V22 H22 V0 H0 Z">
+                <DrawingGroup.Transform>
+                    <TranslateTransform X="0" Y="0.001250147819519043" />
+                </DrawingGroup.Transform>
+                <DrawingGroup Transform="-0.00013,0.03541,0.03541,0.00013,3.02,2.988">
+                    <GeometryDrawing Brush="#202020" Geometry="F1 M22,22z M0,0z M345.44,248.29L151.15,442.57C138.791,454.935 118.753,454.935 106.4,442.57 94.046,430.216 94.046,410.179 106.4,397.826L278.31,225.916 106.4,54.016C94.046,41.657 94.046,21.622 106.4,9.26800000000002 118.754,-3.09099999999998 138.791,-3.09099999999998 151.15,9.26800000000002L345.44,203.548C351.617,209.728 354.702,217.819 354.702,225.914 354.702,234.013 351.611,242.11 345.435,248.287" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>

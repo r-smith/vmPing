@@ -76,6 +76,7 @@
     <Compile Include="Classes\StatusChangeLog.cs" />
     <Compile Include="Classes\Util.cs" />
     <Compile Include="Classes\ValueConverters.cs" />
+    <Compile Include="Controls\AutoScrollAdorner.cs" />
     <Compile Include="Controls\AutoScrollListBox.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

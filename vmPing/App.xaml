@@ -25,6 +25,7 @@
                 <ResourceDictionary Source="ResourceDictionaries/ScrollBarStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/WindowChrome.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/MenuItemStyle.xaml"/>
+                <ResourceDictionary Source="ResourceDictionaries/SliderStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

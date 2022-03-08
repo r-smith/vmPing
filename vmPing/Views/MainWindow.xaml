@@ -96,18 +96,22 @@
                     <Label Content="{Binding ElementName=ColumnCount, Path=Value}"
                            Margin="0,0,15,0"
                            Width="30"
+                           FontSize="14"
                            HorizontalContentAlignment="Center"
                            VerticalContentAlignment="Center"/>
                     <Slider Name="ColumnCount"
-                            Minimum="1" Maximum="10"
+                            Style="{DynamicResource SliderStyle}"
+                            ValueChanged="ColumnCount_ValueChanged"
+                            Minimum="1"
+                            Maximum="10"
                             Value="3"
-                            TickFrequency="1" SmallChange="1"
+                            TickFrequency="1"
+                            SmallChange="1"
                             TickPlacement="BottomRight"
                             IsSnapToTickEnabled="True"
                             Width="200"
-                            Foreground="Gray"
-                            Margin="0,5"
-                            ValueChanged="ColumnCount_ValueChanged"/>
+                            Foreground="#202020"
+                            Margin="0,8"/>
                 </StackPanel>
             </MenuItem>
 

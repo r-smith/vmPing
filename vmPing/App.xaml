@@ -24,6 +24,7 @@
                 <ResourceDictionary Source="ResourceDictionaries/RadioButtonStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/ScrollBarStyle.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/WindowChrome.xaml"/>
+                <ResourceDictionary Source="ResourceDictionaries/MenuItemStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

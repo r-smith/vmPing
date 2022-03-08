@@ -56,98 +56,23 @@
                 </MultiTrigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-
-        <!-- Remove left margin from menu item dropdown -->
-        <ItemsPanelTemplate x:Key="MenuItemPanelTemplate">
-            <StackPanel Margin="0" Background="White"/>
-        </ItemsPanelTemplate>
-        <Style TargetType="{x:Type MenuItem}">
-            <Setter Property="ItemsPanel" Value="{StaticResource MenuItemPanelTemplate}"/>
-        </Style>
-
-        <Style x:Key="MenuStyle1" TargetType="{x:Type Menu}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="FontFamily" Value="{StaticResource {x:Static SystemFonts.MenuFontFamilyKey}}"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontStyle" Value="Normal"/>
-            <Setter Property="FontWeight" Value="Normal"/>
-            <Setter Property="Foreground" Value="#FF212121"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Menu}">
-                        <Border BorderBrush="Transparent" BorderThickness="0" Background="Transparent" Padding="0,0,0,0">
-                            <ItemsPresenter/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- Custom itemcontroltemplate to remove right padding -->
-        <ControlTemplate x:Key="MenuItemControlTemplate1" TargetType="{x:Type MenuItem}">
-            <Border x:Name="templateRoot" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                <Grid VerticalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <ContentPresenter x:Name="Icon" Content="{TemplateBinding Icon}" ContentSource="Icon" HorizontalAlignment="Center" Height="16" Margin="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" Width="16"/>
-                    <Path x:Name="GlyphPanel" Data="F1M10,1.2L4.7,9.1 4.5,9.1 0,5.2 1.3,3.5 4.3,6.1 8.3,0 10,1.2z" Fill="{TemplateBinding Foreground}" FlowDirection="LeftToRight" Margin="0" Visibility="Collapsed" VerticalAlignment="Center"/>
-                    <Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" Placement="Bottom">
-                        <Border x:Name="SubMenuBorder" BorderBrush="#FF999999" BorderThickness="1" Background="#FFF0F0F0" Padding="2">
-                            <ScrollViewer x:Name="SubMenuScrollViewer" Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}}">
-                                <Grid RenderOptions.ClearTypeHint="Enabled">
-                                    <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
-                                        <Rectangle x:Name="OpaqueRect" Fill="{Binding Background, ElementName=SubMenuBorder}" Height="{Binding ActualHeight, ElementName=SubMenuBorder}" Width="{Binding ActualWidth, ElementName=SubMenuBorder}"/>
-                                    </Canvas>
-                                    <Rectangle Fill="#FFD7D7D7" HorizontalAlignment="Left" Margin="29,2,0,2" Width="1"/>
-                                    <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Cycle" Grid.IsSharedSizeScope="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" KeyboardNavigation.TabNavigation="Cycle"/>
-                                </Grid>
-                            </ScrollViewer>
-                        </Border>
-                    </Popup>
-                </Grid>
-            </Border>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsSuspendingPopupAnimation" Value="True">
-                    <Setter Property="PopupAnimation" TargetName="PART_Popup" Value="None"/>
-                </Trigger>
-                <Trigger Property="Icon" Value="{x:Null}">
-                    <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
-                </Trigger>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
-                    <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
-                </Trigger>
-                <Trigger Property="IsHighlighted" Value="True">
-                    <Setter Property="Background" TargetName="templateRoot" Value="#3D26A0DA"/>
-                    <Setter Property="BorderBrush" TargetName="templateRoot" Value="#FF26A0DA"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="#FF707070"/>
-                    <Setter Property="Fill" TargetName="GlyphPanel" Value="#FF707070"/>
-                </Trigger>
-                <Trigger Property="CanContentScroll" SourceName="SubMenuScrollViewer" Value="False">
-                    <Setter Property="Canvas.Top" TargetName="OpaqueRect" Value="{Binding VerticalOffset, ElementName=SubMenuScrollViewer}"/>
-                    <Setter Property="Canvas.Left" TargetName="OpaqueRect" Value="{Binding HorizontalOffset, ElementName=SubMenuScrollViewer}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
     </Window.Resources>
-    
+
     <!-- Root DockPanel -->
     <DockPanel Background="#aaa">
         <!-- Menu bar -->
         <Menu DockPanel.Dock="Top"
-              FontStretch="Normal"
-              Style="{StaticResource MenuStyle1}">
+              FontStretch="Normal">
+            <Menu.Resources>
+                <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource MenuItemStyle}"/>
+            </Menu.Resources>
             <Menu.ItemsPanel>
                 <ItemsPanelTemplate>
                     <DockPanel HorizontalAlignment="Stretch" LastChildFill="False" Background="White"/>
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
 
-            <!-- Menu Item: Add Probe -->
+            <!-- Menu: Add Probe -->
             <MenuItem x:Name="AddProbeMenu"
                       Margin="6,0">
                 <MenuItem.Header>
@@ -158,7 +83,7 @@
                 </MenuItem.Icon>
             </MenuItem>
 
-            <!-- Menu Item: Columns -->
+            <!-- Menu: Columns -->
             <MenuItem Margin="6,0">
                 <MenuItem.Header>
                     <AccessText Text="{x:Static resource:Strings.Toolbar_Columns}" VerticalAlignment="Center"/>
@@ -186,7 +111,7 @@
                 </StackPanel>
             </MenuItem>
 
-            <!-- Menu Item: Start/Stop All -->
+            <!-- Menu: Start/Stop All -->
             <MenuItem x:Name="StartStopMenu"
                       Margin="6,0">
                 <MenuItem.Header>
@@ -201,29 +126,26 @@
                            Source="{Binding Path=(classes:Probe.ActiveCount), Converter={StaticResource ProbeCountToGlobalStartStopIcon}}"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <!-- DEBUG -->
-            <!-- <MenuItem Header="{Binding Path=(classes:Probe.ActiveCount)}"/> -->
 
-
-            <!-- Menu Item: Main menu dropdown -->
+            <!-- Menu: Main menu dropdown -->
             <MenuItem Width="32"
                       Margin="0,0,6,0"
-                      DockPanel.Dock="Right" Template="{DynamicResource MenuItemControlTemplate1}">
+                      DockPanel.Dock="Right"
+                      Template="{StaticResource TopLevelHeaderNoPaddingTemplate}">
                 <MenuItem.Icon>
                     <Image Source="{StaticResource icon.chevron-circle-down}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="16" Height="16"/>
                 </MenuItem.Icon>
-                
+
+                <!-- Menu: Options -->
                 <MenuItem Name="OptionsMenu"
                           Header="{x:Static resource:Strings.Menu_Options}"
-                          InputGestureText="F10"
-                          Padding="0,5"/>
-
-                <Separator Padding="0,6"/>
-
+                          InputGestureText="F10"/>
+                <Separator />
+                <!-- Menu: Status history -->
                 <MenuItem Name="StatusHistoryMenu" Header="{x:Static resource:Strings.Menu_StatusHistory}" InputGestureText="F12"/>
-
+                <!-- Menu: Input addresses-->
                 <MenuItem Name="MultiInputMenu" Header="Input Addresses" InputGestureText="F2"/>
-
+                <!-- Menu: Popup notifications -->
                 <MenuItem Header="{x:Static resource:Strings.Menu_PopupNotifications}">
                     <MenuItem Name="PopupNever"
                               Header="{x:Static resource:Strings.Notification_Never}"
@@ -236,43 +158,42 @@
                     <MenuItem Name="PopupAlways"
                               Header="{x:Static resource:Strings.Notification_Always}"
                               Click="PopupAlways_Click"
-                              IsCheckable="True"
-                              />
+                              IsCheckable="True"/>
                 </MenuItem>
-
-                <Separator Padding="0,6"/>
-
+                <Separator />
+                <!-- Menu: Favorite sets-->
                 <MenuItem Header="{x:Static resource:Strings.Menu_FavoriteSets}" x:Name="FavoritesMenu">
                     <MenuItem Header="{x:Static resource:Strings.Menu_SaveToFavorites}" Click="CreateFavorite_Click"/>
                     <MenuItem Header="{x:Static resource:Strings.Menu_ManageFavorites}" Click="ManageFavorites_Click"/>
-                    <Separator Padding="0,6"/>
+                    <Separator />
                 </MenuItem>
+                <!-- Menu: Aliases-->
                 <MenuItem Header="{x:Static resource:Strings.Menu_Aliases}" x:Name="AliasesMenu">
                     <MenuItem Header="{x:Static resource:Strings.Menu_ManageAliases}" Click="ManageAliases_Click"/>
-                    <Separator Padding="0,6"/>
+                    <Separator />
                 </MenuItem>
-
-                <Separator Padding="0,6"/>
-
-                <MenuItem Header="{x:Static resource:Strings.Menu_Traceroute}" x:Name="TracerouteMenu" InputGestureText="Ctrl-T" Padding="0,5">
+                <Separator />
+                <!-- Menu: Traceroute -->
+                <MenuItem Header="{x:Static resource:Strings.Menu_Traceroute}" x:Name="TracerouteMenu" InputGestureText="Ctrl-T">
                     <MenuItem.Icon>
                         <Image Source="{StaticResource icon.route}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="{x:Static resource:Strings.Menu_FloodHost}" x:Name="FloodHostMenu" InputGestureText="Ctrl-F" Padding="0,5">
+                <!-- Menu: Flood host -->
+                <MenuItem Header="{x:Static resource:Strings.Menu_FloodHost}" x:Name="FloodHostMenu" InputGestureText="Ctrl-F">
                     <MenuItem.Icon>
                         <Image Source="/Resources/bomb-16.png" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="vmPing" x:Name="NewInstanceMenu" InputGestureText="Ctrl-N" Padding="0,5">
+                <!-- Menu: New instance -->
+                <MenuItem Header="vmPing" x:Name="NewInstanceMenu" InputGestureText="Ctrl-N">
                     <MenuItem.Icon>
                         <Image Source="{StaticResource icon.vmping-logo-simple}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-
-                <Separator Padding="0,6"/>
-
-                <MenuItem Header="{x:Static resource:Strings.Menu_Help}" x:Name="HelpMenu" InputGestureText="F1" Padding="0,5">
+                <Separator />
+                <!-- Menu: Help -->
+                <MenuItem Header="{x:Static resource:Strings.Menu_Help}" x:Name="HelpMenu" InputGestureText="F1">
                     <MenuItem.Icon>
                         <Image Source="{StaticResource icon.question-circle-black}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>

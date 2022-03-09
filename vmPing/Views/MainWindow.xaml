@@ -167,7 +167,11 @@
                 <Separator />
                 <!-- Menu: Favorite sets-->
                 <MenuItem Header="{x:Static resource:Strings.Menu_FavoriteSets}" x:Name="FavoritesMenu">
-                    <MenuItem Header="{x:Static resource:Strings.Menu_SaveToFavorites}" Click="CreateFavorite_Click"/>
+                    <MenuItem Header="{x:Static resource:Strings.Menu_SaveToFavorites}" Click="CreateFavorite_Click">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource icon.new-favorite}" VerticalAlignment="Center" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem Header="{x:Static resource:Strings.Menu_ManageFavorites}" Click="ManageFavorites_Click">
                         <MenuItem.Icon>
                             <Image Source="{StaticResource icon.favorite}" VerticalAlignment="Center" Width="16" Height="16"/>

@@ -294,7 +294,7 @@
     <value>Please enter a valid name for this favorite set.</value>
   </data>
   <data name="NewFavorite_Header" xml:space="preserve">
-    <value>Create a Favorite Set</value>
+    <value>Create a new favorite set</value>
   </data>
   <data name="NewFavorite_SelectedHostsHeader" xml:space="preserve">
     <value>Selected Hosts</value>

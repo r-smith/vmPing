@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
 using vmPing.Classes;
 using vmPing.Properties;
 
@@ -49,8 +50,9 @@ namespace vmPing.Views
 
             if (isEditExisting)
             {
-                this.Title = "Edit Favorite Set";
-                Header.Text = "Edit an Existing Favorite";
+                Title = "Edit Favorite";
+                Header.Text = "Edit an existing favorite";
+                HeaderIcon.Source = (DrawingImage)Application.Current.Resources["icon.edit"];
             }
 
             // Set initial focus to text box.

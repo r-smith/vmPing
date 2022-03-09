@@ -574,7 +574,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a Favorite Set.
+        ///   Looks up a localized string similar to Create a new favorite set.
         /// </summary>
         public static string NewFavorite_Header {
             get {

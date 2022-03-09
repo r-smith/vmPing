@@ -320,4 +320,25 @@
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
+    
+    <!-- Icon: New Favorite-->
+    <DrawingImage x:Key="icon.new-favorite">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V512 H576 V0 H0 Z">
+                <DrawingGroup.Transform>
+                    <TranslateTransform X="0" Y="0.012677853927016258" />
+                </DrawingGroup.Transform>
+                <GeometryDrawing Brush="#f2a330" Geometry="F1 M576,512z M0,0z M259.3,17.8L194,150.2 47.9,171.5C21.7,175.3,11.2,207.6,30.2,226.1L135.9,329.1 110.9,474.6C106.4,500.9,134.1,520.6,157.3,508.3L288,439.6 418.7,508.3C441.9,520.5,469.6,500.9,465.1,474.6L440.1,329.1 545.8,226.1C564.8,207.6,554.3,175.3,528.1,171.5L382,150.2 316.7,17.8C305,-5.8,271.1,-6.1,259.3,17.8z" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <!-- Icon: Edit -->
+    <DrawingImage x:Key="icon.edit">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V512 H512 V0 H0 Z">
+                <GeometryDrawing Brush="#404040" Geometry="F1 M512,512z M0,0z M497.9,142.1L451.8,188.2C447.1,192.9,439.5,192.9,434.8,188.2L323.8,77.2C319.1,72.5,319.1,64.9,323.8,60.2L369.9,14.1C388.6,-4.60000000000001,419,-4.60000000000001,437.8,14.1L497.9,74.2C516.7,92.9,516.7,123.3,497.9,142.1z M284.2,99.8L21.6,362.4 0.4,483.9C-2.5,500.3,11.8,514.5,28.2,511.7L149.7,490.4 412.3,227.8C417,223.1,417,215.5,412.3,210.8L301.3,99.8C296.5,95.1,288.9,95.1,284.2,99.8z M124.1,339.9C118.6,334.4,118.6,325.6,124.1,320.1L278.1,166.1C283.6,160.6 292.4,160.6 297.9,166.1 303.4,171.6 303.4,180.4 297.9,185.9L143.9,339.9C138.4,345.4,129.6,345.4,124.1,339.9z M88,424L136,424 136,460.3 71.5,471.6 40.4,440.5 51.7,376 88,376 88,424z" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>

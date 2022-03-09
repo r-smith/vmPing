@@ -143,12 +143,24 @@
                 <!-- Menu: Options -->
                 <MenuItem Name="OptionsMenu"
                           Header="{x:Static resource:Strings.Menu_Options}"
-                          InputGestureText="F10"/>
+                          InputGestureText="F10">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource icon.options}" VerticalAlignment="Center" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator />
                 <!-- Menu: Status history -->
-                <MenuItem Name="StatusHistoryMenu" Header="{x:Static resource:Strings.Menu_StatusHistory}" InputGestureText="F12"/>
+                <MenuItem Name="StatusHistoryMenu" Header="{x:Static resource:Strings.Menu_StatusHistory}" InputGestureText="F12">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource icon.status-history}" VerticalAlignment="Center" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <!-- Menu: Input addresses-->
-                <MenuItem Name="MultiInputMenu" Header="Input Addresses" InputGestureText="F2"/>
+                <MenuItem Name="MultiInputMenu" Header="Input Addresses" InputGestureText="F2">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource icon.input-addresses}" VerticalAlignment="Center" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <!-- Menu: Popup notifications -->
                 <MenuItem Header="{x:Static resource:Strings.Menu_PopupNotifications}">
                     <MenuItem Name="PopupNever"
@@ -211,7 +223,7 @@
                 <!-- Menu: Help -->
                 <MenuItem Header="{x:Static resource:Strings.Menu_Help}" x:Name="HelpMenu" InputGestureText="F1">
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource icon.question-circle-black}" VerticalAlignment="Center" Width="16" Height="16"/>
+                        <Image Source="{StaticResource icon.question-circle}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>

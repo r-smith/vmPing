@@ -161,8 +161,8 @@
                         <Image Source="{StaticResource icon.input-addresses}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <!-- Menu: Popup notifications -->
-                <MenuItem Header="{x:Static resource:Strings.Menu_PopupNotifications}">
+                <!-- Menu: Popup alerts -->
+                <MenuItem Header="{x:Static resource:Strings.Menu_PopupAlerts}">
                     <MenuItem Name="PopupNever"
                               Header="{x:Static resource:Strings.Notification_Never}"
                               Click="PopupNever_Click"

@@ -475,11 +475,11 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Popup Notifications.
+        ///   Looks up a localized string similar to Popup Alerts.
         /// </summary>
-        public static string Menu_PopupNotifications {
+        public static string Menu_PopupAlerts {
             get {
-                return ResourceManager.GetString("Menu_PopupNotifications", resourceCulture);
+                return ResourceManager.GetString("Menu_PopupAlerts", resourceCulture);
             }
         }
         

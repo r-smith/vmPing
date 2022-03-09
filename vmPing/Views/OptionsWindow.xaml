@@ -262,18 +262,18 @@
                 </DockPanel>
             </TabItem>
             
-            <!-- Tab: Notifications -->
-            <TabItem Header="Notifications" Name="NotificationsTab">
+            <!-- Tab: Popup Alerts -->
+            <TabItem Header="Popup Alerts" Name="PopupAlertsTab">
                 <DockPanel Margin="20,0" LastChildFill="False">
                     
                     <!-- Header -->
                     <DockPanel DockPanel.Dock="Top" LastChildFill="False">
                         <TextBlock DockPanel.Dock="Left"
-                                   Text="Popup Notifications"
+                                   Text="Popup Alerts"
                                    Style="{StaticResource OptionHeaderTextStyle}"/>
                         <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
                             <TextBlock>
-                                Popup notifications are displayed when a host you are monitoring changes status (goes down or up).
+                                Popup alerts are displayed, in the lower right corner of your screen, when a host you are monitoring changes status (goes down or up).
                                 <LineBreak/>
                                 <LineBreak/>
                                 You can disable notifications entirely, choose to show them only when vmPing is minimized, or always show notifications.
@@ -284,17 +284,17 @@
                     
                     <!-- Popup notification option radio button group -->
                     <RadioButton DockPanel.Dock="Top"
-                                 GroupName="PopupNotifications"
+                                 GroupName="PopupAlerts"
                                  Content="Disabled"
                                  Name="PopupsDisabledOption"
                                  Margin="0,15,0,0"/>
                     <RadioButton DockPanel.Dock="Top"
-                                 GroupName="PopupNotifications"
+                                 GroupName="PopupAlerts"
                                  Content="Show when minimized"
                                  Name="PopupsMinimizedOption"
                                  Margin="0,6"/>
                     <RadioButton DockPanel.Dock="Top"
-                                 GroupName="PopupNotifications"
+                                 GroupName="PopupAlerts"
                                  Content="Always show"
                                  Name="PopupsAlwaysOption"
                                  IsChecked="True"/>
@@ -306,7 +306,7 @@
                                   Content="Auto-dismiss notifications"
                                   IsChecked="True"/>
                         <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
-                            When enabled, popup notifications will automatically close after the specified number of seconds.
+                            When enabled, popup alerts will automatically close after the specified number of seconds.
                         </Label>
                     </DockPanel>
                     

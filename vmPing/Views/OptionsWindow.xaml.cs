@@ -341,7 +341,7 @@ namespace vmPing.Views
                 }
                 else
                 {
-                    ShowError("Please enter a valid number of seconds for the auto-dismiss interval.", NotificationsTab, AutoDismissInterval);
+                    ShowError("Please enter a valid number of seconds for the auto-dismiss interval.", PopupAlertsTab, AutoDismissInterval);
                     return false;
                 }
             }

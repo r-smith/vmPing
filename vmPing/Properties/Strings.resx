@@ -260,8 +260,8 @@
   <data name="Menu_Options" xml:space="preserve">
     <value>Options</value>
   </data>
-  <data name="Menu_PopupNotifications" xml:space="preserve">
-    <value>Popup Notifications</value>
+  <data name="Menu_PopupAlerts" xml:space="preserve">
+    <value>Popup Alerts</value>
   </data>
   <data name="Menu_SaveToFavorites" xml:space="preserve">
     <value>Create New Favorite Set</value>

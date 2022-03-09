@@ -86,7 +86,7 @@
                         <TextBlock Text="dropped pings"
                                    Margin="10,0,0,0"/>
                     </StackPanel>
-                    
+
                     <!-- Startup header -->
                     <TextBlock DockPanel.Dock="Top"
                                Text="Startup"
@@ -265,7 +265,7 @@
             <!-- Tab: Popup Alerts -->
             <TabItem Header="Popup Alerts" Name="PopupAlertsTab">
                 <DockPanel Margin="20,0" LastChildFill="False">
-                    
+
                     <!-- Header -->
                     <DockPanel DockPanel.Dock="Top" LastChildFill="False">
                         <TextBlock DockPanel.Dock="Left"
@@ -280,8 +280,8 @@
                             </TextBlock>
                         </Label>
                     </DockPanel>
-                    
-                    
+
+
                     <!-- Popup notification option radio button group -->
                     <RadioButton DockPanel.Dock="Top"
                                  GroupName="PopupAlerts"
@@ -298,7 +298,7 @@
                                  Content="Always show"
                                  Name="PopupsAlwaysOption"
                                  IsChecked="True"/>
-                    
+
                     <!-- Auto-dismiss enabled checkbox -->
                     <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,20,0,5">
                         <CheckBox DockPanel.Dock="Left"
@@ -309,7 +309,7 @@
                             When enabled, popup alerts will automatically close after the specified number of seconds.
                         </Label>
                     </DockPanel>
-                    
+
                     <!-- Auto-dismiss interval textbox -->
                     <StackPanel DockPanel.Dock="Top"
                                 Visibility="{Binding IsChecked, ElementName=IsAutoDismissEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -324,7 +324,7 @@
                     </StackPanel>
                 </DockPanel>
             </TabItem>
-            
+
             <!-- Tab: Email Alerts -->
             <TabItem Header="Email Alerts" Name="EmailAlertsTab">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -360,7 +360,7 @@
                                     <Setter Property="DockPanel.Dock" Value="Top"/>
                                 </Style>
                             </DockPanel.Resources>
-                            
+
                             <!-- Server information subheading -->
                             <TextBlock DockPanel.Dock="Top"
                                        Text="Server Information"
@@ -417,7 +417,7 @@
                                     <PasswordBox Name="SmtpPassword"/>
                                 </DockPanel>
                             </StackPanel>
-                            
+
                             <!-- Email addresses subheading -->
                             <TextBlock DockPanel.Dock="Top"
                                        Text="Email Addresses"
@@ -512,11 +512,11 @@
                             </StackPanel>
                         </StackPanel>
                     </Grid>
-                    
+
                     <!-- Hidden separator -->
                     <Separator DockPanel.Dock="Top" Height="1" Background="Transparent" Margin="0,20,0,0"
                                Visibility="{Binding IsChecked, ElementName=IsAudioDownAlertEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    
+
                     <!-- Audio Alert Up: checkbox / tooltip -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,0">
                         <CheckBox Name="IsAudioUpAlertEnabled"
@@ -527,7 +527,7 @@
                             If this option is enabled, an audio file is played whenever a host comes up.
                         </Label>
                     </StackPanel>
-                    
+
                     <!-- Audio Alert Down: Filepath / play button / browse button -->
                     <Grid DockPanel.Dock="Top"
                           Margin="30,10,0,0"
@@ -567,7 +567,7 @@
                 </DockPanel>
             </TabItem>
 
-            <!-- Tab: Log Output -->
+            <!-- Tab: Logging -->
             <TabItem Header="Log Output" Name="LogOutputTab">
                 <DockPanel Margin="20,0">
 
@@ -575,7 +575,7 @@
                     <TextBlock DockPanel.Dock="Top"
                                Text="Log Output"
                                Style="{StaticResource OptionHeaderTextStyle}"/>
-                    
+
                     <!-- Log all ping output -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,0">
                         <CheckBox Name="IsLogOutputEnabled"
@@ -605,7 +605,7 @@
                     <!-- Hidden separator -->
                     <Separator DockPanel.Dock="Top" Height="1" Background="Transparent" Margin="0,20,0,0"
                                Visibility="{Binding IsChecked, ElementName=IsLogOutputEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    
+
                     <!-- Log status changes -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,0">
                         <CheckBox Name="IsLogStatusChangesEnabled"
@@ -635,7 +635,63 @@
                 </DockPanel>
             </TabItem>
 
+            <!-- Tab: Display -->
+            <TabItem Header="Display" Name="DisplayTab">
+                <DockPanel Margin="20,0" LastChildFill="False">
 
+                    <!-- Header -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Display Options"
+                               Style="{StaticResource OptionHeaderTextStyle}"/>
+
+                    <!-- Auto-dismiss enabled checkbox -->
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,15,0,7">
+                        <CheckBox DockPanel.Dock="Left"
+                                  Name="IsAlwaysOnTopEnabled"
+                                  Content="Always on top"/>
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
+                            Keep the vmPing application on top and always visible over other windows.
+                        </Label>
+                    </DockPanel>
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,0,0,7">
+                        <CheckBox DockPanel.Dock="Left"
+                                  Name="IsMinimizeToTrayEnabled"
+                                  Content="Minimize to tray"/>
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
+                            <TextBlock>
+                                Place an icon in the system tray when vmPing is minimized.
+                                <LineBreak/>
+                                <LineBreak/>
+                                To keep the system tray icon always visible:
+                                <LineBreak/>
+                                Right-click the Windows taskbar and choose 'Taskbar settings'.
+                                Under 'Notifications area' click 'Select which icons to appear on the taskbar'. Look for vmPing and set to 'On'.
+                                <LineBreak/>
+                                (Steps may vary)
+                            </TextBlock>
+                        </Label>
+                    </DockPanel>
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,0,0,7">
+                        <CheckBox DockPanel.Dock="Left"
+                                  Name="IsExitToTrayEnabled"
+                                  Content="Exit to tray"/>
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
+                            <TextBlock>
+                                When closing vmPing, the application will minimize to the system tray rather than exit. Right-click the tray icon to exit.
+                                <LineBreak/>
+                                <LineBreak/>
+                                To keep the system tray icon always visible:
+                                <LineBreak/>
+                                Right-click the Windows taskbar and choose 'Taskbar settings'.
+                                Under 'Notifications area' click 'Select which icons to appear on the taskbar'. Look for vmPing and set to 'On'.
+                                <LineBreak/>
+                                (Steps may vary)
+                            </TextBlock>
+                        </Label>
+                    </DockPanel>
+                </DockPanel>
+            </TabItem>
+            
             <!-- Tab: Layout -->
             <TabItem Header="Layout" Name="LayoutTab">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">

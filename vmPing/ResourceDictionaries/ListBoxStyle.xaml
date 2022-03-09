@@ -3,7 +3,7 @@
 
     <!-- No highlighting ListBoxItem style -->
     <Style x:Key="ListBoxItemNoHighlightStyle" TargetType="{x:Type ListBoxItem}">
-        <Setter Property="Padding" Value="5,2"/>
+        <Setter Property="Padding" Value="5,1"/>
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="Background" Value="Transparent"/>
@@ -18,7 +18,7 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Ellipse Height="2" Width="2" Fill="#444" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>
+                        <Ellipse Height="4" Width="4" Fill="#606060" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>
                         <Border x:Name="Bd" Grid.Column="1" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
                             <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
@@ -34,7 +34,7 @@
     </Style>
     
     <!-- Favorites ListBox style -->
-    <SolidColorBrush x:Key="ListBox.Static.Background" Color="#ffffff"/>
+    <SolidColorBrush x:Key="ListBox.Static.Background" Color="#f5f5f5"/>
     <SolidColorBrush x:Key="ListBox.Static.Foreground" Color="#111"/>
     <SolidColorBrush x:Key="ListBox.Static.Border" Color="#abadb3"/>
     <Style x:Key="FavoritesListBox" TargetType="{x:Type ListBox}">
@@ -80,12 +80,12 @@
     <!-- Favorites ListBox items style-->
     <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#30303030"/>
     <SolidColorBrush x:Key="Item.MouseOver.Border" Color="#50303030"/>
-    <SolidColorBrush x:Key="Item.Selected.Background" Color="#d0303030"/>
+    <SolidColorBrush x:Key="Item.Selected.Background" Color="#007acc"/>
     <SolidColorBrush x:Key="Item.Selected.Foreground" Color="#ffffff"/>
     <SolidColorBrush x:Key="Item.Selected.Border" Color="#303030"/>
     <Style x:Key="FavoritesListBoxItemsStyle" TargetType="{x:Type ListBoxItem}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <Setter Property="Padding" Value="4,2"/>
+        <Setter Property="Padding" Value="4,1"/>
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="Background" Value="Transparent"/>

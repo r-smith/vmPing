@@ -4,9 +4,9 @@
     <!-- Options header text style -->
     <Style TargetType="{x:Type TextBlock}" x:Key="OptionHeaderTextStyle">
         <Setter Property="Margin" Value="0,10" />
-        <Setter Property="Foreground" Value="#444" />
+        <Setter Property="Foreground" Value="#404040" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="FontSize" Value="16" />
-        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 </ResourceDictionary>

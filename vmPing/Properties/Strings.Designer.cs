@@ -376,20 +376,11 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage Favorites.
+        ///   Looks up a localized string similar to Manage your favorites.
         /// </summary>
         public static string ManageFavorites_Header {
             get {
                 return ResourceManager.GetString("ManageFavorites_Header", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Hosts in Favorite.
-        /// </summary>
-        public static string ManageFavorites_HostsInSet {
-            get {
-                return ResourceManager.GetString("ManageFavorites_HostsInSet", resourceCulture);
             }
         }
         

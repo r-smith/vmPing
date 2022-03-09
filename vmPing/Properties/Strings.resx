@@ -227,10 +227,7 @@
     <value>Aliases</value>
   </data>
   <data name="ManageFavorites_Header" xml:space="preserve">
-    <value>Manage Favorites</value>
-  </data>
-  <data name="ManageFavorites_HostsInSet" xml:space="preserve">
-    <value>Hosts in Favorite</value>
+    <value>Manage your favorites</value>
   </data>
   <data name="ManageFavorites_Warn_DeleteA" xml:space="preserve">
     <value>Are you sure you want to remove</value>

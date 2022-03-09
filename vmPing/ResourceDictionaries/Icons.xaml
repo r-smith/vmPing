@@ -311,4 +311,13 @@
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
+    
+    <!-- Icon: Favorite -->
+    <DrawingImage x:Key="icon.favorite">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V512 H384 V0 H0 Z">
+                <GeometryDrawing Brush="#d8ac6a" Geometry="F1 M384,512z M0,0z M0,512L0,48C0,21.49,21.49,0,48,0L336,0C362.51,0,384,21.49,384,48L384,512 192,400 0,512z" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>

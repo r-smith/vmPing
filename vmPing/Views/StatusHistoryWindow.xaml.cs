@@ -26,6 +26,7 @@ namespace vmPing.Views
         {
             InitializeComponent();
             RefreshMaximizeRestoreButton();
+            Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
 
             _statusHistoryView = CollectionViewSource.GetDefaultView(statusChangeLog);
             _statusHistoryView.Filter = AddressFilter;

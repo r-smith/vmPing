@@ -20,6 +20,7 @@ namespace vmPing.Views
         public FloodHostWindow()
         {
             InitializeComponent();
+            Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
 
             DataContext = _floodHost;
 

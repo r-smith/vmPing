@@ -22,6 +22,7 @@ namespace vmPing.Views
         public TracerouteWindow()
         {
             InitializeComponent();
+            Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
 
             DataContext = Route;
             TraceData.ItemsSource = Route.networkRoute;

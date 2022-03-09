@@ -16,6 +16,7 @@ namespace vmPing.Views
         public IsolatedPingWindow(Probe pingItem)
         {
             InitializeComponent();
+            Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
             pingItem.IsolatedWindow = this;
             DataContext = pingItem;
         }

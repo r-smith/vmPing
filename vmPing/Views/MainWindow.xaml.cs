@@ -125,6 +125,21 @@ namespace vmPing.Views
 
             // Set always on top state.
             Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
+            if (Probe.StatusWindow != null && Probe.StatusWindow.IsLoaded)
+            {
+                Probe.StatusWindow.Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
+            }
+            if (HelpWindow._OpenWindow != null)
+            {
+                HelpWindow._OpenWindow.Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
+            }
+            foreach (Probe probe in _ProbeCollection)
+            {
+                if (probe.IsolatedWindow != null && probe.IsolatedWindow.IsLoaded)
+                {
+                    probe.IsolatedWindow.Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
+                }
+            }
         }
 
         private void InitializeCommandBindings()

@@ -238,7 +238,10 @@ namespace vmPing.Classes
                     ApplicationOptions.IsLogStatusChangesEnabled),
                 new XElement("option",
                     new XAttribute("name", "LogStatusChangesPath"),
-                    ApplicationOptions.LogStatusChangesPath ?? string.Empty));
+                    ApplicationOptions.LogStatusChangesPath ?? string.Empty),
+                new XElement("option",
+                    new XAttribute("name", "IsAlwaysOnTopEnabled"),
+                    ApplicationOptions.IsAlwaysOnTopEnabled));
 
             return configuration;
         }
@@ -615,6 +618,10 @@ namespace vmPing.Classes
             {
                 if (optionValue.Length > 0)
                     ApplicationOptions.EmailPassword = Util.DecryptStringAES(optionValue);
+            }
+            if (options.TryGetValue("IsAlwaysOnTopEnabled", out optionValue))
+            {
+                ApplicationOptions.IsAlwaysOnTopEnabled = bool.Parse(optionValue);
             }
         }
     }

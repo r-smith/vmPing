@@ -17,6 +17,7 @@ namespace vmPing.Views
         public HelpWindow()
         {
             InitializeComponent();
+            Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
 
             Version version = typeof(MainWindow).Assembly.GetName().Version;
             Version.Inlines.Clear();

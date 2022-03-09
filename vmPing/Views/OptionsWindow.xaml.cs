@@ -37,6 +37,7 @@ namespace vmPing.Views
             PopulateAudioAlertOptions();
             PopulateLogOutputOptions();
             PopulateAdvancedOptions();
+            PopulateDisplayOptions();
             PopulateLayoutOptions();
         }
 
@@ -174,6 +175,11 @@ namespace vmPing.Views
             UpdateByteCount();
         }
 
+        private void PopulateDisplayOptions()
+        {
+            IsAlwaysOnTopEnabled.IsChecked = ApplicationOptions.IsAlwaysOnTopEnabled;
+        }
+
         private void PopulateLayoutOptions()
         {
             BackgroundColor_Probe_Inactive.Text = ApplicationOptions.BackgroundColor_Probe_Inactive;
@@ -220,6 +226,9 @@ namespace vmPing.Views
                 return;
 
             if (SaveLayoutOptions() == false)
+                return;
+
+            if (SaveDisplayOptions() == false)
                 return;
 
             if (SaveAsDefaults.IsChecked == true)
@@ -572,6 +581,12 @@ namespace vmPing.Views
             return true;
         }
 
+        private bool SaveDisplayOptions()
+        {
+            ApplicationOptions.IsAlwaysOnTopEnabled = IsAlwaysOnTopEnabled.IsChecked == true;
+
+            return true;
+        }
 
         private bool SaveLayoutOptions()
         {

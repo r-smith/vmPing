@@ -8,7 +8,7 @@
         UseLayoutRounding="True"
         Height="450" MinHeight="250"
         Width="350" MinWidth="280"
-        Background="#f8f8f8"
+        Background="#f0f0f0"
         WindowStartupLocation="CenterOwner"
         SourceInitialized="Window_SourceInitialized"
         ShowInTaskbar="False">
@@ -66,6 +66,7 @@
 
         <!-- Header -->
         <DockPanel LastChildFill="False">
+            <Image DockPanel.Dock="Left" Source="{StaticResource icon.input-addresses}" VerticalAlignment="Center" Width="20" Height="20" Margin="0,0,8,0"/>
             <TextBlock DockPanel.Dock="Left"
                        Text="Enter addresses to ping"
                        Style="{StaticResource OptionHeaderTextStyle}" />

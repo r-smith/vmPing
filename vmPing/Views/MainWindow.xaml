@@ -181,7 +181,11 @@
                 </MenuItem>
                 <!-- Menu: Aliases-->
                 <MenuItem Header="{x:Static resource:Strings.Menu_Aliases}" x:Name="AliasesMenu">
-                    <MenuItem Header="{x:Static resource:Strings.Menu_ManageAliases}" Click="ManageAliases_Click"/>
+                    <MenuItem Header="{x:Static resource:Strings.Menu_ManageAliases}" Click="ManageAliases_Click">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource icon.alias}" VerticalAlignment="Center" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <Separator />
                 </MenuItem>
                 <Separator />

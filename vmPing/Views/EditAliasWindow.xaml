@@ -7,7 +7,7 @@
         Height="Auto"
         Width="400"
         ResizeMode="NoResize"
-        Background="#fff"
+        Background="#f0f0f0"
         SizeToContent="Height"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False">
@@ -21,12 +21,13 @@
         <DockPanel Grid.Row="0" LastChildFill="False" Margin="9">
 
             <!-- Header -->
-            <TextBlock DockPanel.Dock="Top"
-                       Name="Header"
-                       Text="{x:Static resource:Strings.EditAlias_AliasFor}"
-                       TextTrimming="CharacterEllipsis"
-                       Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"
-                       />
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                <Image Source="{StaticResource icon.edit}" VerticalAlignment="Center" Width="20" Height="20" Margin="0,0,8,0"/>
+                <TextBlock Name="Header"
+                           Text="{x:Static resource:Strings.EditAlias_AliasFor}"
+                           TextTrimming="CharacterEllipsis"
+                           Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"/>
+            </StackPanel>
 
             <!-- Alias TextBox-->
             <TextBox DockPanel.Dock="Top"
@@ -36,19 +37,17 @@
         </DockPanel>
 
         <!-- Buttons -->
-        <Border Grid.Row="1" Background="#f0f0f0" BorderBrush="#dfdfdf" BorderThickness="0,1,0,0">
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="9">
-                <Button Style="{StaticResource ButtonStandardStyle}"
-                        IsDefault="True"
-                        Margin="0,0,9,0"
-                        Click="Save_Click"
-                        Width="85"
-                        Content="{x:Static resource:Strings.DialogButton_Save}" />
-                <Button Style="{StaticResource ButtonStandardStyle}"
-                        Width="85"
-                        IsCancel="True"
-                        Content="{x:Static resource:Strings.DialogButton_Cancel}" />
-            </StackPanel>
-        </Border>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="9,0,9,9">
+            <Button Style="{StaticResource ButtonStandardStyle}"
+                    IsDefault="True"
+                    Margin="0,0,9,0"
+                    Click="Save_Click"
+                    Width="85"
+                    Content="{x:Static resource:Strings.DialogButton_Save}" />
+            <Button Style="{StaticResource ButtonStandardStyle}"
+                    Width="85"
+                    IsCancel="True"
+                    Content="{x:Static resource:Strings.DialogButton_Cancel}" />
+        </StackPanel>
     </Grid>
 </Window>

@@ -169,7 +169,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Alias for:.
+        ///   Looks up a localized string similar to Enter an alias for.
         /// </summary>
         public static string EditAlias_AliasFor {
             get {
@@ -331,7 +331,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage Aliases.
+        ///   Looks up a localized string similar to Manage your aliases.
         /// </summary>
         public static string ManageAliases_Header {
             get {
@@ -547,7 +547,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Alias.
+        ///   Looks up a localized string similar to Create a new alias.
         /// </summary>
         public static string NewAlias_Header {
             get {

@@ -341,4 +341,13 @@
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
+    
+    <!-- Icon: Alias -->
+    <DrawingImage x:Key="icon.alias">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V512 H512 V0 H0 Z">
+                <GeometryDrawing Brush="#00539c" Geometry="F1 M512,512z M0,0z M0,252.118L0,48C0,21.49,21.49,0,48,0L252.118,0A48,48,0,0,1,286.059,14.059L497.941,225.941C516.686,244.686,516.686,275.078,497.941,293.823L293.823,497.941C275.078,516.686,244.686,516.686,225.941,497.941L14.059,286.059A48,48,0,0,1,0,252.118z M112,64C85.49,64 64,85.49 64,112 64,138.51 85.49,160 112,160 138.51,160 160,138.51 160,112 160,85.49 138.51,64 112,64z" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>

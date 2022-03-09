@@ -24,9 +24,9 @@
                 <Setter Property="FontFamily" Value="Segoe UI"/>
                 <Setter Property="FontSize" Value="12"/>
                 <Setter Property="FontWeight" Value="SemiBold"/>
-                <Setter Property="Background" Value="#60ffe975"/>
+                <Setter Property="Background" Value="#fcfcfd"/>
                 <Setter Property="Foreground" Value="Black"/>
-                <Setter Property="BorderBrush" Value="Black"/>
+                <Setter Property="BorderBrush" Value="#abadb3"/>
                 <Setter Property="BorderThickness" Value="1,0,0,1"/>
                 <Setter Property="Padding" Value="5,4,0,4"/>
                 <Setter Property="Margin" Value="-1,0,0,0"/>
@@ -55,6 +55,12 @@
                                 <Thumb x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right" Style="{StaticResource ColumnHeaderGripperStyle}"/>
                             </Grid>
                             <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#e3f7ff"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="#bce4f9"/>
+                                </Trigger>
                                 <Trigger Property="SortDirection" Value="Ascending">
                                     <Setter TargetName="SortArrow" Property="Visibility" Value="Visible"/>
                                     <Setter TargetName="SortArrow" Property="RenderTransform">
@@ -93,7 +99,7 @@
                     </Setter>
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#d0303030"/>
+                            <Setter Property="Background" Value="#007acc"/>
                             <Setter Property="Foreground" Value="#ffffff"/>
                             <Setter Property="FontWeight" Value="SemiBold"/>
                         </Trigger>

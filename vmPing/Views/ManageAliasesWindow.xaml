@@ -9,7 +9,7 @@
         Width="460"
         MinHeight="250"
         MinWidth="360"
-        Background="#fff"
+        Background="#f0f0f0"
         ResizeMode="CanResize"
         PreviewKeyDown="Window_PreviewKeyDown"
         SourceInitialized="Window_SourceInitialized">
@@ -20,10 +20,13 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0"
-                   Text="{x:Static resource:Strings.ManageAliases_Header}"
-                   Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"/>
-
+        <StackPanel Orientation="Horizontal">
+            <Image Source="{StaticResource icon.alias}" VerticalAlignment="Center" Width="20" Height="20" Margin="0,0,8,0"/>
+            <TextBlock Grid.Row="0"
+                       Text="{x:Static resource:Strings.ManageAliases_Header}"
+                       Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"/>
+        </StackPanel>
+        
         <DataGrid Grid.Row="1"
                   Name="AliasesDataGrid"
                   Style="{StaticResource DataGridStyle}">
@@ -64,17 +67,17 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,9,0,0">
             <Button Click="New_Click"
                     Width="85"
-                    Style="{StaticResource ButtonSecondaryStyle}"
+                    Style="{StaticResource ButtonStandardStyle}"
                     Content="_New"/>
             <Button Click="Edit_Click"
                     Margin="15,0"
                     Width="85"
-                    Style="{StaticResource ButtonSecondaryStyle}"
+                    Style="{StaticResource ButtonStandardStyle}"
                     IsEnabled="{Binding ElementName=AliasesDataGrid, Path=SelectedItems.Count}"
                     Content="_Edit"/>
             <Button Click="Remove_Click"
                     Width="85"
-                    Style="{StaticResource ButtonSecondaryStyle}"
+                    Style="{StaticResource ButtonStandardStyle}"
                     IsEnabled="{Binding ElementName=AliasesDataGrid, Path=SelectedItems.Count}"
                     Content="_Remove"/>
         </StackPanel>

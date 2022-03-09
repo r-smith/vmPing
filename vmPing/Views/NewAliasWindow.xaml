@@ -8,7 +8,7 @@
         Width="400"
         SizeToContent="Height"
         ResizeMode="NoResize"
-        Background="#fff"
+        Background="#f0f0f0"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False">
 
@@ -21,11 +21,12 @@
         <DockPanel Grid.Row="0" LastChildFill="False" Margin="9">
 
             <!-- Header -->
-            <TextBlock DockPanel.Dock="Top"
-                       Text="{x:Static resource:Strings.NewAlias_Header}"
-                       TextTrimming="CharacterEllipsis"
-                       Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"
-                       />
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                <Image Source="{StaticResource icon.alias}" VerticalAlignment="Center" Width="20" Height="20" Margin="0,0,8,0"/>
+                <TextBlock Text="{x:Static resource:Strings.NewAlias_Header}"
+                           TextTrimming="CharacterEllipsis"
+                           Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"/>
+            </StackPanel>
 
             <!-- Hostname TextBox-->
             <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
@@ -33,7 +34,7 @@
                     <TextBlock Text="{x:Static resource:Strings.NewAlias_Host}"
                                FontSize="14"
                                VerticalAlignment="Center"
-                               Foreground="#555"
+                               Foreground="#404040"
                                HorizontalAlignment="Right"/>
                 </Border>
                 <TextBox Name="MyHost"
@@ -46,9 +47,8 @@
                     <TextBlock Text="{x:Static resource:Strings.NewAlias_Alias}"
                                FontSize="14"
                                VerticalAlignment="Center"
-                               Foreground="#555"
-                               HorizontalAlignment="Right"
-                               />
+                               Foreground="#404040"
+                               HorizontalAlignment="Right"/>
                 </Border>
                 <TextBox Name="MyAlias"
                          MaxLength="64"/>
@@ -56,19 +56,17 @@
         </DockPanel>
 
         <!-- Buttons -->
-        <Border Grid.Row="1" Background="#f0f0f0" BorderBrush="#dfdfdf" BorderThickness="0,1,0,0">
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="9">
-                <Button Style="{StaticResource ButtonStandardStyle}"
-                        IsDefault="True"
-                        Margin="0,0,9,0"
-                        Click="Save_Click"
-                        Width="85"
-                        Content="{x:Static resource:Strings.DialogButton_Save}" />
-                <Button Style="{StaticResource ButtonStandardStyle}"
-                        Width="85"
-                        IsCancel="True"
-                        Content="{x:Static resource:Strings.DialogButton_Cancel}" />
-            </StackPanel>
-        </Border>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="9,0,9,9">
+            <Button Style="{StaticResource ButtonStandardStyle}"
+                    IsDefault="True"
+                    Margin="0,0,9,0"
+                    Click="Save_Click"
+                    Width="85"
+                    Content="{x:Static resource:Strings.DialogButton_Save}" />
+            <Button Style="{StaticResource ButtonStandardStyle}"
+                    Width="85"
+                    IsCancel="True"
+                    Content="{x:Static resource:Strings.DialogButton_Cancel}" />
+        </StackPanel>
     </Grid>
 </Window>

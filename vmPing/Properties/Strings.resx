@@ -154,8 +154,8 @@
     <value>Warning</value>
   </data>
   <data name="EditAlias_AliasFor" xml:space="preserve">
-    <value>Alias for:</value>
-    <comment>Parsed as:  Alias for: {hostname}</comment>
+    <value>Enter an alias for</value>
+    <comment>Parsed as:  Enter an alias for {hostname}</comment>
   </data>
   <data name="Email_Down" xml:space="preserve">
     <value>down</value>
@@ -210,7 +210,7 @@
     <value>Alias</value>
   </data>
   <data name="ManageAliases_Header" xml:space="preserve">
-    <value>Manage Aliases</value>
+    <value>Manage your aliases</value>
   </data>
   <data name="ManageAliases_Host" xml:space="preserve">
     <value>Host</value>
@@ -285,7 +285,7 @@
     <value>Please enter a valid host name.</value>
   </data>
   <data name="NewAlias_Header" xml:space="preserve">
-    <value>New Alias</value>
+    <value>Create a new alias</value>
   </data>
   <data name="NewAlias_Host" xml:space="preserve">
     <value>Host</value>

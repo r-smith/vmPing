@@ -715,7 +715,7 @@ namespace vmPing.Views
                     // Create tray icon.
                     NotifyIcon = new System.Windows.Forms.NotifyIcon
                     {
-                        Icon = new System.Drawing.Icon(@"../../vmPing.ico"),
+                        Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/vmPing.ico")).Stream),
                         Text = "vmPing",
                         ContextMenuStrip = menuStrip
                     };

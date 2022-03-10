@@ -151,7 +151,7 @@ namespace vmPing.Classes
                 {
                     using (System.IO.StreamWriter outputFile = new System.IO.StreamWriter(ApplicationOptions.LogStatusChangesPath, true))
                     {
-                        outputFile.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()}\t{status.Hostname}\t{status.StatusAsString}");
+                        outputFile.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()}\t{status.Hostname}\t{status.Alias}\t{status.StatusAsString}");
                     }
                 }
                 catch (Exception ex)

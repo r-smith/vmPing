@@ -690,35 +690,99 @@ namespace vmPing.Views
             }
         }
 
-        private void Window_StateChanged(object sender, EventArgs e)
+        private void HideToTray()
         {
-            if (WindowState == WindowState.Minimized && ApplicationOptions.IsMinimizeToTrayEnabled)
+            Visibility = Visibility.Hidden;
+            WindowState = WindowState.Minimized;
+            try
             {
-                Visibility = Visibility.Hidden;
                 if (NotifyIcon == null)
                 {
+                    // Build context menu for tray icon.
+                    System.Windows.Forms.ContextMenuStrip menuStrip = new System.Windows.Forms.ContextMenuStrip();
+                    System.Windows.Forms.ToolStripMenuItem menuOptions = new System.Windows.Forms.ToolStripMenuItem("Options");
+                    menuOptions.Click += (s, args) => OptionsExecute(null, null);
+                    System.Windows.Forms.ToolStripMenuItem menuStatusHistory = new System.Windows.Forms.ToolStripMenuItem("Status History");
+                    menuStatusHistory.Click += (s, args) => StatusHistoryExecute(null, null);
+                    System.Windows.Forms.ToolStripMenuItem menuExit = new System.Windows.Forms.ToolStripMenuItem("Exit vmPing");
+                    menuExit.Click += (s, args) => Application.Current.Shutdown();
+
+                    menuStrip.Items.Add(menuOptions);
+                    menuStrip.Items.Add(menuStatusHistory);
+                    menuStrip.Items.Add(new System.Windows.Forms.ToolStripSeparator());
+                    menuStrip.Items.Add(menuExit);
+
+                    // Create tray icon.
                     NotifyIcon = new System.Windows.Forms.NotifyIcon
                     {
                         Icon = new System.Drawing.Icon(@"../../vmPing.ico"),
-                        Text = "vmPing"
+                        Text = "vmPing",
+                        ContextMenuStrip = menuStrip
                     };
-                    NotifyIcon.Click += NotifyIcon_Click;
+                    NotifyIcon.MouseUp += NotifyIcon_MouseUp;
                 }
                 NotifyIcon.Visible = true;
             }
+            catch
+            {
+                Visibility = Visibility.Visible;
+            }
         }
 
-        private void NotifyIcon_Click(object sender, EventArgs e)
+        private void RestoreFromTray()
         {
             NotifyIcon.Visible = false;
+            WindowState = WindowState.Minimized;
             Visibility = Visibility.Visible;
             Show();
             WindowState = WindowState.Normal;
         }
 
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized && ApplicationOptions.IsMinimizeToTrayEnabled)
+            {
+                HideToTray();
+            }
+        }
+
+        private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            // Clear notify icon - handles notify icon cleanup when vmPing is minimized to tray
+            // and user clicks a popup alert window to restore the vmPing window.
+            if (IsVisible && NotifyIcon != null && NotifyIcon.Visible)
+            {
+                RestoreFromTray();
+            }
+        }
+
+        private void NotifyIcon_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                // Left click. Restore application window.
+                RestoreFromTray();
+            }
+            else if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                // Right click. Display context menu.
+                System.Reflection.MethodInfo mi = typeof(System.Windows.Forms.NotifyIcon)
+                    .GetMethod("ShowContextMenu", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                mi.Invoke(NotifyIcon, null);
+            }
+        }
+
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (NotifyIcon != null) NotifyIcon.Dispose();
+            if (ApplicationOptions.IsExitToTrayEnabled)
+            {
+                HideToTray();
+                e.Cancel = true;
+            }
+            else if (NotifyIcon != null)
+            {
+                NotifyIcon.Dispose();
+            }
         }
 
         private void History_TextChanged(object sender, TextChangedEventArgs e)

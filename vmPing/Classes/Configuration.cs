@@ -241,7 +241,13 @@ namespace vmPing.Classes
                     ApplicationOptions.LogStatusChangesPath ?? string.Empty),
                 new XElement("option",
                     new XAttribute("name", "IsAlwaysOnTopEnabled"),
-                    ApplicationOptions.IsAlwaysOnTopEnabled));
+                    ApplicationOptions.IsAlwaysOnTopEnabled),
+                new XElement("option",
+                    new XAttribute("name", "IsMinimizeToTrayEnabled"),
+                    ApplicationOptions.IsMinimizeToTrayEnabled),
+                new XElement("option",
+                    new XAttribute("name", "IsExitToTrayEnabled"),
+                    ApplicationOptions.IsExitToTrayEnabled));
 
             return configuration;
         }
@@ -622,6 +628,14 @@ namespace vmPing.Classes
             if (options.TryGetValue("IsAlwaysOnTopEnabled", out optionValue))
             {
                 ApplicationOptions.IsAlwaysOnTopEnabled = bool.Parse(optionValue);
+            }
+            if (options.TryGetValue("IsMinimizeToTrayEnabled", out optionValue))
+            {
+                ApplicationOptions.IsMinimizeToTrayEnabled = bool.Parse(optionValue);
+            }
+            if (options.TryGetValue("IsExitToTrayEnabled", out optionValue))
+            {
+                ApplicationOptions.IsExitToTrayEnabled = bool.Parse(optionValue);
             }
         }
     }

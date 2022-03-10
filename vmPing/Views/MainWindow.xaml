@@ -14,7 +14,8 @@
         Loaded="Window_Loaded"
         StateChanged="Window_StateChanged"
         Closing="Window_Closing"
-        ContentRendered="Window_ContentRendered">
+        ContentRendered="Window_ContentRendered"
+        IsVisibleChanged="Window_IsVisibleChanged">
 
     <Window.Resources>
         <!-- Override default context menu animation: set to no animation -->

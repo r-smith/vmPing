@@ -106,7 +106,15 @@ namespace vmPing.Views
         private void Window_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (Application.Current.MainWindow.WindowState == WindowState.Minimized)
+            {
+                // Application is minimized. Restore window.
                 Application.Current.MainWindow.WindowState = WindowState.Normal;
+            }
+            if (Application.Current.MainWindow.Visibility != Visibility.Visible)
+            {
+                // Application is hidden to tray. Toggle visibility. Event will trigger on MainWindow to restore the window.
+                Application.Current.MainWindow.Visibility = Visibility.Visible;
+            }
             Application.Current.MainWindow.Focus();
         }
 

@@ -93,6 +93,7 @@
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
                 Background="{TemplateBinding Background}"
+                Padding="6,0"
                 SnapsToDevicePixels="true">
             <Grid VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
@@ -166,6 +167,7 @@
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
                 Background="{TemplateBinding Background}"
+                Padding="6,0"
                 SnapsToDevicePixels="true">
             <Grid VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>

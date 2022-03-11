@@ -72,10 +72,9 @@
                     <DockPanel HorizontalAlignment="Stretch" LastChildFill="False" Background="White"/>
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
-
+            
             <!-- Menu: Add Probe -->
-            <MenuItem x:Name="AddProbeMenu"
-                      Margin="6,0">
+            <MenuItem x:Name="AddProbeMenu">
                 <MenuItem.Header>
                     <AccessText Text="{x:Static resource:Strings.Toolbar_Add}" VerticalAlignment="Center"/>
                 </MenuItem.Header>
@@ -85,7 +84,7 @@
             </MenuItem>
 
             <!-- Menu: Columns -->
-            <MenuItem Margin="6,0">
+            <MenuItem>
                 <MenuItem.Header>
                     <AccessText Text="{x:Static resource:Strings.Toolbar_Columns}" VerticalAlignment="Center"/>
                 </MenuItem.Header>
@@ -117,8 +116,7 @@
             </MenuItem>
 
             <!-- Menu: Start/Stop All -->
-            <MenuItem x:Name="StartStopMenu"
-                      Margin="6,0">
+            <MenuItem x:Name="StartStopMenu">
                 <MenuItem.Header>
                     <AccessText Name="StartStopMenuHeader"
                                 VerticalAlignment="Center"
@@ -133,8 +131,7 @@
             </MenuItem>
 
             <!-- Menu: Main menu dropdown -->
-            <MenuItem Width="32"
-                      Margin="0,0,6,0"
+            <MenuItem Width="40"
                       DockPanel.Dock="Right"
                       Template="{StaticResource TopLevelHeaderNoPaddingTemplate}">
                 <MenuItem.Icon>

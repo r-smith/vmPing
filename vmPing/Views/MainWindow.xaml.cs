@@ -49,6 +49,11 @@ namespace vmPing.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            // Set initial ColumnCount slider value.
+            ColumnCount.Value = ApplicationOptions.InitialColumnCount > 0
+                ? ApplicationOptions.InitialColumnCount
+                : 2;
+
             // Parse command line arguments. Get any host addresses entered on command line.
             List<string> cliHosts = CommandLine.ParseArguments();
 
@@ -92,12 +97,8 @@ namespace vmPing.Views
                 }
             }
 
-            // Set initial ColumnCount values. Value is what's set visually on the slider control.
-            // Tag is updated to be the lesser of the values ColumnCount.Value and _ProbeCollection.Count.
+            // Update ColumnCount.Tag to be whichever is lower: ColumnCount.Value or _ProbeCollection.Count.
             // The actual number of grid columns is bound to the tag value.
-            ColumnCount.Value = ApplicationOptions.InitialColumnCount > 0
-                ? ApplicationOptions.InitialColumnCount
-                : 2;
             ColumnCount.Tag = ColumnCount.Value > _ProbeCollection.Count
                 ? _ProbeCollection.Count
                 : (int)ColumnCount.Value;

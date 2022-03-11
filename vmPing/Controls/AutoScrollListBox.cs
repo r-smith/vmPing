@@ -57,8 +57,9 @@ namespace vmPing.Controls
 
         private void Scroll_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
+            const double MinimumAdornerHeight = 11.0;
             ScrollViewer scrollViewer = (ScrollViewer)sender;
-            if (scrollViewer.VerticalOffset == scrollViewer.ScrollableHeight)
+            if (scrollViewer.VerticalOffset == scrollViewer.ScrollableHeight || scrollViewer.ActualHeight < MinimumAdornerHeight)
             {
                 _adornerLayer.Remove(_autoScrollAdorner);
 

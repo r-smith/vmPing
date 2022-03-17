@@ -7,9 +7,10 @@
         Height="400"
         Width="720"
         MinHeight="250"
-        MinWidth="600"
+        MinWidth="620"
         Background="#313132"
         WindowStyle="None"
+        Closed="Window_Closed"
         PreviewKeyDown="Window_PreviewKeyDown"
         StateChanged="Window_StateChanged">
     <WindowChrome.WindowChrome>

@@ -21,10 +21,25 @@ namespace vmPing.Views
     public partial class StatusHistoryWindow : Window
     {
         ICollectionView _statusHistoryView;
+        private static bool IsWindowStateSet = false;
+        private static double _Left;
+        private static double _Top;
+        private static double _Width;
+        private static double _Height;
+        private static WindowState _WindowState;
 
         public StatusHistoryWindow(ObservableCollection<StatusChangeLog> statusChangeLog)
         {
             InitializeComponent();
+
+            if (IsWindowStateSet)
+            {
+                WindowState = _WindowState;
+                if (_Left < SystemParameters.VirtualScreenWidth) Left = _Left;
+                Top = _Top;
+                Width = _Width;
+                Height = _Height;
+            }
             RefreshMaximizeRestoreButton();
             Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
 
@@ -308,6 +323,34 @@ namespace vmPing.Views
             public POINT ptMaxPosition;
             public POINT ptMinTrackSize;
             public POINT ptMaxTrackSize;
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            // Remember window position and state.
+            IsWindowStateSet = true;
+            switch (WindowState)
+            {
+                case WindowState.Maximized:
+                    _WindowState = WindowState;
+                    break;
+                case WindowState.Minimized:
+                    _WindowState = WindowState.Normal;
+                    _Left = Left;
+                    _Top = Top;
+                    _Width = ActualWidth;
+                    _Height = ActualHeight;
+                    break;
+                case WindowState.Normal:
+                    _WindowState = WindowState.Normal;
+                    _Left = Left;
+                    _Top = Top;
+                    _Width = Width;
+                    _Height = Height;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

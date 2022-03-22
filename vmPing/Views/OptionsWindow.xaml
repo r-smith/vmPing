@@ -237,7 +237,7 @@
 
                     <!-- Total packet size -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left" Margin="20,15,0,0">
-                        <TextBlock Foreground="#268bd2"
+                        <TextBlock Foreground="#0e70c0"
                                    Text="Total packet size:"/>
                         <TextBlock Foreground="#dc322f"
                                    Name="Bytes"
@@ -256,14 +256,19 @@
                                   Name="DontFragment"
                                   Content="Don't fragment"/>
                         <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
-                            The don't fragment flag instructs routers to discard the packet if it is too big. This can be used to determine the MTU.
+                            <TextBlock>
+                                The don't fragment flag instructs routers to discard the packet if it is too big.
+                                <LineBreak/>
+                                <LineBreak/>
+                                Your maximum transmission unit (MTU) can be determined by enabling this option and adjusting the packet data size.
+                            </TextBlock>
                         </Label>
                     </DockPanel>
                 </DockPanel>
             </TabItem>
             
             <!-- Tab: Popup Alerts -->
-            <TabItem Header="Popup Alerts" Name="PopupAlertsTab">
+            <TabItem Header="Notifications" Name="PopupAlertsTab">
                 <DockPanel Margin="20,0" LastChildFill="False">
 
                     <!-- Header -->
@@ -273,10 +278,10 @@
                                    Style="{StaticResource OptionHeaderTextStyle}"/>
                         <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
                             <TextBlock>
-                                Popup alerts are displayed, in the lower right corner of your screen, when a host you are monitoring changes status (goes down or up).
+                                Popup alerts appear in the lower right corner of your screen when a host you are monitoring changes status (down or up).
                                 <LineBreak/>
                                 <LineBreak/>
-                                You can disable notifications entirely, choose to show them only when vmPing is minimized, or always show notifications.
+                                You can always show popup alerts, show only when vmPing is minimized, or disable entirely.
                             </TextBlock>
                         </Label>
                     </DockPanel>
@@ -306,7 +311,7 @@
                                   Content="Auto-dismiss notifications"
                                   IsChecked="True"/>
                         <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
-                            When enabled, popup alerts will automatically close after the specified number of seconds.
+                            Automatically close popup alerts after the specified number of seconds.
                         </Label>
                     </DockPanel>
 
@@ -326,9 +331,9 @@
             </TabItem>
 
             <!-- Tab: Email Alerts -->
-            <TabItem Header="Email Alerts" Name="EmailAlertsTab">
+            <TabItem Header="Email" Name="EmailAlertsTab">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <DockPanel Margin="20,0">
+                    <DockPanel Margin="20,0,20,15">
 
                         <!-- Header -->
                         <TextBlock DockPanel.Dock="Top"
@@ -342,7 +347,7 @@
                                       Click="IsEmailAlertsEnabled_Click"
                                       IsChecked="True"/>
                             <Label Style="{StaticResource LabelToolTip}">
-                                If this option is enabled, an email is sent whenever a host goes down or up.
+                                Enable this option to send an email alert every time a host changes status (down or up).
                             </Label>
                         </StackPanel>
 
@@ -442,12 +447,12 @@
                             </DockPanel>
 
                             <!-- Test button -->
-                            <Button Style="{StaticResource ButtonSecondaryStyle}"
+                            <Button Style="{StaticResource ButtonStandardStyle}"
                                     Name="TestEmailButton"
                                     Visibility="{Binding IsChecked, ElementName=IsEmailAlertsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
                                     DockPanel.Dock="Top"
                                     Click="TestEmail_Click"
-                                    Width="100"
+                                    Width="85"
                                     Margin="0,18,0,0"
                                     Content="Test"
                                     HorizontalAlignment="Left"/>
@@ -457,7 +462,7 @@
             </TabItem>
 
             <!-- Tab: Audio Alerts -->
-            <TabItem Header="Audio Alerts" Name="AudioAlertTab">
+            <TabItem Header="Sounds" Name="AudioAlertTab">
                 <DockPanel Margin="20,0">
 
                     <!-- Header -->
@@ -472,7 +477,7 @@
                                   Content="Enable audio alert: host down"
                                   IsChecked="True"/>
                         <Label Style="{StaticResource LabelToolTip}">
-                            If this option is enabled, an audio file is played whenever a host goes down.
+                            Enable this option to play a sound when a host goes down.
                         </Label>
                     </StackPanel>
 
@@ -487,10 +492,10 @@
                                      Margin="0,4,0,8"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                 <!-- Browse button -->
-                                <Button Style="{StaticResource ButtonSecondaryStyle}"
+                                <Button Style="{StaticResource ButtonStandardStyle}"
                                         Click="AudioDownBrowse_Click"
-                                        Width="70"
-                                        Content="Browse"/>
+                                        Width="85"
+                                        Content="Browse..."/>
                                 <!-- Play button -->
                                 <Grid>
                                     <Grid.Style>
@@ -502,11 +507,11 @@
                                             </Style.Triggers>
                                         </Style>
                                     </Grid.Style>
-                                    <Button Style="{StaticResource ButtonSecondaryStyle}"
+                                    <Button Style="{StaticResource ButtonStandardStyle}"
                                             Click="AudioDownPlay_Click"
-                                            Width="70"
+                                            Width="85"
                                             Margin="10,0,0,0"
-                                            Content="Play">
+                                            Content="Test">
                                     </Button>
                                 </Grid>
                             </StackPanel>
@@ -524,7 +529,7 @@
                                   Content="Enable audio alert: host up"
                                   IsChecked="True"/>
                         <Label Style="{StaticResource LabelToolTip}">
-                            If this option is enabled, an audio file is played whenever a host comes up.
+                            Enable this option to play a sound when a host comes up.
                         </Label>
                     </StackPanel>
 
@@ -539,10 +544,10 @@
                                      Margin="0,4,0,8"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                 <!-- Browse button -->
-                                <Button Style="{StaticResource ButtonSecondaryStyle}"
+                                <Button Style="{StaticResource ButtonStandardStyle}"
                                         Click="AudioUpBrowse_Click"
-                                        Width="70"
-                                        Content="Browse"/>
+                                        Width="85"
+                                        Content="Browse..."/>
                                 <!-- Play button -->
                                 <Grid>
                                     <Grid.Style>
@@ -554,11 +559,11 @@
                                             </Style.Triggers>
                                         </Style>
                                     </Grid.Style>
-                                    <Button Style="{StaticResource ButtonSecondaryStyle}"
+                                    <Button Style="{StaticResource ButtonStandardStyle}"
                                             Click="AudioUpPlay_Click"
-                                            Width="70"
+                                            Width="85"
                                             Margin="10,0,0,0"
-                                            Content="Play">
+                                            Content="Test">
                                     </Button>
                                 </Grid>
                             </StackPanel>
@@ -568,7 +573,7 @@
             </TabItem>
 
             <!-- Tab: Logging -->
-            <TabItem Header="Log Output" Name="LogOutputTab">
+            <TabItem Header="Logging" Name="LogOutputTab">
                 <DockPanel Margin="20,0">
 
                     <!-- Header -->
@@ -594,10 +599,10 @@
                             <TextBlock Text="Log path (base directory)"/>
                             <TextBox Name="LogPath"
                                      Margin="0,4,0,8"/>
-                            <Button Style="{StaticResource ButtonSecondaryStyle}"
+                            <Button Style="{StaticResource ButtonStandardStyle}"
                                     Click="BrowseLogPath_Click"
-                                    Width="70"
-                                    Content="Browse"
+                                    Width="85"
+                                    Content="Browse..."
                                     HorizontalAlignment="Left"/>
                         </StackPanel>
                     </Grid>
@@ -625,10 +630,10 @@
                             <TextBlock Text="Log path"/>
                             <TextBox Name="LogStatusChangesPath"
                                      Margin="0,4,0,8"/>
-                            <Button Style="{StaticResource ButtonSecondaryStyle}"
+                            <Button Style="{StaticResource ButtonStandardStyle}"
                                     Click="BrowseLogStatusChangesPath_Click"
-                                    Width="70"
-                                    Content="Browse"
+                                    Width="85"
+                                    Content="Browse..."
                                     HorizontalAlignment="Left"/>
                         </StackPanel>
                     </Grid>
@@ -644,8 +649,8 @@
                                Text="Display Options"
                                Style="{StaticResource OptionHeaderTextStyle}"/>
 
-                    <!-- Auto-dismiss enabled checkbox -->
-                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,15,0,7">
+                    <!-- Always on top -->
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,15,0,0">
                         <CheckBox DockPanel.Dock="Left"
                                   Name="IsAlwaysOnTopEnabled"
                                   Content="Always on top"/>
@@ -653,7 +658,8 @@
                             Keep the vmPing application on top and always visible over other windows.
                         </Label>
                     </DockPanel>
-                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,0,0,7">
+                    <!-- Minimze to tray -->
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,15,0,0">
                         <CheckBox DockPanel.Dock="Left"
                                   Name="IsMinimizeToTrayEnabled"
                                   Content="Minimize to tray"/>
@@ -671,7 +677,8 @@
                             </TextBlock>
                         </Label>
                     </DockPanel>
-                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,0,0,7">
+                    <!-- Exit to tray -->
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,15,0,0">
                         <CheckBox DockPanel.Dock="Left"
                                   Name="IsExitToTrayEnabled"
                                   Content="Exit to tray"/>
@@ -693,7 +700,7 @@
             </TabItem>
             
             <!-- Tab: Layout -->
-            <TabItem Header="Layout" Name="LayoutTab">
+            <TabItem Header="Colors" Name="LayoutTab">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <DockPanel LastChildFill="False"
                                Name="ColorsDockPanel"
@@ -849,7 +856,7 @@
 
                         <!-- Restore defaults button -->
                         <Grid DockPanel.Dock="Top" Margin="0,15,0,0">
-                            <Button Style="{StaticResource ButtonSecondaryStyle}"
+                            <Button Style="{StaticResource ButtonStandardStyle}"
                                     Click="RestoreDefaultColors_Click"
                                     Padding="15,5"
                                     Content="Restore Defaults"

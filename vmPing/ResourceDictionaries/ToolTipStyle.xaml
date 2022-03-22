@@ -13,18 +13,31 @@
                             ToolTipService.ShowDuration="60000"
                             SnapsToDevicePixels="true">
                         <Border.ToolTip>
-                            <ToolTip Background="#3a3a3a" BorderBrush="#101010" BorderThickness="1">
-                                <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                                  Margin="5"
-                                                  Width="{TemplateBinding MaxWidth}">
-                                    <ContentPresenter.Resources>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Setter Property="TextWrapping" Value="Wrap"/>
-                                            <Setter Property="FontSize" Value="14"/>
-                                            <Setter Property="Foreground" Value="#f2f2f2"/>
-                                        </Style>
-                                    </ContentPresenter.Resources>
-                                </ContentPresenter>
+                            <ToolTip Background="#e9eeff" BorderBrush="#203d77" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Grid.Column="0"
+                                           Width="16"
+                                           Height="16"
+                                           Margin="7,13,7,7"
+                                           VerticalAlignment="Top"
+                                           Source="{StaticResource icon.vmping-logo-simple}" />
+                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                      Grid.Column="1"
+                                                      Margin="5,10,7,10"
+                                                      Width="{TemplateBinding MaxWidth}">
+                                        <ContentPresenter.Resources>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="TextWrapping" Value="Wrap"/>
+                                                <Setter Property="FontSize" Value="14"/>
+                                                <Setter Property="Foreground" Value="#111111"/>
+                                            </Style>
+                                        </ContentPresenter.Resources>
+                                    </ContentPresenter>
+                                </Grid>
                             </ToolTip>
                         </Border.ToolTip>
                         <Image Source="{StaticResource icon.question-circle}"
@@ -35,7 +48,7 @@
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="TextWrapping" Value="Wrap"/>
                             <Setter Property="FontSize" Value="14"/>
-                            <Setter Property="Foreground" Value="#f2f2f2"/>
+                            <Setter Property="Foreground" Value="#111111"/>
                         </Style>
                     </ControlTemplate.Resources>
                 </ControlTemplate>

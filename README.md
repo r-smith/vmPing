@@ -7,7 +7,7 @@ vmPing
 vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple hosts.  Numerous host monitors can be added and removed, and each monitor dynamically resizes with the application window.  Color-coding allows you to tell at a glance the status of each host.  In addition to standard ICMP pings, you can also perform a TCP 'port ping', where the application continuously connects to a specified port and displays whether or not the port is open.  A fast trace route utility and a basic packet generator / stress tester is also included.
 
 **[Click here to download the latest release](https://github.com/R-Smith/vmPing/releases/latest/download/vmPing.exe)**
-##### (1.3.21 released on March 9, 2022)
+##### (1.3.23 released on April 13, 2022)
 
 ##### Notes
 * There is no installer.  Just run the .exe.
@@ -28,6 +28,17 @@ Screenshots
 
 Recent Changes
 --------------
+### Version 1.3.23
+* Fix: Force software rendering. This should fix high GPU usage on some video cards.
+* Fix: Loading a favorite on startup was not using the column count for the favorite.
+* Fix: Scroll indicator icon would unnecessarily display when the window was resized to small dimensions.
+* The position and size of the status history window is now remembered rather than resetting each time it's opened.
+* Switch to using SnapToDevicePixels on the main window. Previously, the pixel width for the black borders between probes would sometimes vary when the window was resized. The borders should now always be consistent.
+* Removed gaps when hovering mouse between menu buttons (Add Host, Columns, Start/Stop All). Removed gap from right edge of main menu button.
+* Some of the menu headers have been renamed on the options screen.
+
+
+
 ### Version 1.3.21
 * If you scroll up in a ping window, automatic scrolling pauses. Automatic scrolling resumes when you scroll back to the bottom. While scrolled up, a small visual indicator appears in the bottom right corner of the ping window.
 * Added _always on top_ option. This feature existed in early versions, and now it's back. Found under Options -> Display.

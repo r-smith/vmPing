@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Markup;
+using System.Windows.Media;
 
 namespace vmPing
 {
@@ -11,6 +12,9 @@ namespace vmPing
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            // Force software rendering. Otherwise application may have high GPU usage on some video cards.
+            RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.SoftwareOnly;
+
             // The following code snippet was taken from Stack Overflow answer here:
             // https://stackoverflow.com/questions/520115/stringformat-localization-issues-in-wpf/520334#520334
 
@@ -21,6 +25,7 @@ namespace vmPing
                   new FrameworkPropertyMetadata(
                       XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
         }
+
         // DEBUG: Use this for testing alternate locales.
         //public App()
         //{

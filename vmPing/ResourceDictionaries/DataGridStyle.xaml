@@ -204,11 +204,11 @@
     <!-- DataGrid style for the Status History window -->
     <!-- Brushes -->
     <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF000000"/>
-    <SolidColorBrush x:Key="DG.Header.Static.Background" Color="#d6d7d8"/>
-    <SolidColorBrush x:Key="DG.Header.Static.Foreground" Color="Black"/>
+    <SolidColorBrush x:Key="DG.Header.Static.Background" Color="Black"/>
+    <SolidColorBrush x:Key="DG.Header.Static.Foreground" Color="#d0d0d0"/>
     <SolidColorBrush x:Key="DG.Header.Static.Border" Color="Black"/>
-    <SolidColorBrush x:Key="DG.Header.MouseOver.Background" Color="#fcfdfe"/>
-    <SolidColorBrush x:Key="DG.Header.Pressed.Background" Color="#babbbd"/>
+    <SolidColorBrush x:Key="DG.Header.MouseOver.Background" Color="#202020"/>
+    <SolidColorBrush x:Key="DG.Header.Pressed.Background" Color="#007acc"/>
     <SolidColorBrush x:Key="DG.Row.Static.Background" Color="#1e1e1e"/>
     <SolidColorBrush x:Key="DG.Row.Static.Foreground" Color="#e8e8e8"/>
     <SolidColorBrush x:Key="DG.Row.MouseOver.Background" Color="#2e2e2e"/>
@@ -235,13 +235,13 @@
             <!-- Column header -->
             <Style TargetType="{x:Type DataGridColumnHeader}">
                 <Setter Property="FontFamily" Value="Segoe UI"/>
-                <Setter Property="FontSize" Value="13"/>
-                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="Regular"/>
                 <Setter Property="Background" Value="{StaticResource DG.Header.Static.Background}"/>
                 <Setter Property="Foreground" Value="{StaticResource DG.Header.Static.Foreground}"/>
                 <Setter Property="BorderBrush" Value="{StaticResource DG.Header.Static.Border}"/>
-                <Setter Property="BorderThickness" Value="1,0,0,0"/>
-                <Setter Property="Padding" Value="5,5,17,5"/>
+                <Setter Property="BorderThickness" Value="0,1,0,1"/>
+                <Setter Property="Padding" Value="5,7,17,7"/>
                 <Setter Property="Margin" Value="-1,0,-17,0"/>
                 <Setter Property="Template">
                     <Setter.Value>
@@ -344,7 +344,7 @@
         <Setter Property="Foreground" Value="{StaticResource DG.Row.Static.Foreground}"/>
         <Setter Property="RowBackground" Value="{StaticResource DG.Row.Static.Background}"/>
         <Setter Property="BorderBrush" Value="{StaticResource DG.Border}"/>
-        <Setter Property="BorderThickness" Value="0,2,0,1"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
         <Setter Property="GridLinesVisibility" Value="Horizontal"/>
         <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource DG.Gridlines.Border}"/>
         <Setter Property="Template">

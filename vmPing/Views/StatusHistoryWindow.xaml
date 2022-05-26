@@ -11,6 +11,7 @@
         Background="#313132"
         WindowStyle="None"
         Closed="Window_Closed"
+        MouseDown="Window_MouseDown"
         PreviewKeyDown="Window_PreviewKeyDown"
         StateChanged="Window_StateChanged">
     <WindowChrome.WindowChrome>
@@ -51,7 +52,7 @@
                            Margin="4,0,0,0"
                            VerticalAlignment="Center"
                            FontSize="13"
-                           Foreground="#f1f1f1"
+                           Foreground="#f8f8f8"
                            Text="{Binding Path=Title,
                                  RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                 </TextBlock>
@@ -236,7 +237,7 @@
             <!-- Filter section -->
             <DockPanel Grid.Row="2">
                 <!-- Filter section -->
-                <DockPanel DockPanel.Dock="Left" Margin="12,6,6,12">
+                <DockPanel DockPanel.Dock="Left" Margin="12,6,6,9">
                     <!-- Filter -->
                     <StackPanel DockPanel.Dock="Left">
                         <TextBlock Text="Filter" Foreground="#ecce51" Margin="0,0,0,2"/>
@@ -311,7 +312,7 @@
                     </StackPanel>
                     <!-- Export button -->
                     <StackPanel DockPanel.Dock="Left" Margin="25,0,0,0" HorizontalAlignment="Left">
-                        <TextBlock/>
+                        <TextBlock Margin="0,0,0,2"/>
                         <Button Style="{StaticResource ButtonStyle.Dark}"
                                 Content="Export"
                                 Click="Export_Click"

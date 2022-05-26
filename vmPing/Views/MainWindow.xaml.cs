@@ -85,6 +85,7 @@ namespace vmPing.Views
                 switch (ApplicationOptions.InitialStartMode)
                 {
                     case ApplicationOptions.StartMode.MultiInput:
+                        RefreshColumnCount();
                         MultiInputWindowExecute(null, null);
                         break;
                     case ApplicationOptions.StartMode.Favorite:
@@ -97,11 +98,7 @@ namespace vmPing.Views
                 }
             }
 
-            // Update ColumnCount.Tag to be whichever is lower: ColumnCount.Value or _ProbeCollection.Count.
-            // The actual number of grid columns is bound to the tag value.
-            ColumnCount.Tag = ColumnCount.Value > _ProbeCollection.Count
-                ? _ProbeCollection.Count
-                : (int)ColumnCount.Value;
+            RefreshColumnCount();
         }
 
         private void RefreshGuiState()
@@ -141,6 +138,15 @@ namespace vmPing.Views
                     probe.IsolatedWindow.Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
                 }
             }
+        }
+
+        private void RefreshColumnCount()
+        {
+            // Update ColumnCount.Tag to be whichever is lower: ColumnCount.Value or _ProbeCollection.Count.
+            // The actual number of grid columns is bound to the tag value.
+            ColumnCount.Tag = ColumnCount.Value > _ProbeCollection.Count
+                ? _ProbeCollection.Count
+                : (int)ColumnCount.Value;
         }
 
         private void InitializeCommandBindings()
@@ -210,7 +216,7 @@ namespace vmPing.Views
             // When the ColumnCount slider value is changed, update Tag to be the lesser of
             // ColumnCount.Value and _ProbeCollection.Count.
             // The visual column count is bound to the Tag value.
-            ColumnCount.Tag = ColumnCount.Value > _ProbeCollection.Count ? _ProbeCollection.Count : (int)ColumnCount.Value;
+            RefreshColumnCount();
         }
 
         private void Hostname_KeyDown(object sender, KeyEventArgs e)
@@ -243,9 +249,7 @@ namespace vmPing.Views
                 probe.StartStop();
             }
             _ProbeCollection.Remove(probe);
-
-            // Update column count.
-            ColumnCount.Tag = ColumnCount.Value > _ProbeCollection.Count ? _ProbeCollection.Count : (int)ColumnCount.Value;
+            RefreshColumnCount();
         }
 
         private void MultiInputWindowExecute(object sender, ExecutedRoutedEventArgs e)
@@ -342,7 +346,7 @@ namespace vmPing.Views
         private void AddProbeExecute(object sender, ExecutedRoutedEventArgs e)
         {
             _ProbeCollection.Add(new Probe());
-            ColumnCount.Tag = ColumnCount.Value > _ProbeCollection.Count ? _ProbeCollection.Count : (int)ColumnCount.Value;
+            RefreshColumnCount();
         }
 
         private void OptionsExecute(object sender, ExecutedRoutedEventArgs e)

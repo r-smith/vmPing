@@ -114,7 +114,7 @@ namespace vmPing.Views
             }
             else
             {
-                // Checks passed.  Saving.
+                // Checks passed. Saving.
                 SaveFavorite();
             }
         }
@@ -126,6 +126,7 @@ namespace vmPing.Views
                 Favorite.Rename(originalTitle: OriginalTitle, newTitle: MyTitle.Text);
             // Save.
             Favorite.Save(MyTitle.Text, HostList, ColumnCount);
+            Application.Current.MainWindow.Title = MyTitle.Text + " - vmPing";
             DialogResult = true;
         }
 

@@ -51,8 +51,9 @@ namespace vmPing.Views
                 && !addresses.All(x => string.IsNullOrWhiteSpace(x))
                 )
             {
-                // Convert list to multiline string.
+                // Convert list to multiline string and select all text.
                 MyAddresses.Text = string.Join(Environment.NewLine, addresses);
+                MyAddresses.SelectAll();
             }
         }
 

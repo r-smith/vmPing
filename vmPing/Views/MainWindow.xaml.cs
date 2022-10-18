@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,6 +18,8 @@ namespace vmPing.Views
     {
         private ObservableCollection<Probe> _ProbeCollection = new ObservableCollection<Probe>();
         private Dictionary<string, string> _Aliases = new Dictionary<string, string>();
+        private ObservableCollection<ProbeStatus> _TrayNegativeStatusList = new ObservableCollection<ProbeStatus>();
+
         private System.Windows.Forms.NotifyIcon NotifyIcon;
 
         public static RoutedCommand OptionsCommand = new RoutedCommand();
@@ -45,6 +48,8 @@ namespace vmPing.Views
 
             // Set items source for main GUI ItemsControl.
             ProbeItemsControl.ItemsSource = _ProbeCollection;
+
+            _TrayNegativeStatusList.Add(ProbeStatus.Down);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -203,7 +208,42 @@ namespace vmPing.Views
         public void AddProbe(int numberOfProbes = 1)
         {
             for (; numberOfProbes > 0; --numberOfProbes)
-                _ProbeCollection.Add(new Probe());
+            {
+                var probe = new Probe();
+                _ProbeCollection.Add(probe);
+                probe.PropertyChanged += ProbeOnPropertyChanged;
+            }
+
+        }
+
+        private void ProbeOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (NotifyIcon == null)
+                return;
+
+            if (e.PropertyName == "Status")
+            {
+                // Status changed, recalculate color of tray icon
+
+                var green = true;
+
+                foreach (var probe in _ProbeCollection)
+                {
+                    if (_TrayNegativeStatusList.Contains(probe.Status))
+                        green = false;
+                }
+
+                if (green)
+                {
+                    NotifyIcon.Icon = new System.Drawing.Icon(Application
+                        .GetResourceStream(new Uri("pack://application:,,,/vmPing-green.ico")).Stream);
+                }
+                else
+                {
+                    NotifyIcon.Icon = new System.Drawing.Icon(Application
+                        .GetResourceStream(new Uri("pack://application:,,,/vmPing.ico")).Stream);
+                }
+            }
         }
 
         public void ProbeStartStop_Click(object sender, EventArgs e)
@@ -710,7 +750,11 @@ namespace vmPing.Views
                     System.Windows.Forms.ToolStripMenuItem menuStatusHistory = new System.Windows.Forms.ToolStripMenuItem("Status History");
                     menuStatusHistory.Click += (s, args) => StatusHistoryExecute(null, null);
                     System.Windows.Forms.ToolStripMenuItem menuExit = new System.Windows.Forms.ToolStripMenuItem("Exit vmPing");
-                    menuExit.Click += (s, args) => Application.Current.Shutdown();
+                    menuExit.Click += (s, args) =>
+                    {
+                        NotifyIcon.Dispose();
+                        Application.Current.Shutdown();
+                    };
 
                     menuStrip.Items.Add(menuOptions);
                     menuStrip.Items.Add(menuStatusHistory);
@@ -720,13 +764,14 @@ namespace vmPing.Views
                     // Create tray icon.
                     NotifyIcon = new System.Windows.Forms.NotifyIcon
                     {
-                        Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/vmPing.ico")).Stream),
+                        Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/vmPing-green.ico")).Stream),
                         Text = "vmPing",
                         ContextMenuStrip = menuStrip
                     };
                     NotifyIcon.MouseUp += NotifyIcon_MouseUp;
                 }
-                NotifyIcon.Visible = true;
+                if (NotifyIcon != null)
+                    NotifyIcon.Visible = true;
             }
             catch
             {

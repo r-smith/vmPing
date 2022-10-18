@@ -58,6 +58,8 @@ namespace vmPing.Classes
         public static bool IsMinimizeToTrayEnabled { get; set; } = false;
         public static bool IsExitToTrayEnabled { get; set; } = false;
 
+        public static bool IsChangeTrayIconColorEnabled { get; set; } = false;
+
         // Font sizes.
         //public static string FontFamily_Alias { get; set; }
         //public static string FontFamily_Probe { get; set; }

@@ -696,6 +696,25 @@
                             </TextBlock>
                         </Label>
                     </DockPanel>
+                    <!-- Exit to tray -->
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,15,0,0">
+                        <CheckBox DockPanel.Dock="Left"
+                                  Name="IsChangeTrayIconColorEnabled"
+                                  Content="Change tray icon based on ping status,"/>
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
+                            <TextBlock>
+                                Set the tray icon color to green when all pings are successful. Red when one or more pings are unsuccessful.
+                                <LineBreak/>
+                                <LineBreak/>
+                                To keep the system tray icon always visible:
+                                <LineBreak/>
+                                Right-click the Windows taskbar and choose 'Taskbar settings'.
+                                Under 'Notifications area' click 'Select which icons to appear on the taskbar'. Look for vmPing and set to 'On'.
+                                <LineBreak/>
+                                (Steps may vary)
+                            </TextBlock>
+                        </Label>
+                    </DockPanel>
                 </DockPanel>
             </TabItem>
             

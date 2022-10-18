@@ -180,6 +180,7 @@ namespace vmPing.Views
             IsAlwaysOnTopEnabled.IsChecked = ApplicationOptions.IsAlwaysOnTopEnabled;
             IsMinimizeToTrayEnabled.IsChecked = ApplicationOptions.IsMinimizeToTrayEnabled;
             IsExitToTrayEnabled.IsChecked = ApplicationOptions.IsExitToTrayEnabled;
+            IsChangeTrayIconColorEnabled.IsChecked = ApplicationOptions.IsChangeTrayIconColorEnabled;
         }
 
         private void PopulateLayoutOptions()
@@ -588,6 +589,7 @@ namespace vmPing.Views
             ApplicationOptions.IsAlwaysOnTopEnabled = IsAlwaysOnTopEnabled.IsChecked == true;
             ApplicationOptions.IsMinimizeToTrayEnabled = IsMinimizeToTrayEnabled.IsChecked == true;
             ApplicationOptions.IsExitToTrayEnabled = IsExitToTrayEnabled.IsChecked == true;
+            ApplicationOptions.IsChangeTrayIconColorEnabled = IsChangeTrayIconColorEnabled.IsChecked == true;
 
             return true;
         }

@@ -247,7 +247,10 @@ namespace vmPing.Classes
                     ApplicationOptions.IsMinimizeToTrayEnabled),
                 new XElement("option",
                     new XAttribute("name", "IsExitToTrayEnabled"),
-                    ApplicationOptions.IsExitToTrayEnabled));
+                    ApplicationOptions.IsExitToTrayEnabled),
+                new XElement("option",
+                    new XAttribute("name", "IsChangeTrayIconColorEnabled"),
+                    ApplicationOptions.IsChangeTrayIconColorEnabled));
 
             return configuration;
         }
@@ -636,6 +639,10 @@ namespace vmPing.Classes
             if (options.TryGetValue("IsExitToTrayEnabled", out optionValue))
             {
                 ApplicationOptions.IsExitToTrayEnabled = bool.Parse(optionValue);
+            }
+            if (options.TryGetValue("IsChangeTrayIconColorEnabled", out optionValue))
+            {
+                ApplicationOptions.IsChangeTrayIconColorEnabled = bool.Parse(optionValue);
             }
         }
     }

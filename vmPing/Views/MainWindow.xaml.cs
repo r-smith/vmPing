@@ -72,6 +72,10 @@ namespace vmPing.Views
                     _ProbeCollection[i].StartStop();
                 }
             }
+            else if (!string.IsNullOrWhiteSpace(ApplicationOptions.FavoriteToStartWith))
+            {
+                StartFavorite(ApplicationOptions.FavoriteToStartWith);
+            }
             else
             {
                 // No addresses entered on the command line.
@@ -99,6 +103,36 @@ namespace vmPing.Views
             }
 
             RefreshColumnCount();
+        }
+
+        private void StartFavorite(string selectedFavorite)
+        {
+            if (string.IsNullOrWhiteSpace(selectedFavorite))
+            {
+              return;
+            }
+
+            RemoveAllProbes();
+
+            var favorite = Favorite.GetContents(selectedFavorite);
+            if (favorite.Hostnames.Count < 1)
+            {
+                AddProbe();
+            }
+            else
+            {
+                AddProbe(numberOfProbes: favorite.Hostnames.Count);
+                for (var i = 0; i < favorite.Hostnames.Count; ++i)
+                {
+                    _ProbeCollection[i].Hostname = favorite.Hostnames[i].ToUpper();
+                    _ProbeCollection[i].Alias = _Aliases.ContainsKey(_ProbeCollection[i].Hostname)
+                        ? _Aliases[_ProbeCollection[i].Hostname]
+                        : null;
+                    _ProbeCollection[i].StartStop();
+                }
+            }
+
+            ColumnCount.Value = favorite.ColumnCount;
         }
 
         private void RefreshGuiState()

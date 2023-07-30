@@ -26,6 +26,10 @@ namespace vmPing.Classes
             {
                 switch (args[index].ToLower())
                 {
+                    case "/f":
+                    case "-f":
+                        index = ReadFavorite(index, args, ref errorMessage);
+                        break;
                     case "/i":
                     case "-i":
                         if (index + 1 < args.Length &&
@@ -96,6 +100,30 @@ namespace vmPing.Classes
             return hostnames;
         }
 
+
+        private static int ReadFavorite(int index, string[] args, ref string errorMessage)
+        {
+          var favoriteTitle = string.Empty;
+          if (index + 1 < args.Length)
+          {
+            favoriteTitle = args[index + 1];
+          }
+
+          var argSeperators = new[] { '-', '/' };
+          if (!string.IsNullOrWhiteSpace(favoriteTitle) && !argSeperators.Contains(favoriteTitle[0]))
+          {
+            ApplicationOptions.FavoriteToStartWith = favoriteTitle;
+
+            ++index;
+          }
+          else
+          {
+            errorMessage += $"For switch -f you must specify a favorite to load.{Environment.NewLine}";
+            return index;
+          }
+
+          return index;
+        }
 
         private static List<string> ReadHostsFromFile(string path)
         {

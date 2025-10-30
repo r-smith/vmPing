@@ -1,0 +1,85 @@
+﻿<Window x:Class="vmPing.UI.ManageAliasesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:resource="clr-namespace:vmPing.Properties"
+        Title="{x:Static resource:Strings.ManageAliases_WindowTitle}"
+        UseLayoutRounding="True"
+        WindowStartupLocation="CenterScreen"
+        Height="475"
+        Width="460"
+        MinHeight="250"
+        MinWidth="360"
+        Background="#f0f0f0"
+        ResizeMode="CanResize"
+        PreviewKeyDown="Window_PreviewKeyDown"
+        SourceInitialized="Window_SourceInitialized">
+
+    <Grid Margin="9">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <Image Source="{StaticResource icon.alias}" VerticalAlignment="Center" Width="20" Height="20" Margin="0,0,8,0"/>
+            <TextBlock Grid.Row="0"
+                       Text="{x:Static resource:Strings.ManageAliases_Header}"
+                       Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"/>
+        </StackPanel>
+        
+        <DataGrid Grid.Row="1"
+                  Name="AliasesDataGrid"
+                  Style="{StaticResource DataGridStyle}">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=Value}" Header="{x:Static resource:Strings.ManageAliases_Alias}" Width="*">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSelected, RelativeSource= {RelativeSource AncestorType={x:Type DataGridRow}}}" Value="True">
+                                    <Setter Property="Foreground" Value="White"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                            <Setter Property="Padding" Value="7,2,10,2"/>
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding Path=Key}" Header="{x:Static resource:Strings.ManageAliases_Host}" Width=".8*">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSelected, RelativeSource= {RelativeSource AncestorType={x:Type DataGridRow}}}" Value="True">
+                                    <Setter Property="Foreground" Value="White"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                            <Setter Property="Padding" Value="7,2,10,2"/>
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                            <Setter Property="Foreground" Value="#0067b8"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        
+        <!-- Buttons section -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,9,0,0">
+            <Button Click="New_Click"
+                    Width="85"
+                    Style="{StaticResource ButtonStandardStyle}"
+                    Content="_New"/>
+            <Button Click="Edit_Click"
+                    Margin="15,0"
+                    Width="85"
+                    Style="{StaticResource ButtonStandardStyle}"
+                    IsEnabled="{Binding ElementName=AliasesDataGrid, Path=SelectedItems.Count}"
+                    Content="_Edit"/>
+            <Button Click="Remove_Click"
+                    Width="85"
+                    Style="{StaticResource ButtonStandardStyle}"
+                    IsEnabled="{Binding ElementName=AliasesDataGrid, Path=SelectedItems.Count}"
+                    Content="_Remove"/>
+        </StackPanel>
+    </Grid>
+</Window>

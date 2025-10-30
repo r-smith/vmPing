@@ -6,7 +6,7 @@ using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
 using vmPing.Properties;
-using vmPing.Views;
+using vmPing.UI;
 
 namespace vmPing.Classes
 {

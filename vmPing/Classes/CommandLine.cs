@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using vmPing.Views;
+using vmPing.UI;
 
 namespace vmPing.Classes
 {

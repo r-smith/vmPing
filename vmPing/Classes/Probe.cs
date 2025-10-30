@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using vmPing.Properties;
-using vmPing.Views;
+using vmPing.UI;
 
 namespace vmPing.Classes
 {

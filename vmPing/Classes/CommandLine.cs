@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using vmPing.UI;
 
@@ -9,141 +10,133 @@ namespace vmPing.Classes
 {
     class CommandLine
     {
+        private const int MinInterval = 1;
+        private const int MaxInterval = 86400;
+        private const int MinTimeout = 1;
+        private const int MaxTimeout = 60;
+        private const long MaxHostFileSize = 10 * 1024;
+        private const string UsageText = "vmPing [-i interval] [-w timeout] [<target_host>...] [<path_to_list_of_hosts>...]";
+
         public static List<string> ParseArguments()
         {
             var args = Environment.GetCommandLineArgs();
-            var errorMessage = string.Empty;
+            var errors = new StringBuilder();
             var hostnames = new List<string>();
 
-            const int MinimumInterval = 1;
-            const int MaxInterval = 86400;
-            const int MinimumTimeout = 1;
-            const int MaxTimeout = 60;
-
-            const string CommandLineUsage = "vmPing [-i interval] [-w timeout] [<target_host>...] [<path_to_list_of_hosts>...]";
-
-            for (var index = 1; index < args.Length; ++index)
+            for (int i = 1; i < args.Length; i++)
             {
-                switch (args[index].ToLower())
+                switch (args[i].ToLowerInvariant())
                 {
                     case "/i":
                     case "-i":
-                        if (index + 1 < args.Length &&
-                            int.TryParse(args[index + 1], out int interval) &&
-                            interval >= MinimumInterval && interval <= MaxInterval)
+                        if (i + 1 < args.Length &&
+                            int.TryParse(args[i + 1], out int interval) &&
+                            interval >= MinInterval && interval <= MaxInterval)
                         {
                             ApplicationOptions.PingInterval = interval * 1000;
-                            ++index;
+                            i++; // Skip over next arg.
                         }
                         else
                         {
-                            errorMessage +=
-                                $"For switch -i you must specify the number of seconds between {MinimumInterval} and {MaxInterval}.{Environment.NewLine}";
-                            break;
+                            errors.AppendLine($"For option -i you must specify the number of seconds between {MinInterval} and {MaxInterval}.");
                         }
                         break;
                     case "/w":
                     case "-w":
-                        if (args.Length > index + 1 &&
-                            int.TryParse(args[index + 1], out int timeout) &&
-                            timeout >= MinimumTimeout && timeout <= MaxTimeout)
+                        if (args.Length > i + 1 &&
+                            int.TryParse(args[i + 1], out int timeout) &&
+                            timeout >= MinTimeout && timeout <= MaxTimeout)
                         {
                             ApplicationOptions.PingTimeout = timeout * 1000;
-                            ++index;
+                            i++; // Skip over next arg.
                         }
                         else
                         {
-                            errorMessage +=
-                                $"For switch -w you must specify the number of seconds between {MinimumTimeout} and {MaxTimeout}.{Environment.NewLine}";
-                            break;
+                            errors.AppendLine($"For option -w you must specify the number of seconds between {MinTimeout} and {MaxTimeout}.");
                         }
                         break;
                     case "/?":
                     case "-?":
                     case "-h":
                     case "--help":
-                        var dialogWindow = new DialogWindow(
-                            icon: DialogWindow.DialogIcon.Info,
-                            title: "Command Line Usage",
-                            body: CommandLineUsage,
-                            confirmationText: "OK",
-                            isCancelButtonVisible: false);
-                        dialogWindow.Topmost = true;
-                        dialogWindow.ShowDialog();
+                        ShowHelpDialog();
                         Application.Current.Shutdown();
                         break;
                     default:
-                        // If an invalid argument is supplied, check to see if the argument is a valid path name.
-                        //   If so, attempt to parse and read hosts from the file.  If not, use the argument as a hostname.
-                        if (File.Exists(args[index]))
+                        // If an argument isn't one of the above options, check to see if it's a file path.
+                        // If so, open and read hosts from the file. If not, use the argument as a hostname.
+                        if (File.Exists(args[i]))
                         {
-                            hostnames.AddRange(ReadHostsFromFile(args[index]));
+                            hostnames.AddRange(ReadHostsFromFile(args[i]));
                         }
                         else
                         {
-                            hostnames.Add(args[index]);
+                            hostnames.Add(args[i]);
                         }
                         break;
                 }
             }
 
             // Display error message if any problems were encountered while parsing the arguments.
-            if (errorMessage.Length > 0)
+            if (errors.Length > 0)
             {
-                var dialogWindow = DialogWindow.ErrorWindow(
-                    $"{errorMessage}{Environment.NewLine}Command line usage:{Environment.NewLine}{CommandLineUsage}");
-                dialogWindow.Topmost = true;
-                dialogWindow.ShowDialog();
+                ShowErrorDialog(errors.ToString());
                 Application.Current.Shutdown();
             }
 
             return hostnames;
         }
 
-
         private static List<string> ReadHostsFromFile(string path)
         {
-            const long MaxSizeInBytes = 10240;
-
             try
             {
                 // Check file size.
                 long length = new FileInfo(path).Length;
-                if (length > MaxSizeInBytes)
+                if (length > MaxHostFileSize)
                 {
-                    throw new FileFormatException();
+                    ShowErrorDialog($"The specified file is too large and cannot be opened. The maximum file size is {MaxHostFileSize / 1024} KB.{Environment.NewLine}{Environment.NewLine}\"{path}\"");
+                    return new List<string>();
                 }
 
-                // Read file into a list of strings, so that each line can get checked.
-                var linesInFile = new List<string>(File.ReadAllLines(path));
+                // Read, validate, and trim each line from the specified file.
+                // Valid lines must not be empty and must begin with a letter, digit, or '[' character (for IPv6).
+                var validLines = File.ReadAllLines(path)
+                    .Where(line =>
+                        !string.IsNullOrWhiteSpace(line) &&
+                        (char.IsLetterOrDigit(line[0]) || line[0] == '['))
+                    .Select(line => line.Trim())
+                    .ToList();
 
-                // Get a list of valid lines.
-                // Valid lines must not be empty and must being with a letter, digit, or '[' character (for IPv6).
-                var validLines = linesInFile
-                    .Where(x => !string.IsNullOrWhiteSpace(x) &&
-                                (char.IsLetterOrDigit(x[0]) || x[0] == '['));
-
-                // Convert list to multiline string (with each line trimmed).
-                return validLines.Select(x => x.Trim()).ToList();
+                return validLines;
             }
-            catch (FileFormatException)
+            catch (Exception ex)
             {
-                var dialog = DialogWindow.ErrorWindow(
-                    $"The file is too large and cannot be opened. The maximum file size is {MaxSizeInBytes / 1024} kb." +
-                    $"{Environment.NewLine}{Environment.NewLine}{path}");
-                dialog.Topmost = true;
-                dialog.ShowDialog();
+                ShowErrorDialog($"Failed to parse file: {ex.Message}{Environment.NewLine}{Environment.NewLine}\"{path}\"");
                 return new List<string>();
             }
-            catch
+        }
+
+        private static void ShowHelpDialog()
+        {
+            var dialog = new DialogWindow(
+                icon: DialogWindow.DialogIcon.Info,
+                title: "Command Line Usage",
+                body: UsageText,
+                confirmationText: "OK",
+                isCancelButtonVisible: false)
             {
-                var dialog = DialogWindow.ErrorWindow(
-                    "Failed parsing file." +
-                    $"{Environment.NewLine}{Environment.NewLine}{path}");
-                dialog.Topmost = true;
-                dialog.ShowDialog();
-                return new List<string>();
-            }
+                Topmost = true
+            };
+            dialog.ShowDialog();
+        }
+
+        private static void ShowErrorDialog(string message)
+        {
+            var dialog = DialogWindow.ErrorWindow($"{message}{Environment.NewLine}{Environment.NewLine}Command line usage:{Environment.NewLine}{UsageText}");
+            dialog.Topmost = true;
+            dialog.ShowDialog();
+
         }
     }
 }

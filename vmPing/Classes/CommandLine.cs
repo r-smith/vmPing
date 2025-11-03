@@ -55,6 +55,12 @@ namespace vmPing.Classes
                             errors.AppendLine($"For option -w you must specify the number of seconds between {MinTimeout} and {MaxTimeout}.");
                         }
                         break;
+
+                    case "/minimized":
+                    case "-minimized":
+                        Application.Current.MainWindow.WindowState = WindowState.Minimized;
+                        break;
+
                     case "/?":
                     case "-?":
                     case "-h":

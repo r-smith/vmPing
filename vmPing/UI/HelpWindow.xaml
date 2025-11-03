@@ -220,7 +220,7 @@
                 </Paragraph>
                 <Paragraph Style="{StaticResource ParagraphText}">
                     The trace route utility is used to measure network delays and determine the path taken to the given destination host.
-                    The utlity can be accessed from the dropdown icon in the top right or by pressing Ctrl-T.
+                    The utility can be accessed from the dropdown icon in the top right or by pressing Ctrl-T.
                 </Paragraph>
                 <Paragraph Style="{StaticResource SubHeaderText}">
                     Flood Host
@@ -228,7 +228,7 @@
                 <Paragraph Style="{StaticResource ParagraphText}">
                     The flood host utility is used to generate a significant amount of ICMP packets.
                     To limit the flow, the utility waits until a reply is received before sending the next ICMP packet.
-                    The utlity can be accessed from dropdown icon in the top right or by pressing Ctrl-F.
+                    The utility can be accessed from dropdown icon in the top right or by pressing Ctrl-F.
                 </Paragraph>
 
                 <!-- Options section -->

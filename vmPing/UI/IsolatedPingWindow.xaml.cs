@@ -23,7 +23,9 @@ namespace vmPing.UI
             History.SelectionStart = SelStart;
             History.SelectionLength = SelLength;
             if (!History.IsMouseCaptureWithin && History.SelectionLength == 0)
+            {
                 History.ScrollToEnd();
+            }
         }
 
         private void History_SelectionChanged(object sender, RoutedEventArgs e)

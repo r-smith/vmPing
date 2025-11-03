@@ -7,7 +7,7 @@ namespace vmPing.UI
 {
     public partial class EditAliasWindow : Window
     {
-        private string _Hostname;
+        private readonly string _Hostname;
 
         public EditAliasWindow(Probe pingItem) : this(pingItem.Hostname, pingItem.Alias)
         {

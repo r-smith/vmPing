@@ -41,23 +41,25 @@ namespace vmPing.UI
         private bool? ShowError(string message, TabItem tabItem, Control control, bool isWarning = false)
         {
             // Switch to specified tab.
-            if (tabItem != null)
-                tabItem.Focus();
+            tabItem?.Focus();
 
             // Show warning or error?
             DialogWindow errorWindow;
             if (isWarning == true)
+            {
                 errorWindow = DialogWindow.WarningWindow(message, "Save");
+            }
             else
+            {
                 errorWindow = DialogWindow.ErrorWindow(message);
+            }
 
             // Display dialog and capture result.
             errorWindow.Owner = this;
             var result = errorWindow.ShowDialog();
 
             // Set focus to specified control.
-            if (control != null)
-                control.Focus();
+            control?.Focus();
 
             return result;
         }
@@ -98,10 +100,7 @@ namespace vmPing.UI
             InitialColumnCount.Text = ApplicationOptions.InitialColumnCount.ToString();
             StartupMode.SelectedIndex = (int)ApplicationOptions.InitialStartMode;
             InitialFavorite.ItemsSource = Favorite.GetTitles();
-            InitialFavorite.Text =
-                (ApplicationOptions.InitialFavorite == null)
-                ? string.Empty
-                : ApplicationOptions.InitialFavorite;
+            InitialFavorite.Text = ApplicationOptions.InitialFavorite ?? string.Empty;
         }
 
         private void PopulateNotificationOptions()
@@ -206,32 +205,19 @@ namespace vmPing.UI
 
         private void OK_Click(object sender, RoutedEventArgs e)
         {
-            if (SaveGeneralOptions() == false)
-                return;
-
-            if (SaveNotificationOptions() == false)
-                return;
-
-            if (SaveEmailAlertOptions() == false)
-                return;
-
-            if (SaveAudioAlertOptions() == false)
-                return;
-
-            if (SaveLogOutputOptions() == false)
-                return;
-
-            if (SaveAdvancedOptions() == false)
-                return;
-
-            if (SaveLayoutOptions() == false)
-                return;
-
-            if (SaveDisplayOptions() == false)
-                return;
+            if (SaveGeneralOptions() == false) return;
+            if (SaveNotificationOptions() == false) return;
+            if (SaveEmailAlertOptions() == false) return;
+            if (SaveAudioAlertOptions() == false) return;
+            if (SaveLogOutputOptions() == false) return;
+            if (SaveAdvancedOptions() == false) return;
+            if (SaveLayoutOptions() == false) return;
+            if (SaveDisplayOptions() == false) return;
 
             if (SaveAsDefaults.IsChecked == true)
+            {
                 Configuration.WriteConfigurationOptions();
+            }
 
             DialogResult = true;
         }
@@ -272,17 +258,25 @@ namespace vmPing.UI
             }
 
             if (int.TryParse(PingInterval.Text, out pingInterval) && pingInterval > 0 && pingInterval <= 86400)
+            {
                 pingInterval *= multiplier;
+            }
             else
+            {
                 pingInterval = Constants.DefaultInterval;
+            }
             ApplicationOptions.PingInterval = pingInterval;
 
             // Ping timeout.
             int pingTimeout;
             if (int.TryParse(PingTimeout.Text, out pingTimeout) && pingTimeout > 0 && pingTimeout <= 60)
+            {
                 pingTimeout *= 1000;
+            }
             else
+            {
                 pingTimeout = Constants.DefaultTimeout;
+            }
             ApplicationOptions.PingTimeout = pingTimeout;
 
             // Alert threshold.
@@ -290,7 +284,9 @@ namespace vmPing.UI
 
             var isThresholdValid = int.TryParse(AlertThreshold.Text, out alertThreshold) && alertThreshold > 0 && alertThreshold <= 60;
             if (!isThresholdValid)
+            {
                 alertThreshold = 1;
+            }
 
             ApplicationOptions.AlertThreshold = alertThreshold;
 
@@ -305,9 +301,13 @@ namespace vmPing.UI
                     if (int.TryParse(InitialProbeCount.Text, out count))
                     {
                         if (count < 1)
+                        {
                             count = 1;
+                        }
                         else if (count > 20)
+                        {
                             count = 2;
+                        }
                     }
                     else
                     {
@@ -319,9 +319,13 @@ namespace vmPing.UI
                     if (int.TryParse(InitialColumnCount.Text, out count))
                     {
                         if (count < 1)
+                        {
                             count = 1;
+                        }
                         else if (count > 10)
+                        {
                             count = 10;
+                        }
                     }
                     else
                     {
@@ -359,11 +363,17 @@ namespace vmPing.UI
             }
 
             if (PopupsMinimizedOption.IsChecked == true)
+            {
                 ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
+            }
             else if (PopupsAlwaysOption.IsChecked == true)
+            {
                 ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Always;
+            }
             else
+            {
                 ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Never;
+            }
 
             return true;
         }
@@ -399,7 +409,9 @@ namespace vmPing.UI
 
                 // Fill buffer with default text.
                 if (ApplicationOptions.Buffer.Length >= 33)
+                {
                     Buffer.BlockCopy(Encoding.ASCII.GetBytes(Constants.DefaultIcmpData), 0, ApplicationOptions.Buffer, 0, 33);
+                }
             }
             else
             {
@@ -410,9 +422,13 @@ namespace vmPing.UI
 
             // Apply fragment / don't fragment option.
             if (DontFragment.IsChecked == true)
+            {
                 ApplicationOptions.DontFragment = true;
+            }
             else
+            {
                 ApplicationOptions.DontFragment = false;
+            }
 
             // Update ping options (TTL / Don't fragment settings)
             ApplicationOptions.UpdatePingOptions();
@@ -594,12 +610,12 @@ namespace vmPing.UI
             // Validate input.
             foreach (var control in ColorsDockPanel.GetChildren())
             {
-                if (control is TextBox)
+                if (control is TextBox box)
                 {
-                    if (!Util.IsValidHtmlColor(((TextBox)control).Text))
+                    if (!Util.IsValidHtmlColor(box.Text))
                     {
-                        ShowError("Please enter a valid HTML color code.  Accepted formats are #RGB, #RRGGBB, and #AARRGGBB.  Example: #3266CF", LayoutTab, (TextBox)control);
-                        ((TextBox)control).SelectAll();
+                        ShowError("Please enter a valid HTML color code.  Accepted formats are #RGB, #RRGGBB, and #AARRGGBB.  Example: #3266CF", LayoutTab, box);
+                        box.SelectAll();
 
                         return false;
                     }
@@ -635,32 +651,42 @@ namespace vmPing.UI
         {
             var regex = new Regex("[^0-9.-]+");
             if (regex.IsMatch(e.Text))
+            {
                 e.Handled = true;
+            }
         }
 
         private void HtmlColor_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             var regex = new Regex("[#a-fA-F0-9]");
             if (!regex.IsMatch(e.Text))
+            {
                 e.Handled = true;
+            }
         }
 
         private void EmailRecipientAddress_LostFocus(object sender, RoutedEventArgs e)
         {
             if (EmailFromAddress.Text.Length == 0 && EmailRecipientAddress.Text.IndexOf('@') >= 0)
+            {
                 EmailFromAddress.Text = "vmPing" + EmailRecipientAddress.Text.Substring(EmailRecipientAddress.Text.IndexOf('@'));
+            }
         }
 
         private void IsEmailAlertsEnabled_Click(object sender, RoutedEventArgs e)
         {
             if (IsEmailAlertsEnabled.IsChecked == true && SmtpServer.Text.Length == 0)
+            {
                 SmtpServer.Focus();
+            }
         }
 
         private void IsSmtpAuthenticationRequired_Click(object sender, RoutedEventArgs e)
         {
             if (IsSmtpAuthenticationRequired.IsChecked == true)
+            {
                 SmtpUsername.Focus();
+            }
         }
 
         private async void TestEmail_Click(object sender, RoutedEventArgs e)
@@ -708,7 +734,9 @@ namespace vmPing.UI
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
 
                 if (result == System.Windows.Forms.DialogResult.OK)
+                {
                     LogPath.Text = dialog.SelectedPath;
+                }
             }
         }
 
@@ -720,7 +748,9 @@ namespace vmPing.UI
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
 
                 if (result == System.Windows.Forms.DialogResult.OK)
+                {
                     LogStatusChangesPath.Text = dialog.SelectedPath + "\\vmping-status.txt";
+                }
             }
         }
 
@@ -745,7 +775,9 @@ namespace vmPing.UI
                 audiofileDialog.DefaultExt = ".wav";
 
                 if (audiofileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
                     tb.Text = audiofileDialog.FileName;
+                }
             }
         }
 
@@ -802,9 +834,13 @@ namespace vmPing.UI
             if (PacketSizeOption.IsChecked == true)
             {
                 if (PacketSize != null && regex.IsMatch(PacketSize.Text))
+                {
                     Bytes.Text = (int.Parse(PacketSize.Text) + 28).ToString();
+                }
                 else
+                {
                     Bytes.Text = "?";
+                }
             }
             else
             {
@@ -820,13 +856,17 @@ namespace vmPing.UI
         private void PacketSizeOption_Checked(object sender, RoutedEventArgs e)
         {
             if (IsLoaded)
+            {
                 UpdateByteCount();
+            }
         }
 
         private void UseCustomPacketOption_Checked(object sender, RoutedEventArgs e)
         {
             if (IsLoaded)
+            {
                 UpdateByteCount();
+            }
         }
 
         private void RestoreDefaultColors_Click(object sender, RoutedEventArgs e)

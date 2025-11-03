@@ -41,7 +41,9 @@ namespace vmPing.UI
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
             if (AliasesDataGrid.SelectedIndex < 0)
+            {
                 return;
+            }
 
             var dialogWindow = new DialogWindow(
                 DialogWindow.DialogIcon.Warning,
@@ -60,7 +62,9 @@ namespace vmPing.UI
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
             if (AliasesDataGrid.SelectedIndex < 0)
+            {
                 return;
+            }
 
             var editAliasWindow = new EditAliasWindow(((KeyValuePair<string, string>)AliasesDataGrid.SelectedItem).Key, ((KeyValuePair<string, string>)AliasesDataGrid.SelectedItem).Value);
             editAliasWindow.Owner = this;
@@ -73,8 +77,10 @@ namespace vmPing.UI
 
         private void New_Click(object sender, RoutedEventArgs e)
         {
-            var newAliasWindow = new NewAliasWindow();
-            newAliasWindow.Owner = this;
+            var newAliasWindow = new NewAliasWindow
+            {
+                Owner = this
+            };
             if (newAliasWindow.ShowDialog() == true)
             {
                 RefreshAliasList();
@@ -96,7 +102,9 @@ namespace vmPing.UI
         private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
+            {
                 Close();
+            }
         }
     }
 }

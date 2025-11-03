@@ -19,7 +19,10 @@ namespace vmPing.Classes
             if (await IsHostInvalid(Hostname, cancellationToken))
             {
                 if (cancellationToken.IsCancellationRequested)
+                {
                     return;
+                }
+
                 StopProbe(ProbeStatus.Error);
                 return;
             }
@@ -37,7 +40,10 @@ namespace vmPing.Classes
                             timeout: ApplicationOptions.PingTimeout,
                             buffer: ApplicationOptions.Buffer,
                             options: ApplicationOptions.GetPingOptions);
-                        if (cancellationToken.IsCancellationRequested) return;
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            return;
+                        }
 
                         // Reply received.
                         if (reply.Status == IPStatus.Success)
@@ -50,7 +56,9 @@ namespace vmPing.Classes
                             {
                                 TriggerStatusChange(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Up });
                                 if (ApplicationOptions.IsEmailAlertEnabled)
+                                {
                                     Util.SendEmail("up", Hostname, Alias);
+                                }
                             }
 
                             Status = ProbeStatus.Up;
@@ -60,8 +68,14 @@ namespace vmPing.Classes
                         {
                             Statistics.Lost++;
                             IndeterminateCount++;
-                            if (Status == ProbeStatus.Up) Status = ProbeStatus.Indeterminate;
-                            if (Status == ProbeStatus.Inactive) Status = ProbeStatus.Down;
+                            if (Status == ProbeStatus.Up)
+                            {
+                                Status = ProbeStatus.Indeterminate;
+                            }
+                            if (Status == ProbeStatus.Inactive)
+                            {
+                                Status = ProbeStatus.Down;
+                            }
 
                             // Check for status change.
                             if (Status == ProbeStatus.Indeterminate && IndeterminateCount >= ApplicationOptions.AlertThreshold)
@@ -69,7 +83,9 @@ namespace vmPing.Classes
                                 Status = ProbeStatus.Down;
                                 TriggerStatusChange(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Down });
                                 if (ApplicationOptions.IsEmailAlertEnabled)
+                                {
                                     Util.SendEmail("down", Hostname, Alias);
+                                }
                             }
                         }
 
@@ -95,7 +111,9 @@ namespace vmPing.Classes
                             Status = ProbeStatus.Down;
                             TriggerStatusChange(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Down });
                             if (ApplicationOptions.IsEmailAlertEnabled)
+                            {
                                 Util.SendEmail("error", Hostname, Alias);
+                            }
                         }
 
                         // Update output.
@@ -118,20 +136,29 @@ namespace vmPing.Classes
                 // then sleep for [INTERVAL - TIMEOUT]
                 // Otherwise, sleep for a fixed amount of 1 second
                 if (ApplicationOptions.PingInterval > ApplicationOptions.PingTimeout)
+                {
                     await Task.Delay(ApplicationOptions.PingInterval - ApplicationOptions.PingTimeout);
+                }
                 else
+                {
                     await Task.Delay(1000);
+                }
             }
             else
+            {
                 // For any other type of ping response, sleep for the global ping interval amount
                 // before sending another ping.
                 await Task.Delay(ApplicationOptions.PingInterval);
+            }
         }
 
 
         private void DisplayIcmpReply(PingReply pingReply, Exception ex = null)
         {
-            if (pingReply == null && ex == null) return;
+            if (pingReply == null && ex == null)
+            {
+                return;
+            }
 
             // Build output string based on the ping reply details.
             var pingOutput = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  ");
@@ -144,9 +171,14 @@ namespace vmPing.Classes
                         pingOutput.Append("Reply from ");
                         pingOutput.Append(pingReply.Address.ToString());
                         if (pingReply.RoundtripTime < 1)
+                        {
                             pingOutput.Append("  [<1ms]");
+                        }
                         else
+                        {
                             pingOutput.Append($"  [{pingReply.RoundtripTime} ms]");
+                        }
+
                         break;
                     case IPStatus.DestinationHostUnreachable:
                         pingOutput.Append("Reply  [Host unreachable]");
@@ -168,9 +200,13 @@ namespace vmPing.Classes
             else
             {
                 if (ex.InnerException is SocketException)
+                {
                     pingOutput.Append("Unable to resolve hostname.");
+                }
                 else
+                {
                     pingOutput.Append(ex.Message);
+                }
             }
 
             // Add response to the output window..

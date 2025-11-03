@@ -14,7 +14,11 @@ namespace vmPing.Classes
     {
         public void StartStop()
         {
-            if (string.IsNullOrEmpty(Hostname)) return;
+            if (string.IsNullOrEmpty(Hostname))
+            {
+                return;
+            }
+
             if (IsActive)
             {
                 // Stopping probe.
@@ -79,7 +83,10 @@ namespace vmPing.Classes
             {
                 mutex.WaitOne();
                 if (status != ProbeStatus.Error)
+                {
                     WriteFinalStatisticsToHistory();
+                }
+
                 StatusChangeLog.Add(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Stop });
                 mutex.ReleaseMutex();
             }));
@@ -176,16 +183,18 @@ namespace vmPing.Classes
         {
             Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
-                if (ApplicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.Always ||
-                (ApplicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.WhenMinimized &&
-                Application.Current.MainWindow.WindowState == WindowState.Minimized))
+                if (ApplicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.Always
+                    || (ApplicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.WhenMinimized
+                    && Application.Current.MainWindow.WindowState == WindowState.Minimized))
                 {
                     mutex.WaitOne();
                     if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
                     {
                         // Mark all existing status changes as read.
                         for (int i = 0; i < StatusChangeLog.Count; ++i)
+                        {
                             StatusChangeLog[i].HasStatusBeenCleared = true;
+                        }
                     }
                     StatusChangeLog.Add(status);
                     mutex.ReleaseMutex();
@@ -193,7 +202,10 @@ namespace vmPing.Classes
                     if (StatusWindow != null && StatusWindow.IsLoaded)
                     {
                         if (StatusWindow.WindowState == WindowState.Minimized)
+                        {
                             StatusWindow.WindowState = WindowState.Normal;
+                        }
+
                         StatusWindow.Focus();
                     }
                     else if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())

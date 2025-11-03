@@ -44,7 +44,9 @@ namespace vmPing.UI
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
             if (Favorites.SelectedIndex < 0)
+            {
                 return;
+            }
 
             var dialogWindow = new DialogWindow(
                 DialogWindow.DialogIcon.Warning,
@@ -82,7 +84,9 @@ namespace vmPing.UI
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
             if (Favorites.SelectedIndex < 0)
+            {
                 return;
+            }
 
             var newFavoriteWindow = new NewFavoriteWindow(
                 hostList: SelectedFavorite.Hostnames,
@@ -98,8 +102,10 @@ namespace vmPing.UI
 
         private void New_Click(object sender, RoutedEventArgs e)
         {
-            var newFavoriteWindow = new NewFavoriteWindow(new List<string>(), 2);
-            newFavoriteWindow.Owner = this;
+            var newFavoriteWindow = new NewFavoriteWindow(new List<string>(), 2)
+            {
+                Owner = this
+            };
             if (newFavoriteWindow.ShowDialog() == true)
             {
                 RefreshFavoriteList();
@@ -121,7 +127,9 @@ namespace vmPing.UI
         private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
+            {
                 Close();
+            }
         }
     }
 }

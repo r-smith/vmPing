@@ -123,9 +123,7 @@ namespace vmPing.Classes
                 for (int i = 0; i < count; i++)
                 {
                     // Retrieve child visual at specified index value.
-                    var child = VisualTreeHelper.GetChild(parent, i) as Visual;
-
-                    if (child != null)
+                    if (VisualTreeHelper.GetChild(parent, i) is Visual child)
                     {
                         yield return child;
 

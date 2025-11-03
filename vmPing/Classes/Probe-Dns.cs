@@ -23,13 +23,19 @@ namespace vmPing.Classes
                         var host = await Dns.GetHostEntryAsync(Hostname);
                         cancellationToken.ThrowIfCancellationRequested();
                         if (host != null)
+                        {
                             AddHistory($"    {host.HostName}");
+                        }
+
                         break;
                     case UriHostNameType.Dns:
                         var ipAddresses = await Dns.GetHostAddressesAsync(Hostname);
                         cancellationToken.ThrowIfCancellationRequested();
                         foreach (var ip in ipAddresses)
+                        {
                             AddHistory($"    {ip}");
+                        }
+
                         break;
                     default:
                         throw new Exception();
@@ -39,7 +45,9 @@ namespace vmPing.Classes
             catch
             {
                 if (!cancellationToken.IsCancellationRequested)
+                {
                     AddHistory($"{Environment.NewLine}\u2605 Unable to resolve hostname");
+                }
             }
             finally
             {

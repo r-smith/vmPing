@@ -39,7 +39,10 @@ namespace vmPing.Classes
             if (await IsHostInvalid(host, cancellationToken))
             {
                 if (cancellationToken.IsCancellationRequested)
+                {
                     return;
+                }
+
                 StopProbe(ProbeStatus.Error);
                 return;
             }
@@ -98,14 +101,19 @@ namespace vmPing.Classes
                         client.EndConnect(result);
 
                         // Check if this task was cancelled.
-                        if (cancellationToken.IsCancellationRequested) return;
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            return;
+                        }
 
                         // Check for status change.
                         if (Status == ProbeStatus.Down)
                         {
                             TriggerStatusChange(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Up });
                             if (ApplicationOptions.IsEmailAlertEnabled)
+                            {
                                 Util.SendEmail("up", Hostname, Alias);
+                            }
                         }
 
                         Statistics.Received++;
@@ -120,12 +128,20 @@ namespace vmPing.Classes
                         stopwatch.Stop();
 
                         // Check if this task was cancelled.
-                        if (cancellationToken.IsCancellationRequested) return;
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            return;
+                        }
 
                         if (Status == ProbeStatus.Up)
+                        {
                             Status = ProbeStatus.Indeterminate;
+                        }
                         if (Status == ProbeStatus.Inactive)
+                        {
                             Status = ProbeStatus.Down;
+                        }
+
                         IndeterminateCount++;
 
                         // Check for status change.
@@ -134,7 +150,9 @@ namespace vmPing.Classes
                             Status = ProbeStatus.Down;
                             TriggerStatusChange(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Down });
                             if (ApplicationOptions.IsEmailAlertEnabled)
+                            {
                                 Util.SendEmail("down", Hostname, Alias);
+                            }
                         }
 
                         // If hostname cannot be resolved, report error and stop.

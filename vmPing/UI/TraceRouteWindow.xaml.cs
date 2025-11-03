@@ -34,10 +34,11 @@ namespace vmPing.UI
             if (!Route.IsActive)
             {
                 if (Hostname.Text.Length == 0)
+                {
                     return;
+                }
 
-                if (Route.BgWorker != null)
-                    Route.BgWorker.CancelAsync();
+                Route.BgWorker?.CancelAsync();
 
                 // Reset width for IP address column.
                 TraceData.Columns[1].Width = new DataGridLength(100.0);
@@ -118,10 +119,14 @@ namespace vmPing.UI
                         }
 
                         if (!bgWorker.CancellationPending)
+                        {
                             bgWorker.ReportProgress(pingOptions.Ttl, pingReply);
+                        }
 
                         if (pingReply.Status == IPStatus.Success)
+                        {
                             break;
+                        }
 
                         Route.ResetEvent.Set();
                         Thread.Sleep(100);
@@ -151,16 +156,22 @@ namespace vmPing.UI
             var node = new NetworkRouteNode();
 
             if (pingReply.Address != null)
+            {
                 node.HostAddress = pingReply.Address.ToString();
+            }
             node.ReplyStatus = pingReply.Status;
             node.HopId = e.ProgressPercentage;
             node.RoundTripTime = Route.Timer.ElapsedMilliseconds;
 
             if (node.ReplyStatus == IPStatus.TimedOut)
+            {
                 node.HostAddress = "Timed out";
+            }
 
             if (node.ReplyStatus == IPStatus.Success)
+            {
                 TraceStatus.Text = "\u2605 Trace complete";
+            }
 
             Route.networkRoute.Add(node);
             TraceData.ScrollIntoView(TraceData.Items[Route.networkRoute.Count - 1]);

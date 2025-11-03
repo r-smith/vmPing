@@ -20,7 +20,9 @@ namespace vmPing.Classes
             // If a configuration file is found in the current directory, update FilePath.
             // Otherwise the default location is used (%LocalAppData%\vmPing).
             if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "vmPing.xml"))
+            {
                 FilePath = AppDomain.CurrentDomain.BaseDirectory + "vmPing.xml";
+            }
         }
 
         public static bool Exists()
@@ -94,17 +96,25 @@ namespace vmPing.Classes
         public static string GetEscapedXpath(string xpath)
         {
             if (!xpath.Contains("'"))
+            {
                 return '\'' + xpath + '\'';
+            }
             else if (!xpath.Contains("\""))
+            {
                 return '"' + xpath + '"';
+            }
             else
+            {
                 return "concat('" + xpath.Replace("'", "',\"'\",'") + "')";
+            }
         }
 
         public static void WriteConfigurationOptions()
         {
             if (IsReady() == false)
+            {
                 return;
+            }
 
             try
             {
@@ -335,7 +345,9 @@ namespace vmPing.Classes
         public static void Load()
         {
             if (!Exists())
+            {
                 return;
+            }
 
             try
             {
@@ -358,115 +370,157 @@ namespace vmPing.Classes
             var options = new Dictionary<string, string>();
 
             foreach (XmlNode node in nodeList)
+            {
                 options.Add(node.Attributes["name"].Value, node.InnerText);
+            }
 
             string optionValue;
             // Load probe backgorund colors.
             if (options.TryGetValue("Probe.Background.Inactive", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.BackgroundColor_Probe_Inactive = optionValue;
+                }
             }
             if (options.TryGetValue("Probe.Background.Up", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.BackgroundColor_Probe_Up = optionValue;
+                }
             }
             if (options.TryGetValue("Probe.Background.Down", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.BackgroundColor_Probe_Down = optionValue;
+                }
             }
             if (options.TryGetValue("Probe.Background.Indeterminate", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.BackgroundColor_Probe_Indeterminate = optionValue;
+                }
             }
             if (options.TryGetValue("Probe.Background.Error", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.BackgroundColor_Probe_Error = optionValue;
+                }
             }
 
             // Load probe foreground colors.
             if (options.TryGetValue("Probe.Foreground.Inactive", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.ForegroundColor_Probe_Inactive = optionValue;
+                }
             }
             if (options.TryGetValue("Probe.Foreground.Up", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.ForegroundColor_Probe_Up = optionValue;
+                }
             }
             if (options.TryGetValue("Probe.Foreground.Down", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.ForegroundColor_Probe_Down = optionValue;
+                }
             }
             if (options.TryGetValue("Probe.Foreground.Indeterminate", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.ForegroundColor_Probe_Indeterminate = optionValue;
+                }
             }
             if (options.TryGetValue("Probe.Foreground.Error", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.ForegroundColor_Probe_Error = optionValue;
+                }
             }
 
             // Load statistics foreground colors.
             if (options.TryGetValue("Statistics.Foreground.Inactive", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.ForegroundColor_Stats_Inactive = optionValue;
+                }
             }
             if (options.TryGetValue("Statistics.Foreground.Up", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.ForegroundColor_Stats_Up = optionValue;
+                }
             }
             if (options.TryGetValue("Statistics.Foreground.Down", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.ForegroundColor_Stats_Down = optionValue;
+                }
             }
             if (options.TryGetValue("Statistics.Foreground.Indeterminate", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.ForegroundColor_Stats_Indeterminate = optionValue;
+                }
             }
             if (options.TryGetValue("Statistics.Foreground.Error", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.ForegroundColor_Stats_Error = optionValue;
+                }
             }
 
             // Load alias foreground colors.
             if (options.TryGetValue("Alias.Foreground.Inactive", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.ForegroundColor_Alias_Inactive = optionValue;
+                }
             }
             if (options.TryGetValue("Alias.Foreground.Up", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.ForegroundColor_Alias_Up = optionValue;
+                }
             }
             if (options.TryGetValue("Alias.Foreground.Down", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.ForegroundColor_Alias_Down = optionValue;
+                }
             }
             if (options.TryGetValue("Alias.Foreground.Indeterminate", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.ForegroundColor_Alias_Indeterminate = optionValue;
+                }
             }
             if (options.TryGetValue("Alias.Foreground.Error", out optionValue))
             {
                 if (Util.IsValidHtmlColor(optionValue))
+                {
                     ApplicationOptions.ForegroundColor_Alias_Error = optionValue;
+                }
             }
         }
 
@@ -475,7 +529,9 @@ namespace vmPing.Classes
             var options = new Dictionary<string, string>();
 
             foreach (XmlNode node in nodeList)
+            {
                 options.Add(node.Attributes["name"].Value, node.InnerText);
+            }
 
             string optionValue;
             if (options.TryGetValue("PingInterval", out optionValue))
@@ -509,11 +565,17 @@ namespace vmPing.Classes
             if (options.TryGetValue("InitialStartMode", out optionValue))
             {
                 if (optionValue.Equals(ApplicationOptions.StartMode.Favorite.ToString()))
+                {
                     ApplicationOptions.InitialStartMode = ApplicationOptions.StartMode.Favorite;
+                }
                 else if (optionValue.Equals(ApplicationOptions.StartMode.MultiInput.ToString()))
+                {
                     ApplicationOptions.InitialStartMode = ApplicationOptions.StartMode.MultiInput;
+                }
                 else
+                {
                     ApplicationOptions.InitialStartMode = ApplicationOptions.StartMode.Blank;
+                }
             }
             if (options.TryGetValue("InitialProbeCount", out optionValue))
             {
@@ -530,11 +592,17 @@ namespace vmPing.Classes
             if (options.TryGetValue("PopupNotifications", out optionValue))
             {
                 if (optionValue.Equals(ApplicationOptions.PopupNotificationOption.Always.ToString()))
+                {
                     ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Always;
+                }
                 else if (optionValue.Equals(ApplicationOptions.PopupNotificationOption.WhenMinimized.ToString()))
+                {
                     ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
+                }
                 else
+                {
                     ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Never;
+                }
             }
             if (options.TryGetValue("IsAutoDismissEnabled", out optionValue))
             {
@@ -618,12 +686,16 @@ namespace vmPing.Classes
             if (options.TryGetValue("EmailUser", out optionValue))
             {
                 if (optionValue.Length > 0)
+                {
                     ApplicationOptions.EmailUser = Util.DecryptStringAES(optionValue);
+                }
             }
             if (options.TryGetValue("EmailPassword", out optionValue))
             {
                 if (optionValue.Length > 0)
+                {
                     ApplicationOptions.EmailPassword = Util.DecryptStringAES(optionValue);
+                }
             }
             if (options.TryGetValue("IsAlwaysOnTopEnabled", out optionValue))
             {

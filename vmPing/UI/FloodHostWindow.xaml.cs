@@ -11,8 +11,7 @@ namespace vmPing.UI
 {
     public partial class FloodHostWindow : Window
     {
-        FloodHostNode _floodHost = new FloodHostNode();
-
+        readonly FloodHostNode _floodHost = new FloodHostNode();
 
         public FloodHostWindow()
         {
@@ -26,7 +25,6 @@ namespace vmPing.UI
                 MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
 
-
         private void btnFloodHost_Click(object sender, RoutedEventArgs e)
         {
             lblInformation.Visibility = Visibility.Collapsed;
@@ -39,10 +37,11 @@ namespace vmPing.UI
             if (!node.IsActive)
             {
                 if (txtHostname.Text.Length == 0)
+                {
                     return;
+                }
 
-                if (node.BgWorker != null)
-                    node.BgWorker.CancelAsync();
+                node.BgWorker?.CancelAsync();
 
                 node.DestinationAddress = txtHostname.Text;
                 node.PacketsSent = 0;
@@ -82,9 +81,13 @@ namespace vmPing.UI
                     {
                         ++node.PacketsSent;
                         if (ping.Send(node.DestinationAddress, 100, pingBuffer, pingOptions).Status == IPStatus.Success)
+                        {
                             ++node.PacketsReceived;
+                        }
                         else
+                        {
                             ++node.PacketsLost;
+                        }
 
                         node.ResetEvent.Set();
                     }

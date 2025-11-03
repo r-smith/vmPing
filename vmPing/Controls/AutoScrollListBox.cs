@@ -22,7 +22,10 @@ namespace vmPing.Controls
         {
             // When ListBox is loaded, automatically scroll to the bottom of the list.
             // This is to handle dragging/dropping probes.
-            if (Items.Count > 1) ScrollIntoView(Items[Items.Count - 1]);
+            if (Items.Count > 1)
+            {
+                ScrollIntoView(Items[Items.Count - 1]);
+            }
 
             // Subscribe to the ScrollViewers LostMouseCapture and ScrollChanged events.
             if (VisualTreeHelper.GetChildrenCount(this) > 0 && VisualTreeHelper.GetChild(this, 0) is Decorator border)
@@ -67,7 +70,9 @@ namespace vmPing.Controls
             else
             {
                 if (_adornerLayer.GetAdorners(this) == null)
+                {
                     _adornerLayer.Add(_autoScrollAdorner);
+                }
             }
         }
 
@@ -95,7 +100,9 @@ namespace vmPing.Controls
                     // Scroll to the bottom of the ListBox. If user is currently clicking the scrollbar, then do nothing.
                     ScrollViewer scroll = border.Child as ScrollViewer;
                     if (!scroll.IsMouseCaptureWithin)
+                    {
                         scroll?.ScrollToEnd();
+                    }
                 }
             }
         }

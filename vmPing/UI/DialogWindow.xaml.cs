@@ -23,7 +23,9 @@ namespace vmPing.UI
             OK.Content = confirmationText;
 
             if (!isCancelButtonVisible)
+            {
                 Cancel.Visibility = Visibility.Collapsed;
+            }
 
             switch (icon)
             {

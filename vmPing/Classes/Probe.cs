@@ -25,7 +25,6 @@ namespace vmPing.Classes
         Stop
     }
 
-
     public enum ProbeType
     {
         Dns,
@@ -33,13 +32,12 @@ namespace vmPing.Classes
         Traceroute
     }
 
-
     public partial class Probe : INotifyPropertyChanged
     {
         public static ObservableCollection<StatusChangeLog> StatusChangeLog = new ObservableCollection<StatusChangeLog>();
         public static StatusHistoryWindow StatusWindow;
 
-        private static Mutex mutex = new Mutex();
+        private static readonly Mutex mutex = new Mutex();
         private static int activeCount;
         public static int ActiveCount
         {
@@ -143,9 +141,14 @@ namespace vmPing.Classes
 
                     mutex.WaitOne();
                     if (value == true)
+                    {
                         ++ActiveCount;
+                    }
                     else
+                    {
                         --ActiveCount;
+                    }
+
                     mutex.ReleaseMutex();
                     NotifyPropertyChanged("NumberOfActivePings");
                 }
@@ -173,12 +176,17 @@ namespace vmPing.Classes
 
             History.Add(historyItem);
             if (History.Count > MaxSize)
+            {
                 History.RemoveAt(0);
+            }
         }
 
         public void WriteFinalStatisticsToHistory()
         {
-            if (Statistics == null || Statistics.Sent == 0) return;
+            if (Statistics == null || Statistics.Sent == 0)
+            {
+                return;
+            }
 
             var roundTripTimes = new List<int>();
             var rttRegex = new Regex($@"  \[(?<rtt><?\d+) ?{Strings.Milliseconds_Symbol}]$");
@@ -186,11 +194,19 @@ namespace vmPing.Classes
             foreach (var historyItem in History)
             {
                 Match regexMatch = rttRegex.Match(historyItem);
-                if (!regexMatch.Success) continue;
+                if (!regexMatch.Success)
+                {
+                    continue;
+                }
+
                 if (regexMatch.Groups["rtt"].Value == "<1")
+                {
                     roundTripTimes.Add(0);
+                }
                 else
+                {
                     roundTripTimes.Add(int.Parse(regexMatch.Groups["rtt"].Value));
+                }
             }
 
             // Display stats and round trip times.

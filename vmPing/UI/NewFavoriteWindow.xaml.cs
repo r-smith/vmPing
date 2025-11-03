@@ -17,8 +17,8 @@ namespace vmPing.UI
     {
         private List<string> HostList;
         private int ColumnCount;
-        private bool IsExisting = false;
-        private string OriginalTitle;
+        private readonly bool IsExisting = false;
+        private readonly string OriginalTitle;
 
         // Hide minimize and maximize buttons.
         [DllImport("user32.dll")]
@@ -119,7 +119,9 @@ namespace vmPing.UI
         {
             // Check if renaming the title of an existing favorite set.
             if (IsExisting && !MyTitle.Text.Equals(OriginalTitle))
+            {
                 Favorite.Rename(originalTitle: OriginalTitle, newTitle: MyTitle.Text);
+            }
             // Save.
             Favorite.Save(MyTitle.Text, HostList, ColumnCount);
             Application.Current.MainWindow.Title = MyTitle.Text + " - vmPing";
@@ -130,7 +132,9 @@ namespace vmPing.UI
         {
             var regex = new Regex("[^0-9.-]+");
             if (regex.IsMatch(e.Text))
+            {
                 e.Handled = true;
+            }
         }
 
         private void Window_SourceInitialized(object sender, EventArgs e)

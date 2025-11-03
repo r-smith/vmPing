@@ -15,14 +15,18 @@ namespace vmPing.Classes
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
+            {
                 return FalseValue;
+            }
             else
+            {
                 return (bool)value ? TrueValue : FalseValue;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value != null ? value.Equals(TrueValue) : false;
+            return value != null && value.Equals(TrueValue);
         }
     }
 
@@ -33,9 +37,13 @@ namespace vmPing.Classes
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if ((bool)value == false)
+            {
                 return Visibility.Hidden;
+            }
             else
+            {
                 return Visibility.Visible;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -89,9 +97,13 @@ namespace vmPing.Classes
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if ((bool)value == false)
+            {
                 return (DrawingImage)Application.Current.Resources["icon.play"];
+            }
             else
+            {
                 return (DrawingImage)Application.Current.Resources["icon.stop-circle"];
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -215,7 +227,10 @@ namespace vmPing.Classes
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (string.IsNullOrWhiteSpace((string)value))
+            {
                 return Binding.DoNothing;
+            }
+
             try
             {
                 return (Brush)new BrushConverter().ConvertFromString((string)value);
@@ -237,18 +252,33 @@ namespace vmPing.Classes
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if ((double)value > 250)
+            {
                 return 18;
+            }
             else if ((double)value > 225)
+            {
                 return 17;
+            }
             else if ((double)value > 200)
+            {
                 return 16;
+            }
             else if ((double)value > 175)
+            {
                 return 15;
+            }
             else if ((double)value > 150)
+            {
                 return 14;
+            }
             else if ((double)value > 125)
+            {
                 return 13;
-            else return 12.5;
+            }
+            else
+            {
+                return 12.5;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -262,9 +292,13 @@ namespace vmPing.Classes
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if ((double)value > 300)
+            {
                 return Visibility.Visible;
+            }
             else
+            {
                 return Visibility.Collapsed;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -303,9 +337,13 @@ namespace vmPing.Classes
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if ((int)value > 0)
+            {
                 return Strings.Toolbar_StopAll;
+            }
             else
+            {
                 return Strings.Toolbar_StartAll;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -319,9 +357,13 @@ namespace vmPing.Classes
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if ((int)value > 0)
+            {
                 return (DrawingImage)Application.Current.Resources["icon.stop-circle"];
+            }
             else
+            {
                 return (DrawingImage)Application.Current.Resources["icon.play"];
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

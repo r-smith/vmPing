@@ -10,7 +10,9 @@ namespace vmPing.Classes
         public static Dictionary<string, string> GetAliases()
         {
             if (!Configuration.Exists())
+            {
                 return new Dictionary<string, string>();
+            }
 
             try
             {
@@ -19,7 +21,9 @@ namespace vmPing.Classes
 
                 var aliases = new Dictionary<string, string>();
                 foreach (XmlNode node in xd.SelectNodes("/vmping/aliases/alias"))
+                {
                     aliases.Add(node.Attributes["host"].Value.ToLower(), node.InnerText);
+                }
                 return aliases;
             }
 
@@ -34,7 +38,9 @@ namespace vmPing.Classes
         public static void AddAlias(string hostname, string alias)
         {
             if (!Configuration.IsReady())
+            {
                 return;
+            }
 
             // Convert to lowercase for consistent lookups / comparisons.
             hostname = hostname.ToLower();
@@ -70,7 +76,9 @@ namespace vmPing.Classes
         public static void DeleteAlias(string key)
         {
             if (!Configuration.Exists())
+            {
                 return;
+            }
 
             // Convert to lowercase for consistent lookups / comparisons.
             key = key.ToLower();

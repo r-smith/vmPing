@@ -76,9 +76,13 @@ namespace vmPing.Classes
                         // If an invalid argument is supplied, check to see if the argument is a valid path name.
                         //   If so, attempt to parse and read hosts from the file.  If not, use the argument as a hostname.
                         if (File.Exists(args[index]))
+                        {
                             hostnames.AddRange(ReadHostsFromFile(args[index]));
+                        }
                         else
+                        {
                             hostnames.Add(args[index]);
+                        }
                         break;
                 }
             }
@@ -105,7 +109,10 @@ namespace vmPing.Classes
             {
                 // Check file size.
                 long length = new FileInfo(path).Length;
-                if (length > MaxSizeInBytes) throw new FileFormatException();
+                if (length > MaxSizeInBytes)
+                {
+                    throw new FileFormatException();
+                }
 
                 // Read file into a list of strings, so that each line can get checked.
                 var linesInFile = new List<string>(File.ReadAllLines(path));

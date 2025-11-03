@@ -41,7 +41,9 @@ namespace vmPing.UI
         private void AutoDismissTimer_Tick(object sender, EventArgs e)
         {
             if (ApplicationOptions.IsAutoDismissEnabled)
+            {
                 Close();
+            }
         }
 
         private void PopupNotificationWindow_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -62,7 +64,10 @@ namespace vmPing.UI
             {
                 if (VisualTreeHelper.GetChild(StatusHistoryList, 0) is Decorator border)
                 {
-                    if (border.Child is ScrollViewer scroll) scroll.ScrollToEnd();
+                    if (border.Child is ScrollViewer scroll)
+                    {
+                        scroll.ScrollToEnd();
+                    }
                 }
             }
         }

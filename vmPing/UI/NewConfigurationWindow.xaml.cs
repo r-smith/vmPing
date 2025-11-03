@@ -16,16 +16,22 @@ namespace vmPing.UI
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             if (PortableMode.IsChecked == true)
+            {
                 Configuration.FilePath = AppDomain.CurrentDomain.BaseDirectory + "vmPing.xml";
+            }
             DialogResult = true;
         }
 
         private void PortableMode_Click(object sender, RoutedEventArgs e)
         {
             if (PortableMode.IsChecked == true)
+            {
                 FilePath.Text = AppDomain.CurrentDomain.BaseDirectory + "vmPing.xml";
+            }
             else
+            {
                 FilePath.Text = Configuration.FilePath;
+            }
         }
     }
 }

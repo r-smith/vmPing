@@ -10,11 +10,12 @@ namespace vmPing.Classes
         public List<string> Hostnames { get; set; }
         public int ColumnCount { get; set; }
 
-
         public static bool TitleExists(string title)
         {
             if (!Configuration.Exists())
+            {
                 return false;
+            }
 
             var titleExists = false;
 
@@ -25,7 +26,9 @@ namespace vmPing.Classes
 
                 XmlNode nodeTitleSearch = xd.SelectSingleNode($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(title)}]");
                 if (nodeTitleSearch != null)
+                {
                     titleExists = true;
+                }
             }
             catch (Exception ex)
             {
@@ -40,7 +43,9 @@ namespace vmPing.Classes
         public static List<string> GetTitles()
         {
             if (!Configuration.Exists())
+            {
                 return new List<string>();
+            }
 
             var favoriteTitles = new List<string>();
 
@@ -50,7 +55,9 @@ namespace vmPing.Classes
                 xd.Load(Configuration.FilePath);
 
                 foreach (XmlNode node in xd.SelectNodes("/vmping/favorites/favorite"))
+                {
                     favoriteTitles.Add(node.Attributes["title"].Value);
+                }
             }
 
             catch (Exception ex)
@@ -66,7 +73,9 @@ namespace vmPing.Classes
         public static Favorite GetContents(string favoriteTitle)
         {
             if (!Configuration.Exists())
+            {
                 return new Favorite();
+            }
 
             var favorite = new Favorite();
 
@@ -83,7 +92,9 @@ namespace vmPing.Classes
                     favorite.ColumnCount = int.Parse(nodeFavorite.Attributes["columncount"].Value);
 
                     foreach (XmlNode node in xd.SelectNodes($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(favoriteTitle)}]/host"))
+                    {
                         favorite.Hostnames.Add(node.InnerText);
+                    }
                 }
                 else
                 {
@@ -112,7 +123,9 @@ namespace vmPing.Classes
         public static void Rename(string originalTitle, string newTitle)
         {
             if (Configuration.IsReady() == false)
+            {
                 return;
+            }
 
             try
             {
@@ -140,7 +153,9 @@ namespace vmPing.Classes
         public static void Save(string title, List<string> hostnames, int columnCount)
         {
             if (Configuration.IsReady() == false)
+            {
                 return;
+            }
 
             try
             {
@@ -179,7 +194,9 @@ namespace vmPing.Classes
         public static void Delete(string title)
         {
             if (!Configuration.Exists())
+            {
                 return;
+            }
 
             try
             {

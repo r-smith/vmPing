@@ -12,7 +12,7 @@ namespace vmPing.UI
 {
     public partial class MainWindow : Window
     {
-        private ObservableCollection<Probe> _ProbeCollection = new ObservableCollection<Probe>();
+        private readonly ObservableCollection<Probe> _ProbeCollection = new ObservableCollection<Probe>();
         private Dictionary<string, string> _Aliases = new Dictionary<string, string>();
         private System.Windows.Forms.NotifyIcon NotifyIcon;
 
@@ -200,7 +200,9 @@ namespace vmPing.UI
         public void AddProbe(int numberOfProbes = 1)
         {
             for (; numberOfProbes > 0; --numberOfProbes)
+            {
                 _ProbeCollection.Add(new Probe());
+            }
         }
 
         public void ProbeStartStop_Click(object sender, EventArgs e)
@@ -227,9 +229,7 @@ namespace vmPing.UI
                 {
                     var cp = ProbeItemsControl.ItemContainerGenerator.ContainerFromIndex(_ProbeCollection.IndexOf(probe) + 1) as ContentPresenter;
                     var tb = (TextBox)cp.ContentTemplate.FindName("Hostname", cp);
-
-                    if (tb != null)
-                        tb.Focus();
+                    tb?.Focus();
                 }
             }
         }
@@ -237,7 +237,9 @@ namespace vmPing.UI
         private void RemoveProbe_Click(object sender, RoutedEventArgs e)
         {
             if (_ProbeCollection.Count <= 1)
+            {
                 return;
+            }
 
             var probe = (sender as Button).DataContext as Probe;
             if (probe.IsActive)
@@ -256,17 +258,23 @@ namespace vmPing.UI
             for (int i = 0; i < _ProbeCollection.Count; ++i)
             {
                 if (!string.IsNullOrWhiteSpace(_ProbeCollection[i].Hostname))
+                {
                     addresses.Add(_ProbeCollection[i].Hostname.Trim());
+                }
             }
 
-            var wnd = new MultiInputWindow(addresses);
-            wnd.Owner = this;
+            var wnd = new MultiInputWindow(addresses)
+            {
+                Owner = this
+            };
             if (wnd.ShowDialog() == true)
             {
                 RemoveAllProbes();
 
                 if (wnd.Addresses.Count < 1)
+                {
                     AddProbe();
+                }
                 else
                 {
                     AddProbe(numberOfProbes: wnd.Addresses.Count);
@@ -294,9 +302,13 @@ namespace vmPing.UI
             foreach (var probe in _ProbeCollection)
             {
                 if (toggleStatus == Strings.Toolbar_StopAll && probe.IsActive)
+                {
                     probe.StartStop();
+                }
                 else if (toggleStatus == Strings.Toolbar_StartAll && !probe.IsActive)
+                {
                     probe.StartStop();
+                }
             }
         }
 
@@ -349,8 +361,10 @@ namespace vmPing.UI
         private void OptionsExecute(object sender, ExecutedRoutedEventArgs e)
         {
             // Open the options window.
-            var optionsWnd = new OptionsWindow();
-            optionsWnd.Owner = this;
+            var optionsWnd = new OptionsWindow
+            {
+                Owner = this
+            };
             if (optionsWnd.ShowDialog() == true)
             {
                 RefreshGuiState();
@@ -361,7 +375,9 @@ namespace vmPing.UI
         private void RefreshProbeColors()
         {
             for (int i = 0; i < _ProbeCollection.Count; ++i)
+            {
                 _ProbeCollection[i].Status = _ProbeCollection[i].Status;
+            }
         }
 
         private void RemoveAllProbes()
@@ -369,7 +385,9 @@ namespace vmPing.UI
             foreach (var probe in _ProbeCollection)
             {
                 if (probe.IsActive)
+                {
                     probe.StartStop();
+                }
             }
             _ProbeCollection.Clear();
             Probe.ActiveCount = 0;
@@ -379,13 +397,17 @@ namespace vmPing.UI
         {
             // Clear existing favorites menu.
             for (int i = FavoritesMenu.Items.Count - 1; i > 2; --i)
+            {
                 FavoritesMenu.Items.RemoveAt(i);
+            }
 
             // Load favorites.
             foreach (var fav in Favorite.GetTitles())
             {
-                var menuItem = new MenuItem();
-                menuItem.Header = fav;
+                var menuItem = new MenuItem
+                {
+                    Header = fav
+                };
                 menuItem.Click += (s, r) =>
                 {
                     LoadFavorite((s as MenuItem).Header.ToString());
@@ -401,7 +423,9 @@ namespace vmPing.UI
 
             var favorite = Favorite.GetContents(favoriteTitle);
             if (favorite.Hostnames.Count < 1)
+            {
                 AddProbe();
+            }
             else
             {
                 AddProbe(numberOfProbes: favorite.Hostnames.Count);
@@ -428,7 +452,9 @@ namespace vmPing.UI
 
             // Clear existing aliases menu.
             for (int i = AliasesMenu.Items.Count - 1; i > 1; --i)
+            {
                 AliasesMenu.Items.RemoveAt(i);
+            }
 
             // Load aliases.
             foreach (var alias in aliasList)
@@ -446,8 +472,10 @@ namespace vmPing.UI
 
         private MenuItem BuildAliasMenuItem(KeyValuePair<string, string> alias, bool isContextMenu)
         {
-            var menuItem = new MenuItem();
-            menuItem.Header = alias.Value;
+            var menuItem = new MenuItem
+            {
+                Header = alias.Value
+            };
 
             if (isContextMenu)
             {
@@ -509,8 +537,10 @@ namespace vmPing.UI
         private void ManageFavorites_Click(object sender, RoutedEventArgs e)
         {
             // Open the favorites window.
-            var manageFavoritesWindow = new ManageFavoritesWindow();
-            manageFavoritesWindow.Owner = this;
+            var manageFavoritesWindow = new ManageFavoritesWindow
+            {
+                Owner = this
+            };
             manageFavoritesWindow.ShowDialog();
             LoadFavorites();
         }
@@ -518,8 +548,10 @@ namespace vmPing.UI
         private void ManageAliases_Click(object sender, RoutedEventArgs e)
         {
             // Open the aliases window.
-            var manageAliasesWindow = new ManageAliasesWindow();
-            manageAliasesWindow.Owner = this;
+            var manageAliasesWindow = new ManageAliasesWindow
+            {
+                Owner = this
+            };
             manageAliasesWindow.ShowDialog();
             LoadAliases();
         }
@@ -566,15 +598,23 @@ namespace vmPing.UI
             var probe = (sender as Button).DataContext as Probe;
 
             if (string.IsNullOrEmpty(probe.Hostname))
+            {
                 return;
+            }
 
             if (_Aliases.ContainsKey(probe.Hostname.ToLower()))
+            {
                 probe.Alias = _Aliases[probe.Hostname.ToLower()];
+            }
             else
+            {
                 probe.Alias = string.Empty;
+            }
 
-            var wnd = new EditAliasWindow(probe);
-            wnd.Owner = this;
+            var wnd = new EditAliasWindow(probe)
+            {
+                Owner = this
+            };
 
             if (wnd.ShowDialog() == true)
             {
@@ -603,7 +643,9 @@ namespace vmPing.UI
             for (int i = 0; i < _ProbeCollection.Count - 1; ++i)
             {
                 if (string.IsNullOrEmpty(_ProbeCollection[i].Hostname))
+                {
                     return;
+                }
             }
             ((TextBox)sender).Focus();
         }
@@ -627,9 +669,7 @@ namespace vmPing.UI
             {
                 var cp = ProbeItemsControl.ItemContainerGenerator.ContainerFromIndex(0) as ContentPresenter;
                 var tb = (TextBox)cp.ContentTemplate.FindName("Hostname", cp);
-
-                if (tb != null)
-                    tb.Focus();
+                tb?.Focus();
             }
         }
 
@@ -781,9 +821,9 @@ namespace vmPing.UI
                 HideToTray();
                 e.Cancel = true;
             }
-            else if (NotifyIcon != null)
+            else
             {
-                NotifyIcon.Dispose();
+                NotifyIcon?.Dispose();
             }
         }
 
@@ -793,7 +833,9 @@ namespace vmPing.UI
             tb.SelectionStart = (tb.DataContext as Probe).SelStart;
             tb.SelectionLength = (tb.DataContext as Probe).SelLength;
             if (!tb.IsMouseCaptureWithin && tb.SelectionLength == 0)
+            {
                 tb.ScrollToEnd();
+            }
         }
 
         private void History_SelectionChanged(object sender, RoutedEventArgs e)

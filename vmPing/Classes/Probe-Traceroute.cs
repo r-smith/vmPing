@@ -20,7 +20,10 @@ namespace vmPing.Classes
             if (await IsHostInvalid(Hostname, cancellationToken))
             {
                 if (cancellationToken.IsCancellationRequested)
+                {
                     return;
+                }
+
                 StopProbe(ProbeStatus.Error);
                 return;
             }
@@ -49,15 +52,23 @@ namespace vmPing.Classes
 
                         var address = string.Empty;
                         if (reply.Address != null)
+                        {
                             address = reply.Address.ToString();
+                        }
 
                         if (cancellationToken.IsCancellationRequested)
+                        {
                             break;
+                        }
 
                         if (reply.Status != IPStatus.TtlExpired && reply.Status != IPStatus.Success)
+                        {
                             AddHistory(string.Format(stringErrorFormat, ttl, reply.Status));
+                        }
                         else
+                        {
                             AddHistory(string.Format(stringFormat, ttl, address, timer.ElapsedMilliseconds < 1 ? "<1" : timer.ElapsedMilliseconds.ToString()));
+                        }
 
                         if (reply.Status == IPStatus.Success)
                         {
@@ -66,7 +77,11 @@ namespace vmPing.Classes
                         }
 
                         ttl++;
-                        if (ttl > MaxHops) AddHistory($"{Environment.NewLine}\u2605 Trace complete");
+                        if (ttl > MaxHops)
+                        {
+                            AddHistory($"{Environment.NewLine}\u2605 Trace complete");
+                        }
+
                         await Task.Delay(100);
                     }
                     catch (Exception ex)

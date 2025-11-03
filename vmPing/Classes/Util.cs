@@ -7,7 +7,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using vmPing.Properties;
-using vmPing.UI;
 
 namespace vmPing.Classes
 {
@@ -42,9 +41,13 @@ namespace vmPing.Classes
                 var smtpClient = new SmtpClient();
                 MailAddress fromAddress;
                 if (mailFromFriendly.Length > 0)
+                {
                     fromAddress = new MailAddress(mailFromAddress, mailFromFriendly);
+                }
                 else
+                {
                     fromAddress = new MailAddress(mailFromAddress);
+                }
 
                 smtpClient.Host = serverAddress;
                 smtpClient.EnableSsl = ApplicationOptions.IsEmailSslEnabled;
@@ -55,7 +58,9 @@ namespace vmPing.Classes
                 }
 
                 if (serverPort.Length > 0)
+                {
                     smtpClient.Port = Int32.Parse(serverPort);
+                }
 
                 message.From = fromAddress;
                 message.Subject = mailSubject;
@@ -75,7 +80,6 @@ namespace vmPing.Classes
                 message.Dispose();
             }
         }
-
 
         public static void SendTestEmail(
             string serverAddress,
@@ -98,12 +102,16 @@ namespace vmPing.Classes
                 smtpClient.Host = serverAddress;
 
                 if (serverPort.Length > 0)
+                {
                     smtpClient.Port = Int32.Parse(serverPort);
+                }
 
                 fromAddress = new MailAddress(mailFrom, mailFromFriendly);
 
                 if (isAuthRequired)
+                {
                     smtpClient.Credentials = new NetworkCredential(username, password);
+                }
 
                 smtpClient.EnableSsl = isSslEnabled;
 
@@ -120,12 +128,10 @@ namespace vmPing.Classes
             }
         }
 
-
         public static void ShowError(string message)
         {
             MessageBox.Show(message, Strings.Error_WindowTitle, MessageBoxButton.OK, MessageBoxImage.Error);
         }
-
 
         public static bool IsValidHtmlColor(string htmlColor)
         {
@@ -134,11 +140,12 @@ namespace vmPing.Classes
             return regex.IsMatch(htmlColor);
         }
 
-
         public static string EncryptStringAES(string plainText)
         {
             if (string.IsNullOrEmpty(plainText))
+            {
                 throw new ArgumentNullException("plainText");
+            }
 
             string encryptedString = null;                       // Encrypted string to return.
             RijndaelManaged aesAlgorithm = null;                 // RijndaelManaged object used to encrypt the data.
@@ -153,7 +160,7 @@ namespace vmPing.Classes
                 aesAlgorithm.Padding = PaddingMode.PKCS7;
                 aesAlgorithm.Key = key.GetBytes(aesAlgorithm.KeySize / 8);
 
-                if (key != null) key.Dispose();
+                key?.Dispose();
 
                 // Create a decryptor to perform the stream transform.
                 ICryptoTransform encryptor = aesAlgorithm.CreateEncryptor(aesAlgorithm.Key, aesAlgorithm.IV);
@@ -178,15 +185,13 @@ namespace vmPing.Classes
             finally
             {
                 // Clear the RijndaelManaged object.
-                if (aesAlgorithm != null)
-                    aesAlgorithm.Clear();
+                aesAlgorithm?.Clear();
                 aesAlgorithm.Dispose();
             }
 
             // Return the encrypted bytes from the memory stream.
             return encryptedString;
         }
-
 
         public static string GetSafeFilename(string filename)
         {
@@ -196,11 +201,12 @@ namespace vmPing.Classes
             return string.Join("_", filename.Split(invalidCharacters));
         }
 
-
         public static string DecryptStringAES(string cipherText)
         {
             if (string.IsNullOrEmpty(cipherText))
+            {
                 throw new ArgumentNullException("cipherText");
+            }
 
             // Declare the RijndaelManaged object used to decrypt the data.
             RijndaelManaged aesAlgorithm = null;
@@ -237,13 +243,11 @@ namespace vmPing.Classes
             finally
             {
                 // Clear the RijndaelManaged object.
-                if (aesAlgorithm != null)
-                    aesAlgorithm.Clear();
+                aesAlgorithm?.Clear();
             }
 
             return plaintext;
         }
-
 
         private static byte[] ReadByteArray(Stream stream)
         {

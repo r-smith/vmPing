@@ -17,7 +17,7 @@ namespace vmPing.UI
 {
     public partial class StatusHistoryWindow : Window
     {
-        ICollectionView _statusHistoryView;
+        readonly ICollectionView _statusHistoryView;
         private static bool IsWindowStateSet = false;
         private static double _Left;
         private static double _Top;
@@ -32,7 +32,10 @@ namespace vmPing.UI
             if (IsWindowStateSet)
             {
                 WindowState = _WindowState;
-                if (_Left < SystemParameters.VirtualScreenWidth) Left = _Left;
+                if (_Left < SystemParameters.VirtualScreenWidth)
+                {
+                    Left = _Left;
+                }
                 Top = _Top;
                 Width = _Width;
                 Height = _Height;
@@ -48,7 +51,9 @@ namespace vmPing.UI
 
             // When initially displaying the window, automatically scroll to the most recent entry.
             if (StatusHistory.Items.Count > 0)
+            {
                 StatusHistory.ScrollIntoView(StatusHistory.Items[StatusHistory.Items.Count - 1]);
+            }
         }
 
         private void StatusHistory_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -62,7 +67,9 @@ namespace vmPing.UI
                     for (int i = 0; i < StatusHistory.Columns.Count; ++i)
                     {
                         if (StatusHistory.Columns[i].SortDirection != null)
+                        {
                             return;
+                        }
                     }
                 }
                 if (VisualTreeHelper.GetChild(StatusHistory, 0) is Decorator border)
@@ -93,23 +100,37 @@ namespace vmPing.UI
             var entry = item as StatusChangeLog;
 
             if (FilterStart.IsChecked == true && entry.Status == ProbeStatus.Start)
+            {
                 statusMatch = true;
+            }
             if (FilterStop.IsChecked == true && entry.Status == ProbeStatus.Stop)
+            {
                 statusMatch = true;
+            }
             if (FilterUp.IsChecked == true && entry.Status == ProbeStatus.Up)
+            {
                 statusMatch = true;
+            }
             if (FilterDown.IsChecked == true && entry.Status == ProbeStatus.Down)
+            {
                 statusMatch = true;
+            }
 
             if (statusMatch)
             {
                 var filterText = FilterField.Text.ToUpper();
                 if (!string.IsNullOrEmpty(entry.Alias) && entry.Alias.ToUpper().Contains(filterText))
+                {
                     return true;
+                }
                 else if (!string.IsNullOrEmpty(entry.Hostname) && entry.Hostname.ToUpper().Contains(filterText))
+                {
                     return true;
+                }
                 else
+                {
                     return false;
+                }
             }
             else
             {
@@ -353,7 +374,7 @@ namespace vmPing.UI
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
-                this.DragMove();
+                DragMove();
         }
     }
 }

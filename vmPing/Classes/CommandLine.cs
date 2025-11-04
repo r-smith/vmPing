@@ -15,7 +15,6 @@ namespace vmPing.Classes
         private const int MinTimeout = 1;
         private const int MaxTimeout = 60;
         private const long MaxHostFileSize = 10 * 1024;
-        private const string UsageText = "vmPing [-i interval] [-w timeout] [<target_host>...] [<path_to_list_of_hosts>...]";
 
         public static List<string> ParseArguments()
         {
@@ -38,9 +37,10 @@ namespace vmPing.Classes
                         }
                         else
                         {
-                            errors.AppendLine($"For option -i you must specify the number of seconds between {MinInterval} and {MaxInterval}.");
+                            errors.AppendLine($"-i: Ping interval must be between {MinInterval} and {MaxInterval}.");
                         }
                         break;
+
                     case "/w":
                     case "-w":
                         if (args.Length > i + 1 &&
@@ -52,7 +52,7 @@ namespace vmPing.Classes
                         }
                         else
                         {
-                            errors.AppendLine($"For option -w you must specify the number of seconds between {MinTimeout} and {MaxTimeout}.");
+                            errors.AppendLine($"-w: Ping timeout must be between {MinTimeout} and {MaxTimeout}.");
                         }
                         break;
 
@@ -86,7 +86,7 @@ namespace vmPing.Classes
             // Display error message if any problems were encountered while parsing the arguments.
             if (errors.Length > 0)
             {
-                ShowErrorDialog(errors.ToString());
+                ShowErrorDialog(errors.ToString().TrimEnd(Environment.NewLine.ToCharArray()));
                 Application.Current.Shutdown();
             }
 
@@ -101,7 +101,8 @@ namespace vmPing.Classes
                 long length = new FileInfo(path).Length;
                 if (length > MaxHostFileSize)
                 {
-                    ShowErrorDialog($"The specified file is too large and cannot be opened. The maximum file size is {MaxHostFileSize / 1024} KB.{Environment.NewLine}{Environment.NewLine}\"{path}\"");
+                    ShowErrorDialog($"\"{path}\" is too large. The maximum file size is {MaxHostFileSize / 1024} KB.");
+                    Application.Current.Shutdown();
                     return new List<string>();
                 }
 
@@ -118,31 +119,26 @@ namespace vmPing.Classes
             }
             catch (Exception ex)
             {
-                ShowErrorDialog($"Failed to parse file: {ex.Message}{Environment.NewLine}{Environment.NewLine}\"{path}\"");
+                ShowErrorDialog($"Unable to parse \"{path}\": {ex.Message}");
+                Application.Current.Shutdown();
                 return new List<string>();
             }
         }
 
         private static void ShowHelpDialog()
         {
-            var dialog = new DialogWindow(
-                icon: DialogWindow.DialogIcon.Info,
-                title: "Command Line Usage",
-                body: UsageText,
-                confirmationText: "OK",
-                isCancelButtonVisible: false)
-            {
-                Topmost = true
-            };
-            dialog.ShowDialog();
+            Application.Current.MainWindow.Hide();
+            new UsageWindow().ShowDialog();
         }
 
         private static void ShowErrorDialog(string message)
         {
-            var dialog = DialogWindow.ErrorWindow($"{message}{Environment.NewLine}{Environment.NewLine}Command line usage:{Environment.NewLine}{UsageText}");
+            Application.Current.MainWindow.Hide();
+            var dialog = DialogWindow.ErrorWindow(message);
             dialog.Topmost = true;
+            dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            dialog.ShowInTaskbar = true;
             dialog.ShowDialog();
-
         }
     }
 }

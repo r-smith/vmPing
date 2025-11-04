@@ -150,6 +150,9 @@
     <Compile Include="UI\NewFavoriteWindow.xaml.cs">
       <DependentUpon>NewFavoriteWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\UsageWindow.xaml.cs">
+      <DependentUpon>UsageWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="ResourceDictionaries\ButtonStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -291,6 +294,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\NewFavoriteWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\UsageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

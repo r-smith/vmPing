@@ -1,0 +1,126 @@
+﻿<Window x:Class="vmPing.UI.UsageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:vmPing.UI"
+        mc:Ignorable="d"
+        Title="vmPing"
+        Width="600"
+        ResizeMode="NoResize"
+        SizeToContent="Height"
+        Background="White"
+        WindowStartupLocation="CenterScreen">
+    
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="20,10,20,35">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="FontFamily" Value="Consolas"/>
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="TextWrapping" Value="Wrap"/>
+                </Style>
+                <Style TargetType="{x:Type TextBlock}" x:Key="Arg" BasedOn="{StaticResource {x:Type TextBlock}}">
+                    <Setter Property="Width" Value="130"/>
+                    <Setter Property="DockPanel.Dock" Value="Left"/>
+                </Style>
+                <Style TargetType="{x:Type TextBlock}" x:Key="Desc" BasedOn="{StaticResource {x:Type TextBlock}}">
+                    <Setter Property="Foreground" Value="#223"/>
+                </Style>
+            </StackPanel.Resources>
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/vmPing.ico"
+                       VerticalAlignment="Top"
+                       Width="32"
+                       Height="32"/>
+                <StackPanel Margin="10,0,0,0">
+                    <TextBlock Text="vmPing"
+                               Foreground="#000000"
+                               VerticalAlignment="Center"
+                               FontSize="15"
+                               FontFamily="Arial"
+                               FontWeight="SemiBold"/>
+                    <TextBlock x:Name="AppVersion"
+                               d:Text="1.0.0"
+                               FontSize="13"
+                               Opacity="0.5"/>
+                </StackPanel>
+            </StackPanel>
+            <TextBlock Margin="0,20,0,0"
+                       Text="Command line usage:"
+                       FontSize="14"
+                       FontWeight="SemiBold"/>
+            <TextBlock Text="vmPing [OPTIONS] [HOSTNAME...] [FILE...]"/>
+            <TextBlock Margin="0,20,0,0"
+                       Text="Options:"
+                       FontSize="14"
+                       FontWeight="SemiBold"/>
+            <DockPanel>
+                <TextBlock Style="{StaticResource Arg}"
+                           Text="-i &lt;interval>"/>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource Desc}"
+                               Text="Specifies the interval, in seconds, between pings."/>
+                    <TextBlock Style="{StaticResource Desc}"
+                               Text="Valid range: 1 to 86400 (1 second to 24 hours)."/>
+                </StackPanel>
+            </DockPanel>
+            <DockPanel Margin="0,5,0,0">
+                <TextBlock Style="{StaticResource Arg}"
+                           Text="-w &lt;timeout>"/>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource Desc}"
+                               Text="Set the timeout, in seconds, for each ping request."/>
+                    <TextBlock Style="{StaticResource Desc}"
+                               Text="Valid range: 1 to 60 seconds."/>
+                </StackPanel>
+            </DockPanel>
+            <DockPanel Margin="0,5,0,0">
+                <TextBlock Style="{StaticResource Arg}"
+                           Text="-minimized"/>
+                <TextBlock Style="{StaticResource Desc}"
+                           Text="Start the application in a minimized state."/>
+            </DockPanel>
+            <DockPanel Margin="0,5,0,0">
+                <TextBlock Style="{StaticResource Arg}"
+                           Text="&lt;hostname>"/>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource Desc}"
+                               Text="A hostname or IP address to ping."/>
+                    <TextBlock Style="{StaticResource Desc}"
+                               Text="You can provide multiple hostnames."/>
+                </StackPanel>
+            </DockPanel>
+            <DockPanel Margin="0,5,0,0">
+                <TextBlock Style="{StaticResource Arg}"
+                           Text="&lt;file>"/>
+                <TextBlock Style="{StaticResource Desc}"
+                           Text="The path to a text file containing hostnames or IP addresses to ping. Wrap the path in quotes if it contains spaces. You can provide multiple files."/>
+            </DockPanel>
+            <TextBlock Margin="0,20,0,0"
+                       Text="Examples:"
+                       FontSize="14"
+                       FontWeight="SemiBold"/>
+            <TextBlock Text="vmPing.exe -i 5 -w 2 192.168.0.1 172.16.50.1 10.2.0.32"/>
+            <TextBlock Text="vmPing.exe &quot;c:\documents\servers.txt&quot;"/>
+            <TextBlock Text="vmPing.exe -minimized 192.168.5.20 web.example.com"/>
+
+        </StackPanel>
+
+        <!-- Buttons -->
+        <Border Grid.Row="1" Background="#f0f0f0" BorderBrush="#dfdfdf" BorderThickness="0,1,0,0">
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <Button Style="{StaticResource ButtonStandardStyle}"
+                        Width="100"
+                        IsCancel="True"
+                        IsDefault="True"
+                        Content="OK"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

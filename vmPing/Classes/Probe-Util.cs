@@ -179,22 +179,25 @@ namespace vmPing.Classes
         {
             Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
-                if (ApplicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.Always
+                bool shouldPopup = ApplicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.Always
                     || (ApplicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.WhenMinimized
-                    && Application.Current.MainWindow.WindowState == WindowState.Minimized))
+                    && Application.Current.MainWindow.WindowState == WindowState.Minimized);
+
+                lock (mutex)
                 {
-                    mutex.WaitOne();
-                    if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
+                    if (shouldPopup && !Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
                     {
-                        // Mark all existing status changes as read.
-                        for (int i = 0; i < StatusChangeLog.Count; ++i)
+                        foreach (var entry in StatusChangeLog)
                         {
-                            StatusChangeLog[i].HasStatusBeenCleared = true;
+                            entry.HasStatusBeenCleared = true;
                         }
                     }
-                    StatusChangeLog.Add(status);
-                    mutex.ReleaseMutex();
 
+                    StatusChangeLog.Add(status);
+                }
+
+                if (shouldPopup)
+                {
                     if (StatusWindow != null && StatusWindow.IsLoaded)
                     {
                         if (StatusWindow.WindowState == WindowState.Minimized)
@@ -209,19 +212,14 @@ namespace vmPing.Classes
                         new PopupNotificationWindow(StatusChangeLog).Show();
                     }
                 }
-                else
-                {
-                    mutex.WaitOne();
-                    StatusChangeLog.Add(status);
-                    mutex.ReleaseMutex();
-                }
             }));
 
-            if (ApplicationOptions.IsLogStatusChangesEnabled && ApplicationOptions.LogStatusChangesPath.Length > 0)
+            if (ApplicationOptions.IsLogStatusChangesEnabled)
             {
-                mutex.WaitOne();
+                lock (mutex)
+            {
                 WriteToStatusChangesLog(status);
-                mutex.ReleaseMutex();
+                }
             }
 
             if ((ApplicationOptions.IsAudioDownAlertEnabled) && (status.Status == ProbeStatus.Down))
@@ -236,10 +234,7 @@ namespace vmPing.Classes
                 catch (Exception ex)
                 {
                     ApplicationOptions.IsAudioDownAlertEnabled = false;
-                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        DialogWindow.ErrorWindow($"Failed to play audio file. Audio alerts have been disabled. {ex.Message}").ShowDialog();
-                    }));
+                    ShowError($"Failed to play audio file. Audio alerts have been disabled. Error: {ex.Message}");
                 }
             }
             else if ((ApplicationOptions.IsAudioUpAlertEnabled) && (status.Status == ProbeStatus.Up))
@@ -254,10 +249,8 @@ namespace vmPing.Classes
                 catch (Exception ex)
                 {
                     ApplicationOptions.IsAudioUpAlertEnabled = false;
-                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        DialogWindow.ErrorWindow($"Failed to play audio file. Audio alerts have been disabled. {ex.Message}").ShowDialog();
-                    }));
+                    ShowError($"Failed to play audio file. Audio alerts have been disabled. Error: {ex.Message}");
+                }
                 }
             }
 

@@ -11,7 +11,7 @@ namespace vmPing.UI
 {
     public partial class MultiInputWindow : Window
     {
-        // Imports and constants for hiding minimize and maximize buttons.
+        // Constants for hiding minimize and maximize buttons.
         [DllImport("user32.dll")]
         private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
         [DllImport("user32.dll")]
@@ -24,13 +24,13 @@ namespace vmPing.UI
         {
             get
             {
-                // Split addresses text to array, trim each item, then convert to list. Ensure at least one host was entered.
-                List<string> addressList = MyAddresses.Text.Trim().Split(new char[] { ',', '\n' }).Select(host => host.Trim()).ToList();
-                if (addressList.All(x => string.IsNullOrWhiteSpace(x)))
-                {
-                    // Nothing but whitespace was entered. Should an error display? Currently, an empty list is returned.
-                }
-                return addressList;
+                // Split and trim multi-address text. Split occurs on both newlines and commas.
+                // Return as a list with empty entries removed.
+                return MultiAddress.Text
+                    .Split(new[] { ',', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => x.Trim())
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .ToList();
             }
         }
 
@@ -38,9 +38,8 @@ namespace vmPing.UI
         {
             InitializeComponent();
 
-            // Set initial focus to text box.
-            Loaded += (sender, e) =>
-                MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            // Set initial keyboard focus to text box.
+            Loaded += (sender, e) => MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
 
             // Pre-populate textbox if any addresses were supplied.
             if (addresses != null
@@ -49,8 +48,8 @@ namespace vmPing.UI
                 )
             {
                 // Convert list to multiline string and select all text.
-                MyAddresses.Text = string.Join(Environment.NewLine, addresses);
-                MyAddresses.SelectAll();
+                MultiAddress.Text = string.Join(Environment.NewLine, addresses);
+                MultiAddress.SelectAll();
             }
         }
 
@@ -59,65 +58,77 @@ namespace vmPing.UI
             DialogResult = true;
         }
 
-        private void MyAddresses_PreviewDragOver(object sender, DragEventArgs e)
+        private void MultiAddress_PreviewDragOver(object sender, DragEventArgs e)
         {
             e.Effects = DragDropEffects.Copy;
             e.Handled = true;
         }
 
-        private void MyAddresses_Drop(object sender, DragEventArgs e)
+        private void MultiAddress_Drop(object sender, DragEventArgs e)
         {
             const long MaxSizeInBytes = 10240;
 
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                try
+                return;
+            }
+
+            try
+            {
+                // Get paths of dropped files.
+                string[] paths = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (paths == null || paths.Length == 0)
                 {
-                    // Get path(s). We only work with the first element, in cases of multiple files.
-                    string[] docPath = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                    // Check file size.
-                    long length = new FileInfo(docPath[0]).Length;
-                    if (length > MaxSizeInBytes) throw new FileFormatException();
-
-                    // Read file into a list of strings, so that each line can get checked.
-                    var linesInFile = new List<string>(File.ReadAllLines(docPath[0]));
-
-                    // Get a list of valid lines.
-                    // Valid lines must not be empty and must being with a letter, digit, or '[' character (for IPv6).
-                    var validLines = linesInFile
-                        .Where(x => !string.IsNullOrWhiteSpace(x) &&
-                                    (char.IsLetterOrDigit(x[0]) || x[0] == '['));
-
-                    // Convert list to multiline string (with each line trimmed).
-                    MyAddresses.Text = string.Join(Environment.NewLine, validLines.Select(x => x.Trim()));
+                    return;
                 }
-                catch (FileFormatException)
+
+                // Only 1 file drop is supported.
+                if (paths.Length > 1)
                 {
-                    var dialog = DialogWindow.ErrorWindow(
-                        $"The file is too large and cannot be opened. The maximum file size is {MaxSizeInBytes / 1024} kb.");
-                    dialog.Owner = this;
-                    dialog.ShowDialog();
+                    ShowError("Please drop only one file at a time.");
+                    return;
                 }
-                catch
+
+                // Check filesize.
+                var fileInfo = new FileInfo(paths[0]);
+                if (fileInfo.Length > MaxSizeInBytes)
                 {
-                    var dialog = DialogWindow.ErrorWindow("File could not be opened. Make sure the file is a plain text file.");
-                    dialog.Owner = this;
-                    dialog.ShowDialog();
+                    ShowError($"\"{paths[0]}\" is too large. The maximum file size is {MaxSizeInBytes / 1024} KB.");
+                    return;
                 }
+
+                // Extract valid lines: valid lines are non-empty and begin with a letter, number, or the `[` character (for IPv6).
+                var validLines = File.ReadLines(paths[0])
+                    .Select(line => line.Trim())
+                    .Where(line => !string.IsNullOrWhiteSpace(line) &&
+                        (char.IsLetterOrDigit(line[0]) || line[0] == '['));
+
+                // Convert list to multiline string.
+                MultiAddress.Text = string.Join(Environment.NewLine, validLines);
+            }
+            catch (Exception ex) 
+            {
+                ShowError($"File could not be opened: {ex.Message}");
             }
         }
 
         private void Window_SourceInitialized(object sender, EventArgs e)
         {
             // Hide minimize and maximize buttons.
-            IntPtr _windowHandle = new WindowInteropHelper(this).Handle;
-            if (_windowHandle == null)
+            IntPtr handle = new WindowInteropHelper(this).Handle;
+            if (handle == null)
             {
                 return;
             }
 
-            SetWindowLong(_windowHandle, GWL_STYLE, GetWindowLong(_windowHandle, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_MINIMIZEBOX);
+            SetWindowLong(handle, GWL_STYLE, GetWindowLong(handle, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_MINIMIZEBOX);
+        }
+
+        private void ShowError(string message)
+        {
+            var dialog = DialogWindow.ErrorWindow(message);
+            dialog.Owner = this;
+            dialog.ShowDialog();
         }
     }
 }

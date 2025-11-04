@@ -80,7 +80,7 @@
         </DockPanel>
 
         <!-- Input -->
-        <TextBox x:Name="MyAddresses"
+        <TextBox x:Name="MultiAddress"
                  Grid.Row="1"
                  AcceptsReturn="True"
                  VerticalScrollBarVisibility="Auto"
@@ -89,8 +89,8 @@
                  FontSize="16"
                  Padding="5"
                  AllowDrop="True"
-                 PreviewDragOver="MyAddresses_PreviewDragOver"
-                 Drop="MyAddresses_Drop"/>
+                 PreviewDragOver="MultiAddress_PreviewDragOver"
+                 Drop="MultiAddress_Drop"/>
 
         <!-- Buttons section -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,9,0,0">

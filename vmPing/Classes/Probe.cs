@@ -29,7 +29,8 @@ namespace vmPing.Classes
     {
         Dns,
         Ping,
-        Traceroute
+        Traceroute,
+        Comment
     }
 
     public partial class Probe : INotifyPropertyChanged

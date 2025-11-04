@@ -131,48 +131,40 @@ namespace vmPing.Classes
 
         private void WriteToLog(string message)
         {
-            // If logging is enabled, write the response to a file.
-            if (ApplicationOptions.IsLogOutputEnabled && ApplicationOptions.LogPath.Length > 0)
+            if (!ApplicationOptions.IsLogOutputEnabled || string.IsNullOrEmpty(ApplicationOptions.LogPath))
             {
-                var logPath = $@"{ApplicationOptions.LogPath}\{Util.GetSafeFilename(Hostname)}.txt";
+                return;
+            }
+
+            string logPath = Path.Combine(ApplicationOptions.LogPath, $"{Util.GetSafeFilename(Hostname)}.txt");
+
                 try
                 {
-                    using (System.IO.StreamWriter outputFile = new System.IO.StreamWriter(@logPath, true))
-                    {
-                        outputFile.WriteLine(message.Insert(1, DateTime.Now.ToShortDateString() + " "));
-                    }
+                File.AppendAllText(logPath, message.Insert(1, $"{DateTime.Now.ToShortDateString()} ") + Environment.NewLine);
                 }
                 catch (Exception ex)
                 {
                     ApplicationOptions.IsLogOutputEnabled = false;
-                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        DialogWindow.ErrorWindow($"Failed writing to log file. Logging has been disabled. {ex.Message}").ShowDialog();
-                    }));
-                }
+                ShowError($"Failed writing to log file. Logging has been disabled. Error: {ex.Message}");
             }
         }
 
         private void WriteToStatusChangesLog(StatusChangeLog status)
         {
-            // If logging is enabled, write the status change to a file.
-            if (ApplicationOptions.IsLogStatusChangesEnabled && ApplicationOptions.LogStatusChangesPath.Length > 0)
+            if (!ApplicationOptions.IsLogStatusChangesEnabled || string.IsNullOrEmpty(ApplicationOptions.LogStatusChangesPath))
             {
+                return;
+            }
+
                 try
                 {
-                    using (System.IO.StreamWriter outputFile = new System.IO.StreamWriter(ApplicationOptions.LogStatusChangesPath, true))
-                    {
-                        outputFile.WriteLine($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()}\t{status.Hostname}\t{status.Alias}\t{status.StatusAsString}");
-                    }
+                File.AppendAllText(ApplicationOptions.LogStatusChangesPath,
+                    $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()}\t{status.Hostname}\t{status.Alias}\t{status.StatusAsString}");
                 }
                 catch (Exception ex)
                 {
                     ApplicationOptions.IsLogStatusChangesEnabled = false;
-                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        DialogWindow.ErrorWindow($"Failed writing to log file. Logging has been disabled. {ex.Message}").ShowDialog();
-                    }));
-                }
+                ShowError($"Failed writing to log file. Logging has been disabled. Error: {ex.Message}");
             }
         }
 
@@ -268,6 +260,11 @@ namespace vmPing.Classes
                     }));
                 }
             }
+
+        private void ShowError(string message)
+        {
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                DialogWindow.ErrorWindow(message).ShowDialog()));
         }
     }
 }

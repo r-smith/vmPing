@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Media;
 using System.Net;
@@ -14,7 +15,7 @@ namespace vmPing.Classes
     {
         public void StartStop()
         {
-            if (string.IsNullOrEmpty(Hostname))
+            if (string.IsNullOrWhiteSpace(Hostname))
             {
                 return;
             }
@@ -23,50 +24,63 @@ namespace vmPing.Classes
             {
                 // Stopping probe.
                 StopProbe(ProbeStatus.Inactive);
+                return;
+            }
+
+            // Starting probe.
+            CancelSource = new CancellationTokenSource();
+
+            if (Hostname.StartsWith("#"))
+            {
+                Type = ProbeType.Comment;
+                return;
+            }
+
+            if (Hostname.StartsWith("D/"))
+            {
+                Type = ProbeType.Dns;
+                Hostname = Hostname.Substring(2);
+                PerformDnsLookup(CancelSource.Token);
+                return;
+            }
+
+            if (Hostname.StartsWith("T/"))
+            {
+                Type = ProbeType.Traceroute;
+                Hostname = Hostname.Substring(2);
+                PerformTraceroute(CancelSource.Token);
+                return;
+            }
+
+            Type = ProbeType.Ping;
+
+            if (IsTcpPing(Hostname))
+            {
+                Task.Run(() => PerformTcpProbe(CancelSource.Token), CancelSource.Token);
             }
             else
             {
-                // Starting probe.
-                CancelSource = new CancellationTokenSource();
-                if (Hostname.StartsWith("#"))
-                {
-                    Type = ProbeType.Comment;
-                }
-                else if (Hostname.StartsWith("D/"))
-                {
-                    Type = ProbeType.Dns;
-                    Hostname = Hostname.Substring(2);
-                    PerformDnsLookup(CancelSource.Token);
-                }
-                else if (Hostname.StartsWith("T/"))
-                {
-                    Type = ProbeType.Traceroute;
-                    Hostname = Hostname.Substring(2);
-                    PerformTraceroute(CancelSource.Token);
-                }
-                else if (Hostname.Count(f => f == ':') == 1 || Hostname.Contains("]:"))
-                {
-                    Type = ProbeType.Ping;
-                    Task.Run(() => PerformTcpProbe(CancelSource.Token), CancelSource.Token);
-                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        mutex.WaitOne();
-                        StatusChangeLog.Add(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Start });
-                        mutex.ReleaseMutex();
-                    }));
-                }
-                else
-                {
-                    Type = ProbeType.Ping;
-                    Task.Run(() => PerformIcmpProbe(CancelSource.Token), CancelSource.Token);
-                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        mutex.WaitOne();
-                        StatusChangeLog.Add(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Start });
-                        mutex.ReleaseMutex();
-                    }));
-                }
+                Task.Run(() => PerformIcmpProbe(CancelSource.Token), CancelSource.Token);
             }
+
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                lock (mutex)
+                {
+                    StatusChangeLog.Add(new StatusChangeLog
+                    {
+                        Timestamp = DateTime.Now,
+                        Hostname = Hostname,
+                        Alias = Alias,
+                        Status = ProbeStatus.Start
+                    });
+                }
+            }));
+        }
+
+        private static bool IsTcpPing(string hostname)
+        {
+            return hostname.Count(f => f == ':') == 1 || hostname.Contains("]:");
         }
 
         private void InitializeProbe()
@@ -85,18 +99,25 @@ namespace vmPing.Classes
 
             Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
-                mutex.WaitOne();
-                if (status != ProbeStatus.Error)
+                lock (mutex)
                 {
-                    WriteFinalStatisticsToHistory();
-                }
+                    if (status != ProbeStatus.Error)
+                    {
+                        WriteFinalStatisticsToHistory();
+                    }
 
-                StatusChangeLog.Add(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Stop });
-                mutex.ReleaseMutex();
+                    StatusChangeLog.Add(new StatusChangeLog
+                    {
+                        Timestamp = DateTime.Now,
+                        Hostname = Hostname,
+                        Alias = Alias,
+                        Status = ProbeStatus.Stop
+                    });
+                }
             }));
         }
 
-        private async Task<bool> IsHostInvalid(string host, CancellationToken cancellationToken)
+        private async Task<bool> IsHostInvalid(string host, CancellationToken token)
         {
             try
             {
@@ -104,14 +125,16 @@ namespace vmPing.Classes
                 {
                     case UriHostNameType.IPv4:
                     case UriHostNameType.IPv6:
-                        // IP address was entered.  No further action necessary.
+                        // IP address was entered. No further action necessary.
                         break;
                     case UriHostNameType.Dns:
                         var ipAddresses = await Dns.GetHostAddressesAsync(host);
-                        cancellationToken.ThrowIfCancellationRequested();
+                        token.ThrowIfCancellationRequested();
                         if (ipAddresses.Length > 0)
+                        {
                             await Application.Current.Dispatcher.BeginInvoke(
                                 new Action(() => AddHistory($"    ({ipAddresses[0]})")));
+                        }
                         break;
                     default:
                         throw new Exception();
@@ -120,7 +143,7 @@ namespace vmPing.Classes
             }
             catch
             {
-                if (!cancellationToken.IsCancellationRequested)
+                if (!token.IsCancellationRequested)
                 {
                     await Application.Current.Dispatcher.BeginInvoke(
                         new Action(() => AddHistory($"{Environment.NewLine}Unable to resolve hostname")));
@@ -138,13 +161,13 @@ namespace vmPing.Classes
 
             string logPath = Path.Combine(ApplicationOptions.LogPath, $"{Util.GetSafeFilename(Hostname)}.txt");
 
-                try
-                {
+            try
+            {
                 File.AppendAllText(logPath, message.Insert(1, $"{DateTime.Now.ToShortDateString()} ") + Environment.NewLine);
-                }
-                catch (Exception ex)
-                {
-                    ApplicationOptions.IsLogOutputEnabled = false;
+            }
+            catch (Exception ex)
+            {
+                ApplicationOptions.IsLogOutputEnabled = false;
                 ShowError($"Failed writing to log file. Logging has been disabled. Error: {ex.Message}");
             }
         }
@@ -156,23 +179,21 @@ namespace vmPing.Classes
                 return;
             }
 
-                try
-                {
+            try
+            {
                 File.AppendAllText(ApplicationOptions.LogStatusChangesPath,
                     $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()}\t{status.Hostname}\t{status.Alias}\t{status.StatusAsString}");
-                }
-                catch (Exception ex)
-                {
-                    ApplicationOptions.IsLogStatusChangesEnabled = false;
+            }
+            catch (Exception ex)
+            {
+                ApplicationOptions.IsLogStatusChangesEnabled = false;
                 ShowError($"Failed writing to log file. Logging has been disabled. Error: {ex.Message}");
             }
         }
 
         private void DisplayStatistics()
         {
-            // TODO: This should be a computed property.
-            StatisticsText =
-                $"Sent: {Statistics.Sent} Received: {Statistics.Received} Lost: {Statistics.Lost}";
+            StatisticsText = $"Sent: {Statistics.Sent} Received: {Statistics.Received} Lost: {Statistics.Lost}";
         }
 
         private void TriggerStatusChange(StatusChangeLog status)
@@ -217,8 +238,8 @@ namespace vmPing.Classes
             if (ApplicationOptions.IsLogStatusChangesEnabled)
             {
                 lock (mutex)
-            {
-                WriteToStatusChangesLog(status);
+                {
+                    WriteToStatusChangesLog(status);
                 }
             }
 
@@ -251,8 +272,8 @@ namespace vmPing.Classes
                     ApplicationOptions.IsAudioUpAlertEnabled = false;
                     ShowError($"Failed to play audio file. Audio alerts have been disabled. Error: {ex.Message}");
                 }
-                }
             }
+        }
 
         private void ShowError(string message)
         {

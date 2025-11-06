@@ -31,11 +31,11 @@ namespace vmPing.UI
         {
             if (string.IsNullOrWhiteSpace(MyAlias.Text))
             {
-                Alias.DeleteAlias(_Hostname);
+                Alias.Delete(_Hostname);
             }
             else
             {
-                Alias.AddAlias(_Hostname, MyAlias.Text);
+                Alias.Add(_Hostname, MyAlias.Text);
             }
             DialogResult = true;
         }

@@ -7,11 +7,17 @@ namespace vmPing.Classes
 {
     class Alias
     {
-        public static Dictionary<string, string> GetAliases()
+        private const string RootPath = "/vmping/aliases";
+        private const string AliasPath = "/vmping/aliases/alias";
+        private const string HostAttribute = "host";
+
+        public static Dictionary<string, string> GetAll()
         {
+            var aliases = new Dictionary<string, string>();
+
             if (!Configuration.Exists())
             {
-                return new Dictionary<string, string>();
+                return aliases;
             }
 
             try
@@ -19,50 +25,61 @@ namespace vmPing.Classes
                 var xd = new XmlDocument();
                 xd.Load(Configuration.FilePath);
 
-                var aliases = new Dictionary<string, string>();
-                foreach (XmlNode node in xd.SelectNodes("/vmping/aliases/alias"))
+                var nodes = xd.SelectNodes(AliasPath);
+                if (nodes == null)
                 {
-                    aliases.Add(node.Attributes["host"].Value.ToLower(), node.InnerText);
+                    return aliases;
                 }
-                return aliases;
-            }
 
+                foreach (XmlNode node in nodes)
+                {
+                    var host = node.Attributes?[HostAttribute]?.Value;
+                    if (!string.IsNullOrEmpty(host))
+                    {
+                        aliases[host.ToLowerInvariant()] = node.InnerText?.Trim() ?? string.Empty;
+                    }
+                }
+            }
             catch (Exception ex)
             {
                 Util.ShowError($"{Strings.Error_LoadAlias} {ex.Message}");
-                return new Dictionary<string, string>();
             }
+
+            return aliases;
         }
 
-
-        public static void AddAlias(string hostname, string alias)
+        public static void Add(string hostname, string alias)
         {
-            if (!Configuration.IsReady())
+            if (!Configuration.IsReady() || string.IsNullOrWhiteSpace(hostname))
             {
                 return;
             }
 
-            // Convert to lowercase for consistent lookups / comparisons.
-            hostname = hostname.ToLower();
+            hostname = hostname.ToLowerInvariant();
 
             try
             {
                 var xd = new XmlDocument();
                 xd.Load(Configuration.FilePath);
 
-                XmlNode nodeRoot = xd.SelectSingleNode("/vmping/aliases");
-
-                // Check if title already exists.
-                foreach (XmlNode node in xd.SelectNodes($"/vmping/aliases/alias[@host={Configuration.GetEscapedXpath(hostname)}]"))
+                var root = xd.SelectSingleNode(RootPath);
+                if (root == null)
                 {
-                    // Title already exists.  Delete any old versions.
-                    nodeRoot.RemoveChild(node);
+                    return;
                 }
 
-                XmlElement aliasEntry = xd.CreateElement("alias");
-                aliasEntry.SetAttribute("host", hostname);
-                aliasEntry.InnerText = alias;
-                nodeRoot.AppendChild(aliasEntry);
+                // Remove alias if it already exists.
+                foreach (XmlNode node in xd.SelectNodes($"{AliasPath}[@{HostAttribute}={Configuration.GetEscapedXpath(hostname)}]"))
+                {
+                    root.RemoveChild(node);
+                }
+
+                // Add alias.
+                var aliasNode = xd.CreateElement("alias");
+                aliasNode.SetAttribute(HostAttribute, hostname);
+                aliasNode.InnerText = alias;
+                root.AppendChild(aliasNode);
+
                 xd.Save(Configuration.FilePath);
             }
 
@@ -72,16 +89,14 @@ namespace vmPing.Classes
             }
         }
 
-
-        public static void DeleteAlias(string key)
+        public static void Delete(string hostname)
         {
-            if (!Configuration.Exists())
+            if (!Configuration.Exists() || string.IsNullOrWhiteSpace(hostname))
             {
                 return;
             }
 
-            // Convert to lowercase for consistent lookups / comparisons.
-            key = key.ToLower();
+            hostname = hostname.ToLowerInvariant();
 
             try
             {
@@ -89,12 +104,23 @@ namespace vmPing.Classes
                 xd.Load(Configuration.FilePath);
 
                 // Search for alias.
-                XmlNode nodeRoot = xd.SelectSingleNode("/vmping/aliases");
-                foreach (XmlNode node in xd.SelectNodes($"/vmping/aliases/alias[@host={Configuration.GetEscapedXpath(key)}]"))
+                var root = xd.SelectSingleNode(RootPath);
+                if (root == null)
                 {
-                    // Found title.  Delete all versions.
-                    nodeRoot.RemoveChild(node);
+                    return;
                 }
+
+                var nodes = xd.SelectNodes($"{AliasPath}[@{HostAttribute}={Configuration.GetEscapedXpath(hostname)}]");
+                if (nodes == null)
+                {
+                    return;
+                }
+
+                foreach (XmlNode node in nodes)
+                {
+                    root.RemoveChild(node);
+                }
+
                 xd.Save(Configuration.FilePath);
             }
 
@@ -104,12 +130,10 @@ namespace vmPing.Classes
             }
         }
 
-
         public static bool IsNameInvalid(string name)
         {
             return string.IsNullOrWhiteSpace(name);
         }
-
 
         public static bool IsHostInvalid(string hostname)
         {

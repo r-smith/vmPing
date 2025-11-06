@@ -38,7 +38,7 @@ namespace vmPing.Classes
                             hostNameOrAddress: Hostname,
                             timeout: ApplicationOptions.PingTimeout,
                             buffer: ApplicationOptions.Buffer,
-                            options: ApplicationOptions.GetPingOptions);
+                            options: ApplicationOptions.PingOptions);
 
                         if (cancellationToken.IsCancellationRequested)
                         {

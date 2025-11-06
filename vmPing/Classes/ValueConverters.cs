@@ -336,7 +336,7 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((int)value > 0)
+            if ((long)value > 0)
             {
                 return Strings.Toolbar_StopAll;
             }
@@ -356,7 +356,7 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((int)value > 0)
+            if ((long)value > 0)
             {
                 return (DrawingImage)Application.Current.Resources["icon.stop-circle"];
             }

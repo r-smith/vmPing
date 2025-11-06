@@ -39,18 +39,15 @@ namespace vmPing.Classes
         public static StatusHistoryWindow StatusWindow;
 
         private static readonly Mutex mutex = new Mutex();
-        private static int activeCount;
-        public static int ActiveCount
+
+        private static long activeCount;
+        public static long ActiveCount
         {
-            get => activeCount;
-            set
-            {
-                activeCount = value;
-                OnActiveCountChanged(EventArgs.Empty);
+            get => Interlocked.Read(ref activeCount);
+            set => Interlocked.Exchange(ref activeCount, value);
             }
-        }
         public static event EventHandler ActiveCountChanged;
-        protected static void OnActiveCountChanged(EventArgs e) => ActiveCountChanged?.Invoke(null, e);
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public IsolatedPingWindow IsolatedWindow { get; set; }
@@ -135,24 +132,24 @@ namespace vmPing.Classes
             get => isActive;
             set
             {
-                if (value != isActive)
+                if (value == isActive)
                 {
+                    return;
+                }
+
                     isActive = value;
                     NotifyPropertyChanged("IsActive");
 
-                    mutex.WaitOne();
-                    if (value == true)
+                if (value)
                     {
-                        ++ActiveCount;
+                    Interlocked.Increment(ref activeCount);
                     }
                     else
                     {
-                        --ActiveCount;
+                    Interlocked.Decrement(ref activeCount);
                     }
 
-                    mutex.ReleaseMutex();
-                    NotifyPropertyChanged("NumberOfActivePings");
-                }
+                ActiveCountChanged?.Invoke(null, EventArgs.Empty);
             }
         }
 

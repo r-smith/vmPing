@@ -63,10 +63,6 @@ namespace vmPing.Classes
                 xd.Load(Configuration.FilePath);
 
                 var root = xd.SelectSingleNode(RootPath);
-                if (root == null)
-                {
-                    return;
-                }
 
                 // Remove alias if it already exists.
                 foreach (XmlNode node in xd.SelectNodes($"{AliasPath}[@{HostAttribute}={Configuration.GetEscapedXpath(hostname)}]"))

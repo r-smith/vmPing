@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using vmPing.Properties;
@@ -35,7 +36,8 @@ namespace vmPing.Classes
 
     public partial class Probe : INotifyPropertyChanged
     {
-        public static ObservableCollection<StatusChangeLog> StatusChangeLog = new ObservableCollection<StatusChangeLog>();
+        // Static members
+        public static ObservableCollection<StatusChangeLog> StatusChangeLog { get; } = new ObservableCollection<StatusChangeLog>();
         public static StatusHistoryWindow StatusWindow;
 
         private static readonly Mutex mutex = new Mutex();
@@ -45,9 +47,10 @@ namespace vmPing.Classes
         {
             get => Interlocked.Read(ref activeCount);
             set => Interlocked.Exchange(ref activeCount, value);
-            }
+        }
         public static event EventHandler ActiveCountChanged;
 
+        // Instance members
         public event PropertyChangedEventHandler PropertyChanged;
 
         public IsolatedPingWindow IsolatedWindow { get; set; }
@@ -56,28 +59,31 @@ namespace vmPing.Classes
         public int SelStart { get; set; }
         public int SelLength { get; set; }
         public CancellationTokenSource CancelSource { get; set; }
+
         private ObservableCollection<string> history;
         public ObservableCollection<string> History
         {
             get => history;
             set
             {
-                history = value;
-                history.CollectionChanged += History_CollectionChanged;
-                NotifyPropertyChanged("History");
+                if (value != history)
+                {
+                    if (history != null)
+                    {
+                        history.CollectionChanged -= OnHistoryChanged;
+                    }
+
+                    history = value;
+                    history.CollectionChanged += OnHistoryChanged;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(HistoryAsString));
+                }
             }
         }
-        public string HistoryAsString
-        {
-            get
-            {
-                return History != null ? string.Join(Environment.NewLine, History) : string.Empty;
-            }
-        }
-        void History_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            NotifyPropertyChanged("HistoryAsString");
-        }
+
+        public string HistoryAsString => History != null
+            ? string.Join(Environment.NewLine, History)
+            : string.Empty;
 
         private ProbeType type = ProbeType.Ping;
         public ProbeType Type
@@ -85,8 +91,11 @@ namespace vmPing.Classes
             get => type;
             set
             {
-                type = value;
-                NotifyPropertyChanged("Type");
+                if (value != type)
+                {
+                    type = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -98,8 +107,8 @@ namespace vmPing.Classes
             {
                 if (value != hostname)
                 {
-                    hostname = value.Trim();
-                    NotifyPropertyChanged("Hostname");
+                    hostname = value?.Trim();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -110,8 +119,11 @@ namespace vmPing.Classes
             get => alias;
             set
             {
-                alias = value;
-                NotifyPropertyChanged("Alias");
+                if (value != alias)
+                {
+                    alias = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -121,8 +133,11 @@ namespace vmPing.Classes
             get => status;
             set
             {
-                status = value;
-                NotifyPropertyChanged("Status");
+                if (value != status)
+                {
+                    status = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -137,17 +152,17 @@ namespace vmPing.Classes
                     return;
                 }
 
-                    isActive = value;
-                    NotifyPropertyChanged("IsActive");
+                isActive = value;
+                OnPropertyChanged();
 
                 if (value)
-                    {
+                {
                     Interlocked.Increment(ref activeCount);
-                    }
-                    else
-                    {
+                }
+                else
+                {
                     Interlocked.Decrement(ref activeCount);
-                    }
+                }
 
                 ActiveCountChanged?.Invoke(null, EventArgs.Empty);
             }
@@ -162,11 +177,10 @@ namespace vmPing.Classes
                 if (value != statisticsText)
                 {
                     statisticsText = value;
-                    NotifyPropertyChanged("StatisticsText");
+                    OnPropertyChanged();
                 }
             }
         }
-
 
         public void AddHistory(string historyItem)
         {
@@ -189,40 +203,44 @@ namespace vmPing.Classes
             var roundTripTimes = new List<int>();
             var rttRegex = new Regex($@"  \[(?<rtt><?\d+) ?{Strings.Milliseconds_Symbol}]$");
 
-            foreach (var historyItem in History)
+            foreach (string item in History)
             {
-                Match regexMatch = rttRegex.Match(historyItem);
-                if (!regexMatch.Success)
+                var match = rttRegex.Match(item);
+                if (!match.Success)
                 {
                     continue;
                 }
 
-                if (regexMatch.Groups["rtt"].Value == "<1")
-                {
-                    roundTripTimes.Add(0);
-                }
-                else
-                {
-                    roundTripTimes.Add(int.Parse(regexMatch.Groups["rtt"].Value));
-                }
+                // RTT of `<1` is treated as 0 when computing stats.
+                var value = match.Groups["rtt"].Value;
+                roundTripTimes.Add(value == "<1" ? 0 : int.Parse(value));
             }
 
             // Display stats and round trip times.
-            AddHistory("");
+            AddHistory(string.Empty);
             AddHistory(
                 $"Sent {Statistics.Sent}, " +
                 $"Received {Statistics.Received}, " +
-                $"Lost {Statistics.Sent - Statistics.Received} ({(100 * (Statistics.Sent - Statistics.Received)) / Statistics.Sent}% loss)");
+                $"Lost {Statistics.Sent - Statistics.Received} " +
+                $"({(100 * (Statistics.Sent - Statistics.Received)) / Statistics.Sent}% loss)");
+
             if (roundTripTimes.Count > 0)
             {
                 AddHistory(
                     $"Minimum ({roundTripTimes.Min()}{Strings.Milliseconds_Symbol}), " +
                     $"Maximum ({roundTripTimes.Max()}{Strings.Milliseconds_Symbol}), " +
-                    $"Average ({roundTripTimes.Average().ToString("0.##")}{Strings.Milliseconds_Symbol})");
+                    $"Average ({roundTripTimes.Average():0.##}{Strings.Milliseconds_Symbol})");
             }
+
             AddHistory(" ");
         }
 
-        private void NotifyPropertyChanged(string info) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
+        private void OnHistoryChanged(object sender, NotifyCollectionChangedEventArgs e) =>
+            OnPropertyChanged(nameof(HistoryAsString));
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

@@ -62,7 +62,8 @@ namespace vmPing.Classes
                 var xd = new XmlDocument();
                 xd.Load(Configuration.FilePath);
 
-                var root = xd.SelectSingleNode(RootPath);
+                var root = xd.SelectSingleNode(RootPath)
+                    ?? throw new XmlException("Invalid configuration file.");
 
                 // Remove alias if it already exists.
                 foreach (XmlNode node in xd.SelectNodes($"{AliasPath}[@{HostAttribute}={Configuration.GetEscapedXpath(hostname)}]"))

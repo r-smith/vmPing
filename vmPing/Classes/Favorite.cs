@@ -92,11 +92,8 @@ namespace vmPing.Classes
                 var xd = new XmlDocument();
                 xd.Load(Configuration.FilePath);
 
-                var favoriteNode = xd.SelectSingleNode($"{FavoritePath}[@{TitleAttribute}={Configuration.GetEscapedXpath(title)}]");
-                if (favoriteNode == null)
-                {
-                    throw new KeyNotFoundException();
-                }
+                var favoriteNode = xd.SelectSingleNode($"{FavoritePath}[@{TitleAttribute}={Configuration.GetEscapedXpath(title)}]")
+                    ?? throw new KeyNotFoundException();
 
                 // Columns.
                 if (int.TryParse(favoriteNode.Attributes?[ColumnAttribute]?.Value, out int columns))
@@ -177,7 +174,8 @@ namespace vmPing.Classes
                 var xd = new XmlDocument();
                 xd.Load(Configuration.FilePath);
 
-                var root = xd.SelectSingleNode(RootPath);
+                var root = xd.SelectSingleNode(RootPath)
+                    ?? throw new XmlException("Invalid configuration file.");
 
                 // Remove favorite if title already exists.
                 foreach (XmlNode node in xd.SelectNodes($"{FavoritePath}[@{TitleAttribute}={Configuration.GetEscapedXpath(title)}]"))

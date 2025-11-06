@@ -216,7 +216,7 @@ namespace vmPing.UI
 
             if (SaveAsDefaults.IsChecked == true)
             {
-                Configuration.WriteConfigurationOptions();
+                Configuration.Save();
             }
 
             DialogResult = true;

@@ -109,7 +109,7 @@ namespace vmPing.Classes
             }
         }
 
-        public static void WriteConfigurationOptions()
+        public static void Save()
         {
             if (IsReady() == false)
             {

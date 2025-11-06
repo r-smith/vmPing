@@ -446,7 +446,7 @@ namespace vmPing.UI
 
         private void LoadAliases()
         {
-            _Aliases = Alias.GetAliases();
+            _Aliases = Alias.GetAll();
             var aliasList = _Aliases.ToList();
             aliasList.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
 

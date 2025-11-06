@@ -32,7 +32,7 @@ namespace vmPing.UI
         {
             AliasesDataGrid.ItemsSource = null;
 
-            var aliasList = Alias.GetAliases().ToList();
+            var aliasList = Alias.GetAll().ToList();
             aliasList.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
 
             AliasesDataGrid.ItemsSource = aliasList;
@@ -54,7 +54,7 @@ namespace vmPing.UI
             dialogWindow.Owner = this;
             if (dialogWindow.ShowDialog() == true)
             {
-                Alias.DeleteAlias(((KeyValuePair<string, string>)AliasesDataGrid.SelectedItem).Key);
+                Alias.Delete(((KeyValuePair<string, string>)AliasesDataGrid.SelectedItem).Key);
                 RefreshAliasList();
             }
         }

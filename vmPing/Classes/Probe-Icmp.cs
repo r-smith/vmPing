@@ -13,17 +13,16 @@ namespace vmPing.Classes
         private async void PerformIcmpProbe(CancellationToken cancellationToken)
         {
             InitializeProbe();
+
             await Application.Current.Dispatcher.BeginInvoke(
                 new Action(() => AddHistory($"*** Pinging {Hostname}:")));
 
             if (await IsHostInvalid(Hostname, cancellationToken))
             {
-                if (cancellationToken.IsCancellationRequested)
+                if (!cancellationToken.IsCancellationRequested)
                 {
-                    return;
+                    StopProbe(ProbeStatus.Error);
                 }
-
-                StopProbe(ProbeStatus.Error);
                 return;
             }
 
@@ -35,14 +34,15 @@ namespace vmPing.Classes
                     {
                         // Send ping.
                         Statistics.Sent++;
-                        PingReply reply = await ping.SendPingAsync(
+                        var reply = await ping.SendPingAsync(
                             hostNameOrAddress: Hostname,
                             timeout: ApplicationOptions.PingTimeout,
                             buffer: ApplicationOptions.Buffer,
                             options: ApplicationOptions.GetPingOptions);
+
                         if (cancellationToken.IsCancellationRequested)
                         {
-                            return;
+                            break;
                         }
 
                         // Reply received.
@@ -54,11 +54,7 @@ namespace vmPing.Classes
                             // Check for status change.
                             if (Status == ProbeStatus.Down)
                             {
-                                TriggerStatusChange(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Up });
-                                if (ApplicationOptions.IsEmailAlertEnabled)
-                                {
-                                    Util.SendEmail("up", Hostname, Alias);
-                                }
+                                OnStatusChange(ProbeStatus.Up, "up");
                             }
 
                             Status = ProbeStatus.Up;
@@ -68,24 +64,22 @@ namespace vmPing.Classes
                         {
                             Statistics.Lost++;
                             IndeterminateCount++;
+
                             if (Status == ProbeStatus.Up)
                             {
                                 Status = ProbeStatus.Indeterminate;
                             }
-                            if (Status == ProbeStatus.Inactive)
+                            else if (Status == ProbeStatus.Inactive)
                             {
                                 Status = ProbeStatus.Down;
                             }
 
                             // Check for status change.
-                            if (Status == ProbeStatus.Indeterminate && IndeterminateCount >= ApplicationOptions.AlertThreshold)
+                            if (Status == ProbeStatus.Indeterminate &&
+                                IndeterminateCount >= ApplicationOptions.AlertThreshold)
                             {
                                 Status = ProbeStatus.Down;
-                                TriggerStatusChange(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Down });
-                                if (ApplicationOptions.IsEmailAlertEnabled)
-                                {
-                                    Util.SendEmail("down", Hostname, Alias);
-                                }
+                                OnStatusChange(ProbeStatus.Down, "down");
                             }
                         }
 
@@ -105,15 +99,15 @@ namespace vmPing.Classes
                         Statistics.Lost++;
 
                         // Check for status change.
-                        if (Status == ProbeStatus.Inactive) Status = ProbeStatus.Down;
+                        if (Status == ProbeStatus.Inactive)
+                        {
+                            Status = ProbeStatus.Down;
+                        }
+
                         if (Status != ProbeStatus.Down)
                         {
                             Status = ProbeStatus.Down;
-                            TriggerStatusChange(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Down });
-                            if (ApplicationOptions.IsEmailAlertEnabled)
-                            {
-                                Util.SendEmail("error", Hostname, Alias);
-                            }
+                            OnStatusChange(ProbeStatus.Down, "error");
                         }
 
                         // Update output.
@@ -127,12 +121,28 @@ namespace vmPing.Classes
             }
         }
 
+        private void OnStatusChange(ProbeStatus newStatus, string alertType)
+        {
+            Status = newStatus;
+            TriggerStatusChange(new StatusChangeLog
+            {
+                Timestamp = DateTime.Now,
+                Hostname = Hostname,
+                Alias = Alias,
+                Status = newStatus
+            });
+
+            if (ApplicationOptions.IsEmailAlertEnabled)
+            {
+                Util.SendEmail(alertType, Hostname, Alias);
+            }
+        }
 
         private async Task IcmpWait(IPStatus ipStatus)
         {
             if (ipStatus == IPStatus.TimedOut)
             {
-                // Ping timed out.  If the ping interval is greater than the timeout,
+                // Ping timed out. If the ping interval is greater than the timeout,
                 // then sleep for [INTERVAL - TIMEOUT]
                 // Otherwise, sleep for a fixed amount of 1 second
                 if (ApplicationOptions.PingInterval > ApplicationOptions.PingTimeout)
@@ -152,7 +162,6 @@ namespace vmPing.Classes
             }
         }
 
-
         private void DisplayIcmpReply(PingReply pingReply, Exception ex = null)
         {
             if (pingReply == null && ex == null)
@@ -161,60 +170,51 @@ namespace vmPing.Classes
             }
 
             // Build output string based on the ping reply details.
-            var pingOutput = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  ");
+            var sb = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  ");
 
             if (pingReply != null)
             {
                 switch (pingReply.Status)
                 {
                     case IPStatus.Success:
-                        pingOutput.Append("Reply from ");
-                        pingOutput.Append(pingReply.Address.ToString());
-                        if (pingReply.RoundtripTime < 1)
-                        {
-                            pingOutput.Append("  [<1ms]");
-                        }
-                        else
-                        {
-                            pingOutput.Append($"  [{pingReply.RoundtripTime} ms]");
-                        }
-
+                        sb.Append("Reply from ");
+                        sb.Append(pingReply.Address.ToString());
+                        sb.Append(pingReply.RoundtripTime < 1
+                            ? "  [<1ms]"
+                            : $"  [{pingReply.RoundtripTime} ms]");
                         break;
                     case IPStatus.DestinationHostUnreachable:
-                        pingOutput.Append("Reply  [Host unreachable]");
+                        sb.Append("Reply  [Host unreachable]");
                         break;
                     case IPStatus.DestinationNetworkUnreachable:
-                        pingOutput.Append("Reply  [Network unreachable]");
+                        sb.Append("Reply  [Network unreachable]");
                         break;
                     case IPStatus.DestinationUnreachable:
-                        pingOutput.Append("Reply  [Unreachable]");
+                        sb.Append("Reply  [Unreachable]");
                         break;
                     case IPStatus.TimedOut:
-                        pingOutput.Append("Request timed out.");
+                        sb.Append("Request timed out.");
                         break;
                     default:
-                        pingOutput.Append(pingReply.Status.ToString());
+                        sb.Append(pingReply.Status.ToString());
                         break;
                 }
             }
             else
             {
-                if (ex.InnerException is SocketException)
-                {
-                    pingOutput.Append("Unable to resolve hostname.");
-                }
-                else
-                {
-                    pingOutput.Append(ex.Message);
-                }
+                sb.Append(ex.InnerException is SocketException
+                    ? "Unable to resolve hostname."
+                    : ex.Message);
             }
+
+            var output = sb.ToString();
 
             // Add response to the output window..
             Application.Current.Dispatcher.BeginInvoke(
-                new Action(() => AddHistory(pingOutput.ToString())));
+                new Action(() => AddHistory(output)));
 
             // If enabled, log output.
-            WriteToLog(pingOutput.ToString());
+            WriteToLog(output);
         }
     }
 }

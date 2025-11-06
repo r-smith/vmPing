@@ -7,57 +7,65 @@ namespace vmPing.Classes
 {
     class Favorite
     {
+        private const string RootPath = "/vmping/favorites";
+        private const string FavoritePath = "/vmping/favorites/favorite";
+        private const string TitleAttribute = "title";
+        private const string ColumnAttribute = "columncount";
+
         public List<string> Hostnames { get; set; }
         public int ColumnCount { get; set; }
 
         public static bool TitleExists(string title)
         {
-            if (!Configuration.Exists())
+            if (!Configuration.Exists() || string.IsNullOrWhiteSpace(title))
             {
                 return false;
             }
 
-            var titleExists = false;
-
             try
             {
                 var xd = new XmlDocument();
                 xd.Load(Configuration.FilePath);
-
-                XmlNode nodeTitleSearch = xd.SelectSingleNode($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(title)}]");
-                if (nodeTitleSearch != null)
-                {
-                    titleExists = true;
-                }
+                var node = xd.SelectSingleNode($"{FavoritePath}[@{TitleAttribute}={Configuration.GetEscapedXpath(title)}]");
+                return node != null;
             }
             catch (Exception ex)
             {
                 Util.ShowError($"Failed to read configuration file. {ex.Message}");
-                titleExists = false;
+                return false;
             }
-
-            return titleExists;
         }
-
 
         public static List<string> GetTitles()
         {
+            var titles = new List<string>();
+
             if (!Configuration.Exists())
             {
-                return new List<string>();
+                return titles;
             }
-
-            var favoriteTitles = new List<string>();
 
             try
             {
                 var xd = new XmlDocument();
                 xd.Load(Configuration.FilePath);
 
-                foreach (XmlNode node in xd.SelectNodes("/vmping/favorites/favorite"))
+                var nodes = xd.SelectNodes(FavoritePath);
+                if (nodes == null)
                 {
-                    favoriteTitles.Add(node.Attributes["title"].Value);
+                    return titles;
                 }
+
+                foreach (XmlNode node in nodes)
+                {
+                    var title = node.Attributes?[TitleAttribute]?.Value;
+                    if (!string.IsNullOrWhiteSpace(title))
+                    {
+                        titles.Add(title);
+                    }
+                }
+
+                titles.Sort(StringComparer.OrdinalIgnoreCase);
             }
 
             catch (Exception ex)
@@ -65,14 +73,12 @@ namespace vmPing.Classes
                 Util.ShowError($"Failed to read configuration file. {ex.Message}");
             }
 
-            favoriteTitles.Sort();
-            return favoriteTitles;
+            return titles;
         }
 
-
-        public static Favorite GetContents(string favoriteTitle)
+        public static Favorite Load(string title)
         {
-            if (!Configuration.Exists())
+            if (!Configuration.Exists() || string.IsNullOrWhiteSpace(title))
             {
                 return new Favorite();
             }
@@ -86,24 +92,35 @@ namespace vmPing.Classes
                 var xd = new XmlDocument();
                 xd.Load(Configuration.FilePath);
 
-                XmlNode nodeFavorite = xd.SelectSingleNode($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(favoriteTitle)}]");
-                if (nodeFavorite != null)
-                {
-                    favorite.ColumnCount = int.Parse(nodeFavorite.Attributes["columncount"].Value);
-
-                    foreach (XmlNode node in xd.SelectNodes($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(favoriteTitle)}]/host"))
-                    {
-                        favorite.Hostnames.Add(node.InnerText);
-                    }
-                }
-                else
+                var favoriteNode = xd.SelectSingleNode($"{FavoritePath}[@{TitleAttribute}={Configuration.GetEscapedXpath(title)}]");
+                if (favoriteNode == null)
                 {
                     throw new KeyNotFoundException();
+                }
+
+                // Columns.
+                if (int.TryParse(favoriteNode.Attributes?[ColumnAttribute]?.Value, out int columns))
+                {
+                    favorite.ColumnCount = columns;
+                }
+
+                // Hostnames.
+                var hostNodes = favoriteNode.SelectNodes("host");
+                if (hostNodes != null)
+                {
+                    foreach (XmlNode node in hostNodes)
+                    {
+                        var hostname = node.InnerText?.Trim();
+                        if (!string.IsNullOrEmpty(hostname))
+                        {
+                            favorite.Hostnames.Add(hostname);
+                        }
+                    }
                 }
             }
             catch (KeyNotFoundException)
             {
-                Util.ShowError($"The requested favorite was not found: {favoriteTitle}");
+                Util.ShowError($"The requested favorite was not found: {title}");
             }
             catch (Exception ex)
             {
@@ -113,16 +130,9 @@ namespace vmPing.Classes
             return favorite;
         }
 
-
-        public static bool IsTitleInvalid(string title)
-        {
-            return string.IsNullOrWhiteSpace(title);
-        }
-
-
         public static void Rename(string originalTitle, string newTitle)
         {
-            if (Configuration.IsReady() == false)
+            if (Configuration.IsReady() == false || string.IsNullOrWhiteSpace(originalTitle) || string.IsNullOrWhiteSpace(newTitle))
             {
                 return;
             }
@@ -132,12 +142,17 @@ namespace vmPing.Classes
                 var xd = new XmlDocument();
                 xd.Load(Configuration.FilePath);
 
-                // Check if title already exists.
-                XmlNode nodeRoot = xd.SelectSingleNode("/vmping/favorites");
-                foreach (XmlNode node in xd.SelectNodes($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(originalTitle)}]"))
+                // Find favorite.
+                var nodes = xd.SelectNodes($"{FavoritePath}[@{TitleAttribute}={Configuration.GetEscapedXpath(originalTitle)}]");
+                if (nodes == null || nodes.Count == 0)
                 {
-                    // Rename title attribue.
-                    node.Attributes["title"].Value = newTitle;
+                    return;
+                }
+
+                foreach (XmlNode node in nodes)
+                {
+                    // Rename.
+                    node.Attributes[TitleAttribute].Value = newTitle;
                 }
 
                 xd.Save(Configuration.FilePath);
@@ -152,7 +167,7 @@ namespace vmPing.Classes
 
         public static void Save(string title, List<string> hostnames, int columnCount)
         {
-            if (Configuration.IsReady() == false)
+            if (Configuration.IsReady() == false || string.IsNullOrWhiteSpace(title))
             {
                 return;
             }
@@ -162,26 +177,32 @@ namespace vmPing.Classes
                 var xd = new XmlDocument();
                 xd.Load(Configuration.FilePath);
 
-                XmlNode nodeRoot = xd.SelectSingleNode("/vmping/favorites");
+                var root = xd.SelectSingleNode(RootPath);
 
-                // Check if title already exists.
-                XmlNodeList nodeTitleSearch = xd.SelectNodes($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(title)}]");
-                foreach (XmlNode node in nodeTitleSearch)
+                // Remove favorite if title already exists.
+                foreach (XmlNode node in xd.SelectNodes($"{FavoritePath}[@{TitleAttribute}={Configuration.GetEscapedXpath(title)}]"))
                 {
-                    // Title already exists.  Delete any old versions.
-                    nodeRoot.RemoveChild(node);
+                    root.RemoveChild(node);
                 }
 
-                XmlElement favorite = xd.CreateElement("favorite");
-                favorite.SetAttribute("title", title);
-                favorite.SetAttribute("columncount", columnCount.ToString());
-                foreach (string hostname in hostnames)
+                // Create new favorite.
+                var favorite = xd.CreateElement("favorite");
+                favorite.SetAttribute(TitleAttribute, title);
+                favorite.SetAttribute(ColumnAttribute, columnCount.ToString());
+
+                foreach (var hostname in hostnames)
                 {
-                    var xmlElement = xd.CreateElement("host");
-                    xmlElement.InnerText = hostname;
-                    favorite.AppendChild(xmlElement);
+                    if (string.IsNullOrWhiteSpace(hostname))
+                    {
+                        continue;
+                    }
+
+                    var hostElement = xd.CreateElement("host");
+                    hostElement.InnerText = hostname;
+                    favorite.AppendChild(hostElement);
                 }
-                nodeRoot.AppendChild(favorite);
+
+                root.AppendChild(favorite);
                 xd.Save(Configuration.FilePath);
             }
 
@@ -193,7 +214,7 @@ namespace vmPing.Classes
 
         public static void Delete(string title)
         {
-            if (!Configuration.Exists())
+            if (!Configuration.Exists() || string.IsNullOrWhiteSpace(title))
             {
                 return;
             }
@@ -203,13 +224,25 @@ namespace vmPing.Classes
                 var xd = new XmlDocument();
                 xd.Load(Configuration.FilePath);
 
-                // Search for favorite by title.
-                XmlNode nodeRoot = xd.SelectSingleNode("/vmping/favorites");
-                foreach (XmlNode node in xd.SelectNodes($"/vmping/favorites/favorite[@title={Configuration.GetEscapedXpath(title)}]"))
+                // Find favorite.
+                var root = xd.SelectSingleNode(RootPath);
+                if (root == null)
                 {
-                    // Found title.  Delete all versions.
-                    nodeRoot.RemoveChild(node);
+                    return;
                 }
+
+                var nodes = xd.SelectNodes($"{FavoritePath}[@{TitleAttribute}={Configuration.GetEscapedXpath(title)}]");
+                if (nodes == null)
+                {
+                    return;
+                }
+
+                foreach (XmlNode node in nodes)
+                {
+                    // Delete.
+                    root.RemoveChild(node);
+                }
+
                 xd.Save(Configuration.FilePath);
             }
 
@@ -217,6 +250,11 @@ namespace vmPing.Classes
             {
                 Util.ShowError($"{Strings.Error_WriteConfig} {ex.Message}");
             }
+        }
+
+        public static bool IsTitleInvalid(string title)
+        {
+            return string.IsNullOrWhiteSpace(title);
         }
     }
 }

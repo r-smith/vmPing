@@ -74,7 +74,7 @@ namespace vmPing.UI
 
             Grid.SetColumnSpan(Favorites, 1);
             ContentsSection.Visibility = Visibility.Visible;
-            SelectedFavorite = Favorite.GetContents(Favorites.SelectedItem.ToString());
+            SelectedFavorite = Favorite.Load(Favorites.SelectedItem.ToString());
             Contents.ItemsSource = null;
             Contents.Items.Clear();
             Contents.ItemsSource = SelectedFavorite.Hostnames;

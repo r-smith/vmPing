@@ -421,7 +421,7 @@ namespace vmPing.UI
         {
             RemoveAllProbes();
 
-            var favorite = Favorite.GetContents(favoriteTitle);
+            var favorite = Favorite.Load(favoriteTitle);
             if (favorite.Hostnames.Count < 1)
             {
                 AddProbe();

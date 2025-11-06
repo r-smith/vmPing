@@ -2,38 +2,40 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style x:Key="LabelToolTip" TargetType="{x:Type Label}">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="MaxWidth" Value="300"/>
+        <Setter Property="MaxWidth" Value="320"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
                     <Border Background="Transparent"
                             Margin="7,0,0,0"
                             Padding="3"
-                            ToolTipService.InitialShowDelay="350"
-                            ToolTipService.ShowDuration="60000"
+                            ToolTipService.InitialShowDelay="0"
+                            ToolTipService.BetweenShowDelay="0"
+                            ToolTipService.ShowDuration="600000"
                             SnapsToDevicePixels="true">
                         <Border.ToolTip>
-                            <ToolTip Background="#e9eeff" BorderBrush="#203d77" BorderThickness="1">
+                            <ToolTip Background="#e6f1ff" BorderBrush="#6a9edf" BorderThickness="1">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <Image Grid.Column="0"
-                                           Width="16"
-                                           Height="16"
-                                           Margin="7,13,7,7"
+                                           Width="19"
+                                           Height="19"
+                                           Margin="10,17,0,0"
                                            VerticalAlignment="Top"
-                                           Source="{StaticResource icon.vmping-logo-simple}" />
+                                           Opacity="0.75"
+                                           Source="{StaticResource icon.question-circle-black}"/>
                                     <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                                       Grid.Column="1"
-                                                      Margin="5,10,7,10"
+                                                      Margin="13,12,12,12"
                                                       Width="{TemplateBinding MaxWidth}">
                                         <ContentPresenter.Resources>
                                             <Style TargetType="{x:Type TextBlock}">
                                                 <Setter Property="TextWrapping" Value="Wrap"/>
                                                 <Setter Property="FontSize" Value="14"/>
-                                                <Setter Property="Foreground" Value="#111111"/>
+                                                <Setter Property="Foreground" Value="#001"/>
                                             </Style>
                                         </ContentPresenter.Resources>
                                     </ContentPresenter>
@@ -48,7 +50,7 @@
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="TextWrapping" Value="Wrap"/>
                             <Setter Property="FontSize" Value="14"/>
-                            <Setter Property="Foreground" Value="#111111"/>
+                            <Setter Property="Foreground" Value="#001"/>
                         </Style>
                     </ControlTemplate.Resources>
                 </ControlTemplate>

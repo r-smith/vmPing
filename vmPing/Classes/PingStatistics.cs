@@ -12,7 +12,6 @@ namespace vmPing.Classes
         {
             get => sent;
             set { sent = value; OnPropertyChanged(); }
-
         }
 
         private uint received;
@@ -38,19 +37,14 @@ namespace vmPing.Classes
 
         public void Reset()
         {
-            sent = 0;
-            received = 0;
-            lost = 0;
-            error = 0;
-            OnPropertyChanged(name: "Sent");
-            OnPropertyChanged(name: "Received");
-            OnPropertyChanged(name: "Lost");
-            OnPropertyChanged(name: "Error");
+            sent = received = lost = error = 0;
+            OnPropertyChanged(nameof(Sent));
+            OnPropertyChanged(nameof(Received));
+            OnPropertyChanged(nameof(Lost));
+            OnPropertyChanged(nameof(Error));
         }
 
-        // Create the OnPropertyChanged method to raise the event
-        // The calling member's name will be used as the parameter.
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }

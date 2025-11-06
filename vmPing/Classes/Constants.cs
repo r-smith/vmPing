@@ -48,6 +48,5 @@ namespace vmPing.Classes
         // Key bindings.
         public const Key StatusHistoryKeyBinding = Key.F12;
         public const Key HelpKeyBinding = Key.F1;
-
     }
 }

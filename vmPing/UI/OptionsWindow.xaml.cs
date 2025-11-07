@@ -692,11 +692,11 @@ namespace vmPing.UI
         private async void TestEmail_Click(object sender, RoutedEventArgs e)
         {
             TestEmailButton.IsEnabled = false;
-            TestEmailButton.Content = "Testing...";
+            TestEmailButton.Content = "Sending...";
             var serverAddress = SmtpServer.Text;
             var serverPort = SmtpPort.Text;
-            var isSslEnabled = IsSmtpSslEnabled.IsChecked == true ? true : false;
-            var isAuthRequired = IsSmtpAuthenticationRequired.IsChecked == true ? true : false;
+            var isSslEnabled = IsSmtpSslEnabled.IsChecked == true;
+            var isAuthRequired = IsSmtpAuthenticationRequired.IsChecked == true;
             var username = SmtpUsername.Text;
             var password = SmtpPassword.SecurePassword;
             var mailFrom = EmailFromAddress.Text;
@@ -715,11 +715,34 @@ namespace vmPing.UI
                         password,
                         mailFrom,
                         mailRecipient);
+                    Application.Current.Dispatcher.BeginInvoke(
+                        new Action(() =>
+                        {
+                            if (IsLoaded)
+                            {
+                                var dialogWindow = new DialogWindow(
+                                    DialogWindow.DialogIcon.Info,
+                                    "Email Test",
+                                    "A test email was sent.",
+                                    "OK",
+                                    false)
+                                {
+                                    Owner = this
+                                };
+                                dialogWindow.ShowDialog();
+                            }
+                        }));
                 }
                 catch (Exception ex)
                 {
                     Application.Current.Dispatcher.BeginInvoke(
-                        new Action(() => ShowError(ex.Message, EmailAlertsTab, TestEmailButton)));
+                        new Action(() =>
+                        {
+                            if (IsLoaded)
+                            {
+                                ShowError($"Test failed: {ex.Message}", EmailAlertsTab, TestEmailButton);
+                            }
+                        }));
                 }
             });
             TestEmailButton.IsEnabled = true;

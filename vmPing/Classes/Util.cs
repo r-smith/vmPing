@@ -102,101 +102,68 @@ namespace vmPing.Classes
         {
             if (string.IsNullOrEmpty(plainText))
             {
-                throw new ArgumentNullException("plainText");
+                throw new ArgumentNullException(nameof(plainText));
             }
 
-            string encryptedString = null;                       // Encrypted string to return.
-            RijndaelManaged aesAlgorithm = null;                 // RijndaelManaged object used to encrypt the data.
-
-            try
+            // WARNING: The key is hardcoded and published to GitHub. It's not truly secure.
+            // The encryption process still provides local obfuscation.
+            using (var key = new Rfc2898DeriveBytes("https://github.com/R-Smith/vmPing" + Environment.MachineName, Encoding.ASCII.GetBytes(Environment.UserName + "@@vmping-salt@@")))
+            using (var aes = Aes.Create())
             {
-                // Generate the key from a shared secret and initilization vector.
-                Rfc2898DeriveBytes key = new Rfc2898DeriveBytes("https://github.com/R-Smith/vmPing" + Environment.MachineName, Encoding.ASCII.GetBytes(Environment.UserName + "@@vmping-salt@@"));
+                aes.Key = key.GetBytes(aes.KeySize / 8);
+                aes.GenerateIV();
+                aes.Padding = PaddingMode.PKCS7;
+                aes.Mode = CipherMode.CBC;
 
-                // Create a RijndaelManaged object.
-                aesAlgorithm = new RijndaelManaged();
-                aesAlgorithm.Padding = PaddingMode.PKCS7;
-                aesAlgorithm.Key = key.GetBytes(aesAlgorithm.KeySize / 8);
-
-                key?.Dispose();
-
-                // Create a decryptor to perform the stream transform.
-                ICryptoTransform encryptor = aesAlgorithm.CreateEncryptor(aesAlgorithm.Key, aesAlgorithm.IV);
-
-                // Create the streams used for encryption.
-                using (MemoryStream memoryStream = new MemoryStream())
+                using (var memoryStream = new MemoryStream())
                 {
-                    // Prepend the IV.
-                    memoryStream.Write(BitConverter.GetBytes(aesAlgorithm.IV.Length), 0, sizeof(int));
-                    memoryStream.Write(aesAlgorithm.IV, 0, aesAlgorithm.IV.Length);
-                    using (CryptoStream cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+                    memoryStream.Write(BitConverter.GetBytes(aes.IV.Length), 0, sizeof(int));
+                    memoryStream.Write(aes.IV, 0, aes.IV.Length);
+
+                    using (var cryptoStream = new CryptoStream(memoryStream, aes.CreateEncryptor(), CryptoStreamMode.Write))
+                    using (var writer = new StreamWriter(cryptoStream, Encoding.UTF8))
                     {
-                        using (StreamWriter streamWriter = new StreamWriter(cryptoStream))
-                        {
-                            // Write all data to the stream.
-                            streamWriter.Write(plainText);
-                        }
+                        writer.Write(plainText);
                     }
-                    encryptedString = Convert.ToBase64String(memoryStream.ToArray());
+
+                    return Convert.ToBase64String(memoryStream.ToArray());
                 }
             }
-            finally
-            {
-                // Clear the RijndaelManaged object.
-                aesAlgorithm?.Clear();
-                aesAlgorithm.Dispose();
-            }
-
-            // Return the encrypted bytes from the memory stream.
-            return encryptedString;
         }
 
         public static string DecryptStringAES(string cipherText)
         {
-            if (string.IsNullOrEmpty(cipherText))
+            if (string.IsNullOrWhiteSpace(cipherText))
             {
-                throw new ArgumentNullException("cipherText");
+                throw new ArgumentNullException(nameof(cipherText));
             }
-
-            // Declare the RijndaelManaged object used to decrypt the data.
-            RijndaelManaged aesAlgorithm = null;
-
-            // Declare the string used to hold the decrypted text.
-            string plaintext = null;
 
             try
             {
-                // Generate the key from a shared secret and initilization vector.
-                Rfc2898DeriveBytes key = new Rfc2898DeriveBytes("https://github.com/R-Smith/vmPing" + Environment.MachineName, Encoding.ASCII.GetBytes(Environment.UserName + "@@vmping-salt@@"));
+                var bytes = Convert.FromBase64String(cipherText);
 
-                // Create the streams used for decryption.                
-                byte[] bytes = Convert.FromBase64String(cipherText);
-                using (MemoryStream memoryStream = new MemoryStream(bytes))
+                // WARNING: The key is hardcoded and published to GitHub. It's not truly secure.
+                // The encryption process still provides local obfuscation.
+                using (var key = new Rfc2898DeriveBytes("https://github.com/R-Smith/vmPing" + Environment.MachineName, Encoding.ASCII.GetBytes(Environment.UserName + "@@vmping-salt@@")))
+                using (var memoryStream = new MemoryStream(bytes))
+                using (var aes = Aes.Create())
                 {
-                    // Create a RijndaelManaged object with the specified key and IV.
-                    aesAlgorithm = new RijndaelManaged();
-                    aesAlgorithm.Padding = PaddingMode.PKCS7;
-                    aesAlgorithm.Key = key.GetBytes(aesAlgorithm.KeySize / 8);
-                    // Get the initialization vector from the encrypted stream.
-                    aesAlgorithm.IV = ReadByteArray(memoryStream);
-                    // Create a decrytor to perform the stream transform.
-                    ICryptoTransform decryptor = aesAlgorithm.CreateDecryptor(aesAlgorithm.Key, aesAlgorithm.IV);
-                    using (CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
-                    {
-                        using (StreamReader streamReader = new StreamReader(cryptoStream))
+                    aes.Key = key.GetBytes(aes.KeySize / 8);
+                    aes.IV = ReadByteArray(memoryStream);
+                    aes.Padding = PaddingMode.PKCS7;
+                    aes.Mode = CipherMode.CBC;
 
-                            // Read the decrypted bytes from the decrypting stream and place them in a string.
-                            plaintext = streamReader.ReadToEnd();
+                    using (var cryptoStream = new CryptoStream(memoryStream, aes.CreateDecryptor(), CryptoStreamMode.Read))
+                    using (var reader = new StreamReader(cryptoStream, Encoding.UTF8))
+                    {
+                        return reader.ReadToEnd();
                     }
                 }
             }
-            finally
+            catch (Exception ex)
             {
-                // Clear the RijndaelManaged object.
-                aesAlgorithm?.Clear();
+                throw new Exception("Error decrypting value: " + ex.Message);
             }
-
-            return plaintext;
         }
 
         private static byte[] ReadByteArray(Stream stream)

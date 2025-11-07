@@ -10,120 +10,80 @@ using vmPing.Properties;
 
 namespace vmPing.Classes
 {
-    class Util
+    internal static class Util
     {
-        public static void SendEmail(string hostStatus, string hostName, string hostAlias)
+        public static async void SendEmail(string status, string hostname, string alias)
         {
-            var serverAddress = ApplicationOptions.EmailServer;
-            var serverUser = ApplicationOptions.EmailUser;
-            var serverPassword = ApplicationOptions.EmailPassword;
-            var serverPort = ApplicationOptions.EmailPort;
-            var mailFromAddress = ApplicationOptions.EmailFromAddress;
-            var mailFromFriendly = "vmPing";
-            var mailToAddress = ApplicationOptions.EmailRecipient;
-            var mailSubject = $"[vmPing] {hostName} <> {Strings.Email_Host} {hostStatus}";
-            if (hostAlias != null && hostAlias.Length > 0)
-            {
-                hostAlias = $"({hostAlias}) ";
-            }
-            else
-            {
-                hostAlias = string.Empty;
-            }
-            var mailBody =
-                $"{hostName} {hostAlias}{Strings.Email_Verb} {hostStatus}.{Environment.NewLine}" +
-                $"{DateTime.Now.ToLongDateString()}  {DateTime.Now.ToLongTimeString()}";
-
-            var message = new MailMessage();
-
             try
             {
-                var smtpClient = new SmtpClient();
-                MailAddress fromAddress;
-                if (mailFromFriendly.Length > 0)
+                using (MailMessage message = new MailMessage())
                 {
-                    fromAddress = new MailAddress(mailFromAddress, mailFromFriendly);
+                    var affectedShortName = string.IsNullOrWhiteSpace(alias) ? hostname : alias;
+                    var affectedLongName = string.IsNullOrWhiteSpace(alias) ? hostname : $"{alias} ({hostname})";
+
+                    message.Subject = $"Notice: {affectedShortName} {Strings.Email_Verb} {status}";
+                    message.Body = $"{affectedLongName} {Strings.Email_Verb} {status}.{Environment.NewLine}" +
+                        $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()}";
+                    message.From = new MailAddress(ApplicationOptions.EmailFromAddress, "vmPing");
+                    message.To.Add(ApplicationOptions.EmailRecipient.Replace(";", ","));
+
+                    using (SmtpClient smtp = new SmtpClient())
+                    {
+                        smtp.Host = ApplicationOptions.EmailServer;
+                        smtp.EnableSsl = ApplicationOptions.IsEmailSslEnabled;
+                        if (int.TryParse(ApplicationOptions.EmailPort, out var port) && port > 0)
+                        {
+                            smtp.Port = port;
+                        }
+                        if (ApplicationOptions.IsEmailAuthenticationRequired)
+                        {
+                            smtp.Credentials = new NetworkCredential(
+                                ApplicationOptions.EmailUser,
+                                ApplicationOptions.EmailPassword);
+                        }
+
+                        await smtp.SendMailAsync(message);
+                    }
                 }
-                else
-                {
-                    fromAddress = new MailAddress(mailFromAddress);
-                }
-
-                smtpClient.Host = serverAddress;
-                smtpClient.EnableSsl = ApplicationOptions.IsEmailSslEnabled;
-
-                if (ApplicationOptions.IsEmailAuthenticationRequired)
-                {
-                    smtpClient.Credentials = new NetworkCredential(serverUser, serverPassword);
-                }
-
-                if (serverPort.Length > 0)
-                {
-                    smtpClient.Port = Int32.Parse(serverPort);
-                }
-
-                message.From = fromAddress;
-                message.Subject = mailSubject;
-                message.Body = mailBody;
-
-                message.To.Add(mailToAddress);
-
-                //Send the email.
-                smtpClient.Send(message);
             }
             catch
             {
-                // There was an error sending Email.
-            }
-            finally
-            {
-                message.Dispose();
+                // Silently ignore errors.
             }
         }
 
         public static void SendTestEmail(
-            string serverAddress,
-            string serverPort,
+            string server,
+            string port,
             bool isSslEnabled,
             bool isAuthRequired,
             string username,
             System.Security.SecureString password,
-            string mailFrom,
-            string mailRecipient)
+            string fromAddress,
+            string recipientAddress)
         {
-            string mailFromFriendly = "vmPing";
-            string mailSubject = $"[vmPing] Test Email Notification";
-            string mailBody =
-                $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()} - This is a test email notification sent by vmPing.";
-            MailAddress fromAddress;
-
-            using (SmtpClient smtpClient = new SmtpClient())
+            using (MailMessage message = new MailMessage())
             {
-                smtpClient.Host = serverAddress;
+                message.Subject = "[vmPing] Test Email Notification";
+                message.Body = $"This is a test email sent by vmPing on {DateTime.Now:F}";
+                message.From = new MailAddress(fromAddress, "vmPing");
+                message.To.Add(recipientAddress.Replace(";", ","));
 
-                if (serverPort.Length > 0)
+                using (SmtpClient smtp = new SmtpClient())
                 {
-                    smtpClient.Port = Int32.Parse(serverPort);
-                }
+                    smtp.Host = server;
+                    smtp.EnableSsl = isSslEnabled;
+                    if (int.TryParse(port, out var portNumber) && portNumber > 0)
+                    {
+                        smtp.Port = portNumber;
+                    }
+                    if (isAuthRequired)
+                    {
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = new NetworkCredential(username, password);
+                    }
 
-                fromAddress = new MailAddress(mailFrom, mailFromFriendly);
-
-                if (isAuthRequired)
-                {
-                    smtpClient.Credentials = new NetworkCredential(username, password);
-                }
-
-                smtpClient.EnableSsl = isSslEnabled;
-
-                using (MailMessage message = new MailMessage())
-                {
-                    message.From = fromAddress;
-                    message.Subject = mailSubject;
-                    message.Body = mailBody;
-                    message.To.Add(mailRecipient);
-
-                    //Send the email.
-                    smtpClient.Send(message);
+                    smtp.Send(message);
                 }
             }
         }
@@ -135,9 +95,7 @@ namespace vmPing.Classes
 
         public static bool IsValidHtmlColor(string htmlColor)
         {
-            var regex = new Regex("^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$");
-
-            return regex.IsMatch(htmlColor);
+            return Regex.IsMatch(htmlColor, "^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$");
         }
 
         public static string EncryptStringAES(string plainText)
@@ -191,14 +149,6 @@ namespace vmPing.Classes
 
             // Return the encrypted bytes from the memory stream.
             return encryptedString;
-        }
-
-        public static string GetSafeFilename(string filename)
-        {
-            // Manually defining invalid characters rather than using Path.GetInvalidFileNameChars(),
-            // as that method seems to be missing several invalid filename characters.
-            char[] invalidCharacters = { '<', '>', ':', '"', '/', '\\', '|', '?', '*' };
-            return string.Join("_", filename.Split(invalidCharacters));
         }
 
         public static string DecryptStringAES(string cipherText)
@@ -264,6 +214,19 @@ namespace vmPing.Classes
             }
 
             return buffer;
+        }
+
+        public static string GetSafeFilename(string filename)
+        {
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                return string.Empty;
+            }
+
+            // Manually check for invalid characters. The .NET Path.GetInvalidFileNameChars()
+            // function is missing several invalid filename characters.
+            char[] invalidCharacters = { '<', '>', ':', '"', '/', '\\', '|', '?', '*' };
+            return string.Join("_", filename.Split(invalidCharacters));
         }
     }
 }

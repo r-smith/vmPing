@@ -11,14 +11,9 @@ namespace vmPing.Classes
         public ProbeStatus Status { get; set; }
         public bool HasStatusBeenCleared { get; set; }
 
-        public string AliasIfExistOrHostname
-        {
-            get
-            {
-                return (Alias != null && Alias.Length > 0) ? Alias : Hostname;
-            }
+        public string AliasIfExistOrHostname =>
+            !string.IsNullOrWhiteSpace(Alias) ? Alias : Hostname;
 
-        }
         public string StatusAsString
         {
             get

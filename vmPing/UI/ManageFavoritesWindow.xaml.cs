@@ -12,7 +12,7 @@ namespace vmPing.UI
 {
     public partial class ManageFavoritesWindow : Window
     {
-        private Favorite SelectedFavorite = null;
+        private Favorite _selectedFavorite = null;
 
         // Imports and constants for hiding minimize and maximize buttons.
         [DllImport("user32.dll")]
@@ -22,7 +22,6 @@ namespace vmPing.UI
         private const int GWL_STYLE = -16;
         private const int WS_MAXIMIZEBOX = 0x10000; //maximize button
         private const int WS_MINIMIZEBOX = 0x20000; //minimize button
-
 
         public ManageFavoritesWindow()
         {
@@ -35,7 +34,11 @@ namespace vmPing.UI
             Favorites.ItemsSource = null;
             Favorites.Items.Clear();
             Favorites.ItemsSource = Favorite.GetTitles();
+            HideContentsSection();
+        }
 
+        private void HideContentsSection()
+        {
             ContentsSection.Visibility = Visibility.Collapsed;
             Contents.ItemsSource = null;
             Contents.Items.Clear();
@@ -53,8 +56,11 @@ namespace vmPing.UI
                 Strings.DialogTitle_ConfirmDelete,
                 $"{Strings.ManageFavorites_Warn_DeleteA} {Favorites.SelectedItem} {Strings.ManageFavorites_Warn_DeleteB}",
                 Strings.DialogButton_Remove,
-                true);
-            dialogWindow.Owner = this;
+                true)
+            {
+                Owner = this
+            };
+
             if (dialogWindow.ShowDialog() == true)
             {
                 Favorite.Delete(Favorites.SelectedItem.ToString());
@@ -68,16 +74,15 @@ namespace vmPing.UI
             {
                 Grid.SetColumnSpan(Favorites, 3);
                 Favorites.BorderThickness = new Thickness(1.0);
-                ContentsSection.Visibility = Visibility.Collapsed;
+                HideContentsSection();
                 return;
             }
 
+            _selectedFavorite = Favorite.Load(Favorites.SelectedItem.ToString());
+
             Grid.SetColumnSpan(Favorites, 1);
             ContentsSection.Visibility = Visibility.Visible;
-            SelectedFavorite = Favorite.Load(Favorites.SelectedItem.ToString());
-            Contents.ItemsSource = null;
-            Contents.Items.Clear();
-            Contents.ItemsSource = SelectedFavorite.Hostnames;
+            Contents.ItemsSource = _selectedFavorite.Hostnames;
             FavoriteTitle.Text = Favorites.SelectedItem.ToString();
         }
 
@@ -89,11 +94,14 @@ namespace vmPing.UI
             }
 
             var newFavoriteWindow = new NewFavoriteWindow(
-                hostList: SelectedFavorite.Hostnames,
-                columnCount: SelectedFavorite.ColumnCount,
+                hostList: _selectedFavorite.Hostnames,
+                columnCount: _selectedFavorite.ColumnCount,
                 isEditExisting: true,
-                title: Favorites.SelectedItem.ToString());
-            newFavoriteWindow.Owner = this;
+                title: Favorites.SelectedItem.ToString())
+            {
+                Owner = this
+            };
+
             if (newFavoriteWindow.ShowDialog() == true)
             {
                 RefreshFavoriteList();
@@ -106,6 +114,7 @@ namespace vmPing.UI
             {
                 Owner = this
             };
+
             if (newFavoriteWindow.ShowDialog() == true)
             {
                 RefreshFavoriteList();
@@ -115,13 +124,13 @@ namespace vmPing.UI
         private void Window_SourceInitialized(object sender, EventArgs e)
         {
             // Hide minimize and maximize buttons.
-            IntPtr _windowHandle = new WindowInteropHelper(this).Handle;
-            if (_windowHandle == null)
+            var handle = new WindowInteropHelper(this).Handle;
+            if (handle == null)
             {
                 return;
             }
 
-            SetWindowLong(_windowHandle, GWL_STYLE, GetWindowLong(_windowHandle, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_MINIMIZEBOX);
+            SetWindowLong(handle, GWL_STYLE, GetWindowLong(handle, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_MINIMIZEBOX);
         }
 
         private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)

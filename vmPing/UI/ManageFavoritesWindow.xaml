@@ -37,7 +37,7 @@
                 <ColumnDefinition Width=".85*" MinWidth="50"/>
             </Grid.ColumnDefinitions>
             <!-- Favorites list -->
-            <ListBox Name="Favorites"
+            <ListBox x:Name="Favorites"
                      Grid.ColumnSpan="3"
                      SelectionChanged="Favorites_SelectionChanged"
                      HorizontalAlignment="Stretch"
@@ -52,7 +52,7 @@
                           Visibility="{Binding ElementName=ContentsSection, Path=Visibility}"/>
             
             <!-- Contents of selected favorite -->
-            <Border Name="ContentsSection"
+            <Border x:Name="ContentsSection"
                     Grid.Column="2"
                     Background="#f4f4f4"
                     BorderBrush="#abadb3"
@@ -102,8 +102,7 @@
                     Style="{StaticResource ButtonStandardStyle}"
                     IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
                     Content="_Edit"/>
-            <Button Name="Remove"
-                    Click="Remove_Click"
+            <Button Click="Remove_Click"
                     Width="85"
                     Style="{StaticResource ButtonStandardStyle}"
                     IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"

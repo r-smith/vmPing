@@ -153,10 +153,6 @@
   <data name="DialogTitle_Warning" xml:space="preserve">
     <value>Warning</value>
   </data>
-  <data name="EditAlias_AliasFor" xml:space="preserve">
-    <value>Enter an alias for</value>
-    <comment>Parsed as:  Enter an alias for {hostname}</comment>
-  </data>
   <data name="Email_Down" xml:space="preserve">
     <value>down</value>
   </data>

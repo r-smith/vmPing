@@ -169,15 +169,6 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter an alias for.
-        /// </summary>
-        public static string EditAlias_AliasFor {
-            get {
-                return ResourceManager.GetString("EditAlias_AliasFor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to down.
         /// </summary>
         public static string Email_Down {

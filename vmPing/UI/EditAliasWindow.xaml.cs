@@ -1,13 +1,12 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using vmPing.Classes;
-using vmPing.Properties;
 
 namespace vmPing.UI
 {
     public partial class EditAliasWindow : Window
     {
-        private readonly string _Hostname;
+        private readonly string _hostname;
 
         public EditAliasWindow(Probe pingItem) : this(pingItem.Hostname, pingItem.Alias)
         {
@@ -17,26 +16,29 @@ namespace vmPing.UI
         {
             InitializeComponent();
 
-            Header.Text = $"{Strings.EditAlias_AliasFor} {hostname}";
-            MyAlias.Text = alias;
-            MyAlias.SelectAll();
-            _Hostname = hostname;
+            _hostname = hostname;
 
-            // Set initial focus to text box.
-            Loaded += (sender, e) =>
-                MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            Hostname.Text = _hostname;
+            NewAlias.Text = alias;
+            NewAlias.SelectAll();
+            
+            // Set initial keyboard focus.
+            Loaded += (sender, e) => MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(MyAlias.Text))
+            string newAlias = NewAlias.Text?.Trim();
+
+            if (string.IsNullOrWhiteSpace(newAlias))
             {
-                Alias.Delete(_Hostname);
+                Alias.Delete(_hostname);
             }
             else
             {
-                Alias.Add(_Hostname, MyAlias.Text);
+                Alias.Add(_hostname, newAlias);
             }
+
             DialogResult = true;
         }
     }

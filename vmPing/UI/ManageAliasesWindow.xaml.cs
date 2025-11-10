@@ -24,52 +24,57 @@ namespace vmPing.UI
         public ManageAliasesWindow()
         {
             InitializeComponent();
-
             RefreshAliasList();
         }
 
         public void RefreshAliasList()
         {
-            AliasesDataGrid.ItemsSource = null;
+            var aliases = Alias.GetAll()
+                .OrderBy(alias => alias.Value, StringComparer.CurrentCultureIgnoreCase)
+                .ToList();
 
-            var aliasList = Alias.GetAll().ToList();
-            aliasList.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
-
-            AliasesDataGrid.ItemsSource = aliasList;
+            Aliases.ItemsSource = aliases;
         }
 
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
-            if (AliasesDataGrid.SelectedIndex < 0)
+            var selected = GetSelectedAlias();
+            if (selected == null)
             {
                 return;
             }
 
             var dialogWindow = new DialogWindow(
-                DialogWindow.DialogIcon.Warning,
-                Strings.DialogTitle_ConfirmDelete,
-                $"{Strings.ManageAliases_Warn_DeleteA} {((KeyValuePair<string, string>)AliasesDataGrid.SelectedItem).Value} {Strings.ManageAliases_Warn_DeleteB}",
-                Strings.DialogButton_Remove,
-                true);
-            dialogWindow.Owner = this;
+                icon: DialogWindow.DialogIcon.Warning,
+                title: Strings.DialogTitle_ConfirmDelete,
+                body: $"{Strings.ManageAliases_Warn_DeleteA} {selected.Value.Value} {Strings.ManageAliases_Warn_DeleteB}",
+                confirmationText: Strings.DialogButton_Remove,
+                isCancelButtonVisible: true)
+            {
+                Owner = this
+            };
+
             if (dialogWindow.ShowDialog() == true)
             {
-                Alias.Delete(((KeyValuePair<string, string>)AliasesDataGrid.SelectedItem).Key);
+                Alias.Delete(selected.Value.Key);
                 RefreshAliasList();
             }
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
-            if (AliasesDataGrid.SelectedIndex < 0)
+            var selected = GetSelectedAlias();
+            if (selected == null)
             {
                 return;
             }
 
-            var editAliasWindow = new EditAliasWindow(((KeyValuePair<string, string>)AliasesDataGrid.SelectedItem).Key, ((KeyValuePair<string, string>)AliasesDataGrid.SelectedItem).Value);
-            editAliasWindow.Owner = this;
+            var editWindow = new EditAliasWindow(selected.Value.Key, selected.Value.Value)
+            {
+                Owner = this
+            };
 
-            if (editAliasWindow.ShowDialog() == true)
+            if (editWindow.ShowDialog() == true)
             {
                 RefreshAliasList();
             }
@@ -77,26 +82,33 @@ namespace vmPing.UI
 
         private void New_Click(object sender, RoutedEventArgs e)
         {
-            var newAliasWindow = new NewAliasWindow
+            var newWindow = new NewAliasWindow
             {
                 Owner = this
             };
-            if (newAliasWindow.ShowDialog() == true)
+
+            if (newWindow.ShowDialog() == true)
             {
                 RefreshAliasList();
             }
         }
 
+        private KeyValuePair<string, string>? GetSelectedAlias()
+        {
+            var selected = Aliases.SelectedItem as KeyValuePair<string, string>?;
+            return selected.HasValue ? selected : null;
+        }
+
         private void Window_SourceInitialized(object sender, EventArgs e)
         {
             // Hide minimize and maximize buttons.
-            IntPtr _windowHandle = new WindowInteropHelper(this).Handle;
-            if (_windowHandle == null)
+            var handle = new WindowInteropHelper(this).Handle;
+            if (handle == null)
             {
                 return;
             }
 
-            SetWindowLong(_windowHandle, GWL_STYLE, GetWindowLong(_windowHandle, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_MINIMIZEBOX);
+            SetWindowLong(handle, GWL_STYLE, GetWindowLong(handle, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_MINIMIZEBOX);
         }
 
         private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)

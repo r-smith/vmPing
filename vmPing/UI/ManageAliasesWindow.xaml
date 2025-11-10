@@ -20,6 +20,8 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        
+        <!-- Header section -->
         <StackPanel Orientation="Horizontal">
             <Image Source="{StaticResource icon.alias}" VerticalAlignment="Center" Width="20" Height="20" Margin="0,0,8,0"/>
             <TextBlock Grid.Row="0"
@@ -27,10 +29,10 @@
                        Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"/>
         </StackPanel>
         
-        <DataGrid Grid.Row="1"
-                  Name="AliasesDataGrid"
+        <!-- Aliases DataGrid -->
+        <DataGrid x:Name="Aliases"
+                  Grid.Row="1"
                   Style="{StaticResource DataGridStyle}">
-
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Value}" Header="{x:Static resource:Strings.ManageAliases_Alias}" Width="*">
                     <DataGridTextColumn.ElementStyle>
@@ -73,12 +75,12 @@
                     Margin="15,0"
                     Width="85"
                     Style="{StaticResource ButtonStandardStyle}"
-                    IsEnabled="{Binding ElementName=AliasesDataGrid, Path=SelectedItems.Count}"
+                    IsEnabled="{Binding ElementName=Aliases, Path=SelectedItems.Count}"
                     Content="_Edit"/>
             <Button Click="Remove_Click"
                     Width="85"
                     Style="{StaticResource ButtonStandardStyle}"
-                    IsEnabled="{Binding ElementName=AliasesDataGrid, Path=SelectedItems.Count}"
+                    IsEnabled="{Binding ElementName=Aliases, Path=SelectedItems.Count}"
                     Content="_Remove"/>
         </StackPanel>
     </Grid>

@@ -14,14 +14,9 @@ namespace vmPing.Classes
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null)
-            {
-                return FalseValue;
-            }
-            else
-            {
-                return (bool)value ? TrueValue : FalseValue;
-            }
+            return value is bool v && v
+                ? TrueValue
+                : FalseValue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -36,19 +31,14 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((bool)value == false)
-            {
-                return Visibility.Hidden;
-            }
-            else
-            {
-                return Visibility.Visible;
-            }
+            return (value is bool v && v)
+                ? Visibility.Visible
+                : Visibility.Hidden;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
         }
     }
 
@@ -56,12 +46,12 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return !((bool)value);
+            return !(value is bool v && v);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
         }
     }
 
@@ -69,12 +59,14 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (bool)value == true ? Visibility.Collapsed : Visibility.Visible;
+            return (value is bool v && v)
+                ? Visibility.Collapsed
+                : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotSupportedException();
+            return Binding.DoNothing;
         }
     }
 
@@ -83,12 +75,16 @@ namespace vmPing.Classes
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             // Returns true if visibility is hidden or collapsed.
-            return (Visibility)value == Visibility.Hidden || (Visibility)value == Visibility.Collapsed;
+            if (value is Visibility v)
+            {
+                return v == Visibility.Hidden || v == Visibility.Collapsed;
+            }
+            return false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotSupportedException();
+            return Binding.DoNothing;
         }
     }
 
@@ -96,7 +92,7 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((bool)value == false)
+            if (value is bool v && !v)
             {
                 return (DrawingImage)Application.Current.Resources["icon.play"];
             }
@@ -108,7 +104,25 @@ namespace vmPing.Classes
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
+        }
+    }
+
+    internal static class ProbeBrushHelper
+    {
+        private static readonly BrushConverter BrushConverter = new BrushConverter();
+
+        public static Brush FromColorString(string color)
+        {
+            try
+            {
+                var brush = BrushConverter.ConvertFromString(color) as Brush;
+                return brush ?? Brushes.Transparent;
+            }
+            catch
+            {
+                return Brushes.Transparent;
+            }
         }
     }
 
@@ -116,27 +130,32 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (!(value is ProbeStatus))
+            {
+                return Brushes.Transparent;
+            }
+
             switch ((ProbeStatus)value)
             {
                 case ProbeStatus.Up:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Up);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.BackgroundColor_Probe_Up);
                 case ProbeStatus.Down:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Down);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.BackgroundColor_Probe_Down);
                 case ProbeStatus.Error:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Error);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.BackgroundColor_Probe_Error);
                 case ProbeStatus.LatencyHigh:
                 case ProbeStatus.Indeterminate:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Indeterminate);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.BackgroundColor_Probe_Indeterminate);
                 case ProbeStatus.Scanner:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Scanner);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.BackgroundColor_Probe_Scanner);
                 default:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.BackgroundColor_Probe_Inactive);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.BackgroundColor_Probe_Inactive);
             }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
         }
     }
 
@@ -144,27 +163,32 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (!(value is ProbeStatus))
+            {
+                return Brushes.Transparent;
+            }
+
             switch ((ProbeStatus)value)
             {
                 case ProbeStatus.Up:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Up);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ForegroundColor_Probe_Up);
                 case ProbeStatus.Down:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Down);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ForegroundColor_Probe_Down);
                 case ProbeStatus.Error:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Error);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ForegroundColor_Probe_Error);
                 case ProbeStatus.LatencyHigh:
                 case ProbeStatus.Indeterminate:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Indeterminate);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ForegroundColor_Probe_Indeterminate);
                 case ProbeStatus.Scanner:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Scanner);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ForegroundColor_Probe_Scanner);
                 default:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Probe_Inactive);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ForegroundColor_Probe_Inactive);
             }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
         }
     }
 
@@ -172,25 +196,30 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (!(value is ProbeStatus))
+            {
+                return Brushes.Transparent;
+            }
+
             switch ((ProbeStatus)value)
             {
                 case ProbeStatus.Up:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Up);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ForegroundColor_Stats_Up);
                 case ProbeStatus.Down:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Down);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ForegroundColor_Stats_Down);
                 case ProbeStatus.Error:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Error);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ForegroundColor_Stats_Error);
                 case ProbeStatus.LatencyHigh:
                 case ProbeStatus.Indeterminate:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Indeterminate);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ForegroundColor_Stats_Indeterminate);
                 default:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Stats_Inactive);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ForegroundColor_Stats_Inactive);
             }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
         }
     }
 
@@ -198,42 +227,51 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (!(value is ProbeStatus))
+            {
+                return Brushes.Transparent;
+            }
+
             switch ((ProbeStatus)value)
             {
                 case ProbeStatus.Up:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Up);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ForegroundColor_Alias_Up);
                 case ProbeStatus.Down:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Down);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ForegroundColor_Alias_Down);
                 case ProbeStatus.Error:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Error);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ForegroundColor_Alias_Error);
                 case ProbeStatus.LatencyHigh:
                 case ProbeStatus.Indeterminate:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Indeterminate);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ForegroundColor_Alias_Indeterminate);
                 case ProbeStatus.Scanner:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Scanner);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ForegroundColor_Alias_Scanner);
                 default:
-                    return (Brush)new BrushConverter().ConvertFromString(ApplicationOptions.ForegroundColor_Alias_Inactive);
+                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ForegroundColor_Alias_Inactive);
             }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
         }
     }
 
     public class StringToBrushConverter : IValueConverter
     {
+        private static readonly BrushConverter BrushConverter = new BrushConverter();
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (string.IsNullOrWhiteSpace((string)value))
+            var str = value as string;
+            if (string.IsNullOrWhiteSpace(str))
             {
                 return Binding.DoNothing;
             }
 
             try
             {
-                return (Brush)new BrushConverter().ConvertFromString((string)value);
+                var brush = BrushConverter.ConvertFromString(str) as Brush;
+                return brush ?? Binding.DoNothing;
             }
             catch
             {
@@ -243,7 +281,7 @@ namespace vmPing.Classes
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
         }
     }
 
@@ -251,39 +289,25 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((double)value > 250)
-            {
-                return 18;
-            }
-            else if ((double)value > 225)
-            {
-                return 17;
-            }
-            else if ((double)value > 200)
-            {
-                return 16;
-            }
-            else if ((double)value > 175)
-            {
-                return 15;
-            }
-            else if ((double)value > 150)
-            {
-                return 14;
-            }
-            else if ((double)value > 125)
-            {
-                return 13;
-            }
-            else
+            if (!(value is double))
             {
                 return 12.5;
             }
+
+            double width = (double)value;
+
+            if (width > 250) return 18;
+            if (width > 225) return 17;
+            if (width > 200) return 16;
+            if (width > 175) return 15;
+            if (width > 150) return 14;
+            if (width > 125) return 13;
+            return 12.5;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
         }
     }
 
@@ -291,19 +315,14 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((double)value > 300)
-            {
-                return Visibility.Visible;
-            }
-            else
-            {
-                return Visibility.Collapsed;
-            }
+            return (value is double v && v > 300)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
         }
     }
 
@@ -311,6 +330,11 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (!(value is ProbeStatus))
+            {
+                return string.Empty;
+            }
+
             switch ((ProbeStatus)value)
             {
                 case ProbeStatus.Up:
@@ -327,7 +351,7 @@ namespace vmPing.Classes
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
         }
     }
 
@@ -336,19 +360,15 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((long)value > 0)
-            {
-                return Strings.Toolbar_StopAll;
-            }
-            else
-            {
-                return Strings.Toolbar_StartAll;
-            }
+            long count = (value is long v) ? v : 0;
+            return count > 0
+                ? Strings.Toolbar_StopAll
+                : Strings.Toolbar_StartAll;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
         }
     }
 
@@ -356,19 +376,15 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((long)value > 0)
-            {
-                return (DrawingImage)Application.Current.Resources["icon.stop-circle"];
-            }
-            else
-            {
-                return (DrawingImage)Application.Current.Resources["icon.play"];
-            }
+            long count = (value is long v) ? v : 0;
+            return count > 0
+                ? (DrawingImage)Application.Current.Resources["icon.stop-circle"]
+                : (DrawingImage)Application.Current.Resources["icon.play"];
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
         }
     }
 
@@ -376,6 +392,11 @@ namespace vmPing.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (!(value is ProbeType))
+            {
+                return ApplicationOptions.FontSize_Probe;
+            }
+
             switch ((ProbeType)value)
             {
                 case ProbeType.Ping:
@@ -387,21 +408,21 @@ namespace vmPing.Classes
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
         }
     }
 
     public class StringLengthToBoolConverter : IValueConverter
     {
-        // Return true if string length is greater than 0.
+        // Return true if string is not empty.
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return ((string)value).Length > 0;
+            return !string.IsNullOrEmpty(value as string);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Binding.DoNothing;
         }
     }
 }

@@ -18,35 +18,55 @@ namespace vmPing.UI
         {
             InitializeComponent();
 
-            MyTitle.Text = title;
-            Body.Text = body;
+            MessageHeader.Text = title;
+            MessageBody.Text = body;
             OK.Content = confirmationText;
+            Cancel.Visibility = isCancelButtonVisible ? Visibility.Visible : Visibility.Collapsed;
+            SetIcon(icon);
+        }
 
-            if (!isCancelButtonVisible)
+        private void SetIcon(DialogIcon icon)
+        {
+            if (icon == DialogIcon.None)
             {
-                Cancel.Visibility = Visibility.Collapsed;
+                MessageImage.Visibility = Visibility.Collapsed;
+                return;
             }
+
+            string resourceKey = null;
 
             switch (icon)
             {
                 case DialogIcon.Warning:
-                    MyIcon.Source = (DrawingImage)Application.Current.Resources["icon.exclamation-triangle"];
+                    resourceKey = "icon.exclamation-triangle";
                     break;
                 case DialogIcon.Error:
-                    MyIcon.Source = (DrawingImage)Application.Current.Resources["icon.exclamation-circle"];
+                    resourceKey = "icon.exclamation-circle";
                     break;
                 case DialogIcon.Info:
-                    MyIcon.Source = (DrawingImage)Application.Current.Resources["icon.info-circle"];
-                    break;
-                case DialogIcon.None:
-                    MyIcon.Visibility = Visibility.Collapsed;
+                    resourceKey = "icon.info-circle";
                     break;
             }
+
+            if (resourceKey != null)
+            {
+                MessageImage.Source = TryGetDrawingImage(resourceKey);
+            }
+        }
+
+        private DrawingImage TryGetDrawingImage(string key)
+        {
+            return Application.Current.TryFindResource(key) as DrawingImage;
+        }
+
+        private static void PlayExclamationSound()
+        {
+            System.Media.SystemSounds.Exclamation.Play();
         }
 
         public static DialogWindow ErrorWindow(string message)
         {
-            System.Media.SystemSounds.Exclamation.Play();
+            PlayExclamationSound();
             return new DialogWindow(
                 icon: DialogIcon.Error,
                 title: Strings.DialogTitle_Error,
@@ -57,7 +77,7 @@ namespace vmPing.UI
 
         public static DialogWindow WarningWindow(string message, string confirmButtonText)
         {
-            System.Media.SystemSounds.Exclamation.Play();
+            PlayExclamationSound();
             return new DialogWindow(
                 icon: DialogIcon.Warning,
                 title: Strings.DialogTitle_Warning,

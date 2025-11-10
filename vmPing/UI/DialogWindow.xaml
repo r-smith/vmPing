@@ -1,10 +1,13 @@
 ﻿<Window x:Class="vmPing.UI.DialogWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:resource="clr-namespace:vmPing.Properties"
+        mc:Ignorable="d"
         Title="vmPing"
         UseLayoutRounding="True"
-        Height="200"
+        Height="Auto"
         Width="480"
         ResizeMode="NoResize"
         Background="White"
@@ -18,46 +21,53 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <!-- Icon and text -->
         <Grid Grid.Row="0" Margin="20,10,20,35">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Image Name="MyIcon"
+            <Image x:Name="MessageImage"
                    Source="{StaticResource icon.exclamation-triangle}"
                    VerticalAlignment="Top"
                    Width="32"
                    Height="32"/>
             <DockPanel Grid.Column="1" Margin="15,7,0,0">
-                <TextBlock DockPanel.Dock="Top"
-                           Name="MyTitle"
+                <TextBlock x:Name="MessageHeader"
+                           DockPanel.Dock="Top"
                            Text="Warning"
                            Foreground="#000000"
                            VerticalAlignment="Center"
                            FontSize="15"
                            FontFamily="Arial"
                            FontWeight="SemiBold"/>
-                <TextBlock DockPanel.Dock="Top"
-                           Name="Body"
+                <TextBlock x:Name="MessageBody"
+                           DockPanel.Dock="Top"
                            FontSize="13"
                            FontFamily="Arial"
                            Margin="0,15,0,0"
                            Foreground="#202020"
-                           Text="This is warning text"  TextWrapping="Wrap"/>
+                           d:Text="This is warning text"
+                           TextWrapping="Wrap"/>
             </DockPanel>
         </Grid>
 
         <!-- Buttons -->
-        <Border Grid.Row="1" Background="#f0f0f0" BorderBrush="#dfdfdf" BorderThickness="0,1,0,0">
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                <Button Style="{StaticResource ButtonStandardStyle}"
-                        Name="OK"
+        <Border Grid.Row="1"
+                Background="#f0f0f0"
+                BorderBrush="#dfdfdf"
+                BorderThickness="0,1,0,0">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="10">
+                <Button x:Name="OK"
+                        Style="{StaticResource ButtonStandardStyle}"
                         Click="OK_Click"
                         Width="100"
                         IsCancel="{Binding Visibility, ElementName=Cancel, Converter={StaticResource InverseHiddenToBoolConverter}}"
                         Content="{x:Static resource:Strings.DialogButton_OK}" />
-                <Button Style="{StaticResource ButtonStandardStyle}"
-                        Name="Cancel"
+                <Button x:Name="Cancel"
+                        Style="{StaticResource ButtonStandardStyle}"
                         Margin="8,0,0,0"
                         Width="100"
                         IsCancel="True"

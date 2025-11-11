@@ -11,38 +11,40 @@ namespace vmPing.UI
         {
             InitializeComponent();
 
-            // Set initial focus to text box.
-            Loaded += (sender, e) =>
-                MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            // Set initial keyboard focus.
+            Loaded += (sender, e) => MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             // Validate hostname.
-            if (Alias.IsHostInvalid(MyHost.Text))
+            if (Alias.IsHostInvalid(Hostname.Text))
             {
-                var errorWindow = DialogWindow.ErrorWindow(Strings.NewAlias_Error_InvalidHost);
-                errorWindow.Owner = this;
-                errorWindow.ShowDialog();
-                MyHost.Focus();
-                MyHost.SelectAll();
+                ShowError(Strings.NewAlias_Error_InvalidHost);
+                Hostname.Focus();
+                Hostname.SelectAll();
                 return;
             }
 
             // Validate alias name.
-            if (Alias.IsNameInvalid(MyAlias.Text))
+            if (Alias.IsNameInvalid(NewAlias.Text))
             {
-                var errorWindow = DialogWindow.ErrorWindow(Strings.NewAlias_Error_InvalidAlias);
-                errorWindow.Owner = this;
-                errorWindow.ShowDialog();
-                MyAlias.Focus();
-                MyAlias.SelectAll();
+                ShowError(Strings.NewAlias_Error_InvalidAlias);
+                NewAlias.Focus();
+                NewAlias.SelectAll();
                 return;
             }
 
-            // Checks passed.  Add alias entry.
-            Alias.Add(MyHost.Text, MyAlias.Text);
+            // Validation passed. Add alias.
+            Alias.Add(Hostname.Text.Trim(), NewAlias.Text);
             DialogResult = true;
+        }
+
+        private void ShowError(string message)
+        {
+            var errorWindow = DialogWindow.ErrorWindow(message);
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 }

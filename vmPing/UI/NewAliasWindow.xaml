@@ -19,7 +19,6 @@
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0" LastChildFill="False" Margin="9">
-
             <!-- Header -->
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                 <Image Source="{StaticResource icon.alias}" VerticalAlignment="Center" Width="20" Height="20" Margin="0,0,8,0"/>
@@ -37,7 +36,7 @@
                                Foreground="#404040"
                                HorizontalAlignment="Right"/>
                 </Border>
-                <TextBox Name="MyHost"
+                <TextBox x:Name="Hostname"
                          MaxLength="64"/>
             </DockPanel>
 
@@ -50,7 +49,7 @@
                                Foreground="#404040"
                                HorizontalAlignment="Right"/>
                 </Border>
-                <TextBox Name="MyAlias"
+                <TextBox x:Name="NewAlias"
                          MaxLength="64"/>
             </DockPanel>
         </DockPanel>

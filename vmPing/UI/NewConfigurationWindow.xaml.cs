@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using vmPing.Classes;
 
@@ -17,21 +18,22 @@ namespace vmPing.UI
         {
             if (PortableMode.IsChecked == true)
             {
-                Configuration.FilePath = AppDomain.CurrentDomain.BaseDirectory + "vmPing.xml";
+                Configuration.FilePath = GetPortableFilePath();
             }
+
             DialogResult = true;
         }
 
         private void PortableMode_Click(object sender, RoutedEventArgs e)
         {
-            if (PortableMode.IsChecked == true)
-            {
-                FilePath.Text = AppDomain.CurrentDomain.BaseDirectory + "vmPing.xml";
-            }
-            else
-            {
-                FilePath.Text = Configuration.FilePath;
-            }
+            FilePath.Text = PortableMode.IsChecked == true
+                ? GetPortableFilePath()
+                : Configuration.FilePath;
+        }
+
+        private string GetPortableFilePath()
+        {
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "vmPing.xml");
         }
     }
 }

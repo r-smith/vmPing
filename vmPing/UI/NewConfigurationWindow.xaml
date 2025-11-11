@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:vmPing.UI"
         mc:Ignorable="d"
-        Title="Save"
+        Title="New Configuration"
         Height="Auto"
         Width="520"
         SizeToContent="Height"
@@ -35,25 +35,28 @@
                 <TextBlock DockPanel.Dock="Top"
                            FontSize="14"
                            Foreground="#202020"
-                           TextWrapping="Wrap">
-                    A new configuration file is needed to save your settings.<LineBreak/>
-                    The file will be stored in the following location:
-                </TextBlock>
-                <!-- File path -->
+                           TextWrapping="Wrap"
+                           Text="To save your settings, a new configuration file is needed."/>
                 <TextBlock DockPanel.Dock="Top"
-                           x:Name="FilePath"
-                           Margin="0,7,0,0"
+                           FontSize="14"
+                           Foreground="#202020"
+                           TextWrapping="Wrap"
+                           Margin="0,10,0,1"
+                           Text="The file will be stored here:"/>
+                <!-- File path -->
+                <TextBlock x:Name="FilePath"
+                           DockPanel.Dock="Top"
                            FontSize="12"
                            Foreground="#268bd2"
                            TextWrapping="Wrap"
-                           Text="C:\Users\username\AppData\Local\vmPing\vmPing.xml"/>
+                           d:Text="C:\Users\username\AppData\Local\vmPing\vmPing.xml"/>
                 <!-- Portable mode note -->
                 <TextBlock DockPanel.Dock="Top"
                            Margin="0,20,0,5"
                            FontSize="12"
                            Foreground="#888"
                            TextWrapping="Wrap">
-                    Choose portable mode to save your configuration alongside vmPing.exe.
+                    Select 'Portable mode' to save your configuration alongside vmPing.exe.
                 </TextBlock>
             </DockPanel>
         </Grid>
@@ -62,8 +65,8 @@
         <Border Grid.Row="1" Background="#f0f0f0" BorderBrush="#dfdfdf" BorderThickness="0,1,0,0">
             <DockPanel Margin="10">
                 <!-- Portable mode checkbox -->
-                <CheckBox DockPanel.Dock="Left"
-                          Name="PortableMode"
+                <CheckBox x:Name="PortableMode"
+                          DockPanel.Dock="Left"
                           Padding="5,0,10,0"
                           Foreground="#111"
                           Click="PortableMode_Click"

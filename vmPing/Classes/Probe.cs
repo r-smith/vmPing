@@ -38,7 +38,7 @@ namespace vmPing.Classes
     {
         // Static members
         public static ObservableCollection<StatusChangeLog> StatusChangeLog { get; } = new ObservableCollection<StatusChangeLog>();
-        public static StatusHistoryWindow StatusWindow;
+        public static StatusHistoryWindow StatusHistoryWindow;
 
         private static readonly Mutex mutex = new Mutex();
 

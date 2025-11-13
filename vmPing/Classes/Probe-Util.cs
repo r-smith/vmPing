@@ -219,14 +219,14 @@ namespace vmPing.Classes
 
                 if (shouldPopup)
                 {
-                    if (StatusWindow != null && StatusWindow.IsLoaded)
+                    if (StatusHistoryWindow != null && StatusHistoryWindow.IsLoaded)
                     {
-                        if (StatusWindow.WindowState == WindowState.Minimized)
+                        if (StatusHistoryWindow.WindowState == WindowState.Minimized)
                         {
-                            StatusWindow.WindowState = WindowState.Normal;
+                            StatusHistoryWindow.WindowState = WindowState.Normal;
                         }
 
-                        StatusWindow.Focus();
+                        StatusHistoryWindow.Focus();
                     }
                     else if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
                     {

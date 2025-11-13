@@ -120,9 +120,9 @@ namespace vmPing.UI
 
             // Set always on top state.
             Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
-            if (Probe.StatusWindow != null && Probe.StatusWindow.IsLoaded)
+            if (Probe.StatusHistoryWindow != null && Probe.StatusHistoryWindow.IsLoaded)
             {
-                Probe.StatusWindow.Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
+                Probe.StatusHistoryWindow.Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
             }
             if (HelpWindow._OpenWindow != null)
             {
@@ -625,15 +625,15 @@ namespace vmPing.UI
 
         private void StatusHistoryExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            if (Probe.StatusWindow == null || Probe.StatusWindow.IsLoaded == false)
+            if (Probe.StatusHistoryWindow == null || Probe.StatusHistoryWindow.IsLoaded == false)
             {
                 var wnd = new StatusHistoryWindow(Probe.StatusChangeLog);
-                Probe.StatusWindow = wnd;
+                Probe.StatusHistoryWindow = wnd;
                 wnd.Show();
             }
-            else if (Probe.StatusWindow.IsLoaded)
+            else if (Probe.StatusHistoryWindow.IsLoaded)
             {
-                Probe.StatusWindow.Focus();
+                Probe.StatusHistoryWindow.Focus();
             }
         }
 

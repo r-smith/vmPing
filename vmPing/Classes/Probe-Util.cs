@@ -54,15 +54,6 @@ namespace vmPing.Classes
 
             Type = ProbeType.Ping;
 
-            if (IsTcpPing(Hostname))
-            {
-                Task.Run(() => PerformTcpProbe(CancelSource.Token), CancelSource.Token);
-            }
-            else
-            {
-                Task.Run(() => PerformIcmpProbe(CancelSource.Token), CancelSource.Token);
-            }
-
             Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
                 lock (mutex)
@@ -76,6 +67,15 @@ namespace vmPing.Classes
                     });
                 }
             }));
+
+            if (IsTcpPing(Hostname))
+            {
+                Task.Run(() => PerformTcpProbe(CancelSource.Token), CancelSource.Token);
+            }
+            else
+            {
+                Task.Run(() => PerformIcmpProbe(CancelSource.Token), CancelSource.Token);
+            }
         }
 
         private static bool IsTcpPing(string hostname)
@@ -217,21 +217,9 @@ namespace vmPing.Classes
                     StatusChangeLog.Add(status);
                 }
 
-                if (shouldPopup)
+                if (shouldPopup && !Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
                 {
-                    if (StatusHistoryWindow != null && StatusHistoryWindow.IsLoaded)
-                    {
-                        if (StatusHistoryWindow.WindowState == WindowState.Minimized)
-                        {
-                            StatusHistoryWindow.WindowState = WindowState.Normal;
-                        }
-
-                        StatusHistoryWindow.Focus();
-                    }
-                    else if (!Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
-                    {
-                        new PopupNotificationWindow(StatusChangeLog).Show();
-                    }
+                    new PopupNotificationWindow(StatusChangeLog).Show();
                 }
             }));
 

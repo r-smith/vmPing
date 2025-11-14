@@ -97,21 +97,32 @@ namespace vmPing.Classes
             Status = status;
             IsActive = false;
 
+            if (status != ProbeStatus.Error)
+            {
+                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    lock (mutex)
+                    {
+                        WriteFinalStatisticsToHistory();
+                    }
+                }));
+            }
+
+            AddStatusHistory(ProbeStatus.Stop);
+        }
+
+        private void AddStatusHistory(ProbeStatus status)
+        {
             Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
                 lock (mutex)
                 {
-                    if (status != ProbeStatus.Error)
-                    {
-                        WriteFinalStatisticsToHistory();
-                    }
-
                     StatusChangeLog.Add(new StatusChangeLog
                     {
                         Timestamp = DateTime.Now,
                         Hostname = Hostname,
                         Alias = Alias,
-                        Status = ProbeStatus.Stop
+                        Status = status
                     });
                 }
             }));

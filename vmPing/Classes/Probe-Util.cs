@@ -111,7 +111,7 @@ namespace vmPing.Classes
             AddStatusHistory(ProbeStatus.Stop);
         }
 
-        private void AddStatusHistory(ProbeStatus status)
+        private void AddStatusHistory(ProbeStatus status, bool isHidden = false)
         {
             Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
@@ -122,7 +122,8 @@ namespace vmPing.Classes
                         Timestamp = DateTime.Now,
                         Hostname = Hostname,
                         Alias = Alias,
-                        Status = status
+                        Status = status,
+                        HasStatusBeenCleared = isHidden
                     });
                 }
             }));

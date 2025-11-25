@@ -109,7 +109,7 @@ namespace vmPing.Classes
                         // If this is a new probe, record the initial 'up' state to the status history.
                         if (Status == ProbeStatus.Inactive)
                         {
-                            AddStatusHistory(ProbeStatus.Up);
+                            AddStatusHistory(ProbeStatus.Up, true);
                         }
 
                         // Check for status change.
@@ -148,7 +148,7 @@ namespace vmPing.Classes
                             // Because this is a new probe, ignore the indeterminate count
                             // and immediately mark the host as down.
                             // Also, record the initial 'down' state to the status history.
-                            AddStatusHistory(ProbeStatus.Down);
+                            AddStatusHistory(ProbeStatus.Down, true);
                             Status = ProbeStatus.Down;
                         }
 

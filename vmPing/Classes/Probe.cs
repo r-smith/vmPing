@@ -55,6 +55,8 @@ namespace vmPing.Classes
 
         public IsolatedPingWindow IsolatedWindow { get; set; }
         public int IndeterminateCount { get; set; }
+        public int HighLatencyCount { get; set; }
+        public long MinRtt { get; set; } = long.MaxValue;
         public PingStatistics Statistics { get; set; } = new PingStatistics();
         public int SelStart { get; set; }
         public int SelLength { get; set; }

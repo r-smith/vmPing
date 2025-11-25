@@ -21,10 +21,20 @@ namespace vmPing.Classes
             Favorite = 2
         }
 
+        public enum LatencyMode
+        {
+            Off,
+            Auto,
+            Fixed
+        }
+
         // Ping & probe options.
         public static int PingInterval { get; set; } = Constants.DefaultInterval;
         public static int PingTimeout { get; set; } = Constants.DefaultTimeout;
         public static int AlertThreshold { get; set; } = 2;
+        public static LatencyMode LatencyDetectionMode { get; set; } = LatencyMode.Off;
+        public static long HighLatencyMilliseconds { get; set; } = 50;
+        public static int HighLatencyAlertTiggerCount { get; set; } = 2;
         public static int TTL { get; set; } = Constants.DefaultTTL;
         public static bool DontFragment { get; set; } = false;
         public static bool UseCustomBuffer { get; set; } = false;

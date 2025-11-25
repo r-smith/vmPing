@@ -88,6 +88,9 @@ namespace vmPing.Classes
             IsActive = true;
             Status = ProbeStatus.Inactive;
             Statistics.Reset();
+            IndeterminateCount = 0;
+            HighLatencyCount = 0;
+            MinRtt = long.MaxValue;
             History = new ObservableCollection<string>();
         }
 

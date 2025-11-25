@@ -106,26 +106,77 @@ namespace vmPing.Classes
                             return;
                         }
 
+                        // Connected to port.
+                        Statistics.Received++;
+                        IndeterminateCount = 0;
+                        isPortOpen = true;
+
                         // If this is a new probe, record the initial 'up' state to the status history.
                         if (Status == ProbeStatus.Inactive)
                         {
                             AddStatusHistory(ProbeStatus.Up, true);
+                            Status = ProbeStatus.Up;
                         }
 
-                        // Check for status change.
+                        // Check if status changed from down to up.
                         if (Status == ProbeStatus.Down)
                         {
-                            TriggerStatusChange(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Up });
-                            if (ApplicationOptions.IsEmailAlertEnabled)
-                            {
-                                Util.SendEmail("up", Hostname, Alias);
-                            }
+                            OnStatusChange(ProbeStatus.Up, "up");
                         }
 
-                        Statistics.Received++;
-                        IndeterminateCount = 0;
-                        Status = ProbeStatus.Up;
-                        isPortOpen = true;
+                        // Update minimum RTT.
+                        stopwatch.Stop();
+                        if (stopwatch.ElapsedMilliseconds < MinRtt)
+                        {
+                            MinRtt = stopwatch.ElapsedMilliseconds;
+                        }
+
+                        // Check latency.
+                        if ((ApplicationOptions.LatencyDetectionMode == ApplicationOptions.LatencyMode.Fixed &&
+                            stopwatch.ElapsedMilliseconds >= ApplicationOptions.HighLatencyMilliseconds) ||
+                            (ApplicationOptions.LatencyDetectionMode == ApplicationOptions.LatencyMode.Auto &&
+                            stopwatch.ElapsedMilliseconds >= MinRtt + ApplicationOptions.HighLatencyMilliseconds))
+                        {
+                            // Latency is high.
+                            if (HighLatencyCount < ApplicationOptions.HighLatencyAlertTiggerCount)
+                            {
+                                HighLatencyCount++;
+                            }
+
+                            if (Status == ProbeStatus.Up)
+                            {
+                                Status = ProbeStatus.Indeterminate;
+                            }
+
+                            if (Status != ProbeStatus.LatencyHigh)
+                            {
+                                if (HighLatencyCount >= ApplicationOptions.HighLatencyAlertTiggerCount)
+                                {
+                                    OnStatusChange(ProbeStatus.LatencyHigh, "high latency");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // Latency is normal.
+                            if (HighLatencyCount > 0)
+                            {
+                                HighLatencyCount--;
+                            }
+
+                            if (Status == ProbeStatus.LatencyHigh)
+                            {
+                                if (HighLatencyCount <= 0)
+                                {
+                                    OnStatusChange(ProbeStatus.LatencyNormal, "normal latency");
+                                    Status = ProbeStatus.Up;
+                                }
+                            }
+                            else
+                            {
+                                Status = ProbeStatus.Up;
+                            }
+                        }
                     }
                     catch (SocketException ex)
                     {
@@ -139,11 +190,11 @@ namespace vmPing.Classes
                             return;
                         }
 
-                        if (Status == ProbeStatus.Up)
+                        if (Status == ProbeStatus.Up || Status == ProbeStatus.LatencyHigh)
                         {
                             Status = ProbeStatus.Indeterminate;
                         }
-                        if (Status == ProbeStatus.Inactive)
+                        else if (Status == ProbeStatus.Inactive)
                         {
                             // Because this is a new probe, ignore the indeterminate count
                             // and immediately mark the host as down.
@@ -155,14 +206,11 @@ namespace vmPing.Classes
                         IndeterminateCount++;
 
                         // Check for status change.
-                        if (Status == ProbeStatus.Indeterminate && IndeterminateCount >= ApplicationOptions.AlertThreshold)
+                        if (Status == ProbeStatus.Indeterminate &&
+                            IndeterminateCount >= ApplicationOptions.AlertThreshold)
                         {
                             Status = ProbeStatus.Down;
-                            TriggerStatusChange(new StatusChangeLog { Timestamp = DateTime.Now, Hostname = Hostname, Alias = Alias, Status = ProbeStatus.Down });
-                            if (ApplicationOptions.IsEmailAlertEnabled)
-                            {
-                                Util.SendEmail("down", Hostname, Alias);
-                            }
+                            OnStatusChange(ProbeStatus.Down, "down");
                         }
 
                         // If hostname cannot be resolved, report error and stop.
@@ -202,24 +250,23 @@ namespace vmPing.Classes
             }
         }
 
-
         private void DisplayTcpReply(bool isPortOpen, int portnumber, int errorCode, long elapsedTime)
         {
             // Prefix the ping reply output with a timestamp.
-            var pingOutput = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  {Strings.Probe_Port} {portnumber}: ");
+            var sb = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  {Strings.Probe_Port} {portnumber}: ");
             if (isPortOpen)
-                pingOutput.Append($"{Strings.Probe_PortOpen}  [{elapsedTime}{Strings.Milliseconds_Symbol}]");
+                sb.Append($"{Strings.Probe_PortOpen}  [{elapsedTime}{Strings.Milliseconds_Symbol}]");
             else
             {
-                pingOutput.Append(Strings.Probe_PortClosed);
+                sb.Append(Strings.Probe_PortClosed);
             }
 
             // Add response to the output window.
             Application.Current.Dispatcher.BeginInvoke(
-                new Action(() => AddHistory(pingOutput.ToString())));
+                new Action(() => AddHistory(sb.ToString())));
 
             // If enabled, log output.
-            WriteToLog(pingOutput.ToString());
+            WriteToLog(sb.ToString());
         }
     }
 }

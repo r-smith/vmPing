@@ -55,6 +55,7 @@ namespace vmPing.Classes
                             if (Status == ProbeStatus.Inactive)
                             {
                                 AddStatusHistory(ProbeStatus.Up, true);
+                                Status = ProbeStatus.Up;
                             }
 
                             // Check if status changed from down to up.
@@ -63,7 +64,58 @@ namespace vmPing.Classes
                                 OnStatusChange(ProbeStatus.Up, "up");
                             }
 
-                            Status = ProbeStatus.Up;
+                            // Update minimum RTT.
+                            if (reply.RoundtripTime < MinRtt)
+                            {
+                                MinRtt = reply.RoundtripTime;
+                            }
+
+                            // Check latency.
+                            if ((ApplicationOptions.LatencyDetectionMode == ApplicationOptions.LatencyMode.Fixed &&
+                                reply.RoundtripTime >= ApplicationOptions.HighLatencyMilliseconds) ||
+                                (ApplicationOptions.LatencyDetectionMode == ApplicationOptions.LatencyMode.Auto &&
+                                reply.RoundtripTime >= MinRtt + ApplicationOptions.HighLatencyMilliseconds))
+                            {
+                                // Latency is high.
+                                if (HighLatencyCount < ApplicationOptions.HighLatencyAlertTiggerCount)
+                                {
+                                    HighLatencyCount++;
+                                }
+
+                                if (Status == ProbeStatus.Up)
+                                {
+                                    Status = ProbeStatus.Indeterminate;
+                                }
+
+                                if (Status != ProbeStatus.LatencyHigh)
+                                {
+                                    if (HighLatencyCount >= ApplicationOptions.HighLatencyAlertTiggerCount)
+                                    {
+                                        OnStatusChange(ProbeStatus.LatencyHigh, "high latency");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                // Latency is normal.
+                                if (HighLatencyCount > 0)
+                                {
+                                    HighLatencyCount--; 
+                                }
+
+                                if (Status == ProbeStatus.LatencyHigh)
+                                {
+                                    if (HighLatencyCount <= 0)
+                                    {
+                                        OnStatusChange(ProbeStatus.LatencyNormal, "normal latency");
+                                        Status = ProbeStatus.Up;
+                                    }
+                                }
+                                else
+                                {
+                                    Status = ProbeStatus.Up;
+                                }
+                            }
                         }
                         // No reply received.
                         else
@@ -71,7 +123,7 @@ namespace vmPing.Classes
                             Statistics.Lost++;
                             IndeterminateCount++;
 
-                            if (Status == ProbeStatus.Up)
+                            if (Status == ProbeStatus.Up || Status == ProbeStatus.LatencyHigh)
                             {
                                 Status = ProbeStatus.Indeterminate;
                             }

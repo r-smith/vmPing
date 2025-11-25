@@ -183,23 +183,6 @@ namespace vmPing.Classes
             }
         }
 
-        private void OnStatusChange(ProbeStatus newStatus, string alertType)
-        {
-            Status = newStatus;
-            TriggerStatusChange(new StatusChangeLog
-            {
-                Timestamp = DateTime.Now,
-                Hostname = Hostname,
-                Alias = Alias,
-                Status = newStatus
-            });
-
-            if (ApplicationOptions.IsEmailAlertEnabled)
-            {
-                Util.SendEmail(alertType, Hostname, Alias);
-            }
-        }
-
         private async Task IcmpWait(IPStatus ipStatus)
         {
             if (ipStatus == IPStatus.TimedOut)

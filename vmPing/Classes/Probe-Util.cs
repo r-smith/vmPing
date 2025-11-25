@@ -211,6 +211,23 @@ namespace vmPing.Classes
             StatisticsText = $"Sent: {Statistics.Sent} Received: {Statistics.Received} Lost: {Statistics.Lost}";
         }
 
+        private void OnStatusChange(ProbeStatus newStatus, string alertType)
+        {
+            Status = newStatus;
+            TriggerStatusChange(new StatusChangeLog
+            {
+                Timestamp = DateTime.Now,
+                Hostname = Hostname,
+                Alias = Alias,
+                Status = newStatus
+            });
+
+            if (ApplicationOptions.IsEmailAlertEnabled)
+            {
+                Util.SendEmail(alertType, Hostname, Alias);
+            }
+        }
+
         private void TriggerStatusChange(StatusChangeLog status)
         {
             Application.Current.Dispatcher.BeginInvoke(new Action(() =>

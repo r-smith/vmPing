@@ -80,6 +80,14 @@ namespace vmPing.Classes
         public static bool IsMinimizeToTrayEnabled { get; set; } = false;
         public static bool IsExitToTrayEnabled { get; set; } = false;
 
+        // Window position & size options (NEW - REMEMBER WINDOW POSITION)
+        public static double WindowLeft { get; set; } = 100;
+        public static double WindowTop { get; set; } = 100;
+        public static double WindowWidth { get; set; } = 800;
+        public static double WindowHeight { get; set; } = 400;
+        public static string WindowState { get; set; } = "Normal";
+        public static bool RememberWindowPosition { get; set; } = true;
+
         // Fonts.
         public static int FontSize_Probe { get; set; } = 11;
         public static int FontSize_Scanner { get; set; } = 16;

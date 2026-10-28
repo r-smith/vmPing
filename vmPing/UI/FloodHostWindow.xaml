@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:vmPing.UI"
         xmlns:classes="clr-namespace:vmPing.Classes"
-        Title="vmPing - Flood Host"
+        Title="vmPing - ICMP test"
         Height="250"
         Width="400"
         ResizeMode="CanMinimize"
@@ -11,7 +11,7 @@
 
     <Window.Resources>
         <!-- Value converters -->
-        <classes:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="Flood Host" TrueValue="Stop Flood"/>
+        <classes:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="Start test" TrueValue="Stop test"/>
         <classes:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
         <classes:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         <classes:BooleanToImageConverter x:Key="BooleanToImageConverter" />
@@ -87,7 +87,6 @@
             <Button Name="btnFloodHost"
                     Click="btnFloodHost_Click"
                     Grid.Column="1"
-                    IsDefault="True"
                     FontSize="14"
                     Padding="0,6"
                     Width="125"
@@ -173,7 +172,7 @@
             </Grid>
         </Grid>
 
-        <TextBlock Grid.Row="2" Text="Flood in progress..."
+        <TextBlock Grid.Row="2" Text="Test in progress..."
                    Name="tbStatus"
                    Margin="0,7" HorizontalAlignment="Center"
                    Foreground="#657b83"
@@ -214,8 +213,7 @@
                Padding="40,0"
                FontSize="14">
             <TextBlock TextWrapping="Wrap" TextAlignment="Justify">
-                This tool will send a continuous stream of ICMP ping packets to the destination host.
-                It typically will not generate any more than 32 kilobytes per second of network traffic.
+                Sends at most one ICMP request per second for up to 60 seconds. Only use this test on systems you own or are authorized to monitor.
             </TextBlock>
         </Label>
         

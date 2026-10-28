@@ -40,7 +40,7 @@ namespace vmPing.Classes
             {
                 Type = ProbeType.Dns;
                 Hostname = Hostname.Substring(2);
-                PerformDnsLookup(CancelSource.Token);
+                _ = PerformDnsLookup(CancelSource.Token);
                 return;
             }
 
@@ -48,7 +48,7 @@ namespace vmPing.Classes
             {
                 Type = ProbeType.Traceroute;
                 Hostname = Hostname.Substring(2);
-                PerformTraceroute(CancelSource.Token);
+                _ = PerformTraceroute(CancelSource.Token);
                 return;
             }
 
@@ -58,7 +58,7 @@ namespace vmPing.Classes
             {
                 lock (mutex)
                 {
-                    StatusChangeLog.Add(new StatusChangeLog
+                    AddStatusChangeLogEntry(new StatusChangeLog
                     {
                         Timestamp = DateTime.Now,
                         Hostname = Hostname,
@@ -91,6 +91,9 @@ namespace vmPing.Classes
             IndeterminateCount = 0;
             HighLatencyCount = 0;
             MinRtt = long.MaxValue;
+            MaxRtt = 0;
+            TotalRtt = 0;
+            RttSampleCount = 0;
             History = new ObservableCollection<string>();
         }
 
@@ -120,7 +123,7 @@ namespace vmPing.Classes
             {
                 lock (mutex)
                 {
-                    StatusChangeLog.Add(new StatusChangeLog
+                    AddStatusChangeLogEntry(new StatusChangeLog
                     {
                         Timestamp = DateTime.Now,
                         Hostname = Hostname,
@@ -224,7 +227,20 @@ namespace vmPing.Classes
 
             if (ApplicationOptions.IsEmailAlertEnabled)
             {
-                Util.SendEmail(alertType, Hostname, Alias);
+                _ = SendEmailAlertAsync(alertType, Hostname, Alias);
+            }
+        }
+
+        private async Task SendEmailAlertAsync(string alertType, string hostname, string alias)
+        {
+            try
+            {
+                await Util.SendEmailAsync(alertType, hostname, alias);
+            }
+            catch (Exception ex)
+            {
+                ApplicationOptions.IsEmailAlertEnabled = false;
+                ShowError($"Email alerts have been disabled after a sending error: {ex.Message}");
             }
         }
 
@@ -246,7 +262,7 @@ namespace vmPing.Classes
                         }
                     }
 
-                    StatusChangeLog.Add(status);
+                    AddStatusChangeLogEntry(status);
                 }
 
                 if (shouldPopup && !Application.Current.Windows.OfType<PopupNotificationWindow>().Any())

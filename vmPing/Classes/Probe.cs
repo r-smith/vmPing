@@ -39,6 +39,7 @@ namespace vmPing.Classes
         // Static members
         public static ObservableCollection<StatusChangeLog> StatusChangeLog { get; } = new ObservableCollection<StatusChangeLog>();
         public static StatusHistoryWindow StatusHistoryWindow;
+        private const int MaxStatusHistoryEntries = 5000;
 
         private static readonly Mutex mutex = new Mutex();
 
@@ -50,6 +51,15 @@ namespace vmPing.Classes
         }
         public static event EventHandler ActiveCountChanged;
 
+        public static void AddStatusChangeLogEntry(StatusChangeLog entry)
+        {
+            StatusChangeLog.Add(entry);
+            while (StatusChangeLog.Count > MaxStatusHistoryEntries)
+            {
+                StatusChangeLog.RemoveAt(0);
+            }
+        }
+
         // Instance members
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -57,6 +67,9 @@ namespace vmPing.Classes
         public int IndeterminateCount { get; set; }
         public int HighLatencyCount { get; set; }
         public long MinRtt { get; set; } = long.MaxValue;
+        public long MaxRtt { get; set; }
+        public long TotalRtt { get; set; }
+        public long RttSampleCount { get; set; }
         public PingStatistics Statistics { get; set; } = new PingStatistics();
         public int SelStart { get; set; }
         public int SelLength { get; set; }
@@ -195,27 +208,26 @@ namespace vmPing.Classes
             }
         }
 
+        public void RecordRtt(long roundTripTime)
+        {
+            if (roundTripTime < MinRtt)
+            {
+                MinRtt = roundTripTime;
+            }
+            if (roundTripTime > MaxRtt)
+            {
+                MaxRtt = roundTripTime;
+            }
+
+            TotalRtt += roundTripTime;
+            RttSampleCount++;
+        }
+
         public void WriteFinalStatisticsToHistory()
         {
             if (Statistics == null || Statistics.Sent == 0)
             {
                 return;
-            }
-
-            var roundTripTimes = new List<int>();
-            var rttRegex = new Regex($@"  \[(?<rtt><?\d+) ?{Strings.Milliseconds_Symbol}]$");
-
-            foreach (string item in History)
-            {
-                var match = rttRegex.Match(item);
-                if (!match.Success)
-                {
-                    continue;
-                }
-
-                // RTT of `<1` is treated as 0 when computing stats.
-                var value = match.Groups["rtt"].Value;
-                roundTripTimes.Add(value == "<1" ? 0 : int.Parse(value));
             }
 
             // Display stats and round trip times.
@@ -226,12 +238,12 @@ namespace vmPing.Classes
                 $"Lost {Statistics.Sent - Statistics.Received} " +
                 $"({(100 * (Statistics.Sent - Statistics.Received)) / Statistics.Sent}% loss)");
 
-            if (roundTripTimes.Count > 0)
+            if (RttSampleCount > 0)
             {
                 AddHistory(
-                    $"Minimum ({roundTripTimes.Min()}{Strings.Milliseconds_Symbol}), " +
-                    $"Maximum ({roundTripTimes.Max()}{Strings.Milliseconds_Symbol}), " +
-                    $"Average ({roundTripTimes.Average():0.##}{Strings.Milliseconds_Symbol})");
+                    $"Minimum ({MinRtt}{Strings.Milliseconds_Symbol}), " +
+                    $"Maximum ({MaxRtt}{Strings.Milliseconds_Symbol}), " +
+                    $"Average ({(double)TotalRtt / RttSampleCount:0.##}{Strings.Milliseconds_Symbol})");
             }
 
             AddHistory(" ");

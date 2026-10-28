@@ -11,7 +11,7 @@ namespace vmPing.Classes
 {
     public partial class Probe
     {
-        private async void PerformTcpProbe(CancellationToken cancellationToken)
+        private async Task PerformTcpProbe(CancellationToken cancellationToken)
         {
             InitializeProbe();
 
@@ -90,15 +90,16 @@ namespace vmPing.Classes
 
                     try
                     {
-                        var result = client.BeginConnect(host, portnumber, null, null);
-                        var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(3));
-
-                        if (!success)
+                        var connectTask = client.ConnectAsync(host, portnumber);
+                        var timeoutTask = Task.Delay(TimeSpan.FromSeconds(3), cancellationToken);
+                        var completedTask = await Task.WhenAny(connectTask, timeoutTask);
+                        if (completedTask != connectTask)
                         {
-                            throw new SocketException();
+                            cancellationToken.ThrowIfCancellationRequested();
+                            throw new SocketException((int)SocketError.TimedOut);
                         }
 
-                        client.EndConnect(result);
+                        await connectTask;
 
                         // Check if this task was cancelled.
                         if (cancellationToken.IsCancellationRequested)
@@ -126,10 +127,7 @@ namespace vmPing.Classes
 
                         // Update minimum RTT.
                         stopwatch.Stop();
-                        if (stopwatch.ElapsedMilliseconds < MinRtt)
-                        {
-                            MinRtt = stopwatch.ElapsedMilliseconds;
-                        }
+                        RecordRtt(stopwatch.ElapsedMilliseconds);
 
                         // Check latency.
                         if ((ApplicationOptions.LatencyDetectionMode == ApplicationOptions.LatencyMode.Fixed &&
@@ -177,6 +175,10 @@ namespace vmPing.Classes
                                 Status = ProbeStatus.Up;
                             }
                         }
+                    }
+                    catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+                    {
+                        return;
                     }
                     catch (SocketException ex)
                     {
@@ -245,7 +247,7 @@ namespace vmPing.Classes
                     DisplayStatistics();
 
                     // Pause between probes.
-                    await Task.Delay(ApplicationOptions.PingInterval);
+                    await Task.Delay(ApplicationOptions.PingInterval, cancellationToken);
                 }
             }
         }

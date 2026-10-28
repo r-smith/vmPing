@@ -234,7 +234,9 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="#111" BorderThickness="0,0,2,2" Margin="0" CornerRadius="0"
-                            Background="{Binding Status, Converter={StaticResource ProbeStatusToBackgroundBrushConverter}}">
+                            Background="{Binding Status, Converter={StaticResource ProbeStatusToBackgroundBrushConverter}}"
+                            AutomationProperties.Name="{Binding Status}"
+                            AutomationProperties.HelpText="{Binding Hostname}">
                         <Grid Name="gridItemsControl">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
@@ -568,6 +570,7 @@
 
                                 <!-- Hostname textbox -->
                                 <TextBox Name="Hostname"
+                                         AutomationProperties.Name="Hostname or IP address"
                                          Grid.Column="1"
                                          FontWeight="SemiBold"
                                          FontSize="{Binding ElementName=History, Path=ActualWidth, Converter={StaticResource HostnameFontsizeConverter}}"

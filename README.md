@@ -11,7 +11,8 @@ vmPing (Visual Multi Ping) is a graphical ping utility for monitoring multiple h
 
 ##### Notes
 * There is no installer.  Just run the .exe.
-* .NET 4.5 or greater is required.
+* .NET Framework 4.7.2 or greater is required.
+* Email credentials are protected for the current Windows user and cannot be carried to another user profile with portable configuration files.
 
 
 Screenshots

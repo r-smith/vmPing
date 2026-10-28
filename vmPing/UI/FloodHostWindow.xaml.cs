@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
@@ -27,6 +28,15 @@ namespace vmPing.UI
 
         private void btnFloodHost_Click(object sender, RoutedEventArgs e)
         {
+            if (!_floodHost.IsActive && MessageBox.Show(
+                $"Run the ICMP test against {txtHostname.Text} for up to 60 seconds? Only test systems you own or are authorized to monitor.",
+                "Confirm ICMP test",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning) != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
             lblInformation.Visibility = Visibility.Collapsed;
             FloodHost(_floodHost);
         }
@@ -58,6 +68,7 @@ namespace vmPing.UI
             }
             else
             {
+                node.ResetEvent.Reset();
                 node.BgWorker.CancelAsync();
                 node.ResetEvent.WaitOne();
                 node.IsActive = false;
@@ -72,8 +83,9 @@ namespace vmPing.UI
 
             var pingBuffer = Encoding.ASCII.GetBytes(Constants.DefaultIcmpData);
             var pingOptions = new PingOptions(Constants.DefaultTTL, true);
+            var elapsed = Stopwatch.StartNew();
 
-            while (!bgWorker.CancellationPending && node.IsActive)
+            while (!bgWorker.CancellationPending && node.IsActive && elapsed.Elapsed < TimeSpan.FromSeconds(60))
             {
                 using (Ping ping = new Ping())
                 {
@@ -88,19 +100,22 @@ namespace vmPing.UI
                         {
                             ++node.PacketsLost;
                         }
-
-                        node.ResetEvent.Set();
                     }
                     catch
                     {
                         e.Cancel = true;
-                        node.ResetEvent.Set();
                         node.IsActive = false;
-                        return;
+                        break;
                     }
+                }
+
+                if (!bgWorker.CancellationPending && elapsed.Elapsed < TimeSpan.FromSeconds(60))
+                {
+                    Thread.Sleep(900);
                 }
             }
 
+            node.IsActive = false;
             node.ResetEvent.Set();
         }
     }

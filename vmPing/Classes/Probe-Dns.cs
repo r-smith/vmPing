@@ -2,12 +2,13 @@
 using System.Collections.ObjectModel;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace vmPing.Classes
 {
     public partial class Probe
     {
-        private async void PerformDnsLookup(CancellationToken cancellationToken)
+        private async Task PerformDnsLookup(CancellationToken cancellationToken)
         {
             IsActive = true;
             History = new ObservableCollection<string>();

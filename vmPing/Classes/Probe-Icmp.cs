@@ -10,7 +10,7 @@ namespace vmPing.Classes
 {
     public partial class Probe
     {
-        private async void PerformIcmpProbe(CancellationToken cancellationToken)
+        private async Task PerformIcmpProbe(CancellationToken cancellationToken)
         {
             InitializeProbe();
 
@@ -65,10 +65,7 @@ namespace vmPing.Classes
                             }
 
                             // Update minimum RTT.
-                            if (reply.RoundtripTime < MinRtt)
-                            {
-                                MinRtt = reply.RoundtripTime;
-                            }
+                            RecordRtt(reply.RoundtripTime);
 
                             // Check latency.
                             if ((ApplicationOptions.LatencyDetectionMode == ApplicationOptions.LatencyMode.Fixed &&
@@ -152,10 +149,14 @@ namespace vmPing.Classes
                             DisplayIcmpReply(reply);
 
                             // Pause between probes.
-                            await IcmpWait(reply.Status);
+                            await IcmpWait(reply.Status, cancellationToken);
                         }
                     }
 
+                    catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+                    {
+                        break;
+                    }
                     catch (Exception ex)
                     {
                         Statistics.Lost++;
@@ -177,13 +178,13 @@ namespace vmPing.Classes
                         DisplayIcmpReply(null, ex);
 
                         // Pause between probes.
-                        await Task.Delay(ApplicationOptions.PingInterval);
+                        await Task.Delay(ApplicationOptions.PingInterval, cancellationToken);
                     }
                 }
             }
         }
 
-        private async Task IcmpWait(IPStatus ipStatus)
+        private async Task IcmpWait(IPStatus ipStatus, CancellationToken cancellationToken)
         {
             if (ipStatus == IPStatus.TimedOut)
             {
@@ -192,18 +193,18 @@ namespace vmPing.Classes
                 // Otherwise, sleep for a fixed amount of 1 second
                 if (ApplicationOptions.PingInterval > ApplicationOptions.PingTimeout)
                 {
-                    await Task.Delay(ApplicationOptions.PingInterval - ApplicationOptions.PingTimeout);
+                    await Task.Delay(ApplicationOptions.PingInterval - ApplicationOptions.PingTimeout, cancellationToken);
                 }
                 else
                 {
-                    await Task.Delay(1000);
+                    await Task.Delay(1000, cancellationToken);
                 }
             }
             else
             {
                 // For any other type of ping response, sleep for the global ping interval amount
                 // before sending another ping.
-                await Task.Delay(ApplicationOptions.PingInterval);
+                await Task.Delay(ApplicationOptions.PingInterval, cancellationToken);
             }
         }
 

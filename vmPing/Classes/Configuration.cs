@@ -133,7 +133,26 @@ namespace vmPing.Classes
                 root.Add(GenerateConfigurationNode());
                 root.Add(GenerateColorsNode());
 
-                xd.Save(FilePath);
+                var temporaryPath = FilePath + ".tmp";
+                try
+                {
+                    xd.Save(temporaryPath);
+                    if (File.Exists(FilePath))
+                    {
+                        File.Replace(temporaryPath, FilePath, null);
+                    }
+                    else
+                    {
+                        File.Move(temporaryPath, FilePath);
+                    }
+                }
+                finally
+                {
+                    if (File.Exists(temporaryPath))
+                    {
+                        File.Delete(temporaryPath);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -176,10 +195,10 @@ namespace vmPing.Classes
                 Node("IsEmailAuthenticationRequired", ApplicationOptions.IsEmailAuthenticationRequired),
                 Node("EmailUser", string.IsNullOrWhiteSpace(ApplicationOptions.EmailUser)
                     ? string.Empty
-                    : Util.EncryptStringAES(ApplicationOptions.EmailUser)),
+                    : Util.ProtectCredential(ApplicationOptions.EmailUser)),
                 Node("EmailPassword", string.IsNullOrWhiteSpace(ApplicationOptions.EmailPassword)
                         ? string.Empty
-                        : Util.EncryptStringAES(ApplicationOptions.EmailPassword)),
+                        : Util.ProtectCredential(ApplicationOptions.EmailPassword)),
                 Node("EmailRecipient", ApplicationOptions.EmailRecipient),
                 Node("EmailFromAddress", ApplicationOptions.EmailFromAddress),
                 Node("IsAudioUpAlertEnabled", ApplicationOptions.IsAudioUpAlertEnabled),
@@ -311,19 +330,26 @@ namespace vmPing.Classes
             var options = nodes.Cast<XmlNode>()
                 .Where(n => n.Attributes?["name"] != null)
                 .ToDictionary(n => n.Attributes["name"].Value, n => n.InnerText);
+            string optionValue;
+            var booleanOptionNames = new[]
+            {
+                "DontFragment", "UseCustomBuffer", "IsAutoDismissEnabled", "IsEmailAlertEnabled",
+                "IsEmailAuthenticationRequired", "IsEmailSslEnabled", "IsAudioAlertEnabled",
+                "IsAudioUpAlertEnabled", "IsAudioDownAlertEnabled", "IsLogOutputEnabled",
+                "IsLogStatusChangesEnabled", "IsAlwaysOnTopEnabled", "IsMinimizeToTrayEnabled",
+                "IsExitToTrayEnabled"
+            };
+            foreach (var name in booleanOptionNames)
+            {
+                if (options.TryGetValue(name, out var value) && !bool.TryParse(value, out _))
+                {
+                    options.Remove(name);
+                }
+            }
 
-            if (options.TryGetValue("PingInterval", out string optionValue))
-            {
-                ApplicationOptions.PingInterval = int.Parse(optionValue);
-            }
-            if (options.TryGetValue("PingTimeout", out optionValue))
-            {
-                ApplicationOptions.PingTimeout = int.Parse(optionValue);
-            }
-            if (options.TryGetValue("TTL", out optionValue))
-            {
-                ApplicationOptions.TTL = int.Parse(optionValue);
-            }
+            SetIntOption(options, "PingInterval", 1000, 86400000, value => ApplicationOptions.PingInterval = value);
+            SetIntOption(options, "PingTimeout", 1000, 60000, value => ApplicationOptions.PingTimeout = value);
+            SetIntOption(options, "TTL", 1, 255, value => ApplicationOptions.TTL = value);
             if (options.TryGetValue("DontFragment", out optionValue))
             {
                 ApplicationOptions.DontFragment = bool.Parse(optionValue);
@@ -336,10 +362,7 @@ namespace vmPing.Classes
             {
                 ApplicationOptions.Buffer = Encoding.ASCII.GetBytes(optionValue);
             }
-            if (options.TryGetValue("AlertThreshold", out optionValue))
-            {
-                ApplicationOptions.AlertThreshold = int.Parse(optionValue);
-            }
+            SetIntOption(options, "AlertThreshold", 1, 60, value => ApplicationOptions.AlertThreshold = value);
             if (options.TryGetValue("InitialStartMode", out optionValue))
             {
                 if (optionValue.Equals(ApplicationOptions.StartMode.Favorite.ToString()))
@@ -355,14 +378,8 @@ namespace vmPing.Classes
                     ApplicationOptions.InitialStartMode = ApplicationOptions.StartMode.Blank;
                 }
             }
-            if (options.TryGetValue("InitialProbeCount", out optionValue))
-            {
-                ApplicationOptions.InitialProbeCount = int.Parse(optionValue);
-            }
-            if (options.TryGetValue("InitialColumnCount", out optionValue))
-            {
-                ApplicationOptions.InitialColumnCount = int.Parse(optionValue);
-            }
+            SetIntOption(options, "InitialProbeCount", 1, 20, value => ApplicationOptions.InitialProbeCount = value);
+            SetIntOption(options, "InitialColumnCount", 1, 10, value => ApplicationOptions.InitialColumnCount = value);
             if (options.TryGetValue("InitialFavorite", out optionValue))
             {
                 ApplicationOptions.InitialFavorite = optionValue;
@@ -386,10 +403,7 @@ namespace vmPing.Classes
             {
                 ApplicationOptions.IsAutoDismissEnabled = bool.Parse(optionValue);
             }
-            if (options.TryGetValue("AutoDismissMilliseconds", out optionValue))
-            {
-                ApplicationOptions.AutoDismissMilliseconds = int.Parse(optionValue);
-            }
+            SetIntOption(options, "AutoDismissMilliseconds", 1000, 99000, value => ApplicationOptions.AutoDismissMilliseconds = value);
             if (options.TryGetValue("IsEmailAlertEnabled", out optionValue))
             {
                 ApplicationOptions.IsEmailAlertEnabled = bool.Parse(optionValue);
@@ -464,14 +478,14 @@ namespace vmPing.Classes
             {
                 if (optionValue.Length > 0)
                 {
-                    ApplicationOptions.EmailUser = Util.DecryptStringAES(optionValue);
+                    ApplicationOptions.EmailUser = Util.UnprotectCredential(optionValue);
                 }
             }
             if (options.TryGetValue("EmailPassword", out optionValue))
             {
                 if (optionValue.Length > 0)
                 {
-                    ApplicationOptions.EmailPassword = Util.DecryptStringAES(optionValue);
+                    ApplicationOptions.EmailPassword = Util.UnprotectCredential(optionValue);
                 }
             }
             if (options.TryGetValue("IsAlwaysOnTopEnabled", out optionValue))
@@ -485,6 +499,21 @@ namespace vmPing.Classes
             if (options.TryGetValue("IsExitToTrayEnabled", out optionValue))
             {
                 ApplicationOptions.IsExitToTrayEnabled = bool.Parse(optionValue);
+            }
+        }
+
+        private static void SetIntOption(
+            IDictionary<string, string> options,
+            string key,
+            int minimum,
+            int maximum,
+            Action<int> setter)
+        {
+            if (options.TryGetValue(key, out var value) &&
+                int.TryParse(value, out var parsedValue) &&
+                parsedValue >= minimum && parsedValue <= maximum)
+            {
+                setter(parsedValue);
             }
         }
     }

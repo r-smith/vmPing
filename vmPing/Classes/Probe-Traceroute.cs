@@ -10,7 +10,7 @@ namespace vmPing.Classes
 {
     public partial class Probe
     {
-        private async void PerformTraceroute(CancellationToken cancellationToken)
+        private async Task PerformTraceroute(CancellationToken cancellationToken)
         {
             IsActive = true;
             History = new ObservableCollection<string>();

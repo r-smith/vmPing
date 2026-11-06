@@ -24,7 +24,7 @@ namespace vmPing.Classes
         public enum LatencyMode
         {
             Off,
-            Auto,
+            Dynamic,
             Fixed
         }
 

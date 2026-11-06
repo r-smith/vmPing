@@ -73,7 +73,7 @@ namespace vmPing.Classes
                             // Check latency.
                             if ((ApplicationOptions.LatencyDetectionMode == ApplicationOptions.LatencyMode.Fixed &&
                                 reply.RoundtripTime >= ApplicationOptions.HighLatencyMilliseconds) ||
-                                (ApplicationOptions.LatencyDetectionMode == ApplicationOptions.LatencyMode.Auto &&
+                                (ApplicationOptions.LatencyDetectionMode == ApplicationOptions.LatencyMode.Dynamic &&
                                 reply.RoundtripTime >= MinRtt + ApplicationOptions.HighLatencyMilliseconds))
                             {
                                 // Latency is high.

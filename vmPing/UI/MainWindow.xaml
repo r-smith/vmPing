@@ -148,35 +148,20 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
-                <!-- Menu: Status history -->
+                <!-- Menu: Multi-Input -->
+                <MenuItem Name="MultiInputMenu" Header="Multi-Input" InputGestureText="F2">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource icon.input-addresses}" VerticalAlignment="Center" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Menu: History -->
                 <MenuItem Name="StatusHistoryMenu" Header="{x:Static resource:Strings.Menu_StatusHistory}" InputGestureText="F12">
                     <MenuItem.Icon>
                         <Image Source="{StaticResource icon.status-history}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <!-- Menu: Input addresses-->
-                <MenuItem Name="MultiInputMenu" Header="Input Addresses" InputGestureText="F2">
-                    <MenuItem.Icon>
-                        <Image Source="{StaticResource icon.input-addresses}" VerticalAlignment="Center" Width="16" Height="16"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <!-- Menu: Popup alerts -->
-                <MenuItem Header="{x:Static resource:Strings.Menu_PopupAlerts}">
-                    <MenuItem Name="PopupNever"
-                              Header="{x:Static resource:Strings.Notification_Never}"
-                              Click="PopupNever_Click"
-                              IsCheckable="True"/>
-                    <MenuItem Name="PopupWhenMinimized"
-                              Header="{x:Static resource:Strings.Notification_WhenMinimized}"
-                              Click="PopupWhenMinimized_Click"
-                              IsCheckable="True"/>
-                    <MenuItem Name="PopupAlways"
-                              Header="{x:Static resource:Strings.Notification_Always}"
-                              Click="PopupAlways_Click"
-                              IsCheckable="True"/>
-                </MenuItem>
                 <Separator />
-                <!-- Menu: Favorite sets-->
+                <!-- Menu: Favorites -->
                 <MenuItem Header="{x:Static resource:Strings.Menu_FavoriteSets}" x:Name="FavoritesMenu">
                     <MenuItem Header="{x:Static resource:Strings.Menu_SaveToFavorites}" Click="CreateFavorite_Click">
                         <MenuItem.Icon>
@@ -198,6 +183,22 @@
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator />
+                </MenuItem>
+                <Separator />
+                <!-- Menu: Popup alerts -->
+                <MenuItem Header="{x:Static resource:Strings.Menu_PopupAlerts}">
+                    <MenuItem Name="PopupNever"
+                              Header="{x:Static resource:Strings.Notification_Never}"
+                              Click="PopupNever_Click"
+                              IsCheckable="True"/>
+                    <MenuItem Name="PopupWhenMinimized"
+                              Header="{x:Static resource:Strings.Notification_WhenMinimized}"
+                              Click="PopupWhenMinimized_Click"
+                              IsCheckable="True"/>
+                    <MenuItem Name="PopupAlways"
+                              Header="{x:Static resource:Strings.Notification_Always}"
+                              Click="PopupAlways_Click"
+                              IsCheckable="True"/>
                 </MenuItem>
                 <Separator />
                 <!-- Menu: Traceroute -->

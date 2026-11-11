@@ -239,7 +239,7 @@
     <value>Aliases</value>
   </data>
   <data name="Menu_FavoriteSets" xml:space="preserve">
-    <value>Favorite Sets</value>
+    <value>Favorites</value>
   </data>
   <data name="Menu_FloodHost" xml:space="preserve">
     <value>Flood Host</value>
@@ -263,7 +263,7 @@
     <value>Create New Favorite Set</value>
   </data>
   <data name="Menu_StatusHistory" xml:space="preserve">
-    <value>Status History</value>
+    <value>History</value>
   </data>
   <data name="Menu_Traceroute" xml:space="preserve">
     <value>Traceroute</value>

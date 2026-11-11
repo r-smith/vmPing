@@ -412,7 +412,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Favorite Sets.
+        ///   Looks up a localized string similar to Favorites.
         /// </summary>
         public static string Menu_FavoriteSets {
             get {
@@ -484,7 +484,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Status History.
+        ///   Looks up a localized string similar to History.
         /// </summary>
         public static string Menu_StatusHistory {
             get {

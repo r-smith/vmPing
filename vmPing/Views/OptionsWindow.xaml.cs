@@ -203,7 +203,7 @@ namespace vmPing.Views
             ForegroundColor_Stats_Up.Text = ApplicationOptions.ForegroundColor_Stats_Up;
             ForegroundColor_Stats_Down.Text = ApplicationOptions.ForegroundColor_Stats_Down;
             ForegroundColor_Stats_Error.Text = ApplicationOptions.ForegroundColor_Stats_Error;
-            ForegroundColor_Stats_Indeterminate.Text = ApplicationOptions.ForegroundColor_Stats_Inactive;
+            ForegroundColor_Stats_Indeterminate.Text = ApplicationOptions.ForegroundColor_Stats_Indeterminate;
             ForegroundColor_Alias_Inactive.Text = ApplicationOptions.ForegroundColor_Alias_Inactive;
             ForegroundColor_Alias_Up.Text = ApplicationOptions.ForegroundColor_Alias_Up;
             ForegroundColor_Alias_Down.Text = ApplicationOptions.ForegroundColor_Alias_Down;
@@ -947,7 +947,7 @@ namespace vmPing.Views
             ForegroundColor_Stats_Up.Text = Constants.Color_Statistics_Foreground_Up;
             ForegroundColor_Stats_Down.Text = Constants.Color_Statistics_Foreground_Down;
             ForegroundColor_Stats_Error.Text = Constants.Color_Statistics_Foreground_Error;
-            ForegroundColor_Stats_Indeterminate.Text = Constants.Color_Statistics_Foreground_Inactive;
+            ForegroundColor_Stats_Indeterminate.Text = Constants.Color_Statistics_Foreground_Indeterminate;
             ForegroundColor_Alias_Inactive.Text = Constants.Color_Alias_Foreground_Inactive;
             ForegroundColor_Alias_Up.Text = Constants.Color_Alias_Foreground_Up;
             ForegroundColor_Alias_Down.Text = Constants.Color_Alias_Foreground_Down;

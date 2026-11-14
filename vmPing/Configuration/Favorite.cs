@@ -12,7 +12,7 @@ namespace vmPing.Configuration
         private const string TitleAttribute = "title";
         private const string ColumnAttribute = "columncount";
 
-        public List<string> Hostnames { get; set; }
+        public List<string> Hostnames { get; set; } = new List<string>();
         public int ColumnCount { get; set; }
 
         public static bool TitleExists(string title)

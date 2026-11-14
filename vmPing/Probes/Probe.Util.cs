@@ -59,7 +59,7 @@ namespace vmPing.Probes
 
             Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
-                lock (mutex)
+                lock (s_lock)
                 {
                     StatusChangeLog.Add(new StatusChangeLog
                     {
@@ -111,7 +111,7 @@ namespace vmPing.Probes
             {
                 Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    lock (mutex)
+                    lock (s_lock)
                     {
                         WriteFinalStatisticsToHistory();
                     }
@@ -125,7 +125,7 @@ namespace vmPing.Probes
         {
             Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
-                lock (mutex)
+                lock (s_lock)
                 {
                     StatusChangeLog.Add(new StatusChangeLog
                     {
@@ -238,7 +238,7 @@ namespace vmPing.Probes
                     || (ApplicationOptions.PopupOption == PopupNotificationOption.WhenMinimized
                     && Application.Current.MainWindow.WindowState == WindowState.Minimized);
 
-                lock (mutex)
+                lock (s_lock)
                 {
                     if (shouldPopup && !Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
                     {
@@ -259,7 +259,7 @@ namespace vmPing.Probes
 
             if (ApplicationOptions.IsLogStatusChangesEnabled)
             {
-                lock (mutex)
+                lock (s_lock)
                 {
                     WriteToStatusChangesLog(status);
                 }

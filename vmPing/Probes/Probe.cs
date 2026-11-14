@@ -19,7 +19,7 @@ namespace vmPing.Probes
         public static ObservableCollection<StatusChangeLog> StatusChangeLog { get; } = new ObservableCollection<StatusChangeLog>();
         public static StatusHistoryWindow StatusHistoryWindow;
 
-        private static readonly Mutex mutex = new Mutex();
+        private static readonly object s_lock = new object();
 
         private static long activeCount;
         public static long ActiveCount

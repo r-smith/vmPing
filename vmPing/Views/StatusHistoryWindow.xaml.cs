@@ -117,6 +117,11 @@ namespace vmPing.Views
             {
                 statusMatch = true;
             }
+            if (FilterLatency.IsChecked == true
+                && (entry.Status == ProbeStatus.LatencyHigh || entry.Status == ProbeStatus.LatencyNormal))
+            {
+                statusMatch = true;
+            }
 
             if (statusMatch)
             {

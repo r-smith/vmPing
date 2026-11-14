@@ -246,7 +246,7 @@
                             <!-- Textbox -->
                             <TextBox x:Name="FilterField"
                                      Style="{StaticResource TextBoxStyle.Dark}"
-                                     Width="300"
+                                     Width="260"
                                      KeyUp="TextBox_KeyUp"/>
                             <!-- Clear button -->
                             <Button HorizontalAlignment="Right"
@@ -282,21 +282,30 @@
                     <StackPanel Margin="15,0,0,0">
                         <TextBlock Text="Include" Foreground="#ecce51" Margin="0,0,0,2"/>
                         <StackPanel Orientation="Horizontal">
-                            <Grid Width="100">
+                            <Grid Width="90">
                                 <CheckBox x:Name="FilterUp"
                                           Style="{StaticResource CheckBoxStyle.Dark}"
                                           Content="Up"
                                           IsChecked="True"
                                           Click="Filter_Click"/>
                             </Grid>
-                            <CheckBox x:Name="FilterStart"
-                                      Style="{StaticResource CheckBoxStyle.Dark}"
-                                      Content="Start"
-                                      IsChecked="True"
-                                      Click="Filter_Click" />
+                            <Grid Width="90">
+                                <CheckBox x:Name="FilterStart"
+                                          Style="{StaticResource CheckBoxStyle.Dark}"
+                                          Content="Start"
+                                          IsChecked="True"
+                                          Click="Filter_Click"/>
+                            </Grid>
+                            <Grid>
+                                <CheckBox x:Name="FilterLatency"
+                                          Style="{StaticResource CheckBoxStyle.Dark}"
+                                          Content="Latency"
+                                          IsChecked="True"
+                                          Click="Filter_Click"/>
+                            </Grid>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Grid Width="100">
+                            <Grid Width="90">
                                 <CheckBox x:Name="FilterDown"
                                           Style="{StaticResource CheckBoxStyle.Dark}"
                                           Content="Down"

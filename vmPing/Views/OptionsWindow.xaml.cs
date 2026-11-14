@@ -271,11 +271,8 @@ namespace vmPing.Views
                 }
             }
 
-            ApplicationOptions.LatencyDetectionMode = latencyMode;
-            ApplicationOptions.HighLatencyMilliseconds = highLatencyMilliseconds;
-            ApplicationOptions.HighLatencyAlertTiggerCount = highLatencyTriggerCount;
-
-            // Ping interval.
+            // Ping interval. Limited to 24 hours, the same as the command line option.
+            const long MaxIntervalMilliseconds = 24 * 60 * 60 * 1000;
             int pingInterval;
             int multiplier = 1000;
 
@@ -292,13 +289,15 @@ namespace vmPing.Views
                     break;
             }
 
-            if (int.TryParse(PingInterval.Text, out pingInterval) && pingInterval > 0 && pingInterval <= 86400)
+            if (int.TryParse(PingInterval.Text, out pingInterval) && pingInterval > 0
+                && (long)pingInterval * multiplier <= MaxIntervalMilliseconds)
             {
                 pingInterval *= multiplier;
             }
             else
             {
-                pingInterval = Constants.DefaultInterval;
+                ShowError("Please enter a ping interval between 1 second and 24 hours.", GeneralTab, PingInterval);
+                return false;
             }
             ApplicationOptions.PingInterval = pingInterval;
 
@@ -324,6 +323,11 @@ namespace vmPing.Views
             }
 
             ApplicationOptions.AlertThreshold = alertThreshold;
+
+            // High latency detection.
+            ApplicationOptions.LatencyDetectionMode = latencyMode;
+            ApplicationOptions.HighLatencyMilliseconds = highLatencyMilliseconds;
+            ApplicationOptions.HighLatencyAlertTiggerCount = highLatencyTriggerCount;
 
             return true;
         }

@@ -157,6 +157,11 @@ namespace vmPing.Probes
 
                     catch (Exception ex)
                     {
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            break;
+                        }
+
                         Statistics.Lost++;
 
                         // Check for status change.

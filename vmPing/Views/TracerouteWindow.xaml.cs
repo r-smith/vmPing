@@ -30,6 +30,12 @@ namespace vmPing.Views
                 MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
 
+        private void Window_Closed(object sender, System.EventArgs e)
+        {
+            Route.BgWorker?.CancelAsync();
+            Route.IsActive = false;
+        }
+
         private void Trace_Click(object sender, RoutedEventArgs e)
         {
             if (!Route.IsActive)

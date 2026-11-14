@@ -9,7 +9,8 @@
         Width="520"
         MinHeight="300"
         MinWidth="350"
-        Background="#e1e1e1">
+        Background="#e1e1e1"
+        Closed="Window_Closed">
 
     <Window.Resources>
         <!-- Value converters -->

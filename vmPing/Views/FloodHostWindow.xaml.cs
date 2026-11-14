@@ -26,6 +26,12 @@ namespace vmPing.Views
                 MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
 
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            _floodHost.BgWorker?.CancelAsync();
+            _floodHost.IsActive = false;
+        }
+
         private void btnFloodHost_Click(object sender, RoutedEventArgs e)
         {
             lblInformation.Visibility = Visibility.Collapsed;

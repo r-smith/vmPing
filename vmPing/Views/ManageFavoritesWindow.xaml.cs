@@ -93,17 +93,23 @@ namespace vmPing.Views
                 return;
             }
 
+            string originalTitle = Favorites.SelectedItem.ToString();
             var newFavoriteWindow = new NewFavoriteWindow(
                 hostList: _selectedFavorite.Hostnames,
                 columnCount: _selectedFavorite.ColumnCount,
                 isEditExisting: true,
-                title: Favorites.SelectedItem.ToString())
+                title: originalTitle)
             {
                 Owner = this
             };
 
             if (newFavoriteWindow.ShowDialog() == true)
             {
+                // If the loaded favorite was renamed, update the main window title.
+                if (Owner != null && Owner.Title == $"{originalTitle} - vmPing")
+                {
+                    Owner.Title = $"{newFavoriteWindow.MyTitle.Text} - vmPing";
+                }
                 RefreshFavoriteList();
             }
         }

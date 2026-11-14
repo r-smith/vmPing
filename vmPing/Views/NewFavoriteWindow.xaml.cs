@@ -124,7 +124,6 @@ namespace vmPing.Views
             }
             // Save.
             Favorite.Save(MyTitle.Text, HostList, ColumnCount);
-            Application.Current.MainWindow.Title = MyTitle.Text + " - vmPing";
             DialogResult = true;
         }
 

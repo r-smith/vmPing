@@ -531,6 +531,7 @@ namespace vmPing.Views
             newFavoriteWindow.Owner = this;
             if (newFavoriteWindow.ShowDialog() == true)
             {
+                Title = $"{newFavoriteWindow.MyTitle.Text} - vmPing";
                 LoadFavorites();
             }
         }

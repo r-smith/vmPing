@@ -180,10 +180,10 @@ namespace vmPing.Configuration
                 Node("IsEmailAuthenticationRequired", ApplicationOptions.IsEmailAuthenticationRequired),
                 Node("EmailUser", string.IsNullOrWhiteSpace(ApplicationOptions.EmailUser)
                     ? string.Empty
-                    : Util.EncryptStringAES(ApplicationOptions.EmailUser)),
+                    : StringCipher.Encrypt(ApplicationOptions.EmailUser)),
                 Node("EmailPassword", string.IsNullOrWhiteSpace(ApplicationOptions.EmailPassword)
                         ? string.Empty
-                        : Util.EncryptStringAES(ApplicationOptions.EmailPassword)),
+                        : StringCipher.Encrypt(ApplicationOptions.EmailPassword)),
                 Node("EmailRecipient", ApplicationOptions.EmailRecipient),
                 Node("EmailFromAddress", ApplicationOptions.EmailFromAddress),
                 Node("IsAudioUpAlertEnabled", ApplicationOptions.IsAudioUpAlertEnabled),
@@ -491,14 +491,14 @@ namespace vmPing.Configuration
             {
                 if (optionValue.Length > 0)
                 {
-                    ApplicationOptions.EmailUser = Util.DecryptStringAES(optionValue);
+                    ApplicationOptions.EmailUser = StringCipher.Decrypt(optionValue);
                 }
             }
             if (options.TryGetValue("EmailPassword", out optionValue))
             {
                 if (optionValue.Length > 0)
                 {
-                    ApplicationOptions.EmailPassword = Util.DecryptStringAES(optionValue);
+                    ApplicationOptions.EmailPassword = StringCipher.Decrypt(optionValue);
                 }
             }
             if (options.TryGetValue("IsAlwaysOnTopEnabled", out optionValue))

@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using vmPing.Configuration;
+using vmPing.Services;
 
 namespace vmPing.Views
 {
@@ -744,7 +745,7 @@ namespace vmPing.Views
             {
                 try
                 {
-                    Util.SendTestEmail(
+                    Email.SendTest(
                         serverAddress,
                         serverPort,
                         isSslEnabled,

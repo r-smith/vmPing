@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using vmPing.Configuration;
 using vmPing.Models;
+using vmPing.Services;
 using vmPing.Views;
 
 namespace vmPing.Probes
@@ -226,7 +227,7 @@ namespace vmPing.Probes
 
             if (ApplicationOptions.IsEmailAlertEnabled)
             {
-                Util.SendEmail(alertType, Hostname, Alias);
+                Email.SendAlert(alertType, Hostname, Alias);
             }
         }
 

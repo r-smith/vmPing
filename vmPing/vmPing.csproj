@@ -87,6 +87,7 @@
     <Compile Include="Configuration\LatencyMode.cs" />
     <Compile Include="Configuration\PopupNotificationOption.cs" />
     <Compile Include="Configuration\StartMode.cs" />
+    <Compile Include="Configuration\StringCipher.cs" />
     <Compile Include="Configuration\Favorite.cs" />
     <Compile Include="Probes\Probe.Dns.cs" />
     <Compile Include="Probes\Probe.Icmp.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Probes\Probe.Traceroute.cs" />
     <Compile Include="Probes\Probe.Util.cs" />
     <Compile Include="Models\StatusChangeLog.cs" />
+    <Compile Include="Services\Email.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="Converters\ValueConverters.cs" />
     <Compile Include="Controls\AutoScrollAdorner.cs" />

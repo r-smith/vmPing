@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Net.NetworkInformation;
+﻿using System.Net.NetworkInformation;
 using System.Text;
-using System.Windows.Media;
 
 namespace vmPing.Configuration
 {
@@ -107,32 +105,6 @@ namespace vmPing.Configuration
         {
             PingOptions.Ttl = TTL;
             PingOptions.DontFragment = DontFragment;
-        }
-
-        public static IEnumerable<Visual> GetChildren(this Visual parent, bool recurse = true)
-        {
-            if (parent == null)
-            {
-                yield break;
-            }
-
-            int count = VisualTreeHelper.GetChildrenCount(parent);
-            for (int i = 0; i < count; i++)
-            {
-                // Retrieve child visual at specified index value.
-                if (VisualTreeHelper.GetChild(parent, i) is Visual child)
-                {
-                    yield return child;
-
-                    if (recurse)
-                    {
-                        foreach (var grandChild in child.GetChildren(true))
-                        {
-                            yield return grandChild;
-                        }
-                    }
-                }
-            }
         }
     }
 }

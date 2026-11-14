@@ -74,7 +74,7 @@ namespace vmPing.Probes
             // Set IsActive before the background task starts.
             InitializeProbe();
 
-            var token = CancelSource.Token;
+            CancellationToken token = CancelSource.Token;
             if (IsTcpPing(Hostname))
             {
                 Task.Run(() => PerformTcpProbe(token), token);
@@ -150,7 +150,7 @@ namespace vmPing.Probes
                         // IP address was entered. No further action necessary.
                         break;
                     case UriHostNameType.Dns:
-                        var ipAddresses = await Dns.GetHostAddressesAsync(host);
+                        IPAddress[] ipAddresses = await Dns.GetHostAddressesAsync(host);
                         token.ThrowIfCancellationRequested();
                         if (ipAddresses.Length > 0)
                         {
@@ -242,7 +242,7 @@ namespace vmPing.Probes
                 {
                     if (shouldPopup && !Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
                     {
-                        foreach (var entry in StatusChangeLog)
+                        foreach (StatusChange entry in StatusChangeLog)
                         {
                             entry.HasStatusBeenCleared = true;
                         }

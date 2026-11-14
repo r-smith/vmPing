@@ -99,7 +99,7 @@ namespace vmPing.Views
         private bool AddressFilter(object item)
         {
             bool statusMatch = false;
-            var entry = item as StatusChange;
+            StatusChange entry = item as StatusChange;
 
             if (FilterStart.IsChecked == true && entry.Status == ProbeStatus.Start)
             {
@@ -120,7 +120,7 @@ namespace vmPing.Views
 
             if (statusMatch)
             {
-                var filterText = FilterField.Text.ToUpper();
+                string filterText = FilterField.Text.ToUpper();
                 if (!string.IsNullOrEmpty(entry.Alias) && entry.Alias.ToUpper().Contains(filterText))
                 {
                     return true;
@@ -204,7 +204,7 @@ namespace vmPing.Views
             }
             catch (Exception ex)
             {
-                var errorWindow = DialogWindow.ErrorWindow($"Failed to write to '{filePath}'. {ex.Message}");
+                DialogWindow errorWindow = DialogWindow.ErrorWindow($"Failed to write to '{filePath}'. {ex.Message}");
                 errorWindow.Owner = this;
                 errorWindow.ShowDialog();
             }

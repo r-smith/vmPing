@@ -13,7 +13,7 @@ namespace vmPing.Configuration
 
         public static Dictionary<string, string> GetAll()
         {
-            var aliases = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, string> aliases = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             if (!ConfigFile.Exists())
             {
@@ -22,10 +22,10 @@ namespace vmPing.Configuration
 
             try
             {
-                var xd = new XmlDocument();
+                XmlDocument xd = new XmlDocument();
                 xd.Load(ConfigFile.FilePath);
 
-                var nodes = xd.SelectNodes(AliasPath);
+                XmlNodeList nodes = xd.SelectNodes(AliasPath);
                 if (nodes == null)
                 {
                     return aliases;
@@ -33,7 +33,7 @@ namespace vmPing.Configuration
 
                 foreach (XmlNode node in nodes)
                 {
-                    var host = node.Attributes?[HostAttribute]?.Value;
+                    string host = node.Attributes?[HostAttribute]?.Value;
                     if (!string.IsNullOrEmpty(host))
                     {
                         aliases[host.ToLowerInvariant()] = node.InnerText?.Trim() ?? string.Empty;
@@ -59,10 +59,10 @@ namespace vmPing.Configuration
 
             try
             {
-                var xd = new XmlDocument();
+                XmlDocument xd = new XmlDocument();
                 xd.Load(ConfigFile.FilePath);
 
-                var root = xd.SelectSingleNode(RootPath)
+                XmlNode root = xd.SelectSingleNode(RootPath)
                     ?? throw new XmlException("Invalid configuration file.");
 
                 // Remove alias if it already exists.
@@ -72,7 +72,7 @@ namespace vmPing.Configuration
                 }
 
                 // Add alias.
-                var aliasNode = xd.CreateElement("alias");
+                XmlElement aliasNode = xd.CreateElement("alias");
                 aliasNode.SetAttribute(HostAttribute, hostname);
                 aliasNode.InnerText = alias;
                 root.AppendChild(aliasNode);
@@ -97,17 +97,17 @@ namespace vmPing.Configuration
 
             try
             {
-                var xd = new XmlDocument();
+                XmlDocument xd = new XmlDocument();
                 xd.Load(ConfigFile.FilePath);
 
                 // Search for alias.
-                var root = xd.SelectSingleNode(RootPath);
+                XmlNode root = xd.SelectSingleNode(RootPath);
                 if (root == null)
                 {
                     return;
                 }
 
-                var nodes = xd.SelectNodes($"{AliasPath}[@{HostAttribute}={ConfigFile.GetEscapedXpath(hostname)}]");
+                XmlNodeList nodes = xd.SelectNodes($"{AliasPath}[@{HostAttribute}={ConfigFile.GetEscapedXpath(hostname)}]");
                 if (nodes == null)
                 {
                     return;

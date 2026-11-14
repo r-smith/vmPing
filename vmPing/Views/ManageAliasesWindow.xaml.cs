@@ -19,7 +19,7 @@ namespace vmPing.Views
 
         public void RefreshAliasList()
         {
-            var aliases = Alias.GetAll()
+            List<KeyValuePair<string, string>> aliases = Alias.GetAll()
                 .OrderBy(alias => alias.Value, StringComparer.CurrentCultureIgnoreCase)
                 .ToList();
 
@@ -28,13 +28,13 @@ namespace vmPing.Views
 
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
-            var selected = GetSelectedAlias();
+            KeyValuePair<string, string>? selected = GetSelectedAlias();
             if (selected == null)
             {
                 return;
             }
 
-            var dialogWindow = new DialogWindow(
+            DialogWindow dialogWindow = new DialogWindow(
                 icon: DialogWindow.DialogIcon.Warning,
                 title: Strings.DialogTitle_ConfirmDelete,
                 body: $"{Strings.ManageAliases_Warn_DeleteA} {selected.Value.Value} {Strings.ManageAliases_Warn_DeleteB}",
@@ -53,13 +53,13 @@ namespace vmPing.Views
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
-            var selected = GetSelectedAlias();
+            KeyValuePair<string, string>? selected = GetSelectedAlias();
             if (selected == null)
             {
                 return;
             }
 
-            var editWindow = new EditAliasWindow(selected.Value.Key, selected.Value.Value)
+            EditAliasWindow editWindow = new EditAliasWindow(selected.Value.Key, selected.Value.Value)
             {
                 Owner = this
             };
@@ -72,7 +72,7 @@ namespace vmPing.Views
 
         private void New_Click(object sender, RoutedEventArgs e)
         {
-            var newWindow = new NewAliasWindow
+            NewAliasWindow newWindow = new NewAliasWindow
             {
                 Owner = this
             };
@@ -85,7 +85,7 @@ namespace vmPing.Views
 
         private KeyValuePair<string, string>? GetSelectedAlias()
         {
-            var selected = Aliases.SelectedItem as KeyValuePair<string, string>?;
+            KeyValuePair<string, string>? selected = Aliases.SelectedItem as KeyValuePair<string, string>?;
             return selected.HasValue ? selected : null;
         }
 

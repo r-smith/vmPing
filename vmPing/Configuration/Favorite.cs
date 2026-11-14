@@ -24,9 +24,9 @@ namespace vmPing.Configuration
 
             try
             {
-                var xd = new XmlDocument();
+                XmlDocument xd = new XmlDocument();
                 xd.Load(ConfigFile.FilePath);
-                var node = xd.SelectSingleNode($"{FavoritePath}[@{TitleAttribute}={ConfigFile.GetEscapedXpath(title)}]");
+                XmlNode node = xd.SelectSingleNode($"{FavoritePath}[@{TitleAttribute}={ConfigFile.GetEscapedXpath(title)}]");
                 return node != null;
             }
             catch (Exception ex)
@@ -38,7 +38,7 @@ namespace vmPing.Configuration
 
         public static List<string> GetTitles()
         {
-            var titles = new List<string>();
+            List<string> titles = new List<string>();
 
             if (!ConfigFile.Exists())
             {
@@ -47,10 +47,10 @@ namespace vmPing.Configuration
 
             try
             {
-                var xd = new XmlDocument();
+                XmlDocument xd = new XmlDocument();
                 xd.Load(ConfigFile.FilePath);
 
-                var nodes = xd.SelectNodes(FavoritePath);
+                XmlNodeList nodes = xd.SelectNodes(FavoritePath);
                 if (nodes == null)
                 {
                     return titles;
@@ -58,7 +58,7 @@ namespace vmPing.Configuration
 
                 foreach (XmlNode node in nodes)
                 {
-                    var title = node.Attributes?[TitleAttribute]?.Value;
+                    string title = node.Attributes?[TitleAttribute]?.Value;
                     if (!string.IsNullOrWhiteSpace(title))
                     {
                         titles.Add(title);
@@ -83,16 +83,16 @@ namespace vmPing.Configuration
                 return new Favorite();
             }
 
-            var favorite = new Favorite();
+            Favorite favorite = new Favorite();
 
             try
             {
                 favorite.Hostnames = new List<string>();
 
-                var xd = new XmlDocument();
+                XmlDocument xd = new XmlDocument();
                 xd.Load(ConfigFile.FilePath);
 
-                var favoriteNode = xd.SelectSingleNode($"{FavoritePath}[@{TitleAttribute}={ConfigFile.GetEscapedXpath(title)}]")
+                XmlNode favoriteNode = xd.SelectSingleNode($"{FavoritePath}[@{TitleAttribute}={ConfigFile.GetEscapedXpath(title)}]")
                     ?? throw new KeyNotFoundException();
 
                 // Columns.
@@ -102,12 +102,12 @@ namespace vmPing.Configuration
                 }
 
                 // Hostnames.
-                var hostNodes = favoriteNode.SelectNodes("host");
+                XmlNodeList hostNodes = favoriteNode.SelectNodes("host");
                 if (hostNodes != null)
                 {
                     foreach (XmlNode node in hostNodes)
                     {
-                        var hostname = node.InnerText?.Trim();
+                        string hostname = node.InnerText?.Trim();
                         if (!string.IsNullOrEmpty(hostname))
                         {
                             favorite.Hostnames.Add(hostname);
@@ -136,11 +136,11 @@ namespace vmPing.Configuration
 
             try
             {
-                var xd = new XmlDocument();
+                XmlDocument xd = new XmlDocument();
                 xd.Load(ConfigFile.FilePath);
 
                 // Find favorite.
-                var nodes = xd.SelectNodes($"{FavoritePath}[@{TitleAttribute}={ConfigFile.GetEscapedXpath(originalTitle)}]");
+                XmlNodeList nodes = xd.SelectNodes($"{FavoritePath}[@{TitleAttribute}={ConfigFile.GetEscapedXpath(originalTitle)}]");
                 if (nodes == null || nodes.Count == 0)
                 {
                     return;
@@ -171,10 +171,10 @@ namespace vmPing.Configuration
 
             try
             {
-                var xd = new XmlDocument();
+                XmlDocument xd = new XmlDocument();
                 xd.Load(ConfigFile.FilePath);
 
-                var root = xd.SelectSingleNode(RootPath)
+                XmlNode root = xd.SelectSingleNode(RootPath)
                     ?? throw new XmlException("Invalid configuration file.");
 
                 // Remove favorite if title already exists.
@@ -184,18 +184,18 @@ namespace vmPing.Configuration
                 }
 
                 // Create new favorite.
-                var favorite = xd.CreateElement("favorite");
+                XmlElement favorite = xd.CreateElement("favorite");
                 favorite.SetAttribute(TitleAttribute, title);
                 favorite.SetAttribute(ColumnAttribute, columnCount.ToString());
 
-                foreach (var hostname in hostnames)
+                foreach (string hostname in hostnames)
                 {
                     if (string.IsNullOrWhiteSpace(hostname))
                     {
                         continue;
                     }
 
-                    var hostElement = xd.CreateElement("host");
+                    XmlElement hostElement = xd.CreateElement("host");
                     hostElement.InnerText = hostname;
                     favorite.AppendChild(hostElement);
                 }
@@ -219,17 +219,17 @@ namespace vmPing.Configuration
 
             try
             {
-                var xd = new XmlDocument();
+                XmlDocument xd = new XmlDocument();
                 xd.Load(ConfigFile.FilePath);
 
                 // Find favorite.
-                var root = xd.SelectSingleNode(RootPath);
+                XmlNode root = xd.SelectSingleNode(RootPath);
                 if (root == null)
                 {
                     return;
                 }
 
-                var nodes = xd.SelectNodes($"{FavoritePath}[@{TitleAttribute}={ConfigFile.GetEscapedXpath(title)}]");
+                XmlNodeList nodes = xd.SelectNodes($"{FavoritePath}[@{TitleAttribute}={ConfigFile.GetEscapedXpath(title)}]");
                 if (nodes == null)
                 {
                     return;

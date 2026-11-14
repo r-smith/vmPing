@@ -221,13 +221,13 @@ namespace vmPing.Views
         {
             if (e.Key == Key.Enter)
             {
-                var probe = (sender as TextBox).DataContext as Probe;
+                Probe probe = (sender as TextBox).DataContext as Probe;
                 probe.StartStop();
 
                 if (_probes.IndexOf(probe) < _probes.Count - 1)
                 {
-                    var cp = ProbeItemsControl.ItemContainerGenerator.ContainerFromIndex(_probes.IndexOf(probe) + 1) as ContentPresenter;
-                    var tb = (TextBox)cp.ContentTemplate.FindName("Hostname", cp);
+                    ContentPresenter cp = ProbeItemsControl.ItemContainerGenerator.ContainerFromIndex(_probes.IndexOf(probe) + 1) as ContentPresenter;
+                    TextBox tb = (TextBox)cp.ContentTemplate.FindName("Hostname", cp);
                     tb?.Focus();
                 }
             }
@@ -240,7 +240,7 @@ namespace vmPing.Views
                 return;
             }
 
-            var probe = (sender as Button).DataContext as Probe;
+            Probe probe = (sender as Button).DataContext as Probe;
             if (probe.IsActive)
             {
                 // Stop/cancel active probe.
@@ -253,7 +253,7 @@ namespace vmPing.Views
         private void MultiInputWindowExecute(object sender, ExecutedRoutedEventArgs e)
         {
             // Get list of current addresses to send to multi-input window.
-            var addresses = new List<string>();
+            List<string> addresses = new List<string>();
             for (int i = 0; i < _probes.Count; ++i)
             {
                 if (!string.IsNullOrWhiteSpace(_probes[i].Hostname))
@@ -262,7 +262,7 @@ namespace vmPing.Views
                 }
             }
 
-            var wnd = new MultiInputWindow(addresses)
+            MultiInputWindow wnd = new MultiInputWindow(addresses)
             {
                 Owner = this
             };
@@ -296,7 +296,7 @@ namespace vmPing.Views
         {
             string toggleStatus = StartStopMenuHeader.Text;
 
-            foreach (var probe in _probes)
+            foreach (Probe probe in _probes)
             {
                 if (toggleStatus == Strings.Toolbar_StopAll && probe.IsActive)
                 {
@@ -325,7 +325,7 @@ namespace vmPing.Views
         {
             try
             {
-                var p = new System.Diagnostics.Process();
+                System.Diagnostics.Process p = new System.Diagnostics.Process();
                 p.StartInfo.FileName =
                     System.Reflection.Assembly.GetExecutingAssembly().Location;
                 p.Start();
@@ -333,7 +333,7 @@ namespace vmPing.Views
 
             catch (Exception ex)
             {
-                var errorWindow = DialogWindow.ErrorWindow($"{Strings.Error_FailedToLaunch} {ex.Message}");
+                DialogWindow errorWindow = DialogWindow.ErrorWindow($"{Strings.Error_FailedToLaunch} {ex.Message}");
                 errorWindow.Owner = this;
                 errorWindow.ShowDialog();
             }
@@ -358,7 +358,7 @@ namespace vmPing.Views
         private void OptionsExecute(object sender, ExecutedRoutedEventArgs e)
         {
             // Open the options window.
-            var optionsWnd = new OptionsWindow
+            OptionsWindow optionsWnd = new OptionsWindow
             {
                 Owner = this
             };
@@ -379,7 +379,7 @@ namespace vmPing.Views
 
         private void RemoveAllProbes()
         {
-            foreach (var probe in _probes)
+            foreach (Probe probe in _probes)
             {
                 if (probe.IsActive)
                 {
@@ -399,9 +399,9 @@ namespace vmPing.Views
             }
 
             // Load favorites.
-            foreach (var fav in Favorite.GetTitles())
+            foreach (string fav in Favorite.GetTitles())
             {
-                var menuItem = new MenuItem
+                MenuItem menuItem = new MenuItem
                 {
                     Header = fav
                 };
@@ -418,7 +418,7 @@ namespace vmPing.Views
         {
             RemoveAllProbes();
 
-            var favorite = Favorite.Load(favoriteTitle);
+            Favorite favorite = Favorite.Load(favoriteTitle);
             if (favorite.Hostnames.Count < 1)
             {
                 AddProbe();
@@ -442,7 +442,7 @@ namespace vmPing.Views
         private void LoadAliases()
         {
             _aliases = Alias.GetAll();
-            var aliasList = _aliases.ToList();
+            List<KeyValuePair<string, string>> aliasList = _aliases.ToList();
             aliasList.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
 
             // Clear existing aliases menu.
@@ -452,12 +452,12 @@ namespace vmPing.Views
             }
 
             // Load aliases.
-            foreach (var alias in aliasList)
+            foreach (KeyValuePair<string, string> alias in aliasList)
             {
                 AliasesMenu.Items.Add(BuildAliasMenuItem(alias));
             }
 
-            foreach (var probe in _probes)
+            foreach (Probe probe in _probes)
             {
                 probe.Alias = GetAlias(probe.Hostname) ?? string.Empty;
             }
@@ -474,7 +474,7 @@ namespace vmPing.Views
 
         private MenuItem BuildAliasMenuItem(KeyValuePair<string, string> alias)
         {
-            var menuItem = new MenuItem
+            MenuItem menuItem = new MenuItem
             {
                 Header = alias.Value,
                 Tag = alias.Key
@@ -482,9 +482,9 @@ namespace vmPing.Views
 
             menuItem.Click += (s, r) =>
             {
-                var selectedAlias = s as MenuItem;
+                MenuItem selectedAlias = s as MenuItem;
 
-                var didFindEmptyHost = false;
+                bool didFindEmptyHost = false;
                 for (int i = 0; i < _probes.Count; ++i)
                 {
                     if (string.IsNullOrWhiteSpace(_probes[i].Hostname))
@@ -513,7 +513,7 @@ namespace vmPing.Views
             // If window title ends with " - vmPing", then user currently has a
             // favorite loaded. Pass the title of that favorite to the new window.
             const string TitleSuffix = " - vmPing";
-            var newFavoriteWindow = new NewFavoriteWindow(
+            NewFavoriteWindow newFavoriteWindow = new NewFavoriteWindow(
                 hostList: _probes.Select(x => x.Hostname).ToList(),
                 columnCount: (int)ColumnCount.Value,
                 title: Title.EndsWith(TitleSuffix) ? Title.Remove(Title.Length - TitleSuffix.Length) : string.Empty);
@@ -528,7 +528,7 @@ namespace vmPing.Views
         private void ManageFavorites_Click(object sender, RoutedEventArgs e)
         {
             // Open the favorites window.
-            var manageFavoritesWindow = new ManageFavoritesWindow
+            ManageFavoritesWindow manageFavoritesWindow = new ManageFavoritesWindow
             {
                 Owner = this
             };
@@ -539,7 +539,7 @@ namespace vmPing.Views
         private void ManageAliases_Click(object sender, RoutedEventArgs e)
         {
             // Open the aliases window.
-            var manageAliasesWindow = new ManageAliasesWindow
+            ManageAliasesWindow manageAliasesWindow = new ManageAliasesWindow
             {
                 Owner = this
             };
@@ -573,7 +573,7 @@ namespace vmPing.Views
 
         private void IsolatedView_Click(object sender, RoutedEventArgs e)
         {
-            var probe = (sender as Button).DataContext as Probe;
+            Probe probe = (sender as Button).DataContext as Probe;
             if (probe.IsolatedWindow == null || probe.IsolatedWindow.IsLoaded == false)
             {
                 new IsolatedPingWindow(probe).Show();
@@ -586,7 +586,7 @@ namespace vmPing.Views
 
         private void EditAlias_Click(object sender, RoutedEventArgs e)
         {
-            var probe = (sender as Button).DataContext as Probe;
+            Probe probe = (sender as Button).DataContext as Probe;
 
             if (string.IsNullOrEmpty(probe.Hostname))
             {
@@ -595,7 +595,7 @@ namespace vmPing.Views
 
             probe.Alias = GetAlias(probe.Hostname) ?? string.Empty;
 
-            var wnd = new EditAliasWindow(probe)
+            EditAliasWindow wnd = new EditAliasWindow(probe)
             {
                 Owner = this
             };
@@ -611,7 +611,7 @@ namespace vmPing.Views
         {
             if (Probe.StatusHistoryWindow == null || Probe.StatusHistoryWindow.IsLoaded == false)
             {
-                var wnd = new StatusHistoryWindow(Probe.StatusChangeLog);
+                StatusHistoryWindow wnd = new StatusHistoryWindow(Probe.StatusChangeLog);
                 Probe.StatusHistoryWindow = wnd;
                 wnd.Show();
             }
@@ -637,7 +637,7 @@ namespace vmPing.Views
         private void Hostname_TextChanged(object sender, TextChangedEventArgs e)
         {
             // Check if there is an alias for the hostname as you type.
-            var probe = (sender as TextBox).DataContext as Probe;
+            Probe probe = (sender as TextBox).DataContext as Probe;
             if (probe.Hostname != null)
             {
                 probe.Alias = GetAlias(probe.Hostname);
@@ -649,8 +649,8 @@ namespace vmPing.Views
             // Set initial focus first text box.
             if (_probes.Count > 0)
             {
-                var cp = ProbeItemsControl.ItemContainerGenerator.ContainerFromIndex(0) as ContentPresenter;
-                var tb = (TextBox)cp.ContentTemplate.FindName("Hostname", cp);
+                ContentPresenter cp = ProbeItemsControl.ItemContainerGenerator.ContainerFromIndex(0) as ContentPresenter;
+                TextBox tb = (TextBox)cp.ContentTemplate.FindName("Hostname", cp);
                 tb?.Focus();
             }
         }
@@ -659,7 +659,7 @@ namespace vmPing.Views
         {
             // This event is tied to the background image that appears in each probe window.
             // After a probe is started, this event removes the image from the ItemsControl.
-            var image = (sender as Image);
+            Image image = (sender as Image);
             if (image.Visibility == Visibility.Collapsed)
             {
                 image.Visibility = Visibility.Collapsed;
@@ -671,7 +671,7 @@ namespace vmPing.Views
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                var data = new DataObject();
+                DataObject data = new DataObject();
                 data.SetData("Source", (sender as Label).DataContext as Probe);
                 DragDrop.DoDragDrop(sender as DependencyObject, data, DragDropEffects.Move);
                 e.Handled = true;
@@ -686,7 +686,7 @@ namespace vmPing.Views
 
         private void Probe_Drop(object sender, DragEventArgs e)
         {
-            var source = e.Data.GetData("Source") as Probe;
+            Probe source = e.Data.GetData("Source") as Probe;
             if (source != null)
             {
                 int newIndex;

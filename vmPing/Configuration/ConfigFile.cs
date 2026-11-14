@@ -39,11 +39,11 @@ namespace vmPing.Configuration
 
             // No configuration found.
             // Prompt the user to create a new configuration file.
-            var newConfigWindow = new NewConfigurationWindow();
+            NewConfigurationWindow newConfigWindow = new NewConfigurationWindow();
 
             // Find the best owner for the new window.
             // Checks: Owned windows of MainWindow, plus owned windows of any child windows.
-            var mainOwnedWindows = Application.Current.MainWindow.OwnedWindows;
+            WindowCollection mainOwnedWindows = Application.Current.MainWindow.OwnedWindows;
             if (mainOwnedWindows.Count > 0)
             {
                 newConfigWindow.Owner = mainOwnedWindows[0].OwnedWindows.Count > 0
@@ -80,7 +80,7 @@ namespace vmPing.Configuration
             // Create a minimal XML configuration file.
             try
             {
-                var xd = new XDocument(
+                XDocument xd = new XDocument(
                     new XElement("vmping",
                         new XElement("aliases"),
                         new XElement("favorites"),
@@ -123,7 +123,7 @@ namespace vmPing.Configuration
             try
             {
                 // Open XML configuration file and get root <vmping> node.
-                var xd = XDocument.Load(FilePath);
+                XDocument xd = XDocument.Load(FilePath);
                 XElement root = xd.Element("vmping")
                     ?? throw new XmlException("Invalid configuration file.");
 
@@ -251,7 +251,7 @@ namespace vmPing.Configuration
 
             try
             {
-                var xd = new XmlDocument();
+                XmlDocument xd = new XmlDocument();
                 xd.Load(FilePath);
 
                 LoadAppOptions(xd.SelectNodes("/vmping/configuration/option"));
@@ -272,7 +272,7 @@ namespace vmPing.Configuration
                 return;
             }
 
-            var options = nodes.Cast<XmlNode>()
+            Dictionary<string, string> options = nodes.Cast<XmlNode>()
                 .Where(n => n.Attributes?["name"] != null)
                 .ToDictionary(n => n.Attributes["name"].Value, n => n.InnerText);
 
@@ -301,7 +301,7 @@ namespace vmPing.Configuration
 
         private static void ApplyColor(string key, Action<string> setter, IDictionary<string, string> options)
         {
-            if (options.TryGetValue(key, out var value) && Util.IsValidHtmlColor(value))
+            if (options.TryGetValue(key, out string value) && Util.IsValidHtmlColor(value))
                 setter(value);
         }
 
@@ -312,7 +312,7 @@ namespace vmPing.Configuration
                 return;
             }
 
-            var options = nodes.Cast<XmlNode>()
+            Dictionary<string, string> options = nodes.Cast<XmlNode>()
                 .Where(n => n.Attributes?["name"] != null)
                 .ToDictionary(n => n.Attributes["name"].Value, n => n.InnerText);
 
@@ -370,25 +370,25 @@ namespace vmPing.Configuration
 
         private static void ApplyString(string key, Action<string> setter, IDictionary<string, string> options)
         {
-            if (options.TryGetValue(key, out var value))
+            if (options.TryGetValue(key, out string value))
                 setter(value);
         }
 
         private static void ApplyBool(string key, Action<bool> setter, IDictionary<string, string> options)
         {
-            if (options.TryGetValue(key, out var value) && bool.TryParse(value, out bool result))
+            if (options.TryGetValue(key, out string value) && bool.TryParse(value, out bool result))
                 setter(result);
         }
 
         private static void ApplyInt(string key, int min, int max, Action<int> setter, IDictionary<string, string> options)
         {
-            if (options.TryGetValue(key, out var value) && int.TryParse(value, out int result) && result >= min && result <= max)
+            if (options.TryGetValue(key, out string value) && int.TryParse(value, out int result) && result >= min && result <= max)
                 setter(result);
         }
 
         private static void ApplyEnum<T>(string key, Action<T> setter, IDictionary<string, string> options) where T : struct
         {
-            if (options.TryGetValue(key, out var value) && Enum.TryParse(value, out T result) && Enum.IsDefined(typeof(T), result))
+            if (options.TryGetValue(key, out string value) && Enum.TryParse(value, out T result) && Enum.IsDefined(typeof(T), result))
                 setter(result);
         }
     }

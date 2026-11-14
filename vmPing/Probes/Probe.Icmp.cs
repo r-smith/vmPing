@@ -25,7 +25,7 @@ namespace vmPing.Probes
                 return;
             }
 
-            using (var ping = new Ping())
+            using (Ping ping = new Ping())
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
@@ -33,7 +33,7 @@ namespace vmPing.Probes
                     {
                         // Send ping.
                         Statistics.Sent++;
-                        var reply = await ping.SendPingAsync(
+                        PingReply reply = await ping.SendPingAsync(
                             hostNameOrAddress: Hostname,
                             timeout: ApplicationOptions.PingTimeout,
                             buffer: ApplicationOptions.Buffer,
@@ -217,7 +217,7 @@ namespace vmPing.Probes
             }
 
             // Build output string based on the ping reply details.
-            var sb = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  ");
+            StringBuilder sb = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  ");
 
             if (pingReply != null)
             {
@@ -254,7 +254,7 @@ namespace vmPing.Probes
                     : ex.Message);
             }
 
-            var output = sb.ToString();
+            string output = sb.ToString();
 
             // Add response to the output window..
             Application.Current.Dispatcher.BeginInvoke(

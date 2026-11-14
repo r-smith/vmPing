@@ -92,7 +92,7 @@ namespace vmPing.Views
 
         private void ShowError(string message)
         {
-            var dialog = DialogWindow.ErrorWindow(message);
+            DialogWindow dialog = DialogWindow.ErrorWindow(message);
             dialog.Owner = this;
             dialog.ShowDialog();
         }

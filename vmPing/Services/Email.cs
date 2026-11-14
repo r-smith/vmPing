@@ -14,8 +14,8 @@ namespace vmPing.Services
             {
                 using (MailMessage message = new MailMessage())
                 {
-                    var affectedShortName = string.IsNullOrWhiteSpace(alias) ? hostname : alias;
-                    var affectedLongName = string.IsNullOrWhiteSpace(alias) ? hostname : $"{alias} ({hostname})";
+                    string affectedShortName = string.IsNullOrWhiteSpace(alias) ? hostname : alias;
+                    string affectedLongName = string.IsNullOrWhiteSpace(alias) ? hostname : $"{alias} ({hostname})";
 
                     message.Subject = $"Notice: {affectedShortName} {Strings.Email_Verb} {status}";
                     message.Body = $"{affectedLongName} {Strings.Email_Verb} {status}.{Environment.NewLine}" +
@@ -27,7 +27,7 @@ namespace vmPing.Services
                     {
                         smtp.Host = ApplicationOptions.EmailServer;
                         smtp.EnableSsl = ApplicationOptions.IsEmailSslEnabled;
-                        if (int.TryParse(ApplicationOptions.EmailPort, out var port) && port > 0)
+                        if (int.TryParse(ApplicationOptions.EmailPort, out int port) && port > 0)
                         {
                             smtp.Port = port;
                         }
@@ -69,7 +69,7 @@ namespace vmPing.Services
                 {
                     smtp.Host = server;
                     smtp.EnableSsl = isSslEnabled;
-                    if (int.TryParse(port, out var portNumber) && portNumber > 0)
+                    if (int.TryParse(port, out int portNumber) && portNumber > 0)
                     {
                         smtp.Port = portNumber;
                     }

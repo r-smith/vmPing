@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using vmPing.Configuration;
 using vmPing.Interop;
 using vmPing.Services;
@@ -48,7 +49,7 @@ namespace vmPing.Views
 
             // Display dialog and capture result.
             errorWindow.Owner = this;
-            var result = errorWindow.ShowDialog();
+            bool? result = errorWindow.ShowDialog();
 
             // Set focus to specified control.
             control?.Focus();
@@ -571,7 +572,7 @@ namespace vmPing.Views
 
         private bool ValidateLayoutOptions()
         {
-            foreach (var control in ColorsDockPanel.GetChildren())
+            foreach (Visual control in ColorsDockPanel.GetChildren())
             {
                 if (control is TextBox box && !Util.IsValidHtmlColor(box.Text))
                 {
@@ -610,7 +611,7 @@ namespace vmPing.Views
 
         private void NumericTextbox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            var regex = new Regex("[^0-9]+");
+            Regex regex = new Regex("[^0-9]+");
             if (regex.IsMatch(e.Text))
             {
                 e.Handled = true;
@@ -619,7 +620,7 @@ namespace vmPing.Views
 
         private void HtmlColor_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            var regex = new Regex("[#a-fA-F0-9]");
+            Regex regex = new Regex("[#a-fA-F0-9]");
             if (!regex.IsMatch(e.Text))
             {
                 e.Handled = true;
@@ -654,14 +655,14 @@ namespace vmPing.Views
         {
             TestEmailButton.IsEnabled = false;
             TestEmailButton.Content = "Sending...";
-            var serverAddress = SmtpServer.Text;
-            var serverPort = SmtpPort.Text;
-            var isSslEnabled = IsSmtpSslEnabled.IsChecked == true;
-            var isAuthRequired = IsSmtpAuthenticationRequired.IsChecked == true;
-            var username = SmtpUsername.Text;
-            var password = SmtpPassword.SecurePassword;
-            var mailFrom = EmailFromAddress.Text;
-            var mailRecipient = EmailRecipientAddress.Text;
+            string serverAddress = SmtpServer.Text;
+            string serverPort = SmtpPort.Text;
+            bool isSslEnabled = IsSmtpSslEnabled.IsChecked == true;
+            bool isAuthRequired = IsSmtpAuthenticationRequired.IsChecked == true;
+            string username = SmtpUsername.Text;
+            System.Security.SecureString password = SmtpPassword.SecurePassword;
+            string mailFrom = EmailFromAddress.Text;
+            string mailRecipient = EmailRecipientAddress.Text;
 
             await Task.Run(() =>
             {
@@ -681,7 +682,7 @@ namespace vmPing.Views
                         {
                             if (IsLoaded)
                             {
-                                var dialogWindow = new DialogWindow(
+                                DialogWindow dialogWindow = new DialogWindow(
                                     DialogWindow.DialogIcon.Info,
                                     "Email Test",
                                     "A test email was sent.",
@@ -712,7 +713,7 @@ namespace vmPing.Views
 
         private void BrowseLogPath_Click(object sender, RoutedEventArgs e)
         {
-            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            using (System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog())
             {
                 dialog.Description = "Select a location for the log files.";
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
@@ -726,7 +727,7 @@ namespace vmPing.Views
 
         private void BrowseLogStatusChangesPath_Click(object sender, RoutedEventArgs e)
         {
-            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            using (System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog())
             {
                 dialog.Description = "Select a location for the log files.";
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
@@ -750,7 +751,7 @@ namespace vmPing.Views
 
         private void AudioFileBrowse(TextBox tb)
         {
-            using (var audiofileDialog = new System.Windows.Forms.OpenFileDialog())
+            using (System.Windows.Forms.OpenFileDialog audiofileDialog = new System.Windows.Forms.OpenFileDialog())
             {
                 audiofileDialog.Title = "Select an audio file";
                 audiofileDialog.RestoreDirectory = true;
@@ -779,7 +780,7 @@ namespace vmPing.Views
         {
             try
             {
-                using (var player = new SoundPlayer(path))
+                using (SoundPlayer player = new SoundPlayer(path))
                 {
                     player.Play();
                 }
@@ -814,7 +815,7 @@ namespace vmPing.Views
 
         private void UpdateByteCount()
         {
-            var regex = new Regex("^\\d+$");
+            Regex regex = new Regex("^\\d+$");
             if (PacketSizeOption.IsChecked == true)
             {
                 if (PacketSize != null && regex.IsMatch(PacketSize.Text))

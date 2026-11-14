@@ -165,19 +165,19 @@ namespace vmPing.Probes
                 return;
             }
 
-            var roundTripTimes = new List<int>();
-            var rttRegex = new Regex($@"  \[(?<rtt><?\d+) ?{Strings.Milliseconds_Symbol}]$");
+            List<int> roundTripTimes = new List<int>();
+            Regex rttRegex = new Regex($@"  \[(?<rtt><?\d+) ?{Strings.Milliseconds_Symbol}]$");
 
             foreach (string item in History)
             {
-                var match = rttRegex.Match(item);
+                Match match = rttRegex.Match(item);
                 if (!match.Success)
                 {
                     continue;
                 }
 
                 // RTT of `<1` is treated as 0 when computing stats.
-                var value = match.Groups["rtt"].Value;
+                string value = match.Groups["rtt"].Value;
                 roundTripTimes.Add(value == "<1" ? 0 : int.Parse(value));
             }
 

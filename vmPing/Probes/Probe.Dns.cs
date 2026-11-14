@@ -20,7 +20,7 @@ namespace vmPing.Probes
                 {
                     case UriHostNameType.IPv4:
                     case UriHostNameType.IPv6:
-                        var host = await Dns.GetHostEntryAsync(Hostname);
+                        IPHostEntry host = await Dns.GetHostEntryAsync(Hostname);
                         cancellationToken.ThrowIfCancellationRequested();
                         if (host != null)
                         {
@@ -29,9 +29,9 @@ namespace vmPing.Probes
 
                         break;
                     case UriHostNameType.Dns:
-                        var ipAddresses = await Dns.GetHostAddressesAsync(Hostname);
+                        IPAddress[] ipAddresses = await Dns.GetHostAddressesAsync(Hostname);
                         cancellationToken.ThrowIfCancellationRequested();
-                        foreach (var ip in ipAddresses)
+                        foreach (IPAddress ip in ipAddresses)
                         {
                             AddHistory($"    {ip}");
                         }

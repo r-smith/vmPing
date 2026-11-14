@@ -41,7 +41,7 @@ namespace vmPing.Views
                 return;
             }
 
-            var dialogWindow = new DialogWindow(
+            DialogWindow dialogWindow = new DialogWindow(
                 DialogWindow.DialogIcon.Warning,
                 Strings.DialogTitle_ConfirmDelete,
                 $"{Strings.ManageFavorites_Warn_DeleteA} {Favorites.SelectedItem} {Strings.ManageFavorites_Warn_DeleteB}",
@@ -84,7 +84,7 @@ namespace vmPing.Views
             }
 
             string originalTitle = Favorites.SelectedItem.ToString();
-            var newFavoriteWindow = new NewFavoriteWindow(
+            NewFavoriteWindow newFavoriteWindow = new NewFavoriteWindow(
                 hostList: _selectedFavorite.Hostnames,
                 columnCount: _selectedFavorite.ColumnCount,
                 isEditExisting: true,
@@ -106,7 +106,7 @@ namespace vmPing.Views
 
         private void New_Click(object sender, RoutedEventArgs e)
         {
-            var newFavoriteWindow = new NewFavoriteWindow(new List<string>(), 2)
+            NewFavoriteWindow newFavoriteWindow = new NewFavoriteWindow(new List<string>(), 2)
             {
                 Owner = this
             };

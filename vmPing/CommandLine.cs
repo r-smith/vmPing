@@ -18,9 +18,9 @@ namespace vmPing
 
         public static List<string> ParseArguments()
         {
-            var args = Environment.GetCommandLineArgs();
-            var errors = new StringBuilder();
-            var hostnames = new List<string>();
+            string[] args = Environment.GetCommandLineArgs();
+            StringBuilder errors = new StringBuilder();
+            List<string> hostnames = new List<string>();
 
             for (int i = 1; i < args.Length; i++)
             {
@@ -116,7 +116,7 @@ namespace vmPing
         private static void ShowErrorDialog(string message)
         {
             Application.Current.MainWindow.Hide();
-            var dialog = DialogWindow.ErrorWindow(message);
+            DialogWindow dialog = DialogWindow.ErrorWindow(message);
             dialog.Topmost = true;
             dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             dialog.ShowInTaskbar = true;

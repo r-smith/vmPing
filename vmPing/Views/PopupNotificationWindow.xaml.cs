@@ -130,7 +130,7 @@ namespace vmPing.Views
         {
             if (Probe.StatusHistoryWindow == null || Probe.StatusHistoryWindow.IsLoaded == false)
             {
-                var wnd = new StatusHistoryWindow(Probe.StatusChangeLog);
+                StatusHistoryWindow wnd = new StatusHistoryWindow(Probe.StatusChangeLog);
                 Probe.StatusHistoryWindow = wnd;
                 wnd.Show();
             }

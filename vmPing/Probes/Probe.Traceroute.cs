@@ -30,14 +30,14 @@ namespace vmPing.Probes
             }
             AddHistory("");
 
-            using (var ping = new Ping())
+            using (Ping ping = new Ping())
             {
                 const int MaxHops = 30;
                 const int Timeout = 2000;
                 const string HopFormat = "{0,2}   {1,-15}   [{2} ms]";
                 const string HopErrorFormat = "{0,2}   {1}";
-                var ttl = 1;
-                var timer = new Stopwatch();
+                int ttl = 1;
+                Stopwatch timer = new Stopwatch();
 
                 while (!cancellationToken.IsCancellationRequested && ttl <= MaxHops)
                 {
@@ -51,7 +51,7 @@ namespace vmPing.Probes
                             options: new PingOptions() { Ttl = ttl });
                         timer.Stop();
 
-                        var address = string.Empty;
+                        string address = string.Empty;
                         if (reply.Address != null)
                         {
                             address = reply.Address.ToString();

@@ -48,7 +48,7 @@ namespace vmPing
 
                     if (recurse)
                     {
-                        foreach (var grandChild in child.GetChildren(true))
+                        foreach (Visual grandChild in child.GetChildren(true))
                         {
                             yield return grandChild;
                         }

@@ -14,9 +14,9 @@ namespace vmPing.Probes
     {
         private async void PerformTcpProbe(CancellationToken cancellationToken)
         {
-            var host = Hostname.Substring(0, Hostname.LastIndexOf(':'));
+            string host = Hostname.Substring(0, Hostname.LastIndexOf(':'));
             host = host.Trim(new[] { '[', ']' });
-            var port = Hostname.Substring(Hostname.LastIndexOf(':') + 1);
+            string port = Hostname.Substring(Hostname.LastIndexOf(':') + 1);
             int portnumber;
             bool isPortOpen = false;
 
@@ -47,7 +47,7 @@ namespace vmPing.Probes
             }
 
             // Determine whether target is IPv4 or IPv6. Necessary for TcpClient class.
-            var ipVersion = AddressFamily.InterNetwork;
+            AddressFamily ipVersion = AddressFamily.InterNetwork;
             try
             {
                 switch (Uri.CheckHostName(host))
@@ -59,7 +59,7 @@ namespace vmPing.Probes
                         ipVersion = AddressFamily.InterNetworkV6;
                         break;
                     case UriHostNameType.Dns:
-                        var ipAddresses = await Dns.GetHostAddressesAsync(host);
+                        IPAddress[] ipAddresses = await Dns.GetHostAddressesAsync(host);
                         cancellationToken.ThrowIfCancellationRequested();
                         host = ipAddresses[0].ToString();
                         ipVersion = ipAddresses[0].AddressFamily;
@@ -77,19 +77,19 @@ namespace vmPing.Probes
             }
 
             int errorCode = 0;
-            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+            System.Diagnostics.Stopwatch stopwatch = System.Diagnostics.Stopwatch.StartNew();
             while (!cancellationToken.IsCancellationRequested)
             {
                 stopwatch.Restart();
 
-                using (var client = new TcpClient(ipVersion))
+                using (TcpClient client = new TcpClient(ipVersion))
                 {
                     Statistics.Sent++;
 
                     try
                     {
-                        var result = client.BeginConnect(host, portnumber, null, null);
-                        var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(3));
+                        IAsyncResult result = client.BeginConnect(host, portnumber, null, null);
+                        bool success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(3));
 
                         if (!success)
                         {
@@ -250,7 +250,7 @@ namespace vmPing.Probes
         private void DisplayTcpReply(bool isPortOpen, int portnumber, int errorCode, long elapsedTime)
         {
             // Prefix the ping reply output with a timestamp.
-            var sb = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  {Strings.Probe_Port} {portnumber}: ");
+            StringBuilder sb = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  {Strings.Probe_Port} {portnumber}: ");
             if (isPortOpen)
                 sb.Append($"{Strings.Probe_PortOpen}  [{elapsedTime}{Strings.Milliseconds_Symbol}]");
             else

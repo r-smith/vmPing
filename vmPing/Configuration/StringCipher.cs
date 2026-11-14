@@ -17,21 +17,21 @@ namespace vmPing.Configuration
 
             // WARNING: The key is hardcoded and published to GitHub. It's not truly secure.
             // The encryption process still provides local obfuscation.
-            using (var key = new Rfc2898DeriveBytes("https://github.com/R-Smith/vmPing" + Environment.MachineName, Encoding.ASCII.GetBytes(Environment.UserName + "@@vmping-salt@@")))
-            using (var aes = Aes.Create())
+            using (Rfc2898DeriveBytes key = new Rfc2898DeriveBytes("https://github.com/R-Smith/vmPing" + Environment.MachineName, Encoding.ASCII.GetBytes(Environment.UserName + "@@vmping-salt@@")))
+            using (Aes aes = Aes.Create())
             {
                 aes.Key = key.GetBytes(aes.KeySize / 8);
                 aes.GenerateIV();
                 aes.Padding = PaddingMode.PKCS7;
                 aes.Mode = CipherMode.CBC;
 
-                using (var memoryStream = new MemoryStream())
+                using (MemoryStream memoryStream = new MemoryStream())
                 {
                     memoryStream.Write(BitConverter.GetBytes(aes.IV.Length), 0, sizeof(int));
                     memoryStream.Write(aes.IV, 0, aes.IV.Length);
 
-                    using (var cryptoStream = new CryptoStream(memoryStream, aes.CreateEncryptor(), CryptoStreamMode.Write))
-                    using (var writer = new StreamWriter(cryptoStream, Encoding.UTF8))
+                    using (CryptoStream cryptoStream = new CryptoStream(memoryStream, aes.CreateEncryptor(), CryptoStreamMode.Write))
+                    using (StreamWriter writer = new StreamWriter(cryptoStream, Encoding.UTF8))
                     {
                         writer.Write(plainText);
                     }
@@ -50,21 +50,21 @@ namespace vmPing.Configuration
 
             try
             {
-                var bytes = Convert.FromBase64String(cipherText);
+                byte[] bytes = Convert.FromBase64String(cipherText);
 
                 // WARNING: The key is hardcoded and published to GitHub. It's not truly secure.
                 // The encryption process still provides local obfuscation.
-                using (var key = new Rfc2898DeriveBytes("https://github.com/R-Smith/vmPing" + Environment.MachineName, Encoding.ASCII.GetBytes(Environment.UserName + "@@vmping-salt@@")))
-                using (var memoryStream = new MemoryStream(bytes))
-                using (var aes = Aes.Create())
+                using (Rfc2898DeriveBytes key = new Rfc2898DeriveBytes("https://github.com/R-Smith/vmPing" + Environment.MachineName, Encoding.ASCII.GetBytes(Environment.UserName + "@@vmping-salt@@")))
+                using (MemoryStream memoryStream = new MemoryStream(bytes))
+                using (Aes aes = Aes.Create())
                 {
                     aes.Key = key.GetBytes(aes.KeySize / 8);
                     aes.IV = ReadByteArray(memoryStream);
                     aes.Padding = PaddingMode.PKCS7;
                     aes.Mode = CipherMode.CBC;
 
-                    using (var cryptoStream = new CryptoStream(memoryStream, aes.CreateDecryptor(), CryptoStreamMode.Read))
-                    using (var reader = new StreamReader(cryptoStream, Encoding.UTF8))
+                    using (CryptoStream cryptoStream = new CryptoStream(memoryStream, aes.CreateDecryptor(), CryptoStreamMode.Read))
+                    using (StreamReader reader = new StreamReader(cryptoStream, Encoding.UTF8))
                     {
                         return reader.ReadToEnd();
                     }

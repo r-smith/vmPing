@@ -118,7 +118,7 @@ namespace vmPing.Converters
         {
             try
             {
-                var brush = s_brushConverter.ConvertFromString(color) as Brush;
+                Brush brush = s_brushConverter.ConvertFromString(color) as Brush;
                 return brush ?? Brushes.Transparent;
             }
             catch
@@ -264,7 +264,7 @@ namespace vmPing.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var str = value as string;
+            string str = value as string;
             if (string.IsNullOrWhiteSpace(str))
             {
                 return Binding.DoNothing;
@@ -272,7 +272,7 @@ namespace vmPing.Converters
 
             try
             {
-                var brush = s_brushConverter.ConvertFromString(str) as Brush;
+                Brush brush = s_brushConverter.ConvertFromString(str) as Brush;
                 return brush ?? Binding.DoNothing;
             }
             catch

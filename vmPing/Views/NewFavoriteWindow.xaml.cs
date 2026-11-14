@@ -49,7 +49,7 @@ namespace vmPing.Views
             // Validate column count.
             if (int.TryParse(MyColumnCount.Text, out _columnCount) == false || _columnCount < 1 || _columnCount > 10)
             {
-                var errorWindow = DialogWindow.ErrorWindow("Please enter a valid number of columns (between 1 and 10).");
+                DialogWindow errorWindow = DialogWindow.ErrorWindow("Please enter a valid number of columns (between 1 and 10).");
                 errorWindow.Owner = this;
                 errorWindow.ShowDialog();
                 MyColumnCount.Focus();
@@ -60,7 +60,7 @@ namespace vmPing.Views
             // Validate favorite name.
             if (Favorite.IsTitleInvalid(MyTitle.Text))
             {
-                var errorWindow = DialogWindow.ErrorWindow(Strings.NewFavorite_Error_InvalidName);
+                DialogWindow errorWindow = DialogWindow.ErrorWindow(Strings.NewFavorite_Error_InvalidName);
                 errorWindow.Owner = this;
                 errorWindow.ShowDialog();
                 MyTitle.Focus();
@@ -72,7 +72,7 @@ namespace vmPing.Views
             _hostList = MyHosts.Text.Trim().Split(new char[] { ',', '\n' }).Select(host => host.Trim()).ToList();
             if (_hostList.All(x => string.IsNullOrWhiteSpace(x)))
             {
-                var errorWindow = DialogWindow.ErrorWindow("You have not entered any hosts. Provide at least one host for this favorite set.");
+                DialogWindow errorWindow = DialogWindow.ErrorWindow("You have not entered any hosts. Provide at least one host for this favorite set.");
                 errorWindow.Owner = this;
                 errorWindow.ShowDialog();
                 MyHosts.Focus();
@@ -86,7 +86,7 @@ namespace vmPing.Views
             if ( (!_isExisting && Favorite.TitleExists(MyTitle.Text))
                 || (_isExisting && !string.Equals(_originalTitle, MyTitle.Text) && Favorite.TitleExists(MyTitle.Text)) )
             {
-                var warningWindow = DialogWindow.WarningWindow(
+                DialogWindow warningWindow = DialogWindow.WarningWindow(
                     message: $"{MyTitle.Text} {Strings.NewFavorite_Warn_AlreadyExists}",
                     confirmButtonText: Strings.DialogButton_Overwrite);
                 warningWindow.Owner = this;
@@ -117,7 +117,7 @@ namespace vmPing.Views
 
         private void MyColumnCount_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            var regex = new Regex("[^0-9.-]+");
+            Regex regex = new Regex("[^0-9.-]+");
             if (regex.IsMatch(e.Text))
             {
                 e.Handled = true;

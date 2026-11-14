@@ -475,7 +475,8 @@ namespace vmPing.Views
         {
             var menuItem = new MenuItem
             {
-                Header = alias.Value
+                Header = alias.Value,
+                Tag = alias.Key
             };
 
             if (isContextMenu)
@@ -484,7 +485,7 @@ namespace vmPing.Views
                 {
                     var selectedMenuItem = s as MenuItem;
                     var selectedAlias = (Probe)selectedMenuItem.DataContext;
-                    selectedAlias.Hostname = _Aliases.FirstOrDefault(x => x.Value == selectedMenuItem.Header.ToString()).Key;
+                    selectedAlias.Hostname = (string)selectedMenuItem.Tag;
                     selectedAlias.StartStop();
                 };
             }
@@ -499,7 +500,7 @@ namespace vmPing.Views
                     {
                         if (string.IsNullOrWhiteSpace(_ProbeCollection[i].Hostname))
                         {
-                            _ProbeCollection[i].Hostname = _Aliases.FirstOrDefault(x => x.Value == selectedAlias.Header.ToString()).Key;
+                            _ProbeCollection[i].Hostname = (string)selectedAlias.Tag;
                             _ProbeCollection[i].StartStop();
                             didFindEmptyHost = true;
                             break;
@@ -509,7 +510,7 @@ namespace vmPing.Views
                     if (!didFindEmptyHost)
                     {
                         AddProbe();
-                        _ProbeCollection[_ProbeCollection.Count - 1].Hostname = _Aliases.FirstOrDefault(x => x.Value == selectedAlias.Header.ToString()).Key;
+                        _ProbeCollection[_ProbeCollection.Count - 1].Hostname = (string)selectedAlias.Tag;
                         _ProbeCollection[_ProbeCollection.Count - 1].StartStop();
                     }
                 };

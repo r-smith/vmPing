@@ -71,13 +71,17 @@ namespace vmPing.Probes
                 }
             }));
 
+            // Set IsActive before the background task starts.
+            InitializeProbe();
+
+            var token = CancelSource.Token;
             if (IsTcpPing(Hostname))
             {
-                Task.Run(() => PerformTcpProbe(CancelSource.Token), CancelSource.Token);
+                Task.Run(() => PerformTcpProbe(token), token);
             }
             else
             {
-                Task.Run(() => PerformIcmpProbe(CancelSource.Token), CancelSource.Token);
+                Task.Run(() => PerformIcmpProbe(token), token);
             }
         }
 

@@ -14,8 +14,6 @@ namespace vmPing.Probes
     {
         private async void PerformTcpProbe(CancellationToken cancellationToken)
         {
-            InitializeProbe();
-
             var host = Hostname.Substring(0, Hostname.LastIndexOf(':'));
             host = host.Trim(new[] { '[', ']' });
             var port = Hostname.Substring(Hostname.LastIndexOf(':') + 1);

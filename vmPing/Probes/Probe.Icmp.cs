@@ -13,8 +13,6 @@ namespace vmPing.Probes
     {
         private async void PerformIcmpProbe(CancellationToken cancellationToken)
         {
-            InitializeProbe();
-
             await Application.Current.Dispatcher.BeginInvoke(
                 new Action(() => AddHistory($"*** Pinging {Hostname}:")));
 

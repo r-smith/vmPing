@@ -204,7 +204,9 @@ namespace vmPing.Views
             }
             catch (Exception ex)
             {
-                DialogWindow.ErrorWindow($"Failed to write to '{filePath}'. {ex.Message}");
+                var errorWindow = DialogWindow.ErrorWindow($"Failed to write to '{filePath}'. {ex.Message}");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
             }
             Cursor = Cursors.Arrow;
         }

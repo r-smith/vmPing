@@ -58,39 +58,39 @@ namespace vmPing.Configuration
         public static bool IsExitToTrayEnabled { get; set; } = false;
 
         // Fonts.
-        public static int FontSize_Probe { get; set; } = 11;
-        public static int FontSize_Scanner { get; set; } = 16;
+        public static int ProbeFontSize { get; set; } = 11;
+        public static int ScannerFontSize { get; set; } = 16;
 
         // Probe background colors.
-        public static string BackgroundColor_Probe_Inactive { get; set; } = Constants.Color_Probe_Background_Inactive;
-        public static string BackgroundColor_Probe_Up { get; set; } = Constants.Color_Probe_Background_Up;
-        public static string BackgroundColor_Probe_Down { get; set; } = Constants.Color_Probe_Background_Down;
-        public static string BackgroundColor_Probe_Indeterminate { get; set; } = Constants.Color_Probe_Background_Indeterminate;
-        public static string BackgroundColor_Probe_Error { get; set; } = Constants.Color_Probe_Background_Error;
-        public static string BackgroundColor_Probe_Scanner { get; set; } = Constants.Color_Probe_Background_Scanner;
+        public static string ProbeBackgroundInactive { get; set; } = Constants.DefaultProbeBackgroundInactive;
+        public static string ProbeBackgroundUp { get; set; } = Constants.DefaultProbeBackgroundUp;
+        public static string ProbeBackgroundDown { get; set; } = Constants.DefaultProbeBackgroundDown;
+        public static string ProbeBackgroundIndeterminate { get; set; } = Constants.DefaultProbeBackgroundIndeterminate;
+        public static string ProbeBackgroundError { get; set; } = Constants.DefaultProbeBackgroundError;
+        public static string ProbeBackgroundScanner { get; set; } = Constants.DefaultProbeBackgroundScanner;
 
         // Probe foreground colors.
-        public static string ForegroundColor_Probe_Inactive { get; set; } = Constants.Color_Probe_Foreground_Inactive;
-        public static string ForegroundColor_Probe_Up { get; set; } = Constants.Color_Probe_Foreground_Up;
-        public static string ForegroundColor_Probe_Down { get; set; } = Constants.Color_Probe_Foreground_Down;
-        public static string ForegroundColor_Probe_Indeterminate { get; set; } = Constants.Color_Probe_Foreground_Indeterminate;
-        public static string ForegroundColor_Probe_Error { get; set; } = Constants.Color_Probe_Foreground_Error;
-        public static string ForegroundColor_Probe_Scanner { get; set; } = Constants.Color_Probe_Foreground_Scanner;
+        public static string ProbeForegroundInactive { get; set; } = Constants.DefaultProbeForegroundInactive;
+        public static string ProbeForegroundUp { get; set; } = Constants.DefaultProbeForegroundUp;
+        public static string ProbeForegroundDown { get; set; } = Constants.DefaultProbeForegroundDown;
+        public static string ProbeForegroundIndeterminate { get; set; } = Constants.DefaultProbeForegroundIndeterminate;
+        public static string ProbeForegroundError { get; set; } = Constants.DefaultProbeForegroundError;
+        public static string ProbeForegroundScanner { get; set; } = Constants.DefaultProbeForegroundScanner;
 
         // Probe statistics.
-        public static string ForegroundColor_Stats_Inactive { get; set; } = Constants.Color_Statistics_Foreground_Inactive;
-        public static string ForegroundColor_Stats_Up { get; set; } = Constants.Color_Statistics_Foreground_Up;
-        public static string ForegroundColor_Stats_Down { get; set; } = Constants.Color_Statistics_Foreground_Down;
-        public static string ForegroundColor_Stats_Indeterminate { get; set; } = Constants.Color_Statistics_Foreground_Indeterminate;
-        public static string ForegroundColor_Stats_Error { get; set; } = Constants.Color_Statistics_Foreground_Error;
+        public static string StatisticsForegroundInactive { get; set; } = Constants.DefaultStatisticsForegroundInactive;
+        public static string StatisticsForegroundUp { get; set; } = Constants.DefaultStatisticsForegroundUp;
+        public static string StatisticsForegroundDown { get; set; } = Constants.DefaultStatisticsForegroundDown;
+        public static string StatisticsForegroundIndeterminate { get; set; } = Constants.DefaultStatisticsForegroundIndeterminate;
+        public static string StatisticsForegroundError { get; set; } = Constants.DefaultStatisticsForegroundError;
 
         // Alias text.
-        public static string ForegroundColor_Alias_Inactive { get; set; } = Constants.Color_Alias_Foreground_Inactive;
-        public static string ForegroundColor_Alias_Up { get; set; } = Constants.Color_Alias_Foreground_Up;
-        public static string ForegroundColor_Alias_Down { get; set; } = Constants.Color_Alias_Foreground_Down;
-        public static string ForegroundColor_Alias_Indeterminate { get; set; } = Constants.Color_Alias_Foreground_Indeterminate;
-        public static string ForegroundColor_Alias_Error { get; set; } = Constants.Color_Alias_Foreground_Error;
-        public static string ForegroundColor_Alias_Scanner { get; set; } = Constants.Color_Alias_Foreground_Scanner;
+        public static string AliasForegroundInactive { get; set; } = Constants.DefaultAliasForegroundInactive;
+        public static string AliasForegroundUp { get; set; } = Constants.DefaultAliasForegroundUp;
+        public static string AliasForegroundDown { get; set; } = Constants.DefaultAliasForegroundDown;
+        public static string AliasForegroundIndeterminate { get; set; } = Constants.DefaultAliasForegroundIndeterminate;
+        public static string AliasForegroundError { get; set; } = Constants.DefaultAliasForegroundError;
+        public static string AliasForegroundScanner { get; set; } = Constants.DefaultAliasForegroundScanner;
 
         static ApplicationOptions()
         {

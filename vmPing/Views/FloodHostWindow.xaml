@@ -95,7 +95,7 @@
                     Background="#268bd2">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border Name="floodHostButton_border" BorderThickness="2" BorderBrush="Black"
+                        <Border Name="FloodButtonBorder" BorderThickness="2" BorderBrush="Black"
                                 Background="{TemplateBinding Background}"
                                 Padding="{TemplateBinding Padding}">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -106,10 +106,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="floodHostButton_border" Property="Background" Value="#167bc2" />
+                                <Setter TargetName="FloodButtonBorder" Property="Background" Value="#167bc2" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="floodHostButton_border" Property="Background" Value="#066ba2" />
+                                <Setter TargetName="FloodButtonBorder" Property="Background" Value="#066ba2" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

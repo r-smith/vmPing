@@ -5,35 +5,35 @@ namespace vmPing.Configuration
     class Constants
     {
         // Default probe background colors.
-        public const string Color_Probe_Background_Inactive = "#eceafa";
-        public const string Color_Probe_Background_Up = "#859900";
-        public const string Color_Probe_Background_Down = "#dc322f";
-        public const string Color_Probe_Background_Indeterminate = "#dfdf00";
-        public const string Color_Probe_Background_Error = "#b58900";
-        public const string Color_Probe_Background_Scanner = "#505050";
+        public const string DefaultProbeBackgroundInactive = "#eceafa";
+        public const string DefaultProbeBackgroundUp = "#859900";
+        public const string DefaultProbeBackgroundDown = "#dc322f";
+        public const string DefaultProbeBackgroundIndeterminate = "#dfdf00";
+        public const string DefaultProbeBackgroundError = "#b58900";
+        public const string DefaultProbeBackgroundScanner = "#505050";
 
         // Default probe foreground colors.
-        public const string Color_Probe_Foreground_Inactive = "#839496";
-        public const string Color_Probe_Foreground_Up = "#002b36";
-        public const string Color_Probe_Foreground_Down = "#002b36";
-        public const string Color_Probe_Foreground_Indeterminate = "#002b36";
-        public const string Color_Probe_Foreground_Error = "#000000";
-        public const string Color_Probe_Foreground_Scanner = "#f0f0f0";
+        public const string DefaultProbeForegroundInactive = "#839496";
+        public const string DefaultProbeForegroundUp = "#002b36";
+        public const string DefaultProbeForegroundDown = "#002b36";
+        public const string DefaultProbeForegroundIndeterminate = "#002b36";
+        public const string DefaultProbeForegroundError = "#000000";
+        public const string DefaultProbeForegroundScanner = "#f0f0f0";
 
         // Default statistics foreground colors.
-        public const string Color_Statistics_Foreground_Inactive = "#657b83";
-        public const string Color_Statistics_Foreground_Up = "#fdf6e3";
-        public const string Color_Statistics_Foreground_Down = "#fdf6e3";
-        public const string Color_Statistics_Foreground_Indeterminate = "#111";
-        public const string Color_Statistics_Foreground_Error = "#ffffff";
+        public const string DefaultStatisticsForegroundInactive = "#657b83";
+        public const string DefaultStatisticsForegroundUp = "#fdf6e3";
+        public const string DefaultStatisticsForegroundDown = "#fdf6e3";
+        public const string DefaultStatisticsForegroundIndeterminate = "#111";
+        public const string DefaultStatisticsForegroundError = "#ffffff";
 
         // Default alias / probe title colors.
-        public const string Color_Alias_Foreground_Inactive = "#000000";
-        public const string Color_Alias_Foreground_Up = "#ffff00";
-        public const string Color_Alias_Foreground_Down = "#ffff00";
-        public const string Color_Alias_Foreground_Indeterminate = "#ffffff";
-        public const string Color_Alias_Foreground_Error = "#ffff00";
-        public const string Color_Alias_Foreground_Scanner = "#ffff00";
+        public const string DefaultAliasForegroundInactive = "#000000";
+        public const string DefaultAliasForegroundUp = "#ffff00";
+        public const string DefaultAliasForegroundDown = "#ffff00";
+        public const string DefaultAliasForegroundIndeterminate = "#ffffff";
+        public const string DefaultAliasForegroundError = "#ffff00";
+        public const string DefaultAliasForegroundScanner = "#ffff00";
 
         // Default probe options.
         public const string DefaultIcmpData = "https://github.com/R-Smith/vmPing";

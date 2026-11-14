@@ -213,32 +213,32 @@ namespace vmPing.Configuration
 
             return new XElement("colors",
                 new XComment(" Probe background "),
-                Node("Probe.Background.Inactive", ApplicationOptions.BackgroundColor_Probe_Inactive),
-                Node("Probe.Background.Up", ApplicationOptions.BackgroundColor_Probe_Up),
-                Node("Probe.Background.Down", ApplicationOptions.BackgroundColor_Probe_Down),
-                Node("Probe.Background.Indeterminate", ApplicationOptions.BackgroundColor_Probe_Indeterminate),
-                Node("Probe.Background.Error", ApplicationOptions.BackgroundColor_Probe_Error),
+                Node("Probe.Background.Inactive", ApplicationOptions.ProbeBackgroundInactive),
+                Node("Probe.Background.Up", ApplicationOptions.ProbeBackgroundUp),
+                Node("Probe.Background.Down", ApplicationOptions.ProbeBackgroundDown),
+                Node("Probe.Background.Indeterminate", ApplicationOptions.ProbeBackgroundIndeterminate),
+                Node("Probe.Background.Error", ApplicationOptions.ProbeBackgroundError),
 
                 new XComment(" Probe foreground "),
-                Node("Probe.Foreground.Inactive", ApplicationOptions.ForegroundColor_Probe_Inactive),
-                Node("Probe.Foreground.Up", ApplicationOptions.ForegroundColor_Probe_Up),
-                Node("Probe.Foreground.Down", ApplicationOptions.ForegroundColor_Probe_Down),
-                Node("Probe.Foreground.Indeterminate", ApplicationOptions.ForegroundColor_Probe_Indeterminate),
-                Node("Probe.Foreground.Error", ApplicationOptions.ForegroundColor_Probe_Error),
+                Node("Probe.Foreground.Inactive", ApplicationOptions.ProbeForegroundInactive),
+                Node("Probe.Foreground.Up", ApplicationOptions.ProbeForegroundUp),
+                Node("Probe.Foreground.Down", ApplicationOptions.ProbeForegroundDown),
+                Node("Probe.Foreground.Indeterminate", ApplicationOptions.ProbeForegroundIndeterminate),
+                Node("Probe.Foreground.Error", ApplicationOptions.ProbeForegroundError),
 
                 new XComment(" Statistics foreground "),
-                Node("Statistics.Foreground.Inactive", ApplicationOptions.ForegroundColor_Stats_Inactive),
-                Node("Statistics.Foreground.Up", ApplicationOptions.ForegroundColor_Stats_Up),
-                Node("Statistics.Foreground.Down", ApplicationOptions.ForegroundColor_Stats_Down),
-                Node("Statistics.Foreground.Indeterminate", ApplicationOptions.ForegroundColor_Stats_Indeterminate),
-                Node("Statistics.Foreground.Error", ApplicationOptions.ForegroundColor_Stats_Error),
+                Node("Statistics.Foreground.Inactive", ApplicationOptions.StatisticsForegroundInactive),
+                Node("Statistics.Foreground.Up", ApplicationOptions.StatisticsForegroundUp),
+                Node("Statistics.Foreground.Down", ApplicationOptions.StatisticsForegroundDown),
+                Node("Statistics.Foreground.Indeterminate", ApplicationOptions.StatisticsForegroundIndeterminate),
+                Node("Statistics.Foreground.Error", ApplicationOptions.StatisticsForegroundError),
 
                 new XComment(" Alias foreground "),
-                Node("Alias.Foreground.Inactive", ApplicationOptions.ForegroundColor_Alias_Inactive),
-                Node("Alias.Foreground.Up", ApplicationOptions.ForegroundColor_Alias_Up),
-                Node("Alias.Foreground.Down", ApplicationOptions.ForegroundColor_Alias_Down),
-                Node("Alias.Foreground.Indeterminate", ApplicationOptions.ForegroundColor_Alias_Indeterminate),
-                Node("Alias.Foreground.Error", ApplicationOptions.ForegroundColor_Alias_Error)
+                Node("Alias.Foreground.Inactive", ApplicationOptions.AliasForegroundInactive),
+                Node("Alias.Foreground.Up", ApplicationOptions.AliasForegroundUp),
+                Node("Alias.Foreground.Down", ApplicationOptions.AliasForegroundDown),
+                Node("Alias.Foreground.Indeterminate", ApplicationOptions.AliasForegroundIndeterminate),
+                Node("Alias.Foreground.Error", ApplicationOptions.AliasForegroundError)
             );
         }
 
@@ -277,26 +277,26 @@ namespace vmPing.Configuration
                 .ToDictionary(n => n.Attributes["name"].Value, n => n.InnerText);
 
             // Load probe background colors.
-            ApplyColor("Probe.Background.Inactive", v => ApplicationOptions.BackgroundColor_Probe_Inactive = v, options);
-            ApplyColor("Probe.Background.Up", v => ApplicationOptions.BackgroundColor_Probe_Up = v, options);
-            ApplyColor("Probe.Background.Down", v => ApplicationOptions.BackgroundColor_Probe_Down = v, options);
-            ApplyColor("Probe.Background.Indeterminate", v => ApplicationOptions.BackgroundColor_Probe_Indeterminate = v, options);
-            ApplyColor("Probe.Background.Error", v => ApplicationOptions.BackgroundColor_Probe_Error = v, options);
-            ApplyColor("Probe.Foreground.Inactive", v => ApplicationOptions.ForegroundColor_Probe_Inactive = v, options);
-            ApplyColor("Probe.Foreground.Up", v => ApplicationOptions.ForegroundColor_Probe_Up = v, options);
-            ApplyColor("Probe.Foreground.Down", v => ApplicationOptions.ForegroundColor_Probe_Down = v, options);
-            ApplyColor("Probe.Foreground.Indeterminate", v => ApplicationOptions.ForegroundColor_Probe_Indeterminate = v, options);
-            ApplyColor("Probe.Foreground.Error", v => ApplicationOptions.ForegroundColor_Probe_Error = v, options);
-            ApplyColor("Statistics.Foreground.Inactive", v => ApplicationOptions.ForegroundColor_Stats_Inactive = v, options);
-            ApplyColor("Statistics.Foreground.Up", v => ApplicationOptions.ForegroundColor_Stats_Up = v, options);
-            ApplyColor("Statistics.Foreground.Down", v => ApplicationOptions.ForegroundColor_Stats_Down = v, options);
-            ApplyColor("Statistics.Foreground.Indeterminate", v => ApplicationOptions.ForegroundColor_Stats_Indeterminate = v, options);
-            ApplyColor("Statistics.Foreground.Error", v => ApplicationOptions.ForegroundColor_Stats_Error = v, options);
-            ApplyColor("Alias.Foreground.Inactive", v => ApplicationOptions.ForegroundColor_Alias_Inactive = v, options);
-            ApplyColor("Alias.Foreground.Up", v => ApplicationOptions.ForegroundColor_Alias_Up = v, options);
-            ApplyColor("Alias.Foreground.Down", v => ApplicationOptions.ForegroundColor_Alias_Down = v, options);
-            ApplyColor("Alias.Foreground.Indeterminate", v => ApplicationOptions.ForegroundColor_Alias_Indeterminate = v, options);
-            ApplyColor("Alias.Foreground.Error", v => ApplicationOptions.ForegroundColor_Alias_Error = v, options);
+            ApplyColor("Probe.Background.Inactive", v => ApplicationOptions.ProbeBackgroundInactive = v, options);
+            ApplyColor("Probe.Background.Up", v => ApplicationOptions.ProbeBackgroundUp = v, options);
+            ApplyColor("Probe.Background.Down", v => ApplicationOptions.ProbeBackgroundDown = v, options);
+            ApplyColor("Probe.Background.Indeterminate", v => ApplicationOptions.ProbeBackgroundIndeterminate = v, options);
+            ApplyColor("Probe.Background.Error", v => ApplicationOptions.ProbeBackgroundError = v, options);
+            ApplyColor("Probe.Foreground.Inactive", v => ApplicationOptions.ProbeForegroundInactive = v, options);
+            ApplyColor("Probe.Foreground.Up", v => ApplicationOptions.ProbeForegroundUp = v, options);
+            ApplyColor("Probe.Foreground.Down", v => ApplicationOptions.ProbeForegroundDown = v, options);
+            ApplyColor("Probe.Foreground.Indeterminate", v => ApplicationOptions.ProbeForegroundIndeterminate = v, options);
+            ApplyColor("Probe.Foreground.Error", v => ApplicationOptions.ProbeForegroundError = v, options);
+            ApplyColor("Statistics.Foreground.Inactive", v => ApplicationOptions.StatisticsForegroundInactive = v, options);
+            ApplyColor("Statistics.Foreground.Up", v => ApplicationOptions.StatisticsForegroundUp = v, options);
+            ApplyColor("Statistics.Foreground.Down", v => ApplicationOptions.StatisticsForegroundDown = v, options);
+            ApplyColor("Statistics.Foreground.Indeterminate", v => ApplicationOptions.StatisticsForegroundIndeterminate = v, options);
+            ApplyColor("Statistics.Foreground.Error", v => ApplicationOptions.StatisticsForegroundError = v, options);
+            ApplyColor("Alias.Foreground.Inactive", v => ApplicationOptions.AliasForegroundInactive = v, options);
+            ApplyColor("Alias.Foreground.Up", v => ApplicationOptions.AliasForegroundUp = v, options);
+            ApplyColor("Alias.Foreground.Down", v => ApplicationOptions.AliasForegroundDown = v, options);
+            ApplyColor("Alias.Foreground.Indeterminate", v => ApplicationOptions.AliasForegroundIndeterminate = v, options);
+            ApplyColor("Alias.Foreground.Error", v => ApplicationOptions.AliasForegroundError = v, options);
         }
 
         private static void ApplyColor(string key, Action<string> setter, IDictionary<string, string> options)

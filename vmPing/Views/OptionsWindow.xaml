@@ -808,28 +808,28 @@
                                    Style="{StaticResource OptionSubHeaderTextStyle}"/>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Inactive"/>
-                            <TextBox Name="BackgroundColor_Probe_Inactive"/>
-                            <Border Background="{Binding ElementName=BackgroundColor_Probe_Inactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="ProbeBackgroundInactive"/>
+                            <Border Background="{Binding ElementName=ProbeBackgroundInactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Up"/>
-                            <TextBox Name="BackgroundColor_Probe_Up"/>
-                            <Border Background="{Binding ElementName=BackgroundColor_Probe_Up, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="ProbeBackgroundUp"/>
+                            <Border Background="{Binding ElementName=ProbeBackgroundUp, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Down"/>
-                            <TextBox Name="BackgroundColor_Probe_Down"/>
-                            <Border Background="{Binding ElementName=BackgroundColor_Probe_Down, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="ProbeBackgroundDown"/>
+                            <Border Background="{Binding ElementName=ProbeBackgroundDown, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Indeterminate"/>
-                            <TextBox Name="BackgroundColor_Probe_Indeterminate"/>
-                            <Border Background="{Binding ElementName=BackgroundColor_Probe_Indeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="ProbeBackgroundIndeterminate"/>
+                            <Border Background="{Binding ElementName=ProbeBackgroundIndeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Error"/>
-                            <TextBox Name="BackgroundColor_Probe_Error"/>
-                            <Border Background="{Binding ElementName=BackgroundColor_Probe_Error, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="ProbeBackgroundError"/>
+                            <Border Background="{Binding ElementName=ProbeBackgroundError, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
 
                         <!-- Probe foreground colors -->
@@ -840,28 +840,28 @@
                                    Style="{StaticResource OptionSubHeaderTextStyle}"/>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Inactive"/>
-                            <TextBox Name="ForegroundColor_Probe_Inactive"/>
-                            <Border Background="{Binding ElementName=ForegroundColor_Probe_Inactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="ProbeForegroundInactive"/>
+                            <Border Background="{Binding ElementName=ProbeForegroundInactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Up"/>
-                            <TextBox Name="ForegroundColor_Probe_Up"/>
-                            <Border Background="{Binding ElementName=ForegroundColor_Probe_Up, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="ProbeForegroundUp"/>
+                            <Border Background="{Binding ElementName=ProbeForegroundUp, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Down"/>
-                            <TextBox Name="ForegroundColor_Probe_Down"/>
-                            <Border Background="{Binding ElementName=ForegroundColor_Probe_Down, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="ProbeForegroundDown"/>
+                            <Border Background="{Binding ElementName=ProbeForegroundDown, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Indeterminate"/>
-                            <TextBox Name="ForegroundColor_Probe_Indeterminate"/>
-                            <Border Background="{Binding ElementName=ForegroundColor_Probe_Indeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="ProbeForegroundIndeterminate"/>
+                            <Border Background="{Binding ElementName=ProbeForegroundIndeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Error"/>
-                            <TextBox Name="ForegroundColor_Probe_Error"/>
-                            <Border Background="{Binding ElementName=ForegroundColor_Probe_Error, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="ProbeForegroundError"/>
+                            <Border Background="{Binding ElementName=ProbeForegroundError, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
 
                         <!-- Statistics foreground colors -->
@@ -872,28 +872,28 @@
                                    Style="{StaticResource OptionSubHeaderTextStyle}"/>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Inactive"/>
-                            <TextBox Name="ForegroundColor_Stats_Inactive"/>
-                            <Border Background="{Binding ElementName=ForegroundColor_Stats_Inactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="StatisticsForegroundInactive"/>
+                            <Border Background="{Binding ElementName=StatisticsForegroundInactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Up"/>
-                            <TextBox Name="ForegroundColor_Stats_Up"/>
-                            <Border Background="{Binding ElementName=ForegroundColor_Stats_Up, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="StatisticsForegroundUp"/>
+                            <Border Background="{Binding ElementName=StatisticsForegroundUp, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Down"/>
-                            <TextBox Name="ForegroundColor_Stats_Down"/>
-                            <Border Background="{Binding ElementName=ForegroundColor_Stats_Down, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="StatisticsForegroundDown"/>
+                            <Border Background="{Binding ElementName=StatisticsForegroundDown, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Indeterminate"/>
-                            <TextBox Name="ForegroundColor_Stats_Indeterminate"/>
-                            <Border Background="{Binding ElementName=ForegroundColor_Stats_Indeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="StatisticsForegroundIndeterminate"/>
+                            <Border Background="{Binding ElementName=StatisticsForegroundIndeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,10">
                             <TextBlock Width="150" Text="Error"/>
-                            <TextBox Name="ForegroundColor_Stats_Error"/>
-                            <Border Background="{Binding ElementName=ForegroundColor_Stats_Error, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="StatisticsForegroundError"/>
+                            <Border Background="{Binding ElementName=StatisticsForegroundError, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
 
                         <!-- Alias foreground colors -->
@@ -904,28 +904,28 @@
                                    Style="{StaticResource OptionSubHeaderTextStyle}"/>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Inactive"/>
-                            <TextBox Name="ForegroundColor_Alias_Inactive"/>
-                            <Border Background="{Binding ElementName=ForegroundColor_Alias_Inactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="AliasForegroundInactive"/>
+                            <Border Background="{Binding ElementName=AliasForegroundInactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Up"/>
-                            <TextBox Name="ForegroundColor_Alias_Up"/>
-                            <Border Background="{Binding ElementName=ForegroundColor_Alias_Up, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="AliasForegroundUp"/>
+                            <Border Background="{Binding ElementName=AliasForegroundUp, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Down"/>
-                            <TextBox Name="ForegroundColor_Alias_Down"/>
-                            <Border Background="{Binding ElementName=ForegroundColor_Alias_Down, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="AliasForegroundDown"/>
+                            <Border Background="{Binding ElementName=AliasForegroundDown, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBlock Width="150" Text="Indeterminate"/>
-                            <TextBox Name="ForegroundColor_Alias_Indeterminate"/>
-                            <Border Background="{Binding ElementName=ForegroundColor_Alias_Indeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="AliasForegroundIndeterminate"/>
+                            <Border Background="{Binding ElementName=AliasForegroundIndeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,10">
                             <TextBlock Width="150" Text="Error"/>
-                            <TextBox Name="ForegroundColor_Alias_Error"/>
-                            <Border Background="{Binding ElementName=ForegroundColor_Alias_Error, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                            <TextBox Name="AliasForegroundError"/>
+                            <Border Background="{Binding ElementName=AliasForegroundError, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
 
                         <!-- Restore defaults button -->

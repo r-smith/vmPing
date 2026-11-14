@@ -60,26 +60,26 @@
                     Click="Maximize_Click">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border Name="controlButton_border"
+                        <Border Name="ControlButtonBorder"
                                 BorderThickness="1"
                                 BorderBrush="Transparent"
                                 CornerRadius="4"
                                 Opacity="0.5"
                                 Padding="{TemplateBinding Padding}"
                                 Background="{TemplateBinding Background}">
-                            <Image Name="controlButton_image"
+                            <Image Name="ControlButtonImage"
                                    Source="{StaticResource icon.window-restore-white}"
                                    Width="12"
                                    Height="12"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="controlButton_border" Property="Background" Value="#000" />
-                                <Setter TargetName="controlButton_border" Property="Opacity" Value="1" />
-                                <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.window-restore-white}"/>
+                                <Setter TargetName="ControlButtonBorder" Property="Background" Value="#000" />
+                                <Setter TargetName="ControlButtonBorder" Property="Opacity" Value="1" />
+                                <Setter TargetName="ControlButtonImage" Property="Source" Value="{StaticResource icon.window-restore-white}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="controlButton_border" Property="BorderBrush" Value="White" />
+                                <Setter TargetName="ControlButtonBorder" Property="BorderBrush" Value="White" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -109,26 +109,26 @@
                     Click="Close_Click">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border Name="controlButton_border"
+                        <Border Name="ControlButtonBorder"
                                 BorderThickness="1"
                                 BorderBrush="Transparent"
                                 CornerRadius="4"
                                 Opacity="0.5"
                                 Padding="{TemplateBinding Padding}"
                                 Background="{TemplateBinding Background}">
-                            <Image Name="controlButton_image"
+                            <Image Name="ControlButtonImage"
                                    Source="{StaticResource icon.window-close-white}"
                                    Width="12"
                                    Height="12"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="controlButton_border" Property="Background" Value="#000" />
-                                <Setter TargetName="controlButton_border" Property="Opacity" Value="1" />
-                                <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.window-close-white}"/>
+                                <Setter TargetName="ControlButtonBorder" Property="Background" Value="#000" />
+                                <Setter TargetName="ControlButtonBorder" Property="Opacity" Value="1" />
+                                <Setter TargetName="ControlButtonImage" Property="Source" Value="{StaticResource icon.window-close-white}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="controlButton_border" Property="BorderBrush" Value="White" />
+                                <Setter TargetName="ControlButtonBorder" Property="BorderBrush" Value="White" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

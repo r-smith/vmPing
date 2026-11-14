@@ -179,26 +179,26 @@ namespace vmPing.Views
 
         private void PopulateLayoutOptions()
         {
-            BackgroundColor_Probe_Inactive.Text = ApplicationOptions.BackgroundColor_Probe_Inactive;
-            BackgroundColor_Probe_Up.Text = ApplicationOptions.BackgroundColor_Probe_Up;
-            BackgroundColor_Probe_Down.Text = ApplicationOptions.BackgroundColor_Probe_Down;
-            BackgroundColor_Probe_Error.Text = ApplicationOptions.BackgroundColor_Probe_Error;
-            BackgroundColor_Probe_Indeterminate.Text = ApplicationOptions.BackgroundColor_Probe_Indeterminate;
-            ForegroundColor_Probe_Inactive.Text = ApplicationOptions.ForegroundColor_Probe_Inactive;
-            ForegroundColor_Probe_Up.Text = ApplicationOptions.ForegroundColor_Probe_Up;
-            ForegroundColor_Probe_Down.Text = ApplicationOptions.ForegroundColor_Probe_Down;
-            ForegroundColor_Probe_Error.Text = ApplicationOptions.ForegroundColor_Probe_Error;
-            ForegroundColor_Probe_Indeterminate.Text = ApplicationOptions.ForegroundColor_Probe_Indeterminate;
-            ForegroundColor_Stats_Inactive.Text = ApplicationOptions.ForegroundColor_Stats_Inactive;
-            ForegroundColor_Stats_Up.Text = ApplicationOptions.ForegroundColor_Stats_Up;
-            ForegroundColor_Stats_Down.Text = ApplicationOptions.ForegroundColor_Stats_Down;
-            ForegroundColor_Stats_Error.Text = ApplicationOptions.ForegroundColor_Stats_Error;
-            ForegroundColor_Stats_Indeterminate.Text = ApplicationOptions.ForegroundColor_Stats_Indeterminate;
-            ForegroundColor_Alias_Inactive.Text = ApplicationOptions.ForegroundColor_Alias_Inactive;
-            ForegroundColor_Alias_Up.Text = ApplicationOptions.ForegroundColor_Alias_Up;
-            ForegroundColor_Alias_Down.Text = ApplicationOptions.ForegroundColor_Alias_Down;
-            ForegroundColor_Alias_Error.Text = ApplicationOptions.ForegroundColor_Alias_Error;
-            ForegroundColor_Alias_Indeterminate.Text = ApplicationOptions.ForegroundColor_Alias_Indeterminate;
+            ProbeBackgroundInactive.Text = ApplicationOptions.ProbeBackgroundInactive;
+            ProbeBackgroundUp.Text = ApplicationOptions.ProbeBackgroundUp;
+            ProbeBackgroundDown.Text = ApplicationOptions.ProbeBackgroundDown;
+            ProbeBackgroundError.Text = ApplicationOptions.ProbeBackgroundError;
+            ProbeBackgroundIndeterminate.Text = ApplicationOptions.ProbeBackgroundIndeterminate;
+            ProbeForegroundInactive.Text = ApplicationOptions.ProbeForegroundInactive;
+            ProbeForegroundUp.Text = ApplicationOptions.ProbeForegroundUp;
+            ProbeForegroundDown.Text = ApplicationOptions.ProbeForegroundDown;
+            ProbeForegroundError.Text = ApplicationOptions.ProbeForegroundError;
+            ProbeForegroundIndeterminate.Text = ApplicationOptions.ProbeForegroundIndeterminate;
+            StatisticsForegroundInactive.Text = ApplicationOptions.StatisticsForegroundInactive;
+            StatisticsForegroundUp.Text = ApplicationOptions.StatisticsForegroundUp;
+            StatisticsForegroundDown.Text = ApplicationOptions.StatisticsForegroundDown;
+            StatisticsForegroundError.Text = ApplicationOptions.StatisticsForegroundError;
+            StatisticsForegroundIndeterminate.Text = ApplicationOptions.StatisticsForegroundIndeterminate;
+            AliasForegroundInactive.Text = ApplicationOptions.AliasForegroundInactive;
+            AliasForegroundUp.Text = ApplicationOptions.AliasForegroundUp;
+            AliasForegroundDown.Text = ApplicationOptions.AliasForegroundDown;
+            AliasForegroundError.Text = ApplicationOptions.AliasForegroundError;
+            AliasForegroundIndeterminate.Text = ApplicationOptions.AliasForegroundIndeterminate;
         }
 
 
@@ -586,26 +586,26 @@ namespace vmPing.Views
 
         private void SaveLayoutOptions()
         {
-            ApplicationOptions.BackgroundColor_Probe_Inactive = BackgroundColor_Probe_Inactive.Text;
-            ApplicationOptions.BackgroundColor_Probe_Up = BackgroundColor_Probe_Up.Text;
-            ApplicationOptions.BackgroundColor_Probe_Down = BackgroundColor_Probe_Down.Text;
-            ApplicationOptions.BackgroundColor_Probe_Indeterminate = BackgroundColor_Probe_Indeterminate.Text;
-            ApplicationOptions.BackgroundColor_Probe_Error = BackgroundColor_Probe_Error.Text;
-            ApplicationOptions.ForegroundColor_Probe_Inactive = ForegroundColor_Probe_Inactive.Text;
-            ApplicationOptions.ForegroundColor_Probe_Up = ForegroundColor_Probe_Up.Text;
-            ApplicationOptions.ForegroundColor_Probe_Down = ForegroundColor_Probe_Down.Text;
-            ApplicationOptions.ForegroundColor_Probe_Indeterminate = ForegroundColor_Probe_Indeterminate.Text;
-            ApplicationOptions.ForegroundColor_Probe_Error = ForegroundColor_Probe_Error.Text;
-            ApplicationOptions.ForegroundColor_Stats_Inactive = ForegroundColor_Stats_Inactive.Text;
-            ApplicationOptions.ForegroundColor_Stats_Up = ForegroundColor_Stats_Up.Text;
-            ApplicationOptions.ForegroundColor_Stats_Down = ForegroundColor_Stats_Down.Text;
-            ApplicationOptions.ForegroundColor_Stats_Indeterminate = ForegroundColor_Stats_Indeterminate.Text;
-            ApplicationOptions.ForegroundColor_Stats_Error = ForegroundColor_Stats_Error.Text;
-            ApplicationOptions.ForegroundColor_Alias_Inactive = ForegroundColor_Alias_Inactive.Text;
-            ApplicationOptions.ForegroundColor_Alias_Up = ForegroundColor_Alias_Up.Text;
-            ApplicationOptions.ForegroundColor_Alias_Down = ForegroundColor_Alias_Down.Text;
-            ApplicationOptions.ForegroundColor_Alias_Indeterminate = ForegroundColor_Alias_Indeterminate.Text;
-            ApplicationOptions.ForegroundColor_Alias_Error = ForegroundColor_Alias_Error.Text;
+            ApplicationOptions.ProbeBackgroundInactive = ProbeBackgroundInactive.Text;
+            ApplicationOptions.ProbeBackgroundUp = ProbeBackgroundUp.Text;
+            ApplicationOptions.ProbeBackgroundDown = ProbeBackgroundDown.Text;
+            ApplicationOptions.ProbeBackgroundIndeterminate = ProbeBackgroundIndeterminate.Text;
+            ApplicationOptions.ProbeBackgroundError = ProbeBackgroundError.Text;
+            ApplicationOptions.ProbeForegroundInactive = ProbeForegroundInactive.Text;
+            ApplicationOptions.ProbeForegroundUp = ProbeForegroundUp.Text;
+            ApplicationOptions.ProbeForegroundDown = ProbeForegroundDown.Text;
+            ApplicationOptions.ProbeForegroundIndeterminate = ProbeForegroundIndeterminate.Text;
+            ApplicationOptions.ProbeForegroundError = ProbeForegroundError.Text;
+            ApplicationOptions.StatisticsForegroundInactive = StatisticsForegroundInactive.Text;
+            ApplicationOptions.StatisticsForegroundUp = StatisticsForegroundUp.Text;
+            ApplicationOptions.StatisticsForegroundDown = StatisticsForegroundDown.Text;
+            ApplicationOptions.StatisticsForegroundIndeterminate = StatisticsForegroundIndeterminate.Text;
+            ApplicationOptions.StatisticsForegroundError = StatisticsForegroundError.Text;
+            ApplicationOptions.AliasForegroundInactive = AliasForegroundInactive.Text;
+            ApplicationOptions.AliasForegroundUp = AliasForegroundUp.Text;
+            ApplicationOptions.AliasForegroundDown = AliasForegroundDown.Text;
+            ApplicationOptions.AliasForegroundIndeterminate = AliasForegroundIndeterminate.Text;
+            ApplicationOptions.AliasForegroundError = AliasForegroundError.Text;
         }
 
         private void NumericTextbox_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -855,26 +855,26 @@ namespace vmPing.Views
 
         private void RestoreDefaultColors_Click(object sender, RoutedEventArgs e)
         {
-            BackgroundColor_Probe_Inactive.Text = Constants.Color_Probe_Background_Inactive;
-            BackgroundColor_Probe_Up.Text = Constants.Color_Probe_Background_Up;
-            BackgroundColor_Probe_Down.Text = Constants.Color_Probe_Background_Down;
-            BackgroundColor_Probe_Error.Text = Constants.Color_Probe_Background_Error;
-            BackgroundColor_Probe_Indeterminate.Text = Constants.Color_Probe_Background_Indeterminate;
-            ForegroundColor_Probe_Inactive.Text = Constants.Color_Probe_Foreground_Inactive;
-            ForegroundColor_Probe_Up.Text = Constants.Color_Probe_Foreground_Up;
-            ForegroundColor_Probe_Down.Text = Constants.Color_Probe_Foreground_Down;
-            ForegroundColor_Probe_Error.Text = Constants.Color_Probe_Foreground_Error;
-            ForegroundColor_Probe_Indeterminate.Text = Constants.Color_Probe_Foreground_Indeterminate;
-            ForegroundColor_Stats_Inactive.Text = Constants.Color_Statistics_Foreground_Inactive;
-            ForegroundColor_Stats_Up.Text = Constants.Color_Statistics_Foreground_Up;
-            ForegroundColor_Stats_Down.Text = Constants.Color_Statistics_Foreground_Down;
-            ForegroundColor_Stats_Error.Text = Constants.Color_Statistics_Foreground_Error;
-            ForegroundColor_Stats_Indeterminate.Text = Constants.Color_Statistics_Foreground_Indeterminate;
-            ForegroundColor_Alias_Inactive.Text = Constants.Color_Alias_Foreground_Inactive;
-            ForegroundColor_Alias_Up.Text = Constants.Color_Alias_Foreground_Up;
-            ForegroundColor_Alias_Down.Text = Constants.Color_Alias_Foreground_Down;
-            ForegroundColor_Alias_Error.Text = Constants.Color_Alias_Foreground_Error;
-            ForegroundColor_Alias_Indeterminate.Text = Constants.Color_Alias_Foreground_Indeterminate;
+            ProbeBackgroundInactive.Text = Constants.DefaultProbeBackgroundInactive;
+            ProbeBackgroundUp.Text = Constants.DefaultProbeBackgroundUp;
+            ProbeBackgroundDown.Text = Constants.DefaultProbeBackgroundDown;
+            ProbeBackgroundError.Text = Constants.DefaultProbeBackgroundError;
+            ProbeBackgroundIndeterminate.Text = Constants.DefaultProbeBackgroundIndeterminate;
+            ProbeForegroundInactive.Text = Constants.DefaultProbeForegroundInactive;
+            ProbeForegroundUp.Text = Constants.DefaultProbeForegroundUp;
+            ProbeForegroundDown.Text = Constants.DefaultProbeForegroundDown;
+            ProbeForegroundError.Text = Constants.DefaultProbeForegroundError;
+            ProbeForegroundIndeterminate.Text = Constants.DefaultProbeForegroundIndeterminate;
+            StatisticsForegroundInactive.Text = Constants.DefaultStatisticsForegroundInactive;
+            StatisticsForegroundUp.Text = Constants.DefaultStatisticsForegroundUp;
+            StatisticsForegroundDown.Text = Constants.DefaultStatisticsForegroundDown;
+            StatisticsForegroundError.Text = Constants.DefaultStatisticsForegroundError;
+            StatisticsForegroundIndeterminate.Text = Constants.DefaultStatisticsForegroundIndeterminate;
+            AliasForegroundInactive.Text = Constants.DefaultAliasForegroundInactive;
+            AliasForegroundUp.Text = Constants.DefaultAliasForegroundUp;
+            AliasForegroundDown.Text = Constants.DefaultAliasForegroundDown;
+            AliasForegroundError.Text = Constants.DefaultAliasForegroundError;
+            AliasForegroundIndeterminate.Text = Constants.DefaultAliasForegroundIndeterminate;
         }
 
         private void Window_SourceInitialized(object sender, EventArgs e)

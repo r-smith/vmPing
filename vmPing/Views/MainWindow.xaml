@@ -291,25 +291,25 @@
                                             Click="RemoveProbe_Click">
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
-                                                <Border Name="controlButton_border"
+                                                <Border Name="ControlButtonBorder"
                                                         BorderThickness="0"
                                                         BorderBrush="Transparent"
                                                         CornerRadius="1,0,0,1"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
-                                                    <Image Name="controlButton_image" Source="{StaticResource icon.window-close-black}"
+                                                    <Image Name="ControlButtonImage" Source="{StaticResource icon.window-close-black}"
                                                            Width="14" Height="14"
                                                            Opacity="0.9"/>
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="Black"/>
-                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="1"/>
-                                                        <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.window-close-white}"/>
+                                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="Black"/>
+                                                        <Setter TargetName="ControlButtonImage" Property="Opacity" Value="1"/>
+                                                        <Setter TargetName="ControlButtonImage" Property="Source" Value="{StaticResource icon.window-close-white}"/>
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#444"/>
-                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="0.4"/>
+                                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="#444"/>
+                                                        <Setter TargetName="ControlButtonImage" Property="Opacity" Value="0.4"/>
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>
@@ -339,25 +339,25 @@
                                             Click="IsolatedView_Click">
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
-                                                <Border Name="controlButton_border"
+                                                <Border Name="ControlButtonBorder"
                                                         BorderThickness="0"
                                                         BorderBrush="Transparent"
                                                         CornerRadius="1"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
-                                                    <Image Name="controlButton_image" Source="{StaticResource icon.window-restore-black}"
+                                                    <Image Name="ControlButtonImage" Source="{StaticResource icon.window-restore-black}"
                                                            Width="14" Height="14"
                                                            Opacity="0.9"/>
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="Black"/>
-                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="1"/>
-                                                        <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.window-restore-white}"/>
+                                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="Black"/>
+                                                        <Setter TargetName="ControlButtonImage" Property="Opacity" Value="1"/>
+                                                        <Setter TargetName="ControlButtonImage" Property="Source" Value="{StaticResource icon.window-restore-white}"/>
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#444"/>
-                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="0.4"/>
+                                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="#444"/>
+                                                        <Setter TargetName="ControlButtonImage" Property="Opacity" Value="0.4"/>
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>
@@ -388,28 +388,28 @@
                                             Click="EditAlias_Click">
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
-                                                <Border Name="controlButton_border"
+                                                <Border Name="ControlButtonBorder"
                                                         BorderThickness="0"
                                                         BorderBrush="Transparent"
                                                         CornerRadius="1"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
-                                                    <Image Name="controlButton_image" Source="{StaticResource icon.pencil-black}"
+                                                    <Image Name="ControlButtonImage" Source="{StaticResource icon.pencil-black}"
                                                            Width="14" Height="14"
                                                            Opacity="0.9"/>
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="Black"/>
-                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="1"/>
-                                                        <Setter TargetName="controlButton_image" Property="Source" Value="{StaticResource icon.pencil-white}"/>
+                                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="Black"/>
+                                                        <Setter TargetName="ControlButtonImage" Property="Opacity" Value="1"/>
+                                                        <Setter TargetName="ControlButtonImage" Property="Source" Value="{StaticResource icon.pencil-white}"/>
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
-                                                        <Setter TargetName="controlButton_border" Property="Background" Value="#444"/>
-                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="0.4"/>
+                                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="#444"/>
+                                                        <Setter TargetName="ControlButtonImage" Property="Opacity" Value="0.4"/>
                                                     </Trigger>
                                                     <Trigger Property="IsEnabled" Value="False">
-                                                        <Setter TargetName="controlButton_image" Property="Opacity" Value="0.4"/>
+                                                        <Setter TargetName="ControlButtonImage" Property="Opacity" Value="0.4"/>
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>
@@ -594,7 +594,7 @@
                                         Background="White">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
-                                            <Border Name="pingButton_border" BorderThickness="1" BorderBrush="#bb2e6da4"
+                                            <Border Name="PingButtonBorder" BorderThickness="1" BorderBrush="#bb2e6da4"
                                                     CornerRadius="4"
                                                     Background="{TemplateBinding Background}">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
@@ -610,11 +610,11 @@
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="pingButton_border" Property="Background" Value="#f0f0f0"/>
-                                                    <Setter TargetName="pingButton_border" Property="BorderBrush" Value="#ff2e6da4"/>
+                                                    <Setter TargetName="PingButtonBorder" Property="Background" Value="#f0f0f0"/>
+                                                    <Setter TargetName="PingButtonBorder" Property="BorderBrush" Value="#ff2e6da4"/>
                                                 </Trigger>
                                                 <Trigger Property="IsPressed" Value="True">
-                                                    <Setter TargetName="pingButton_border" Property="Background" Value="#d8d8d8"/>
+                                                    <Setter TargetName="PingButtonBorder" Property="Background" Value="#d8d8d8"/>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>

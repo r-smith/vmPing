@@ -43,7 +43,7 @@ namespace vmPing.Probes
             {
                 Type = ProbeType.Dns;
                 Hostname = Hostname.Substring(2);
-                PerformDnsLookup(CancelSource.Token);
+                _ = PerformDnsLookup(CancelSource.Token);
                 return;
             }
 
@@ -51,7 +51,7 @@ namespace vmPing.Probes
             {
                 Type = ProbeType.Traceroute;
                 Hostname = Hostname.Substring(2);
-                PerformTraceroute(CancelSource.Token);
+                _ = PerformTraceroute(CancelSource.Token);
                 return;
             }
 
@@ -82,6 +82,20 @@ namespace vmPing.Probes
             else
             {
                 Task.Run(() => PerformIcmpProbe(token), token);
+            }
+        }
+
+        // Waits for the given time. Returns false if the probe was stopped while waiting.
+        private static async Task<bool> Delay(int milliseconds, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await Task.Delay(milliseconds, cancellationToken);
+                return true;
+            }
+            catch (OperationCanceledException)
+            {
+                return false;
             }
         }
 

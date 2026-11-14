@@ -13,7 +13,7 @@ namespace vmPing.Probes
 {
     public partial class Probe
     {
-        private async void PerformTcpProbe(CancellationToken cancellationToken)
+        private async Task PerformTcpProbe(CancellationToken cancellationToken)
         {
             string host = Hostname.Substring(0, Hostname.LastIndexOf(':'));
             host = host.Trim(new[] { '[', ']' });
@@ -119,7 +119,10 @@ namespace vmPing.Probes
                 DisplayTcpReply(isPortOpen, portnumber, stopwatch.ElapsedMilliseconds);
 
                 // Pause between probes.
-                await Task.Delay(ApplicationOptions.PingInterval);
+                if (!await Delay(ApplicationOptions.PingInterval, cancellationToken))
+                {
+                    return;
+                }
             }
         }
 

@@ -11,7 +11,7 @@ namespace vmPing.Probes
 {
     public partial class Probe
     {
-        private async void PerformIcmpProbe(CancellationToken cancellationToken)
+        private async Task PerformIcmpProbe(CancellationToken cancellationToken)
         {
             await Application.Current.Dispatcher.BeginInvoke(
                 new Action(() => AddHistory($"*** Pinging {Hostname}:")));
@@ -29,6 +29,8 @@ namespace vmPing.Probes
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
+                    bool didPingFail = false;
+
                     try
                     {
                         // Send ping.
@@ -59,7 +61,7 @@ namespace vmPing.Probes
                             DisplayIcmpReply(reply);
 
                             // Pause between probes.
-                            await IcmpWait(reply.Status);
+                            await IcmpWait(reply.Status, cancellationToken);
                         }
                     }
 
@@ -88,13 +90,18 @@ namespace vmPing.Probes
                         DisplayIcmpReply(null, ex);
 
                         // Pause between probes.
-                        await Task.Delay(ApplicationOptions.PingInterval);
+                        didPingFail = true;
+                    }
+
+                    if (didPingFail && !await Delay(ApplicationOptions.PingInterval, cancellationToken))
+                    {
+                        break;
                     }
                 }
             }
         }
 
-        private async Task IcmpWait(IPStatus ipStatus)
+        private async Task IcmpWait(IPStatus ipStatus, CancellationToken cancellationToken)
         {
             if (ipStatus == IPStatus.TimedOut)
             {
@@ -103,18 +110,18 @@ namespace vmPing.Probes
                 // Otherwise, sleep for a fixed amount of 1 second
                 if (ApplicationOptions.PingInterval > ApplicationOptions.PingTimeout)
                 {
-                    await Task.Delay(ApplicationOptions.PingInterval - ApplicationOptions.PingTimeout);
+                    await Task.Delay(ApplicationOptions.PingInterval - ApplicationOptions.PingTimeout, cancellationToken);
                 }
                 else
                 {
-                    await Task.Delay(1000);
+                    await Task.Delay(1000, cancellationToken);
                 }
             }
             else
             {
                 // For any other type of ping response, sleep for the global ping interval amount
                 // before sending another ping.
-                await Task.Delay(ApplicationOptions.PingInterval);
+                await Task.Delay(ApplicationOptions.PingInterval, cancellationToken);
             }
         }
 

@@ -97,6 +97,7 @@ namespace vmPing.Probes
             Statistics.Reset();
             IndeterminateCount = 0;
             HighLatencyCount = 0;
+            _isLatencyHigh = false;
             MinRtt = long.MaxValue;
             History = new ObservableCollection<string>();
         }

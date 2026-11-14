@@ -4,6 +4,8 @@ namespace vmPing.Probes
 {
     public partial class Probe
     {
+        private bool _isLatencyHigh;
+
         // Updates statistics and status after a host replies.
         private void HandleReply(long roundTripTime)
         {
@@ -21,6 +23,10 @@ namespace vmPing.Probes
             if (Status == ProbeStatus.Down)
             {
                 OnStatusChange(ProbeStatus.Up, "up");
+
+                // Latency tracking starts over after an outage.
+                _isLatencyHigh = false;
+                HighLatencyCount = 0;
             }
 
             UpdateLatency(roundTripTime);
@@ -34,51 +40,48 @@ namespace vmPing.Probes
                 MinRtt = roundTripTime;
             }
 
-            // Check latency.
-            if ((ApplicationOptions.LatencyDetectionMode == LatencyMode.Fixed &&
+            bool isSlow =
+                (ApplicationOptions.LatencyDetectionMode == LatencyMode.Fixed &&
                 roundTripTime >= ApplicationOptions.HighLatencyMilliseconds) ||
                 (ApplicationOptions.LatencyDetectionMode == LatencyMode.Dynamic &&
-                roundTripTime >= MinRtt + ApplicationOptions.HighLatencyMilliseconds))
+                roundTripTime >= MinRtt + ApplicationOptions.HighLatencyMilliseconds);
+
+            // Count up on each slow reply and back down on each normal reply.
+            if (isSlow)
             {
-                // Latency is high.
                 if (HighLatencyCount < ApplicationOptions.HighLatencyAlertTriggerCount)
                 {
                     HighLatencyCount++;
                 }
+            }
+            else if (HighLatencyCount > 0)
+            {
+                HighLatencyCount--;
+            }
 
-                if (Status == ProbeStatus.Up)
-                {
-                    Status = ProbeStatus.Indeterminate;
-                }
+            // Alert once when latency becomes high, and once when it returns to normal.
+            if (!_isLatencyHigh && isSlow && HighLatencyCount >= ApplicationOptions.HighLatencyAlertTriggerCount)
+            {
+                _isLatencyHigh = true;
+                OnStatusChange(ProbeStatus.LatencyHigh, "high latency");
+            }
+            else if (_isLatencyHigh && HighLatencyCount == 0)
+            {
+                _isLatencyHigh = false;
+                OnStatusChange(ProbeStatus.LatencyNormal, "normal latency");
+            }
 
-                if (Status != ProbeStatus.LatencyHigh)
-                {
-                    if (HighLatencyCount >= ApplicationOptions.HighLatencyAlertTriggerCount)
-                    {
-                        OnStatusChange(ProbeStatus.LatencyHigh, "high latency");
-                    }
-                }
+            if (_isLatencyHigh)
+            {
+                Status = ProbeStatus.LatencyHigh;
+            }
+            else if (isSlow)
+            {
+                Status = ProbeStatus.Indeterminate;
             }
             else
             {
-                // Latency is normal.
-                if (HighLatencyCount > 0)
-                {
-                    HighLatencyCount--; 
-                }
-
-                if (Status == ProbeStatus.LatencyHigh)
-                {
-                    if (HighLatencyCount <= 0)
-                    {
-                        OnStatusChange(ProbeStatus.LatencyNormal, "normal latency");
-                        Status = ProbeStatus.Up;
-                    }
-                }
-                else
-                {
-                    Status = ProbeStatus.Up;
-                }
+                Status = ProbeStatus.Up;
             }
         }
 

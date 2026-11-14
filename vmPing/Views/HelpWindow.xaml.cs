@@ -9,7 +9,7 @@ namespace vmPing.Views
 {
     public partial class HelpWindow : Window
     {
-        public static HelpWindow _OpenWindow = null;
+        public static HelpWindow OpenWindow { get; private set; }
 
         public HelpWindow()
         {
@@ -74,12 +74,12 @@ namespace vmPing.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            _OpenWindow = this;
+            OpenWindow = this;
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            _OpenWindow = null;
+            OpenWindow = null;
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)

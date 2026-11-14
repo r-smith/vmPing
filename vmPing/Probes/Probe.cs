@@ -21,11 +21,11 @@ namespace vmPing.Probes
 
         private static readonly object s_lock = new object();
 
-        private static long activeCount;
+        private static long s_activeCount;
         public static long ActiveCount
         {
-            get => Interlocked.Read(ref activeCount);
-            set => Interlocked.Exchange(ref activeCount, value);
+            get => Interlocked.Read(ref s_activeCount);
+            set => Interlocked.Exchange(ref s_activeCount, value);
         }
         public static event EventHandler ActiveCountChanged;
 
@@ -39,21 +39,21 @@ namespace vmPing.Probes
         public PingStatistics Statistics { get; set; } = new PingStatistics();
         public CancellationTokenSource CancelSource { get; set; }
 
-        private ObservableCollection<string> history;
+        private ObservableCollection<string> _history;
         public ObservableCollection<string> History
         {
-            get => history;
+            get => _history;
             set
             {
-                if (value != history)
+                if (value != _history)
                 {
-                    if (history != null)
+                    if (_history != null)
                     {
-                        history.CollectionChanged -= OnHistoryChanged;
+                        _history.CollectionChanged -= OnHistoryChanged;
                     }
 
-                    history = value;
-                    history.CollectionChanged += OnHistoryChanged;
+                    _history = value;
+                    _history.CollectionChanged += OnHistoryChanged;
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(HistoryAsString));
                 }
@@ -64,83 +64,83 @@ namespace vmPing.Probes
             ? string.Join(Environment.NewLine, History)
             : string.Empty;
 
-        private ProbeType type = ProbeType.Ping;
+        private ProbeType _type = ProbeType.Ping;
         public ProbeType Type
         {
-            get => type;
+            get => _type;
             set
             {
-                if (value != type)
+                if (value != _type)
                 {
-                    type = value;
+                    _type = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private string hostname;
+        private string _hostname;
         public string Hostname
         {
-            get => hostname;
+            get => _hostname;
             set
             {
-                if (value != hostname)
+                if (value != _hostname)
                 {
-                    hostname = value?.Trim();
+                    _hostname = value?.Trim();
                     OnPropertyChanged();
                 }
             }
         }
 
-        private string alias;
+        private string _alias;
         public string Alias
         {
-            get => alias;
+            get => _alias;
             set
             {
-                if (value != alias)
+                if (value != _alias)
                 {
-                    alias = value;
+                    _alias = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private ProbeStatus status = ProbeStatus.Inactive;
+        private ProbeStatus _status = ProbeStatus.Inactive;
         public ProbeStatus Status
         {
-            get => status;
+            get => _status;
             set
             {
-                if (value != status)
+                if (value != _status)
                 {
-                    status = value;
+                    _status = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private bool isActive = false;
+        private bool _isActive = false;
         public bool IsActive
         {
-            get => isActive;
+            get => _isActive;
             set
             {
-                if (value == isActive)
+                if (value == _isActive)
                 {
                     return;
                 }
 
-                isActive = value;
+                _isActive = value;
                 OnPropertyChanged();
 
                 if (value)
                 {
-                    Interlocked.Increment(ref activeCount);
+                    Interlocked.Increment(ref s_activeCount);
                 }
                 else
                 {
-                    Interlocked.Decrement(ref activeCount);
+                    Interlocked.Decrement(ref s_activeCount);
                 }
 
                 ActiveCountChanged?.Invoke(null, EventArgs.Empty);

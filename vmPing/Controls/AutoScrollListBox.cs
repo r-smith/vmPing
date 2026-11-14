@@ -9,7 +9,7 @@ namespace vmPing.Controls
 {
     public class AutoScrollListBox : ListBox
     {
-        private bool IsAutoScrollEnabled = true;
+        private bool _isAutoScrollEnabled = true;
         private AdornerLayer _adornerLayer;
         private AutoScrollAdorner _autoScrollAdorner;
 
@@ -46,11 +46,11 @@ namespace vmPing.Controls
                 ScrollViewer scroll = border.Child as ScrollViewer;
                 if (scroll.ComputedVerticalScrollBarVisibility != Visibility.Visible)
                 {
-                    IsAutoScrollEnabled = true;
+                    _isAutoScrollEnabled = true;
                     _adornerLayer.Remove(_autoScrollAdorner);
                 }
 
-                if (IsAutoScrollEnabled && !scroll.IsMouseCaptureWithin)
+                if (_isAutoScrollEnabled && !scroll.IsMouseCaptureWithin)
                 {
                     scroll?.ScrollToEnd();
                 }
@@ -82,7 +82,7 @@ namespace vmPing.Controls
             // Check the position of the scrollbar - If it's scrolled to
             // the bottom, then automatically re-enable auto-scrolling.
             ScrollViewer scrollViewer = (ScrollViewer)sender;
-            IsAutoScrollEnabled = scrollViewer.VerticalOffset >=
+            _isAutoScrollEnabled = scrollViewer.VerticalOffset >=
                 (scrollViewer.ScrollableHeight > 100
                 ? scrollViewer.ScrollableHeight - 2
                 : scrollViewer.ScrollableHeight - 1);
@@ -95,7 +95,7 @@ namespace vmPing.Controls
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 // An item was added to the ListBox.
-                if (IsAutoScrollEnabled && VisualTreeHelper.GetChild(this, 0) is Decorator border)
+                if (_isAutoScrollEnabled && VisualTreeHelper.GetChild(this, 0) is Decorator border)
                 {
                     // Scroll to the bottom of the ListBox. If user is currently clicking the scrollbar, then do nothing.
                     ScrollViewer scroll = border.Child as ScrollViewer;

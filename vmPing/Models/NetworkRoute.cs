@@ -10,15 +10,15 @@ namespace vmPing.Models
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private bool isActive;
+        private bool _isActive;
         public bool IsActive
         {
-            get { return isActive; }
+            get { return _isActive; }
             set
             {
-                if (value != isActive)
+                if (value != _isActive)
                 {
-                    isActive = value;
+                    _isActive = value;
                     NotifyPropertyChanged("IsActive");
                 }
             }

@@ -13,9 +13,9 @@ namespace vmPing.Views
 {
     public partial class MainWindow : Window
     {
-        private readonly ObservableCollection<Probe> _ProbeCollection = new ObservableCollection<Probe>();
-        private Dictionary<string, string> _Aliases = new Dictionary<string, string>();
-        private System.Windows.Forms.NotifyIcon NotifyIcon;
+        private readonly ObservableCollection<Probe> _probes = new ObservableCollection<Probe>();
+        private Dictionary<string, string> _aliases = new Dictionary<string, string>();
+        private System.Windows.Forms.NotifyIcon _notifyIcon;
 
         public static RoutedCommand OptionsCommand = new RoutedCommand();
         public static RoutedCommand StartStopCommand = new RoutedCommand();
@@ -42,7 +42,7 @@ namespace vmPing.Views
             RefreshGuiState();
 
             // Set items source for main GUI ItemsControl.
-            ProbeItemsControl.ItemsSource = _ProbeCollection;
+            ProbeItemsControl.ItemsSource = _probes;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -63,9 +63,9 @@ namespace vmPing.Views
                 AddProbe(cliHosts.Count);
                 for (int i = 0; i < cliHosts.Count; ++i)
                 {
-                    _ProbeCollection[i].Hostname = cliHosts[i];
-                    _ProbeCollection[i].Alias = GetAlias(_ProbeCollection[i].Hostname);
-                    _ProbeCollection[i].StartStop();
+                    _probes[i].Hostname = cliHosts[i];
+                    _probes[i].Alias = GetAlias(_probes[i].Hostname);
+                    _probes[i].StartStop();
                 }
             }
             else
@@ -123,11 +123,11 @@ namespace vmPing.Views
             {
                 Probe.StatusHistoryWindow.Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
             }
-            if (HelpWindow._OpenWindow != null)
+            if (HelpWindow.OpenWindow != null)
             {
-                HelpWindow._OpenWindow.Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
+                HelpWindow.OpenWindow.Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
             }
-            foreach (Probe probe in _ProbeCollection)
+            foreach (Probe probe in _probes)
             {
                 if (probe.IsolatedWindow != null && probe.IsolatedWindow.IsLoaded)
                 {
@@ -138,10 +138,10 @@ namespace vmPing.Views
 
         private void RefreshColumnCount()
         {
-            // Update ColumnCount.Tag to be whichever is lower: ColumnCount.Value or _ProbeCollection.Count.
+            // Update ColumnCount.Tag to be whichever is lower: ColumnCount.Value or _probes.Count.
             // The actual number of grid columns is bound to the tag value.
-            ColumnCount.Tag = ColumnCount.Value > _ProbeCollection.Count
-                ? _ProbeCollection.Count
+            ColumnCount.Tag = ColumnCount.Value > _probes.Count
+                ? _probes.Count
                 : (int)ColumnCount.Value;
         }
 
@@ -200,7 +200,7 @@ namespace vmPing.Views
         {
             for (; numberOfProbes > 0; --numberOfProbes)
             {
-                _ProbeCollection.Add(new Probe());
+                _probes.Add(new Probe());
             }
         }
 
@@ -212,7 +212,7 @@ namespace vmPing.Views
         private void ColumnCount_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             // When the ColumnCount slider value is changed, update Tag to be the lesser of
-            // ColumnCount.Value and _ProbeCollection.Count.
+            // ColumnCount.Value and _probes.Count.
             // The visual column count is bound to the Tag value.
             RefreshColumnCount();
         }
@@ -224,9 +224,9 @@ namespace vmPing.Views
                 var probe = (sender as TextBox).DataContext as Probe;
                 probe.StartStop();
 
-                if (_ProbeCollection.IndexOf(probe) < _ProbeCollection.Count - 1)
+                if (_probes.IndexOf(probe) < _probes.Count - 1)
                 {
-                    var cp = ProbeItemsControl.ItemContainerGenerator.ContainerFromIndex(_ProbeCollection.IndexOf(probe) + 1) as ContentPresenter;
+                    var cp = ProbeItemsControl.ItemContainerGenerator.ContainerFromIndex(_probes.IndexOf(probe) + 1) as ContentPresenter;
                     var tb = (TextBox)cp.ContentTemplate.FindName("Hostname", cp);
                     tb?.Focus();
                 }
@@ -235,7 +235,7 @@ namespace vmPing.Views
 
         private void RemoveProbe_Click(object sender, RoutedEventArgs e)
         {
-            if (_ProbeCollection.Count <= 1)
+            if (_probes.Count <= 1)
             {
                 return;
             }
@@ -246,7 +246,7 @@ namespace vmPing.Views
                 // Stop/cancel active probe.
                 probe.StartStop();
             }
-            _ProbeCollection.Remove(probe);
+            _probes.Remove(probe);
             RefreshColumnCount();
         }
 
@@ -254,11 +254,11 @@ namespace vmPing.Views
         {
             // Get list of current addresses to send to multi-input window.
             var addresses = new List<string>();
-            for (int i = 0; i < _ProbeCollection.Count; ++i)
+            for (int i = 0; i < _probes.Count; ++i)
             {
-                if (!string.IsNullOrWhiteSpace(_ProbeCollection[i].Hostname))
+                if (!string.IsNullOrWhiteSpace(_probes[i].Hostname))
                 {
-                    addresses.Add(_ProbeCollection[i].Hostname.Trim());
+                    addresses.Add(_probes[i].Hostname.Trim());
                 }
             }
 
@@ -279,9 +279,9 @@ namespace vmPing.Views
                     AddProbe(numberOfProbes: wnd.Addresses.Count);
                     for (int i = 0; i < wnd.Addresses.Count; ++i)
                     {
-                        _ProbeCollection[i].Hostname = wnd.Addresses[i];
-                        _ProbeCollection[i].Alias = GetAlias(_ProbeCollection[i].Hostname);
-                        _ProbeCollection[i].StartStop();
+                        _probes[i].Hostname = wnd.Addresses[i];
+                        _probes[i].Alias = GetAlias(_probes[i].Hostname);
+                        _probes[i].StartStop();
                     }
                 }
 
@@ -296,7 +296,7 @@ namespace vmPing.Views
         {
             string toggleStatus = StartStopMenuHeader.Text;
 
-            foreach (var probe in _ProbeCollection)
+            foreach (var probe in _probes)
             {
                 if (toggleStatus == Strings.Toolbar_StopAll && probe.IsActive)
                 {
@@ -311,13 +311,13 @@ namespace vmPing.Views
 
         private void HelpExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            if (HelpWindow._OpenWindow == null)
+            if (HelpWindow.OpenWindow == null)
             {
                 new HelpWindow().Show();
             }
             else
             {
-                HelpWindow._OpenWindow.Activate();
+                HelpWindow.OpenWindow.Activate();
             }
         }
 
@@ -351,7 +351,7 @@ namespace vmPing.Views
 
         private void AddProbeExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            _ProbeCollection.Add(new Probe());
+            _probes.Add(new Probe());
             RefreshColumnCount();
         }
 
@@ -371,22 +371,22 @@ namespace vmPing.Views
 
         private void RefreshProbeColors()
         {
-            for (int i = 0; i < _ProbeCollection.Count; ++i)
+            for (int i = 0; i < _probes.Count; ++i)
             {
-                _ProbeCollection[i].Status = _ProbeCollection[i].Status;
+                _probes[i].Status = _probes[i].Status;
             }
         }
 
         private void RemoveAllProbes()
         {
-            foreach (var probe in _ProbeCollection)
+            foreach (var probe in _probes)
             {
                 if (probe.IsActive)
                 {
                     probe.StartStop();
                 }
             }
-            _ProbeCollection.Clear();
+            _probes.Clear();
             Probe.ActiveCount = 0;
         }
 
@@ -428,9 +428,9 @@ namespace vmPing.Views
                 AddProbe(numberOfProbes: favorite.Hostnames.Count);
                 for (int i = 0; i < favorite.Hostnames.Count; ++i)
                 {
-                    _ProbeCollection[i].Hostname = favorite.Hostnames[i];
-                    _ProbeCollection[i].Alias = GetAlias(_ProbeCollection[i].Hostname);
-                    _ProbeCollection[i].StartStop();
+                    _probes[i].Hostname = favorite.Hostnames[i];
+                    _probes[i].Alias = GetAlias(_probes[i].Hostname);
+                    _probes[i].StartStop();
                 }
             }
 
@@ -441,8 +441,8 @@ namespace vmPing.Views
 
         private void LoadAliases()
         {
-            _Aliases = Alias.GetAll();
-            var aliasList = _Aliases.ToList();
+            _aliases = Alias.GetAll();
+            var aliasList = _aliases.ToList();
             aliasList.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
 
             // Clear existing aliases menu.
@@ -457,7 +457,7 @@ namespace vmPing.Views
                 AliasesMenu.Items.Add(BuildAliasMenuItem(alias));
             }
 
-            foreach (var probe in _ProbeCollection)
+            foreach (var probe in _probes)
             {
                 probe.Alias = GetAlias(probe.Hostname) ?? string.Empty;
             }
@@ -465,7 +465,7 @@ namespace vmPing.Views
 
         private string GetAlias(string hostname)
         {
-            if (hostname != null && _Aliases.TryGetValue(hostname, out string alias))
+            if (hostname != null && _aliases.TryGetValue(hostname, out string alias))
             {
                 return alias;
             }
@@ -485,12 +485,12 @@ namespace vmPing.Views
                 var selectedAlias = s as MenuItem;
 
                 var didFindEmptyHost = false;
-                for (int i = 0; i < _ProbeCollection.Count; ++i)
+                for (int i = 0; i < _probes.Count; ++i)
                 {
-                    if (string.IsNullOrWhiteSpace(_ProbeCollection[i].Hostname))
+                    if (string.IsNullOrWhiteSpace(_probes[i].Hostname))
                     {
-                        _ProbeCollection[i].Hostname = (string)selectedAlias.Tag;
-                        _ProbeCollection[i].StartStop();
+                        _probes[i].Hostname = (string)selectedAlias.Tag;
+                        _probes[i].StartStop();
                         didFindEmptyHost = true;
                         break;
                     }
@@ -499,8 +499,8 @@ namespace vmPing.Views
                 if (!didFindEmptyHost)
                 {
                     AddProbe();
-                    _ProbeCollection[_ProbeCollection.Count - 1].Hostname = (string)selectedAlias.Tag;
-                    _ProbeCollection[_ProbeCollection.Count - 1].StartStop();
+                    _probes[_probes.Count - 1].Hostname = (string)selectedAlias.Tag;
+                    _probes[_probes.Count - 1].StartStop();
                 }
             };
 
@@ -514,7 +514,7 @@ namespace vmPing.Views
             // favorite loaded. Pass the title of that favorite to the new window.
             const string favTitle = " - vmPing";
             var newFavoriteWindow = new NewFavoriteWindow(
-                hostList: _ProbeCollection.Select(x => x.Hostname).ToList(),
+                hostList: _probes.Select(x => x.Hostname).ToList(),
                 columnCount: (int)ColumnCount.Value,
                 title: Title.EndsWith(favTitle) ? Title.Remove(Title.Length - favTitle.Length) : string.Empty);
             newFavoriteWindow.Owner = this;
@@ -624,9 +624,9 @@ namespace vmPing.Views
         private void Hostname_Loaded(object sender, RoutedEventArgs e)
         {
             // Set focus to textbox on newly added monitors.  If the hostname field is blank for any existing monitors, do not change focus.
-            for (int i = 0; i < _ProbeCollection.Count - 1; ++i)
+            for (int i = 0; i < _probes.Count - 1; ++i)
             {
-                if (string.IsNullOrEmpty(_ProbeCollection[i].Hostname))
+                if (string.IsNullOrEmpty(_probes[i].Hostname))
                 {
                     return;
                 }
@@ -647,7 +647,7 @@ namespace vmPing.Views
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             // Set initial focus first text box.
-            if (_ProbeCollection.Count > 0)
+            if (_probes.Count > 0)
             {
                 var cp = ProbeItemsControl.ItemContainerGenerator.ContainerFromIndex(0) as ContentPresenter;
                 var tb = (TextBox)cp.ContentTemplate.FindName("Hostname", cp);
@@ -692,12 +692,12 @@ namespace vmPing.Views
                 int newIndex;
                 if (sender is Label)
                 {
-                    newIndex = _ProbeCollection.IndexOf((sender as Label).DataContext as Probe);
+                    newIndex = _probes.IndexOf((sender as Label).DataContext as Probe);
                     e.Handled = true;
                 }
                 else if (sender is DockPanel)
                 {
-                    newIndex = _ProbeCollection.IndexOf((sender as DockPanel).DataContext as Probe);
+                    newIndex = _probes.IndexOf((sender as DockPanel).DataContext as Probe);
                     e.Handled = true;
                 }
                 else
@@ -705,11 +705,11 @@ namespace vmPing.Views
                     return;
                 }
 
-                int prevIndex = _ProbeCollection.IndexOf(source);
+                int prevIndex = _probes.IndexOf(source);
                 if (newIndex != prevIndex)
                 {
-                    _ProbeCollection.RemoveAt(prevIndex);
-                    _ProbeCollection.Insert(newIndex, source);
+                    _probes.RemoveAt(prevIndex);
+                    _probes.Insert(newIndex, source);
                 }
             }
         }
@@ -720,7 +720,7 @@ namespace vmPing.Views
             WindowState = WindowState.Minimized;
             try
             {
-                if (NotifyIcon == null)
+                if (_notifyIcon == null)
                 {
                     // Build context menu for tray icon.
                     System.Windows.Forms.ContextMenuStrip menuStrip = new System.Windows.Forms.ContextMenuStrip();
@@ -737,15 +737,15 @@ namespace vmPing.Views
                     menuStrip.Items.Add(menuExit);
 
                     // Create tray icon.
-                    NotifyIcon = new System.Windows.Forms.NotifyIcon
+                    _notifyIcon = new System.Windows.Forms.NotifyIcon
                     {
                         Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("pack://application:,,,/vmPing.ico")).Stream),
                         Text = "vmPing",
                         ContextMenuStrip = menuStrip
                     };
-                    NotifyIcon.MouseUp += NotifyIcon_MouseUp;
+                    _notifyIcon.MouseUp += NotifyIcon_MouseUp;
                 }
-                NotifyIcon.Visible = true;
+                _notifyIcon.Visible = true;
             }
             catch
             {
@@ -755,7 +755,7 @@ namespace vmPing.Views
 
         private void RestoreFromTray()
         {
-            NotifyIcon.Visible = false;
+            _notifyIcon.Visible = false;
             WindowState = WindowState.Minimized;
             Visibility = Visibility.Visible;
             Show();
@@ -774,7 +774,7 @@ namespace vmPing.Views
         {
             // Clear notify icon - handles notify icon cleanup when vmPing is minimized to tray
             // and user clicks a popup alert window to restore the vmPing window.
-            if (IsVisible && NotifyIcon != null && NotifyIcon.Visible)
+            if (IsVisible && _notifyIcon != null && _notifyIcon.Visible)
             {
                 RestoreFromTray();
             }
@@ -792,7 +792,7 @@ namespace vmPing.Views
                 // Right click. Display context menu.
                 System.Reflection.MethodInfo mi = typeof(System.Windows.Forms.NotifyIcon)
                     .GetMethod("ShowContextMenu", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                mi.Invoke(NotifyIcon, null);
+                mi.Invoke(_notifyIcon, null);
             }
         }
 
@@ -805,7 +805,7 @@ namespace vmPing.Views
             }
             else
             {
-                NotifyIcon?.Dispose();
+                _notifyIcon?.Dispose();
             }
         }
     }

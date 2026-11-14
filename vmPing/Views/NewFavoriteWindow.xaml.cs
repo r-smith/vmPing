@@ -14,19 +14,19 @@ namespace vmPing.Views
 {
     public partial class NewFavoriteWindow : Window
     {
-        private List<string> HostList;
-        private int ColumnCount;
-        private readonly bool IsExisting = false;
-        private readonly string OriginalTitle;
+        private List<string> _hostList;
+        private int _columnCount;
+        private readonly bool _isExisting = false;
+        private readonly string _originalTitle;
 
         public NewFavoriteWindow(List<string> hostList, int columnCount, bool isEditExisting = false, string title = "")
         {
             InitializeComponent();
 
-            HostList = hostList;
-            ColumnCount = columnCount;
-            IsExisting = isEditExisting;
-            OriginalTitle = title;
+            _hostList = hostList;
+            _columnCount = columnCount;
+            _isExisting = isEditExisting;
+            _originalTitle = title;
 
             MyHosts.Text = string.Join(Environment.NewLine, hostList).Trim();
             MyColumnCount.Text = columnCount.ToString();
@@ -47,7 +47,7 @@ namespace vmPing.Views
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             // Validate column count.
-            if (int.TryParse(MyColumnCount.Text, out ColumnCount) == false || ColumnCount < 1 || ColumnCount > 10)
+            if (int.TryParse(MyColumnCount.Text, out _columnCount) == false || _columnCount < 1 || _columnCount > 10)
             {
                 var errorWindow = DialogWindow.ErrorWindow("Please enter a valid number of columns (between 1 and 10).");
                 errorWindow.Owner = this;
@@ -69,8 +69,8 @@ namespace vmPing.Views
             }
 
             // Split MyHosts string to array, trim each item, then convert to list. Ensure at least one host was entered.
-            HostList = MyHosts.Text.Trim().Split(new char[] { ',', '\n' }).Select(host => host.Trim()).ToList();
-            if (HostList.All(x => string.IsNullOrWhiteSpace(x)))
+            _hostList = MyHosts.Text.Trim().Split(new char[] { ',', '\n' }).Select(host => host.Trim()).ToList();
+            if (_hostList.All(x => string.IsNullOrWhiteSpace(x)))
             {
                 var errorWindow = DialogWindow.ErrorWindow("You have not entered any hosts. Provide at least one host for this favorite set.");
                 errorWindow.Owner = this;
@@ -83,8 +83,8 @@ namespace vmPing.Views
             // If creating a new favorite: Check and display warning if title already exists.
             // If editing a favorite and title has changed: Check and display warning if title already exists.
             // If editing a favorite and title has not changed: Proceed with save. No warning displayed.
-            if ( (!IsExisting && Favorite.TitleExists(MyTitle.Text))
-                || (IsExisting && !string.Equals(OriginalTitle, MyTitle.Text) && Favorite.TitleExists(MyTitle.Text)) )
+            if ( (!_isExisting && Favorite.TitleExists(MyTitle.Text))
+                || (_isExisting && !string.Equals(_originalTitle, MyTitle.Text) && Favorite.TitleExists(MyTitle.Text)) )
             {
                 var warningWindow = DialogWindow.WarningWindow(
                     message: $"{MyTitle.Text} {Strings.NewFavorite_Warn_AlreadyExists}",
@@ -106,12 +106,12 @@ namespace vmPing.Views
         private void SaveFavorite()
         {
             // Check if renaming the title of an existing favorite set.
-            if (IsExisting && !MyTitle.Text.Equals(OriginalTitle))
+            if (_isExisting && !MyTitle.Text.Equals(_originalTitle))
             {
-                Favorite.Rename(originalTitle: OriginalTitle, newTitle: MyTitle.Text);
+                Favorite.Rename(originalTitle: _originalTitle, newTitle: MyTitle.Text);
             }
             // Save.
-            Favorite.Save(MyTitle.Text, HostList, ColumnCount);
+            Favorite.Save(MyTitle.Text, _hostList, _columnCount);
             DialogResult = true;
         }
 

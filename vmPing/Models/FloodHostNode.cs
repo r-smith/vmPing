@@ -10,71 +10,71 @@ namespace vmPing.Models
 
         public DateTime StartTime { get; set; }
 
-        private bool isActive;
+        private bool _isActive;
         public bool IsActive
         {
-            get { return isActive; }
+            get { return _isActive; }
             set
             {
-                if (value != isActive)
+                if (value != _isActive)
                 {
-                    isActive = value;
+                    _isActive = value;
                     NotifyPropertyChanged("IsActive");
                 }
             }
         }
 
-        private long packetsPerSecond;
+        private long _packetsPerSecond;
         public long PacketsPerSecond
         {
-            get { return packetsPerSecond; }
+            get { return _packetsPerSecond; }
             set
             {
-                if (value != packetsPerSecond)
+                if (value != _packetsPerSecond)
                 {
-                    packetsPerSecond = value;
+                    _packetsPerSecond = value;
                     NotifyPropertyChanged("PacketsPerSecond");
                 }
             }
         }
 
-        private long packetsSent;
+        private long _packetsSent;
         public long PacketsSent
         {
-            get { return packetsSent; }
+            get { return _packetsSent; }
             set
             {
-                if (value != packetsSent)
+                if (value != _packetsSent)
                 {
-                    packetsSent = value;
+                    _packetsSent = value;
                     NotifyPropertyChanged("PacketsSent");
                 }
             }
         }
 
-        private long packetsReceived;
+        private long _packetsReceived;
         public long PacketsReceived
         {
-            get { return packetsReceived; }
+            get { return _packetsReceived; }
             set
             {
-                if (value != packetsReceived)
+                if (value != _packetsReceived)
                 {
-                    packetsReceived = value;
+                    _packetsReceived = value;
                     NotifyPropertyChanged("PacketsReceived");
                 }
             }
         }
 
-        private long packetsLost;
+        private long _packetsLost;
         public long PacketsLost
         {
-            get { return packetsLost; }
+            get { return _packetsLost; }
             set
             {
-                if (value != packetsLost)
+                if (value != _packetsLost)
                 {
-                    packetsLost = value;
+                    _packetsLost = value;
                     NotifyPropertyChanged("PacketsLost");
                 }
             }

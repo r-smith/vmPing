@@ -12,7 +12,7 @@ namespace vmPing.Views
 {
     public partial class FloodHostWindow : Window
     {
-        readonly FloodHostNode _floodHost = new FloodHostNode();
+        private readonly FloodHostNode _floodHost = new FloodHostNode();
 
         public FloodHostWindow()
         {

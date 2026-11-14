@@ -8,8 +8,8 @@ namespace vmPing.Views
 {
     public partial class IsolatedPingWindow : Window
     {
-        private int SelStart = 0;
-        private int SelLength = 0;
+        private int _selectionStart = 0;
+        private int _selectionLength = 0;
 
         public IsolatedPingWindow(Probe pingItem)
         {
@@ -21,8 +21,8 @@ namespace vmPing.Views
 
         private void History_TextChanged(object sender, TextChangedEventArgs e)
         {
-            History.SelectionStart = SelStart;
-            History.SelectionLength = SelLength;
+            History.SelectionStart = _selectionStart;
+            History.SelectionLength = _selectionLength;
             if (!History.IsMouseCaptureWithin && History.SelectionLength == 0)
             {
                 History.ScrollToEnd();
@@ -31,8 +31,8 @@ namespace vmPing.Views
 
         private void History_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            SelStart = History.SelectionStart;
-            SelLength = History.SelectionLength;
+            _selectionStart = History.SelectionStart;
+            _selectionLength = History.SelectionLength;
         }
 
         private void Window_Closed(object sender, EventArgs e)

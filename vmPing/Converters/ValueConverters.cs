@@ -112,13 +112,13 @@ namespace vmPing.Converters
 
     internal static class ProbeBrushHelper
     {
-        private static readonly BrushConverter BrushConverter = new BrushConverter();
+        private static readonly BrushConverter s_brushConverter = new BrushConverter();
 
         public static Brush FromColorString(string color)
         {
             try
             {
-                var brush = BrushConverter.ConvertFromString(color) as Brush;
+                var brush = s_brushConverter.ConvertFromString(color) as Brush;
                 return brush ?? Brushes.Transparent;
             }
             catch
@@ -260,7 +260,7 @@ namespace vmPing.Converters
 
     public class StringToBrushConverter : IValueConverter
     {
-        private static readonly BrushConverter BrushConverter = new BrushConverter();
+        private static readonly BrushConverter s_brushConverter = new BrushConverter();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -272,7 +272,7 @@ namespace vmPing.Converters
 
             try
             {
-                var brush = BrushConverter.ConvertFromString(str) as Brush;
+                var brush = s_brushConverter.ConvertFromString(str) as Brush;
                 return brush ?? Binding.DoNothing;
             }
             catch

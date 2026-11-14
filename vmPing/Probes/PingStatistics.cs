@@ -7,30 +7,30 @@ namespace vmPing.Probes
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private uint sent;
+        private uint _sent;
         public uint Sent
         {
-            get => sent;
-            set { sent = value; OnPropertyChanged(); }
+            get => _sent;
+            set { _sent = value; OnPropertyChanged(); }
         }
 
-        private uint received;
+        private uint _received;
         public uint Received
         {
-            get => received;
-            set { received = value; OnPropertyChanged(); }
+            get => _received;
+            set { _received = value; OnPropertyChanged(); }
         }
 
-        private uint lost;
+        private uint _lost;
         public uint Lost
         {
-            get => lost;
-            set { lost = value; OnPropertyChanged(); }
+            get => _lost;
+            set { _lost = value; OnPropertyChanged(); }
         }
 
         public void Reset()
         {
-            sent = received = lost = 0;
+            _sent = _received = _lost = 0;
             OnPropertyChanged(nameof(Sent));
             OnPropertyChanged(nameof(Received));
             OnPropertyChanged(nameof(Lost));

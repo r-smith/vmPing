@@ -15,7 +15,7 @@ namespace vmPing.Views
 {
     public partial class PopupNotificationWindow : Window
     {
-        private DispatcherTimer _AutoDismissTimer;
+        private DispatcherTimer _autoDismissTimer;
 
         public PopupNotificationWindow(ObservableCollection<StatusChangeLog> statusChangeLog)
         {
@@ -31,12 +31,12 @@ namespace vmPing.Views
 
             ((INotifyCollectionChanged)StatusHistoryList.Items).CollectionChanged += PopupNotificationWindow_CollectionChanged;
 
-            _AutoDismissTimer = new DispatcherTimer();
-            _AutoDismissTimer.Tick += new EventHandler(AutoDismissTimer_Tick);
+            _autoDismissTimer = new DispatcherTimer();
+            _autoDismissTimer.Tick += new EventHandler(AutoDismissTimer_Tick);
             if (ApplicationOptions.IsAutoDismissEnabled)
             {
-                _AutoDismissTimer.Interval = TimeSpan.FromMilliseconds(ApplicationOptions.AutoDismissMilliseconds);
-                _AutoDismissTimer.Start();
+                _autoDismissTimer.Interval = TimeSpan.FromMilliseconds(ApplicationOptions.AutoDismissMilliseconds);
+                _autoDismissTimer.Start();
             }
         }
 
@@ -52,9 +52,9 @@ namespace vmPing.Views
         {
             if (ApplicationOptions.IsAutoDismissEnabled)
             {
-                _AutoDismissTimer.Stop();
-                _AutoDismissTimer.Interval = TimeSpan.FromMilliseconds(ApplicationOptions.AutoDismissMilliseconds);
-                _AutoDismissTimer.Start();
+                _autoDismissTimer.Stop();
+                _autoDismissTimer.Interval = TimeSpan.FromMilliseconds(ApplicationOptions.AutoDismissMilliseconds);
+                _autoDismissTimer.Start();
             }
             ScaleWindowSize();
             ScrollToEnd();

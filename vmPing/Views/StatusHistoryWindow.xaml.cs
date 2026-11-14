@@ -19,28 +19,28 @@ namespace vmPing.Views
 {
     public partial class StatusHistoryWindow : Window
     {
-        readonly ICollectionView _statusHistoryView;
-        private static bool IsWindowStateSet = false;
-        private static double _Left;
-        private static double _Top;
-        private static double _Width;
-        private static double _Height;
-        private static WindowState _WindowState;
+        private readonly ICollectionView _statusHistoryView;
+        private static bool s_isWindowStateSet = false;
+        private static double s_left;
+        private static double s_top;
+        private static double s_width;
+        private static double s_height;
+        private static WindowState s_windowState;
 
         public StatusHistoryWindow(ObservableCollection<StatusChangeLog> statusChangeLog)
         {
             InitializeComponent();
 
-            if (IsWindowStateSet)
+            if (s_isWindowStateSet)
             {
-                WindowState = _WindowState;
-                if (_Left < SystemParameters.VirtualScreenWidth)
+                WindowState = s_windowState;
+                if (s_left < SystemParameters.VirtualScreenWidth)
                 {
-                    Left = _Left;
+                    Left = s_left;
                 }
-                Top = _Top;
-                Width = _Width;
-                Height = _Height;
+                Top = s_top;
+                Width = s_width;
+                Height = s_height;
             }
             RefreshMaximizeRestoreButton();
             Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
@@ -350,25 +350,25 @@ namespace vmPing.Views
         private void Window_Closed(object sender, EventArgs e)
         {
             // Remember window position and state.
-            IsWindowStateSet = true;
+            s_isWindowStateSet = true;
             switch (WindowState)
             {
                 case WindowState.Maximized:
-                    _WindowState = WindowState;
+                    s_windowState = WindowState;
                     break;
                 case WindowState.Minimized:
-                    _WindowState = WindowState.Normal;
-                    _Left = Left;
-                    _Top = Top;
-                    _Width = ActualWidth;
-                    _Height = ActualHeight;
+                    s_windowState = WindowState.Normal;
+                    s_left = Left;
+                    s_top = Top;
+                    s_width = ActualWidth;
+                    s_height = ActualHeight;
                     break;
                 case WindowState.Normal:
-                    _WindowState = WindowState.Normal;
-                    _Left = Left;
-                    _Top = Top;
-                    _Width = Width;
-                    _Height = Height;
+                    s_windowState = WindowState.Normal;
+                    s_left = Left;
+                    s_top = Top;
+                    s_width = Width;
+                    s_height = Height;
                     break;
                 default:
                     break;

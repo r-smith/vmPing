@@ -9,45 +9,45 @@ namespace vmPing.Models
         public event PropertyChangedEventHandler PropertyChanged;
 
 
-        private string hostAddress;
+        private string _hostAddress;
         public string HostAddress
         {
-            get { return hostAddress; }
+            get { return _hostAddress; }
             set
             {
-                if (value != hostAddress)
+                if (value != _hostAddress)
                 {
-                    hostAddress = value;
+                    _hostAddress = value;
                     NotifyPropertyChanged("HostAddress");
                 }
             }
         }
 
 
-        private string hostName;
+        private string _hostName;
         public string HostName
         {
-            get { return hostName; }
+            get { return _hostName; }
             set
             {
-                if (value != hostName)
+                if (value != _hostName)
                 {
-                    hostName = value;
+                    _hostName = value;
                     NotifyPropertyChanged("HostName");
                 }
             }
         }
 
 
-        private long roundTripTime;
+        private long _roundTripTime;
         public long RoundTripTime
         {
-            get { return roundTripTime; }
+            get { return _roundTripTime; }
             set
             {
-                if (value != roundTripTime)
+                if (value != _roundTripTime)
                 {
-                    roundTripTime = value;
+                    _roundTripTime = value;
                     NotifyPropertyChanged("RoundTripTime");
                 }
             }

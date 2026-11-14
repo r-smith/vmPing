@@ -108,7 +108,7 @@
                         </Label>
                     </DockPanel>
 
-                    <!-- Latency mode. The item order must match the ApplicationOptions.LatencyMode enum. -->
+                    <!-- Latency mode. The item order must match the LatencyMode enum. -->
                     <StackPanel DockPanel.Dock="Top"
                                 Orientation="Horizontal">
                         <TextBlock Text="Latency mode:"

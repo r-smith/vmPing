@@ -133,9 +133,9 @@ namespace vmPing.Probes
                         }
 
                         // Check latency.
-                        if ((ApplicationOptions.LatencyDetectionMode == ApplicationOptions.LatencyMode.Fixed &&
+                        if ((ApplicationOptions.LatencyDetectionMode == LatencyMode.Fixed &&
                             stopwatch.ElapsedMilliseconds >= ApplicationOptions.HighLatencyMilliseconds) ||
-                            (ApplicationOptions.LatencyDetectionMode == ApplicationOptions.LatencyMode.Dynamic &&
+                            (ApplicationOptions.LatencyDetectionMode == LatencyMode.Dynamic &&
                             stopwatch.ElapsedMilliseconds >= MinRtt + ApplicationOptions.HighLatencyMilliseconds))
                         {
                             // Latency is high.

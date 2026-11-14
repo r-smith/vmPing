@@ -82,11 +82,11 @@ namespace vmPing.Views
                 // Determine statup mode.
                 switch (ApplicationOptions.InitialStartMode)
                 {
-                    case ApplicationOptions.StartMode.MultiInput:
+                    case StartMode.MultiInput:
                         RefreshColumnCount();
                         MultiInputWindowExecute(null, null);
                         break;
-                    case ApplicationOptions.StartMode.Favorite:
+                    case StartMode.Favorite:
                         if (ApplicationOptions.InitialFavorite != null
                             && !string.IsNullOrWhiteSpace(ApplicationOptions.InitialFavorite))
                         {
@@ -108,13 +108,13 @@ namespace vmPing.Views
 
             switch (ApplicationOptions.PopupOption)
             {
-                case ApplicationOptions.PopupNotificationOption.Always:
+                case PopupNotificationOption.Always:
                     PopupAlways.IsChecked = true;
                     break;
-                case ApplicationOptions.PopupNotificationOption.Never:
+                case PopupNotificationOption.Never:
                     PopupNever.IsChecked = true;
                     break;
-                case ApplicationOptions.PopupNotificationOption.WhenMinimized:
+                case PopupNotificationOption.WhenMinimized:
                     PopupWhenMinimized.IsChecked = true;
                     break;
             }
@@ -562,7 +562,7 @@ namespace vmPing.Views
             PopupAlways.IsChecked = true;
             PopupNever.IsChecked = false;
             PopupWhenMinimized.IsChecked = false;
-            ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Always;
+            ApplicationOptions.PopupOption = PopupNotificationOption.Always;
         }
 
         private void PopupNever_Click(object sender, RoutedEventArgs e)
@@ -570,7 +570,7 @@ namespace vmPing.Views
             PopupAlways.IsChecked = false;
             PopupNever.IsChecked = true;
             PopupWhenMinimized.IsChecked = false;
-            ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Never;
+            ApplicationOptions.PopupOption = PopupNotificationOption.Never;
         }
 
         private void PopupWhenMinimized_Click(object sender, RoutedEventArgs e)
@@ -578,7 +578,7 @@ namespace vmPing.Views
             PopupAlways.IsChecked = false;
             PopupNever.IsChecked = false;
             PopupWhenMinimized.IsChecked = true;
-            ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
+            ApplicationOptions.PopupOption = PopupNotificationOption.WhenMinimized;
         }
 
         private void IsolatedView_Click(object sender, RoutedEventArgs e)

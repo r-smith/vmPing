@@ -118,13 +118,13 @@ namespace vmPing.Views
             PopupsAlwaysOption.IsChecked = false;
             switch (ApplicationOptions.PopupOption)
             {
-                case ApplicationOptions.PopupNotificationOption.Never:
+                case PopupNotificationOption.Never:
                     PopupsDisabledOption.IsChecked = true;
                     break;
-                case ApplicationOptions.PopupNotificationOption.WhenMinimized:
+                case PopupNotificationOption.WhenMinimized:
                     PopupsMinimizedOption.IsChecked = true;
                     break;
-                case ApplicationOptions.PopupNotificationOption.Always:
+                case PopupNotificationOption.Always:
                     PopupsAlwaysOption.IsChecked = true;
                     break;
             }
@@ -250,11 +250,11 @@ namespace vmPing.Views
             }
 
             // High latency detection. The threshold and trigger count are only used when a mode is selected.
-            var latencyMode = (ApplicationOptions.LatencyMode)LatencyDetectionMode.SelectedIndex;
+            var latencyMode = (LatencyMode)LatencyDetectionMode.SelectedIndex;
             long highLatencyMilliseconds = ApplicationOptions.HighLatencyMilliseconds;
             int highLatencyTriggerCount = ApplicationOptions.HighLatencyAlertTiggerCount;
 
-            if (latencyMode != ApplicationOptions.LatencyMode.Off)
+            if (latencyMode != LatencyMode.Off)
             {
                 if (!long.TryParse(HighLatencyMilliseconds.Text, out highLatencyMilliseconds)
                     || highLatencyMilliseconds < 1 || highLatencyMilliseconds > 60000)
@@ -329,11 +329,11 @@ namespace vmPing.Views
 
         private bool SaveStartupOptions()
         {
-            ApplicationOptions.InitialStartMode = (ApplicationOptions.StartMode)StartupMode.SelectedIndex;
+            ApplicationOptions.InitialStartMode = (StartMode)StartupMode.SelectedIndex;
             switch (StartupMode.SelectedIndex)
             {
-                case ((int)ApplicationOptions.StartMode.Blank):
-                case ((int)ApplicationOptions.StartMode.MultiInput):
+                case ((int)StartMode.Blank):
+                case ((int)StartMode.MultiInput):
                     // Initial probe count.
                     int count;
                     if (int.TryParse(InitialProbeCount.Text, out count))
@@ -371,7 +371,7 @@ namespace vmPing.Views
                     }
                     ApplicationOptions.InitialColumnCount = count;
                     break;
-                case ((int)ApplicationOptions.StartMode.Favorite):
+                case ((int)StartMode.Favorite):
                     // Initial favorite.
                     ApplicationOptions.InitialFavorite = InitialFavorite.Text;
                     break;
@@ -402,15 +402,15 @@ namespace vmPing.Views
 
             if (PopupsMinimizedOption.IsChecked == true)
             {
-                ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
+                ApplicationOptions.PopupOption = PopupNotificationOption.WhenMinimized;
             }
             else if (PopupsAlwaysOption.IsChecked == true)
             {
-                ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Always;
+                ApplicationOptions.PopupOption = PopupNotificationOption.Always;
             }
             else
             {
-                ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Never;
+                ApplicationOptions.PopupOption = PopupNotificationOption.Never;
             }
 
             return true;

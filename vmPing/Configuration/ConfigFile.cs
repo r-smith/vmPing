@@ -346,17 +346,17 @@ namespace vmPing.Configuration
             }
             if (options.TryGetValue("LatencyDetectionMode", out optionValue))
             {
-                if (optionValue.Equals(ApplicationOptions.LatencyMode.Dynamic.ToString()))
+                if (optionValue.Equals(LatencyMode.Dynamic.ToString()))
                 {
-                    ApplicationOptions.LatencyDetectionMode = ApplicationOptions.LatencyMode.Dynamic;
+                    ApplicationOptions.LatencyDetectionMode = LatencyMode.Dynamic;
                 }
-                else if (optionValue.Equals(ApplicationOptions.LatencyMode.Fixed.ToString()))
+                else if (optionValue.Equals(LatencyMode.Fixed.ToString()))
                 {
-                    ApplicationOptions.LatencyDetectionMode = ApplicationOptions.LatencyMode.Fixed;
+                    ApplicationOptions.LatencyDetectionMode = LatencyMode.Fixed;
                 }
                 else
                 {
-                    ApplicationOptions.LatencyDetectionMode = ApplicationOptions.LatencyMode.Off;
+                    ApplicationOptions.LatencyDetectionMode = LatencyMode.Off;
                 }
             }
             if (options.TryGetValue("HighLatencyMilliseconds", out optionValue))
@@ -369,17 +369,17 @@ namespace vmPing.Configuration
             }
             if (options.TryGetValue("InitialStartMode", out optionValue))
             {
-                if (optionValue.Equals(ApplicationOptions.StartMode.Favorite.ToString()))
+                if (optionValue.Equals(StartMode.Favorite.ToString()))
                 {
-                    ApplicationOptions.InitialStartMode = ApplicationOptions.StartMode.Favorite;
+                    ApplicationOptions.InitialStartMode = StartMode.Favorite;
                 }
-                else if (optionValue.Equals(ApplicationOptions.StartMode.MultiInput.ToString()))
+                else if (optionValue.Equals(StartMode.MultiInput.ToString()))
                 {
-                    ApplicationOptions.InitialStartMode = ApplicationOptions.StartMode.MultiInput;
+                    ApplicationOptions.InitialStartMode = StartMode.MultiInput;
                 }
                 else
                 {
-                    ApplicationOptions.InitialStartMode = ApplicationOptions.StartMode.Blank;
+                    ApplicationOptions.InitialStartMode = StartMode.Blank;
                 }
             }
             if (options.TryGetValue("InitialProbeCount", out optionValue))
@@ -396,17 +396,17 @@ namespace vmPing.Configuration
             }
             if (options.TryGetValue("PopupNotifications", out optionValue))
             {
-                if (optionValue.Equals(ApplicationOptions.PopupNotificationOption.Always.ToString()))
+                if (optionValue.Equals(PopupNotificationOption.Always.ToString()))
                 {
-                    ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Always;
+                    ApplicationOptions.PopupOption = PopupNotificationOption.Always;
                 }
-                else if (optionValue.Equals(ApplicationOptions.PopupNotificationOption.WhenMinimized.ToString()))
+                else if (optionValue.Equals(PopupNotificationOption.WhenMinimized.ToString()))
                 {
-                    ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.WhenMinimized;
+                    ApplicationOptions.PopupOption = PopupNotificationOption.WhenMinimized;
                 }
                 else
                 {
-                    ApplicationOptions.PopupOption = ApplicationOptions.PopupNotificationOption.Never;
+                    ApplicationOptions.PopupOption = PopupNotificationOption.Never;
                 }
             }
             if (options.TryGetValue("IsAutoDismissEnabled", out optionValue))

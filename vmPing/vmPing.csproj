@@ -84,6 +84,9 @@
     <Compile Include="Configuration\ApplicationOptions.cs" />
     <Compile Include="CommandLine.cs" />
     <Compile Include="Configuration\ConfigFile.cs" />
+    <Compile Include="Configuration\LatencyMode.cs" />
+    <Compile Include="Configuration\PopupNotificationOption.cs" />
+    <Compile Include="Configuration\StartMode.cs" />
     <Compile Include="Configuration\Favorite.cs" />
     <Compile Include="Probes\Probe.Dns.cs" />
     <Compile Include="Probes\Probe.Icmp.cs" />
@@ -128,6 +131,8 @@
     <Compile Include="Models\NetworkRouteNode.cs" />
     <Compile Include="Probes\Probe.cs" />
     <Compile Include="Probes\PingStatistics.cs" />
+    <Compile Include="Probes\ProbeStatus.cs" />
+    <Compile Include="Probes\ProbeType.cs" />
     <Compile Include="Views\IsolatedPingWindow.xaml.cs">
       <DependentUpon>IsolatedPingWindow.xaml</DependentUpon>
     </Compile>

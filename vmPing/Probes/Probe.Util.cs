@@ -234,8 +234,8 @@ namespace vmPing.Probes
         {
             Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
-                bool shouldPopup = ApplicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.Always
-                    || (ApplicationOptions.PopupOption == ApplicationOptions.PopupNotificationOption.WhenMinimized
+                bool shouldPopup = ApplicationOptions.PopupOption == PopupNotificationOption.Always
+                    || (ApplicationOptions.PopupOption == PopupNotificationOption.WhenMinimized
                     && Application.Current.MainWindow.WindowState == WindowState.Minimized);
 
                 lock (mutex)

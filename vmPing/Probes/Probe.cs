@@ -13,28 +13,6 @@ using vmPing.Views;
 
 namespace vmPing.Probes
 {
-    public enum ProbeStatus
-    {
-        Up,
-        Down,
-        Error,
-        LatencyHigh,
-        LatencyNormal,
-        Indeterminate,
-        Inactive,
-        Scanner,
-        Start,
-        Stop
-    }
-
-    public enum ProbeType
-    {
-        Dns,
-        Ping,
-        Traceroute,
-        Comment
-    }
-
     public partial class Probe : INotifyPropertyChanged
     {
         // Static members

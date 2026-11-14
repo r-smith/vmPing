@@ -7,27 +7,6 @@ namespace vmPing.Configuration
 {
     public static class ApplicationOptions
     {
-        public enum PopupNotificationOption
-        {
-            Always,
-            Never,
-            WhenMinimized
-        }
-
-        public enum StartMode
-        {
-            Blank = 0,
-            MultiInput = 1,
-            Favorite = 2
-        }
-
-        public enum LatencyMode
-        {
-            Off,
-            Dynamic,
-            Fixed
-        }
-
         // Ping & probe options.
         public static int PingInterval { get; set; } = Constants.DefaultInterval;
         public static int PingTimeout { get; set; } = Constants.DefaultTimeout;

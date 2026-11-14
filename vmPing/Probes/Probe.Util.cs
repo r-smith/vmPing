@@ -61,7 +61,7 @@ namespace vmPing.Probes
             {
                 lock (s_lock)
                 {
-                    StatusChangeLog.Add(new StatusChangeLog
+                    StatusChangeLog.Add(new StatusChange
                     {
                         Timestamp = DateTime.Now,
                         Hostname = Hostname,
@@ -127,7 +127,7 @@ namespace vmPing.Probes
             {
                 lock (s_lock)
                 {
-                    StatusChangeLog.Add(new StatusChangeLog
+                    StatusChangeLog.Add(new StatusChange
                     {
                         Timestamp = DateTime.Now,
                         Hostname = Hostname,
@@ -194,7 +194,7 @@ namespace vmPing.Probes
             }
         }
 
-        private void WriteToStatusChangesLog(StatusChangeLog status)
+        private void WriteToStatusChangesLog(StatusChange status)
         {
             if (!ApplicationOptions.IsLogStatusChangesEnabled || string.IsNullOrEmpty(ApplicationOptions.LogStatusChangesPath))
             {
@@ -216,7 +216,7 @@ namespace vmPing.Probes
         private void OnStatusChange(ProbeStatus newStatus, string alertType)
         {
             Status = newStatus;
-            TriggerStatusChange(new StatusChangeLog
+            TriggerStatusChange(new StatusChange
             {
                 Timestamp = DateTime.Now,
                 Hostname = Hostname,
@@ -230,7 +230,7 @@ namespace vmPing.Probes
             }
         }
 
-        private void TriggerStatusChange(StatusChangeLog status)
+        private void TriggerStatusChange(StatusChange status)
         {
             Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {

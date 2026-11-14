@@ -16,7 +16,7 @@ namespace vmPing.Probes
     public partial class Probe : INotifyPropertyChanged
     {
         // Static members
-        public static ObservableCollection<StatusChangeLog> StatusChangeLog { get; } = new ObservableCollection<StatusChangeLog>();
+        public static ObservableCollection<StatusChange> StatusChangeLog { get; } = new ObservableCollection<StatusChange>();
         public static StatusHistoryWindow StatusHistoryWindow;
 
         private static readonly object s_lock = new object();

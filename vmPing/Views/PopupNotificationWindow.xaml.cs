@@ -17,14 +17,14 @@ namespace vmPing.Views
     {
         private DispatcherTimer _autoDismissTimer;
 
-        public PopupNotificationWindow(ObservableCollection<StatusChangeLog> statusChangeLog)
+        public PopupNotificationWindow(ObservableCollection<StatusChange> statusChangeLog)
         {
             InitializeComponent();
 
             ICollectionView filteredChangeLog = new CollectionViewSource { Source = statusChangeLog }.View;
             filteredChangeLog.Filter = item =>
             {
-                StatusChangeLog entry = item as StatusChangeLog;
+                StatusChange entry = item as StatusChange;
                 return entry.HasStatusBeenCleared == false && entry.Status != ProbeStatus.Start && entry.Status != ProbeStatus.Stop;
             };
             StatusHistoryList.ItemsSource = filteredChangeLog;

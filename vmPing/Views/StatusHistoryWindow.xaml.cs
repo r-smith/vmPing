@@ -27,7 +27,7 @@ namespace vmPing.Views
         private static double s_height;
         private static WindowState s_windowState;
 
-        public StatusHistoryWindow(ObservableCollection<StatusChangeLog> statusChangeLog)
+        public StatusHistoryWindow(ObservableCollection<StatusChange> statusChangeLog)
         {
             InitializeComponent();
 
@@ -99,7 +99,7 @@ namespace vmPing.Views
         private bool AddressFilter(object item)
         {
             bool statusMatch = false;
-            var entry = item as StatusChangeLog;
+            var entry = item as StatusChange;
 
             if (FilterStart.IsChecked == true && entry.Status == ProbeStatus.Start)
             {
@@ -190,7 +190,7 @@ namespace vmPing.Views
         {
             Cursor = Cursors.Wait;
             StringBuilder sb = new StringBuilder();
-            foreach (StatusChangeLog s in _statusHistoryView)
+            foreach (StatusChange s in _statusHistoryView)
             {
                 sb.AppendLine($"{s.Timestamp}{delimeter}{s.Hostname}{delimeter}{s.Alias?.Replace(",", "")}{delimeter}{s.StatusAsString}");
             }

@@ -92,7 +92,7 @@
     <Compile Include="Probes\Probe.Traceroute.cs" />
     <Compile Include="Probes\Probe.Util.cs" />
     <Compile Include="Interop\NativeMethods.cs" />
-    <Compile Include="Models\StatusChangeLog.cs" />
+    <Compile Include="Models\StatusChange.cs" />
     <Compile Include="Services\Email.cs" />
     <Compile Include="Services\HostFile.cs" />
     <Compile Include="Util.cs" />

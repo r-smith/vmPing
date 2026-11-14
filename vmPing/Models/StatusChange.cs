@@ -4,7 +4,7 @@ using vmPing.Properties;
 
 namespace vmPing.Models
 {
-    public class StatusChangeLog
+    public class StatusChange
     {
         public DateTime Timestamp { get; set; }
         public string Hostname { get; set; }

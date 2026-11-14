@@ -316,203 +316,80 @@ namespace vmPing.Configuration
                 .Where(n => n.Attributes?["name"] != null)
                 .ToDictionary(n => n.Attributes["name"].Value, n => n.InnerText);
 
-            if (options.TryGetValue("PingInterval", out string optionValue))
+            ApplyInt("PingInterval", 1000, 86400000, v => ApplicationOptions.PingInterval = v, options);
+            ApplyInt("PingTimeout", 1000, 60000, v => ApplicationOptions.PingTimeout = v, options);
+            ApplyInt("TTL", 1, 255, v => ApplicationOptions.TTL = v, options);
+            ApplyBool("DontFragment", v => ApplicationOptions.DontFragment = v, options);
+            ApplyBool("UseCustomBuffer", v => ApplicationOptions.UseCustomBuffer = v, options);
+            ApplyString("Buffer", v => ApplicationOptions.Buffer = Encoding.ASCII.GetBytes(v), options);
+            ApplyInt("AlertThreshold", 1, 60, v => ApplicationOptions.AlertThreshold = v, options);
+            ApplyEnum<LatencyMode>("LatencyDetectionMode", v => ApplicationOptions.LatencyDetectionMode = v, options);
+            ApplyInt("HighLatencyMilliseconds", 1, 60000, v => ApplicationOptions.HighLatencyMilliseconds = v, options);
+            ApplyInt("HighLatencyAlertTriggerCount", 1, 60, v => ApplicationOptions.HighLatencyAlertTiggerCount = v, options);
+            ApplyEnum<StartMode>("InitialStartMode", v => ApplicationOptions.InitialStartMode = v, options);
+            ApplyInt("InitialProbeCount", 1, 20, v => ApplicationOptions.InitialProbeCount = v, options);
+            ApplyInt("InitialColumnCount", 1, 10, v => ApplicationOptions.InitialColumnCount = v, options);
+            ApplyString("InitialFavorite", v => ApplicationOptions.InitialFavorite = v, options);
+            ApplyEnum<PopupNotificationOption>("PopupNotifications", v => ApplicationOptions.PopupOption = v, options);
+            ApplyBool("IsAutoDismissEnabled", v => ApplicationOptions.IsAutoDismissEnabled = v, options);
+            ApplyInt("AutoDismissMilliseconds", 1000, 99000, v => ApplicationOptions.AutoDismissMilliseconds = v, options);
+            ApplyBool("IsEmailAlertEnabled", v => ApplicationOptions.IsEmailAlertEnabled = v, options);
+            ApplyBool("IsEmailAuthenticationRequired", v => ApplicationOptions.IsEmailAuthenticationRequired = v, options);
+            ApplyString("EmailServer", v => ApplicationOptions.EmailServer = v, options);
+            ApplyString("EmailPort", v => ApplicationOptions.EmailPort = v, options);
+            ApplyBool("IsEmailSslEnabled", v => ApplicationOptions.IsEmailSslEnabled = v, options);
+            ApplyString("EmailRecipient", v => ApplicationOptions.EmailRecipient = v, options);
+            ApplyString("EmailFromAddress", v => ApplicationOptions.EmailFromAddress = v, options);
+
+            // For compatibility with version 1.3.4 and lower.
+            ApplyBool("IsAudioAlertEnabled", v => ApplicationOptions.IsAudioDownAlertEnabled = v, options);
+            ApplyString("AudioFilePath", v => ApplicationOptions.AudioDownFilePath = v, options);
+
+            ApplyBool("IsAudioUpAlertEnabled", v => ApplicationOptions.IsAudioUpAlertEnabled = v, options);
+            ApplyBool("IsAudioDownAlertEnabled", v => ApplicationOptions.IsAudioDownAlertEnabled = v, options);
+            ApplyString("AudioUpFilePath", v => ApplicationOptions.AudioUpFilePath = v, options);
+            ApplyString("AudioDownFilePath", v => ApplicationOptions.AudioDownFilePath = v, options);
+            ApplyBool("IsLogOutputEnabled", v => ApplicationOptions.IsLogOutputEnabled = v, options);
+            ApplyString("LogPath", v => ApplicationOptions.LogPath = v, options);
+            ApplyBool("IsLogStatusChangesEnabled", v => ApplicationOptions.IsLogStatusChangesEnabled = v, options);
+            ApplyString("LogStatusChangesPath", v => ApplicationOptions.LogStatusChangesPath = v, options);
+            ApplyBool("IsAlwaysOnTopEnabled", v => ApplicationOptions.IsAlwaysOnTopEnabled = v, options);
+            ApplyBool("IsMinimizeToTrayEnabled", v => ApplicationOptions.IsMinimizeToTrayEnabled = v, options);
+            ApplyBool("IsExitToTrayEnabled", v => ApplicationOptions.IsExitToTrayEnabled = v, options);
+
+            // Loaded last, since a value that can't be decrypted stops the load with an error.
+            if (options.TryGetValue("EmailUser", out string emailUser) && emailUser.Length > 0)
             {
-                ApplicationOptions.PingInterval = int.Parse(optionValue);
+                ApplicationOptions.EmailUser = StringCipher.Decrypt(emailUser);
             }
-            if (options.TryGetValue("PingTimeout", out optionValue))
+            if (options.TryGetValue("EmailPassword", out string emailPassword) && emailPassword.Length > 0)
             {
-                ApplicationOptions.PingTimeout = int.Parse(optionValue);
+                ApplicationOptions.EmailPassword = StringCipher.Decrypt(emailPassword);
             }
-            if (options.TryGetValue("TTL", out optionValue))
-            {
-                ApplicationOptions.TTL = int.Parse(optionValue);
-            }
-            if (options.TryGetValue("DontFragment", out optionValue))
-            {
-                ApplicationOptions.DontFragment = bool.Parse(optionValue);
-            }
-            if (options.TryGetValue("UseCustomBuffer", out optionValue))
-            {
-                ApplicationOptions.UseCustomBuffer = bool.Parse(optionValue);
-            }
-            if (options.TryGetValue("Buffer", out optionValue))
-            {
-                ApplicationOptions.Buffer = Encoding.ASCII.GetBytes(optionValue);
-            }
-            if (options.TryGetValue("AlertThreshold", out optionValue))
-            {
-                ApplicationOptions.AlertThreshold = int.Parse(optionValue);
-            }
-            if (options.TryGetValue("LatencyDetectionMode", out optionValue))
-            {
-                if (optionValue.Equals(LatencyMode.Dynamic.ToString()))
-                {
-                    ApplicationOptions.LatencyDetectionMode = LatencyMode.Dynamic;
-                }
-                else if (optionValue.Equals(LatencyMode.Fixed.ToString()))
-                {
-                    ApplicationOptions.LatencyDetectionMode = LatencyMode.Fixed;
-                }
-                else
-                {
-                    ApplicationOptions.LatencyDetectionMode = LatencyMode.Off;
-                }
-            }
-            if (options.TryGetValue("HighLatencyMilliseconds", out optionValue))
-            {
-                ApplicationOptions.HighLatencyMilliseconds = long.Parse(optionValue);
-            }
-            if (options.TryGetValue("HighLatencyAlertTriggerCount", out optionValue))
-            {
-                ApplicationOptions.HighLatencyAlertTiggerCount = int.Parse(optionValue);
-            }
-            if (options.TryGetValue("InitialStartMode", out optionValue))
-            {
-                if (optionValue.Equals(StartMode.Favorite.ToString()))
-                {
-                    ApplicationOptions.InitialStartMode = StartMode.Favorite;
-                }
-                else if (optionValue.Equals(StartMode.MultiInput.ToString()))
-                {
-                    ApplicationOptions.InitialStartMode = StartMode.MultiInput;
-                }
-                else
-                {
-                    ApplicationOptions.InitialStartMode = StartMode.Blank;
-                }
-            }
-            if (options.TryGetValue("InitialProbeCount", out optionValue))
-            {
-                ApplicationOptions.InitialProbeCount = int.Parse(optionValue);
-            }
-            if (options.TryGetValue("InitialColumnCount", out optionValue))
-            {
-                ApplicationOptions.InitialColumnCount = int.Parse(optionValue);
-            }
-            if (options.TryGetValue("InitialFavorite", out optionValue))
-            {
-                ApplicationOptions.InitialFavorite = optionValue;
-            }
-            if (options.TryGetValue("PopupNotifications", out optionValue))
-            {
-                if (optionValue.Equals(PopupNotificationOption.Always.ToString()))
-                {
-                    ApplicationOptions.PopupOption = PopupNotificationOption.Always;
-                }
-                else if (optionValue.Equals(PopupNotificationOption.WhenMinimized.ToString()))
-                {
-                    ApplicationOptions.PopupOption = PopupNotificationOption.WhenMinimized;
-                }
-                else
-                {
-                    ApplicationOptions.PopupOption = PopupNotificationOption.Never;
-                }
-            }
-            if (options.TryGetValue("IsAutoDismissEnabled", out optionValue))
-            {
-                ApplicationOptions.IsAutoDismissEnabled = bool.Parse(optionValue);
-            }
-            if (options.TryGetValue("AutoDismissMilliseconds", out optionValue))
-            {
-                ApplicationOptions.AutoDismissMilliseconds = int.Parse(optionValue);
-            }
-            if (options.TryGetValue("IsEmailAlertEnabled", out optionValue))
-            {
-                ApplicationOptions.IsEmailAlertEnabled = bool.Parse(optionValue);
-            }
-            if (options.TryGetValue("IsEmailAuthenticationRequired", out optionValue))
-            {
-                ApplicationOptions.IsEmailAuthenticationRequired = bool.Parse(optionValue);
-            }
-            if (options.TryGetValue("EmailServer", out optionValue))
-            {
-                ApplicationOptions.EmailServer = optionValue;
-            }
-            if (options.TryGetValue("EmailPort", out optionValue))
-            {
-                ApplicationOptions.EmailPort = optionValue;
-            }
-            if (options.TryGetValue("IsEmailSslEnabled", out optionValue))
-            {
-                ApplicationOptions.IsEmailSslEnabled = bool.Parse(optionValue);
-            }
-            if (options.TryGetValue("EmailRecipient", out optionValue))
-            {
-                ApplicationOptions.EmailRecipient = optionValue;
-            }
-            if (options.TryGetValue("EmailFromAddress", out optionValue))
-            {
-                ApplicationOptions.EmailFromAddress = optionValue;
-            }
-            if (options.TryGetValue("IsAudioAlertEnabled", out optionValue))
-            {
-                // For compatibility with version 1.3.4 and lower.
-                ApplicationOptions.IsAudioDownAlertEnabled = bool.Parse(optionValue);
-            }
-            if (options.TryGetValue("AudioFilePath", out optionValue))
-            {
-                // For compatibility with version 1.3.4 and lower.
-                ApplicationOptions.AudioDownFilePath = optionValue;
-            }
-            if (options.TryGetValue("IsAudioUpAlertEnabled", out optionValue))
-            {
-                ApplicationOptions.IsAudioUpAlertEnabled = bool.Parse(optionValue);
-            }
-            if (options.TryGetValue("IsAudioDownAlertEnabled", out optionValue))
-            {
-                ApplicationOptions.IsAudioDownAlertEnabled = bool.Parse(optionValue);
-            }
-            if (options.TryGetValue("AudioUpFilePath", out optionValue))
-            {
-                ApplicationOptions.AudioUpFilePath = optionValue;
-            }
-            if (options.TryGetValue("AudioDownFilePath", out optionValue))
-            {
-                ApplicationOptions.AudioDownFilePath = optionValue;
-            }
-            if (options.TryGetValue("IsLogOutputEnabled", out optionValue))
-            {
-                ApplicationOptions.IsLogOutputEnabled = bool.Parse(optionValue);
-            }
-            if (options.TryGetValue("LogPath", out optionValue))
-            {
-                ApplicationOptions.LogPath = optionValue;
-            }
-            if (options.TryGetValue("IsLogStatusChangesEnabled", out optionValue))
-            {
-                ApplicationOptions.IsLogStatusChangesEnabled = bool.Parse(optionValue);
-            }
-            if (options.TryGetValue("LogStatusChangesPath", out optionValue))
-            {
-                ApplicationOptions.LogStatusChangesPath = optionValue;
-            }
-            if (options.TryGetValue("EmailUser", out optionValue))
-            {
-                if (optionValue.Length > 0)
-                {
-                    ApplicationOptions.EmailUser = StringCipher.Decrypt(optionValue);
-                }
-            }
-            if (options.TryGetValue("EmailPassword", out optionValue))
-            {
-                if (optionValue.Length > 0)
-                {
-                    ApplicationOptions.EmailPassword = StringCipher.Decrypt(optionValue);
-                }
-            }
-            if (options.TryGetValue("IsAlwaysOnTopEnabled", out optionValue))
-            {
-                ApplicationOptions.IsAlwaysOnTopEnabled = bool.Parse(optionValue);
-            }
-            if (options.TryGetValue("IsMinimizeToTrayEnabled", out optionValue))
-            {
-                ApplicationOptions.IsMinimizeToTrayEnabled = bool.Parse(optionValue);
-            }
-            if (options.TryGetValue("IsExitToTrayEnabled", out optionValue))
-            {
-                ApplicationOptions.IsExitToTrayEnabled = bool.Parse(optionValue);
-            }
+        }
+
+        private static void ApplyString(string key, Action<string> setter, IDictionary<string, string> options)
+        {
+            if (options.TryGetValue(key, out var value))
+                setter(value);
+        }
+
+        private static void ApplyBool(string key, Action<bool> setter, IDictionary<string, string> options)
+        {
+            if (options.TryGetValue(key, out var value) && bool.TryParse(value, out bool result))
+                setter(result);
+        }
+
+        private static void ApplyInt(string key, int min, int max, Action<int> setter, IDictionary<string, string> options)
+        {
+            if (options.TryGetValue(key, out var value) && int.TryParse(value, out int result) && result >= min && result <= max)
+                setter(result);
+        }
+
+        private static void ApplyEnum<T>(string key, Action<T> setter, IDictionary<string, string> options) where T : struct
+        {
+            if (options.TryGetValue(key, out var value) && Enum.TryParse(value, out T result) && Enum.IsDefined(typeof(T), result))
+                setter(result);
         }
     }
 }

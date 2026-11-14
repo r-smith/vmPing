@@ -620,7 +620,7 @@ namespace vmPing.Views
 
         private void NumericTextbox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            var regex = new Regex("[^0-9.-]+");
+            var regex = new Regex("[^0-9]+");
             if (regex.IsMatch(e.Text))
             {
                 e.Handled = true;

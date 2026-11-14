@@ -94,6 +94,7 @@
     <Compile Include="Interop\NativeMethods.cs" />
     <Compile Include="Models\StatusChangeLog.cs" />
     <Compile Include="Services\Email.cs" />
+    <Compile Include="Services\HostFile.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="Converters\ValueConverters.cs" />
     <Compile Include="Controls\AutoScrollAdorner.cs" />

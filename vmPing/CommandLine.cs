@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows;
 using vmPing.Configuration;
+using vmPing.Services;
 using vmPing.Views;
 
 namespace vmPing
@@ -15,7 +15,6 @@ namespace vmPing
         private const int MaxInterval = 86400;
         private const int MinTimeout = 1;
         private const int MaxTimeout = 60;
-        private const long MaxHostFileSize = 10 * 1024;
 
         public static List<string> ParseArguments()
         {
@@ -98,29 +97,11 @@ namespace vmPing
         {
             try
             {
-                // Check file size.
-                long length = new FileInfo(path).Length;
-                if (length > MaxHostFileSize)
-                {
-                    ShowErrorDialog($"\"{path}\" is too large. The maximum file size is {MaxHostFileSize / 1024} KB.");
-                    Application.Current.Shutdown();
-                    return new List<string>();
-                }
-
-                // Read, validate, and trim each line from the specified file.
-                // Valid lines must not be empty and must begin with a letter, digit, or '[' character (for IPv6).
-                var validLines = File.ReadAllLines(path)
-                    .Where(line =>
-                        !string.IsNullOrWhiteSpace(line) &&
-                        (char.IsLetterOrDigit(line[0]) || line[0] == '['))
-                    .Select(line => line.Trim())
-                    .ToList();
-
-                return validLines;
+                return HostFile.Read(path);
             }
             catch (Exception ex)
             {
-                ShowErrorDialog($"Unable to parse \"{path}\": {ex.Message}");
+                ShowErrorDialog($"Unable to read \"{path}\": {ex.Message}");
                 Application.Current.Shutdown();
                 return new List<string>();
             }

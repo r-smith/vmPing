@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -9,6 +8,7 @@ using System.Windows.Media;
 using vmPing.Configuration;
 using vmPing.Interop;
 using vmPing.Properties;
+using vmPing.Services;
 
 namespace vmPing.Views
 {
@@ -131,44 +131,22 @@ namespace vmPing.Views
 
         private void MyHosts_Drop(object sender, DragEventArgs e)
         {
-            const long MaxSizeInBytes = 10240;
-
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                try
-                {
-                    // Get path(s). We only work with the first element, in cases of multiple files.
-                    string[] docPath = (string[])e.Data.GetData(DataFormats.FileDrop);
+                return;
+            }
 
-                    // Check file size.
-                    long length = new FileInfo(docPath[0]).Length;
-                    if (length > MaxSizeInBytes) throw new FileFormatException();
-
-                    // Read file into a list of strings, so that each line can get checked.
-                    var linesInFile = new List<string>(File.ReadAllLines(docPath[0]));
-
-                    // Get a list of valid lines.
-                    // Valid lines must not be empty and must being with a letter, digit, or '[' character (for IPv6).
-                    var validLines = linesInFile
-                        .Where(x => !string.IsNullOrWhiteSpace(x) &&
-                                    (char.IsLetterOrDigit(x[0]) || x[0] == '['));
-
-                    // Convert list to multiline string (with each line trimmed).
-                    MyHosts.Text = string.Join(Environment.NewLine, validLines.Select(x => x.Trim()));
-                }
-                catch (FileFormatException)
-                {
-                    var dialog = DialogWindow.ErrorWindow(
-                        $"The file is too large and cannot be opened. The maximum file size is {MaxSizeInBytes / 1024} kb.");
-                    dialog.Owner = this;
-                    dialog.ShowDialog();
-                }
-                catch
-                {
-                    var dialog = DialogWindow.ErrorWindow("File could not be opened. Make sure the file is a plain text file.");
-                    dialog.Owner = this;
-                    dialog.ShowDialog();
-                }
+            try
+            {
+                // Only the first file is used when several are dropped.
+                string[] paths = (string[])e.Data.GetData(DataFormats.FileDrop);
+                MyHosts.Text = string.Join(Environment.NewLine, HostFile.Read(paths[0]));
+            }
+            catch (Exception ex)
+            {
+                DialogWindow dialog = DialogWindow.ErrorWindow($"File could not be opened: {ex.Message}");
+                dialog.Owner = this;
+                dialog.ShowDialog();
             }
         }
 

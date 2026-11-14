@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using vmPing.Interop;
+using vmPing.Services;
 
 namespace vmPing.Views
 {
@@ -56,8 +56,6 @@ namespace vmPing.Views
 
         private void MultiAddress_Drop(object sender, DragEventArgs e)
         {
-            const long MaxSizeInBytes = 10240;
-
             if (!e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 return;
@@ -79,24 +77,9 @@ namespace vmPing.Views
                     return;
                 }
 
-                // Check filesize.
-                var fileInfo = new FileInfo(paths[0]);
-                if (fileInfo.Length > MaxSizeInBytes)
-                {
-                    ShowError($"\"{paths[0]}\" is too large. The maximum file size is {MaxSizeInBytes / 1024} KB.");
-                    return;
-                }
-
-                // Extract valid lines: valid lines are non-empty and begin with a letter, number, or the `[` character (for IPv6).
-                var validLines = File.ReadLines(paths[0])
-                    .Select(line => line.Trim())
-                    .Where(line => !string.IsNullOrWhiteSpace(line) &&
-                        (char.IsLetterOrDigit(line[0]) || line[0] == '['));
-
-                // Convert list to multiline string.
-                MultiAddress.Text = string.Join(Environment.NewLine, validLines);
+                MultiAddress.Text = string.Join(Environment.NewLine, HostFile.Read(paths[0]));
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 ShowError($"File could not be opened: {ex.Message}");
             }

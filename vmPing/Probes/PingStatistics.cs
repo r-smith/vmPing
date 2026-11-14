@@ -28,9 +28,34 @@ namespace vmPing.Probes
             set { _lost = value; OnPropertyChanged(); }
         }
 
+        // Round-trip times of the replies received, in milliseconds.
+        public long MinimumTime { get; private set; }
+        public long MaximumTime { get; private set; }
+        public double AverageTime => _timeCount == 0 ? 0 : (double)_totalTime / _timeCount;
+
+        private long _totalTime;
+        private long _timeCount;
+
+        public void AddRoundTripTime(long milliseconds)
+        {
+            if (_timeCount == 0 || milliseconds < MinimumTime)
+            {
+                MinimumTime = milliseconds;
+            }
+            if (milliseconds > MaximumTime)
+            {
+                MaximumTime = milliseconds;
+            }
+
+            _totalTime += milliseconds;
+            _timeCount++;
+        }
+
         public void Reset()
         {
             _sent = _received = _lost = 0;
+            MinimumTime = MaximumTime = 0;
+            _totalTime = _timeCount = 0;
             OnPropertyChanged(nameof(Sent));
             OnPropertyChanged(nameof(Received));
             OnPropertyChanged(nameof(Lost));

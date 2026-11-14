@@ -10,6 +10,7 @@ namespace vmPing.Probes
         private void HandleReply(long roundTripTime)
         {
             Statistics.Received++;
+            Statistics.AddRoundTripTime(roundTripTime);
             IndeterminateCount = 0;
 
             // If this is a new probe, record the initial 'up' state to the status history.
@@ -34,17 +35,11 @@ namespace vmPing.Probes
 
         private void UpdateLatency(long roundTripTime)
         {
-            // Update minimum RTT.
-            if (roundTripTime < MinRtt)
-            {
-                MinRtt = roundTripTime;
-            }
-
             bool isSlow =
                 (ApplicationOptions.LatencyDetectionMode == LatencyMode.Fixed &&
                 roundTripTime >= ApplicationOptions.HighLatencyMilliseconds) ||
                 (ApplicationOptions.LatencyDetectionMode == LatencyMode.Dynamic &&
-                roundTripTime >= MinRtt + ApplicationOptions.HighLatencyMilliseconds);
+                roundTripTime >= Statistics.MinimumTime + ApplicationOptions.HighLatencyMilliseconds);
 
             // Count up on each slow reply and back down on each normal reply.
             if (isSlow)

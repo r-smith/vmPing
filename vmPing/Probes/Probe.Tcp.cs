@@ -85,7 +85,6 @@ namespace vmPing.Probes
                 using (var client = new TcpClient(ipVersion))
                 {
                     Statistics.Sent++;
-                    DisplayStatistics();
 
                     try
                     {
@@ -241,7 +240,6 @@ namespace vmPing.Probes
                 {
                     // Update output.
                     DisplayTcpReply(isPortOpen, portnumber, errorCode, stopwatch.ElapsedMilliseconds);
-                    DisplayStatistics();
 
                     // Pause between probes.
                     await Task.Delay(ApplicationOptions.PingInterval);

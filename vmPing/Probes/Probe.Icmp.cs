@@ -147,7 +147,6 @@ namespace vmPing.Probes
                         if (!cancellationToken.IsCancellationRequested)
                         {
                             // Update output.
-                            DisplayStatistics();
                             DisplayIcmpReply(reply);
 
                             // Pause between probes.
@@ -177,7 +176,6 @@ namespace vmPing.Probes
                         }
 
                         // Update output.
-                        DisplayStatistics();
                         DisplayIcmpReply(null, ex);
 
                         // Pause between probes.

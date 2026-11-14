@@ -454,7 +454,7 @@ namespace vmPing.Views
             // Load aliases.
             foreach (var alias in aliasList)
             {
-                AliasesMenu.Items.Add(BuildAliasMenuItem(alias, false));
+                AliasesMenu.Items.Add(BuildAliasMenuItem(alias));
             }
 
             foreach (var probe in _ProbeCollection)
@@ -472,7 +472,7 @@ namespace vmPing.Views
             return null;
         }
 
-        private MenuItem BuildAliasMenuItem(KeyValuePair<string, string> alias, bool isContextMenu)
+        private MenuItem BuildAliasMenuItem(KeyValuePair<string, string> alias)
         {
             var menuItem = new MenuItem
             {
@@ -480,42 +480,29 @@ namespace vmPing.Views
                 Tag = alias.Key
             };
 
-            if (isContextMenu)
+            menuItem.Click += (s, r) =>
             {
-                menuItem.Click += (s, r) =>
-                {
-                    var selectedMenuItem = s as MenuItem;
-                    var selectedAlias = (Probe)selectedMenuItem.DataContext;
-                    selectedAlias.Hostname = (string)selectedMenuItem.Tag;
-                    selectedAlias.StartStop();
-                };
-            }
-            else
-            {
-                menuItem.Click += (s, r) =>
-                {
-                    var selectedAlias = s as MenuItem;
+                var selectedAlias = s as MenuItem;
 
-                    var didFindEmptyHost = false;
-                    for (int i = 0; i < _ProbeCollection.Count; ++i)
+                var didFindEmptyHost = false;
+                for (int i = 0; i < _ProbeCollection.Count; ++i)
+                {
+                    if (string.IsNullOrWhiteSpace(_ProbeCollection[i].Hostname))
                     {
-                        if (string.IsNullOrWhiteSpace(_ProbeCollection[i].Hostname))
-                        {
-                            _ProbeCollection[i].Hostname = (string)selectedAlias.Tag;
-                            _ProbeCollection[i].StartStop();
-                            didFindEmptyHost = true;
-                            break;
-                        }
+                        _ProbeCollection[i].Hostname = (string)selectedAlias.Tag;
+                        _ProbeCollection[i].StartStop();
+                        didFindEmptyHost = true;
+                        break;
                     }
+                }
 
-                    if (!didFindEmptyHost)
-                    {
-                        AddProbe();
-                        _ProbeCollection[_ProbeCollection.Count - 1].Hostname = (string)selectedAlias.Tag;
-                        _ProbeCollection[_ProbeCollection.Count - 1].StartStop();
-                    }
-                };
-            }
+                if (!didFindEmptyHost)
+                {
+                    AddProbe();
+                    _ProbeCollection[_ProbeCollection.Count - 1].Hostname = (string)selectedAlias.Tag;
+                    _ProbeCollection[_ProbeCollection.Count - 1].StartStop();
+                }
+            };
 
             return menuItem;
         }
@@ -820,24 +807,6 @@ namespace vmPing.Views
             {
                 NotifyIcon?.Dispose();
             }
-        }
-
-        private void History_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            var tb = sender as TextBox;
-            tb.SelectionStart = (tb.DataContext as Probe).SelStart;
-            tb.SelectionLength = (tb.DataContext as Probe).SelLength;
-            if (!tb.IsMouseCaptureWithin && tb.SelectionLength == 0)
-            {
-                tb.ScrollToEnd();
-            }
-        }
-
-        private void History_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            var tb = sender as TextBox;
-            (tb.DataContext as Probe).SelStart = tb.SelectionStart;
-            (tb.DataContext as Probe).SelLength = tb.SelectionLength;
         }
     }
 }

@@ -213,11 +213,6 @@ namespace vmPing.Probes
             }
         }
 
-        private void DisplayStatistics()
-        {
-            StatisticsText = $"Sent: {Statistics.Sent} Received: {Statistics.Received} Lost: {Statistics.Lost}";
-        }
-
         private void OnStatusChange(ProbeStatus newStatus, string alertType)
         {
             Status = newStatus;

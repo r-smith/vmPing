@@ -37,8 +37,6 @@ namespace vmPing.Probes
         public int HighLatencyCount { get; set; }
         public long MinRtt { get; set; } = long.MaxValue;
         public PingStatistics Statistics { get; set; } = new PingStatistics();
-        public int SelStart { get; set; }
-        public int SelLength { get; set; }
         public CancellationTokenSource CancelSource { get; set; }
 
         private ObservableCollection<string> history;
@@ -146,20 +144,6 @@ namespace vmPing.Probes
                 }
 
                 ActiveCountChanged?.Invoke(null, EventArgs.Empty);
-            }
-        }
-
-        private string statisticsText;
-        public string StatisticsText
-        {
-            get => statisticsText;
-            set
-            {
-                if (value != statisticsText)
-                {
-                    statisticsText = value;
-                    OnPropertyChanged();
-                }
             }
         }
 

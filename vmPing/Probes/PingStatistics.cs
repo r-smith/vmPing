@@ -28,20 +28,12 @@ namespace vmPing.Probes
             set { lost = value; OnPropertyChanged(); }
         }
 
-        private uint error;
-        public uint Error
-        {
-            get => error;
-            set { error = value; OnPropertyChanged(); }
-        }
-
         public void Reset()
         {
-            sent = received = lost = error = 0;
+            sent = received = lost = 0;
             OnPropertyChanged(nameof(Sent));
             OnPropertyChanged(nameof(Received));
             OnPropertyChanged(nameof(Lost));
-            OnPropertyChanged(nameof(Error));
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string name = null)

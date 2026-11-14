@@ -4,7 +4,7 @@
         xmlns:resource="clr-namespace:vmPing.Properties"
         Title="{x:Static resource:Strings.ManageAliases_WindowTitle}"
         UseLayoutRounding="True"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="CenterOwner"
         Height="475"
         Width="460"
         MinHeight="250"

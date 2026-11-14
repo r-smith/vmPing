@@ -24,6 +24,7 @@ namespace vmPing.Views
         public TracerouteWindow()
         {
             InitializeComponent();
+            Util.CenterOverMainWindow(this);
             Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
 
             DataContext = _traceroute;

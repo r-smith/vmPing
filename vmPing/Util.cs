@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
+using vmPing.Interop;
 using vmPing.Properties;
 
 namespace vmPing
@@ -29,6 +31,39 @@ namespace vmPing
             // function is missing several invalid filename characters.
             char[] invalidCharacters = { '<', '>', ':', '"', '/', '\\', '|', '?', '*' };
             return string.Join("_", filename.Split(invalidCharacters));
+        }
+
+        // Centers a window over the main window without making it an owned window.
+        // The window is kept inside the work area of the main window's monitor.
+        // Call before the window is shown.
+        public static void CenterOverMainWindow(Window window)
+        {
+            Window mainWindow = Application.Current.MainWindow;
+
+            // Use the center of the screen when the main window is hidden or minimized.
+            if (mainWindow == null || !mainWindow.IsVisible || mainWindow.WindowState == WindowState.Minimized)
+            {
+                window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                return;
+            }
+
+            // A maximized window fills the work area. Left and Top can't be used
+            // because they hold the restored position while maximized.
+            Rect workArea = NativeMethods.GetWorkArea(mainWindow);
+            Rect bounds = mainWindow.WindowState == WindowState.Maximized
+                ? workArea
+                : new Rect(mainWindow.Left, mainWindow.Top, mainWindow.ActualWidth, mainWindow.ActualHeight);
+
+            double left = bounds.Left + (bounds.Width - window.Width) / 2;
+            double top = bounds.Top + (bounds.Height - window.Height) / 2;
+
+            // Move the window back if it would go past an edge of the work area.
+            left = Math.Max(workArea.Left, Math.Min(left, workArea.Right - window.Width));
+            top = Math.Max(workArea.Top, Math.Min(top, workArea.Bottom - window.Height));
+
+            window.WindowStartupLocation = WindowStartupLocation.Manual;
+            window.Left = left;
+            window.Top = top;
         }
 
         public static IEnumerable<Visual> GetChildren(this Visual parent, bool recurse = true)

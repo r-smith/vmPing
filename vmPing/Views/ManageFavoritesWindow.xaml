@@ -8,7 +8,7 @@
         MinHeight="300"
         Width="600"
         MinWidth="425"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="CenterOwner"
         Background="#f0f0f0"
         ResizeMode="CanResize"
         PreviewKeyDown="Window_PreviewKeyDown"

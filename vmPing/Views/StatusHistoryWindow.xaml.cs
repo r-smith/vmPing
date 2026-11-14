@@ -27,20 +27,30 @@ namespace vmPing.Views
         private static double s_height;
         private static WindowState s_windowState;
 
-        public StatusHistoryWindow(ObservableCollection<StatusChange> statusChangeLog)
+        public StatusHistoryWindow(ObservableCollection<StatusChange> statusChangeLog, bool restorePosition = false)
         {
             InitializeComponent();
 
             if (s_isWindowStateSet)
             {
                 WindowState = s_windowState;
+                Width = s_width;
+                Height = s_height;
+            }
+
+            // Reopen at the last position when opened from a popup alert.
+            // Otherwise, open over the main window.
+            if (s_isWindowStateSet && restorePosition)
+            {
                 if (s_left < SystemParameters.VirtualScreenWidth)
                 {
                     Left = s_left;
                 }
                 Top = s_top;
-                Width = s_width;
-                Height = s_height;
+            }
+            else
+            {
+                Util.CenterOverMainWindow(this);
             }
             RefreshMaximizeRestoreButton();
             Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;

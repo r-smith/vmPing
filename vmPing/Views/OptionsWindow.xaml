@@ -7,7 +7,7 @@
         Width="580"
         MinHeight="500"
         MinWidth="580"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="CenterOwner"
         ResizeMode="CanResize"
         Background="#e1e1e1"
         SourceInitialized="Window_SourceInitialized">

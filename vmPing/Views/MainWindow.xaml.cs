@@ -64,9 +64,7 @@ namespace vmPing.Views
                 for (int i = 0; i < cliHosts.Count; ++i)
                 {
                     _ProbeCollection[i].Hostname = cliHosts[i];
-                    _ProbeCollection[i].Alias = _Aliases.ContainsKey(_ProbeCollection[i].Hostname.ToLower())
-                        ? _Aliases[_ProbeCollection[i].Hostname.ToLower()]
-                        : null;
+                    _ProbeCollection[i].Alias = GetAlias(_ProbeCollection[i].Hostname);
                     _ProbeCollection[i].StartStop();
                 }
             }
@@ -282,9 +280,7 @@ namespace vmPing.Views
                     for (int i = 0; i < wnd.Addresses.Count; ++i)
                     {
                         _ProbeCollection[i].Hostname = wnd.Addresses[i];
-                        _ProbeCollection[i].Alias = _Aliases.ContainsKey(_ProbeCollection[i].Hostname.ToLower())
-                            ? _Aliases[_ProbeCollection[i].Hostname.ToLower()]
-                            : null;
+                        _ProbeCollection[i].Alias = GetAlias(_ProbeCollection[i].Hostname);
                         _ProbeCollection[i].StartStop();
                     }
                 }
@@ -433,9 +429,7 @@ namespace vmPing.Views
                 for (int i = 0; i < favorite.Hostnames.Count; ++i)
                 {
                     _ProbeCollection[i].Hostname = favorite.Hostnames[i];
-                    _ProbeCollection[i].Alias = _Aliases.ContainsKey(_ProbeCollection[i].Hostname.ToLower())
-                        ? _Aliases[_ProbeCollection[i].Hostname.ToLower()]
-                        : null;
+                    _ProbeCollection[i].Alias = GetAlias(_ProbeCollection[i].Hostname);
                     _ProbeCollection[i].StartStop();
                 }
             }
@@ -465,10 +459,17 @@ namespace vmPing.Views
 
             foreach (var probe in _ProbeCollection)
             {
-                probe.Alias = probe.Hostname != null && _Aliases.ContainsKey(probe.Hostname.ToLower())
-                    ? _Aliases[probe.Hostname.ToLower()]
-                    : string.Empty;
+                probe.Alias = GetAlias(probe.Hostname) ?? string.Empty;
             }
+        }
+
+        private string GetAlias(string hostname)
+        {
+            if (hostname != null && _Aliases.TryGetValue(hostname, out string alias))
+            {
+                return alias;
+            }
+            return null;
         }
 
         private MenuItem BuildAliasMenuItem(KeyValuePair<string, string> alias, bool isContextMenu)
@@ -605,14 +606,7 @@ namespace vmPing.Views
                 return;
             }
 
-            if (_Aliases.ContainsKey(probe.Hostname.ToLower()))
-            {
-                probe.Alias = _Aliases[probe.Hostname.ToLower()];
-            }
-            else
-            {
-                probe.Alias = string.Empty;
-            }
+            probe.Alias = GetAlias(probe.Hostname) ?? string.Empty;
 
             var wnd = new EditAliasWindow(probe)
             {
@@ -659,9 +653,7 @@ namespace vmPing.Views
             var probe = (sender as TextBox).DataContext as Probe;
             if (probe.Hostname != null)
             {
-                probe.Alias = _Aliases.ContainsKey(probe.Hostname.ToLower())
-                    ? _Aliases[probe.Hostname.ToLower()]
-                    : null;
+                probe.Alias = GetAlias(probe.Hostname);
             }
         }
 

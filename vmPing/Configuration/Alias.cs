@@ -13,7 +13,7 @@ namespace vmPing.Configuration
 
         public static Dictionary<string, string> GetAll()
         {
-            var aliases = new Dictionary<string, string>();
+            var aliases = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             if (!ConfigFile.Exists())
             {

@@ -214,15 +214,21 @@ namespace vmPing.Views
 
         private void OK_Click(object sender, RoutedEventArgs e)
         {
-            if (SaveGeneralOptions() == false) return;
-            if (SaveStartupOptions() == false) return;
-            if (SaveNotificationOptions() == false) return;
-            if (SaveEmailAlertOptions() == false) return;
-            if (SaveAudioAlertOptions() == false) return;
-            if (SaveLogOutputOptions() == false) return;
-            if (SaveAdvancedOptions() == false) return;
-            if (SaveLayoutOptions() == false) return;
-            if (SaveDisplayOptions() == false) return;
+            // Check every tab before applying anything.
+            if (!ValidateOptions())
+            {
+                return;
+            }
+
+            SaveGeneralOptions();
+            SaveStartupOptions();
+            SaveNotificationOptions();
+            SaveEmailAlertOptions();
+            SaveAudioAlertOptions();
+            SaveLogOutputOptions();
+            SaveAdvancedOptions();
+            SaveLayoutOptions();
+            SaveDisplayOptions();
 
             if (SaveAsDefaults.IsChecked == true)
             {
@@ -232,177 +238,142 @@ namespace vmPing.Views
             DialogResult = true;
         }
 
-        private bool SaveGeneralOptions()
+        private bool ValidateOptions()
         {
-            if (PingInterval.Text.Length == 0)
+            return ValidateGeneralOptions()
+                && ValidateStartupOptions()
+                && ValidateNotificationOptions()
+                && ValidateEmailAlertOptions()
+                && ValidateAudioAlertOptions()
+                && ValidateLogOutputOptions()
+                && ValidateAdvancedOptions()
+                && ValidateLayoutOptions();
+        }
+
+        private static bool IsInRange(string text, int min, int max)
+        {
+            return int.TryParse(text, out int value) && value >= min && value <= max;
+        }
+
+        private int GetPingIntervalMultiplier()
+        {
+            switch (PingIntervalUnits.Text)
             {
-                ShowError("Please enter a valid ping interval.", GeneralTab, PingInterval);
+                case "minutes":
+                    return 1000 * 60;
+                case "hours":
+                    return 1000 * 60 * 60;
+                default:
+                    return 1000;
+            }
+        }
+
+        private bool ValidateGeneralOptions()
+        {
+            // Ping interval. Limited to 24 hours, the same as the command line option.
+            const long MaxIntervalMilliseconds = 24 * 60 * 60 * 1000;
+            if (!int.TryParse(PingInterval.Text, out int pingInterval) || pingInterval < 1
+                || (long)pingInterval * GetPingIntervalMultiplier() > MaxIntervalMilliseconds)
+            {
+                ShowError("Please enter a ping interval between 1 second and 24 hours.", GeneralTab, PingInterval);
                 return false;
             }
-            else if (PingTimeout.Text.Length == 0)
+            if (!IsInRange(PingTimeout.Text, 1, 60))
             {
-                ShowError("Please enter a valid ping timeout.", GeneralTab, PingTimeout);
+                ShowError("Please enter a ping timeout between 1 and 60 seconds.", GeneralTab, PingTimeout);
                 return false;
             }
-            else if (AlertThreshold.Text.Length == 0)
+            if (!IsInRange(AlertThreshold.Text, 1, 60))
             {
-                ShowError("Please enter a valid alert threshold.", GeneralTab, AlertThreshold);
+                ShowError("Please enter an alert threshold between 1 and 60.", GeneralTab, AlertThreshold);
                 return false;
             }
 
-            // High latency detection. The threshold and trigger count are only used when a mode is selected.
-            var latencyMode = (LatencyMode)LatencyDetectionMode.SelectedIndex;
-            long highLatencyMilliseconds = ApplicationOptions.HighLatencyMilliseconds;
-            int highLatencyTriggerCount = ApplicationOptions.HighLatencyAlertTiggerCount;
-
-            if (latencyMode != LatencyMode.Off)
+            // The high latency threshold and trigger count are only used when a mode is selected.
+            if ((LatencyMode)LatencyDetectionMode.SelectedIndex != LatencyMode.Off)
             {
-                if (!long.TryParse(HighLatencyMilliseconds.Text, out highLatencyMilliseconds)
-                    || highLatencyMilliseconds < 1 || highLatencyMilliseconds > 60000)
+                if (!IsInRange(HighLatencyMilliseconds.Text, 1, 60000))
                 {
                     ShowError("Please enter a high latency threshold between 1 and 60,000 milliseconds.", GeneralTab, HighLatencyMilliseconds);
                     return false;
                 }
-                if (!int.TryParse(HighLatencyTriggerCount.Text, out highLatencyTriggerCount)
-                    || highLatencyTriggerCount < 1 || highLatencyTriggerCount > 60)
+                if (!IsInRange(HighLatencyTriggerCount.Text, 1, 60))
                 {
                     ShowError("Please enter a number of slow pings between 1 and 60.", GeneralTab, HighLatencyTriggerCount);
                     return false;
                 }
             }
 
-            // Ping interval. Limited to 24 hours, the same as the command line option.
-            const long MaxIntervalMilliseconds = 24 * 60 * 60 * 1000;
-            int pingInterval;
-            int multiplier = 1000;
+            return true;
+        }
 
-            switch (PingIntervalUnits.Text)
+        private void SaveGeneralOptions()
+        {
+            ApplicationOptions.PingInterval = int.Parse(PingInterval.Text) * GetPingIntervalMultiplier();
+            ApplicationOptions.PingTimeout = int.Parse(PingTimeout.Text) * 1000;
+            ApplicationOptions.AlertThreshold = int.Parse(AlertThreshold.Text);
+
+            ApplicationOptions.LatencyDetectionMode = (LatencyMode)LatencyDetectionMode.SelectedIndex;
+            if (ApplicationOptions.LatencyDetectionMode != LatencyMode.Off)
             {
-                case "seconds":
-                    multiplier = 1000;
-                    break;
-                case "minutes":
-                    multiplier = 1000 * 60;
-                    break;
-                case "hours":
-                    multiplier = 1000 * 60 * 60;
-                    break;
+                ApplicationOptions.HighLatencyMilliseconds = long.Parse(HighLatencyMilliseconds.Text);
+                ApplicationOptions.HighLatencyAlertTiggerCount = int.Parse(HighLatencyTriggerCount.Text);
+            }
+        }
+
+        private bool ValidateStartupOptions()
+        {
+            // The probe and column counts are not used when starting with a favorite.
+            if (StartupMode.SelectedIndex == (int)StartMode.Favorite)
+            {
+                return true;
             }
 
-            if (int.TryParse(PingInterval.Text, out pingInterval) && pingInterval > 0
-                && (long)pingInterval * multiplier <= MaxIntervalMilliseconds)
+            if (!IsInRange(InitialProbeCount.Text, 1, 20))
             {
-                pingInterval *= multiplier;
-            }
-            else
-            {
-                ShowError("Please enter a ping interval between 1 second and 24 hours.", GeneralTab, PingInterval);
+                ShowError("Please enter an initial probe count between 1 and 20.", StartupTab, InitialProbeCount);
                 return false;
             }
-            ApplicationOptions.PingInterval = pingInterval;
-
-            // Ping timeout.
-            int pingTimeout;
-            if (int.TryParse(PingTimeout.Text, out pingTimeout) && pingTimeout > 0 && pingTimeout <= 60)
+            if (!IsInRange(InitialColumnCount.Text, 1, 10))
             {
-                pingTimeout *= 1000;
+                ShowError("Please enter an initial column count between 1 and 10.", StartupTab, InitialColumnCount);
+                return false;
             }
-            else
-            {
-                pingTimeout = Constants.DefaultTimeout;
-            }
-            ApplicationOptions.PingTimeout = pingTimeout;
-
-            // Alert threshold.
-            int alertThreshold;
-
-            var isThresholdValid = int.TryParse(AlertThreshold.Text, out alertThreshold) && alertThreshold > 0 && alertThreshold <= 60;
-            if (!isThresholdValid)
-            {
-                alertThreshold = 1;
-            }
-
-            ApplicationOptions.AlertThreshold = alertThreshold;
-
-            // High latency detection.
-            ApplicationOptions.LatencyDetectionMode = latencyMode;
-            ApplicationOptions.HighLatencyMilliseconds = highLatencyMilliseconds;
-            ApplicationOptions.HighLatencyAlertTiggerCount = highLatencyTriggerCount;
 
             return true;
         }
 
-        private bool SaveStartupOptions()
+        private void SaveStartupOptions()
         {
             ApplicationOptions.InitialStartMode = (StartMode)StartupMode.SelectedIndex;
-            switch (StartupMode.SelectedIndex)
+            if (ApplicationOptions.InitialStartMode == StartMode.Favorite)
             {
-                case ((int)StartMode.Blank):
-                case ((int)StartMode.MultiInput):
-                    // Initial probe count.
-                    int count;
-                    if (int.TryParse(InitialProbeCount.Text, out count))
-                    {
-                        if (count < 1)
-                        {
-                            count = 1;
-                        }
-                        else if (count > 20)
-                        {
-                            count = 2;
-                        }
-                    }
-                    else
-                    {
-                        count = 2;
-                    }
-                    ApplicationOptions.InitialProbeCount = count;
+                ApplicationOptions.InitialFavorite = InitialFavorite.Text;
+            }
+            else
+            {
+                ApplicationOptions.InitialProbeCount = int.Parse(InitialProbeCount.Text);
+                ApplicationOptions.InitialColumnCount = int.Parse(InitialColumnCount.Text);
+            }
+        }
 
-                    // Initial column count.
-                    if (int.TryParse(InitialColumnCount.Text, out count))
-                    {
-                        if (count < 1)
-                        {
-                            count = 1;
-                        }
-                        else if (count > 10)
-                        {
-                            count = 10;
-                        }
-                    }
-                    else
-                    {
-                        count = 2;
-                    }
-                    ApplicationOptions.InitialColumnCount = count;
-                    break;
-                case ((int)StartMode.Favorite):
-                    // Initial favorite.
-                    ApplicationOptions.InitialFavorite = InitialFavorite.Text;
-                    break;
+        private bool ValidateNotificationOptions()
+        {
+            if (IsAutoDismissEnabled.IsChecked == true && !IsInRange(AutoDismissInterval.Text, 1, 99))
+            {
+                ShowError("Please enter a valid number of seconds for the auto-dismiss interval.", PopupAlertsTab, AutoDismissInterval);
+                return false;
             }
 
             return true;
         }
 
-        private bool SaveNotificationOptions()
+        private void SaveNotificationOptions()
         {
-            if (IsAutoDismissEnabled.IsChecked == true)
+            ApplicationOptions.IsAutoDismissEnabled = IsAutoDismissEnabled.IsChecked == true;
+            if (ApplicationOptions.IsAutoDismissEnabled)
             {
-                if (int.TryParse(AutoDismissInterval.Text, out int result) && result > 0 && result < 100)
-                {
-                    ApplicationOptions.AutoDismissMilliseconds = result * 1000;
-                    ApplicationOptions.IsAutoDismissEnabled = true;
-                }
-                else
-                {
-                    ShowError("Please enter a valid number of seconds for the auto-dismiss interval.", PopupAlertsTab, AutoDismissInterval);
-                    return false;
-                }
-            }
-            else
-            {
-                ApplicationOptions.IsAutoDismissEnabled = false;
+                ApplicationOptions.AutoDismissMilliseconds = int.Parse(AutoDismissInterval.Text) * 1000;
             }
 
             if (PopupsMinimizedOption.IsChecked == true)
@@ -417,36 +388,30 @@ namespace vmPing.Views
             {
                 ApplicationOptions.PopupOption = PopupNotificationOption.Never;
             }
-
-            return true;
         }
 
-        private bool SaveAdvancedOptions()
+        private bool ValidateAdvancedOptions()
         {
-            // Validate input.
-
-            var regex = new Regex("^\\d+$");
-
-            // Validate TTL.
-            if (!regex.IsMatch(TTL.Text) || int.Parse(TTL.Text) < 1 || int.Parse(TTL.Text) > 255)
+            if (!IsInRange(TTL.Text, 1, 255))
             {
                 ShowError("Please enter a valid time to live (TTL) between 1 and 255.", AdvancedTab, TTL);
                 return false;
             }
+            if (PacketSizeOption.IsChecked == true && !IsInRange(PacketSize.Text, 0, 65500))
+            {
+                ShowError("Please enter a valid data size between 0 and 65,500.", AdvancedTab, PacketSize);
+                return false;
+            }
 
-            // Apply TTL.
+            return true;
+        }
+
+        private void SaveAdvancedOptions()
+        {
             ApplicationOptions.TTL = int.Parse(TTL.Text);
 
-            // Validate packet size.
             if (PacketSizeOption.IsChecked == true)
             {
-                if (!regex.IsMatch(PacketSize.Text) || int.Parse(PacketSize.Text) < 0 || int.Parse(PacketSize.Text) > 65500)
-                {
-                    ShowError("Please enter a valid data size between 0 and 65,500.", AdvancedTab, PacketSize);
-                    return false;
-                }
-
-                // Apply packet size.
                 ApplicationOptions.Buffer = new byte[int.Parse(PacketSize.Text)];
                 ApplicationOptions.UseCustomBuffer = false;
 
@@ -463,208 +428,174 @@ namespace vmPing.Views
                 ApplicationOptions.UseCustomBuffer = true;
             }
 
-            // Apply fragment / don't fragment option.
-            if (DontFragment.IsChecked == true)
-            {
-                ApplicationOptions.DontFragment = true;
-            }
-            else
-            {
-                ApplicationOptions.DontFragment = false;
-            }
+            ApplicationOptions.DontFragment = DontFragment.IsChecked == true;
 
             // Update ping options (TTL / Don't fragment settings)
             ApplicationOptions.UpdatePingOptions();
+        }
+
+        private bool ValidateEmailAlertOptions()
+        {
+            if (IsEmailAlertsEnabled.IsChecked != true)
+            {
+                return true;
+            }
+
+            if (SmtpServer.Text.Length == 0)
+            {
+                ShowError("Please enter a valid SMTP server address.", EmailAlertsTab, SmtpServer);
+                return false;
+            }
+            if (!IsInRange(SmtpPort.Text, 1, 65535))
+            {
+                ShowError("Please enter a valid port number for your SMTP server.", EmailAlertsTab, SmtpPort);
+                return false;
+            }
+            if (EmailRecipientAddress.Text.Length == 0)
+            {
+                ShowError("Please enter a valid recipient email address. This address will receive email alerts from vmPing.", EmailAlertsTab, EmailRecipientAddress);
+                return false;
+            }
+            if (EmailFromAddress.Text.Length == 0)
+            {
+                ShowError("Please enter a valid 'from' address. This address appears as the sender for any alerts that are sent.", EmailAlertsTab, EmailFromAddress);
+                return false;
+            }
+            if (IsSmtpAuthenticationRequired.IsChecked == true && SmtpUsername.Text.Length == 0)
+            {
+                ShowError("Please enter a valid username for your mail server.", EmailAlertsTab, SmtpUsername);
+                return false;
+            }
 
             return true;
         }
 
-        private bool SaveEmailAlertOptions()
+        private void SaveEmailAlertOptions()
         {
-            // Validate input.
-            if (IsEmailAlertsEnabled.IsChecked == true)
+            ApplicationOptions.IsEmailAlertEnabled = IsEmailAlertsEnabled.IsChecked == true;
+            if (!ApplicationOptions.IsEmailAlertEnabled)
             {
-                var regex = new Regex("^\\d+$");
-
-                if (SmtpServer.Text.Length == 0)
-                {
-                    ShowError("Please enter a valid SMTP server address.", EmailAlertsTab, SmtpServer);
-                    return false;
-                }
-                else if (SmtpPort.Text.Length == 0 || !regex.IsMatch(SmtpPort.Text))
-                {
-                    ShowError("Please enter a valid port number for your SMTP server.", EmailAlertsTab, SmtpPort);
-                    return false;
-                }
-                else if (EmailRecipientAddress.Text.Length == 0)
-                {
-                    ShowError("Please enter a valid recipient email address. This address will receive email alerts from vmPing.", EmailAlertsTab, EmailRecipientAddress);
-                    return false;
-                }
-                else if (EmailFromAddress.Text.Length == 0)
-                {
-                    ShowError("Please enter a valid 'from' address. This address appears as the sender for any alerts that are sent.", EmailAlertsTab, EmailFromAddress);
-                    return false;
-                }
-                if (IsSmtpAuthenticationRequired.IsChecked == true)
-                {
-                    ApplicationOptions.IsEmailAuthenticationRequired = true;
-                    if (SmtpUsername.Text.Length == 0)
-                    {
-                        ShowError("Please enter a valid username for your mail server.", EmailAlertsTab, SmtpUsername);
-                        return false;
-                    }
-                }
-                else
-                {
-                    ApplicationOptions.IsEmailAuthenticationRequired = false;
-                    SmtpUsername.Text = string.Empty;
-                    SmtpPassword.Password = string.Empty;
-                }
-
-                ApplicationOptions.IsEmailAlertEnabled = true;
-                ApplicationOptions.EmailServer = SmtpServer.Text;
-                ApplicationOptions.EmailPort = SmtpPort.Text;
-                ApplicationOptions.EmailUser = SmtpUsername.Text;
-                ApplicationOptions.EmailPassword = SmtpPassword.Password;
-                ApplicationOptions.EmailRecipient = EmailRecipientAddress.Text;
-                ApplicationOptions.EmailFromAddress = EmailFromAddress.Text;
-                ApplicationOptions.IsEmailSslEnabled = IsSmtpSslEnabled.IsChecked == true ? true : false;
-
-                return true;
+                return;
             }
-            else
+
+            ApplicationOptions.IsEmailAuthenticationRequired = IsSmtpAuthenticationRequired.IsChecked == true;
+            if (!ApplicationOptions.IsEmailAuthenticationRequired)
             {
-                ApplicationOptions.IsEmailAlertEnabled = false;
-                return true;
+                SmtpUsername.Text = string.Empty;
+                SmtpPassword.Password = string.Empty;
             }
+
+            ApplicationOptions.EmailServer = SmtpServer.Text;
+            ApplicationOptions.EmailPort = SmtpPort.Text;
+            ApplicationOptions.EmailUser = SmtpUsername.Text;
+            ApplicationOptions.EmailPassword = SmtpPassword.Password;
+            ApplicationOptions.EmailRecipient = EmailRecipientAddress.Text;
+            ApplicationOptions.EmailFromAddress = EmailFromAddress.Text;
+            ApplicationOptions.IsEmailSslEnabled = IsSmtpSslEnabled.IsChecked == true;
         }
 
-        private bool SaveAudioAlertOptions()
+        private bool ValidateAudioAlertOptions()
         {
-            if (IsAudioDownAlertEnabled.IsChecked == true)
+            if (IsAudioDownAlertEnabled.IsChecked == true && !File.Exists(AudioDownFilePath.Text))
             {
-                try
-                {
-                    if (Path.GetFileName(AudioDownFilePath.Text).IndexOfAny(Path.GetInvalidFileNameChars()) >= 0 ||
-                        !File.Exists(AudioDownFilePath.Text) ||
-                        Path.GetFileName(AudioDownFilePath.Text).Length < 1)
-                    {
-                        throw new Exception();
-                    }
-                }
-                catch
-                {
-                    ShowError("The specified path does not exist. Please enter a valid path.", AudioAlertTab, AudioDownFilePath);
-                    return false;
-                }
-                ApplicationOptions.IsAudioDownAlertEnabled = true;
+                ShowError("The specified path does not exist. Please enter a valid path.", AudioAlertTab, AudioDownFilePath);
+                return false;
+            }
+            if (IsAudioUpAlertEnabled.IsChecked == true && !File.Exists(AudioUpFilePath.Text))
+            {
+                ShowError("The specified path does not exist. Please enter a valid path.", AudioAlertTab, AudioUpFilePath);
+                return false;
+            }
+
+            return true;
+        }
+
+        private void SaveAudioAlertOptions()
+        {
+            ApplicationOptions.IsAudioDownAlertEnabled = IsAudioDownAlertEnabled.IsChecked == true;
+            if (ApplicationOptions.IsAudioDownAlertEnabled)
+            {
                 ApplicationOptions.AudioDownFilePath = AudioDownFilePath.Text;
             }
-            else
-            {
-                ApplicationOptions.IsAudioDownAlertEnabled = false;
-            }
 
-            if (IsAudioUpAlertEnabled.IsChecked == true)
+            ApplicationOptions.IsAudioUpAlertEnabled = IsAudioUpAlertEnabled.IsChecked == true;
+            if (ApplicationOptions.IsAudioUpAlertEnabled)
             {
-                try
-                {
-                    if (Path.GetFileName(AudioUpFilePath.Text).IndexOfAny(Path.GetInvalidFileNameChars()) >= 0 ||
-                        !File.Exists(AudioUpFilePath.Text) ||
-                        Path.GetFileName(AudioUpFilePath.Text).Length < 1)
-                    {
-                        throw new Exception();
-                    }
-                }
-                catch
-                {
-                    ShowError("The specified path does not exist. Please enter a valid path.", AudioAlertTab, AudioUpFilePath);
-                    return false;
-                }
-                ApplicationOptions.IsAudioUpAlertEnabled = true;
                 ApplicationOptions.AudioUpFilePath = AudioUpFilePath.Text;
             }
-            else
+        }
+
+        private bool ValidateLogOutputOptions()
+        {
+            if (IsLogOutputEnabled.IsChecked == true && !Directory.Exists(LogPath.Text))
             {
-                ApplicationOptions.IsAudioUpAlertEnabled = false;
+                ShowError("The specified path does not exist.  Please enter a valid path.", LogOutputTab, LogPath);
+                return false;
+            }
+            if (IsLogStatusChangesEnabled.IsChecked == true && !IsValidLogFilePath(LogStatusChangesPath.Text))
+            {
+                ShowError("The specified path does not exist.  Please enter a valid path.", LogOutputTab, LogStatusChangesPath);
+                return false;
             }
 
             return true;
         }
 
-        private bool SaveLogOutputOptions()
+        // The file itself doesn't need to exist yet, but its folder does.
+        private static bool IsValidLogFilePath(string path)
         {
-            if (IsLogOutputEnabled.IsChecked == true)
+            try
             {
-                if (!Directory.Exists(LogPath.Text))
-                {
-                    ShowError("The specified path does not exist.  Please enter a valid path.", LogOutputTab, LogPath);
-                    return false;
-                }
+                string fileName = Path.GetFileName(path);
+                return fileName.Length > 0
+                    && fileName.IndexOfAny(Path.GetInvalidFileNameChars()) < 0
+                    && Directory.Exists(Path.GetDirectoryName(path));
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
-                ApplicationOptions.IsLogOutputEnabled = true;
+        private void SaveLogOutputOptions()
+        {
+            ApplicationOptions.IsLogOutputEnabled = IsLogOutputEnabled.IsChecked == true;
+            if (ApplicationOptions.IsLogOutputEnabled)
+            {
                 ApplicationOptions.LogPath = LogPath.Text;
             }
-            else
-            {
-                ApplicationOptions.IsLogOutputEnabled = false;
-            }
 
-            if (IsLogStatusChangesEnabled.IsChecked == true)
+            ApplicationOptions.IsLogStatusChangesEnabled = IsLogStatusChangesEnabled.IsChecked == true;
+            if (ApplicationOptions.IsLogStatusChangesEnabled)
             {
-                try
-                {
-                    if (Path.GetFileName(LogStatusChangesPath.Text).IndexOfAny(Path.GetInvalidFileNameChars()) >= 0 ||
-                        !Directory.Exists(Path.GetDirectoryName(LogStatusChangesPath.Text)) ||
-                        Path.GetFileName(LogStatusChangesPath.Text).Length < 1)
-                    {
-                        throw new Exception();
-                    }
-                }
-                catch
-                {
-                    ShowError("The specified path does not exist.  Please enter a valid path.", LogOutputTab, LogStatusChangesPath);
-                    return false;
-                }
-
-                ApplicationOptions.IsLogStatusChangesEnabled = true;
                 ApplicationOptions.LogStatusChangesPath = LogStatusChangesPath.Text;
             }
-            else
-            {
-                ApplicationOptions.IsLogStatusChangesEnabled = false;
-            }
-
-            return true;
         }
 
-        private bool SaveDisplayOptions()
+        private void SaveDisplayOptions()
         {
             ApplicationOptions.IsAlwaysOnTopEnabled = IsAlwaysOnTopEnabled.IsChecked == true;
             ApplicationOptions.IsMinimizeToTrayEnabled = IsMinimizeToTrayEnabled.IsChecked == true;
             ApplicationOptions.IsExitToTrayEnabled = IsExitToTrayEnabled.IsChecked == true;
+        }
+
+        private bool ValidateLayoutOptions()
+        {
+            foreach (var control in ColorsDockPanel.GetChildren())
+            {
+                if (control is TextBox box && !Util.IsValidHtmlColor(box.Text))
+                {
+                    ShowError("Please enter a valid HTML color code.  Accepted formats are #RGB, #RRGGBB, and #AARRGGBB.  Example: #3266CF", LayoutTab, box);
+                    box.SelectAll();
+                    return false;
+                }
+            }
 
             return true;
         }
 
-        private bool SaveLayoutOptions()
+        private void SaveLayoutOptions()
         {
-            // Validate input.
-            foreach (var control in ColorsDockPanel.GetChildren())
-            {
-                if (control is TextBox box)
-                {
-                    if (!Util.IsValidHtmlColor(box.Text))
-                    {
-                        ShowError("Please enter a valid HTML color code.  Accepted formats are #RGB, #RRGGBB, and #AARRGGBB.  Example: #3266CF", LayoutTab, box);
-                        box.SelectAll();
-
-                        return false;
-                    }
-                }
-            }
-
             ApplicationOptions.BackgroundColor_Probe_Inactive = BackgroundColor_Probe_Inactive.Text;
             ApplicationOptions.BackgroundColor_Probe_Up = BackgroundColor_Probe_Up.Text;
             ApplicationOptions.BackgroundColor_Probe_Down = BackgroundColor_Probe_Down.Text;
@@ -685,10 +616,7 @@ namespace vmPing.Views
             ApplicationOptions.ForegroundColor_Alias_Down = ForegroundColor_Alias_Down.Text;
             ApplicationOptions.ForegroundColor_Alias_Indeterminate = ForegroundColor_Alias_Indeterminate.Text;
             ApplicationOptions.ForegroundColor_Alias_Error = ForegroundColor_Alias_Error.Text;
-
-            return true;
         }
-
 
         private void NumericTextbox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {

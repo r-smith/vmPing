@@ -1,26 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Interop;
 using vmPing.Configuration;
+using vmPing.Interop;
 using vmPing.Properties;
 
 namespace vmPing.Views
 {
     public partial class ManageAliasesWindow : Window
     {
-        // Imports and constants for hiding minimize and maximize buttons.
-        [DllImport("user32.dll")]
-        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-        [DllImport("user32.dll")]
-        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-        private const int GWL_STYLE = -16;
-        private const int WS_MAXIMIZEBOX = 0x10000; //maximize button
-        private const int WS_MINIMIZEBOX = 0x20000; //minimize button
-
         public ManageAliasesWindow()
         {
             InitializeComponent();
@@ -101,14 +91,7 @@ namespace vmPing.Views
 
         private void Window_SourceInitialized(object sender, EventArgs e)
         {
-            // Hide minimize and maximize buttons.
-            var handle = new WindowInteropHelper(this).Handle;
-            if (handle == null)
-            {
-                return;
-            }
-
-            SetWindowLong(handle, GWL_STYLE, GetWindowLong(handle, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_MINIMIZEBOX);
+            NativeMethods.HideMinimizeAndMaximizeButtons(this);
         }
 
         private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)

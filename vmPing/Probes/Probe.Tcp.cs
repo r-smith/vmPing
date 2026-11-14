@@ -105,76 +105,9 @@ namespace vmPing.Probes
                         }
 
                         // Connected to port.
-                        Statistics.Received++;
-                        IndeterminateCount = 0;
-                        isPortOpen = true;
-
-                        // If this is a new probe, record the initial 'up' state to the status history.
-                        if (Status == ProbeStatus.Inactive)
-                        {
-                            AddStatusHistory(ProbeStatus.Up, true);
-                            Status = ProbeStatus.Up;
-                        }
-
-                        // Check if status changed from down to up.
-                        if (Status == ProbeStatus.Down)
-                        {
-                            OnStatusChange(ProbeStatus.Up, "up");
-                        }
-
-                        // Update minimum RTT.
                         stopwatch.Stop();
-                        if (stopwatch.ElapsedMilliseconds < MinRtt)
-                        {
-                            MinRtt = stopwatch.ElapsedMilliseconds;
-                        }
-
-                        // Check latency.
-                        if ((ApplicationOptions.LatencyDetectionMode == LatencyMode.Fixed &&
-                            stopwatch.ElapsedMilliseconds >= ApplicationOptions.HighLatencyMilliseconds) ||
-                            (ApplicationOptions.LatencyDetectionMode == LatencyMode.Dynamic &&
-                            stopwatch.ElapsedMilliseconds >= MinRtt + ApplicationOptions.HighLatencyMilliseconds))
-                        {
-                            // Latency is high.
-                            if (HighLatencyCount < ApplicationOptions.HighLatencyAlertTriggerCount)
-                            {
-                                HighLatencyCount++;
-                            }
-
-                            if (Status == ProbeStatus.Up)
-                            {
-                                Status = ProbeStatus.Indeterminate;
-                            }
-
-                            if (Status != ProbeStatus.LatencyHigh)
-                            {
-                                if (HighLatencyCount >= ApplicationOptions.HighLatencyAlertTriggerCount)
-                                {
-                                    OnStatusChange(ProbeStatus.LatencyHigh, "high latency");
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // Latency is normal.
-                            if (HighLatencyCount > 0)
-                            {
-                                HighLatencyCount--;
-                            }
-
-                            if (Status == ProbeStatus.LatencyHigh)
-                            {
-                                if (HighLatencyCount <= 0)
-                                {
-                                    OnStatusChange(ProbeStatus.LatencyNormal, "normal latency");
-                                    Status = ProbeStatus.Up;
-                                }
-                            }
-                            else
-                            {
-                                Status = ProbeStatus.Up;
-                            }
-                        }
+                        isPortOpen = true;
+                        HandleReply(stopwatch.ElapsedMilliseconds);
                     }
                     catch (SocketException ex)
                     {
@@ -188,29 +121,6 @@ namespace vmPing.Probes
                             return;
                         }
 
-                        if (Status == ProbeStatus.Up || Status == ProbeStatus.LatencyHigh)
-                        {
-                            Status = ProbeStatus.Indeterminate;
-                        }
-                        else if (Status == ProbeStatus.Inactive)
-                        {
-                            // Because this is a new probe, ignore the indeterminate count
-                            // and immediately mark the host as down.
-                            // Also, record the initial 'down' state to the status history.
-                            AddStatusHistory(ProbeStatus.Down, true);
-                            Status = ProbeStatus.Down;
-                        }
-
-                        IndeterminateCount++;
-
-                        // Check for status change.
-                        if (Status == ProbeStatus.Indeterminate &&
-                            IndeterminateCount >= ApplicationOptions.AlertThreshold)
-                        {
-                            Status = ProbeStatus.Down;
-                            OnStatusChange(ProbeStatus.Down, "down");
-                        }
-
                         // If hostname cannot be resolved, report error and stop.
                         if (ex.ErrorCode == WSAHOST_NOT_FOUND)
                         {
@@ -221,7 +131,7 @@ namespace vmPing.Probes
                             return;
                         }
 
-                        Statistics.Lost++;
+                        HandleNoReply();
                         isPortOpen = false;
                         errorCode = ex.ErrorCode;
                     }

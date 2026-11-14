@@ -160,6 +160,10 @@ namespace vmPing.Classes
                 Node("UseCustomBuffer", ApplicationOptions.UseCustomBuffer),
                 Node("Buffer", Encoding.ASCII.GetString(ApplicationOptions.Buffer)),
                 Node("AlertThreshold", ApplicationOptions.AlertThreshold),
+                new XComment(" LatencyDetectionMode: [Off, Dynamic, Fixed] "),
+                Node("LatencyDetectionMode", ApplicationOptions.LatencyDetectionMode),
+                Node("HighLatencyMilliseconds", ApplicationOptions.HighLatencyMilliseconds),
+                Node("HighLatencyAlertTriggerCount", ApplicationOptions.HighLatencyAlertTiggerCount),
                 new XComment(" InitialStartMode: [Blank, MultiInput, Favorite] "),
                 Node("InitialStartMode", ApplicationOptions.InitialStartMode),
                 Node("InitialProbeCount", ApplicationOptions.InitialProbeCount),
@@ -339,6 +343,29 @@ namespace vmPing.Classes
             if (options.TryGetValue("AlertThreshold", out optionValue))
             {
                 ApplicationOptions.AlertThreshold = int.Parse(optionValue);
+            }
+            if (options.TryGetValue("LatencyDetectionMode", out optionValue))
+            {
+                if (optionValue.Equals(ApplicationOptions.LatencyMode.Dynamic.ToString()))
+                {
+                    ApplicationOptions.LatencyDetectionMode = ApplicationOptions.LatencyMode.Dynamic;
+                }
+                else if (optionValue.Equals(ApplicationOptions.LatencyMode.Fixed.ToString()))
+                {
+                    ApplicationOptions.LatencyDetectionMode = ApplicationOptions.LatencyMode.Fixed;
+                }
+                else
+                {
+                    ApplicationOptions.LatencyDetectionMode = ApplicationOptions.LatencyMode.Off;
+                }
+            }
+            if (options.TryGetValue("HighLatencyMilliseconds", out optionValue))
+            {
+                ApplicationOptions.HighLatencyMilliseconds = long.Parse(optionValue);
+            }
+            if (options.TryGetValue("HighLatencyAlertTriggerCount", out optionValue))
+            {
+                ApplicationOptions.HighLatencyAlertTiggerCount = int.Parse(optionValue);
             }
             if (options.TryGetValue("InitialStartMode", out optionValue))
             {

@@ -73,97 +73,85 @@
                                    Margin="10,0,0,0"/>
                     </StackPanel>
 
-                    <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" Margin="0,20,0,5"/>
-
-                    <!-- Alert threshold -->
+                    <!-- Down detection -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Down Detection"
+                               Margin="0,25,0,10"
+                               Style="{StaticResource OptionHeaderTextStyle}"/>
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Number of failed pings to mark host as down:"/>
                     <StackPanel DockPanel.Dock="Top"
                                 Orientation="Horizontal"
-                                Margin="0,10,0,0">
-                        <TextBlock Text="Alert threshold:"
-                                   Width="110"/>
+                                Margin="0,4,0,0">
                         <TextBox Name="AlertThreshold"
                                  PreviewTextInput="NumericTextbox_PreviewTextInput"
                                  Width="60"
                                  MaxLength="2"/>
-                        <TextBlock Text="dropped pings"
-                                   Margin="10,0,0,0"/>
                     </StackPanel>
 
-                    <!-- Startup header -->
-                    <TextBlock DockPanel.Dock="Top"
-                               Text="Startup"
-                               Margin="0,25,0,10"
-                               Style="{StaticResource OptionHeaderTextStyle}"/>
-                    <TextBlock DockPanel.Dock="Top"
-                               Text="Choose how vmPing should start:"
-                               Margin="0,0,0,5"/>
-                    <!-- Startup mode selection -->
-                    <ComboBox DockPanel.Dock="Top"
-                              Name="StartupMode"
-                              Width="200">
-                        <ComboBoxItem Content="Blank (default)" Tag="Standard" IsSelected="True"/>
-                        <ComboBoxItem Content="List input window" Tag="Standard"/>
-                        <ComboBoxItem Content="Load a favorite" Tag="Favorite"/>
-                    </ComboBox>
-                    <!-- Initial probe / column count -->
+                    <!-- High latency detection -->
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,25,0,10">
+                        <TextBlock DockPanel.Dock="Left"
+                                   Text="High Latency Detection"
+                                   Margin="0"
+                                   Style="{StaticResource OptionHeaderTextStyle}"/>
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
+                            <TextBlock>
+                                Alerts you when a host is up but responding slowly.
+                                <LineBreak/>
+                                <LineBreak/>
+                                Dynamic: a reply is slow when it takes longer than the fastest reply from that host plus the threshold.
+                                <LineBreak/>
+                                <LineBreak/>
+                                Fixed: a reply is slow when it takes as long as the threshold or longer.
+                            </TextBlock>
+                        </Label>
+                    </DockPanel>
+
+                    <!-- Latency mode. The item order must match the ApplicationOptions.LatencyMode enum. -->
                     <StackPanel DockPanel.Dock="Top"
-                                Orientation="Horizontal"
-                                Margin="0,13,0,0">
-                        <!-- Style to control visibility based on selected startup mode -->
-                        <StackPanel.Style>
-                            <Style>
-                                <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ElementName=StartupMode, Path=SelectedItem.Tag}" Value="Standard">
-                                        <Setter Property="StackPanel.Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </StackPanel.Style>
-                        <!-- Probe count -->
-                        <StackPanel Margin="0,0,30,0">
-                            <TextBlock Text="Probe count:"
-                                       Margin="0,0,0,4"/>
-                            <TextBox Name="InitialProbeCount"
-                                     PreviewTextInput="NumericTextbox_PreviewTextInput"
-                                     Width="60"
-                                     HorizontalAlignment="Left"
-                                     MaxLength="2"/>
-                        </StackPanel>
-                        <!-- Column count-->
-                        <StackPanel>
-                            <TextBlock Text="Column count:"
-                                       Margin="0,0,0,4"/>
-                            <TextBox Name="InitialColumnCount"
-                                     PreviewTextInput="NumericTextbox_PreviewTextInput"
-                                     Width="60"
-                                     HorizontalAlignment="Left"
-                                     MaxLength="2"/>
-                        </StackPanel>
+                                Orientation="Horizontal">
+                        <TextBlock Text="Latency mode:"
+                                   Width="110"/>
+                        <ComboBox Name="LatencyDetectionMode" Width="100">
+                            <ComboBoxItem Content="Off" IsSelected="True"/>
+                            <ComboBoxItem Content="Dynamic"/>
+                            <ComboBoxItem Content="Fixed"/>
+                        </ComboBox>
                     </StackPanel>
-                    <!-- Select a favorite -->
-                    <StackPanel DockPanel.Dock="Top"
-                                Orientation="Horizontal"
-                                Margin="0,13,0,0">
-                        <!-- Style to control visibility based on selected startup mode -->
+
+                    <!-- Threshold and trigger count. Hidden when latency mode is off. -->
+                    <StackPanel DockPanel.Dock="Top">
                         <StackPanel.Style>
-                            <Style>
-                                <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                            <Style TargetType="{x:Type StackPanel}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ElementName=StartupMode, Path=SelectedItem.Tag}" Value="Favorite">
-                                        <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                                    <DataTrigger Binding="{Binding ElementName=LatencyDetectionMode, Path=SelectedIndex}" Value="0">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </StackPanel.Style>
-                        <!-- Favorite selection -->
-                        <StackPanel Margin="0,0,35,0">
-                            <TextBlock Text="Select a favorite:"
-                                       Margin="0,0,0,4"/>
-                            <ComboBox DockPanel.Dock="Top"
-                                      Name="InitialFavorite"
-                                      Width="250">
-                            </ComboBox>
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,10,0,0">
+                            <TextBlock Text="Threshold:"
+                                       Width="110"/>
+                            <TextBox Name="HighLatencyMilliseconds"
+                                     PreviewTextInput="NumericTextbox_PreviewTextInput"
+                                     Width="60"
+                                     MaxLength="5"/>
+                            <TextBlock Text="milliseconds"
+                                       Margin="10,0,0,0"/>
+                        </StackPanel>
+
+                        <TextBlock Text="Number of slow pings to mark host as high latency:"
+                                   Margin="0,10,0,0"/>
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,4,0,0">
+                            <TextBox Name="HighLatencyTriggerCount"
+                                     PreviewTextInput="NumericTextbox_PreviewTextInput"
+                                     Width="60"
+                                     MaxLength="2"/>
                         </StackPanel>
                     </StackPanel>
                 </DockPanel>
@@ -268,7 +256,7 @@
                     </DockPanel>
                 </DockPanel>
             </TabItem>
-            
+
             <!-- Tab: Popup Alerts -->
             <TabItem Header="Notifications" Name="PopupAlertsTab">
                 <DockPanel Margin="20,0" LastChildFill="False">
@@ -700,7 +688,91 @@
                     </DockPanel>
                 </DockPanel>
             </TabItem>
-            
+
+            <!-- Tab: Startup -->
+            <TabItem Header="Startup" Name="StartupTab">
+                <DockPanel Margin="20,0" LastChildFill="False">
+
+                    <!-- Header -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Startup"
+                               Style="{StaticResource OptionHeaderTextStyle}"/>
+
+                    <!-- Startup mode selection -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Choose how vmPing should start:"
+                               Margin="0,0,0,5"/>
+                    <ComboBox DockPanel.Dock="Top"
+                              Name="StartupMode"
+                              Width="200">
+                        <ComboBoxItem Content="Blank (default)" Tag="Standard" IsSelected="True"/>
+                        <ComboBoxItem Content="Multi-input window" Tag="Standard"/>
+                        <ComboBoxItem Content="Load a favorite" Tag="Favorite"/>
+                    </ComboBox>
+                    <!-- Initial probe / column count -->
+                    <StackPanel DockPanel.Dock="Top"
+                                Orientation="Horizontal"
+                                Margin="0,13,0,0">
+                        <!-- Style to control visibility based on selected startup mode -->
+                        <StackPanel.Style>
+                            <Style>
+                                <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=StartupMode, Path=SelectedItem.Tag}" Value="Standard">
+                                        <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <!-- Probe count -->
+                        <StackPanel Margin="0,0,30,0">
+                            <TextBlock Text="Probe count:"
+                                       Margin="0,0,0,4"/>
+                            <TextBox Name="InitialProbeCount"
+                                     PreviewTextInput="NumericTextbox_PreviewTextInput"
+                                     Width="60"
+                                     HorizontalAlignment="Left"
+                                     MaxLength="2"/>
+                        </StackPanel>
+                        <!-- Column count-->
+                        <StackPanel>
+                            <TextBlock Text="Column count:"
+                                       Margin="0,0,0,4"/>
+                            <TextBox Name="InitialColumnCount"
+                                     PreviewTextInput="NumericTextbox_PreviewTextInput"
+                                     Width="60"
+                                     HorizontalAlignment="Left"
+                                     MaxLength="2"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <!-- Select a favorite -->
+                    <StackPanel DockPanel.Dock="Top"
+                                Orientation="Horizontal"
+                                Margin="0,13,0,0">
+                        <!-- Style to control visibility based on selected startup mode -->
+                        <StackPanel.Style>
+                            <Style>
+                                <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=StartupMode, Path=SelectedItem.Tag}" Value="Favorite">
+                                        <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <!-- Favorite selection -->
+                        <StackPanel Margin="0,0,35,0">
+                            <TextBlock Text="Select a favorite:"
+                                       Margin="0,0,0,4"/>
+                            <ComboBox DockPanel.Dock="Top"
+                                      Name="InitialFavorite"
+                                      Width="250">
+                            </ComboBox>
+                        </StackPanel>
+                    </StackPanel>
+                </DockPanel>
+            </TabItem>
+
             <!-- Tab: Layout -->
             <TabItem Header="Colors" Name="LayoutTab">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">

@@ -29,6 +29,7 @@ namespace vmPing.UI
             InitializeComponent();
 
             PopulateGeneralOptions();
+            PopulateStartupOptions();
             PopulateNotificationOptions();
             PopulateEmailAlertOptions();
             PopulateAudioAlertOptions();
@@ -95,7 +96,14 @@ namespace vmPing.UI
             AlertThreshold.Text = ApplicationOptions.AlertThreshold.ToString();
             PingIntervalUnits.Text = pingIntervalUnits;
 
-            // Get startup mode settings.
+            // High latency detection.
+            LatencyDetectionMode.SelectedIndex = (int)ApplicationOptions.LatencyDetectionMode;
+            HighLatencyMilliseconds.Text = ApplicationOptions.HighLatencyMilliseconds.ToString();
+            HighLatencyTriggerCount.Text = ApplicationOptions.HighLatencyAlertTiggerCount.ToString();
+        }
+
+        private void PopulateStartupOptions()
+        {
             InitialProbeCount.Text = ApplicationOptions.InitialProbeCount.ToString();
             InitialColumnCount.Text = ApplicationOptions.InitialColumnCount.ToString();
             StartupMode.SelectedIndex = (int)ApplicationOptions.InitialStartMode;
@@ -206,6 +214,7 @@ namespace vmPing.UI
         private void OK_Click(object sender, RoutedEventArgs e)
         {
             if (SaveGeneralOptions() == false) return;
+            if (SaveStartupOptions() == false) return;
             if (SaveNotificationOptions() == false) return;
             if (SaveEmailAlertOptions() == false) return;
             if (SaveAudioAlertOptions() == false) return;
@@ -239,6 +248,31 @@ namespace vmPing.UI
                 ShowError("Please enter a valid alert threshold.", GeneralTab, AlertThreshold);
                 return false;
             }
+
+            // High latency detection. The threshold and trigger count are only used when a mode is selected.
+            var latencyMode = (ApplicationOptions.LatencyMode)LatencyDetectionMode.SelectedIndex;
+            long highLatencyMilliseconds = ApplicationOptions.HighLatencyMilliseconds;
+            int highLatencyTriggerCount = ApplicationOptions.HighLatencyAlertTiggerCount;
+
+            if (latencyMode != ApplicationOptions.LatencyMode.Off)
+            {
+                if (!long.TryParse(HighLatencyMilliseconds.Text, out highLatencyMilliseconds)
+                    || highLatencyMilliseconds < 1 || highLatencyMilliseconds > 60000)
+                {
+                    ShowError("Please enter a high latency threshold between 1 and 60,000 milliseconds.", GeneralTab, HighLatencyMilliseconds);
+                    return false;
+                }
+                if (!int.TryParse(HighLatencyTriggerCount.Text, out highLatencyTriggerCount)
+                    || highLatencyTriggerCount < 1 || highLatencyTriggerCount > 60)
+                {
+                    ShowError("Please enter a number of slow pings between 1 and 60.", GeneralTab, HighLatencyTriggerCount);
+                    return false;
+                }
+            }
+
+            ApplicationOptions.LatencyDetectionMode = latencyMode;
+            ApplicationOptions.HighLatencyMilliseconds = highLatencyMilliseconds;
+            ApplicationOptions.HighLatencyAlertTiggerCount = highLatencyTriggerCount;
 
             // Ping interval.
             int pingInterval;
@@ -290,7 +324,11 @@ namespace vmPing.UI
 
             ApplicationOptions.AlertThreshold = alertThreshold;
 
-            // Startup mode.
+            return true;
+        }
+
+        private bool SaveStartupOptions()
+        {
             ApplicationOptions.InitialStartMode = (ApplicationOptions.StartMode)StartupMode.SelectedIndex;
             switch (StartupMode.SelectedIndex)
             {

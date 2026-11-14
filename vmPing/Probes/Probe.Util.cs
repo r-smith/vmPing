@@ -265,35 +265,31 @@ namespace vmPing.Probes
                 }
             }
 
-            if ((ApplicationOptions.IsAudioDownAlertEnabled) && (status.Status == ProbeStatus.Down))
+            if (ApplicationOptions.IsAudioDownAlertEnabled && status.Status == ProbeStatus.Down)
             {
-                try
-                {
-                    using (SoundPlayer player = new SoundPlayer(ApplicationOptions.AudioDownFilePath))
-                    {
-                        player.Play();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ApplicationOptions.IsAudioDownAlertEnabled = false;
-                    ShowError($"Failed to play audio file. Audio alerts have been disabled. Error: {ex.Message}");
-                }
+                ApplicationOptions.IsAudioDownAlertEnabled = PlayAudio(ApplicationOptions.AudioDownFilePath);
             }
-            else if ((ApplicationOptions.IsAudioUpAlertEnabled) && (status.Status == ProbeStatus.Up))
+            else if (ApplicationOptions.IsAudioUpAlertEnabled && status.Status == ProbeStatus.Up)
             {
-                try
+                ApplicationOptions.IsAudioUpAlertEnabled = PlayAudio(ApplicationOptions.AudioUpFilePath);
+            }
+        }
+
+        // Returns false if the file could not be played.
+        private bool PlayAudio(string path)
+        {
+            try
+            {
+                using (SoundPlayer player = new SoundPlayer(path))
                 {
-                    using (SoundPlayer player = new SoundPlayer(ApplicationOptions.AudioUpFilePath))
-                    {
-                        player.Play();
-                    }
+                    player.Play();
                 }
-                catch (Exception ex)
-                {
-                    ApplicationOptions.IsAudioUpAlertEnabled = false;
-                    ShowError($"Failed to play audio file. Audio alerts have been disabled. Error: {ex.Message}");
-                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Failed to play audio file. Audio alerts have been disabled. Error: {ex.Message}");
+                return false;
             }
         }
 

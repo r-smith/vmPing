@@ -98,7 +98,7 @@ namespace vmPing.Configuration
             Buffer = Encoding.ASCII.GetBytes(Constants.DefaultIcmpData);
 
             // Set the default ping options.
-            PingOptions = new PingOptions(Constants.DefaultTTL, true);
+            PingOptions = new PingOptions(TTL, DontFragment);
         }
 
         public static void UpdatePingOptions()

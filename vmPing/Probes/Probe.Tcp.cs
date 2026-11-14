@@ -252,7 +252,9 @@ namespace vmPing.Probes
             // Prefix the ping reply output with a timestamp.
             StringBuilder sb = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  {Strings.Probe_Port} {portnumber}: ");
             if (isPortOpen)
+            {
                 sb.Append($"{Strings.Probe_PortOpen}  [{elapsedTime}{Strings.Milliseconds_Symbol}]");
+            }
             else
             {
                 sb.Append(Strings.Probe_PortClosed);

@@ -302,7 +302,9 @@ namespace vmPing.Configuration
         private static void ApplyColor(string key, Action<string> setter, IDictionary<string, string> options)
         {
             if (options.TryGetValue(key, out string value) && Util.IsValidHtmlColor(value))
+            {
                 setter(value);
+            }
         }
 
         private static void LoadAppOptions(XmlNodeList nodes)
@@ -371,25 +373,33 @@ namespace vmPing.Configuration
         private static void ApplyString(string key, Action<string> setter, IDictionary<string, string> options)
         {
             if (options.TryGetValue(key, out string value))
+            {
                 setter(value);
+            }
         }
 
         private static void ApplyBool(string key, Action<bool> setter, IDictionary<string, string> options)
         {
             if (options.TryGetValue(key, out string value) && bool.TryParse(value, out bool result))
+            {
                 setter(result);
+            }
         }
 
         private static void ApplyInt(string key, int min, int max, Action<int> setter, IDictionary<string, string> options)
         {
             if (options.TryGetValue(key, out string value) && int.TryParse(value, out int result) && result >= min && result <= max)
+            {
                 setter(result);
+            }
         }
 
         private static void ApplyEnum<T>(string key, Action<T> setter, IDictionary<string, string> options) where T : struct
         {
             if (options.TryGetValue(key, out string value) && Enum.TryParse(value, out T result) && Enum.IsDefined(typeof(T), result))
+            {
                 setter(result);
+            }
         }
     }
 }

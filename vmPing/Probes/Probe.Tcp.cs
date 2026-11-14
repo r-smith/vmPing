@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -18,7 +19,6 @@ namespace vmPing.Probes
             host = host.Trim(new[] { '[', ']' });
             string port = Hostname.Substring(Hostname.LastIndexOf(':') + 1);
             int portnumber;
-            bool isPortOpen = false;
 
             // Check if port is invalid.
             if (!(int.TryParse(port, out portnumber) && portnumber >= 1 && portnumber <= 65535))
@@ -76,88 +76,76 @@ namespace vmPing.Probes
                 return;
             }
 
-            int errorCode = 0;
-            System.Diagnostics.Stopwatch stopwatch = System.Diagnostics.Stopwatch.StartNew();
+            Stopwatch stopwatch = new Stopwatch();
             while (!cancellationToken.IsCancellationRequested)
             {
+                bool isPortOpen;
+                Statistics.Sent++;
                 stopwatch.Restart();
 
-                using (TcpClient client = new TcpClient(ipVersion))
+                try
                 {
-                    Statistics.Sent++;
-
-                    try
+                    using (TcpClient client = new TcpClient(ipVersion))
                     {
-                        IAsyncResult result = client.BeginConnect(host, portnumber, null, null);
-                        bool success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(3));
-
-                        if (!success)
-                        {
-                            throw new SocketException();
-                        }
-
-                        client.EndConnect(result);
-
-                        // Check if this task was cancelled.
-                        if (cancellationToken.IsCancellationRequested)
-                        {
-                            return;
-                        }
-
-                        // Connected to port.
-                        stopwatch.Stop();
-                        isPortOpen = true;
-                        HandleReply(stopwatch.ElapsedMilliseconds);
+                        isPortOpen = await TryConnectAsync(client, host, portnumber);
                     }
-                    catch (SocketException ex)
-                    {
-                        const int WSAHOST_NOT_FOUND = 11001;
-
-                        stopwatch.Stop();
-
-                        // Check if this task was cancelled.
-                        if (cancellationToken.IsCancellationRequested)
-                        {
-                            return;
-                        }
-
-                        // If hostname cannot be resolved, report error and stop.
-                        if (ex.ErrorCode == WSAHOST_NOT_FOUND)
-                        {
-                            await Application.Current.Dispatcher.BeginInvoke(
-                                new Action(() => AddHistory("Unable to resolve hostname.")));
-
-                            StopProbe(ProbeStatus.Error);
-                            return;
-                        }
-
-                        HandleNoReply();
-                        isPortOpen = false;
-                        errorCode = ex.ErrorCode;
-                    }
-                    catch (Exception ex)
-                    {
-                        // Unexpected error ocurred. Report error and stop probe.
-                        await Application.Current.Dispatcher.BeginInvoke(
-                            new Action(() => AddHistory("Error: " + ex.Message)));
-                        StopProbe(ProbeStatus.Error);
-                        return;
-                    }
-                    client.Close();
+                }
+                catch (Exception ex)
+                {
+                    // Unexpected error ocurred. Report error and stop probe.
+                    await Application.Current.Dispatcher.BeginInvoke(
+                        new Action(() => AddHistory("Error: " + ex.Message)));
+                    StopProbe(ProbeStatus.Error);
+                    return;
                 }
 
-                if (!cancellationToken.IsCancellationRequested)
-                {
-                    // Update output.
-                    DisplayTcpReply(isPortOpen, portnumber, errorCode, stopwatch.ElapsedMilliseconds);
+                stopwatch.Stop();
 
-                    // Pause between probes.
-                    await Task.Delay(ApplicationOptions.PingInterval);
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return;
                 }
+
+                if (isPortOpen)
+                {
+                    HandleReply(stopwatch.ElapsedMilliseconds);
+                }
+                else
+                {
+                    HandleNoReply();
+                }
+
+                // Update output.
+                DisplayTcpReply(isPortOpen, portnumber, stopwatch.ElapsedMilliseconds);
+
+                // Pause between probes.
+                await Task.Delay(ApplicationOptions.PingInterval);
             }
         }
 
-        private void DisplayTcpReply(bool isPortOpen, int portnumber, int errorCode, long elapsedTime)
+        // Returns true if the port accepted a connection within the ping timeout.
+        private static async Task<bool> TryConnectAsync(TcpClient client, string host, int port)
+        {
+            Task connect = client.ConnectAsync(host, port);
+            Task timeout = Task.Delay(ApplicationOptions.PingTimeout);
+
+            if (await Task.WhenAny(connect, timeout) != connect)
+            {
+                return false;
+            }
+
+            try
+            {
+                await connect;
+                return true;
+            }
+            catch (SocketException)
+            {
+                return false;
+            }
+        }
+
+        private void DisplayTcpReply(bool isPortOpen, int portnumber, long elapsedTime)
         {
             // Prefix the ping reply output with a timestamp.
             StringBuilder sb = new StringBuilder($"[{DateTime.Now.ToLongTimeString()}]  {Strings.Probe_Port} {portnumber}: ");

@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 namespace vmPing.Controls
 {
-    class AutoScrollAdorner : Adorner
+    internal class AutoScrollAdorner : Adorner
     {
         public AutoScrollAdorner(UIElement adornedElement)
             : base(adornedElement)

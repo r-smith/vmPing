@@ -9,7 +9,7 @@ using vmPing.Views;
 
 namespace vmPing
 {
-    class CommandLine
+    internal static class CommandLine
     {
         private const int MinInterval = 1;
         private const int MaxInterval = 86400;

@@ -2,7 +2,7 @@
 
 namespace vmPing.Configuration
 {
-    class Constants
+    internal static class Constants
     {
         // Default probe background colors.
         public const string DefaultProbeBackgroundInactive = "#eceafa";

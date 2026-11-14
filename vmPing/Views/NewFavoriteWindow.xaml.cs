@@ -47,7 +47,7 @@ namespace vmPing.Views
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             // Validate column count.
-            if (int.TryParse(MyColumnCount.Text, out _columnCount) == false || _columnCount < 1 || _columnCount > 10)
+            if (!int.TryParse(MyColumnCount.Text, out _columnCount) || _columnCount < 1 || _columnCount > 10)
             {
                 DialogWindow errorWindow = DialogWindow.ErrorWindow("Please enter a valid number of columns (between 1 and 10).");
                 errorWindow.Owner = this;

@@ -5,7 +5,7 @@ using vmPing.Properties;
 
 namespace vmPing.Configuration
 {
-    class Alias
+    internal static class Alias
     {
         private const string RootPath = "/vmping/aliases";
         private const string AliasPath = "/vmping/aliases/alias";

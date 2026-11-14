@@ -38,7 +38,7 @@ namespace vmPing.Views
 
             // Show warning or error?
             DialogWindow errorWindow;
-            if (isWarning == true)
+            if (isWarning)
             {
                 errorWindow = DialogWindow.WarningWindow(message, "Save");
             }

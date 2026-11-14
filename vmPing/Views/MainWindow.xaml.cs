@@ -17,15 +17,15 @@ namespace vmPing.Views
         private Dictionary<string, string> _aliases = new Dictionary<string, string>();
         private System.Windows.Forms.NotifyIcon _notifyIcon;
 
-        public static RoutedCommand OptionsCommand = new RoutedCommand();
-        public static RoutedCommand StartStopCommand = new RoutedCommand();
-        public static RoutedCommand HelpCommand = new RoutedCommand();
-        public static RoutedCommand NewInstanceCommand = new RoutedCommand();
-        public static RoutedCommand TracerouteCommand = new RoutedCommand();
-        public static RoutedCommand FloodHostCommand = new RoutedCommand();
-        public static RoutedCommand AddProbeCommand = new RoutedCommand();
-        public static RoutedCommand MultiInputCommand = new RoutedCommand();
-        public static RoutedCommand StatusHistoryCommand = new RoutedCommand();
+        public static readonly RoutedCommand OptionsCommand = new RoutedCommand();
+        public static readonly RoutedCommand StartStopCommand = new RoutedCommand();
+        public static readonly RoutedCommand HelpCommand = new RoutedCommand();
+        public static readonly RoutedCommand NewInstanceCommand = new RoutedCommand();
+        public static readonly RoutedCommand TracerouteCommand = new RoutedCommand();
+        public static readonly RoutedCommand FloodHostCommand = new RoutedCommand();
+        public static readonly RoutedCommand AddProbeCommand = new RoutedCommand();
+        public static readonly RoutedCommand MultiInputCommand = new RoutedCommand();
+        public static readonly RoutedCommand StatusHistoryCommand = new RoutedCommand();
 
         public MainWindow()
         {
@@ -436,7 +436,7 @@ namespace vmPing.Views
 
             ColumnCount.Value = 1;  // Ensure window's grid column binding is updated, if needed.
             ColumnCount.Value = favorite.ColumnCount;
-            this.Title = $"{favoriteTitle} - vmPing";
+            Title = $"{favoriteTitle} - vmPing";
         }
 
         private void LoadAliases()
@@ -574,7 +574,7 @@ namespace vmPing.Views
         private void IsolatedView_Click(object sender, RoutedEventArgs e)
         {
             Probe probe = (sender as Button).DataContext as Probe;
-            if (probe.IsolatedWindow == null || probe.IsolatedWindow.IsLoaded == false)
+            if (probe.IsolatedWindow == null || !probe.IsolatedWindow.IsLoaded)
             {
                 new IsolatedPingWindow(probe).Show();
             }
@@ -609,7 +609,7 @@ namespace vmPing.Views
 
         private void StatusHistoryExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            if (Probe.StatusHistoryWindow == null || Probe.StatusHistoryWindow.IsLoaded == false)
+            if (Probe.StatusHistoryWindow == null || !Probe.StatusHistoryWindow.IsLoaded)
             {
                 StatusHistoryWindow wnd = new StatusHistoryWindow(Probe.StatusChangeLog);
                 Probe.StatusHistoryWindow = wnd;

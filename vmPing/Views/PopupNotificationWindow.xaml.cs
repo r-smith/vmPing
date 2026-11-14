@@ -25,7 +25,7 @@ namespace vmPing.Views
             filteredChangeLog.Filter = item =>
             {
                 StatusChange entry = item as StatusChange;
-                return entry.HasStatusBeenCleared == false && entry.Status != ProbeStatus.Start && entry.Status != ProbeStatus.Stop;
+                return !entry.HasStatusBeenCleared && entry.Status != ProbeStatus.Start && entry.Status != ProbeStatus.Stop;
             };
             StatusHistoryList.ItemsSource = filteredChangeLog;
 
@@ -128,7 +128,7 @@ namespace vmPing.Views
 
         private void Maximize_Click(object sender, RoutedEventArgs e)
         {
-            if (Probe.StatusHistoryWindow == null || Probe.StatusHistoryWindow.IsLoaded == false)
+            if (Probe.StatusHistoryWindow == null || !Probe.StatusHistoryWindow.IsLoaded)
             {
                 StatusHistoryWindow wnd = new StatusHistoryWindow(Probe.StatusChangeLog);
                 Probe.StatusHistoryWindow = wnd;

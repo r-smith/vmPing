@@ -5,7 +5,7 @@ using vmPing.Properties;
 
 namespace vmPing.Configuration
 {
-    class Favorite
+    internal class Favorite
     {
         private const string RootPath = "/vmping/favorites";
         private const string FavoritePath = "/vmping/favorites/favorite";
@@ -129,7 +129,7 @@ namespace vmPing.Configuration
 
         public static void Rename(string originalTitle, string newTitle)
         {
-            if (ConfigFile.IsReady() == false || string.IsNullOrWhiteSpace(originalTitle) || string.IsNullOrWhiteSpace(newTitle))
+            if (!ConfigFile.IsReady() || string.IsNullOrWhiteSpace(originalTitle) || string.IsNullOrWhiteSpace(newTitle))
             {
                 return;
             }
@@ -164,7 +164,7 @@ namespace vmPing.Configuration
 
         public static void Save(string title, List<string> hostnames, int columnCount)
         {
-            if (ConfigFile.IsReady() == false || string.IsNullOrWhiteSpace(title))
+            if (!ConfigFile.IsReady() || string.IsNullOrWhiteSpace(title))
             {
                 return;
             }

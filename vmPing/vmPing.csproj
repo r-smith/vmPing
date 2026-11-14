@@ -116,7 +116,7 @@
     <Compile Include="Views\EditAliasWindow.xaml.cs">
       <DependentUpon>EditAliasWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\FloodHostNode.cs" />
+    <Compile Include="Models\FloodHost.cs" />
     <Compile Include="Views\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>

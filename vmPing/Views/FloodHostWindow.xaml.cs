@@ -1,8 +1,8 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using vmPing.Configuration;
@@ -12,7 +12,8 @@ namespace vmPing.Views
 {
     public partial class FloodHostWindow : Window
     {
-        private readonly FloodHostNode _floodHost = new FloodHostNode();
+        private readonly FloodHost _floodHost = new FloodHost();
+        private CancellationTokenSource _cancelSource;
 
         public FloodHostWindow()
         {
@@ -28,87 +29,87 @@ namespace vmPing.Views
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            _floodHost.BgWorker?.CancelAsync();
-            _floodHost.IsActive = false;
+            StopFlood();
         }
 
-        private void btnFloodHost_Click(object sender, RoutedEventArgs e)
+        private void FloodButton_Click(object sender, RoutedEventArgs e)
         {
-            lblInformation.Visibility = Visibility.Collapsed;
-            FloodHost(_floodHost);
-        }
+            Information.Visibility = Visibility.Collapsed;
 
-
-        public void FloodHost(FloodHostNode node)
-        {
-            if (!node.IsActive)
+            if (_floodHost.IsActive)
             {
-                if (txtHostname.Text.Length == 0)
-                {
-                    return;
-                }
-
-                node.BgWorker?.CancelAsync();
-
-                node.DestinationAddress = txtHostname.Text;
-                node.PacketsSent = 0;
-                node.PacketsReceived = 0;
-                node.PacketsLost = 0;
-                node.StartTime = DateTime.Now;
-                node.IsActive = true;
-
-                node.BgWorker = new BackgroundWorker();
-                node.ResetEvent = new AutoResetEvent(false);
-                node.BgWorker.DoWork += new DoWorkEventHandler(backgroundThread_FloodHost);
-                node.BgWorker.WorkerSupportsCancellation = true;
-                node.BgWorker.RunWorkerAsync(node);
+                StopFlood();
             }
             else
             {
-                node.BgWorker.CancelAsync();
-                node.ResetEvent.WaitOne();
-                node.IsActive = false;
+                StartFlood();
             }
         }
 
-
-        public void backgroundThread_FloodHost(object sender, DoWorkEventArgs e)
+        private void StartFlood()
         {
-            var bgWorker = sender as BackgroundWorker;
-            var node = e.Argument as FloodHostNode;
+            if (Hostname.Text.Length == 0)
+            {
+                return;
+            }
 
-            var pingBuffer = Encoding.ASCII.GetBytes(Constants.DefaultIcmpData);
-            var pingOptions = new PingOptions(Constants.DefaultTTL, true);
+            _floodHost.PacketsSent = 0;
+            _floodHost.PacketsReceived = 0;
+            _floodHost.PacketsLost = 0;
+            _floodHost.IsActive = true;
 
-            while (!bgWorker.CancellationPending && node.IsActive)
+            _cancelSource = new CancellationTokenSource();
+            CancellationToken token = _cancelSource.Token;
+            string address = Hostname.Text;
+            Task.Run(() => SendPings(address, token));
+        }
+
+        private void StopFlood()
+        {
+            _cancelSource?.Cancel();
+            _floodHost.IsActive = false;
+        }
+
+        // Runs on a background thread until the token is cancelled.
+        private void SendPings(string address, CancellationToken token)
+        {
+            byte[] buffer = Encoding.ASCII.GetBytes(Constants.DefaultIcmpData);
+            PingOptions options = new PingOptions(Constants.DefaultTTL, true);
+
+            try
             {
                 using (Ping ping = new Ping())
                 {
-                    try
+                    while (!token.IsCancellationRequested)
                     {
-                        ++node.PacketsSent;
-                        if (ping.Send(node.DestinationAddress, 100, pingBuffer, pingOptions).Status == IPStatus.Success)
+                        PingReply reply = ping.Send(address, 100, buffer, options);
+
+                        // Don't count a reply that arrives after the flood was stopped.
+                        if (token.IsCancellationRequested)
                         {
-                            ++node.PacketsReceived;
+                            break;
+                        }
+
+                        _floodHost.PacketsSent++;
+                        if (reply.Status == IPStatus.Success)
+                        {
+                            _floodHost.PacketsReceived++;
                         }
                         else
                         {
-                            ++node.PacketsLost;
+                            _floodHost.PacketsLost++;
                         }
-
-                        node.ResetEvent.Set();
-                    }
-                    catch
-                    {
-                        e.Cancel = true;
-                        node.ResetEvent.Set();
-                        node.IsActive = false;
-                        return;
                     }
                 }
             }
-
-            node.ResetEvent.Set();
+            catch
+            {
+                // The host could not be resolved or the ping could not be sent.
+                if (!token.IsCancellationRequested)
+                {
+                    _floodHost.IsActive = false;
+                }
+            }
         }
     }
 }

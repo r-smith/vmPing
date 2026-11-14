@@ -19,7 +19,7 @@
         
 
         <!-- Style for hostname textbox -->
-        <ControlTemplate x:Key="TextBoxBaseControlTemplatez" TargetType="{x:Type TextBoxBase}">
+        <ControlTemplate x:Key="TextBoxBaseControlTemplate" TargetType="{x:Type TextBoxBase}">
             <Border Background="{TemplateBinding Background}"
                     x:Name="Bd"
                     BorderThickness="{TemplateBinding BorderThickness}"
@@ -75,18 +75,18 @@
             </Grid.ColumnDefinitions>
 
             <!-- Hostname textbox -->
-            <TextBox Name="txtHostname"
+            <TextBox Name="Hostname"
                      FontSize="18" FontWeight="Bold"
                      BorderThickness="2,2,0,2"
                      BorderBrush="Black"
                      VerticalContentAlignment="Center"
-                     Template="{StaticResource TextBoxBaseControlTemplatez}"
+                     Template="{StaticResource TextBoxBaseControlTemplate}"
                      IsEnabled="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}"
                      />
 
-            <!-- Trace Route button -->
-            <Button Name="btnFloodHost"
-                    Click="btnFloodHost_Click"
+            <!-- Flood button -->
+            <Button Name="FloodButton"
+                    Click="FloodButton_Click"
                     Grid.Column="1"
                     IsDefault="True"
                     FontSize="14"
@@ -135,7 +135,7 @@
                            Margin="0,0,15,0"
                            Foreground="#93a1a1"
                            FontSize="16" FontWeight="Bold" />
-                <TextBlock Grid.Column="1" Name="tbPacketsSent"
+                <TextBlock Grid.Column="1" Name="PacketsSentText"
                            Text="{Binding Path=PacketsSent, StringFormat='#,0'}"
                            Foreground="#859900"
                            FontSize="22" />
@@ -151,7 +151,7 @@
                            Margin="0,0,15,0"
                            Foreground="#93a1a1"
                            FontSize="16" FontWeight="Bold" />
-                <TextBlock Grid.Column="1" Name="tbPacketsReceived"
+                <TextBlock Grid.Column="1" Name="PacketsReceivedText"
                            Text="{Binding Path=PacketsReceived, StringFormat='#,0'}"
                            Foreground="#6c71c4"
                            FontSize="22" />
@@ -167,7 +167,7 @@
                            Margin="0,0,15,0"
                            Foreground="#93a1a1"
                            FontSize="16" FontWeight="Bold" />
-                <TextBlock Grid.Column="1" Name="tbPacketsLost"
+                <TextBlock Grid.Column="1" Name="PacketsLostText"
                            Text="{Binding Path=PacketsLost, StringFormat='#,0'}"
                            Foreground="#dc322f"
                            FontSize="22" />
@@ -175,7 +175,7 @@
         </Grid>
 
         <TextBlock Grid.Row="2" Text="Flood in progress..."
-                   Name="tbStatus"
+                   Name="StatusText"
                    Margin="0,7" HorizontalAlignment="Center"
                    Foreground="#657b83"
                    FontSize="13"
@@ -210,7 +210,7 @@
         
         <Label Grid.Row="1" Grid.RowSpan="2"
                VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-               Name="lblInformation"
+               Name="Information"
                Foreground="#657b83" Background="#002b36"
                Padding="40,0"
                FontSize="14">

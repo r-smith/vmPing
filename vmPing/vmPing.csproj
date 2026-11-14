@@ -43,8 +43,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-	<Deterministic>true</Deterministic>
-	<PathMap>$(MSBuildThisFileDirectory)=C:\src\</PathMap>
+    <Deterministic>true</Deterministic>
+    <PathMap>$(MSBuildThisFileDirectory)=C:\src\</PathMap>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -319,9 +319,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="vmPing.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\bomb-16.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

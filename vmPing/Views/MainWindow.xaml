@@ -210,7 +210,7 @@
                 <!-- Menu: Flood host -->
                 <MenuItem Header="{x:Static resource:Strings.Menu_FloodHost}" x:Name="FloodHostMenu" InputGestureText="Ctrl-F">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/bomb-16.png" VerticalAlignment="Center" Width="16" Height="16"/>
+                        <Image Source="{StaticResource icon.flood-host}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <!-- Menu: New instance -->

@@ -14,15 +14,15 @@ namespace vmPing.Controls
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            const double imageWidth = 13.0;
-            const double imageHeight = 11.0;
-            const double xOffset = 36.0;
-            const double yOffset = 14.0;
+            const double ImageWidth = 13.0;
+            const double ImageHeight = 11.0;
+            const double XOffset = 36.0;
+            const double YOffset = 14.0;
             Rect rect = new Rect(
-                AdornedElement.RenderSize.Width - xOffset,
-                AdornedElement.RenderSize.Height - yOffset,
-                imageWidth,
-                imageHeight);
+                AdornedElement.RenderSize.Width - XOffset,
+                AdornedElement.RenderSize.Height - YOffset,
+                ImageWidth,
+                ImageHeight);
             drawingContext.DrawImage((DrawingImage)Application.Current.Resources["icon.down-arrow-scroll-indicator"], rect);
 
             base.OnRender(drawingContext);

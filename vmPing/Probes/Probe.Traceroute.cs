@@ -34,8 +34,8 @@ namespace vmPing.Probes
             {
                 const int MaxHops = 30;
                 const int Timeout = 2000;
-                const string stringFormat = "{0,2}   {1,-15}   [{2} ms]";
-                const string stringErrorFormat = "{0,2}   {1}";
+                const string HopFormat = "{0,2}   {1,-15}   [{2} ms]";
+                const string HopErrorFormat = "{0,2}   {1}";
                 var ttl = 1;
                 var timer = new Stopwatch();
 
@@ -64,11 +64,11 @@ namespace vmPing.Probes
 
                         if (reply.Status != IPStatus.TtlExpired && reply.Status != IPStatus.Success)
                         {
-                            AddHistory(string.Format(stringErrorFormat, ttl, reply.Status));
+                            AddHistory(string.Format(HopErrorFormat, ttl, reply.Status));
                         }
                         else
                         {
-                            AddHistory(string.Format(stringFormat, ttl, address, timer.ElapsedMilliseconds < 1 ? "<1" : timer.ElapsedMilliseconds.ToString()));
+                            AddHistory(string.Format(HopFormat, ttl, address, timer.ElapsedMilliseconds < 1 ? "<1" : timer.ElapsedMilliseconds.ToString()));
                         }
 
                         if (reply.Status == IPStatus.Success)

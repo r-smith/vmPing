@@ -11,7 +11,7 @@ namespace vmPing.Configuration
         public static int AlertThreshold { get; set; } = 2;
         public static LatencyMode LatencyDetectionMode { get; set; } = LatencyMode.Off;
         public static long HighLatencyMilliseconds { get; set; } = 50;
-        public static int HighLatencyAlertTiggerCount { get; set; } = 2;
+        public static int HighLatencyAlertTriggerCount { get; set; } = 2;
         public static int TTL { get; set; } = Constants.DefaultTTL;
         public static bool DontFragment { get; set; } = false;
         public static bool UseCustomBuffer { get; set; } = false;

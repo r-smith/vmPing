@@ -30,10 +30,10 @@ namespace vmPing.Views
         public MainWindow()
         {
             InitializeComponent();
-            InitializeAplication();
+            InitializeApplication();
         }
 
-        private void InitializeAplication()
+        private void InitializeApplication()
         {
             InitializeCommandBindings();
             LoadFavorites();
@@ -77,7 +77,7 @@ namespace vmPing.Views
                         ? ApplicationOptions.InitialProbeCount
                         : 2);
 
-                // Determine statup mode.
+                // Determine startup mode.
                 switch (ApplicationOptions.InitialStartMode)
                 {
                     case StartMode.MultiInput:
@@ -512,11 +512,11 @@ namespace vmPing.Views
             // Display new favorite window => Pass in current addresses and column count.
             // If window title ends with " - vmPing", then user currently has a
             // favorite loaded. Pass the title of that favorite to the new window.
-            const string favTitle = " - vmPing";
+            const string TitleSuffix = " - vmPing";
             var newFavoriteWindow = new NewFavoriteWindow(
                 hostList: _probes.Select(x => x.Hostname).ToList(),
                 columnCount: (int)ColumnCount.Value,
-                title: Title.EndsWith(favTitle) ? Title.Remove(Title.Length - favTitle.Length) : string.Empty);
+                title: Title.EndsWith(TitleSuffix) ? Title.Remove(Title.Length - TitleSuffix.Length) : string.Empty);
             newFavoriteWindow.Owner = this;
             if (newFavoriteWindow.ShowDialog() == true)
             {

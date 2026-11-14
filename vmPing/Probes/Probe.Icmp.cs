@@ -76,7 +76,7 @@ namespace vmPing.Probes
                                 reply.RoundtripTime >= MinRtt + ApplicationOptions.HighLatencyMilliseconds))
                             {
                                 // Latency is high.
-                                if (HighLatencyCount < ApplicationOptions.HighLatencyAlertTiggerCount)
+                                if (HighLatencyCount < ApplicationOptions.HighLatencyAlertTriggerCount)
                                 {
                                     HighLatencyCount++;
                                 }
@@ -88,7 +88,7 @@ namespace vmPing.Probes
 
                                 if (Status != ProbeStatus.LatencyHigh)
                                 {
-                                    if (HighLatencyCount >= ApplicationOptions.HighLatencyAlertTiggerCount)
+                                    if (HighLatencyCount >= ApplicationOptions.HighLatencyAlertTriggerCount)
                                     {
                                         OnStatusChange(ProbeStatus.LatencyHigh, "high latency");
                                     }

@@ -37,9 +37,9 @@ namespace vmPing.Configuration
 
         // Default probe options.
         public const string DefaultIcmpData = "https://github.com/R-Smith/vmPing";
-        public const int DefaultTimeout = 2000;       // In miliseconds.
+        public const int DefaultTimeout = 2000;       // In milliseconds.
         public const int DefaultTTL = 64;
-        public const int DefaultInterval = 2000;      // In miliseconds.
+        public const int DefaultInterval = 2000;      // In milliseconds.
 
         // Default audio alert file paths.
         public const string DefaultAudioDownFilePath = @"%WINDIR%\Media\Windows Notify Email.wav";

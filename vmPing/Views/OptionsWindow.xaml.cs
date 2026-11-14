@@ -90,7 +90,7 @@ namespace vmPing.Views
             // High latency detection.
             LatencyDetectionMode.SelectedIndex = (int)ApplicationOptions.LatencyDetectionMode;
             HighLatencyMilliseconds.Text = ApplicationOptions.HighLatencyMilliseconds.ToString();
-            HighLatencyTriggerCount.Text = ApplicationOptions.HighLatencyAlertTiggerCount.ToString();
+            HighLatencyTriggerCount.Text = ApplicationOptions.HighLatencyAlertTriggerCount.ToString();
         }
 
         private void PopulateStartupOptions()
@@ -307,7 +307,7 @@ namespace vmPing.Views
             if (ApplicationOptions.LatencyDetectionMode != LatencyMode.Off)
             {
                 ApplicationOptions.HighLatencyMilliseconds = long.Parse(HighLatencyMilliseconds.Text);
-                ApplicationOptions.HighLatencyAlertTiggerCount = int.Parse(HighLatencyTriggerCount.Text);
+                ApplicationOptions.HighLatencyAlertTriggerCount = int.Parse(HighLatencyTriggerCount.Text);
             }
         }
 

@@ -163,7 +163,7 @@ namespace vmPing.Configuration
                 new XComment(" LatencyDetectionMode: [Off, Dynamic, Fixed] "),
                 Node("LatencyDetectionMode", ApplicationOptions.LatencyDetectionMode),
                 Node("HighLatencyMilliseconds", ApplicationOptions.HighLatencyMilliseconds),
-                Node("HighLatencyAlertTriggerCount", ApplicationOptions.HighLatencyAlertTiggerCount),
+                Node("HighLatencyAlertTriggerCount", ApplicationOptions.HighLatencyAlertTriggerCount),
                 new XComment(" InitialStartMode: [Blank, MultiInput, Favorite] "),
                 Node("InitialStartMode", ApplicationOptions.InitialStartMode),
                 Node("InitialProbeCount", ApplicationOptions.InitialProbeCount),
@@ -276,7 +276,7 @@ namespace vmPing.Configuration
                 .Where(n => n.Attributes?["name"] != null)
                 .ToDictionary(n => n.Attributes["name"].Value, n => n.InnerText);
 
-            // Load probe backgorund colors.
+            // Load probe background colors.
             ApplyColor("Probe.Background.Inactive", v => ApplicationOptions.BackgroundColor_Probe_Inactive = v, options);
             ApplyColor("Probe.Background.Up", v => ApplicationOptions.BackgroundColor_Probe_Up = v, options);
             ApplyColor("Probe.Background.Down", v => ApplicationOptions.BackgroundColor_Probe_Down = v, options);
@@ -325,7 +325,7 @@ namespace vmPing.Configuration
             ApplyInt("AlertThreshold", 1, 60, v => ApplicationOptions.AlertThreshold = v, options);
             ApplyEnum<LatencyMode>("LatencyDetectionMode", v => ApplicationOptions.LatencyDetectionMode = v, options);
             ApplyInt("HighLatencyMilliseconds", 1, 60000, v => ApplicationOptions.HighLatencyMilliseconds = v, options);
-            ApplyInt("HighLatencyAlertTriggerCount", 1, 60, v => ApplicationOptions.HighLatencyAlertTiggerCount = v, options);
+            ApplyInt("HighLatencyAlertTriggerCount", 1, 60, v => ApplicationOptions.HighLatencyAlertTriggerCount = v, options);
             ApplyEnum<StartMode>("InitialStartMode", v => ApplicationOptions.InitialStartMode = v, options);
             ApplyInt("InitialProbeCount", 1, 20, v => ApplicationOptions.InitialProbeCount = v, options);
             ApplyInt("InitialColumnCount", 1, 10, v => ApplicationOptions.InitialColumnCount = v, options);

@@ -80,19 +80,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Classes\Alias.cs" />
-    <Compile Include="Classes\ApplicationOptions.cs" />
-    <Compile Include="Classes\CommandLine.cs" />
-    <Compile Include="Classes\Configuration.cs" />
-    <Compile Include="Classes\Favorite.cs" />
-    <Compile Include="Classes\Probe-Dns.cs" />
-    <Compile Include="Classes\Probe-Icmp.cs" />
-    <Compile Include="Classes\Probe-Tcp.cs" />
-    <Compile Include="Classes\Probe-Traceroute.cs" />
-    <Compile Include="Classes\Probe-Util.cs" />
-    <Compile Include="Classes\StatusChangeLog.cs" />
-    <Compile Include="Classes\Util.cs" />
-    <Compile Include="Classes\ValueConverters.cs" />
+    <Compile Include="Configuration\Alias.cs" />
+    <Compile Include="Configuration\ApplicationOptions.cs" />
+    <Compile Include="CommandLine.cs" />
+    <Compile Include="Configuration\ConfigFile.cs" />
+    <Compile Include="Configuration\Favorite.cs" />
+    <Compile Include="Probes\Probe.Dns.cs" />
+    <Compile Include="Probes\Probe.Icmp.cs" />
+    <Compile Include="Probes\Probe.Tcp.cs" />
+    <Compile Include="Probes\Probe.Traceroute.cs" />
+    <Compile Include="Probes\Probe.Util.cs" />
+    <Compile Include="Models\StatusChangeLog.cs" />
+    <Compile Include="Util.cs" />
+    <Compile Include="Converters\ValueConverters.cs" />
     <Compile Include="Controls\AutoScrollAdorner.cs" />
     <Compile Include="Controls\AutoScrollListBox.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -105,157 +105,157 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="UI\MultiInputWindow.xaml.cs">
+    <Compile Include="Views\MultiInputWindow.xaml.cs">
       <DependentUpon>MultiInputWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\NewConfigurationWindow.xaml.cs">
+    <Compile Include="Views\NewConfigurationWindow.xaml.cs">
       <DependentUpon>NewConfigurationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\StatusHistoryWindow.xaml.cs">
+    <Compile Include="Views\StatusHistoryWindow.xaml.cs">
       <DependentUpon>StatusHistoryWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\EditAliasWindow.xaml.cs">
+    <Compile Include="Views\EditAliasWindow.xaml.cs">
       <DependentUpon>EditAliasWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Classes\FloodHostNode.cs" />
-    <Compile Include="UI\DialogWindow.xaml.cs">
+    <Compile Include="Models\FloodHostNode.cs" />
+    <Compile Include="Views\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\FloodHostWindow.xaml.cs">
+    <Compile Include="Views\FloodHostWindow.xaml.cs">
       <DependentUpon>FloodHostWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Classes\NetworkRoute.cs" />
-    <Compile Include="Classes\NetworkRouteNode.cs" />
-    <Compile Include="Classes\Probe.cs" />
-    <Compile Include="Classes\PingStatistics.cs" />
-    <Compile Include="UI\IsolatedPingWindow.xaml.cs">
+    <Compile Include="Models\NetworkRoute.cs" />
+    <Compile Include="Models\NetworkRouteNode.cs" />
+    <Compile Include="Probes\Probe.cs" />
+    <Compile Include="Probes\PingStatistics.cs" />
+    <Compile Include="Views\IsolatedPingWindow.xaml.cs">
       <DependentUpon>IsolatedPingWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ManageAliasesWindow.xaml.cs">
+    <Compile Include="Views\ManageAliasesWindow.xaml.cs">
       <DependentUpon>ManageAliasesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ManageFavoritesWindow.xaml.cs">
+    <Compile Include="Views\ManageFavoritesWindow.xaml.cs">
       <DependentUpon>ManageFavoritesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\NewAliasWindow.xaml.cs">
+    <Compile Include="Views\NewAliasWindow.xaml.cs">
       <DependentUpon>NewAliasWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\OptionsWindow.xaml.cs">
+    <Compile Include="Views\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\PopupNotificationWindow.xaml.cs">
+    <Compile Include="Views\PopupNotificationWindow.xaml.cs">
       <DependentUpon>PopupNotificationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\TracerouteWindow.xaml.cs">
+    <Compile Include="Views\TracerouteWindow.xaml.cs">
       <DependentUpon>TracerouteWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\NewFavoriteWindow.xaml.cs">
+    <Compile Include="Views\NewFavoriteWindow.xaml.cs">
       <DependentUpon>NewFavoriteWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UsageWindow.xaml.cs">
+    <Compile Include="Views\UsageWindow.xaml.cs">
       <DependentUpon>UsageWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="ResourceDictionaries\ButtonStyle.xaml">
+    <Page Include="Themes\ButtonStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\CheckBoxStyle.xaml">
+    <Page Include="Themes\CheckBoxStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\ComboBoxStyle.xaml">
+    <Page Include="Themes\ComboBoxStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\DataGridStyle.xaml">
+    <Page Include="Themes\DataGridStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\FocusVisualStyle.xaml">
+    <Page Include="Themes\FocusVisualStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\Icons.xaml">
+    <Page Include="Themes\Icons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\ListBoxStyle.xaml">
+    <Page Include="Themes\ListBoxStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\MenuItemStyle.xaml">
+    <Page Include="Themes\MenuItemStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\OptionsHeaderStyle.xaml">
+    <Page Include="Themes\OptionsHeaderStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\RadioButtonStyle.xaml">
+    <Page Include="Themes\RadioButtonStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\ScrollBarStyle.xaml">
+    <Page Include="Themes\ScrollBarStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\SliderStyle.xaml">
+    <Page Include="Themes\SliderStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\TabControlStyle.xaml">
+    <Page Include="Themes\TabControlStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\TextBoxStyle.xaml">
+    <Page Include="Themes\TextBoxStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\ToolTipStyle.xaml">
+    <Page Include="Themes\ToolTipStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\ValueConverters.xaml">
+    <Page Include="Themes\ValueConverters.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\WindowChrome.xaml">
+    <Page Include="Themes\WindowChrome.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\MultiInputWindow.xaml">
+    <Page Include="Views\MultiInputWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\NewConfigurationWindow.xaml">
+    <Page Include="Views\NewConfigurationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\StatusHistoryWindow.xaml">
+    <Page Include="Views\StatusHistoryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\EditAliasWindow.xaml">
+    <Page Include="Views\EditAliasWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\DialogWindow.xaml">
+    <Page Include="Views\DialogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\FloodHostWindow.xaml">
+    <Page Include="Views\FloodHostWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\HelpWindow.xaml">
+    <Page Include="Views\HelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\IsolatedPingWindow.xaml">
+    <Page Include="Views\IsolatedPingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -263,43 +263,43 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\Constants.cs" />
-    <Compile Include="UI\HelpWindow.xaml.cs">
+    <Compile Include="Configuration\Constants.cs" />
+    <Compile Include="Views\HelpWindow.xaml.cs">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\MainWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="UI\ManageAliasesWindow.xaml">
+    <Page Include="Views\ManageAliasesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\ManageFavoritesWindow.xaml">
+    <Page Include="Views\ManageFavoritesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\NewAliasWindow.xaml">
+    <Page Include="Views\NewAliasWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\OptionsWindow.xaml">
+    <Page Include="Views\OptionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\PopupNotificationWindow.xaml">
+    <Page Include="Views\PopupNotificationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\TracerouteWindow.xaml">
+    <Page Include="Views\TracerouteWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\NewFavoriteWindow.xaml">
+    <Page Include="Views\NewFavoriteWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\UsageWindow.xaml">
+    <Page Include="Views\UsageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

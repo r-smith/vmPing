@@ -2,30 +2,30 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:System="clr-namespace:System;assembly=mscorlib"
-             StartupUri="UI/MainWindow.xaml"
+             StartupUri="Views/MainWindow.xaml"
              Startup="Application_Startup"
              ShutdownMode="OnMainWindowClose">
     <Application.Resources>
 
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="ResourceDictionaries/FocusVisualStyle.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/Icons.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/ValueConverters.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/ButtonStyle.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/DataGridStyle.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/ListBoxStyle.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/OptionsHeaderStyle.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/TabControlStyle.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/TextBoxStyle.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/ToolTipStyle.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/ComboBoxStyle.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/CheckBoxStyle.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/RadioButtonStyle.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/ScrollBarStyle.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/WindowChrome.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/MenuItemStyle.xaml"/>
-                <ResourceDictionary Source="ResourceDictionaries/SliderStyle.xaml"/>
+                <ResourceDictionary Source="Themes/FocusVisualStyle.xaml"/>
+                <ResourceDictionary Source="Themes/Icons.xaml"/>
+                <ResourceDictionary Source="Themes/ValueConverters.xaml"/>
+                <ResourceDictionary Source="Themes/ButtonStyle.xaml"/>
+                <ResourceDictionary Source="Themes/DataGridStyle.xaml"/>
+                <ResourceDictionary Source="Themes/ListBoxStyle.xaml"/>
+                <ResourceDictionary Source="Themes/OptionsHeaderStyle.xaml"/>
+                <ResourceDictionary Source="Themes/TabControlStyle.xaml"/>
+                <ResourceDictionary Source="Themes/TextBoxStyle.xaml"/>
+                <ResourceDictionary Source="Themes/ToolTipStyle.xaml"/>
+                <ResourceDictionary Source="Themes/ComboBoxStyle.xaml"/>
+                <ResourceDictionary Source="Themes/CheckBoxStyle.xaml"/>
+                <ResourceDictionary Source="Themes/RadioButtonStyle.xaml"/>
+                <ResourceDictionary Source="Themes/ScrollBarStyle.xaml"/>
+                <ResourceDictionary Source="Themes/WindowChrome.xaml"/>
+                <ResourceDictionary Source="Themes/MenuItemStyle.xaml"/>
+                <ResourceDictionary Source="Themes/SliderStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

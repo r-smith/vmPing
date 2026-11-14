@@ -1,0 +1,26 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:vmPing.Converters"
+                    xmlns:resource="clr-namespace:vmPing.Properties">
+    
+    <!-- Value converters -->
+    <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+    <converters:BooleanToImageConverter x:Key="BooleanToImageConverter" />
+    <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+    <converters:InverseHiddenToBoolConverter x:Key="InverseHiddenToBoolConverter" />
+    <converters:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="{x:Static resource:Strings.Button_Ping}" TrueValue="{x:Static resource:Strings.Button_Stop}" />
+    <converters:ProbeStatusToBackgroundBrushConverter x:Key="ProbeStatusToBackgroundBrushConverter" />
+    <converters:ProbeStatusToForegroundBrushConverter x:Key="ProbeStatusToForegroundBrushConverter" />
+    <converters:ProbeStatusToStatisticsBrushConverter x:Key="ProbeStatusToStatisticsBrushConverter" />
+    <converters:ProbeStatusToAliasBrushConverter x:Key="ProbeStatusToAliasBrushConverter" />
+    <converters:ProbeStatusToGlyphConverter x:Key="ProbeStatusToGlyphConverter" />
+    <converters:ProbeCountToGlobalStartStopText x:Key="ProbeCountToGlobalStartStopText" />
+    <converters:ProbeCountToGlobalStartStopIcon x:Key="ProbeCountToGlobalStartStopIcon" />
+    <converters:HostnameFontsizeConverter x:Key="HostnameFontsizeConverter" />
+    <converters:ButtonTextVisibilityConverter x:Key="ButtonTextVisibilityConverter" />
+    <converters:ProbeTypeToFontSizeConverter x:Key="ProbeTypeToFontSizeConverter" />
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
+    <converters:StringToBrushConverter x:Key="StringToBrushConverter" />
+    <converters:StringLengthToBoolConverter x:Key="StringLengthToBoolConverter" />
+</ResourceDictionary>

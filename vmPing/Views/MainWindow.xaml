@@ -236,7 +236,7 @@
                 <DataTemplate>
                     <Border BorderBrush="#111" BorderThickness="0,0,2,2" Margin="0" CornerRadius="0"
                             Background="{Binding Status, Converter={StaticResource ProbeStatusToBackgroundBrushConverter}}">
-                        <Grid Name="gridItemsControl">
+                        <Grid Name="ProbeGrid">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
@@ -251,7 +251,7 @@
                                         <Style TargetType="{x:Type Grid}">
                                             <Setter Property="Background" Value="#00000000"/>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
+                                                <DataTrigger Binding="{Binding ElementName=ProbeGrid, Path=IsMouseOver}" Value="True">
                                                     <Setter Property="Background" Value="#88888888"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -266,7 +266,7 @@
                                     </Grid.ColumnDefinitions>
 
                                     <!-- Alias section -->
-                                    <Label Name="txtEditAlias"
+                                    <Label Name="AliasLabel"
                                            Content="{Binding Alias, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
                                            Background="Transparent"
                                            FontSize="14"
@@ -318,7 +318,7 @@
                                             <Style TargetType="{x:Type Button}">
                                                 <Setter Property="Visibility" Value="Hidden"/>
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
+                                                    <DataTrigger Binding="{Binding ElementName=ProbeGrid, Path=IsMouseOver}" Value="True">
                                                         <Setter Property="Visibility" Value="Visible"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -366,7 +366,7 @@
                                             <Style TargetType="{x:Type Button}">
                                                 <Setter Property="Visibility" Value="Hidden"/>
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
+                                                    <DataTrigger Binding="{Binding ElementName=ProbeGrid, Path=IsMouseOver}" Value="True">
                                                         <Setter Property="Visibility" Value="Visible"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -418,7 +418,7 @@
                                             <Style TargetType="{x:Type Button}">
                                                 <Setter Property="Visibility" Value="Hidden"/>
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
+                                                    <DataTrigger Binding="{Binding ElementName=ProbeGrid, Path=IsMouseOver}" Value="True">
                                                         <Setter Property="Visibility" Value="Visible"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -527,7 +527,7 @@
                                         <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ScrollBarStyle.Probe}">
                                             <Setter Property="Opacity" Value="0.6"/>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=gridItemsControl, Path=IsMouseOver}" Value="True">
+                                                <DataTrigger Binding="{Binding ElementName=ProbeGrid, Path=IsMouseOver}" Value="True">
                                                     <Setter Property="Opacity" Value="1.0"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -629,7 +629,7 @@
 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <!-- ColumnCount.Tag is updated to contain the lesser the two values: ColumnCount.Value and _ProbeCollection.Count -->
+                    <!-- ColumnCount.Tag is updated to contain the lesser of the two values: ColumnCount.Value and the number of probes -->
                     <UniformGrid Columns="{Binding ElementName=ColumnCount, Path=Tag}"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>

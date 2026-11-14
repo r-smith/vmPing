@@ -86,7 +86,7 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TreeView Name="tree" FontSize="10pt" BorderThickness="0" Padding="0,20,20,20" Margin="0">
+        <TreeView Name="HelpTree" FontSize="10pt" BorderThickness="0" Padding="0,20,20,20" Margin="0">
             <TreeViewItem Header="Intro"
                           Selected="Intro_Selected" />
             <TreeViewItem Header="Basic Usage"

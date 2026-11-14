@@ -72,7 +72,7 @@
                           StrokeThickness="1" />
                 </Button>
                 <!-- Maximize button -->
-                <Button Name="maximizeButton"
+                <Button Name="MaximizeButton"
                         Grid.Column="5"
                         Click="OnMaximizeRestoreButtonClick"
                         Style="{StaticResource TitleBarButtonStyle}"
@@ -86,7 +86,7 @@
                           StrokeThickness="1" />
                 </Button>
                 <!-- Restore button -->
-                <Button Name="restoreButton"
+                <Button Name="RestoreButton"
                         Grid.Column="5"
                         Click="OnMaximizeRestoreButtonClick"
                         Style="{StaticResource TitleBarButtonStyle}"

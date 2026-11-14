@@ -197,7 +197,7 @@ namespace vmPing.Classes
             try
             {
                 File.AppendAllText(ApplicationOptions.LogStatusChangesPath,
-                    $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()}\t{status.Hostname}\t{status.Alias}\t{status.StatusAsString}");
+                    $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()}\t{status.Hostname}\t{status.Alias}\t{status.StatusAsString}{Environment.NewLine}");
             }
             catch (Exception ex)
             {

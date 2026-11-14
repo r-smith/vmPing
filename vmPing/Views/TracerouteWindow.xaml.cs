@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+﻿using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -15,173 +15,146 @@ namespace vmPing.Views
 {
     public partial class TracerouteWindow : Window
     {
-        internal NetworkRoute Route { get; set; } = new NetworkRoute();
+        private const int MaxHops = 30;
+        private const int PingTimeout = 2000;
+
+        private readonly Traceroute _traceroute = new Traceroute();
+        private CancellationTokenSource _cancelSource;
 
         public TracerouteWindow()
         {
             InitializeComponent();
             Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
 
-            DataContext = Route;
-            TraceData.ItemsSource = Route.networkRoute;
+            DataContext = _traceroute;
+            TraceData.ItemsSource = _traceroute.Hops;
 
             // Set initial focus to text box.
             Loaded += (sender, e) =>
                 MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
 
-        private void Window_Closed(object sender, System.EventArgs e)
+        private void Window_Closed(object sender, EventArgs e)
         {
-            Route.BgWorker?.CancelAsync();
-            Route.IsActive = false;
+            StopTrace();
         }
 
-        private void Trace_Click(object sender, RoutedEventArgs e)
+        private async void Trace_Click(object sender, RoutedEventArgs e)
         {
-            if (!Route.IsActive)
+            if (_traceroute.IsActive)
             {
-                if (Hostname.Text.Length == 0)
-                {
-                    return;
-                }
-
-                Route.BgWorker?.CancelAsync();
-
-                // Reset width for IP address column.
-                TraceData.Columns[1].Width = new DataGridLength(100.0);
-                TraceData.Columns[1].Width = new DataGridLength(1.0, DataGridLengthUnitType.Auto);
-
-                TraceStatus.Text = "Tracing route...";
-                TraceStatus.Visibility = Visibility.Visible;
-                Route.DestinationHost = Hostname.Text;
-                Route.MaxHops = 30;
-                Route.PingTimeout = 2000;
-                Route.networkRoute.Clear();
-                Route.IsActive = true;
-
-                Route.BgWorker = new BackgroundWorker();
-                Route.ResetEvent = new AutoResetEvent(false);
-                Route.BgWorker.DoWork += new DoWorkEventHandler(BackgroundThread_TraceRoute);
-                Route.BgWorker.ProgressChanged += new ProgressChangedEventHandler(BackgroundThread_ProgressChanged);
-                Route.BgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(BgWorker_RunWorkerCompleted);
-                Route.BgWorker.WorkerSupportsCancellation = true;
-                Route.BgWorker.WorkerReportsProgress = true;
-                Route.BgWorker.RunWorkerAsync();
-            }
-            else
-            {
-                Route.BgWorker.CancelAsync();
-                Route.ResetEvent.WaitOne();
-                Route.IsActive = false;
+                StopTrace();
                 TraceStatus.Text = "\u2022 Trace cancelled";
                 Hostname.Focus();
-            }
-        }
-
-        private void BgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            Task.Delay(100).ContinueWith(_ =>
-                {
-                    Application.Current.Dispatcher.Invoke(new System.Action(() =>
-                    {
-                        Hostname.Focus();
-                    }));
-                });
-        }
-
-        public void BackgroundThread_TraceRoute(object sender, DoWorkEventArgs e)
-        {
-            var bgWorker = sender as BackgroundWorker;
-
-            var pingBuffer = Encoding.ASCII.GetBytes(Constants.DefaultIcmpData);
-            var pingOptions = new PingOptions(ttl: 1, dontFragment: true);
-            PingReply pingReply;
-            var timer = new Stopwatch();
-            Route.Timer = timer;
-
-            while (!bgWorker.CancellationPending && Route.IsActive && pingOptions.Ttl <= Route.MaxHops)
-            {
-                if (IPAddress.TryParse(Route.DestinationHost, out IPAddress ipAddress))
-                {
-                    Route.DestinationIp = ipAddress;
-                }
-                else
-                {
-                    try { Route.DestinationIp = Dns.GetHostEntry(Route.DestinationHost).AddressList[0]; }
-                    catch { bgWorker.ReportProgress(-1); break; }
-                }
-
-                using (Ping ping = new Ping())
-                {
-                    try
-                    {
-                        Route.Timer.Reset();
-                        Route.Timer.Start();
-                        pingReply = ping.Send(Route.DestinationIp, Route.PingTimeout, pingBuffer, pingOptions);
-                        if (pingReply.Status == IPStatus.TimedOut)
-                        {
-                            Route.Timer.Reset();
-                            Route.Timer.Start();
-                            pingReply = ping.Send(Route.DestinationIp, Route.PingTimeout, pingBuffer, pingOptions);
-                        }
-
-                        if (!bgWorker.CancellationPending)
-                        {
-                            bgWorker.ReportProgress(pingOptions.Ttl, pingReply);
-                        }
-
-                        if (pingReply.Status == IPStatus.Success)
-                        {
-                            break;
-                        }
-
-                        Route.ResetEvent.Set();
-                        Thread.Sleep(100);
-                        ++pingOptions.Ttl;
-                    }
-
-                    catch { break; }
-                }
-            }
-
-            e.Cancel = true;
-            Route.ResetEvent.Set();
-            Route.IsActive = false;
-        }
-
-        private void BackgroundThread_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            Route.Timer.Stop();
-
-            if (e.ProgressPercentage < 0)
-            {
-                TraceStatus.Text = "\u2022 Invalid hostname";
                 return;
             }
 
-            var pingReply = e.UserState as PingReply;
-            var node = new NetworkRouteNode();
-
-            if (pingReply.Address != null)
+            if (Hostname.Text.Length == 0)
             {
-                node.HostAddress = pingReply.Address.ToString();
-            }
-            node.ReplyStatus = pingReply.Status;
-            node.HopId = e.ProgressPercentage;
-            node.RoundTripTime = Route.Timer.ElapsedMilliseconds;
-
-            if (node.ReplyStatus == IPStatus.TimedOut)
-            {
-                node.HostAddress = "Timed out";
+                return;
             }
 
-            if (node.ReplyStatus == IPStatus.Success)
-            {
-                TraceStatus.Text = "\u2605 Trace complete";
-            }
+            // Reset width for IP address column.
+            TraceData.Columns[1].Width = new DataGridLength(100.0);
+            TraceData.Columns[1].Width = new DataGridLength(1.0, DataGridLengthUnitType.Auto);
 
-            Route.networkRoute.Add(node);
-            TraceData.ScrollIntoView(TraceData.Items[Route.networkRoute.Count - 1]);
+            TraceStatus.Text = "Tracing route...";
+            TraceStatus.Visibility = Visibility.Visible;
+            _traceroute.Hops.Clear();
+            _traceroute.IsActive = true;
+
+            _cancelSource = new CancellationTokenSource();
+            await TraceAsync(Hostname.Text, _cancelSource.Token);
+        }
+
+        private void StopTrace()
+        {
+            _cancelSource?.Cancel();
+            _traceroute.IsActive = false;
+        }
+
+        // Once the token is cancelled, the trace stops without touching the window again.
+        private async Task TraceAsync(string host, CancellationToken token)
+        {
+            try
+            {
+                if (!IPAddress.TryParse(host, out IPAddress address))
+                {
+                    try
+                    {
+                        address = (await Dns.GetHostEntryAsync(host)).AddressList[0];
+                    }
+                    catch
+                    {
+                        if (!token.IsCancellationRequested)
+                        {
+                            TraceStatus.Text = "\u2022 Invalid hostname";
+                        }
+                        return;
+                    }
+                }
+
+                byte[] buffer = Encoding.ASCII.GetBytes(Constants.DefaultIcmpData);
+                Stopwatch stopwatch = new Stopwatch();
+
+                using (Ping ping = new Ping())
+                {
+                    for (int ttl = 1; ttl <= MaxHops; ttl++)
+                    {
+                        PingOptions options = new PingOptions(ttl, true);
+
+                        stopwatch.Restart();
+                        PingReply reply = await ping.SendPingAsync(address, PingTimeout, buffer, options);
+                        if (reply.Status == IPStatus.TimedOut)
+                        {
+                            // Try a hop a second time before reporting it as timed out.
+                            stopwatch.Restart();
+                            reply = await ping.SendPingAsync(address, PingTimeout, buffer, options);
+                        }
+                        stopwatch.Stop();
+
+                        if (token.IsCancellationRequested)
+                        {
+                            return;
+                        }
+
+                        AddHop(ttl, reply, stopwatch.ElapsedMilliseconds);
+
+                        if (reply.Status == IPStatus.Success)
+                        {
+                            TraceStatus.Text = "\u2605 Trace complete";
+                            break;
+                        }
+
+                        await Task.Delay(100);
+                    }
+                }
+            }
+            catch
+            {
+                // The ping could not be sent. End the trace with the hops found so far.
+            }
+            finally
+            {
+                if (!token.IsCancellationRequested)
+                {
+                    _traceroute.IsActive = false;
+                    Hostname.Focus();
+                }
+            }
+        }
+
+        private void AddHop(int hopId, PingReply reply, long roundTripTime)
+        {
+            TracerouteHop hop = new TracerouteHop
+            {
+                HopId = hopId,
+                HostAddress = reply.Status == IPStatus.TimedOut ? "Timed out" : reply.Address?.ToString(),
+                RoundTripTime = roundTripTime
+            };
+
+            _traceroute.Hops.Add(hop);
+            TraceData.ScrollIntoView(hop);
         }
     }
 }

@@ -123,8 +123,8 @@
     <Compile Include="Views\FloodHostWindow.xaml.cs">
       <DependentUpon>FloodHostWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\NetworkRoute.cs" />
-    <Compile Include="Models\NetworkRouteNode.cs" />
+    <Compile Include="Models\Traceroute.cs" />
+    <Compile Include="Models\TracerouteHop.cs" />
     <Compile Include="Probes\Probe.cs" />
     <Compile Include="Probes\PingStatistics.cs" />
     <Compile Include="Probes\ProbeStatus.cs" />

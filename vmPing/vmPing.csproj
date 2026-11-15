@@ -84,6 +84,7 @@
     <Compile Include="Configuration\LatencyMode.cs" />
     <Compile Include="Configuration\PopupNotificationOption.cs" />
     <Compile Include="Configuration\StartMode.cs" />
+    <Compile Include="Configuration\WindowStartupOption.cs" />
     <Compile Include="Configuration\StringCipher.cs" />
     <Compile Include="Configuration\Favorite.cs" />
     <Compile Include="Probes\Probe.Dns.cs" />

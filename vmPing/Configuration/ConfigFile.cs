@@ -141,6 +141,54 @@ namespace vmPing.Configuration
             }
         }
 
+        // Updates only the window size and position in the config file.
+        public static void SaveWindowPlacement(bool saveSize, bool savePosition)
+        {
+            if (!Exists())
+            {
+                return;
+            }
+
+            try
+            {
+                XDocument xd = XDocument.Load(FilePath);
+                XElement configuration = xd.Element("vmping")?.Element("configuration")
+                    ?? throw new XmlException("Invalid configuration file.");
+
+                if (saveSize)
+                {
+                    SetOption(configuration, "WindowWidth", ApplicationOptions.WindowWidth);
+                    SetOption(configuration, "WindowHeight", ApplicationOptions.WindowHeight);
+                    SetOption(configuration, "IsWindowMaximized", ApplicationOptions.IsWindowMaximized);
+                }
+                if (savePosition)
+                {
+                    SetOption(configuration, "WindowLeft", ApplicationOptions.WindowLeft);
+                    SetOption(configuration, "WindowTop", ApplicationOptions.WindowTop);
+                }
+
+                xd.Save(FilePath);
+            }
+            catch
+            {
+                // Called while closing, so an error message isn't worth showing.
+            }
+        }
+
+        private static void SetOption(XElement configuration, string name, object value)
+        {
+            XElement option = configuration.Elements("option")
+                .FirstOrDefault(x => (string)x.Attribute("name") == name);
+            if (option == null)
+            {
+                configuration.Add(new XElement("option", new XAttribute("name", name), value));
+            }
+            else
+            {
+                option.SetValue(value);
+            }
+        }
+
         private static XElement GenerateConfigurationNode()
         {
             // In XML, options are written as:
@@ -169,6 +217,15 @@ namespace vmPing.Configuration
                 Node("InitialProbeCount", ApplicationOptions.InitialProbeCount),
                 Node("InitialColumnCount", ApplicationOptions.InitialColumnCount),
                 Node("InitialFavorite", ApplicationOptions.InitialFavorite),
+                new XComment(" WindowSizeOption: [Default, Remember, Fixed] "),
+                Node("WindowSizeOption", ApplicationOptions.WindowSizeOption),
+                Node("WindowWidth", ApplicationOptions.WindowWidth),
+                Node("WindowHeight", ApplicationOptions.WindowHeight),
+                Node("IsWindowMaximized", ApplicationOptions.IsWindowMaximized),
+                new XComment(" WindowPositionOption: [Default, Remember, Fixed] "),
+                Node("WindowPositionOption", ApplicationOptions.WindowPositionOption),
+                Node("WindowLeft", ApplicationOptions.WindowLeft),
+                Node("WindowTop", ApplicationOptions.WindowTop),
                 new XComment(" PopupNotifications: [Always, Never, WhenMinimized] "),
                 Node("PopupNotifications", ApplicationOptions.PopupOption),
                 Node("IsAutoDismissEnabled", ApplicationOptions.IsAutoDismissEnabled),
@@ -332,6 +389,13 @@ namespace vmPing.Configuration
             ApplyInt("InitialProbeCount", 1, 20, v => ApplicationOptions.InitialProbeCount = v, options);
             ApplyInt("InitialColumnCount", 1, 10, v => ApplicationOptions.InitialColumnCount = v, options);
             ApplyString("InitialFavorite", v => ApplicationOptions.InitialFavorite = v, options);
+            ApplyEnum<WindowStartupOption>("WindowSizeOption", v => ApplicationOptions.WindowSizeOption = v, options);
+            ApplyInt("WindowWidth", 350, 9999, v => ApplicationOptions.WindowWidth = v, options);
+            ApplyInt("WindowHeight", 200, 9999, v => ApplicationOptions.WindowHeight = v, options);
+            ApplyBool("IsWindowMaximized", v => ApplicationOptions.IsWindowMaximized = v, options);
+            ApplyEnum<WindowStartupOption>("WindowPositionOption", v => ApplicationOptions.WindowPositionOption = v, options);
+            ApplyInt("WindowLeft", -9999, 9999, v => ApplicationOptions.WindowLeft = v, options);
+            ApplyInt("WindowTop", -9999, 9999, v => ApplicationOptions.WindowTop = v, options);
             ApplyEnum<PopupNotificationOption>("PopupNotifications", v => ApplicationOptions.PopupOption = v, options);
             ApplyBool("IsAutoDismissEnabled", v => ApplicationOptions.IsAutoDismissEnabled = v, options);
             ApplyInt("AutoDismissMilliseconds", 1000, 99000, v => ApplicationOptions.AutoDismissMilliseconds = v, options);

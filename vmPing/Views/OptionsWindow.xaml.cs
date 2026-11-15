@@ -101,6 +101,18 @@ namespace vmPing.Views
             StartupMode.SelectedIndex = (int)ApplicationOptions.InitialStartMode;
             InitialFavorite.ItemsSource = Favorite.GetTitles();
             InitialFavorite.Text = ApplicationOptions.InitialFavorite ?? string.Empty;
+
+            WindowSizeDefaultOption.IsChecked = ApplicationOptions.WindowSizeOption == WindowStartupOption.Default;
+            WindowSizeRememberOption.IsChecked = ApplicationOptions.WindowSizeOption == WindowStartupOption.Remember;
+            WindowSizeFixedOption.IsChecked = ApplicationOptions.WindowSizeOption == WindowStartupOption.Fixed;
+            FixedWindowWidth.Text = ApplicationOptions.WindowWidth.ToString();
+            FixedWindowHeight.Text = ApplicationOptions.WindowHeight.ToString();
+
+            WindowPositionDefaultOption.IsChecked = ApplicationOptions.WindowPositionOption == WindowStartupOption.Default;
+            WindowPositionRememberOption.IsChecked = ApplicationOptions.WindowPositionOption == WindowStartupOption.Remember;
+            WindowPositionFixedOption.IsChecked = ApplicationOptions.WindowPositionOption == WindowStartupOption.Fixed;
+            FixedWindowLeft.Text = ApplicationOptions.WindowLeft.ToString();
+            FixedWindowTop.Text = ApplicationOptions.WindowTop.ToString();
         }
 
         private void PopulateNotificationOptions()
@@ -314,6 +326,34 @@ namespace vmPing.Views
 
         private bool ValidateStartupOptions()
         {
+            if (WindowSizeFixedOption.IsChecked == true)
+            {
+                if (!IsInRange(FixedWindowWidth.Text, 350, 9999))
+                {
+                    ShowError("Please enter a window width between 350 and 9999.", StartupTab, FixedWindowWidth);
+                    return false;
+                }
+                if (!IsInRange(FixedWindowHeight.Text, 200, 9999))
+                {
+                    ShowError("Please enter a window height between 200 and 9999.", StartupTab, FixedWindowHeight);
+                    return false;
+                }
+            }
+
+            if (WindowPositionFixedOption.IsChecked == true)
+            {
+                if (!IsInRange(FixedWindowLeft.Text, -9999, 9999))
+                {
+                    ShowError("Please enter a window left position between -9999 and 9999.", StartupTab, FixedWindowLeft);
+                    return false;
+                }
+                if (!IsInRange(FixedWindowTop.Text, -9999, 9999))
+                {
+                    ShowError("Please enter a window top position between -9999 and 9999.", StartupTab, FixedWindowTop);
+                    return false;
+                }
+            }
+
             // The probe and column counts are not used when starting with a favorite.
             if (StartupMode.SelectedIndex == (int)StartMode.Favorite)
             {
@@ -345,6 +385,32 @@ namespace vmPing.Views
             {
                 ApplicationOptions.InitialProbeCount = int.Parse(InitialProbeCount.Text);
                 ApplicationOptions.InitialColumnCount = int.Parse(InitialColumnCount.Text);
+            }
+
+            if (WindowSizeFixedOption.IsChecked == true)
+            {
+                ApplicationOptions.WindowSizeOption = WindowStartupOption.Fixed;
+                ApplicationOptions.WindowWidth = int.Parse(FixedWindowWidth.Text);
+                ApplicationOptions.WindowHeight = int.Parse(FixedWindowHeight.Text);
+            }
+            else
+            {
+                ApplicationOptions.WindowSizeOption = WindowSizeRememberOption.IsChecked == true
+                    ? WindowStartupOption.Remember
+                    : WindowStartupOption.Default;
+            }
+
+            if (WindowPositionFixedOption.IsChecked == true)
+            {
+                ApplicationOptions.WindowPositionOption = WindowStartupOption.Fixed;
+                ApplicationOptions.WindowLeft = int.Parse(FixedWindowLeft.Text);
+                ApplicationOptions.WindowTop = int.Parse(FixedWindowTop.Text);
+            }
+            else
+            {
+                ApplicationOptions.WindowPositionOption = WindowPositionRememberOption.IsChecked == true
+                    ? WindowStartupOption.Remember
+                    : WindowStartupOption.Default;
             }
         }
 
@@ -607,6 +673,16 @@ namespace vmPing.Views
             ApplicationOptions.AliasForegroundDown = AliasForegroundDown.Text;
             ApplicationOptions.AliasForegroundIndeterminate = AliasForegroundIndeterminate.Text;
             ApplicationOptions.AliasForegroundError = AliasForegroundError.Text;
+        }
+
+        // Allows digits and a minus sign, for positions left of or above the main monitor.
+        private void SignedNumericTextbox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9-]+");
+            if (regex.IsMatch(e.Text))
+            {
+                e.Handled = true;
+            }
         }
 
         private void NumericTextbox_PreviewTextInput(object sender, TextCompositionEventArgs e)

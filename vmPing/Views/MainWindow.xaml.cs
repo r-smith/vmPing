@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using vmPing.Configuration;
+using vmPing.Interop;
 using vmPing.Probes;
 using vmPing.Properties;
 
@@ -42,6 +43,7 @@ namespace vmPing.Views
             LoadFavorites();
             LoadAliases();
             ConfigFile.Load();
+            ApplyStartupWindowPlacement();
             RefreshGuiState();
 
             // Set items source for main GUI ItemsControl.
@@ -850,7 +852,11 @@ namespace vmPing.Views
                     System.Windows.Forms.ToolStripMenuItem menuStatusHistory = new System.Windows.Forms.ToolStripMenuItem("Status History");
                     menuStatusHistory.Click += (s, args) => StatusHistoryExecute(null, null);
                     System.Windows.Forms.ToolStripMenuItem menuExit = new System.Windows.Forms.ToolStripMenuItem("Exit vmPing");
-                    menuExit.Click += (s, args) => Application.Current.Shutdown();
+                    menuExit.Click += (s, args) =>
+                    {
+                        SaveWindowPlacement();
+                        Application.Current.Shutdown();
+                    };
 
                     menuStrip.Items.Add(menuOptions);
                     menuStrip.Items.Add(menuStatusHistory);
@@ -926,8 +932,80 @@ namespace vmPing.Views
             }
             else
             {
+                SaveWindowPlacement();
                 _notifyIcon?.Dispose();
             }
+        }
+
+        // Applies the size and position options before the window is shown.
+        private void ApplyStartupWindowPlacement()
+        {
+            if (ApplicationOptions.WindowSizeOption != WindowStartupOption.Default)
+            {
+                Width = ApplicationOptions.WindowWidth;
+                Height = ApplicationOptions.WindowHeight;
+            }
+
+            if (ApplicationOptions.WindowPositionOption != WindowStartupOption.Default)
+            {
+                Left = ApplicationOptions.WindowLeft;
+                Top = ApplicationOptions.WindowTop;
+            }
+
+            // Set after the position, so it maximizes on the right monitor.
+            if (ApplicationOptions.WindowSizeOption == WindowStartupOption.Remember && ApplicationOptions.IsWindowMaximized)
+            {
+                WindowState = WindowState.Maximized;
+            }
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+
+            // The window has a handle now, so its monitor is known. Never start partly or fully off screen:
+            // fit it inside the work area of the nearest monitor. A saved position may be on a monitor
+            // that's no longer connected.
+            if (ApplicationOptions.WindowSizeOption == WindowStartupOption.Default
+                && ApplicationOptions.WindowPositionOption == WindowStartupOption.Default)
+            {
+                return;
+            }
+
+            Rect workArea = NativeMethods.GetWorkArea(this);
+            Width = Math.Min(Width, workArea.Width);
+            Height = Math.Min(Height, workArea.Height);
+            if (!double.IsNaN(Left) && !double.IsNaN(Top))
+            {
+                Left = Math.Max(workArea.Left, Math.Min(Left, workArea.Right - Width));
+                Top = Math.Max(workArea.Top, Math.Min(Top, workArea.Bottom - Height));
+            }
+        }
+
+        private void SaveWindowPlacement()
+        {
+            bool saveSize = ApplicationOptions.WindowSizeOption == WindowStartupOption.Remember;
+            bool savePosition = ApplicationOptions.WindowPositionOption == WindowStartupOption.Remember;
+            if (!saveSize && !savePosition)
+            {
+                return;
+            }
+
+            // When maximized or minimized, RestoreBounds holds the normal size and position.
+            Rect bounds = WindowState == WindowState.Normal
+                ? new Rect(Left, Top, ActualWidth, ActualHeight)
+                : RestoreBounds;
+            if (bounds.IsEmpty || bounds.Width <= 0 || bounds.Height <= 0)
+            {
+                return;
+            }
+
+            ApplicationOptions.WindowWidth = (int)bounds.Width;
+            ApplicationOptions.WindowHeight = (int)bounds.Height;
+            ApplicationOptions.IsWindowMaximized = WindowState == WindowState.Maximized;
+            ApplicationOptions.WindowLeft = (int)bounds.Left;
+            ApplicationOptions.WindowTop = (int)bounds.Top;
+            ConfigFile.SaveWindowPlacement(saveSize, savePosition);
         }
     }
 }

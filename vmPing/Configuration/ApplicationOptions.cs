@@ -51,6 +51,13 @@ namespace vmPing.Configuration
         public static int InitialProbeCount { get; set; } = 2;
         public static int InitialColumnCount { get; set; } = 2;
         public static string InitialFavorite { get; set; } = null;
+        public static WindowStartupOption WindowSizeOption { get; set; } = WindowStartupOption.Default;
+        public static int WindowWidth { get; set; } = 800;
+        public static int WindowHeight { get; set; } = 400;
+        public static bool IsWindowMaximized { get; set; } = false;
+        public static WindowStartupOption WindowPositionOption { get; set; } = WindowStartupOption.Default;
+        public static int WindowLeft { get; set; } = 100;
+        public static int WindowTop { get; set; } = 100;
 
         // Display options.
         public static bool IsAlwaysOnTopEnabled { get; set; } = false;

@@ -770,6 +770,84 @@
                             </ComboBox>
                         </StackPanel>
                     </StackPanel>
+
+                    <!-- Window size -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Window size:"
+                               Margin="0,20,0,5"/>
+                    <RadioButton DockPanel.Dock="Top"
+                                 GroupName="WindowSize"
+                                 Name="WindowSizeDefaultOption"
+                                 Content="Default"
+                                 IsChecked="True"/>
+                    <RadioButton DockPanel.Dock="Top"
+                                 GroupName="WindowSize"
+                                 Name="WindowSizeRememberOption"
+                                 Content="Remember the last size"
+                                 Margin="0,6"/>
+                    <StackPanel DockPanel.Dock="Top"
+                                Orientation="Horizontal">
+                        <RadioButton GroupName="WindowSize"
+                                     Name="WindowSizeFixedOption"
+                                     Content="Fixed size:"
+                                     Width="150"
+                                     VerticalAlignment="Center"/>
+                        <TextBlock Text="Width"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,5,0"/>
+                        <TextBox Name="FixedWindowWidth"
+                                 PreviewTextInput="NumericTextbox_PreviewTextInput"
+                                 IsEnabled="{Binding ElementName=WindowSizeFixedOption, Path=IsChecked}"
+                                 Width="60"
+                                 MaxLength="4"/>
+                        <TextBlock Text="Height"
+                                   VerticalAlignment="Center"
+                                   Margin="15,0,5,0"/>
+                        <TextBox Name="FixedWindowHeight"
+                                 PreviewTextInput="NumericTextbox_PreviewTextInput"
+                                 IsEnabled="{Binding ElementName=WindowSizeFixedOption, Path=IsChecked}"
+                                 Width="60"
+                                 MaxLength="4"/>
+                    </StackPanel>
+
+                    <!-- Window position -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Window position:"
+                               Margin="0,20,0,5"/>
+                    <RadioButton DockPanel.Dock="Top"
+                                 GroupName="WindowPosition"
+                                 Name="WindowPositionDefaultOption"
+                                 Content="Default"
+                                 IsChecked="True"/>
+                    <RadioButton DockPanel.Dock="Top"
+                                 GroupName="WindowPosition"
+                                 Name="WindowPositionRememberOption"
+                                 Content="Remember the last position"
+                                 Margin="0,6"/>
+                    <StackPanel DockPanel.Dock="Top"
+                                Orientation="Horizontal">
+                        <RadioButton GroupName="WindowPosition"
+                                     Name="WindowPositionFixedOption"
+                                     Content="Fixed position:"
+                                     Width="150"
+                                     VerticalAlignment="Center"/>
+                        <TextBlock Text="Left"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,5,0"/>
+                        <TextBox Name="FixedWindowLeft"
+                                 PreviewTextInput="SignedNumericTextbox_PreviewTextInput"
+                                 IsEnabled="{Binding ElementName=WindowPositionFixedOption, Path=IsChecked}"
+                                 Width="60"
+                                 MaxLength="5"/>
+                        <TextBlock Text="Top"
+                                   VerticalAlignment="Center"
+                                   Margin="15,0,5,0"/>
+                        <TextBox Name="FixedWindowTop"
+                                 PreviewTextInput="SignedNumericTextbox_PreviewTextInput"
+                                 IsEnabled="{Binding ElementName=WindowPositionFixedOption, Path=IsChecked}"
+                                 Width="60"
+                                 MaxLength="5"/>
+                    </StackPanel>
                 </DockPanel>
             </TabItem>
 

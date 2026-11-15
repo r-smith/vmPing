@@ -212,6 +212,9 @@ namespace vmPing.Views
             {
                 _probes.Add(new Probe());
             }
+
+            // Probes fill the columns of a row before starting a new row.
+            RefreshColumnCount();
         }
 
         public void ProbeStartStop_Click(object sender, EventArgs e)
@@ -479,8 +482,7 @@ namespace vmPing.Views
 
         private void AddProbeExecute(object sender, ExecutedRoutedEventArgs e)
         {
-            _probes.Add(new Probe());
-            RefreshColumnCount();
+            AddProbe();
         }
 
         private void OptionsExecute(object sender, ExecutedRoutedEventArgs e)

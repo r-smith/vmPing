@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Threading;
 using vmPing.Configuration;
 using vmPing.Interop;
 using vmPing.Probes;
@@ -20,6 +21,9 @@ namespace vmPing.Views
         private System.Windows.Forms.NotifyIcon _notifyIcon;
         private TextBox _probeTypeMenuHostname;
         private string _loadedFavoriteTitle;
+        private object _dragHandle;
+        private Point _dragStartPoint;
+        private Probe _draggedProbe;
 
         public static readonly RoutedCommand OptionsCommand = new RoutedCommand();
         public static readonly RoutedCommand StartStopCommand = new RoutedCommand();
@@ -800,50 +804,93 @@ namespace vmPing.Views
             }
         }
 
-        private void ProbeTitle_PreviewMouseMove(object sender, MouseEventArgs e)
+        // A probe is moved by dragging its title bar. It moves live as it's dragged over
+        // other probes, so dropping it just leaves it where it is.
+
+        private void ProbeTitle_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                DataObject data = new DataObject();
-                data.SetData("Source", ((FrameworkElement)sender).DataContext as Probe);
-                DragDrop.DoDragDrop(sender as DependencyObject, data, DragDropEffects.Move);
-                e.Handled = true;
-            }
+            _dragHandle = sender;
+            _dragStartPoint = e.GetPosition(this);
         }
 
-        private void History_PreviewDragOver(object sender, DragEventArgs e)
+        private void ProbeTitle_PreviewMouseMove(object sender, MouseEventArgs e)
         {
-            e.Effects = DragDropEffects.Move;
+            if (e.LeftButton != MouseButtonState.Pressed || sender != _dragHandle)
+            {
+                return;
+            }
+
+            // Only start once the mouse has moved a few pixels, so a click doesn't start a drag.
+            Vector moved = e.GetPosition(this) - _dragStartPoint;
+            if (Math.Abs(moved.X) < SystemParameters.MinimumHorizontalDragDistance
+                && Math.Abs(moved.Y) < SystemParameters.MinimumVerticalDragDistance)
+            {
+                return;
+            }
+
+            _dragHandle = null;
+            _draggedProbe = (Probe)((FrameworkElement)sender).DataContext;
+            int startIndex = _probes.IndexOf(_draggedProbe);
+            SetProbeOpacity(_draggedProbe, 0.4);
+
+            DataObject data = new DataObject();
+            data.SetData("Source", _draggedProbe);
+            DragDropEffects result = DragDrop.DoDragDrop((DependencyObject)sender, data, DragDropEffects.Move);
+
+            // Dropped outside the probes, or cancelled with Escape: put the probe back.
+            if (result == DragDropEffects.None)
+            {
+                int index = _probes.IndexOf(_draggedProbe);
+                if (index != startIndex)
+                {
+                    _probes.Move(index, startIndex);
+                }
+            }
+
+            SetProbeOpacity(_draggedProbe, 1.0);
+            _draggedProbe = null;
+            e.Handled = true;
+        }
+
+        private void Probe_DragEnter(object sender, DragEventArgs e)
+        {
+            Probe target = ((FrameworkElement)sender).DataContext as Probe;
+            if (_draggedProbe == null || target == null || target == _draggedProbe)
+            {
+                return;
+            }
+
+            _probes.Move(_probes.IndexOf(_draggedProbe), _probes.IndexOf(target));
+
+            // The move can give the probe a new container, so fade it again once the layout is updated.
+            Probe draggedProbe = _draggedProbe;
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (_draggedProbe == draggedProbe)
+                {
+                    SetProbeOpacity(draggedProbe, 0.4);
+                }
+            }), DispatcherPriority.Loaded);
+        }
+
+        private void Probe_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effects = _draggedProbe != null ? DragDropEffects.Move : DragDropEffects.None;
             e.Handled = true;
         }
 
         private void Probe_Drop(object sender, DragEventArgs e)
         {
-            Probe source = e.Data.GetData("Source") as Probe;
-            if (source != null)
-            {
-                int newIndex;
-                if (sender is Label)
-                {
-                    newIndex = _probes.IndexOf((sender as Label).DataContext as Probe);
-                    e.Handled = true;
-                }
-                else if (sender is DockPanel)
-                {
-                    newIndex = _probes.IndexOf((sender as DockPanel).DataContext as Probe);
-                    e.Handled = true;
-                }
-                else
-                {
-                    return;
-                }
+            // The probe was already moved while dragging.
+            e.Effects = DragDropEffects.Move;
+            e.Handled = true;
+        }
 
-                int prevIndex = _probes.IndexOf(source);
-                if (newIndex != prevIndex)
-                {
-                    _probes.RemoveAt(prevIndex);
-                    _probes.Insert(newIndex, source);
-                }
+        private void SetProbeOpacity(Probe probe, double opacity)
+        {
+            if (ProbeItemsControl.ItemContainerGenerator.ContainerFromItem(probe) is UIElement container)
+            {
+                container.Opacity = opacity;
             }
         }
 

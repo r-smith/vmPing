@@ -280,7 +280,10 @@
                             </Grid.RowDefinitions>
 
                             <!-- Ping output section -->
-                            <DockPanel AllowDrop="True" Drop="Probe_Drop">
+                            <DockPanel AllowDrop="True"
+                                       DragEnter="Probe_DragEnter"
+                                       DragOver="Probe_DragOver"
+                                       Drop="Probe_Drop">
 
                                 <!-- Ping title bar / button section -->
                                 <Grid DockPanel.Dock="Top">
@@ -307,6 +310,7 @@
                                     <Border Grid.Column="0"
                                             Background="Transparent"
                                             Padding="6,0,0,0"
+                                            PreviewMouseLeftButtonDown="ProbeTitle_PreviewMouseLeftButtonDown"
                                             PreviewMouseMove="ProbeTitle_PreviewMouseMove">
                                         <Border.Style>
                                             <Style TargetType="{x:Type Border}">
@@ -335,7 +339,8 @@
                                            Margin="0"
                                            FontWeight="SemiBold"
                                            Foreground="{Binding Status, Converter={StaticResource ProbeStatusToAliasBrushConverter}}"
-                                           AllowDrop="True" Drop="Probe_Drop" PreviewMouseMove="ProbeTitle_PreviewMouseMove">
+                                           PreviewMouseLeftButtonDown="ProbeTitle_PreviewMouseLeftButtonDown"
+                                           PreviewMouseMove="ProbeTitle_PreviewMouseMove">
                                     </Label>
 
                                     <!-- Button: Remove probe -->

@@ -73,17 +73,11 @@ namespace vmPing.Probes
         }
 
         // Waits for the given time. Returns false if the probe was stopped while waiting.
+        // WhenAny finishes without throwing when the delay is cancelled.
         private static async Task<bool> Delay(int milliseconds, CancellationToken cancellationToken)
         {
-            try
-            {
-                await Task.Delay(milliseconds, cancellationToken);
-                return true;
-            }
-            catch (OperationCanceledException)
-            {
-                return false;
-            }
+            await Task.WhenAny(Task.Delay(milliseconds, cancellationToken));
+            return !cancellationToken.IsCancellationRequested;
         }
 
         private static bool IsTcpPing(string hostname)

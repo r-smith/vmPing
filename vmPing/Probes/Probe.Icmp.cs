@@ -108,18 +108,18 @@ namespace vmPing.Probes
                 // Otherwise, sleep for a fixed amount of 1 second
                 if (ApplicationOptions.PingInterval > ApplicationOptions.PingTimeout)
                 {
-                    await Task.Delay(ApplicationOptions.PingInterval - ApplicationOptions.PingTimeout, cancellationToken);
+                    await Delay(ApplicationOptions.PingInterval - ApplicationOptions.PingTimeout, cancellationToken);
                 }
                 else
                 {
-                    await Task.Delay(1000, cancellationToken);
+                    await Delay(1000, cancellationToken);
                 }
             }
             else
             {
                 // For any other type of ping response, sleep for the global ping interval amount
                 // before sending another ping.
-                await Task.Delay(ApplicationOptions.PingInterval, cancellationToken);
+                await Delay(ApplicationOptions.PingInterval, cancellationToken);
             }
         }
 

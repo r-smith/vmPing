@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -35,30 +35,10 @@ namespace vmPing.Probes
         public PingStatistics Statistics { get; set; } = new PingStatistics();
         public CancellationTokenSource CancelSource { get; set; }
 
-        private ObservableCollection<string> _history;
-        public ObservableCollection<string> History
-        {
-            get => _history;
-            set
-            {
-                if (value != _history)
-                {
-                    if (_history != null)
-                    {
-                        _history.CollectionChanged -= OnHistoryChanged;
-                    }
-
-                    _history = value;
-                    _history.CollectionChanged += OnHistoryChanged;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(HistoryAsString));
-                }
-            }
-        }
-
-        public string HistoryAsString => History != null
-            ? string.Join(Environment.NewLine, History)
-            : string.Empty;
+        // Output lines. HistoryAdded is raised for each new line, and HistoryReset when the whole output changes.
+        private readonly List<string> _history = new List<string>();
+        public event EventHandler<string> HistoryAdded;
+        public event EventHandler HistoryReset;
 
         private ProbeType _type = ProbeType.Ping;
         public ProbeType Type
@@ -143,15 +123,34 @@ namespace vmPing.Probes
             }
         }
 
-        public void AddHistory(string historyItem)
+        public void AddHistory(string line)
         {
-            const int MaxSize = 3600;
+            const int MaxLines = 3600;
+            const int TrimLines = 600;
 
-            History.Add(historyItem);
-            if (History.Count > MaxSize)
+            _history.Add(line);
+
+            // Remove old lines in batches, so the output only has to be rebuilt once in a while.
+            if (_history.Count > MaxLines + TrimLines)
             {
-                History.RemoveAt(0);
+                _history.RemoveRange(0, _history.Count - MaxLines);
+                HistoryReset?.Invoke(this, EventArgs.Empty);
             }
+            else
+            {
+                HistoryAdded?.Invoke(this, line);
+            }
+        }
+
+        public void ClearHistory()
+        {
+            _history.Clear();
+            HistoryReset?.Invoke(this, EventArgs.Empty);
+        }
+
+        public string GetHistoryText()
+        {
+            return string.Join(Environment.NewLine, _history);
         }
 
         public void WriteFinalStatisticsToHistory()
@@ -179,9 +178,6 @@ namespace vmPing.Probes
 
             AddHistory(" ");
         }
-
-        private void OnHistoryChanged(object sender, NotifyCollectionChangedEventArgs e) =>
-            OnPropertyChanged(nameof(HistoryAsString));
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

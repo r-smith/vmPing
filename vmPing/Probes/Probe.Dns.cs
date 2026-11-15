@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,7 +10,7 @@ namespace vmPing.Probes
         private async Task PerformDnsLookup(CancellationToken cancellationToken)
         {
             IsActive = true;
-            History = new ObservableCollection<string>();
+            ClearHistory();
             Status = ProbeStatus.Scanner;
 
             try

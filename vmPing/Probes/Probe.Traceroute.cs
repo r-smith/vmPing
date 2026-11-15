@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
 using System.Text;
@@ -14,7 +13,7 @@ namespace vmPing.Probes
         private async Task PerformTraceroute(CancellationToken cancellationToken)
         {
             IsActive = true;
-            History = new ObservableCollection<string>();
+            ClearHistory();
             Status = ProbeStatus.Scanner;
 
             AddHistory($"[\u2022] Tracing route to {Hostname}:");

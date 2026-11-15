@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Media;
@@ -112,7 +111,7 @@ namespace vmPing.Probes
             IndeterminateCount = 0;
             HighLatencyCount = 0;
             _isLatencyHigh = false;
-            History = new ObservableCollection<string>();
+            ClearHistory();
         }
 
         private void StopProbe(ProbeStatus status)

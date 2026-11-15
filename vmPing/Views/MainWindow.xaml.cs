@@ -256,8 +256,9 @@ namespace vmPing.Views
                 ProbeTypeMenu.IsOpen = false;
             }
 
-            // Typing / in an empty hostname box opens the probe type menu.
-            if (e.Text == "/" && hostname.Text.Length == 0)
+            // Typing / opens the probe type menu when the hostname box is empty or all its text is selected.
+            // The hostname is kept, so the same host can be switched to another probe type.
+            if (e.Text == "/" && hostname.SelectionLength == hostname.Text.Length)
             {
                 e.Handled = true;
                 OpenProbeTypeMenu(hostname);
@@ -287,7 +288,7 @@ namespace vmPing.Views
                         ProbeTypeMenu.IsOpen = false;
                         e.Handled = true;
                         return;
-                    case Key.Back when hostname.Text.Length == 0:
+                    case Key.Back:
                         ProbeTypeMenu.IsOpen = false;
                         e.Handled = true;
                         return;

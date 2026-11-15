@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using vmPing.Configuration;
@@ -29,6 +30,24 @@ namespace vmPing.Views
             PopulateAdvancedOptions();
             PopulateDisplayOptions();
             PopulateLayoutOptions();
+
+            // Watch for changes only after the options are filled in.
+            WatchStartupOptions();
+        }
+
+        // Startup options only matter when vmPing starts, which needs them saved.
+        // So changing any of them checks "Save as vmPing defaults".
+        private void WatchStartupOptions()
+        {
+            UIElement startupOptions = (UIElement)StartupTab.Content;
+            startupOptions.AddHandler(TextBoxBase.TextChangedEvent, new TextChangedEventHandler(StartupOption_Changed));
+            startupOptions.AddHandler(Selector.SelectionChangedEvent, new SelectionChangedEventHandler(StartupOption_Changed));
+            startupOptions.AddHandler(ToggleButton.CheckedEvent, new RoutedEventHandler(StartupOption_Changed));
+        }
+
+        private void StartupOption_Changed(object sender, RoutedEventArgs e)
+        {
+            SaveAsDefaults.IsChecked = true;
         }
 
         private bool? ShowError(string message, TabItem tabItem, Control control, bool isWarning = false)

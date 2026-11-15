@@ -16,6 +16,7 @@ namespace vmPing.Controls
         private bool _isAutoScrollEnabled = true;
         private bool _hasText;
         private AutoScrollAdorner _adorner;
+        private ScrollViewer _scrollViewer;
 
         public ProbeOutputBox()
         {
@@ -29,6 +30,12 @@ namespace vmPing.Controls
         {
             get => (Probe)GetValue(ProbeProperty);
             set => SetValue(ProbeProperty, value);
+        }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            _scrollViewer = GetTemplateChild("PART_ContentHost") as ScrollViewer;
         }
 
         private static void OnProbeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -127,9 +134,11 @@ namespace vmPing.Controls
         private void ScrollToBottom()
         {
             // Don't move text the user is selecting or has selected.
+            // TextBox.ScrollToEnd forces a layout of the whole window, which is slow with many probes.
+            // The ScrollViewer waits for the next layout instead.
             if (SelectionLength == 0 && !IsMouseCaptureWithin)
             {
-                ScrollToEnd();
+                _scrollViewer?.ScrollToEnd();
             }
         }
 

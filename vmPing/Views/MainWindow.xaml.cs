@@ -19,6 +19,7 @@ namespace vmPing.Views
         private Dictionary<string, string> _aliases = new Dictionary<string, string>();
         private System.Windows.Forms.NotifyIcon _notifyIcon;
         private TextBox _probeTypeMenuHostname;
+        private string _loadedFavoriteTitle;
 
         public static readonly RoutedCommand OptionsCommand = new RoutedCommand();
         public static readonly RoutedCommand StartStopCommand = new RoutedCommand();
@@ -559,7 +560,18 @@ namespace vmPing.Views
 
             ColumnCount.Value = 1;  // Ensure window's grid column binding is updated, if needed.
             ColumnCount.Value = favorite.ColumnCount;
-            Title = $"{favoriteTitle} - vmPing";
+            LoadedFavoriteTitle = favoriteTitle;
+        }
+
+        // The title of the loaded favorite, shown as the window title. Null if no favorite is loaded.
+        public string LoadedFavoriteTitle
+        {
+            get => _loadedFavoriteTitle;
+            set
+            {
+                _loadedFavoriteTitle = value;
+                Title = string.IsNullOrWhiteSpace(value) ? "vmPing" : value;
+            }
         }
 
         private void LoadAliases()
@@ -633,17 +645,15 @@ namespace vmPing.Views
         private void CreateFavorite_Click(object sender, RoutedEventArgs e)
         {
             // Display new favorite window => Pass in current addresses and column count.
-            // If window title ends with " - vmPing", then user currently has a
-            // favorite loaded. Pass the title of that favorite to the new window.
-            const string TitleSuffix = " - vmPing";
+            // If a favorite is loaded, pass its title to the new window.
             NewFavoriteWindow newFavoriteWindow = new NewFavoriteWindow(
                 hostList: _probes.Select(x => x.Hostname).ToList(),
                 columnCount: (int)ColumnCount.Value,
-                title: Title.EndsWith(TitleSuffix) ? Title.Remove(Title.Length - TitleSuffix.Length) : string.Empty);
+                title: LoadedFavoriteTitle ?? string.Empty);
             newFavoriteWindow.Owner = this;
             if (newFavoriteWindow.ShowDialog() == true)
             {
-                Title = $"{newFavoriteWindow.MyTitle.Text} - vmPing";
+                LoadedFavoriteTitle = newFavoriteWindow.MyTitle.Text;
                 LoadFavorites();
             }
         }

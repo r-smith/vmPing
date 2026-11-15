@@ -2,7 +2,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:c="clr-namespace:vmPing.Controls"
-        Title="{Binding Hostname, StringFormat='{}{0} - vmPing'}"
         UseLayoutRounding="True"
         Height="500"
         Width="450"
@@ -10,6 +9,20 @@
         MinWidth="300"
         Background="White"
         Closed="Window_Closed">
+    <!-- The window title is the hostname, or vmPing if there's no hostname. -->
+    <Window.Style>
+        <Style TargetType="{x:Type Window}">
+            <Setter Property="Title" Value="{Binding Hostname}"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Hostname}" Value="{x:Null}">
+                    <Setter Property="Title" Value="vmPing"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Hostname}" Value="">
+                    <Setter Property="Title" Value="vmPing"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
 
     <!-- Items Control -->
     <Border BorderBrush="#111" BorderThickness="0,1,0,0" Margin="0,0,0,0" CornerRadius="0"

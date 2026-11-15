@@ -96,9 +96,9 @@ namespace vmPing.Views
             if (newFavoriteWindow.ShowDialog() == true)
             {
                 // If the loaded favorite was renamed, update the main window title.
-                if (Owner != null && Owner.Title == $"{originalTitle} - vmPing")
+                if (Owner is MainWindow mainWindow && mainWindow.LoadedFavoriteTitle == originalTitle)
                 {
-                    Owner.Title = $"{newFavoriteWindow.MyTitle.Text} - vmPing";
+                    mainWindow.LoadedFavoriteTitle = newFavoriteWindow.MyTitle.Text;
                 }
                 RefreshFavoriteList();
             }

@@ -26,6 +26,7 @@
                 <ResourceDictionary Source="Themes/WindowChrome.xaml"/>
                 <ResourceDictionary Source="Themes/MenuItemStyle.xaml"/>
                 <ResourceDictionary Source="Themes/SliderStyle.xaml"/>
+                <ResourceDictionary Source="Themes/ProbeTypeStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

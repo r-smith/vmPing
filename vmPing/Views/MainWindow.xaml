@@ -34,7 +34,7 @@
                     <ScrollViewer x:Name="PART_ContentHost"/>
                 </Border>
                 <TextBlock x:Name="placeholderText"
-                           Text="Enter a hostname"
+                           Text="{x:Static resource:Strings.ProbeType_PingHint}"
                            Visibility="Hidden"
                            FontSize="12"
                            Opacity="0.3"
@@ -56,6 +56,12 @@
                         <Setter Property="Visibility" TargetName="placeholderText" Value="Visible"/>
                     </MultiTrigger.Setters>
                 </MultiTrigger>
+                <DataTrigger Binding="{Binding Type}" Value="Dns">
+                    <Setter Property="Text" TargetName="placeholderText" Value="{x:Static resource:Strings.ProbeType_DnsHint}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Type}" Value="Traceroute">
+                    <Setter Property="Text" TargetName="placeholderText" Value="{x:Static resource:Strings.ProbeType_TracerouteHint}"/>
+                </DataTrigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </Window.Resources>
@@ -229,6 +235,37 @@
             </MenuItem>
         </Menu>
 
+
+        <!-- Probe type menu. Opens when / is typed in an empty hostname box, or the probe type label is clicked. -->
+        <Popup x:Name="ProbeTypeMenu"
+               DockPanel.Dock="Top"
+               Placement="Custom"
+               StaysOpen="False"
+               AllowsTransparency="True">
+            <Border Background="White"
+                    BorderBrush="#c8c8c8"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="4"
+                    Margin="0,2,0,0">
+                <ListBox x:Name="ProbeTypeList"
+                         Focusable="False"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         ItemContainerStyle="{StaticResource ProbeTypeMenuItem}"
+                         PreviewMouseLeftButtonUp="ProbeTypeList_PreviewMouseLeftButtonUp">
+                    <ListBoxItem Tag="{x:Static probes:ProbeType.Ping}"
+                                 TextSearch.Text="{x:Static resource:Strings.ProbeType_PingKey}"
+                                 Content="{x:Static resource:Strings.ProbeType_Ping}"/>
+                    <ListBoxItem Tag="{x:Static probes:ProbeType.Dns}"
+                                 TextSearch.Text="{x:Static resource:Strings.ProbeType_DnsKey}"
+                                 Content="{x:Static resource:Strings.ProbeType_Dns}"/>
+                    <ListBoxItem Tag="{x:Static probes:ProbeType.Traceroute}"
+                                 TextSearch.Text="{x:Static resource:Strings.ProbeType_TracerouteKey}"
+                                 Content="{x:Static resource:Strings.ProbeType_Traceroute}"/>
+                </ListBox>
+            </Border>
+        </Popup>
 
         <!-- Items Control -->
         <ItemsControl Name="ProbeItemsControl" IsTabStop="False" Focusable="False" BorderThickness="0,1,0,0" BorderBrush="#111" Margin="0,0,-2,-2">
@@ -529,12 +566,13 @@
                             <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
                                 <!-- Border to set background color and top border for this section -->
-                                <Border Grid.ColumnSpan="3" Background="#e8ffffff" BorderThickness="0,1,0,0" BorderBrush="#20000000"/>
+                                <Border Grid.ColumnSpan="4" Background="#e8ffffff" BorderThickness="0,1,0,0" BorderBrush="#20000000"/>
 
                                 <!-- Status glyph -->
                                 <TextBlock Grid.Column="0"
@@ -546,9 +584,16 @@
                                            Padding="4,0,1,0">
                                 </TextBlock>
 
+                                <!-- Probe type label. Click to change the probe type. -->
+                                <Label Grid.Column="1"
+                                       Style="{StaticResource ProbeTypeLabel}"
+                                       Margin="2,0,4,0"
+                                       Cursor="Hand"
+                                       MouseLeftButtonUp="ProbeTypeLabel_MouseLeftButtonUp"/>
+
                                 <!-- Hostname textbox -->
                                 <TextBox Name="Hostname"
-                                         Grid.Column="1"
+                                         Grid.Column="2"
                                          FontWeight="SemiBold"
                                          FontSize="{Binding ElementName=History, Path=ActualWidth, Converter={StaticResource HostnameFontsizeConverter}}"
                                          BorderThickness="0,0,0,0"
@@ -561,11 +606,13 @@
                                          Template="{StaticResource TextBoxControlTemplate}"
                                          Loaded="Hostname_Loaded"
                                          TextChanged="Hostname_TextChanged"
+                                         PreviewTextInput="Hostname_PreviewTextInput"
+                                         PreviewKeyDown="Hostname_PreviewKeyDown"
                                          KeyDown="Hostname_KeyDown"/>
 
                                 <!-- Ping button -->
                                 <Button Click="ProbeStartStop_Click"
-                                        Grid.Column="2"
+                                        Grid.Column="3"
                                         FontSize="14"
                                         Padding="0,2"
                                         Margin="2"
@@ -579,12 +626,34 @@
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
                                                     <Image Source="{Binding IsActive, Converter={StaticResource BooleanToImageConverter}}" Width="16" Height="16"
                                                            Margin="0,6"/>
-                                                    <TextBlock Text="{Binding IsActive, Converter={StaticResource BoolToStringConverter}}"
-                                                               Visibility="{Binding ElementName=History, Path=ActualWidth, Converter={StaticResource ButtonTextVisibilityConverter}}"
+                                                    <TextBlock Visibility="{Binding ElementName=History, Path=ActualWidth, Converter={StaticResource ButtonTextVisibilityConverter}}"
                                                                Foreground="Black"
                                                                FontSize="13"
                                                                VerticalAlignment="Center"
-                                                               Margin="8,0,0,0"/>
+                                                               Margin="8,0,0,0">
+                                                        <!-- Ping or Stop, or a label for the probe type when it isn't a ping probe -->
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="{x:Type TextBlock}">
+                                                                <Setter Property="Text" Value="{Binding IsActive, Converter={StaticResource BoolToStringConverter}}"/>
+                                                                <Style.Triggers>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding Type}" Value="Dns"/>
+                                                                            <Condition Binding="{Binding IsActive}" Value="False"/>
+                                                                        </MultiDataTrigger.Conditions>
+                                                                        <Setter Property="Text" Value="{x:Static resource:Strings.Button_LookUp}"/>
+                                                                    </MultiDataTrigger>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding Type}" Value="Traceroute"/>
+                                                                            <Condition Binding="{Binding IsActive}" Value="False"/>
+                                                                        </MultiDataTrigger.Conditions>
+                                                                        <Setter Property="Text" Value="{x:Static resource:Strings.Button_Trace}"/>
+                                                                    </MultiDataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
                                                 </StackPanel>
                                             </Border>
                                             <ControlTemplate.Triggers>

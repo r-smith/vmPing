@@ -61,6 +61,15 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Look up.
+        /// </summary>
+        public static string Button_LookUp {
+            get {
+                return ResourceManager.GetString("Button_LookUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ping.
         /// </summary>
         public static string Button_Ping {
@@ -75,6 +84,15 @@ namespace vmPing.Properties {
         public static string Button_Stop {
             get {
                 return ResourceManager.GetString("Button_Stop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trace.
+        /// </summary>
+        public static string Button_Trace {
+            get {
+                return ResourceManager.GetString("Button_Trace", resourceCulture);
             }
         }
         
@@ -759,6 +777,105 @@ namespace vmPing.Properties {
         public static string Probe_Unreachable {
             get {
                 return ResourceManager.GetString("Probe_Unreachable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DNS lookup.
+        /// </summary>
+        public static string ProbeType_Dns {
+            get {
+                return ResourceManager.GetString("ProbeType_Dns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a hostname to look up.
+        /// </summary>
+        public static string ProbeType_DnsHint {
+            get {
+                return ResourceManager.GetString("ProbeType_DnsHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to D.
+        /// </summary>
+        public static string ProbeType_DnsKey {
+            get {
+                return ResourceManager.GetString("ProbeType_DnsKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DNS.
+        /// </summary>
+        public static string ProbeType_DnsLabel {
+            get {
+                return ResourceManager.GetString("ProbeType_DnsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ping.
+        /// </summary>
+        public static string ProbeType_Ping {
+            get {
+                return ResourceManager.GetString("ProbeType_Ping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a hostname, or / for options.
+        /// </summary>
+        public static string ProbeType_PingHint {
+            get {
+                return ResourceManager.GetString("ProbeType_PingHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to P.
+        /// </summary>
+        public static string ProbeType_PingKey {
+            get {
+                return ResourceManager.GetString("ProbeType_PingKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Traceroute.
+        /// </summary>
+        public static string ProbeType_Traceroute {
+            get {
+                return ResourceManager.GetString("ProbeType_Traceroute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a hostname to trace.
+        /// </summary>
+        public static string ProbeType_TracerouteHint {
+            get {
+                return ResourceManager.GetString("ProbeType_TracerouteHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to T.
+        /// </summary>
+        public static string ProbeType_TracerouteKey {
+            get {
+                return ResourceManager.GetString("ProbeType_TracerouteKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TRACE.
+        /// </summary>
+        public static string ProbeType_TracerouteLabel {
+            get {
+                return ResourceManager.GetString("ProbeType_TracerouteLabel", resourceCulture);
             }
         }
         

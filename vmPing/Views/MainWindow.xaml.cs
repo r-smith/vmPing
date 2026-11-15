@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using vmPing.Configuration;
 using vmPing.Probes;
@@ -16,6 +17,7 @@ namespace vmPing.Views
         private readonly ObservableCollection<Probe> _probes = new ObservableCollection<Probe>();
         private Dictionary<string, string> _aliases = new Dictionary<string, string>();
         private System.Windows.Forms.NotifyIcon _notifyIcon;
+        private TextBox _probeTypeMenuHostname;
 
         public static readonly RoutedCommand OptionsCommand = new RoutedCommand();
         public static readonly RoutedCommand StartStopCommand = new RoutedCommand();
@@ -30,6 +32,7 @@ namespace vmPing.Views
         public MainWindow()
         {
             InitializeComponent();
+            ProbeTypeMenu.CustomPopupPlacementCallback = PlaceProbeTypeMenu;
             InitializeApplication();
         }
 
@@ -231,6 +234,123 @@ namespace vmPing.Views
                     tb?.Focus();
                 }
             }
+        }
+
+        private void Hostname_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            TextBox hostname = (TextBox)sender;
+
+            if (ProbeTypeMenu.IsOpen)
+            {
+                // Typing a probe type's shortcut key selects it.
+                ListBoxItem item = ProbeTypeList.Items.Cast<ListBoxItem>()
+                    .FirstOrDefault(x => string.Equals(TextSearch.GetText(x), e.Text, StringComparison.OrdinalIgnoreCase));
+                if (item != null)
+                {
+                    e.Handled = true;
+                    SelectProbeType((ProbeType)item.Tag);
+                    return;
+                }
+
+                // Any other key closes the menu and is typed as usual.
+                ProbeTypeMenu.IsOpen = false;
+            }
+
+            // Typing / in an empty hostname box opens the probe type menu.
+            if (e.Text == "/" && hostname.Text.Length == 0)
+            {
+                e.Handled = true;
+                OpenProbeTypeMenu(hostname);
+            }
+        }
+
+        private void Hostname_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox hostname = (TextBox)sender;
+
+            if (ProbeTypeMenu.IsOpen)
+            {
+                switch (e.Key)
+                {
+                    case Key.Up:
+                    case Key.Down:
+                        int count = ProbeTypeList.Items.Count;
+                        int step = e.Key == Key.Down ? 1 : count - 1;
+                        ProbeTypeList.SelectedIndex = (ProbeTypeList.SelectedIndex + step) % count;
+                        e.Handled = true;
+                        return;
+                    case Key.Enter:
+                        SelectProbeType((ProbeType)((ListBoxItem)ProbeTypeList.SelectedItem).Tag);
+                        e.Handled = true;
+                        return;
+                    case Key.Escape:
+                        ProbeTypeMenu.IsOpen = false;
+                        e.Handled = true;
+                        return;
+                    case Key.Back when hostname.Text.Length == 0:
+                        ProbeTypeMenu.IsOpen = false;
+                        e.Handled = true;
+                        return;
+                }
+            }
+
+            // Backspace in an empty hostname box switches back to ping.
+            Probe probe = (Probe)hostname.DataContext;
+            if (e.Key == Key.Back && hostname.Text.Length == 0 && probe.Type != ProbeType.Ping)
+            {
+                probe.Type = ProbeType.Ping;
+                e.Handled = true;
+            }
+        }
+
+        private void ProbeTypeLabel_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Label label = (Label)sender;
+            if (((Probe)label.DataContext).IsActive)
+            {
+                return;
+            }
+
+            // The label and the hostname box are in the same grid.
+            TextBox hostname = ((Grid)label.Parent).Children.OfType<TextBox>().First();
+            OpenProbeTypeMenu(hostname);
+        }
+
+        private void ProbeTypeList_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (ItemsControl.ContainerFromElement(ProbeTypeList, (DependencyObject)e.OriginalSource) is ListBoxItem item)
+            {
+                SelectProbeType((ProbeType)item.Tag);
+            }
+        }
+
+        private void OpenProbeTypeMenu(TextBox hostname)
+        {
+            // Keyboard focus stays in the hostname box. Its key handlers control the menu.
+            _probeTypeMenuHostname = hostname;
+            ProbeType currentType = ((Probe)hostname.DataContext).Type;
+            ProbeTypeList.SelectedItem = ProbeTypeList.Items.Cast<ListBoxItem>().First(x => (ProbeType)x.Tag == currentType);
+            ProbeTypeMenu.PlacementTarget = hostname;
+            ProbeTypeMenu.IsOpen = true;
+            hostname.Focus();
+        }
+
+        // Opens the menu below the hostname box, lined up with its left edge, or above it if there's no room.
+        // Placement="Bottom" can line up with the right edge instead, depending on a Windows handedness setting.
+        private static CustomPopupPlacement[] PlaceProbeTypeMenu(Size popupSize, Size targetSize, Point offset)
+        {
+            return new[]
+            {
+                new CustomPopupPlacement(new Point(0, targetSize.Height), PopupPrimaryAxis.Horizontal),
+                new CustomPopupPlacement(new Point(0, -popupSize.Height), PopupPrimaryAxis.Horizontal)
+            };
+        }
+
+        private void SelectProbeType(ProbeType type)
+        {
+            ProbeTypeMenu.IsOpen = false;
+            ((Probe)_probeTypeMenuHostname.DataContext).Type = type;
+            _probeTypeMenuHostname.Focus();
         }
 
         private void RemoveProbe_Click(object sender, RoutedEventArgs e)

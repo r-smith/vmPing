@@ -974,38 +974,6 @@
                             <Border Background="{Binding ElementName=StatisticsForegroundError, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
 
-                        <!-- Alias foreground colors -->
-                        <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="Transparent" Margin="0,20,0,0"/>
-                        <TextBlock DockPanel.Dock="Top"
-                                   Text="Alias Foreground"
-                                   Margin="0"
-                                   Style="{StaticResource OptionSubHeaderTextStyle}"/>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Inactive"/>
-                            <TextBox Name="AliasForegroundInactive"/>
-                            <Border Background="{Binding ElementName=AliasForegroundInactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Up"/>
-                            <TextBox Name="AliasForegroundUp"/>
-                            <Border Background="{Binding ElementName=AliasForegroundUp, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Down"/>
-                            <TextBox Name="AliasForegroundDown"/>
-                            <Border Background="{Binding ElementName=AliasForegroundDown, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Indeterminate"/>
-                            <TextBox Name="AliasForegroundIndeterminate"/>
-                            <Border Background="{Binding ElementName=AliasForegroundIndeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,10">
-                            <TextBlock Width="150" Text="Error"/>
-                            <TextBox Name="AliasForegroundError"/>
-                            <Border Background="{Binding ElementName=AliasForegroundError, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-
                         <!-- Restore defaults button -->
                         <Grid DockPanel.Dock="Top" Margin="0,15,0,0">
                             <Button Style="{StaticResource ButtonStandardStyle}"

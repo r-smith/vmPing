@@ -12,7 +12,6 @@
     <converters:ProbeStatusToBackgroundBrushConverter x:Key="ProbeStatusToBackgroundBrushConverter" />
     <converters:ProbeStatusToForegroundBrushConverter x:Key="ProbeStatusToForegroundBrushConverter" />
     <converters:ProbeStatusToStatisticsBrushConverter x:Key="ProbeStatusToStatisticsBrushConverter" />
-    <converters:ProbeStatusToAliasBrushConverter x:Key="ProbeStatusToAliasBrushConverter" />
     <converters:ProbeStatusToGlyphConverter x:Key="ProbeStatusToGlyphConverter" />
     <converters:ProbeCountToGlobalStartStopText x:Key="ProbeCountToGlobalStartStopText" />
     <converters:ProbeCountToGlobalStartStopIcon x:Key="ProbeCountToGlobalStartStopIcon" />

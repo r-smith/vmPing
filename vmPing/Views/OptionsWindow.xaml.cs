@@ -226,11 +226,6 @@ namespace vmPing.Views
             StatisticsForegroundDown.Text = ApplicationOptions.StatisticsForegroundDown;
             StatisticsForegroundError.Text = ApplicationOptions.StatisticsForegroundError;
             StatisticsForegroundIndeterminate.Text = ApplicationOptions.StatisticsForegroundIndeterminate;
-            AliasForegroundInactive.Text = ApplicationOptions.AliasForegroundInactive;
-            AliasForegroundUp.Text = ApplicationOptions.AliasForegroundUp;
-            AliasForegroundDown.Text = ApplicationOptions.AliasForegroundDown;
-            AliasForegroundError.Text = ApplicationOptions.AliasForegroundError;
-            AliasForegroundIndeterminate.Text = ApplicationOptions.AliasForegroundIndeterminate;
         }
 
 
@@ -687,11 +682,6 @@ namespace vmPing.Views
             ApplicationOptions.StatisticsForegroundDown = StatisticsForegroundDown.Text;
             ApplicationOptions.StatisticsForegroundIndeterminate = StatisticsForegroundIndeterminate.Text;
             ApplicationOptions.StatisticsForegroundError = StatisticsForegroundError.Text;
-            ApplicationOptions.AliasForegroundInactive = AliasForegroundInactive.Text;
-            ApplicationOptions.AliasForegroundUp = AliasForegroundUp.Text;
-            ApplicationOptions.AliasForegroundDown = AliasForegroundDown.Text;
-            ApplicationOptions.AliasForegroundIndeterminate = AliasForegroundIndeterminate.Text;
-            ApplicationOptions.AliasForegroundError = AliasForegroundError.Text;
         }
 
         // Allows digits and a minus sign, for positions left of or above the main monitor.
@@ -966,11 +956,6 @@ namespace vmPing.Views
             StatisticsForegroundDown.Text = Constants.DefaultStatisticsForegroundDown;
             StatisticsForegroundError.Text = Constants.DefaultStatisticsForegroundError;
             StatisticsForegroundIndeterminate.Text = Constants.DefaultStatisticsForegroundIndeterminate;
-            AliasForegroundInactive.Text = Constants.DefaultAliasForegroundInactive;
-            AliasForegroundUp.Text = Constants.DefaultAliasForegroundUp;
-            AliasForegroundDown.Text = Constants.DefaultAliasForegroundDown;
-            AliasForegroundError.Text = Constants.DefaultAliasForegroundError;
-            AliasForegroundIndeterminate.Text = Constants.DefaultAliasForegroundIndeterminate;
         }
 
         private void Window_SourceInitialized(object sender, EventArgs e)

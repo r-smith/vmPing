@@ -225,39 +225,6 @@ namespace vmPing.Converters
         }
     }
 
-    public class ProbeStatusToAliasBrushConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (!(value is ProbeStatus))
-            {
-                return Brushes.Transparent;
-            }
-
-            switch ((ProbeStatus)value)
-            {
-                case ProbeStatus.Up:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.AliasForegroundUp);
-                case ProbeStatus.Down:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.AliasForegroundDown);
-                case ProbeStatus.Error:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.AliasForegroundError);
-                case ProbeStatus.LatencyHigh:
-                case ProbeStatus.Indeterminate:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.AliasForegroundIndeterminate);
-                case ProbeStatus.Scanner:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.AliasForegroundScanner);
-                default:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.AliasForegroundInactive);
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return Binding.DoNothing;
-        }
-    }
-
     public class StringToBrushConverter : IValueConverter
     {
         private static readonly BrushConverter s_brushConverter = new BrushConverter();

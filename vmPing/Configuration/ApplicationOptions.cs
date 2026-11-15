@@ -91,14 +91,6 @@ namespace vmPing.Configuration
         public static string StatisticsForegroundIndeterminate { get; set; } = Constants.DefaultStatisticsForegroundIndeterminate;
         public static string StatisticsForegroundError { get; set; } = Constants.DefaultStatisticsForegroundError;
 
-        // Alias text.
-        public static string AliasForegroundInactive { get; set; } = Constants.DefaultAliasForegroundInactive;
-        public static string AliasForegroundUp { get; set; } = Constants.DefaultAliasForegroundUp;
-        public static string AliasForegroundDown { get; set; } = Constants.DefaultAliasForegroundDown;
-        public static string AliasForegroundIndeterminate { get; set; } = Constants.DefaultAliasForegroundIndeterminate;
-        public static string AliasForegroundError { get; set; } = Constants.DefaultAliasForegroundError;
-        public static string AliasForegroundScanner { get; set; } = Constants.DefaultAliasForegroundScanner;
-
         static ApplicationOptions()
         {
             // Set the default ping data.

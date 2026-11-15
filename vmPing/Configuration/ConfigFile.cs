@@ -288,14 +288,7 @@ namespace vmPing.Configuration
                 Node("Statistics.Foreground.Up", ApplicationOptions.StatisticsForegroundUp),
                 Node("Statistics.Foreground.Down", ApplicationOptions.StatisticsForegroundDown),
                 Node("Statistics.Foreground.Indeterminate", ApplicationOptions.StatisticsForegroundIndeterminate),
-                Node("Statistics.Foreground.Error", ApplicationOptions.StatisticsForegroundError),
-
-                new XComment(" Alias foreground "),
-                Node("Alias.Foreground.Inactive", ApplicationOptions.AliasForegroundInactive),
-                Node("Alias.Foreground.Up", ApplicationOptions.AliasForegroundUp),
-                Node("Alias.Foreground.Down", ApplicationOptions.AliasForegroundDown),
-                Node("Alias.Foreground.Indeterminate", ApplicationOptions.AliasForegroundIndeterminate),
-                Node("Alias.Foreground.Error", ApplicationOptions.AliasForegroundError)
+                Node("Statistics.Foreground.Error", ApplicationOptions.StatisticsForegroundError)
             );
         }
 
@@ -349,11 +342,6 @@ namespace vmPing.Configuration
             ApplyColor("Statistics.Foreground.Down", v => ApplicationOptions.StatisticsForegroundDown = v, options);
             ApplyColor("Statistics.Foreground.Indeterminate", v => ApplicationOptions.StatisticsForegroundIndeterminate = v, options);
             ApplyColor("Statistics.Foreground.Error", v => ApplicationOptions.StatisticsForegroundError = v, options);
-            ApplyColor("Alias.Foreground.Inactive", v => ApplicationOptions.AliasForegroundInactive = v, options);
-            ApplyColor("Alias.Foreground.Up", v => ApplicationOptions.AliasForegroundUp = v, options);
-            ApplyColor("Alias.Foreground.Down", v => ApplicationOptions.AliasForegroundDown = v, options);
-            ApplyColor("Alias.Foreground.Indeterminate", v => ApplicationOptions.AliasForegroundIndeterminate = v, options);
-            ApplyColor("Alias.Foreground.Error", v => ApplicationOptions.AliasForegroundError = v, options);
         }
 
         private static void ApplyColor(string key, Action<string> setter, IDictionary<string, string> options)

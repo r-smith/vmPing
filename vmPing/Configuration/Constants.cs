@@ -27,14 +27,6 @@ namespace vmPing.Configuration
         public const string DefaultStatisticsForegroundIndeterminate = "#111";
         public const string DefaultStatisticsForegroundError = "#ffffff";
 
-        // Default alias / probe title colors.
-        public const string DefaultAliasForegroundInactive = "#000000";
-        public const string DefaultAliasForegroundUp = "#ffff00";
-        public const string DefaultAliasForegroundDown = "#ffff00";
-        public const string DefaultAliasForegroundIndeterminate = "#ffffff";
-        public const string DefaultAliasForegroundError = "#ffff00";
-        public const string DefaultAliasForegroundScanner = "#ffff00";
-
         // Default probe options.
         public const string DefaultIcmpData = "https://github.com/R-Smith/vmPing";
         public const int DefaultTimeout = 2000;       // In milliseconds.

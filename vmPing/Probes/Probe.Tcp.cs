@@ -29,7 +29,7 @@ namespace vmPing.Probes
                 return;
             }
 
-            AddHistory($"*** Pinging {host} on port {portnumber}:");
+            AddHistory($"*** Pinging {GetDisplayName(host)} on port {portnumber}:");
 
             // Check whether a hostname or an IP address was provided.  If hostname, resolve and print IP.
             if (await IsHostInvalid(host, cancellationToken))

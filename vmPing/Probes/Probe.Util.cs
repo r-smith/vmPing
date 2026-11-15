@@ -105,6 +105,12 @@ namespace vmPing.Probes
             AddStatusHistory(ProbeStatus.Stop);
         }
 
+        // The host for output lines, with the alias in front when there is one: "core-sw01 [10.0.0.1]".
+        private string GetDisplayName(string host)
+        {
+            return string.IsNullOrEmpty(Alias) ? host : $"{Alias} [{host}]";
+        }
+
         private void AddStatusHistory(ProbeStatus status, bool isHidden = false)
         {
             StatusChange entry = new StatusChange

@@ -12,7 +12,7 @@ namespace vmPing.Probes
     {
         private async Task PerformIcmpProbe(CancellationToken cancellationToken)
         {
-            AddHistory($"*** Pinging {Hostname}:");
+            AddHistory($"*** Pinging {GetDisplayName(Hostname)}:");
 
             if (await IsHostInvalid(Hostname, cancellationToken))
             {

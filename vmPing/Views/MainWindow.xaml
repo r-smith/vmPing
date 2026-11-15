@@ -628,17 +628,7 @@
                                     </Border>
                                 </Grid>
                             </DockPanel>
-                            
-                            
-                            <!-- vmPing icon -->
-                            <Image Source="{StaticResource icon.vmping-logo-simple}"
-                                   Width="72"
-                                   Height="72"
-                                   IsHitTestVisible="False"
-                                   Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanToVisibilityConverter}, NotifyOnTargetUpdated=True}"
-                                   TargetUpdated="Logo_TargetUpdated"
-                                   Opacity="0.03"/>
-                            
+
                             <!-- Hostname and ping button section -->
                             <Grid Grid.Row="1">
                                 <!-- Hidden for comments, except while editing. Opacity keeps it clickable and focusable. -->
@@ -726,17 +716,6 @@
                                         Margin="2"
                                         HorizontalAlignment="Right"
                                         Background="White">
-                                    <!-- Comments can't be started, so the button can't be focused or clicked. -->
-                                    <Button.Style>
-                                        <Style TargetType="{x:Type Button}">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsComment}" Value="True">
-                                                    <Setter Property="Focusable" Value="False"/>
-                                                    <Setter Property="IsHitTestVisible" Value="False"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Border Name="PingButtonBorder" BorderThickness="1" BorderBrush="#bb2e6da4"

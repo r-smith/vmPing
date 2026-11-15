@@ -6,7 +6,6 @@
     <!-- Value converters -->
     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
     <converters:BooleanToImageConverter x:Key="BooleanToImageConverter" />
-    <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
     <converters:InverseHiddenToBoolConverter x:Key="InverseHiddenToBoolConverter" />
     <converters:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="{x:Static resource:Strings.Button_Ping}" TrueValue="{x:Static resource:Strings.Button_Stop}" />
     <converters:ProbeStatusToBackgroundBrushConverter x:Key="ProbeStatusToBackgroundBrushConverter" />

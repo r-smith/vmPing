@@ -827,18 +827,6 @@ namespace vmPing.Views
             }
         }
 
-        private void Logo_TargetUpdated(object sender, System.Windows.Data.DataTransferEventArgs e)
-        {
-            // This event is tied to the background image that appears in each probe window.
-            // After a probe is started, this event removes the image from the ItemsControl.
-            Image image = (sender as Image);
-            if (image.Visibility == Visibility.Collapsed)
-            {
-                image.Visibility = Visibility.Collapsed;
-                image.Source = null;
-            }
-        }
-
         // A probe is moved by dragging its title bar. It moves live as it's dragged over
         // other probes, so dropping it just leaves it where it is.
 

@@ -5,7 +5,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using vmPing.Configuration;
 using vmPing.Properties;
 
@@ -24,15 +23,13 @@ namespace vmPing.Probes
             if (!(int.TryParse(port, out portnumber) && portnumber >= 1 && portnumber <= 65535))
             {
                 // Error.
-                await Application.Current.Dispatcher.BeginInvoke(
-                    new Action(() => AddHistory("Invalid port number.")));
+                AddHistory("Invalid port number.");
 
                 StopProbe(ProbeStatus.Error);
                 return;
             }
 
-            await Application.Current.Dispatcher.BeginInvoke(
-                new Action(() => AddHistory($"*** Pinging {host} on port {portnumber}:")));
+            AddHistory($"*** Pinging {host} on port {portnumber}:");
 
             // Check whether a hostname or an IP address was provided.  If hostname, resolve and print IP.
             if (await IsHostInvalid(host, cancellationToken))
@@ -70,8 +67,7 @@ namespace vmPing.Probes
             }
             catch (Exception ex)
             {
-                await Application.Current.Dispatcher.BeginInvoke(
-                            new Action(() => AddHistory("Error: " + ex.Message)));
+                AddHistory("Error: " + ex.Message);
                 StopProbe(ProbeStatus.Error);
                 return;
             }
@@ -93,8 +89,7 @@ namespace vmPing.Probes
                 catch (Exception ex)
                 {
                     // Unexpected error ocurred. Report error and stop probe.
-                    await Application.Current.Dispatcher.BeginInvoke(
-                        new Action(() => AddHistory("Error: " + ex.Message)));
+                    AddHistory("Error: " + ex.Message);
                     StopProbe(ProbeStatus.Error);
                     return;
                 }
@@ -162,8 +157,7 @@ namespace vmPing.Probes
             }
 
             // Add response to the output window.
-            Application.Current.Dispatcher.BeginInvoke(
-                new Action(() => AddHistory(sb.ToString())));
+            AddHistory(sb.ToString());
 
             // If enabled, log output.
             WriteToLog(sb.ToString());

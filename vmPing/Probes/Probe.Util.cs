@@ -56,19 +56,7 @@ namespace vmPing.Probes
 
             Type = ProbeType.Ping;
 
-            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                lock (s_lock)
-                {
-                    StatusChangeLog.Add(new StatusChange
-                    {
-                        Timestamp = DateTime.Now,
-                        Hostname = Hostname,
-                        Alias = Alias,
-                        Status = ProbeStatus.Start
-                    });
-                }
-            }));
+            AddStatusHistory(ProbeStatus.Start);
 
             // Set IsActive before the background task starts.
             InitializeProbe();
@@ -122,13 +110,8 @@ namespace vmPing.Probes
 
             if (status != ProbeStatus.Error)
             {
-                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    lock (s_lock)
-                    {
-                        WriteFinalStatisticsToHistory();
-                    }
-                }));
+                // Post, so the statistics come after any output the probe has already posted.
+                Application.Current.Dispatcher.BeginInvoke(new Action(WriteFinalStatisticsToHistory));
             }
 
             AddStatusHistory(ProbeStatus.Stop);
@@ -136,20 +119,17 @@ namespace vmPing.Probes
 
         private void AddStatusHistory(ProbeStatus status, bool isHidden = false)
         {
-            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            StatusChange entry = new StatusChange
             {
-                lock (s_lock)
-                {
-                    StatusChangeLog.Add(new StatusChange
-                    {
-                        Timestamp = DateTime.Now,
-                        Hostname = Hostname,
-                        Alias = Alias,
-                        Status = status,
-                        HasStatusBeenCleared = isHidden
-                    });
-                }
-            }));
+                Timestamp = DateTime.Now,
+                Hostname = Hostname,
+                Alias = Alias,
+                Status = status,
+                HasStatusBeenCleared = isHidden
+            };
+
+            // The status history is shown on screen, so it is only changed on the UI thread.
+            Application.Current.Dispatcher.BeginInvoke(new Action(() => StatusChangeLog.Add(entry)));
         }
 
         private async Task<bool> IsHostInvalid(string host, CancellationToken token)
@@ -167,8 +147,7 @@ namespace vmPing.Probes
                         token.ThrowIfCancellationRequested();
                         if (ipAddresses.Length > 0)
                         {
-                            await Application.Current.Dispatcher.BeginInvoke(
-                                new Action(() => AddHistory($"    ({ipAddresses[0]})")));
+                            AddHistory($"    ({ipAddresses[0]})");
                         }
                         break;
                     default:
@@ -180,8 +159,7 @@ namespace vmPing.Probes
             {
                 if (!token.IsCancellationRequested)
                 {
-                    await Application.Current.Dispatcher.BeginInvoke(
-                        new Action(() => AddHistory($"{Environment.NewLine}Unable to resolve hostname")));
+                    AddHistory($"{Environment.NewLine}Unable to resolve hostname");
                 }
                 return true;
             }
@@ -250,21 +228,20 @@ namespace vmPing.Probes
                 bool shouldPopup = ApplicationOptions.PopupOption == PopupNotificationOption.Always
                     || (ApplicationOptions.PopupOption == PopupNotificationOption.WhenMinimized
                     && Application.Current.MainWindow.WindowState == WindowState.Minimized);
+                bool isNewPopup = shouldPopup && !Application.Current.Windows.OfType<PopupNotificationWindow>().Any();
 
-                lock (s_lock)
+                // A new popup only shows changes that happened since the last one.
+                if (isNewPopup)
                 {
-                    if (shouldPopup && !Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
+                    foreach (StatusChange entry in StatusChangeLog)
                     {
-                        foreach (StatusChange entry in StatusChangeLog)
-                        {
-                            entry.HasStatusBeenCleared = true;
-                        }
+                        entry.HasStatusBeenCleared = true;
                     }
-
-                    StatusChangeLog.Add(status);
                 }
 
-                if (shouldPopup && !Application.Current.Windows.OfType<PopupNotificationWindow>().Any())
+                StatusChangeLog.Add(status);
+
+                if (isNewPopup)
                 {
                     new PopupNotificationWindow(StatusChangeLog).Show();
                 }
@@ -272,7 +249,8 @@ namespace vmPing.Probes
 
             if (ApplicationOptions.IsLogStatusChangesEnabled)
             {
-                lock (s_lock)
+                // Probes can write to this file from different threads at the same time.
+                lock (s_statusLogFileLock)
                 {
                     WriteToStatusChangesLog(status);
                 }

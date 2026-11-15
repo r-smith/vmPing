@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Windows;
 using vmPing.Models;
 using vmPing.Properties;
 using vmPing.Views;
@@ -16,7 +17,7 @@ namespace vmPing.Probes
         public static ObservableCollection<StatusChange> StatusChangeLog { get; } = new ObservableCollection<StatusChange>();
         public static StatusHistoryWindow StatusHistoryWindow;
 
-        private static readonly object s_lock = new object();
+        private static readonly object s_statusLogFileLock = new object();
 
         private static long s_activeCount;
         public static long ActiveCount
@@ -123,10 +124,18 @@ namespace vmPing.Probes
             }
         }
 
+        // Safe to call from any thread. The output is shown on screen,
+        // so lines from a probe's background thread are posted to the UI thread.
         public void AddHistory(string line)
         {
             const int MaxLines = 3600;
             const int TrimLines = 600;
+
+            if (!Application.Current.Dispatcher.CheckAccess())
+            {
+                Application.Current.Dispatcher.BeginInvoke(new Action(() => AddHistory(line)));
+                return;
+            }
 
             _history.Add(line);
 

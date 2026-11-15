@@ -4,7 +4,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using vmPing.Configuration;
 
 namespace vmPing.Probes
@@ -13,8 +12,7 @@ namespace vmPing.Probes
     {
         private async Task PerformIcmpProbe(CancellationToken cancellationToken)
         {
-            await Application.Current.Dispatcher.BeginInvoke(
-                new Action(() => AddHistory($"*** Pinging {Hostname}:")));
+            AddHistory($"*** Pinging {Hostname}:");
 
             if (await IsHostInvalid(Hostname, cancellationToken))
             {
@@ -173,8 +171,7 @@ namespace vmPing.Probes
             string output = sb.ToString();
 
             // Add response to the output window..
-            Application.Current.Dispatcher.BeginInvoke(
-                new Action(() => AddHistory(output)));
+            AddHistory(output);
 
             // If enabled, log output.
             WriteToLog(output);

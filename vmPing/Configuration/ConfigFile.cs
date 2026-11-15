@@ -253,7 +253,8 @@ namespace vmPing.Configuration
                 Node("LogStatusChangesPath", ApplicationOptions.LogStatusChangesPath),
                 Node("IsAlwaysOnTopEnabled", ApplicationOptions.IsAlwaysOnTopEnabled),
                 Node("IsMinimizeToTrayEnabled", ApplicationOptions.IsMinimizeToTrayEnabled),
-                Node("IsExitToTrayEnabled", ApplicationOptions.IsExitToTrayEnabled)
+                Node("IsExitToTrayEnabled", ApplicationOptions.IsExitToTrayEnabled),
+                Node("IsAlwaysShowTrayIconEnabled", ApplicationOptions.IsAlwaysShowTrayIconEnabled)
             );
         }
 
@@ -410,6 +411,7 @@ namespace vmPing.Configuration
             ApplyBool("IsAlwaysOnTopEnabled", v => ApplicationOptions.IsAlwaysOnTopEnabled = v, options);
             ApplyBool("IsMinimizeToTrayEnabled", v => ApplicationOptions.IsMinimizeToTrayEnabled = v, options);
             ApplyBool("IsExitToTrayEnabled", v => ApplicationOptions.IsExitToTrayEnabled = v, options);
+            ApplyBool("IsAlwaysShowTrayIconEnabled", v => ApplicationOptions.IsAlwaysShowTrayIconEnabled = v, options);
 
             // Loaded last, since a value that can't be decrypted stops the load with an error.
             if (options.TryGetValue("EmailUser", out string emailUser) && emailUser.Length > 0)

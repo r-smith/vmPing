@@ -63,6 +63,7 @@ namespace vmPing.Configuration
         public static bool IsAlwaysOnTopEnabled { get; set; } = false;
         public static bool IsMinimizeToTrayEnabled { get; set; } = false;
         public static bool IsExitToTrayEnabled { get; set; } = false;
+        public static bool IsAlwaysShowTrayIconEnabled { get; set; } = false;
 
         // Fonts.
         public static int ProbeFontSize { get; set; } = 11;

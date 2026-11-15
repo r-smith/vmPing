@@ -19,6 +19,7 @@ namespace vmPing.Views
         private readonly ObservableCollection<Probe> _probes = new ObservableCollection<Probe>();
         private Dictionary<string, string> _aliases = new Dictionary<string, string>();
         private System.Windows.Forms.NotifyIcon _notifyIcon;
+        private bool _isHiddenToTray;
         private TextBox _probeTypeMenuHostname;
         private string _loadedFavoriteTitle;
         private object _dragHandle;
@@ -49,6 +50,7 @@ namespace vmPing.Views
             LoadAliases();
             ConfigFile.Load();
             ApplyStartupWindowPlacement();
+            RefreshTrayIcon();
             RefreshGuiState();
 
             // Set items source for main GUI ItemsControl.
@@ -496,6 +498,7 @@ namespace vmPing.Views
             {
                 RefreshGuiState();
                 RefreshProbeColors();
+                RefreshTrayIcon();
             }
         }
 
@@ -919,56 +922,90 @@ namespace vmPing.Views
 
         private void HideToTray()
         {
-            Visibility = Visibility.Hidden;
-            WindowState = WindowState.Minimized;
             try
             {
-                if (_notifyIcon == null)
-                {
-                    // Build context menu for tray icon.
-                    System.Windows.Forms.ContextMenuStrip menuStrip = new System.Windows.Forms.ContextMenuStrip();
-                    System.Windows.Forms.ToolStripMenuItem menuOptions = new System.Windows.Forms.ToolStripMenuItem("Options");
-                    menuOptions.Click += (s, args) => OptionsExecute(null, null);
-                    System.Windows.Forms.ToolStripMenuItem menuStatusHistory = new System.Windows.Forms.ToolStripMenuItem("Status History");
-                    menuStatusHistory.Click += (s, args) => StatusHistoryExecute(null, null);
-                    System.Windows.Forms.ToolStripMenuItem menuExit = new System.Windows.Forms.ToolStripMenuItem("Exit vmPing");
-                    menuExit.Click += (s, args) =>
-                    {
-                        SaveWindowPlacement();
-                        Application.Current.Shutdown();
-                    };
-
-                    menuStrip.Items.Add(menuOptions);
-                    menuStrip.Items.Add(menuStatusHistory);
-                    menuStrip.Items.Add(new System.Windows.Forms.ToolStripSeparator());
-                    menuStrip.Items.Add(menuExit);
-
-                    // Create tray icon.
-                    _notifyIcon = new System.Windows.Forms.NotifyIcon
-                    {
-                        Icon = new System.Drawing.Icon(
-                            Application.GetResourceStream(new Uri("pack://application:,,,/vmPing.ico")).Stream,
-                            System.Windows.Forms.SystemInformation.SmallIconSize),
-                        Text = "vmPing",
-                        ContextMenuStrip = menuStrip
-                    };
-                    _notifyIcon.MouseUp += NotifyIcon_MouseUp;
-                }
+                CreateTrayIcon();
                 _notifyIcon.Visible = true;
             }
             catch
             {
-                Visibility = Visibility.Visible;
+                // Without a tray icon there'd be no way back to the window, so keep it shown.
+                return;
             }
+
+            Visibility = Visibility.Hidden;
+            WindowState = WindowState.Minimized;
+            _isHiddenToTray = true;
         }
 
         private void RestoreFromTray()
         {
-            _notifyIcon.Visible = false;
+            _isHiddenToTray = false;
             WindowState = WindowState.Minimized;
             Visibility = Visibility.Visible;
             Show();
             WindowState = WindowState.Normal;
+            RefreshTrayIcon();
+        }
+
+        // Shows the tray icon if it's set to always show or the window is hidden to the tray. Otherwise hides it.
+        private void RefreshTrayIcon()
+        {
+            bool shouldShow = ApplicationOptions.IsAlwaysShowTrayIconEnabled || _isHiddenToTray;
+            if (shouldShow)
+            {
+                try
+                {
+                    CreateTrayIcon();
+                }
+                catch
+                {
+                    return;
+                }
+            }
+
+            if (_notifyIcon != null)
+            {
+                _notifyIcon.Visible = shouldShow;
+            }
+        }
+
+        private void CreateTrayIcon()
+        {
+            if (_notifyIcon != null)
+            {
+                return;
+            }
+
+            // Build context menu for tray icon.
+            System.Windows.Forms.ContextMenuStrip menuStrip = new System.Windows.Forms.ContextMenuStrip();
+            System.Windows.Forms.ToolStripMenuItem menuOptions = new System.Windows.Forms.ToolStripMenuItem("Options");
+            menuOptions.Click += (s, args) => OptionsExecute(null, null);
+            System.Windows.Forms.ToolStripMenuItem menuStatusHistory = new System.Windows.Forms.ToolStripMenuItem("Status History");
+            menuStatusHistory.Click += (s, args) => StatusHistoryExecute(null, null);
+            System.Windows.Forms.ToolStripMenuItem menuExit = new System.Windows.Forms.ToolStripMenuItem("Exit vmPing");
+            menuExit.Click += (s, args) =>
+            {
+                SaveWindowPlacement();
+                _notifyIcon.Dispose();
+                Application.Current.Shutdown();
+            };
+
+            menuStrip.Items.Add(menuOptions);
+            menuStrip.Items.Add(menuStatusHistory);
+            menuStrip.Items.Add(new System.Windows.Forms.ToolStripSeparator());
+            menuStrip.Items.Add(menuExit);
+
+            // Create tray icon.
+            _notifyIcon = new System.Windows.Forms.NotifyIcon
+            {
+                Icon = new System.Drawing.Icon(
+                    Application.GetResourceStream(new Uri("pack://application:,,,/vmPing.ico")).Stream,
+                    System.Windows.Forms.SystemInformation.SmallIconSize),
+                Text = "vmPing",
+                ContextMenuStrip = menuStrip
+            };
+            _notifyIcon.MouseUp += NotifyIcon_MouseUp;
         }
 
         private void Window_StateChanged(object sender, EventArgs e)
@@ -981,9 +1018,8 @@ namespace vmPing.Views
 
         private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            // Clear notify icon - handles notify icon cleanup when vmPing is minimized to tray
-            // and user clicks a popup alert window to restore the vmPing window.
-            if (IsVisible && _notifyIcon != null && _notifyIcon.Visible)
+            // Handles a popup alert showing the window while it's hidden to the tray.
+            if (IsVisible && _isHiddenToTray)
             {
                 RestoreFromTray();
             }
@@ -993,8 +1029,19 @@ namespace vmPing.Views
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                // Left click. Restore application window.
-                RestoreFromTray();
+                // Left click. Restore the window, or bring it to the front if it's already shown.
+                if (_isHiddenToTray)
+                {
+                    RestoreFromTray();
+                }
+                else
+                {
+                    if (WindowState == WindowState.Minimized)
+                    {
+                        WindowState = WindowState.Normal;
+                    }
+                    Activate();
+                }
             }
             else if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {

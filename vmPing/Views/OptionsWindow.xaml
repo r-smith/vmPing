@@ -686,6 +686,15 @@
                             </TextBlock>
                         </Label>
                     </DockPanel>
+                    <!-- Always show tray icon -->
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,15,0,0">
+                        <CheckBox DockPanel.Dock="Left"
+                                  Name="IsAlwaysShowTrayIconEnabled"
+                                  Content="Always show tray icon"/>
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
+                            Show the vmPing icon in the system tray all the time, not only when vmPing is minimized or closed to the tray. Click the icon to bring vmPing to the front.
+                        </Label>
+                    </DockPanel>
                 </DockPanel>
             </TabItem>
 

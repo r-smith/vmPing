@@ -50,6 +50,12 @@ namespace vmPing.Probes
                 if (value != _type)
                 {
                     _type = value;
+
+                    // Output, statistics and status from the old type don't apply to the new one.
+                    ClearHistory();
+                    Statistics.Reset();
+                    Status = ProbeStatus.Inactive;
+
                     OnPropertyChanged();
                 }
             }

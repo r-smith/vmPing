@@ -4,7 +4,6 @@
     {
         Dns,
         Ping,
-        Traceroute,
-        Comment
+        Traceroute
     }
 }

@@ -32,29 +32,23 @@ namespace vmPing.Probes
             // Starting probe.
             CancelSource = new CancellationTokenSource();
 
+            // Hostnames starting with # are comments and aren't probed.
             if (Hostname.StartsWith("#"))
             {
-                Type = ProbeType.Comment;
                 return;
             }
 
-            if (Hostname.StartsWith("D/"))
+            if (Type == ProbeType.Dns)
             {
-                Type = ProbeType.Dns;
-                Hostname = Hostname.Substring(2);
                 _ = PerformDnsLookup(CancelSource.Token);
                 return;
             }
 
-            if (Hostname.StartsWith("T/"))
+            if (Type == ProbeType.Traceroute)
             {
-                Type = ProbeType.Traceroute;
-                Hostname = Hostname.Substring(2);
                 _ = PerformTraceroute(CancelSource.Token);
                 return;
             }
-
-            Type = ProbeType.Ping;
 
             AddStatusHistory(ProbeStatus.Start);
 

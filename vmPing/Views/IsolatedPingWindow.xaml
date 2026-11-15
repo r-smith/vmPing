@@ -9,11 +9,17 @@
         MinWidth="300"
         Background="White"
         Closed="Window_Closed">
-    <!-- The window title is the hostname, or vmPing if there's no hostname. -->
+    <!-- The window title is the alias, else the hostname, else vmPing. Later triggers win. -->
     <Window.Style>
         <Style TargetType="{x:Type Window}">
-            <Setter Property="Title" Value="{Binding Hostname}"/>
+            <Setter Property="Title" Value="{Binding Alias}"/>
             <Style.Triggers>
+                <DataTrigger Binding="{Binding Alias}" Value="{x:Null}">
+                    <Setter Property="Title" Value="{Binding Hostname}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Alias}" Value="">
+                    <Setter Property="Title" Value="{Binding Hostname}"/>
+                </DataTrigger>
                 <DataTrigger Binding="{Binding Hostname}" Value="{x:Null}">
                     <Setter Property="Title" Value="vmPing"/>
                 </DataTrigger>
@@ -133,12 +139,26 @@
                             HorizontalAlignment="Center">
                     <Label Style="{StaticResource ProbeTypeLabel}"
                            Margin="0,0,8,0"/>
+                    <!-- The alias, or the hostname if there's no alias -->
                     <TextBlock FontWeight="SemiBold"
                                Foreground="#eee"
                                FontSize="20"
                                Padding="0,0,0,5"
-                               VerticalAlignment="Center"
-                               Text="{Binding Hostname}"/>
+                               VerticalAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Text" Value="{Binding Alias}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Alias}" Value="{x:Null}">
+                                        <Setter Property="Text" Value="{Binding Hostname}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Alias}" Value="">
+                                        <Setter Property="Text" Value="{Binding Hostname}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </StackPanel>
             </Border>
         </Grid>

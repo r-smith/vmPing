@@ -621,26 +621,18 @@ namespace vmPing.Views
 
             menuItem.Click += (s, r) =>
             {
-                MenuItem selectedAlias = s as MenuItem;
-
-                bool didFindEmptyHost = false;
-                for (int i = 0; i < _probes.Count; ++i)
-                {
-                    if (string.IsNullOrWhiteSpace(_probes[i].Hostname))
-                    {
-                        _probes[i].Hostname = (string)selectedAlias.Tag;
-                        _probes[i].StartStop();
-                        didFindEmptyHost = true;
-                        break;
-                    }
-                }
-
-                if (!didFindEmptyHost)
+                // Use the first empty probe, or add a new one.
+                Probe probe = _probes.FirstOrDefault(x => string.IsNullOrWhiteSpace(x.Hostname));
+                if (probe == null)
                 {
                     AddProbe();
-                    _probes[_probes.Count - 1].Hostname = (string)selectedAlias.Tag;
-                    _probes[_probes.Count - 1].StartStop();
+                    probe = _probes[_probes.Count - 1];
                 }
+
+                // Set the alias here. A new probe has no hostname box yet to look it up as the text changes.
+                probe.Hostname = alias.Key;
+                probe.Alias = alias.Value;
+                probe.StartStop();
             };
 
             return menuItem;

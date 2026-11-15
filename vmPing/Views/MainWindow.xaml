@@ -33,6 +33,14 @@
                         BorderBrush="{TemplateBinding BorderBrush}">
                     <ScrollViewer x:Name="PART_ContentHost"/>
                 </Border>
+                <!-- Alias, shown instead of the hostname when the box isn't being edited -->
+                <TextBlock x:Name="aliasText"
+                           Text="{Binding Alias}"
+                           Visibility="Collapsed"
+                           Margin="2,0,0,0"
+                           VerticalAlignment="Center"
+                           TextTrimming="CharacterEllipsis"
+                           IsHitTestVisible="False"/>
                 <TextBlock x:Name="placeholderText"
                            Text="{x:Static resource:Strings.ProbeType_PingHint}"
                            Visibility="Hidden"
@@ -56,6 +64,19 @@
                         <Setter Property="Visibility" TargetName="placeholderText" Value="Visible"/>
                     </MultiTrigger.Setters>
                 </MultiTrigger>
+                <!-- Show the alias unless the box is focused for editing. No alias: show the hostname. -->
+                <Trigger Property="IsKeyboardFocused" Value="False">
+                    <Setter Property="Visibility" TargetName="aliasText" Value="Visible"/>
+                    <Setter Property="Visibility" TargetName="PART_ContentHost" Value="Hidden"/>
+                </Trigger>
+                <DataTrigger Binding="{Binding Alias}" Value="{x:Null}">
+                    <Setter Property="Visibility" TargetName="aliasText" Value="Collapsed"/>
+                    <Setter Property="Visibility" TargetName="PART_ContentHost" Value="Visible"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Alias}" Value="">
+                    <Setter Property="Visibility" TargetName="aliasText" Value="Collapsed"/>
+                    <Setter Property="Visibility" TargetName="PART_ContentHost" Value="Visible"/>
+                </DataTrigger>
                 <DataTrigger Binding="{Binding Type}" Value="Dns">
                     <Setter Property="Text" TargetName="placeholderText" Value="{x:Static resource:Strings.ProbeType_DnsHint}"/>
                 </DataTrigger>
@@ -328,20 +349,11 @@
                                               VerticalAlignment="Center"/>
                                     </Border>
 
-                                    <!-- Alias section -->
-                                    <Label Name="AliasLabel"
-                                           Grid.Column="1"
-                                           Content="{Binding Alias, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
-                                           Background="Transparent"
-                                           FontSize="14"
-                                           VerticalContentAlignment="Center"
-                                           Padding="5,0,0,0"
-                                           Margin="0"
-                                           FontWeight="SemiBold"
-                                           Foreground="{Binding Status, Converter={StaticResource ProbeStatusToAliasBrushConverter}}"
-                                           PreviewMouseLeftButtonDown="ProbeTitle_PreviewMouseLeftButtonDown"
-                                           PreviewMouseMove="ProbeTitle_PreviewMouseMove">
-                                    </Label>
+                                    <!-- Empty title bar area. Drag it to move the probe. -->
+                                    <Border Grid.Column="1"
+                                            Background="Transparent"
+                                            PreviewMouseLeftButtonDown="ProbeTitle_PreviewMouseLeftButtonDown"
+                                            PreviewMouseMove="ProbeTitle_PreviewMouseMove"/>
 
                                     <!-- Button: Remove probe -->
                                     <Button Grid.Column="4"

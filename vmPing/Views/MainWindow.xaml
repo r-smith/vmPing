@@ -35,7 +35,7 @@
                 </Border>
                 <!-- Alias, shown instead of the hostname when the box isn't being edited -->
                 <TextBlock x:Name="aliasText"
-                           Text="{Binding Alias}"
+                           Text="{Binding DisplayAlias}"
                            Visibility="Collapsed"
                            Margin="2,0,0,0"
                            VerticalAlignment="Center"
@@ -69,11 +69,11 @@
                     <Setter Property="Visibility" TargetName="aliasText" Value="Visible"/>
                     <Setter Property="Visibility" TargetName="PART_ContentHost" Value="Hidden"/>
                 </Trigger>
-                <DataTrigger Binding="{Binding Alias}" Value="{x:Null}">
+                <DataTrigger Binding="{Binding DisplayAlias}" Value="{x:Null}">
                     <Setter Property="Visibility" TargetName="aliasText" Value="Collapsed"/>
                     <Setter Property="Visibility" TargetName="PART_ContentHost" Value="Visible"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Alias}" Value="">
+                <DataTrigger Binding="{Binding DisplayAlias}" Value="">
                     <Setter Property="Visibility" TargetName="aliasText" Value="Collapsed"/>
                     <Setter Property="Visibility" TargetName="PART_ContentHost" Value="Visible"/>
                 </DataTrigger>

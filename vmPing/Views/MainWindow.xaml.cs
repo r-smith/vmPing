@@ -558,8 +558,7 @@ namespace vmPing.Views
                 AddProbe(numberOfProbes: favorite.Hostnames.Count);
                 for (int i = 0; i < favorite.Hostnames.Count; ++i)
                 {
-                    _probes[i].Hostname = favorite.Hostnames[i];
-                    _probes[i].Alias = GetAlias(_probes[i].Hostname);
+                    SetHostFromFavoriteLine(_probes[i], favorite.Hostnames[i]);
                     _probes[i].StartStop();
                 }
             }
@@ -567,6 +566,22 @@ namespace vmPing.Views
             ColumnCount.Value = 1;  // Ensure window's grid column binding is updated, if needed.
             ColumnCount.Value = favorite.ColumnCount;
             LoadedFavoriteTitle = favoriteTitle;
+        }
+
+        // A favorite line is a host, a host with a label ("10.0.0.1 # switch"), or a comment ("# Core switches").
+        private void SetHostFromFavoriteLine(Probe probe, string line)
+        {
+            int commentStart = line.IndexOf('#');
+            if (commentStart > 0)
+            {
+                probe.Hostname = line.Substring(0, commentStart);
+                probe.Label = line.Substring(commentStart + 1).Trim();
+            }
+            else
+            {
+                probe.Hostname = line;
+            }
+            probe.Alias = GetAlias(probe.Hostname);
         }
 
         // The title of the loaded favorite, shown as the window title. Null if no favorite is loaded.
@@ -645,7 +660,7 @@ namespace vmPing.Views
             // Display new favorite window => Pass in current addresses and column count.
             // If a favorite is loaded, pass its title to the new window.
             NewFavoriteWindow newFavoriteWindow = new NewFavoriteWindow(
-                hostList: _probes.Select(x => x.Hostname).ToList(),
+                hostList: _probes.Select(x => string.IsNullOrEmpty(x.Label) ? x.Hostname : $"{x.Hostname} # {x.Label}").ToList(),
                 columnCount: (int)ColumnCount.Value,
                 title: LoadedFavoriteTitle ?? string.Empty);
             newFavoriteWindow.Owner = this;
@@ -768,10 +783,18 @@ namespace vmPing.Views
         private void Hostname_TextChanged(object sender, TextChangedEventArgs e)
         {
             // Check if there is an alias for the hostname as you type.
-            Probe probe = (sender as TextBox).DataContext as Probe;
+            TextBox hostname = (TextBox)sender;
+            Probe probe = (Probe)hostname.DataContext;
             if (probe.Hostname != null)
             {
                 probe.Alias = GetAlias(probe.Hostname);
+            }
+
+            // A label from a favorite named the old host, so editing the hostname clears it.
+            // Only when the user is typing, not when the hostname is set from code.
+            if (hostname.IsKeyboardFocused)
+            {
+                probe.Label = null;
             }
         }
 

@@ -108,7 +108,7 @@ namespace vmPing.Probes
         // The host for output lines, with the alias in front when there is one: "core-sw01 [10.0.0.1]".
         private string GetDisplayName(string host)
         {
-            return string.IsNullOrEmpty(Alias) ? host : $"{Alias} [{host}]";
+            return string.IsNullOrEmpty(DisplayAlias) ? host : $"{DisplayAlias} [{host}]";
         }
 
         private void AddStatusHistory(ProbeStatus status, bool isHidden = false)
@@ -117,7 +117,7 @@ namespace vmPing.Probes
             {
                 Timestamp = DateTime.Now,
                 Hostname = Hostname,
-                Alias = Alias,
+                Alias = DisplayAlias,
                 Status = status,
                 HasStatusBeenCleared = isHidden
             };
@@ -205,13 +205,13 @@ namespace vmPing.Probes
             {
                 Timestamp = DateTime.Now,
                 Hostname = Hostname,
-                Alias = Alias,
+                Alias = DisplayAlias,
                 Status = newStatus
             });
 
             if (ApplicationOptions.IsEmailAlertEnabled)
             {
-                Email.SendAlert(alertType, Hostname, Alias);
+                Email.SendAlert(alertType, Hostname, DisplayAlias);
             }
         }
 

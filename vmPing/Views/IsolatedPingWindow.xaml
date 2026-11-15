@@ -12,12 +12,12 @@
     <!-- The window title is the alias, else the hostname, else vmPing. Later triggers win. -->
     <Window.Style>
         <Style TargetType="{x:Type Window}">
-            <Setter Property="Title" Value="{Binding Alias}"/>
+            <Setter Property="Title" Value="{Binding DisplayAlias}"/>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Alias}" Value="{x:Null}">
+                <DataTrigger Binding="{Binding DisplayAlias}" Value="{x:Null}">
                     <Setter Property="Title" Value="{Binding Hostname}"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Alias}" Value="">
+                <DataTrigger Binding="{Binding DisplayAlias}" Value="">
                     <Setter Property="Title" Value="{Binding Hostname}"/>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Hostname}" Value="{x:Null}">
@@ -147,12 +147,12 @@
                                VerticalAlignment="Center">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Text" Value="{Binding Alias}"/>
+                                <Setter Property="Text" Value="{Binding DisplayAlias}"/>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Alias}" Value="{x:Null}">
+                                    <DataTrigger Binding="{Binding DisplayAlias}" Value="{x:Null}">
                                         <Setter Property="Text" Value="{Binding Hostname}"/>
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding Alias}" Value="">
+                                    <DataTrigger Binding="{Binding DisplayAlias}" Value="">
                                         <Setter Property="Text" Value="{Binding Hostname}"/>
                                     </DataTrigger>
                                 </Style.Triggers>

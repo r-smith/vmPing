@@ -85,9 +85,29 @@ namespace vmPing.Probes
                 {
                     _alias = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(DisplayAlias));
                 }
             }
         }
+
+        // A name for the host from a favorite line like "10.0.0.1 # switch". Overrides the alias.
+        private string _label;
+        public string Label
+        {
+            get => _label;
+            set
+            {
+                if (value != _label)
+                {
+                    _label = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(DisplayAlias));
+                }
+            }
+        }
+
+        // The name shown in place of the hostname: the label, else the alias. Empty if neither is set.
+        public string DisplayAlias => !string.IsNullOrEmpty(Label) ? Label : Alias;
 
         private ProbeStatus _status = ProbeStatus.Inactive;
         public ProbeStatus Status

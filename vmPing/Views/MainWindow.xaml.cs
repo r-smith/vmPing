@@ -780,6 +780,24 @@ namespace vmPing.Views
             ((TextBox)sender).Focus();
         }
 
+        private void Comment_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            // Comments are edited in the probe's hostname box.
+            if (((FrameworkElement)sender).FindName("Hostname") is TextBox hostname)
+            {
+                // Allow focus until the box loses it again.
+                hostname.Focusable = true;
+                hostname.Focus();
+                hostname.CaretIndex = hostname.Text.Length;
+            }
+        }
+
+        private void Hostname_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            // Undo the focus allowed when a comment was clicked, so the style decides again.
+            ((TextBox)sender).ClearValue(FocusableProperty);
+        }
+
         private void Hostname_TextChanged(object sender, TextChangedEventArgs e)
         {
             // Check if there is an alias for the hostname as you type.

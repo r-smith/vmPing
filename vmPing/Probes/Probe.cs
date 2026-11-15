@@ -71,9 +71,15 @@ namespace vmPing.Probes
                 {
                     _hostname = value?.Trim();
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(IsComment));
+                    OnPropertyChanged(nameof(CommentText));
                 }
             }
         }
+
+        // Hostnames starting with # are comments. They're shown as a label and never probed.
+        public bool IsComment => Hostname != null && Hostname.StartsWith("#");
+        public string CommentText => IsComment ? Hostname.Substring(1).Trim() : string.Empty;
 
         private string _alias;
         public string Alias

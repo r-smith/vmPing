@@ -292,8 +292,18 @@
         <ItemsControl Name="ProbeItemsControl" IsTabStop="False" Focusable="False" BorderThickness="0,1,0,0" BorderBrush="#111" Margin="0,0,-2,-2">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="#111" BorderThickness="0,0,2,2" Margin="0" CornerRadius="0"
-                            Background="{Binding Status, Converter={StaticResource ProbeStatusToBackgroundBrushConverter}}">
+                    <Border BorderBrush="#111" BorderThickness="0,0,2,2" Margin="0" CornerRadius="0">
+                        <!-- Status color, or a neutral gray for comments -->
+                        <Border.Style>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="Background" Value="{Binding Status, Converter={StaticResource ProbeStatusToBackgroundBrushConverter}}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsComment}" Value="True">
+                                        <Setter Property="Background" Value="#d6d6d6"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
                         <Grid Name="ProbeGrid">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
@@ -574,25 +584,52 @@
                                     </TextBlock>
                                 </DockPanel>
 
-                                <!-- Ping history -->
-                                <c:ProbeOutputBox x:Name="History"
-                                                  Probe="{Binding}"
-                                                  Foreground="{Binding Status, Converter={StaticResource ProbeStatusToForegroundBrushConverter}}"
-                                                  FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}">
-                                    <c:ProbeOutputBox.Resources>
-                                        <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ScrollBarStyle.Probe}">
-                                            <Setter Property="Opacity" Value="0.6"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=ProbeGrid, Path=IsMouseOver}" Value="True">
-                                                    <Setter Property="Opacity" Value="1.0"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </c:ProbeOutputBox.Resources>
-                                </c:ProbeOutputBox>
+                                <!-- Output, or a comment in its place -->
+                                <Grid>
+                                    <!-- Ping history -->
+                                    <c:ProbeOutputBox x:Name="History"
+                                                      Probe="{Binding}"
+                                                      Foreground="{Binding Status, Converter={StaticResource ProbeStatusToForegroundBrushConverter}}"
+                                                      FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}">
+                                        <c:ProbeOutputBox.Resources>
+                                            <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ScrollBarStyle.Probe}">
+                                                <Setter Property="Opacity" Value="0.6"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=ProbeGrid, Path=IsMouseOver}" Value="True">
+                                                        <Setter Property="Opacity" Value="1.0"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </c:ProbeOutputBox.Resources>
+                                    </c:ProbeOutputBox>
+
+                                    <!-- Comment, shown in place of the output. Click to edit it. -->
+                                    <Border Background="Transparent"
+                                            MouseLeftButtonUp="Comment_MouseLeftButtonUp">
+                                        <Border.Style>
+                                            <Style TargetType="{x:Type Border}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsComment}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="{Binding CommentText}"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#333"
+                                                   TextWrapping="Wrap"
+                                                   TextAlignment="Center"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Margin="8"/>
+                                    </Border>
+                                </Grid>
                             </DockPanel>
-
-
+                            
+                            
                             <!-- vmPing icon -->
                             <Image Source="{StaticResource icon.vmping-logo-simple}"
                                    Width="72"
@@ -601,9 +638,23 @@
                                    Visibility="{Binding IsActive, Converter={StaticResource InverseBooleanToVisibilityConverter}, NotifyOnTargetUpdated=True}"
                                    TargetUpdated="Logo_TargetUpdated"
                                    Opacity="0.03"/>
-
+                            
                             <!-- Hostname and ping button section -->
                             <Grid Grid.Row="1">
+                                <!-- Hidden for comments, except while editing. Opacity keeps it clickable and focusable. -->
+                                <Grid.Style>
+                                    <Style TargetType="{x:Type Grid}">
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding IsComment}" Value="True"/>
+                                                    <Condition Binding="{Binding ElementName=Hostname, Path=IsKeyboardFocused}" Value="False"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Opacity" Value="0"/>
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
@@ -648,7 +699,24 @@
                                          TextChanged="Hostname_TextChanged"
                                          PreviewTextInput="Hostname_PreviewTextInput"
                                          PreviewKeyDown="Hostname_PreviewKeyDown"
-                                         KeyDown="Hostname_KeyDown"/>
+                                         KeyDown="Hostname_KeyDown"
+                                         LostKeyboardFocus="Hostname_LostKeyboardFocus">
+                                    <!-- A comment's hostname box only takes focus when the comment is clicked.
+                                         Otherwise focus could land there when other probes start. -->
+                                    <TextBox.Style>
+                                        <Style TargetType="{x:Type TextBox}">
+                                            <Style.Triggers>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding IsComment}" Value="True"/>
+                                                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsKeyboardFocused}" Value="False"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter Property="Focusable" Value="False"/>
+                                                </MultiDataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBox.Style>
+                                </TextBox>
 
                                 <!-- Ping button -->
                                 <Button Click="ProbeStartStop_Click"
@@ -658,6 +726,17 @@
                                         Margin="2"
                                         HorizontalAlignment="Right"
                                         Background="White">
+                                    <!-- Comments can't be started, so the button can't be focused or clicked. -->
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsComment}" Value="True">
+                                                    <Setter Property="Focusable" Value="False"/>
+                                                    <Setter Property="IsHitTestVisible" Value="False"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Border Name="PingButtonBorder" BorderThickness="1" BorderBrush="#bb2e6da4"

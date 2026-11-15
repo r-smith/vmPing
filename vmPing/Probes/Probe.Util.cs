@@ -32,8 +32,7 @@ namespace vmPing.Probes
             // Starting probe.
             CancelSource = new CancellationTokenSource();
 
-            // Hostnames starting with # are comments and aren't probed.
-            if (Hostname.StartsWith("#"))
+            if (IsComment)
             {
                 return;
             }

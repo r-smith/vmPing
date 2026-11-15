@@ -296,14 +296,37 @@
                                     </Grid.Style>
 
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
+                                    <!-- Grip icon -->
+                                    <Border Grid.Column="0"
+                                            Background="Transparent"
+                                            Padding="6,0,0,0"
+                                            PreviewMouseMove="ProbeTitle_PreviewMouseMove">
+                                        <Border.Style>
+                                            <Style TargetType="{x:Type Border}">
+                                                <Setter Property="Visibility" Value="Hidden"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=ProbeGrid, Path=IsMouseOver}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <Path Data="M0,0 h2 v2 h-2 z M4,0 h2 v2 h-2 z M0,4 h2 v2 h-2 z M4,4 h2 v2 h-2 z M0,8 h2 v2 h-2 z M4,8 h2 v2 h-2 z"
+                                              Fill="#333"
+                                              Opacity="0.7"
+                                              VerticalAlignment="Center"/>
+                                    </Border>
+
                                     <!-- Alias section -->
                                     <Label Name="AliasLabel"
+                                           Grid.Column="1"
                                            Content="{Binding Alias, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"
                                            Background="Transparent"
                                            FontSize="14"
@@ -316,7 +339,7 @@
                                     </Label>
 
                                     <!-- Button: Remove probe -->
-                                    <Button Grid.Column="3"
+                                    <Button Grid.Column="4"
                                             Padding="6,3"
                                             Margin="0,0,0,0"
                                             Background="Transparent"
@@ -364,7 +387,7 @@
                                     </Button>
 
                                     <!-- Button: Isolated view -->
-                                    <Button Grid.Column="2"
+                                    <Button Grid.Column="3"
                                             Padding="6,3"
                                             Margin="0,0,1,0"
                                             Background="Transparent"
@@ -412,7 +435,7 @@
                                     </Button>
 
                                     <!-- Button: Edit alias -->
-                                    <Button Grid.Column="1"
+                                    <Button Grid.Column="2"
                                             Padding="6,3"
                                             Margin="0,0,1,0"
                                             Background="Transparent"

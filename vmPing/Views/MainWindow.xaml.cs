@@ -805,7 +805,7 @@ namespace vmPing.Views
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 DataObject data = new DataObject();
-                data.SetData("Source", (sender as Label).DataContext as Probe);
+                data.SetData("Source", ((FrameworkElement)sender).DataContext as Probe);
                 DragDrop.DoDragDrop(sender as DependencyObject, data, DragDropEffects.Move);
                 e.Handled = true;
             }

@@ -68,8 +68,8 @@ namespace vmPing.Views
                 return;
             }
 
-            // Split MyHosts string to array, trim each item, then convert to list. Ensure at least one host was entered.
-            _hostList = MyHosts.Text.Trim().Split(new char[] { ',', '\n' }).Select(host => host.Trim()).ToList();
+            // Split into host lines, keeping blank lines as empty probes. Ensure at least one host was entered.
+            _hostList = HostFile.Parse(MyHosts.Text.Trim(), keepBlankLines: true);
             if (_hostList.All(x => string.IsNullOrWhiteSpace(x)))
             {
                 DialogWindow errorWindow = DialogWindow.ErrorWindow("You have not entered any hosts. Provide at least one host for this favorite set.");

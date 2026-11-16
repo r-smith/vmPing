@@ -51,7 +51,7 @@ namespace vmPing
                     }
                     else
                     {
-                        hostnames.Add(args[i]);
+                        hostnames.AddRange(HostFile.Parse(args[i]));
                     }
                     continue;
                 }

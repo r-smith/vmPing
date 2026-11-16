@@ -14,15 +14,7 @@ namespace vmPing.Views
         {
             get
             {
-                // One host per line, or several on a line separated by commas.
-                // A line with a # (a label or a comment) is kept whole, since the text after # may contain commas.
-                // Return as a list with empty entries removed.
-                return MultiAddress.Text
-                    .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
-                    .SelectMany(line => line.Contains("#") ? new[] { line } : line.Split(','))
-                    .Select(x => x.Trim())
-                    .Where(x => !string.IsNullOrWhiteSpace(x))
-                    .ToList();
+                return HostFile.Parse(MultiAddress.Text);
             }
         }
 

@@ -51,6 +51,12 @@ namespace vmPing.Views
             ConfigFile.Load();
             ApplyStartupWindowPlacement();
             RefreshTrayIcon();
+
+            // Set before the window is shown, so it opens minimized instead of appearing first.
+            if (CommandLine.HasMinimizedArgument())
+            {
+                WindowState = WindowState.Minimized;
+            }
             RefreshGuiState();
 
             // Set items source for main GUI ItemsControl.
@@ -107,6 +113,12 @@ namespace vmPing.Views
             }
 
             RefreshColumnCount();
+
+            // Started minimized with minimize to tray on: move to the tray now that the window exists.
+            if (WindowState == WindowState.Minimized && ApplicationOptions.IsMinimizeToTrayEnabled)
+            {
+                HideToTray();
+            }
         }
 
         private void RefreshGuiState()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using vmPing.Configuration;
@@ -15,6 +16,15 @@ namespace vmPing
         private const int MaxInterval = 86400;
         private const int MinTimeout = 1;
         private const int MaxTimeout = 60;
+
+        // Checked before the main window is shown, so it can start minimized without appearing first.
+        public static bool HasMinimizedArgument()
+        {
+            return Environment.GetCommandLineArgs()
+                .Skip(1)
+                .Any(x => x.Equals("-minimized", StringComparison.OrdinalIgnoreCase)
+                    || x.Equals("/minimized", StringComparison.OrdinalIgnoreCase));
+        }
 
         public static List<string> ParseArguments()
         {
@@ -58,7 +68,7 @@ namespace vmPing
 
                     case "/minimized":
                     case "-minimized":
-                        Application.Current.MainWindow.WindowState = WindowState.Minimized;
+                        // Handled before the window is shown. See HasMinimizedArgument.
                         break;
 
                     case "/?":

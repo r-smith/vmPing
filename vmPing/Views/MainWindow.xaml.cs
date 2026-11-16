@@ -404,7 +404,7 @@ namespace vmPing.Views
             {
                 if (!string.IsNullOrWhiteSpace(_probes[i].Hostname))
                 {
-                    addresses.Add(_probes[i].Hostname.Trim());
+                    addresses.Add(GetHostLine(_probes[i]));
                 }
             }
 
@@ -425,8 +425,7 @@ namespace vmPing.Views
                     AddProbe(numberOfProbes: wnd.Addresses.Count);
                     for (int i = 0; i < wnd.Addresses.Count; ++i)
                     {
-                        _probes[i].Hostname = wnd.Addresses[i];
-                        _probes[i].Alias = GetAlias(_probes[i].Hostname);
+                        SetHostFromLine(_probes[i], wnd.Addresses[i]);
                         _probes[i].StartStop();
                     }
                 }
@@ -574,7 +573,7 @@ namespace vmPing.Views
                 AddProbe(numberOfProbes: favorite.Hostnames.Count);
                 for (int i = 0; i < favorite.Hostnames.Count; ++i)
                 {
-                    SetHostFromFavoriteLine(_probes[i], favorite.Hostnames[i]);
+                    SetHostFromLine(_probes[i], favorite.Hostnames[i]);
                     _probes[i].StartStop();
                 }
             }
@@ -584,8 +583,15 @@ namespace vmPing.Views
             LoadedFavoriteTitle = favoriteTitle;
         }
 
-        // A favorite line is a host, a host with a label ("10.0.0.1 # switch"), or a comment ("# Core switches").
-        private void SetHostFromFavoriteLine(Probe probe, string line)
+        // The probe as a line for a favorite or the multi-input window. The reverse of SetHostFromLine.
+        private static string GetHostLine(Probe probe)
+        {
+            return string.IsNullOrEmpty(probe.Label) ? probe.Hostname : $"{probe.Hostname} # {probe.Label}";
+        }
+
+        // A line from a favorite or the multi-input window is a host, a host with a label
+        // ("10.0.0.1 # switch"), or a comment ("# Core switches").
+        private void SetHostFromLine(Probe probe, string line)
         {
             int commentStart = line.IndexOf('#');
             if (commentStart > 0)
@@ -676,7 +682,7 @@ namespace vmPing.Views
             // Display new favorite window => Pass in current addresses and column count.
             // If a favorite is loaded, pass its title to the new window.
             NewFavoriteWindow newFavoriteWindow = new NewFavoriteWindow(
-                hostList: _probes.Select(x => string.IsNullOrEmpty(x.Label) ? x.Hostname : $"{x.Hostname} # {x.Label}").ToList(),
+                hostList: _probes.Select(GetHostLine).ToList(),
                 columnCount: (int)ColumnCount.Value,
                 title: LoadedFavoriteTitle ?? string.Empty);
             newFavoriteWindow.Owner = this;

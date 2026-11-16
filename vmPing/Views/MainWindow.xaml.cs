@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -53,7 +54,7 @@ namespace vmPing.Views
             RefreshTrayIcon();
 
             // Set before the window is shown, so it opens minimized instead of appearing first.
-            if (CommandLine.HasMinimizedArgument())
+            if (CommandLine.HasMinimizedArgument() || ShouldStartMinimized())
             {
                 WindowState = WindowState.Minimized;
             }
@@ -1075,6 +1076,28 @@ namespace vmPing.Views
             {
                 SaveWindowPlacement();
                 _notifyIcon?.Dispose();
+            }
+        }
+
+        // The start minimized option only applies when no other vmPing is running in this Windows session.
+        // Otherwise the new copy opens normally, so starting vmPing again always shows a window.
+        // The -minimized argument isn't affected.
+        private static bool ShouldStartMinimized()
+        {
+            if (!ApplicationOptions.IsStartMinimizedEnabled)
+            {
+                return false;
+            }
+
+            using (Process current = Process.GetCurrentProcess())
+            {
+                Process[] others = Process.GetProcessesByName(current.ProcessName);
+                bool isOtherRunning = others.Any(x => x.Id != current.Id && x.SessionId == current.SessionId);
+                foreach (Process process in others)
+                {
+                    process.Dispose();
+                }
+                return !isOtherRunning;
             }
         }
 

@@ -217,6 +217,7 @@ namespace vmPing.Configuration
                 Node("InitialProbeCount", ApplicationOptions.InitialProbeCount),
                 Node("InitialColumnCount", ApplicationOptions.InitialColumnCount),
                 Node("InitialFavorite", ApplicationOptions.InitialFavorite),
+                Node("IsStartMinimizedEnabled", ApplicationOptions.IsStartMinimizedEnabled),
                 new XComment(" WindowSizeOption: [Default, Remember, Fixed] "),
                 Node("WindowSizeOption", ApplicationOptions.WindowSizeOption),
                 Node("WindowWidth", ApplicationOptions.WindowWidth),
@@ -378,6 +379,7 @@ namespace vmPing.Configuration
             ApplyInt("InitialProbeCount", 1, 20, v => ApplicationOptions.InitialProbeCount = v, options);
             ApplyInt("InitialColumnCount", 1, 10, v => ApplicationOptions.InitialColumnCount = v, options);
             ApplyString("InitialFavorite", v => ApplicationOptions.InitialFavorite = v, options);
+            ApplyBool("IsStartMinimizedEnabled", v => ApplicationOptions.IsStartMinimizedEnabled = v, options);
             ApplyEnum<WindowStartupOption>("WindowSizeOption", v => ApplicationOptions.WindowSizeOption = v, options);
             ApplyInt("WindowWidth", 350, 9999, v => ApplicationOptions.WindowWidth = v, options);
             ApplyInt("WindowHeight", 200, 9999, v => ApplicationOptions.WindowHeight = v, options);

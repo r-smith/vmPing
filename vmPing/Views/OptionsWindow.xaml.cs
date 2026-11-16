@@ -43,6 +43,7 @@ namespace vmPing.Views
             startupOptions.AddHandler(TextBoxBase.TextChangedEvent, new TextChangedEventHandler(StartupOption_Changed));
             startupOptions.AddHandler(Selector.SelectionChangedEvent, new SelectionChangedEventHandler(StartupOption_Changed));
             startupOptions.AddHandler(ToggleButton.CheckedEvent, new RoutedEventHandler(StartupOption_Changed));
+            startupOptions.AddHandler(ToggleButton.UncheckedEvent, new RoutedEventHandler(StartupOption_Changed));
         }
 
         private void StartupOption_Changed(object sender, RoutedEventArgs e)
@@ -120,6 +121,7 @@ namespace vmPing.Views
             StartupMode.SelectedIndex = (int)ApplicationOptions.InitialStartMode;
             InitialFavorite.ItemsSource = Favorite.GetTitles();
             InitialFavorite.Text = ApplicationOptions.InitialFavorite ?? string.Empty;
+            IsStartMinimizedEnabled.IsChecked = ApplicationOptions.IsStartMinimizedEnabled;
 
             WindowSizeDefaultOption.IsChecked = ApplicationOptions.WindowSizeOption == WindowStartupOption.Default;
             WindowSizeRememberOption.IsChecked = ApplicationOptions.WindowSizeOption == WindowStartupOption.Remember;
@@ -401,6 +403,8 @@ namespace vmPing.Views
                 ApplicationOptions.InitialProbeCount = int.Parse(InitialProbeCount.Text);
                 ApplicationOptions.InitialColumnCount = int.Parse(InitialColumnCount.Text);
             }
+
+            ApplicationOptions.IsStartMinimizedEnabled = IsStartMinimizedEnabled.IsChecked == true;
 
             if (WindowSizeFixedOption.IsChecked == true)
             {

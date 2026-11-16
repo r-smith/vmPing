@@ -780,6 +780,24 @@
                         </StackPanel>
                     </StackPanel>
 
+                    <!-- Start minimized -->
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,20,0,0">
+                        <CheckBox DockPanel.Dock="Left"
+                                  Name="IsStartMinimizedEnabled"
+                                  Content="Start minimized"/>
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
+                            <TextBlock>
+                                Start vmPing minimized to the taskbar.
+                                <LineBreak/>
+                                <LineBreak/>
+                                <Bold>Note:</Bold> If 'Minimize to tray' is also on, vmPing starts hidden in the system tray.
+                                <LineBreak/>
+                                <LineBreak/>
+                                If vmPing is already running, a new copy opens normally.
+                            </TextBlock>
+                        </Label>
+                    </DockPanel>
+
                     <!-- Window size -->
                     <TextBlock DockPanel.Dock="Top"
                                Text="Window size:"

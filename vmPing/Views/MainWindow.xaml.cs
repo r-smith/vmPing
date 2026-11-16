@@ -1104,11 +1104,8 @@ namespace vmPing.Views
         // Applies the size and position options before the window is shown.
         private void ApplyStartupWindowPlacement()
         {
-            if (ApplicationOptions.WindowSizeOption != WindowStartupOption.Default)
-            {
-                Width = ApplicationOptions.WindowWidth;
-                Height = ApplicationOptions.WindowHeight;
-            }
+            Width = ApplicationOptions.WindowWidth;
+            Height = ApplicationOptions.WindowHeight;
 
             if (ApplicationOptions.WindowPositionOption != WindowStartupOption.Default)
             {
@@ -1130,12 +1127,6 @@ namespace vmPing.Views
             // The window has a handle now, so its monitor is known. Never start partly or fully off screen:
             // fit it inside the work area of the nearest monitor. A saved position may be on a monitor
             // that's no longer connected.
-            if (ApplicationOptions.WindowSizeOption == WindowStartupOption.Default
-                && ApplicationOptions.WindowPositionOption == WindowStartupOption.Default)
-            {
-                return;
-            }
-
             Rect workArea = NativeMethods.GetWorkArea(this);
             Width = Math.Min(Width, workArea.Width);
             Height = Math.Min(Height, workArea.Height);

@@ -218,7 +218,7 @@ namespace vmPing.Configuration
                 Node("InitialColumnCount", ApplicationOptions.InitialColumnCount),
                 Node("InitialFavorite", ApplicationOptions.InitialFavorite),
                 Node("IsStartMinimizedEnabled", ApplicationOptions.IsStartMinimizedEnabled),
-                new XComment(" WindowSizeOption: [Default, Remember, Fixed] "),
+                new XComment(" WindowSizeOption: [Remember, Fixed] "),
                 Node("WindowSizeOption", ApplicationOptions.WindowSizeOption),
                 Node("WindowWidth", ApplicationOptions.WindowWidth),
                 Node("WindowHeight", ApplicationOptions.WindowHeight),

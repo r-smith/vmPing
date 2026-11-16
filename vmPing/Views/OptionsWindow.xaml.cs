@@ -123,7 +123,6 @@ namespace vmPing.Views
             InitialFavorite.Text = ApplicationOptions.InitialFavorite ?? string.Empty;
             IsStartMinimizedEnabled.IsChecked = ApplicationOptions.IsStartMinimizedEnabled;
 
-            WindowSizeDefaultOption.IsChecked = ApplicationOptions.WindowSizeOption == WindowStartupOption.Default;
             WindowSizeRememberOption.IsChecked = ApplicationOptions.WindowSizeOption == WindowStartupOption.Remember;
             WindowSizeFixedOption.IsChecked = ApplicationOptions.WindowSizeOption == WindowStartupOption.Fixed;
             FixedWindowWidth.Text = ApplicationOptions.WindowWidth.ToString();
@@ -414,9 +413,7 @@ namespace vmPing.Views
             }
             else
             {
-                ApplicationOptions.WindowSizeOption = WindowSizeRememberOption.IsChecked == true
-                    ? WindowStartupOption.Remember
-                    : WindowStartupOption.Default;
+                ApplicationOptions.WindowSizeOption = WindowStartupOption.Remember;
             }
 
             if (WindowPositionFixedOption.IsChecked == true)

@@ -52,7 +52,7 @@ namespace vmPing.Configuration
         public static int InitialColumnCount { get; set; } = 2;
         public static string InitialFavorite { get; set; } = null;
         public static bool IsStartMinimizedEnabled { get; set; } = false;
-        public static WindowStartupOption WindowSizeOption { get; set; } = WindowStartupOption.Default;
+        public static WindowStartupOption WindowSizeOption { get; set; } = WindowStartupOption.Fixed;
         public static int WindowWidth { get; set; } = 800;
         public static int WindowHeight { get; set; } = 400;
         public static bool IsWindowMaximized { get; set; } = false;

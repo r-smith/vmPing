@@ -18,7 +18,6 @@ namespace vmPing.Views
     public partial class MainWindow : Window
     {
         private readonly ObservableCollection<Probe> _probes = new ObservableCollection<Probe>();
-        private Dictionary<string, string> _aliases = new Dictionary<string, string>();
         private System.Windows.Forms.NotifyIcon _notifyIcon;
         private bool _isHiddenToTray;
         private TextBox _probeTypeMenuHostname;
@@ -82,8 +81,7 @@ namespace vmPing.Views
                 AddProbe(cliHosts.Count);
                 for (int i = 0; i < cliHosts.Count; ++i)
                 {
-                    _probes[i].Hostname = cliHosts[i];
-                    _probes[i].Alias = GetAlias(_probes[i].Hostname);
+                    _probes[i].HostLine = cliHosts[i];
                     _probes[i].StartStop();
                 }
             }
@@ -404,7 +402,7 @@ namespace vmPing.Views
             {
                 if (!string.IsNullOrWhiteSpace(_probes[i].Hostname))
                 {
-                    addresses.Add(GetHostLine(_probes[i]));
+                    addresses.Add(_probes[i].HostLine);
                 }
             }
 
@@ -425,7 +423,7 @@ namespace vmPing.Views
                     AddProbe(numberOfProbes: wnd.Addresses.Count);
                     for (int i = 0; i < wnd.Addresses.Count; ++i)
                     {
-                        SetHostFromLine(_probes[i], wnd.Addresses[i]);
+                        _probes[i].HostLine = wnd.Addresses[i];
                         _probes[i].StartStop();
                     }
                 }
@@ -573,7 +571,7 @@ namespace vmPing.Views
                 AddProbe(numberOfProbes: favorite.Hostnames.Count);
                 for (int i = 0; i < favorite.Hostnames.Count; ++i)
                 {
-                    SetHostFromLine(_probes[i], favorite.Hostnames[i]);
+                    _probes[i].HostLine = favorite.Hostnames[i];
                     _probes[i].StartStop();
                 }
             }
@@ -581,29 +579,6 @@ namespace vmPing.Views
             ColumnCount.Value = 1;  // Ensure window's grid column binding is updated, if needed.
             ColumnCount.Value = favorite.ColumnCount;
             LoadedFavoriteTitle = favoriteTitle;
-        }
-
-        // The probe as a line for a favorite or the multi-input window. The reverse of SetHostFromLine.
-        private static string GetHostLine(Probe probe)
-        {
-            return string.IsNullOrEmpty(probe.Label) ? probe.Hostname : $"{probe.Hostname} # {probe.Label}";
-        }
-
-        // A line from a favorite or the multi-input window is a host, a host with a label
-        // ("10.0.0.1 # switch"), or a comment ("# Core switches").
-        private void SetHostFromLine(Probe probe, string line)
-        {
-            int commentStart = line.IndexOf('#');
-            if (commentStart > 0)
-            {
-                probe.Hostname = line.Substring(0, commentStart);
-                probe.Label = line.Substring(commentStart + 1).Trim();
-            }
-            else
-            {
-                probe.Hostname = line;
-            }
-            probe.Alias = GetAlias(probe.Hostname);
         }
 
         // The title of the loaded favorite, shown as the window title. Null if no favorite is loaded.
@@ -619,8 +594,7 @@ namespace vmPing.Views
 
         private void LoadAliases()
         {
-            _aliases = Alias.GetAll();
-            List<KeyValuePair<string, string>> aliasList = _aliases.ToList();
+            List<KeyValuePair<string, string>> aliasList = Alias.Load().ToList();
             aliasList.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
 
             // Clear existing aliases menu.
@@ -637,17 +611,8 @@ namespace vmPing.Views
 
             foreach (Probe probe in _probes)
             {
-                probe.Alias = GetAlias(probe.Hostname) ?? string.Empty;
+                probe.RefreshAlias();
             }
-        }
-
-        private string GetAlias(string hostname)
-        {
-            if (hostname != null && _aliases.TryGetValue(hostname, out string alias))
-            {
-                return alias;
-            }
-            return null;
         }
 
         private MenuItem BuildAliasMenuItem(KeyValuePair<string, string> alias)
@@ -668,9 +633,7 @@ namespace vmPing.Views
                     probe = _probes[_probes.Count - 1];
                 }
 
-                // Set the alias here. A new probe has no hostname box yet to look it up as the text changes.
-                probe.Hostname = alias.Key;
-                probe.Alias = alias.Value;
+                probe.HostLine = alias.Key;
                 probe.StartStop();
             };
 
@@ -682,7 +645,7 @@ namespace vmPing.Views
             // Display new favorite window => Pass in current addresses and column count.
             // If a favorite is loaded, pass its title to the new window.
             NewFavoriteWindow newFavoriteWindow = new NewFavoriteWindow(
-                hostList: _probes.Select(GetHostLine).ToList(),
+                hostList: _probes.Select(x => x.HostLine).ToList(),
                 columnCount: (int)ColumnCount.Value,
                 title: LoadedFavoriteTitle ?? string.Empty);
             newFavoriteWindow.Owner = this;
@@ -761,7 +724,7 @@ namespace vmPing.Views
                 return;
             }
 
-            probe.Alias = GetAlias(probe.Hostname) ?? string.Empty;
+            probe.RefreshAlias();
 
             EditAliasWindow wnd = new EditAliasWindow(probe)
             {
@@ -816,25 +779,15 @@ namespace vmPing.Views
 
         private void Hostname_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            // Undo the focus allowed when a comment was clicked, so the style decides again.
-            ((TextBox)sender).ClearValue(FocusableProperty);
-        }
-
-        private void Hostname_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // Check if there is an alias for the hostname as you type.
             TextBox hostname = (TextBox)sender;
-            Probe probe = (Probe)hostname.DataContext;
-            if (probe.Hostname != null)
-            {
-                probe.Alias = GetAlias(probe.Hostname);
-            }
 
-            // A label from a favorite named the old host, so editing the hostname clears it.
-            // Only when the user is typing, not when the hostname is set from code.
-            if (hostname.IsKeyboardFocused)
+            // Undo the focus allowed when a comment was clicked, so the style decides again.
+            hostname.ClearValue(FocusableProperty);
+
+            // Done editing, so remove extra spaces from what was typed.
+            if (hostname.DataContext is Probe probe)
             {
-                probe.Label = null;
+                probe.TidyHostLine();
             }
         }
 

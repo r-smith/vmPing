@@ -61,18 +61,59 @@ namespace vmPing.Probes
             }
         }
 
+        // The probe as one line of text: a host ("10.0.0.1"), a host with a label ("10.0.0.1 # switch"),
+        // or a comment ("# Core switches"). Favorites, the multi-input window and the command line all use this.
+        // Setting it sets the hostname and label. The text is kept as entered.
+        private string _hostLine;
+        public string HostLine
+        {
+            get => _hostLine;
+            set
+            {
+                if (value == _hostLine)
+                {
+                    return;
+                }
+
+                string line = value?.Trim() ?? string.Empty;
+                int labelStart = line.IndexOf('#');
+                if (labelStart > 0)
+                {
+                    Hostname = line.Substring(0, labelStart).Trim();
+                    Label = line.Substring(labelStart + 1).Trim();
+                }
+                else
+                {
+                    Hostname = line;
+                    Label = null;
+                }
+
+                _hostLine = value;
+                OnPropertyChanged();
+            }
+        }
+
+        // Rewrites the line in its tidy form, like "10.0.0.1 # switch", without extra spaces.
+        // Called when the user is done editing it.
+        public void TidyHostLine()
+        {
+            HostLine = string.IsNullOrEmpty(Label) ? Hostname : $"{Hostname} # {Label}";
+        }
+
+        // Set through HostLine.
         private string _hostname;
         public string Hostname
         {
             get => _hostname;
-            set
+            private set
             {
                 if (value != _hostname)
                 {
-                    _hostname = value?.Trim();
+                    _hostname = value;
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(IsComment));
                     OnPropertyChanged(nameof(CommentText));
+                    RefreshAlias();
                 }
             }
         }
@@ -81,11 +122,12 @@ namespace vmPing.Probes
         public bool IsComment => Hostname != null && Hostname.StartsWith("#");
         public string CommentText => IsComment ? Hostname.Substring(1).Trim() : string.Empty;
 
+        // The saved alias for the hostname, if any.
         private string _alias;
         public string Alias
         {
             get => _alias;
-            set
+            private set
             {
                 if (value != _alias)
                 {
@@ -96,12 +138,13 @@ namespace vmPing.Probes
             }
         }
 
-        // A name for the host from a favorite line like "10.0.0.1 # switch". Overrides the alias.
+        // A name for the host from its line, like "switch" in "10.0.0.1 # switch". Overrides the alias.
+        // Set through HostLine.
         private string _label;
         public string Label
         {
             get => _label;
-            set
+            private set
             {
                 if (value != _label)
                 {
@@ -110,6 +153,12 @@ namespace vmPing.Probes
                     OnPropertyChanged(nameof(DisplayAlias));
                 }
             }
+        }
+
+        // Looks up the alias again. Called when the hostname or the saved aliases change.
+        public void RefreshAlias()
+        {
+            Alias = Configuration.Alias.Find(Hostname);
         }
 
         // The name shown in place of the hostname: the label, else the alias. Empty if neither is set.

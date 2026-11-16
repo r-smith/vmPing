@@ -11,6 +11,26 @@ namespace vmPing.Configuration
         private const string AliasPath = "/vmping/aliases/alias";
         private const string HostAttribute = "host";
 
+        // The aliases from the last Load, used to look up a probe's alias.
+        private static Dictionary<string, string> s_aliases = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        // Reads the aliases from the config file, for Find and the aliases menu.
+        public static Dictionary<string, string> Load()
+        {
+            s_aliases = GetAll();
+            return s_aliases;
+        }
+
+        // Returns the alias for a hostname, or null if it has none.
+        public static string Find(string hostname)
+        {
+            if (hostname != null && s_aliases.TryGetValue(hostname, out string alias))
+            {
+                return alias;
+            }
+            return null;
+        }
+
         public static Dictionary<string, string> GetAll()
         {
             Dictionary<string, string> aliases = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);

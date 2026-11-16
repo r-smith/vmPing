@@ -682,11 +682,10 @@
                                          VerticalContentAlignment="Center"
                                          Background="Transparent"
                                          Padding="0,0,0,0"
-                                         Text="{Binding Hostname, UpdateSourceTrigger=PropertyChanged}"
+                                         Text="{Binding HostLine, UpdateSourceTrigger=PropertyChanged}"
                                          IsEnabled="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}"
                                          Template="{StaticResource TextBoxControlTemplate}"
                                          Loaded="Hostname_Loaded"
-                                         TextChanged="Hostname_TextChanged"
                                          PreviewTextInput="Hostname_PreviewTextInput"
                                          PreviewKeyDown="Hostname_PreviewKeyDown"
                                          KeyDown="Hostname_KeyDown"
@@ -716,6 +715,17 @@
                                         Margin="2"
                                         HorizontalAlignment="Right"
                                         Background="White">
+                                    <!-- Comments can't be started, so the button can't be focused or clicked. -->
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsComment}" Value="True">
+                                                    <Setter Property="Focusable" Value="False"/>
+                                                    <Setter Property="IsHitTestVisible" Value="False"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Border Name="PingButtonBorder" BorderThickness="1" BorderBrush="#bb2e6da4"

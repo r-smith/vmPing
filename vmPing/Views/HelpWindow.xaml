@@ -215,6 +215,20 @@
                     <Bold>SERVER01:80</Bold> , will monitor port 80 on SERVER01.
                 </Paragraph>
                 <Paragraph Style="{StaticResource SubHeaderText}">
+                    Labels, Comments and Notes
+                </Paragraph>
+                <Paragraph Style="{StaticResource ParagraphText}">
+                    Hosts can be entered with a label, a comment, or a note. This works in a probe, in favorites,
+                    in the multi-input window, in host files, and on the command line.
+                    <LineBreak/>
+                    <LineBreak/>
+                    <Bold>10.0.0.1 # Core switch</Bold> - Pings 10.0.0.1 and shows "Core switch" in place of the address.
+                    <LineBreak/>
+                    <Bold># Building A</Bold> - A comment. Shown as a label tile and never pinged.
+                    <LineBreak/>
+                    <Bold>// Updated in March</Bold> - A note. Ignored completely, in lists of hosts.
+                </Paragraph>
+                <Paragraph Style="{StaticResource SubHeaderText}">
                     Trace Route
                 </Paragraph>
                 <Paragraph Style="{StaticResource ParagraphText}">

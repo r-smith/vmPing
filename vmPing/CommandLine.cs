@@ -22,8 +22,7 @@ namespace vmPing
         {
             return Environment.GetCommandLineArgs()
                 .Skip(1)
-                .Any(x => x.Equals("-minimized", StringComparison.OrdinalIgnoreCase)
-                    || x.Equals("/minimized", StringComparison.OrdinalIgnoreCase));
+                .Any(x => GetOptionName(x) == "minimized");
         }
 
         public static List<string> ParseArguments()
@@ -34,16 +33,35 @@ namespace vmPing
 
             for (int i = 1; i < args.Length; i++)
             {
-                switch (args[i].ToLowerInvariant())
+                string option = GetOptionName(args[i]);
+
+                // Not an option, so it's a file of hosts or a hostname.
+                if (option == null)
                 {
-                    case "/i":
-                    case "-i":
-                        if (i + 1 < args.Length &&
-                            int.TryParse(args[i + 1], out int interval) &&
-                            interval >= MinInterval && interval <= MaxInterval)
+                    if (File.Exists(args[i]))
+                    {
+                        try
+                        {
+                            hostnames.AddRange(HostFile.Read(args[i]));
+                        }
+                        catch (Exception ex)
+                        {
+                            errors.AppendLine($"Unable to read \"{args[i]}\": {ex.Message}");
+                        }
+                    }
+                    else
+                    {
+                        hostnames.Add(args[i]);
+                    }
+                    continue;
+                }
+
+                switch (option)
+                {
+                    case "i":
+                        if (TryReadNumber(args, ref i, MinInterval, MaxInterval, out int interval))
                         {
                             ApplicationOptions.PingInterval = interval * 1000;
-                            i++; // Skip over next arg.
                         }
                         else
                         {
@@ -51,14 +69,10 @@ namespace vmPing
                         }
                         break;
 
-                    case "/w":
-                    case "-w":
-                        if (args.Length > i + 1 &&
-                            int.TryParse(args[i + 1], out int timeout) &&
-                            timeout >= MinTimeout && timeout <= MaxTimeout)
+                    case "w":
+                        if (TryReadNumber(args, ref i, MinTimeout, MaxTimeout, out int timeout))
                         {
                             ApplicationOptions.PingTimeout = timeout * 1000;
-                            i++; // Skip over next arg.
                         }
                         else
                         {
@@ -66,29 +80,19 @@ namespace vmPing
                         }
                         break;
 
-                    case "/minimized":
-                    case "-minimized":
+                    case "minimized":
                         // Handled before the window is shown. See HasMinimizedArgument.
                         break;
 
-                    case "/?":
-                    case "-?":
-                    case "-h":
-                    case "--help":
+                    case "?":
+                    case "h":
+                    case "help":
                         ShowHelpDialog();
                         Application.Current.Shutdown();
-                        break;
+                        return new List<string>();
+
                     default:
-                        // If an argument isn't one of the above options, check to see if it's a file path.
-                        // If so, open and read hosts from the file. If not, use the argument as a hostname.
-                        if (File.Exists(args[i]))
-                        {
-                            hostnames.AddRange(ReadHostsFromFile(args[i]));
-                        }
-                        else
-                        {
-                            hostnames.Add(args[i]);
-                        }
+                        errors.AppendLine($"{args[i]}: Unknown option.");
                         break;
                 }
             }
@@ -96,25 +100,36 @@ namespace vmPing
             // Display error message if any problems were encountered while parsing the arguments.
             if (errors.Length > 0)
             {
-                ShowErrorDialog(errors.ToString().TrimEnd(Environment.NewLine.ToCharArray()));
+                ShowErrorDialog(errors.ToString().TrimEnd());
                 Application.Current.Shutdown();
+                return new List<string>();
             }
 
             return hostnames;
         }
 
-        private static List<string> ReadHostsFromFile(string path)
+        // Returns the option name without its prefix: "/minimized", "-minimized" and "--minimized" all return "minimized".
+        // Returns null if the argument isn't an option. Hostnames and file paths never start with - or /.
+        private static string GetOptionName(string arg)
         {
-            try
+            if (!arg.StartsWith("-") && !arg.StartsWith("/"))
             {
-                return HostFile.Read(path);
+                return null;
             }
-            catch (Exception ex)
+            return arg.TrimStart('-', '/').ToLowerInvariant();
+        }
+
+        // Reads the number after an option, like the 5 in "-i 5", and moves past it.
+        private static bool TryReadNumber(string[] args, ref int i, int min, int max, out int value)
+        {
+            value = 0;
+            if (i + 1 >= args.Length || !int.TryParse(args[i + 1], out value) || value < min || value > max)
             {
-                ShowErrorDialog($"Unable to read \"{path}\": {ex.Message}");
-                Application.Current.Shutdown();
-                return new List<string>();
+                return false;
             }
+
+            i++;
+            return true;
         }
 
         private static void ShowHelpDialog()

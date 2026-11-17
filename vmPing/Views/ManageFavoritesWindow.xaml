@@ -81,16 +81,24 @@
                             <GroupStyle>
                                 <GroupStyle.HeaderTemplate>
                                     <DataTemplate>
-                                        <TextBlock x:Name="GroupName"
-                                                   Text="{Binding Name}"
-                                                   Foreground="#404040"
-                                                   FontWeight="SemiBold"
-                                                   Margin="6,6,2,2"
-                                                   TextTrimming="CharacterEllipsis"/>
+                                        <!-- The transparent background lets the whole header width be right-clicked. -->
+                                        <Border x:Name="GroupHeader" Background="Transparent">
+                                            <Border.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Rename group..." Click="RenameGroup_Click"/>
+                                                    <MenuItem Header="Remove group" Click="RemoveGroup_Click"/>
+                                                </ContextMenu>
+                                            </Border.ContextMenu>
+                                            <TextBlock Text="{Binding Name}"
+                                                       Foreground="#404040"
+                                                       FontWeight="SemiBold"
+                                                       Margin="6,6,2,2"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                        </Border>
                                         <!-- Favorites without a group have no header. -->
                                         <DataTemplate.Triggers>
                                             <DataTrigger Binding="{Binding Name}" Value="">
-                                                <Setter TargetName="GroupName" Property="Visibility" Value="Collapsed"/>
+                                                <Setter TargetName="GroupHeader" Property="Visibility" Value="Collapsed"/>
                                             </DataTrigger>
                                         </DataTemplate.Triggers>
                                     </DataTemplate>

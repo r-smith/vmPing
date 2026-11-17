@@ -427,17 +427,63 @@ namespace vmPing.Views
         }
 
         // Uses the existing group's spelling when only the case is different, so it doesn't become a second group.
-        private string GetGroupName(string text)
+        // The excluded group is skipped, so a group can be renamed to change its case.
+        private string GetGroupName(string text, string excludedGroup = null)
         {
             string group = text.Trim();
             foreach (string existingGroup in FavoriteGroup.Items)
             {
-                if (string.Equals(existingGroup, group, StringComparison.OrdinalIgnoreCase))
+                if (existingGroup != excludedGroup && string.Equals(existingGroup, group, StringComparison.OrdinalIgnoreCase))
                 {
                     return existingGroup;
                 }
             }
             return group;
+        }
+
+        private void RenameGroup_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(((FrameworkElement)sender).DataContext is CollectionViewGroup group))
+            {
+                return;
+            }
+
+            string groupName = (string)group.Name;
+            RenameGroupWindow renameWindow = new RenameGroupWindow(groupName)
+            {
+                Owner = this
+            };
+            if (renameWindow.ShowDialog() != true)
+            {
+                return;
+            }
+
+            // Renaming to an existing group moves the favorites into it.
+            string newName = GetGroupName(renameWindow.NewName, excludedGroup: groupName);
+            if (newName != groupName)
+            {
+                Favorite.RenameGroup(groupName, newName);
+                RefreshFavoriteList(_current?.Title);
+            }
+        }
+
+        private void RemoveGroup_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(((FrameworkElement)sender).DataContext is CollectionViewGroup group))
+            {
+                return;
+            }
+
+            string groupName = (string)group.Name;
+            DialogWindow warningWindow = DialogWindow.WarningWindow(
+                message: $"Remove the group {groupName}? Its favorites won't be deleted.",
+                confirmButtonText: Strings.DialogButton_Remove);
+            warningWindow.Owner = this;
+            if (warningWindow.ShowDialog() == true)
+            {
+                Favorite.RenameGroup(groupName, string.Empty);
+                RefreshFavoriteList(_current?.Title);
+            }
         }
 
         private void Revert_Click(object sender, RoutedEventArgs e)

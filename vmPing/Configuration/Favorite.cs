@@ -184,6 +184,40 @@ namespace vmPing.Configuration
             }
         }
 
+        // Renames a group in every favorite that's in it. An empty new name removes the group.
+        public static void RenameGroup(string group, string newGroup)
+        {
+            if (!ConfigFile.IsReady() || string.IsNullOrWhiteSpace(group))
+            {
+                return;
+            }
+
+            try
+            {
+                XmlDocument xd = new XmlDocument();
+                xd.Load(ConfigFile.FilePath);
+
+                newGroup = newGroup?.Trim();
+                foreach (XmlElement node in xd.SelectNodes($"{FavoritePath}[@{GroupAttribute}={ConfigFile.GetEscapedXpath(group)}]"))
+                {
+                    if (string.IsNullOrEmpty(newGroup))
+                    {
+                        node.RemoveAttribute(GroupAttribute);
+                    }
+                    else
+                    {
+                        node.SetAttribute(GroupAttribute, newGroup);
+                    }
+                }
+
+                ConfigFile.WriteSafely(xd.Save);
+            }
+            catch (Exception ex)
+            {
+                Util.ShowError($"{Strings.Error_WriteConfig} {ex.Message}");
+            }
+        }
+
         public static void Rename(string originalTitle, string newTitle)
         {
             if (!ConfigFile.IsReady() || string.IsNullOrWhiteSpace(originalTitle) || string.IsNullOrWhiteSpace(newTitle))

@@ -564,69 +564,46 @@
 
             <!-- Tab: Logging -->
             <TabItem Header="Logging" Name="LogOutputTab">
-                <DockPanel Margin="20,0">
+                <DockPanel Margin="20,0" LastChildFill="False">
 
                     <!-- Header -->
                     <TextBlock DockPanel.Dock="Top"
                                Text="Log Output"
                                Style="{StaticResource OptionHeaderTextStyle}"/>
 
+                    <!-- Log folder -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Log folder"
+                               Margin="0,15,0,0"/>
+                    <DockPanel DockPanel.Dock="Top" Margin="0,4,0,0">
+                        <Button DockPanel.Dock="Right"
+                                Style="{StaticResource ButtonStandardStyle}"
+                                Click="BrowseLogFolder_Click"
+                                Width="85"
+                                Margin="8,0,0,0"
+                                Content="Browse..."/>
+                        <TextBox Name="LogFolder"/>
+                    </DockPanel>
+
                     <!-- Log all ping output -->
-                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,0">
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,20,0,0">
                         <CheckBox Name="IsLogOutputEnabled"
-                                  Content="Write ping output to plain text files"
-                                  IsChecked="True"/>
+                                  Content="Log ping output"/>
                         <Label Style="{StaticResource LabelToolTip}">
-                            If this option is enabled, all ping output is written to a text file.
-                            You specify the base directory, and vmPing will generate a separate log file for each host (hostname.txt).
+                            Writes all ping output to text files in the log folder, one file for each host (hostname.txt).
                         </Label>
                     </StackPanel>
-                    <Grid DockPanel.Dock="Top"
-                          Margin="30,10,0,0"
-                          VerticalAlignment="Top"
-                          Visibility="{Binding IsChecked, ElementName=IsLogOutputEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <StackPanel>
-                            <TextBlock Text="Log path (base directory)"/>
-                            <TextBox Name="LogPath"
-                                     Margin="0,4,0,8"/>
-                            <Button Style="{StaticResource ButtonStandardStyle}"
-                                    Click="BrowseLogPath_Click"
-                                    Width="85"
-                                    Content="Browse..."
-                                    HorizontalAlignment="Left"/>
-                        </StackPanel>
-                    </Grid>
-
-                    <!-- Hidden separator -->
-                    <Separator DockPanel.Dock="Top" Height="1" Background="Transparent" Margin="0,20,0,0"
-                               Visibility="{Binding IsChecked, ElementName=IsLogOutputEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
                     <!-- Log status changes -->
-                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,0">
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,10,0,0">
                         <CheckBox Name="IsLogStatusChangesEnabled"
-                                  Content="Log status changes to text file"
-                                  IsChecked="True"/>
+                                  Content="Log status changes"/>
                         <Label Style="{StaticResource LabelToolTip}">
-                            When enabled, this option writes all status changes to a text file.
+                            Writes all status changes to vmPing-status.txt in the log folder.
                             A status change is when a host you are pinging goes down, or a down host comes back up.
-                            The text file is saved in a tab delimited format that is suitable for Excel or database imports.
+                            The file is tab delimited, so it's suitable for Excel or database imports.
                         </Label>
                     </StackPanel>
-                    <Grid DockPanel.Dock="Top"
-                          Margin="30,10,0,0"
-                          VerticalAlignment="Top"
-                          Visibility="{Binding IsChecked, ElementName=IsLogStatusChangesEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <StackPanel>
-                            <TextBlock Text="Log path"/>
-                            <TextBox Name="LogStatusChangesPath"
-                                     Margin="0,4,0,8"/>
-                            <Button Style="{StaticResource ButtonStandardStyle}"
-                                    Click="BrowseLogStatusChangesPath_Click"
-                                    Width="85"
-                                    Content="Browse..."
-                                    HorizontalAlignment="Left"/>
-                        </StackPanel>
-                    </Grid>
                 </DockPanel>
             </TabItem>
 

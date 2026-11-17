@@ -4,6 +4,9 @@ namespace vmPing.Configuration
 {
     internal static class Constants
     {
+        // Status changes are logged to this file in the log folder.
+        public const string StatusLogFileName = "vmPing-status.txt";
+
         // Default probe background colors.
         public const string DefaultProbeBackgroundInactive = "#eceafa";
         public const string DefaultProbeBackgroundUp = "#859900";

@@ -248,10 +248,9 @@ namespace vmPing.Configuration
                 Node("AudioUpFilePath", ApplicationOptions.AudioUpFilePath),
                 Node("IsAudioDownAlertEnabled", ApplicationOptions.IsAudioDownAlertEnabled),
                 Node("AudioDownFilePath", ApplicationOptions.AudioDownFilePath),
+                Node("LogFolder", ApplicationOptions.LogFolder),
                 Node("IsLogOutputEnabled", ApplicationOptions.IsLogOutputEnabled),
-                Node("LogPath", ApplicationOptions.LogPath),
                 Node("IsLogStatusChangesEnabled", ApplicationOptions.IsLogStatusChangesEnabled),
-                Node("LogStatusChangesPath", ApplicationOptions.LogStatusChangesPath),
                 Node("IsAlwaysOnTopEnabled", ApplicationOptions.IsAlwaysOnTopEnabled),
                 Node("IsMinimizeToTrayEnabled", ApplicationOptions.IsMinimizeToTrayEnabled),
                 Node("IsExitToTrayEnabled", ApplicationOptions.IsExitToTrayEnabled),
@@ -406,10 +405,14 @@ namespace vmPing.Configuration
             ApplyBool("IsAudioDownAlertEnabled", v => ApplicationOptions.IsAudioDownAlertEnabled = v, options);
             ApplyString("AudioUpFilePath", v => ApplicationOptions.AudioUpFilePath = v, options);
             ApplyString("AudioDownFilePath", v => ApplicationOptions.AudioDownFilePath = v, options);
+            // For compatibility with version 1.4.0 and lower, which had a separate path for each log.
+            // The ping output folder is used if set, else the status log file's folder.
+            ApplyString("LogStatusChangesPath", v => ApplicationOptions.LogFolder = GetFolderOrNull(v) ?? ApplicationOptions.LogFolder, options);
+            ApplyString("LogPath", v => ApplicationOptions.LogFolder = string.IsNullOrEmpty(v) ? ApplicationOptions.LogFolder : v, options);
+
+            ApplyString("LogFolder", v => ApplicationOptions.LogFolder = v, options);
             ApplyBool("IsLogOutputEnabled", v => ApplicationOptions.IsLogOutputEnabled = v, options);
-            ApplyString("LogPath", v => ApplicationOptions.LogPath = v, options);
             ApplyBool("IsLogStatusChangesEnabled", v => ApplicationOptions.IsLogStatusChangesEnabled = v, options);
-            ApplyString("LogStatusChangesPath", v => ApplicationOptions.LogStatusChangesPath = v, options);
             ApplyBool("IsAlwaysOnTopEnabled", v => ApplicationOptions.IsAlwaysOnTopEnabled = v, options);
             ApplyBool("IsMinimizeToTrayEnabled", v => ApplicationOptions.IsMinimizeToTrayEnabled = v, options);
             ApplyBool("IsExitToTrayEnabled", v => ApplicationOptions.IsExitToTrayEnabled = v, options);
@@ -423,6 +426,20 @@ namespace vmPing.Configuration
             if (options.TryGetValue("EmailPassword", out string emailPassword) && emailPassword.Length > 0)
             {
                 ApplicationOptions.EmailPassword = StringCipher.Decrypt(emailPassword);
+            }
+        }
+
+        // The folder of a file path, or null if there isn't one.
+        private static string GetFolderOrNull(string path)
+        {
+            try
+            {
+                string folder = Path.GetDirectoryName(path);
+                return string.IsNullOrEmpty(folder) ? null : folder;
+            }
+            catch
+            {
+                return null;
             }
         }
 

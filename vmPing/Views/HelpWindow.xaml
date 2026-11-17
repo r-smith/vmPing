@@ -275,12 +275,13 @@
                     The vmPing window will remain on top of all other application windows.
                 </Paragraph>
                 <Paragraph Style="{StaticResource SubHeaderText}">
-                    Log all output to files
+                    Logging
                 </Paragraph>
                 <Paragraph Style="{StaticResource ParagraphText}">
-                    Write all ping responses to a text file.
-                    The file will be named &lt;hostname&gt;.txt and will be saved to the specified directory.
-                    If the file already exists, new output will be appended to the existing file.
+                    Choose a log folder, then turn on either log.
+                    Ping output is written to one file for each host, named &lt;hostname&gt;.txt.
+                    Status changes are written to vmPing-status.txt.
+                    If a file already exists, new lines are added to the end.
                 </Paragraph>
 
                 <!-- Command Line Usage section -->

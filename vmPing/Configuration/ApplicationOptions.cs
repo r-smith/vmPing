@@ -41,11 +41,10 @@ namespace vmPing.Configuration
         public static string AudioDownFilePath { get; set; }
 
         // Logging.
+        public static string LogFolder { get; set; }
         public static bool IsLogOutputEnabled { get; set; } = false;
-        public static string LogPath { get; set; }
         public static bool IsLogStatusChangesEnabled { get; set; } = false;
-        public static string LogStatusChangesPath { get; set; }
-        
+
         // Startup options.
         public static StartMode InitialStartMode { get; set; } = StartMode.Blank;
         public static int InitialProbeCount { get; set; } = 2;

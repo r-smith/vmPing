@@ -160,12 +160,12 @@ namespace vmPing.Probes
 
         private void WriteToLog(string message)
         {
-            if (!ApplicationOptions.IsLogOutputEnabled || string.IsNullOrEmpty(ApplicationOptions.LogPath))
+            if (!ApplicationOptions.IsLogOutputEnabled || string.IsNullOrEmpty(ApplicationOptions.LogFolder))
             {
                 return;
             }
 
-            string logPath = Path.Combine(ApplicationOptions.LogPath, $"{Util.GetSafeFilename(Hostname)}.txt");
+            string logPath = Path.Combine(ApplicationOptions.LogFolder, $"{Util.GetSafeFilename(Hostname)}.txt");
 
             try
             {
@@ -180,14 +180,14 @@ namespace vmPing.Probes
 
         private void WriteToStatusChangesLog(StatusChange status)
         {
-            if (!ApplicationOptions.IsLogStatusChangesEnabled || string.IsNullOrEmpty(ApplicationOptions.LogStatusChangesPath))
+            if (!ApplicationOptions.IsLogStatusChangesEnabled || string.IsNullOrEmpty(ApplicationOptions.LogFolder))
             {
                 return;
             }
 
             try
             {
-                File.AppendAllText(ApplicationOptions.LogStatusChangesPath,
+                File.AppendAllText(Path.Combine(ApplicationOptions.LogFolder, Constants.StatusLogFileName),
                     $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()}\t{status.Hostname}\t{status.Alias}\t{status.StatusAsString}{Environment.NewLine}");
             }
             catch (Exception ex)

@@ -178,9 +178,8 @@ namespace vmPing.Views
 
         private void PopulateLogOutputOptions()
         {
-            LogPath.Text = ApplicationOptions.LogPath;
+            LogFolder.Text = ApplicationOptions.LogFolder;
             IsLogOutputEnabled.IsChecked = ApplicationOptions.IsLogOutputEnabled;
-            LogStatusChangesPath.Text = ApplicationOptions.LogStatusChangesPath;
             IsLogStatusChangesEnabled.IsChecked = ApplicationOptions.IsLogStatusChangesEnabled;
         }
 
@@ -600,49 +599,54 @@ namespace vmPing.Views
 
         private bool ValidateLogOutputOptions()
         {
-            if (IsLogOutputEnabled.IsChecked == true && !Directory.Exists(LogPath.Text))
+            // The folder only matters when a log is turned on.
+            if (IsLogOutputEnabled.IsChecked != true && IsLogStatusChangesEnabled.IsChecked != true)
             {
-                ShowError("The specified path does not exist.  Please enter a valid path.", LogOutputTab, LogPath);
+                return true;
+            }
+
+            string folder = LogFolder.Text.Trim();
+            if (!Directory.Exists(folder))
+            {
+                ShowError("The log folder does not exist. Please choose an existing folder.", LogOutputTab, LogFolder);
                 return false;
             }
-            if (IsLogStatusChangesEnabled.IsChecked == true && !IsValidLogFilePath(LogStatusChangesPath.Text))
+
+            // Check now that vmPing can write there, instead of failing later when the first line is logged.
+            if (!CanWriteToFolder(folder, out string error))
             {
-                ShowError("The specified path does not exist.  Please enter a valid path.", LogOutputTab, LogStatusChangesPath);
+                ShowError($"vmPing can't write to the log folder. {error}", LogOutputTab, LogFolder);
                 return false;
             }
 
             return true;
         }
 
-        // The file itself doesn't need to exist yet, but its folder does.
-        private static bool IsValidLogFilePath(string path)
+        // Creates a temporary file in the folder to check that it can be written to.
+        // The file is deleted as soon as it's closed.
+        private static bool CanWriteToFolder(string folder, out string error)
         {
             try
             {
-                string fileName = Path.GetFileName(path);
-                return fileName.Length > 0
-                    && fileName.IndexOfAny(Path.GetInvalidFileNameChars()) < 0
-                    && Directory.Exists(Path.GetDirectoryName(path));
+                string testPath = Path.Combine(folder, Path.GetRandomFileName());
+                using (new FileStream(testPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 1, FileOptions.DeleteOnClose))
+                {
+                }
+                error = null;
+                return true;
             }
-            catch
+            catch (Exception ex)
             {
+                error = ex.Message;
                 return false;
             }
         }
 
         private void SaveLogOutputOptions()
         {
+            ApplicationOptions.LogFolder = LogFolder.Text.Trim();
             ApplicationOptions.IsLogOutputEnabled = IsLogOutputEnabled.IsChecked == true;
-            if (ApplicationOptions.IsLogOutputEnabled)
-            {
-                ApplicationOptions.LogPath = LogPath.Text;
-            }
-
             ApplicationOptions.IsLogStatusChangesEnabled = IsLogStatusChangesEnabled.IsChecked == true;
-            if (ApplicationOptions.IsLogStatusChangesEnabled)
-            {
-                ApplicationOptions.LogStatusChangesPath = LogStatusChangesPath.Text;
-            }
         }
 
         private void SaveDisplayOptions()
@@ -799,30 +803,15 @@ namespace vmPing.Views
             TestEmailButton.Content = "Test";
         }
 
-        private void BrowseLogPath_Click(object sender, RoutedEventArgs e)
+        private void BrowseLogFolder_Click(object sender, RoutedEventArgs e)
         {
             using (System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog())
             {
-                dialog.Description = "Select a location for the log files.";
-                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-
-                if (result == System.Windows.Forms.DialogResult.OK)
+                dialog.Description = "Select a folder for the log files.";
+                dialog.SelectedPath = LogFolder.Text;
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    LogPath.Text = dialog.SelectedPath;
-                }
-            }
-        }
-
-        private void BrowseLogStatusChangesPath_Click(object sender, RoutedEventArgs e)
-        {
-            using (System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog())
-            {
-                dialog.Description = "Select a location for the log files.";
-                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-
-                if (result == System.Windows.Forms.DialogResult.OK)
-                {
-                    LogStatusChangesPath.Text = dialog.SelectedPath + "\\vmping-status.txt";
+                    LogFolder.Text = dialog.SelectedPath;
                 }
             }
         }

@@ -392,7 +392,7 @@ namespace vmPing.Views
             }
             if (hostnames.Count == 0)
             {
-                ShowError("You have not entered any hosts. Provide at least one host for this favorite set.", FavoriteHosts);
+                ShowError("You have not entered any hosts. Provide at least one host for this favorite.", FavoriteHosts);
                 return;
             }
 

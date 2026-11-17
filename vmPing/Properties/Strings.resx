@@ -266,7 +266,7 @@
     <value>Popup Alerts</value>
   </data>
   <data name="Menu_SaveToFavorites" xml:space="preserve">
-    <value>Create New Favorite Set</value>
+    <value>Save as Favorite</value>
   </data>
   <data name="Menu_StatusHistory" xml:space="preserve">
     <value>History</value>
@@ -293,16 +293,16 @@
     <value>Host</value>
   </data>
   <data name="NewFavorite_Error_InvalidName" xml:space="preserve">
-    <value>Please enter a valid name for this favorite set.</value>
+    <value>Please enter a valid name for this favorite.</value>
   </data>
   <data name="NewFavorite_Header" xml:space="preserve">
-    <value>Create a new favorite set</value>
+    <value>Save this layout as a favorite</value>
   </data>
   <data name="NewFavorite_SelectedHostsHeader" xml:space="preserve">
     <value>Selected Hosts</value>
   </data>
   <data name="NewFavorite_Title" xml:space="preserve">
-    <value>Enter a title</value>
+    <value>Name</value>
   </data>
   <data name="NewFavorite_Warn_AlreadyExists" xml:space="preserve">
     <value>already exists.  Would you like to overwrite?</value>

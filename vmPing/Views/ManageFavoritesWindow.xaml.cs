@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using vmPing.Configuration;
 using vmPing.Interop;
@@ -22,6 +23,7 @@ namespace vmPing.Views
         private bool _isNew;
         private bool _hasUnsavedChanges;
         private bool _isFillingEditor;
+        private string _originalContents = string.Empty;
         private bool _isRefreshingList;
 
         public ManageFavoritesWindow()
@@ -37,10 +39,16 @@ namespace vmPing.Views
         {
             List<Favorite> favorites = Favorite.GetAll();
 
+            // Favorites are already sorted with grouped favorites first, so the groups show in that order.
+            ListCollectionView view = new ListCollectionView(favorites);
+            view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Favorite.Group)));
+
             _isRefreshingList = true;
-            Favorites.ItemsSource = favorites;
+            Favorites.ItemsSource = view;
             Favorites.SelectedItem = favorites.FirstOrDefault(f => f.Title == titleToSelect);
             _isRefreshingList = false;
+
+            FavoriteGroup.ItemsSource = favorites.Select(f => f.Group).Where(g => g.Length > 0).Distinct().ToList();
 
             EmptyListText.Visibility = favorites.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
             ShowFavorite(Favorites.SelectedItem as Favorite);
@@ -52,24 +60,32 @@ namespace vmPing.Views
             _isNew = false;
             if (favorite == null)
             {
-                FillEditor(string.Empty, DefaultColumnCount, new List<string>());
+                FillEditor(string.Empty, string.Empty, DefaultColumnCount, new List<string>());
             }
             else
             {
-                FillEditor(favorite.Title, favorite.ColumnCount, favorite.Hostnames);
+                FillEditor(favorite.Title, favorite.Group, favorite.ColumnCount, favorite.Hostnames);
             }
         }
 
-        private void FillEditor(string title, int columnCount, List<string> hostnames)
+        private void FillEditor(string title, string group, int columnCount, List<string> hostnames)
         {
             _isFillingEditor = true;
             FavoriteName.Text = title;
+            FavoriteGroup.Text = group;
             FavoriteColumns.Text = columnCount.ToString();
             FavoriteHosts.Text = string.Join(Environment.NewLine, hostnames);
             _isFillingEditor = false;
 
+            _originalContents = GetEditorContents();
             _hasUnsavedChanges = false;
             UpdateControls();
+        }
+
+        // Everything in the editor, to tell whether it was changed.
+        private string GetEditorContents()
+        {
+            return string.Join("\n", FavoriteName.Text, FavoriteGroup.Text, FavoriteColumns.Text, FavoriteHosts.Text);
         }
 
         // While there are unsaved changes, the list and its buttons are disabled until the changes are saved or reverted.
@@ -91,15 +107,20 @@ namespace vmPing.Views
             OpenButton.IsEnabled = hasSelection;
         }
 
+        // Compares with the original contents, so changing something back clears the unsaved changes.
         private void Editor_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (_isFillingEditor || _hasUnsavedChanges)
+            if (_isFillingEditor)
             {
                 return;
             }
 
-            _hasUnsavedChanges = true;
-            UpdateControls();
+            bool hasUnsavedChanges = GetEditorContents() != _originalContents;
+            if (hasUnsavedChanges != _hasUnsavedChanges)
+            {
+                _hasUnsavedChanges = hasUnsavedChanges;
+                UpdateControls();
+            }
         }
 
         private void Favorites_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -146,7 +167,7 @@ namespace vmPing.Views
 
             _current = null;
             _isNew = true;
-            FillEditor(string.Empty, DefaultColumnCount, new List<string>());
+            FillEditor(string.Empty, string.Empty, DefaultColumnCount, new List<string>());
             FavoriteName.Focus();
         }
 
@@ -208,6 +229,7 @@ namespace vmPing.Views
             }
 
             string title = FavoriteName.Text.Trim();
+            string group = GetGroupName(FavoriteGroup.Text);
             List<string> hostnames = HostFile.Parse(FavoriteHosts.Text);
 
             if (Favorite.IsTitleInvalid(title))
@@ -252,8 +274,22 @@ namespace vmPing.Views
                 }
             }
 
-            Favorite.Save(title, hostnames, columnCount);
+            Favorite.Save(title, hostnames, columnCount, group);
             RefreshFavoriteList(title);
+        }
+
+        // Uses the existing group's spelling when only the case is different, so it doesn't become a second group.
+        private string GetGroupName(string text)
+        {
+            string group = text.Trim();
+            foreach (string existingGroup in FavoriteGroup.Items)
+            {
+                if (string.Equals(existingGroup, group, StringComparison.OrdinalIgnoreCase))
+                {
+                    return existingGroup;
+                }
+            }
+            return group;
         }
 
         private void Revert_Click(object sender, RoutedEventArgs e)

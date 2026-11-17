@@ -40,8 +40,83 @@
             </Grid.ColumnDefinitions>
 
             <!-- Favorites list -->
-            <DockPanel>
-                <UniformGrid DockPanel.Dock="Bottom" Columns="3" Margin="0,9,0,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid>
+                    <ListBox x:Name="Favorites"
+                             Style="{StaticResource FavoritesListBox}"
+                             ItemContainerStyle="{StaticResource FavoritesListBoxItemsStyle}"
+                             HorizontalContentAlignment="Stretch"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             TextSearch.TextPath="Title"
+                             SelectionChanged="Favorites_SelectionChanged"
+                             MouseDoubleClick="Favorites_MouseDoubleClick"
+                             KeyDown="Favorites_KeyDown">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock x:Name="FavoriteTitle"
+                                           Text="{Binding Title}"
+                                           Margin="16,3,2,3"
+                                           TextTrimming="CharacterEllipsis"/>
+                                <!-- Favorites without a group aren't indented. -->
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding Group}" Value="">
+                                        <Setter TargetName="FavoriteTitle" Property="Margin" Value="2,3"/>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock x:Name="GroupName"
+                                                   Text="{Binding Name}"
+                                                   Foreground="#404040"
+                                                   FontWeight="SemiBold"
+                                                   Margin="6,6,2,2"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                        <!-- Favorites without a group have no header. -->
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding Name}" Value="">
+                                                <Setter TargetName="GroupName" Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                                <!-- The default group template indents items by 5 pixels, which left a gap beside selected items. -->
+                                <GroupStyle.ContainerStyle>
+                                    <Style TargetType="{x:Type GroupItem}">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                    <StackPanel>
+                                                        <ContentPresenter/>
+                                                        <ItemsPresenter/>
+                                                    </StackPanel>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </GroupStyle.ContainerStyle>
+                            </GroupStyle>
+                        </ListBox.GroupStyle>
+                    </ListBox>
+
+                    <!-- Shown when there are no favorites -->
+                    <TextBlock x:Name="EmptyListText"
+                               Text="No favorites yet."
+                               Foreground="#707070"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               IsHitTestVisible="False"/>
+                </Grid>
+
+                <UniformGrid Grid.Row="1" Columns="3" Margin="0,9,0,0">
                     <Button x:Name="NewButton"
                             Margin="0,0,3,0"
                             Style="{StaticResource ButtonStandardStyle}"
@@ -58,35 +133,7 @@
                             Content="Delete"
                             Click="Delete_Click"/>
                 </UniformGrid>
-
-                <Grid>
-                    <ListBox x:Name="Favorites"
-                             Style="{StaticResource FavoritesListBox}"
-                             ItemContainerStyle="{StaticResource FavoritesListBoxItemsStyle}"
-                             HorizontalContentAlignment="Stretch"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                             TextSearch.TextPath="Title"
-                             SelectionChanged="Favorites_SelectionChanged"
-                             MouseDoubleClick="Favorites_MouseDoubleClick"
-                             KeyDown="Favorites_KeyDown">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Title}"
-                                           Margin="2,3"
-                                           TextTrimming="CharacterEllipsis"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-
-                    <!-- Shown when there are no favorites -->
-                    <TextBlock x:Name="EmptyListText"
-                               Text="No favorites yet."
-                               Foreground="#707070"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               IsHitTestVisible="False"/>
-                </Grid>
-            </DockPanel>
+            </Grid>
 
             <!-- Editor -->
             <Border Grid.Column="2"
@@ -94,13 +141,24 @@
                     BorderBrush="#abadb3"
                     BorderThickness="1">
                 <Grid>
-                    <DockPanel x:Name="Editor" Margin="10">
-                        <!-- Name and columns -->
-                        <Grid DockPanel.Dock="Top">
+                    <Grid x:Name="Editor" Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Name, columns, and group -->
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
                             <StackPanel>
                                 <TextBlock Text="Name"
                                            Foreground="#404040"
@@ -120,33 +178,21 @@
                                          PreviewTextInput="FavoriteColumns_PreviewTextInput"
                                          TextChanged="Editor_TextChanged"/>
                             </StackPanel>
+                            <StackPanel Grid.Row="1" Margin="0,10,0,0">
+                                <TextBlock Text="Group"
+                                           Foreground="#404040"
+                                           FontSize="14"/>
+                                <!-- Pick an existing group, or type a new one. Leave it empty for no group. -->
+                                <ComboBox x:Name="FavoriteGroup"
+                                          Margin="0,4,0,0"
+                                          HorizontalAlignment="Stretch"
+                                          IsEditable="True"
+                                          TextBoxBase.TextChanged="Editor_TextChanged"/>
+                            </StackPanel>
                         </Grid>
 
-                        <!-- Save and revert -->
-                        <DockPanel DockPanel.Dock="Bottom" Margin="0,10,0,0" LastChildFill="False">
-                            <Button x:Name="SaveButton"
-                                    DockPanel.Dock="Right"
-                                    Width="85"
-                                    Margin="9,0,0,0"
-                                    Style="{StaticResource ButtonStandardStyle}"
-                                    Content="{x:Static resource:Strings.DialogButton_Save}"
-                                    Click="Save_Click"/>
-                            <Button x:Name="RevertButton"
-                                    DockPanel.Dock="Right"
-                                    Width="85"
-                                    Style="{StaticResource ButtonStandardStyle}"
-                                    Content="Revert"
-                                    Click="Revert_Click"/>
-                            <TextBlock x:Name="UnsavedText"
-                                       DockPanel.Dock="Right"
-                                       Text="Unsaved changes"
-                                       Foreground="#707070"
-                                       VerticalAlignment="Center"
-                                       Margin="0,0,9,0"/>
-                        </DockPanel>
-
                         <!-- Hosts -->
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,14,0,0">
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,14,0,0">
                             <TextBlock Text="Hosts"
                                        Foreground="#404040"
                                        FontSize="14"
@@ -160,6 +206,7 @@
                             </Label>
                         </StackPanel>
                         <TextBox x:Name="FavoriteHosts"
+                                 Grid.Row="2"
                                  Margin="0,4,0,0"
                                  Padding="4"
                                  FontFamily="Consolas"
@@ -172,7 +219,27 @@
                                  PreviewDragOver="FavoriteHosts_PreviewDragOver"
                                  Drop="FavoriteHosts_Drop"
                                  TextChanged="Editor_TextChanged"/>
-                    </DockPanel>
+
+                        <!-- Save and revert -->
+                        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                            <TextBlock x:Name="UnsavedText"
+                                       Text="Unsaved changes"
+                                       Foreground="#707070"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,9,0"/>
+                            <Button x:Name="RevertButton"
+                                    Width="85"
+                                    Style="{StaticResource ButtonStandardStyle}"
+                                    Content="Revert"
+                                    Click="Revert_Click"/>
+                            <Button x:Name="SaveButton"
+                                    Width="85"
+                                    Margin="9,0,0,0"
+                                    Style="{StaticResource ButtonStandardStyle}"
+                                    Content="{x:Static resource:Strings.DialogButton_Save}"
+                                    Click="Save_Click"/>
+                        </StackPanel>
+                    </Grid>
 
                     <!-- Shown when no favorite is selected -->
                     <TextBlock x:Name="NoSelectionText"

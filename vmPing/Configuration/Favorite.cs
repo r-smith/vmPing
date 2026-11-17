@@ -11,7 +11,10 @@ namespace vmPing.Configuration
         private const string FavoritePath = "/vmping/favorites/favorite";
         private const string TitleAttribute = "title";
         private const string ColumnAttribute = "columncount";
+        private const string GroupAttribute = "group";
 
+        public string Title { get; set; }
+        public string Group { get; set; } = string.Empty;
         public List<string> Hostnames { get; set; } = new List<string>();
         public int ColumnCount { get; set; }
 
@@ -76,6 +79,46 @@ namespace vmPing.Configuration
             return titles;
         }
 
+        // All favorites, with grouped favorites first. Sorted by group, then title.
+        public static List<Favorite> GetAll()
+        {
+            List<Favorite> favorites = new List<Favorite>();
+
+            if (!ConfigFile.Exists())
+            {
+                return favorites;
+            }
+
+            try
+            {
+                XmlDocument xd = new XmlDocument();
+                xd.Load(ConfigFile.FilePath);
+
+                XmlNodeList nodes = xd.SelectNodes(FavoritePath);
+                if (nodes == null)
+                {
+                    return favorites;
+                }
+
+                foreach (XmlNode node in nodes)
+                {
+                    Favorite favorite = FromNode(node);
+                    if (!string.IsNullOrWhiteSpace(favorite.Title))
+                    {
+                        favorites.Add(favorite);
+                    }
+                }
+
+                favorites.Sort(CompareByGroupAndTitle);
+            }
+            catch (Exception ex)
+            {
+                Util.ShowError($"{Strings.Error_ReadConfig} {ex.Message}");
+            }
+
+            return favorites;
+        }
+
         public static Favorite Load(string title)
         {
             if (!ConfigFile.Exists() || string.IsNullOrWhiteSpace(title))
@@ -87,33 +130,13 @@ namespace vmPing.Configuration
 
             try
             {
-                favorite.Hostnames = new List<string>();
-
                 XmlDocument xd = new XmlDocument();
                 xd.Load(ConfigFile.FilePath);
 
                 XmlNode favoriteNode = xd.SelectSingleNode($"{FavoritePath}[@{TitleAttribute}={ConfigFile.GetEscapedXpath(title)}]")
                     ?? throw new KeyNotFoundException();
 
-                // Columns.
-                if (int.TryParse(favoriteNode.Attributes?[ColumnAttribute]?.Value, out int columns))
-                {
-                    favorite.ColumnCount = columns;
-                }
-
-                // Hostnames.
-                XmlNodeList hostNodes = favoriteNode.SelectNodes("host");
-                if (hostNodes != null)
-                {
-                    foreach (XmlNode node in hostNodes)
-                    {
-                        string hostname = node.InnerText?.Trim();
-                        if (!string.IsNullOrEmpty(hostname))
-                        {
-                            favorite.Hostnames.Add(hostname);
-                        }
-                    }
-                }
+                favorite = FromNode(favoriteNode);
             }
             catch (KeyNotFoundException)
             {
@@ -162,7 +185,8 @@ namespace vmPing.Configuration
         }
 
 
-        public static void Save(string title, List<string> hostnames, int columnCount)
+        // A null group keeps the favorite's current group. An empty group means no group.
+        public static void Save(string title, List<string> hostnames, int columnCount, string group = null)
         {
             if (!ConfigFile.IsReady() || string.IsNullOrWhiteSpace(title))
             {
@@ -180,6 +204,10 @@ namespace vmPing.Configuration
                 // Remove favorite if title already exists.
                 foreach (XmlNode node in xd.SelectNodes($"{FavoritePath}[@{TitleAttribute}={ConfigFile.GetEscapedXpath(title)}]"))
                 {
+                    if (group == null)
+                    {
+                        group = node.Attributes?[GroupAttribute]?.Value;
+                    }
                     root.RemoveChild(node);
                 }
 
@@ -187,6 +215,12 @@ namespace vmPing.Configuration
                 XmlElement favorite = xd.CreateElement("favorite");
                 favorite.SetAttribute(TitleAttribute, title);
                 favorite.SetAttribute(ColumnAttribute, columnCount.ToString());
+
+                group = group?.Trim();
+                if (!string.IsNullOrEmpty(group))
+                {
+                    favorite.SetAttribute(GroupAttribute, group);
+                }
 
                 foreach (string hostname in hostnames)
                 {
@@ -253,6 +287,53 @@ namespace vmPing.Configuration
         public static bool IsTitleInvalid(string title)
         {
             return string.IsNullOrWhiteSpace(title);
+        }
+
+        private static Favorite FromNode(XmlNode node)
+        {
+            Favorite favorite = new Favorite
+            {
+                Title = node.Attributes?[TitleAttribute]?.Value,
+                Group = node.Attributes?[GroupAttribute]?.Value?.Trim() ?? string.Empty
+            };
+
+            if (int.TryParse(node.Attributes?[ColumnAttribute]?.Value, out int columns))
+            {
+                favorite.ColumnCount = columns;
+            }
+
+            XmlNodeList hostNodes = node.SelectNodes("host");
+            if (hostNodes != null)
+            {
+                foreach (XmlNode hostNode in hostNodes)
+                {
+                    string hostname = hostNode.InnerText?.Trim();
+                    if (!string.IsNullOrEmpty(hostname))
+                    {
+                        favorite.Hostnames.Add(hostname);
+                    }
+                }
+            }
+
+            return favorite;
+        }
+
+        private static int CompareByGroupAndTitle(Favorite a, Favorite b)
+        {
+            bool isAGrouped = a.Group.Length > 0;
+            bool isBGrouped = b.Group.Length > 0;
+            if (isAGrouped != isBGrouped)
+            {
+                return isAGrouped ? -1 : 1;
+            }
+
+            int result = StringComparer.OrdinalIgnoreCase.Compare(a.Group, b.Group);
+            if (result != 0)
+            {
+                return result;
+            }
+
+            return StringComparer.OrdinalIgnoreCase.Compare(a.Title, b.Title);
         }
     }
 }

@@ -541,20 +541,49 @@ namespace vmPing.Views
                 FavoritesMenu.Items.RemoveAt(i);
             }
 
-            // Load favorites.
-            foreach (string fav in Favorite.GetTitles())
+            // Load favorites. Grouped favorites come first, each group in its own submenu.
+            MenuItem groupMenu = null;
+            foreach (Favorite favorite in Favorite.GetAll())
             {
                 MenuItem menuItem = new MenuItem
                 {
-                    Header = fav
+                    Header = GetMenuText(favorite.Title),
+                    Tag = favorite.Title
                 };
                 menuItem.Click += (s, r) =>
                 {
-                    LoadFavorite((s as MenuItem).Header.ToString());
+                    LoadFavorite((string)((MenuItem)s).Tag);
                 };
 
-                FavoritesMenu.Items.Add(menuItem);
+                if (favorite.Group.Length == 0)
+                {
+                    // Separate the ungrouped favorites from the groups above them.
+                    if (groupMenu != null)
+                    {
+                        FavoritesMenu.Items.Add(new Separator());
+                        groupMenu = null;
+                    }
+                    FavoritesMenu.Items.Add(menuItem);
+                    continue;
+                }
+
+                if ((string)groupMenu?.Tag != favorite.Group)
+                {
+                    groupMenu = new MenuItem
+                    {
+                        Header = GetMenuText(favorite.Group),
+                        Tag = favorite.Group
+                    };
+                    FavoritesMenu.Items.Add(groupMenu);
+                }
+                groupMenu.Items.Add(menuItem);
             }
+        }
+
+        // Underscores mark access keys in menus, so double them to show them as typed.
+        private static string GetMenuText(string text)
+        {
+            return text.Replace("_", "__");
         }
 
         public void LoadFavorite(string favoriteTitle)

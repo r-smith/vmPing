@@ -34,6 +34,16 @@ namespace vmPing.Views
         {
             InitializeComponent();
 
+            // Button access keys only work with Alt, so typing in the list to find a favorite can't press a button.
+            AccessKeyManager.AddAccessKeyPressedHandler(this, (sender, e) =>
+            {
+                if ((Keyboard.Modifiers & ModifierKeys.Alt) == 0)
+                {
+                    e.Target = null;
+                    e.Handled = true;
+                }
+            });
+
             // Select the favorite that's loaded in the main window, if any.
             Loaded += (sender, e) => RefreshFavoriteList((Owner as MainWindow)?.LoadedFavoriteTitle);
         }

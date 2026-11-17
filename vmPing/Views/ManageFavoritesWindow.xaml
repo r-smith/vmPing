@@ -136,17 +136,17 @@
                     <Button x:Name="NewButton"
                             Margin="0,0,3,0"
                             Style="{StaticResource ButtonStandardStyle}"
-                            Content="New"
+                            Content="_New"
                             Click="New_Click"/>
                     <Button x:Name="DuplicateButton"
                             Margin="3,0"
                             Style="{StaticResource ButtonStandardStyle}"
-                            Content="Duplicate"
+                            Content="D_uplicate"
                             Click="Duplicate_Click"/>
                     <Button x:Name="DeleteButton"
                             Margin="3,0,0,0"
                             Style="{StaticResource ButtonStandardStyle}"
-                            Content="Delete"
+                            Content="_Delete"
                             Click="Delete_Click"/>
                 </UniformGrid>
             </Grid>
@@ -246,13 +246,13 @@
                             <Button x:Name="RevertButton"
                                     Width="85"
                                     Style="{StaticResource ButtonStandardStyle}"
-                                    Content="Revert"
+                                    Content="_Revert"
                                     Click="Revert_Click"/>
                             <Button x:Name="SaveButton"
                                     Width="85"
                                     Margin="9,0,0,0"
                                     Style="{StaticResource ButtonStandardStyle}"
-                                    Content="{x:Static resource:Strings.DialogButton_Save}"
+                                    Content="_Save"
                                     Click="Save_Click"/>
                         </StackPanel>
                     </Grid>
@@ -291,12 +291,12 @@
             <Button x:Name="OpenButton"
                     Width="85"
                     Style="{StaticResource ButtonStandardStyle}"
-                    Content="Open"
+                    Content="_Open"
                     Click="Open_Click"/>
             <Button Width="85"
                     Margin="9,0,0,0"
                     Style="{StaticResource ButtonStandardStyle}"
-                    Content="Close"
+                    Content="_Close"
                     Click="Close_Click"/>
         </StackPanel>
     </Grid>

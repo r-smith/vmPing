@@ -32,16 +32,13 @@
         <!-- Aliases DataGrid -->
         <DataGrid x:Name="Aliases"
                   Grid.Row="1"
-                  Style="{StaticResource DataGridStyle}">
+                  Style="{StaticResource LightDataGridStyle}"
+                  MouseDoubleClick="Aliases_MouseDoubleClick"
+                  PreviewKeyDown="Aliases_PreviewKeyDown">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Value}" Header="{x:Static resource:Strings.ManageAliases_Alias}" Width="*">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsSelected, RelativeSource= {RelativeSource AncestorType={x:Type DataGridRow}}}" Value="True">
-                                    <Setter Property="Foreground" Value="White"/>
-                                </DataTrigger>
-                            </Style.Triggers>
                             <Setter Property="Padding" Value="7,2,10,2"/>
                             <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
                         </Style>
@@ -51,11 +48,6 @@
                 <DataGridTextColumn Binding="{Binding Path=Key}" Header="{x:Static resource:Strings.ManageAliases_Host}" Width=".8*">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsSelected, RelativeSource= {RelativeSource AncestorType={x:Type DataGridRow}}}" Value="True">
-                                    <Setter Property="Foreground" Value="White"/>
-                                </DataTrigger>
-                            </Style.Triggers>
                             <Setter Property="Padding" Value="7,2,10,2"/>
                             <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
                             <Setter Property="Foreground" Value="#0067b8"/>

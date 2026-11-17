@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using vmPing.Configuration;
 using vmPing.Interop;
@@ -15,6 +16,16 @@ namespace vmPing.Views
         {
             InitializeComponent();
             RefreshAliasList();
+
+            // Button access keys only work with Alt, like in Manage favorites.
+            AccessKeyManager.AddAccessKeyPressedHandler(this, (sender, e) =>
+            {
+                if ((Keyboard.Modifiers & ModifierKeys.Alt) == 0)
+                {
+                    e.Target = null;
+                    e.Handled = true;
+                }
+            });
         }
 
         public void RefreshAliasList()
@@ -83,6 +94,29 @@ namespace vmPing.Views
             }
         }
 
+        private void Aliases_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            // Only edit when a row was double-clicked, not a column header or the scroll bar.
+            if (ItemsControl.ContainerFromElement(Aliases, (DependencyObject)e.OriginalSource) is DataGridRow)
+            {
+                Edit_Click(sender, e);
+            }
+        }
+
+        private void Aliases_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Edit_Click(sender, e);
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Delete)
+            {
+                Remove_Click(sender, e);
+                e.Handled = true;
+            }
+        }
+
         private KeyValuePair<string, string>? GetSelectedAlias()
         {
             KeyValuePair<string, string>? selected = Aliases.SelectedItem as KeyValuePair<string, string>?;
@@ -94,7 +128,7 @@ namespace vmPing.Views
             NativeMethods.HideMinimizeAndMaximizeButtons(this);
         }
 
-        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {

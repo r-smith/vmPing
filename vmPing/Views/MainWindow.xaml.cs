@@ -557,7 +557,7 @@ namespace vmPing.Views
             }
         }
 
-        private void LoadFavorite(string favoriteTitle)
+        public void LoadFavorite(string favoriteTitle)
         {
             RemoveAllProbes();
 

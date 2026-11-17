@@ -1,38 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- No highlighting ListBoxItem style -->
-    <Style x:Key="ListBoxItemNoHighlightStyle" TargetType="{x:Type ListBoxItem}">
-        <Setter Property="Padding" Value="5,1"/>
-        <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"/>
-        <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Focusable" Value="False"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Ellipse Height="4" Width="4" Fill="#606060" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>
-                        <Border x:Name="Bd" Grid.Column="1" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
-                            <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{StaticResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    
     <!-- Favorites ListBox style -->
     <SolidColorBrush x:Key="ListBox.Static.Background" Color="#f5f5f5"/>
     <SolidColorBrush x:Key="ListBox.Static.Foreground" Color="#111"/>
@@ -64,6 +32,9 @@
                         </ScrollViewer>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" TargetName="Bd" Value="0.5"/>
+                        </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsGrouping" Value="true"/>
@@ -78,11 +49,11 @@
     </Style>
     
     <!-- Favorites ListBox items style-->
-    <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#30303030"/>
-    <SolidColorBrush x:Key="Item.MouseOver.Border" Color="#50303030"/>
-    <SolidColorBrush x:Key="Item.Selected.Background" Color="#007acc"/>
-    <SolidColorBrush x:Key="Item.Selected.Foreground" Color="#ffffff"/>
-    <SolidColorBrush x:Key="Item.Selected.Border" Color="#303030"/>
+    <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#e5f3ff"/>
+    <SolidColorBrush x:Key="Item.MouseOver.Border" Color="#e5f3ff"/>
+    <SolidColorBrush x:Key="Item.Selected.Background" Color="#cce8ff"/>
+    <SolidColorBrush x:Key="Item.Selected.Foreground" Color="#111"/>
+    <SolidColorBrush x:Key="Item.Selected.Border" Color="#99d1ff"/>
     <Style x:Key="FavoritesListBoxItemsStyle" TargetType="{x:Type ListBoxItem}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="Padding" Value="4,1"/>
@@ -107,7 +78,6 @@
                             <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.Selected.Background}"/>
                             <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.Selected.Border}"/>
                             <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{StaticResource Item.Selected.Foreground}"/>
-                            <Setter Property="TextElement.FontWeight" TargetName="Bd" Value="SemiBold"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

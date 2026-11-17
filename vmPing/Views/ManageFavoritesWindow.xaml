@@ -4,14 +4,16 @@
         xmlns:resource="clr-namespace:vmPing.Properties"
         Title="{x:Static resource:Strings.ManageFavorites_WindowTitle}"
         UseLayoutRounding="True"
-        Height="475"
-        MinHeight="300"
-        Width="600"
-        MinWidth="425"
+        Height="500"
+        MinHeight="380"
+        Width="760"
+        MinWidth="600"
         WindowStartupLocation="CenterOwner"
         Background="#f0f0f0"
         ResizeMode="CanResize"
+        ShowInTaskbar="False"
         PreviewKeyDown="Window_PreviewKeyDown"
+        Closing="Window_Closing"
         SourceInitialized="Window_SourceInitialized">
 
     <Grid Margin="9">
@@ -30,83 +32,173 @@
         </StackPanel>
 
         <!-- Main content -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Margin="0,10,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MinWidth="50"/>
-                <ColumnDefinition Width="6"/>
-                <ColumnDefinition Width=".85*" MinWidth="50"/>
+                <ColumnDefinition Width="230"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <!-- Favorites list -->
-            <ListBox x:Name="Favorites"
-                     Grid.ColumnSpan="3"
-                     SelectionChanged="Favorites_SelectionChanged"
-                     HorizontalAlignment="Stretch"
-                     Style="{StaticResource FavoritesListBox}"
-                     ItemContainerStyle="{StaticResource FavoritesListBoxItemsStyle}"/>
-            
-            <!-- Grid splitter -->
-            <GridSplitter Grid.Column="1"
-                          Background="Transparent"
-                          HorizontalAlignment="Stretch"
-                          Focusable="False"
-                          Visibility="{Binding ElementName=ContentsSection, Path=Visibility}"/>
-            
-            <!-- Contents of selected favorite -->
-            <Border x:Name="ContentsSection"
-                    Grid.Column="2"
-                    Background="#f4f4f4"
-                    BorderBrush="#abadb3"
-                    Visibility="Visible"
-                    VerticalAlignment="Stretch"
-                    BorderThickness="1">
-                <DockPanel Background="#fcfcfc">
-                    <!-- Contents title -->
-                    <TextBlock DockPanel.Dock="Top"
-                               Name="FavoriteTitle"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Center"
-                               TextWrapping="NoWrap"
-                               TextTrimming="CharacterEllipsis"
-                               FontSize="14"
-                               Padding="5,5,5,7"
-                               Foreground="#000"
-                               Background="Transparent"
-                               FontWeight="SemiBold"/>
 
-                    <!-- Contents list -->
-                    <ListBox Name="Contents"
-                             Foreground="#404040"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             Margin="0"
-                             SelectionMode="Single"
-                             FontFamily="Consolas"
-                             FontSize="15"
-                             ItemContainerStyle="{StaticResource ListBoxItemNoHighlightStyle}"/>
-                </DockPanel>
-                <Border.Effect>
-                    <DropShadowEffect Opacity="0.1"/>
-                </Border.Effect>
+            <!-- Favorites list -->
+            <DockPanel>
+                <UniformGrid DockPanel.Dock="Bottom" Columns="3" Margin="0,9,0,0">
+                    <Button x:Name="NewButton"
+                            Margin="0,0,3,0"
+                            Style="{StaticResource ButtonStandardStyle}"
+                            Content="New"
+                            Click="New_Click"/>
+                    <Button x:Name="DuplicateButton"
+                            Margin="3,0"
+                            Style="{StaticResource ButtonStandardStyle}"
+                            Content="Duplicate"
+                            Click="Duplicate_Click"/>
+                    <Button x:Name="DeleteButton"
+                            Margin="3,0,0,0"
+                            Style="{StaticResource ButtonStandardStyle}"
+                            Content="Delete"
+                            Click="Delete_Click"/>
+                </UniformGrid>
+
+                <Grid>
+                    <ListBox x:Name="Favorites"
+                             Style="{StaticResource FavoritesListBox}"
+                             ItemContainerStyle="{StaticResource FavoritesListBoxItemsStyle}"
+                             HorizontalContentAlignment="Stretch"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             TextSearch.TextPath="Title"
+                             SelectionChanged="Favorites_SelectionChanged"
+                             MouseDoubleClick="Favorites_MouseDoubleClick"
+                             KeyDown="Favorites_KeyDown">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Title}"
+                                           Margin="2,3"
+                                           TextTrimming="CharacterEllipsis"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!-- Shown when there are no favorites -->
+                    <TextBlock x:Name="EmptyListText"
+                               Text="No favorites yet."
+                               Foreground="#707070"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               IsHitTestVisible="False"/>
+                </Grid>
+            </DockPanel>
+
+            <!-- Editor -->
+            <Border Grid.Column="2"
+                    Background="#fcfcfc"
+                    BorderBrush="#abadb3"
+                    BorderThickness="1">
+                <Grid>
+                    <DockPanel x:Name="Editor" Margin="10">
+                        <!-- Name and columns -->
+                        <Grid DockPanel.Dock="Top">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Name"
+                                           Foreground="#404040"
+                                           FontSize="14"/>
+                                <TextBox x:Name="FavoriteName"
+                                         Margin="0,4,0,0"
+                                         MaxLength="64"
+                                         TextChanged="Editor_TextChanged"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Width="80" Margin="20,0,0,0">
+                                <TextBlock Text="Columns"
+                                           Foreground="#404040"
+                                           FontSize="14"/>
+                                <TextBox x:Name="FavoriteColumns"
+                                         Margin="0,4,0,0"
+                                         MaxLength="2"
+                                         PreviewTextInput="FavoriteColumns_PreviewTextInput"
+                                         TextChanged="Editor_TextChanged"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Save and revert -->
+                        <DockPanel DockPanel.Dock="Bottom" Margin="0,10,0,0" LastChildFill="False">
+                            <Button x:Name="SaveButton"
+                                    DockPanel.Dock="Right"
+                                    Width="85"
+                                    Margin="9,0,0,0"
+                                    Style="{StaticResource ButtonStandardStyle}"
+                                    Content="{x:Static resource:Strings.DialogButton_Save}"
+                                    Click="Save_Click"/>
+                            <Button x:Name="RevertButton"
+                                    DockPanel.Dock="Right"
+                                    Width="85"
+                                    Style="{StaticResource ButtonStandardStyle}"
+                                    Content="Revert"
+                                    Click="Revert_Click"/>
+                            <TextBlock x:Name="UnsavedText"
+                                       DockPanel.Dock="Right"
+                                       Text="Unsaved changes"
+                                       Foreground="#707070"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,9,0"/>
+                        </DockPanel>
+
+                        <!-- Hosts -->
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,14,0,0">
+                            <TextBlock Text="Hosts"
+                                       Foreground="#404040"
+                                       FontSize="14"
+                                       VerticalAlignment="Center"/>
+                            <Label Style="{StaticResource LabelToolTip}" MaxWidth="380">
+                                <TextBlock>
+                                    Enter one host per line, or separate them with commas.<LineBreak/>
+                                    Add a label after a host with #, or start a line with # for a comment.<LineBreak/><LineBreak/>
+                                    If you have a text file containing hosts, drag and drop it here.
+                                </TextBlock>
+                            </Label>
+                        </StackPanel>
+                        <TextBox x:Name="FavoriteHosts"
+                                 Margin="0,4,0,0"
+                                 Padding="4"
+                                 FontFamily="Consolas"
+                                 FontSize="15"
+                                 AcceptsReturn="True"
+                                 VerticalContentAlignment="Top"
+                                 VerticalScrollBarVisibility="Auto"
+                                 TextWrapping="Wrap"
+                                 AllowDrop="True"
+                                 PreviewDragOver="FavoriteHosts_PreviewDragOver"
+                                 Drop="FavoriteHosts_Drop"
+                                 TextChanged="Editor_TextChanged"/>
+                    </DockPanel>
+
+                    <!-- Shown when no favorite is selected -->
+                    <TextBlock x:Name="NoSelectionText"
+                               Text="Select a favorite to edit it, or click New to create one."
+                               Foreground="#707070"
+                               TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Margin="20"/>
+                </Grid>
             </Border>
         </Grid>
 
-        <!-- Buttons section -->
+        <!-- Open and close -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,9,0,0">
-            <Button Click="New_Click"
+            <Button x:Name="OpenButton"
                     Width="85"
                     Style="{StaticResource ButtonStandardStyle}"
-                    Content="_New"/>
-            <Button Click="Edit_Click"
-                    Margin="15,0"
-                    Width="85"
+                    Content="Open"
+                    Click="Open_Click"/>
+            <Button Width="85"
+                    Margin="9,0,0,0"
                     Style="{StaticResource ButtonStandardStyle}"
-                    IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
-                    Content="_Edit"/>
-            <Button Click="Remove_Click"
-                    Width="85"
-                    Style="{StaticResource ButtonStandardStyle}"
-                    IsEnabled="{Binding ElementName=Favorites, Path=SelectedItems.Count}"
-                    Content="_Remove"/>
+                    Content="Close"
+                    Click="Close_Click"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 using vmPing.Configuration;
 using vmPing.Interop;
 using vmPing.Properties;
@@ -16,28 +15,17 @@ namespace vmPing.Views
     {
         private List<string> _hostList;
         private int _columnCount;
-        private readonly bool _isExisting = false;
-        private readonly string _originalTitle;
 
-        public NewFavoriteWindow(List<string> hostList, int columnCount, bool isEditExisting = false, string title = "")
+        public NewFavoriteWindow(List<string> hostList, int columnCount, string title = "")
         {
             InitializeComponent();
 
             _hostList = hostList;
             _columnCount = columnCount;
-            _isExisting = isEditExisting;
-            _originalTitle = title;
 
             MyHosts.Text = string.Join(Environment.NewLine, hostList).Trim();
             MyColumnCount.Text = columnCount.ToString();
             MyTitle.Text = title;
-
-            if (isEditExisting)
-            {
-                Title = "Edit Favorite";
-                Header.Text = "Edit an existing favorite";
-                HeaderIcon.Source = (DrawingImage)Application.Current.Resources["icon.edit"];
-            }
 
             // Set initial focus to text box.
             Loaded += (sender, e) =>
@@ -80,11 +68,8 @@ namespace vmPing.Views
                 return;
             }
 
-            // If creating a new favorite: Check and display warning if title already exists.
-            // If editing a favorite and title has changed: Check and display warning if title already exists.
-            // If editing a favorite and title has not changed: Proceed with save. No warning displayed.
-            if ( (!_isExisting && Favorite.TitleExists(MyTitle.Text))
-                || (_isExisting && !string.Equals(_originalTitle, MyTitle.Text) && Favorite.TitleExists(MyTitle.Text)) )
+            // Warn if a favorite with this title already exists.
+            if (Favorite.TitleExists(MyTitle.Text))
             {
                 DialogWindow warningWindow = DialogWindow.WarningWindow(
                     message: $"{MyTitle.Text} {Strings.NewFavorite_Warn_AlreadyExists}",
@@ -105,12 +90,6 @@ namespace vmPing.Views
 
         private void SaveFavorite()
         {
-            // Check if renaming the title of an existing favorite set.
-            if (_isExisting && !MyTitle.Text.Equals(_originalTitle))
-            {
-                Favorite.Rename(originalTitle: _originalTitle, newTitle: MyTitle.Text);
-            }
-            // Save.
             Favorite.Save(MyTitle.Text, _hostList, _columnCount);
             DialogResult = true;
         }

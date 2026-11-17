@@ -23,14 +23,12 @@
         <DockPanel Grid.Row="0" Margin="9">
             <!-- Header -->
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-                <Image Name="HeaderIcon"
-                       Source="{StaticResource icon.new-favorite}"
+                <Image Source="{StaticResource icon.new-favorite}"
                        VerticalAlignment="Center"
                        Width="20"
                        Height="20"
                        Margin="0,0,8,0"/>
                 <TextBlock DockPanel.Dock="Top"
-                           Name="Header"
                            Text="{x:Static resource:Strings.NewFavorite_Header}"
                            Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"/>
             </StackPanel>

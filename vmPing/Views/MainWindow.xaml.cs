@@ -680,7 +680,7 @@ namespace vmPing.Views
             newFavoriteWindow.Owner = this;
             if (newFavoriteWindow.ShowDialog() == true)
             {
-                LoadedFavoriteTitle = newFavoriteWindow.MyTitle.Text;
+                LoadedFavoriteTitle = newFavoriteWindow.SavedTitle;
                 LoadFavorites();
             }
         }

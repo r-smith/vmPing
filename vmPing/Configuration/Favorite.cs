@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using vmPing.Properties;
 
@@ -350,6 +351,13 @@ namespace vmPing.Configuration
             {
                 Util.ShowError($"{Strings.Error_WriteConfig} {ex.Message}");
             }
+        }
+
+        // Returns the existing group's spelling when only the case is different, so it doesn't become a second group.
+        public static string MatchGroup(string group, IEnumerable<string> existingGroups)
+        {
+            group = group.Trim();
+            return existingGroups.FirstOrDefault(g => string.Equals(g, group, StringComparison.OrdinalIgnoreCase)) ?? group;
         }
 
         public static bool IsTitleInvalid(string title)

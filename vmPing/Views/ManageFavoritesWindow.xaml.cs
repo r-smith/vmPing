@@ -426,19 +426,10 @@ namespace vmPing.Views
             RefreshFavoriteList(title);
         }
 
-        // Uses the existing group's spelling when only the case is different, so it doesn't become a second group.
         // The excluded group is skipped, so a group can be renamed to change its case.
         private string GetGroupName(string text, string excludedGroup = null)
         {
-            string group = text.Trim();
-            foreach (string existingGroup in FavoriteGroup.Items)
-            {
-                if (existingGroup != excludedGroup && string.Equals(existingGroup, group, StringComparison.OrdinalIgnoreCase))
-                {
-                    return existingGroup;
-                }
-            }
-            return group;
+            return Favorite.MatchGroup(text, FavoriteGroup.Items.Cast<string>().Where(g => g != excludedGroup));
         }
 
         private void RenameGroup_Click(object sender, RoutedEventArgs e)

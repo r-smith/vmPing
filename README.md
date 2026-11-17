@@ -9,7 +9,7 @@ vmPing (Visual Multi Ping) is a graphical ping utility for monitoring many hosts
 Along with standard ICMP pings, vmPing can do TCP "port pings", which repeatedly connect to a port and show whether it's open. It also includes DNS lookups, a fast traceroute, alerts for status changes and high latency, and a basic flood tool for stress testing.
 
 **[Download the latest release](https://github.com/R-Smith/vmPing/releases/latest/download/vmPing.exe)**
-##### (1.4.0, released November 16, 2026)
+##### (1.4.4, released November 17, 2026)
 
 ##### Notes
 * No installer. Just download and run the .exe.
@@ -30,6 +30,27 @@ Screenshots
 
 Recent Changes
 --------------
+### Version 1.4.1
+- Favorites can now be organized into groups.
+  - Each group shows as a submenu in the Favorites menu.
+  - Choose a group when saving or editing a favorite.
+  - In Manage Favorites, drag favorites between groups, or right-click a group to rename or remove it.
+- Redesigned the Manage Favorites window.
+  - Edit favorites directly in the window, without opening another window.
+- 'Create New Favorite Set' is renamed to 'Save as Favorite', and only asks for a name and group.
+- The New Alias and Edit Alias windows are combined into one window.
+  - Aliases can be removed from the alias window.
+- Ping output and status change logs now use one log folder. Status changes are logged to `vmPing-status.txt`. Existing log settings are carried over.
+- The log folder is checked for write access when saving options.
+- The log folder Browse button now uses the modern Windows folder picker.
+- The default ping data now matches Windows ping (32 bytes). This fixes timeouts with devices that don't reply to the previous 33-byte pings (#101).
+- Packet size and custom packet data are now saved as separate options. Packet settings from earlier versions are reset to the default.
+- The Multi-Input window now supports `# labels`.
+- Favorite and group names with underscores now show correctly in the Favorites menu.
+- Fixed: Saving options with a packet size other than 33 failed and could corrupt the configuration file.
+- The configuration file is now saved safely. If a save fails, the existing file is left unchanged.
+
+
 ### Version 1.4.0
 - Choose a probe type by typing `/` in an empty hostname box (Ping, DNS lookup, Traceroute).
 - New high latency detection. Access via Options > General.
@@ -64,6 +85,7 @@ Recent Changes
 - Fixed an error when exporting the status history failed.
 - Fixed the statistics color for indeterminate status.
 
+
 ### Version 1.3.23
 * Fix: Force software rendering. This should fix high GPU usage on some video cards.
 * Fix: Loading a favorite on startup was not using the column count for the favorite.
@@ -72,7 +94,6 @@ Recent Changes
 * Switch to using SnapToDevicePixels on the main window. Previously, the pixel width for the black borders between probes would sometimes vary when the window was resized. The borders should now always be consistent.
 * Removed gaps when hovering mouse between menu buttons (Add Host, Columns, Start/Stop All). Removed gap from right edge of main menu button.
 * Some of the menu headers have been renamed on the options screen.
-
 
 
 ### Version 1.3.21
@@ -134,15 +155,6 @@ Recent Changes
 ### Version 1.3.14
 * __Portable mode.__ Previously, your configuration file had to be stored at %LocalAppData%\vmPing\vmPing.xml. The configuration file includes all favorites, aliases, and default settings for the application. Now vmPing.xml can reside in the same folder as the application, making everything easily portable. Additionally for new users, a simple prompt is displayed if you do anything that would require saving an initial config file. The prompt informs of config file creation, and gives an opportunity to select portable mode if you want your config file created alongside vmPing.exe.
 * There's a whole new look to the traceroute window. Check it out. An MTR feature isn't there yet, but should follow in a future release.
-
-
-### Version 1.3.12
-* __New multi-address input.__ Access using the keyboard shortcut F2 or by clicking the option in vmPing's menu. This displays a window with a multi-line textbox. Type your target addresses one per line or comma-separated, click OK, and vmPing populates with your targets and immediately begins pinging. So simple. If you have a text file containing addresses, just drag and drop it onto the window.
-* Column count can now be set to anything (within the limits). Previously the column count could never be set higher than the number of probes. This has always annoyed me. Now you can choose any column count and it'll stick. An example would be: Two probes. Set column count to four. vmPing displays two columns since there's only two probes. But as you add more probes, new columns will be made until the four column count is satisfied.
-* Improved drag & drop re-ordering of probes. This was a little buggy when first introduced in v1.3.9, but should now perform well. Usage: Hovering your mouse over a probe displays the usual probe title bar. Click and hold in the title bar area, then drag to the desired new location, and release.
-* Loading a favorite sets the application title bar to the title of the favorite.
-* On the Create New Favorite Set window, you can now drag & drop a text file right onto the list of addresses.
-* Minor UI style changes on the Manage Aliases and Manage Favorites window.
 
 
 

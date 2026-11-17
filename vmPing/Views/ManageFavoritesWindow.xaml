@@ -53,9 +53,16 @@
                              HorizontalContentAlignment="Stretch"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                              TextSearch.TextPath="Title"
+                             AllowDrop="True"
                              SelectionChanged="Favorites_SelectionChanged"
                              MouseDoubleClick="Favorites_MouseDoubleClick"
-                             KeyDown="Favorites_KeyDown">
+                             KeyDown="Favorites_KeyDown"
+                             PreviewMouseLeftButtonDown="Favorites_PreviewMouseLeftButtonDown"
+                             PreviewMouseMove="Favorites_PreviewMouseMove"
+                             DragOver="Favorites_DragOver"
+                             DragLeave="Favorites_DragLeave"
+                             Drop="Favorites_Drop"
+                             GiveFeedback="Favorites_GiveFeedback">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock x:Name="FavoriteTitle"
@@ -94,7 +101,8 @@
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="{x:Type GroupItem}">
-                                                    <StackPanel>
+                                                    <!-- The background highlights the group while a favorite is dragged over it. -->
+                                                    <StackPanel Background="{TemplateBinding Background}">
                                                         <ContentPresenter/>
                                                         <ItemsPresenter/>
                                                     </StackPanel>
@@ -253,6 +261,22 @@
                 </Grid>
             </Border>
         </Grid>
+
+        <!-- The favorite's name, shown beside the mouse pointer while dragging -->
+        <Popup x:Name="DragLabelPopup"
+               Placement="Absolute"
+               AllowsTransparency="True"
+               IsHitTestVisible="False">
+            <Border Background="#cce8ff"
+                    BorderBrush="#99d1ff"
+                    BorderThickness="1"
+                    Padding="6,2"
+                    Opacity="0.85">
+                <TextBlock x:Name="DragLabel"
+                           FontSize="14"
+                           Foreground="#111"/>
+            </Border>
+        </Popup>
 
         <!-- Open and close -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,9,0,0">

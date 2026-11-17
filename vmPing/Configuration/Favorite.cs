@@ -150,6 +150,40 @@ namespace vmPing.Configuration
             return favorite;
         }
 
+        // Moves a favorite to a group. An empty group means no group.
+        public static void SetGroup(string title, string group)
+        {
+            if (!ConfigFile.IsReady() || string.IsNullOrWhiteSpace(title))
+            {
+                return;
+            }
+
+            try
+            {
+                XmlDocument xd = new XmlDocument();
+                xd.Load(ConfigFile.FilePath);
+
+                group = group?.Trim();
+                foreach (XmlElement node in xd.SelectNodes($"{FavoritePath}[@{TitleAttribute}={ConfigFile.GetEscapedXpath(title)}]"))
+                {
+                    if (string.IsNullOrEmpty(group))
+                    {
+                        node.RemoveAttribute(GroupAttribute);
+                    }
+                    else
+                    {
+                        node.SetAttribute(GroupAttribute, group);
+                    }
+                }
+
+                ConfigFile.WriteSafely(xd.Save);
+            }
+            catch (Exception ex)
+            {
+                Util.ShowError($"{Strings.Error_WriteConfig} {ex.Message}");
+            }
+        }
+
         public static void Rename(string originalTitle, string newTitle)
         {
             if (!ConfigFile.IsReady() || string.IsNullOrWhiteSpace(originalTitle) || string.IsNullOrWhiteSpace(newTitle))

@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using vmPing.Configuration;
 using vmPing.Interop;
 using vmPing.Properties;
@@ -24,6 +25,9 @@ namespace vmPing.Views
         private bool _hasUnsavedChanges;
         private bool _isFillingEditor;
         private string _originalContents = string.Empty;
+        private Point _dragStartPoint;
+        private Favorite _dragFavorite;
+        private GroupItem _highlightedGroup;
         private bool _isRefreshingList;
 
         public ManageFavoritesWindow()
@@ -152,6 +156,150 @@ namespace vmPing.Views
                 Delete_Click(sender, e);
                 e.Handled = true;
             }
+        }
+
+        private void Favorites_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _dragStartPoint = e.GetPosition(Favorites);
+            _dragFavorite = FindAncestor<ListBoxItem>(e.OriginalSource as DependencyObject)?.DataContext as Favorite;
+        }
+
+        private void Favorites_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            if (_dragFavorite == null || e.LeftButton != MouseButtonState.Pressed)
+            {
+                return;
+            }
+
+            // Only start once the mouse has moved a few pixels, so a click doesn't start a drag.
+            Vector moved = e.GetPosition(Favorites) - _dragStartPoint;
+            if (Math.Abs(moved.X) < SystemParameters.MinimumHorizontalDragDistance
+                && Math.Abs(moved.Y) < SystemParameters.MinimumVerticalDragDistance)
+            {
+                return;
+            }
+
+            Favorite favorite = _dragFavorite;
+            _dragFavorite = null;
+
+            DragLabel.Text = favorite.Title;
+            MoveDragLabel();
+            DragLabelPopup.IsOpen = true;
+            try
+            {
+                DragDrop.DoDragDrop(Favorites, new DataObject(typeof(Favorite), favorite), DragDropEffects.Move);
+            }
+            finally
+            {
+                DragLabelPopup.IsOpen = false;
+                HighlightGroup(null);
+            }
+        }
+
+        // Raised throughout the drag, wherever the mouse is.
+        private void Favorites_GiveFeedback(object sender, GiveFeedbackEventArgs e)
+        {
+            MoveDragLabel();
+
+            // Show the normal pointer instead of the drag cursor.
+            e.UseDefaultCursors = false;
+            Mouse.SetCursor(Cursors.Arrow);
+            e.Handled = true;
+        }
+
+        // Keeps the drag label below and to the right of the mouse pointer.
+        // It must not be under the pointer, or it would get the drop instead of the list.
+        private void MoveDragLabel()
+        {
+            System.Drawing.Point mouse = System.Windows.Forms.Control.MousePosition;
+            DpiScale dpi = VisualTreeHelper.GetDpi(this);
+            DragLabelPopup.HorizontalOffset = (mouse.X / dpi.DpiScaleX) + 16;
+            DragLabelPopup.VerticalOffset = (mouse.Y / dpi.DpiScaleY) + 20;
+        }
+
+        private void Favorites_DragOver(object sender, DragEventArgs e)
+        {
+            Favorite favorite = e.Data.GetData(typeof(Favorite)) as Favorite;
+            string group = GetDropGroup(e, out GroupItem groupItem);
+            bool canDrop = favorite != null && group != favorite.Group;
+
+            HighlightGroup(canDrop ? groupItem : null);
+            e.Effects = canDrop ? DragDropEffects.Move : DragDropEffects.None;
+            e.Handled = true;
+        }
+
+        private void Favorites_DragLeave(object sender, DragEventArgs e)
+        {
+            HighlightGroup(null);
+        }
+
+        private void HighlightGroup(GroupItem groupItem)
+        {
+            if (groupItem == _highlightedGroup)
+            {
+                return;
+            }
+
+            _highlightedGroup?.ClearValue(BackgroundProperty);
+            _highlightedGroup = groupItem;
+            if (groupItem != null)
+            {
+                groupItem.Background = (Brush)FindResource("Item.MouseOver.Background");
+            }
+        }
+
+        private void Favorites_Drop(object sender, DragEventArgs e)
+        {
+            if (!(e.Data.GetData(typeof(Favorite)) is Favorite favorite))
+            {
+                return;
+            }
+
+            HighlightGroup(null);
+            string group = GetDropGroup(e, out _);
+            if (group != favorite.Group)
+            {
+                Favorite.SetGroup(favorite.Title, group);
+                RefreshFavoriteList(favorite.Title);
+            }
+        }
+
+        // The group under the mouse, and where it is in the list. Below the last favorite means no group.
+        private string GetDropGroup(DragEventArgs e, out GroupItem groupItem)
+        {
+            DependencyObject element = e.OriginalSource as DependencyObject;
+            groupItem = FindAncestor<GroupItem>(element);
+
+            if (FindAncestor<ListBoxItem>(element)?.DataContext is Favorite favorite)
+            {
+                return favorite.Group;
+            }
+            if (groupItem?.Content is CollectionViewGroup group)
+            {
+                return group.Name as string ?? string.Empty;
+            }
+
+            // Below the list, so highlight the favorites without a group, if there are any.
+            groupItem = null;
+            foreach (CollectionViewGroup ungrouped in Favorites.Items.Groups)
+            {
+                if ((ungrouped.Name as string) == string.Empty)
+                {
+                    groupItem = Favorites.ItemContainerGenerator.ContainerFromItem(ungrouped) as GroupItem;
+                }
+            }
+            return string.Empty;
+        }
+
+        private static T FindAncestor<T>(DependencyObject element) where T : DependencyObject
+        {
+            while (element != null && !(element is T))
+            {
+                element = element is Visual
+                    ? VisualTreeHelper.GetParent(element)
+                    : LogicalTreeHelper.GetParent(element);
+            }
+            return element as T;
         }
 
         private void New_Click(object sender, RoutedEventArgs e)

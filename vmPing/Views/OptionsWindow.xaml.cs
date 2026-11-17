@@ -805,14 +805,10 @@ namespace vmPing.Views
 
         private void BrowseLogFolder_Click(object sender, RoutedEventArgs e)
         {
-            using (System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog())
+            string folder = FolderPicker.Show(this, "Select a folder for the log files", LogFolder.Text.Trim());
+            if (folder != null)
             {
-                dialog.Description = "Select a folder for the log files.";
-                dialog.SelectedPath = LogFolder.Text;
-                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    LogFolder.Text = dialog.SelectedPath;
-                }
+                LogFolder.Text = folder;
             }
         }
 

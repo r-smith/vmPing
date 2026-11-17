@@ -152,7 +152,7 @@ namespace vmPing.Configuration
                     node.Attributes[TitleAttribute].Value = newTitle;
                 }
 
-                xd.Save(ConfigFile.FilePath);
+                ConfigFile.WriteSafely(xd.Save);
             }
 
             catch (Exception ex)
@@ -201,7 +201,7 @@ namespace vmPing.Configuration
                 }
 
                 root.AppendChild(favorite);
-                xd.Save(ConfigFile.FilePath);
+                ConfigFile.WriteSafely(xd.Save);
             }
 
             catch (Exception ex)
@@ -241,7 +241,7 @@ namespace vmPing.Configuration
                     root.RemoveChild(node);
                 }
 
-                xd.Save(ConfigFile.FilePath);
+                ConfigFile.WriteSafely(xd.Save);
             }
 
             catch (Exception ex)

@@ -97,7 +97,7 @@ namespace vmPing.Configuration
                 aliasNode.InnerText = alias;
                 root.AppendChild(aliasNode);
 
-                xd.Save(ConfigFile.FilePath);
+                ConfigFile.WriteSafely(xd.Save);
             }
 
             catch (Exception ex)
@@ -138,7 +138,7 @@ namespace vmPing.Configuration
                     root.RemoveChild(node);
                 }
 
-                xd.Save(ConfigFile.FilePath);
+                ConfigFile.WriteSafely(xd.Save);
             }
 
             catch (Exception ex)

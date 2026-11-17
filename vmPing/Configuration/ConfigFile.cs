@@ -86,7 +86,7 @@ namespace vmPing.Configuration
                         new XElement("favorites"),
                         new XElement("configuration"),
                         new XElement("colors")));
-                xd.Save(FilePath);
+                WriteSafely(xd.Save);
 
                 return true;
             }
@@ -94,6 +94,30 @@ namespace vmPing.Configuration
             {
                 Util.ShowError($"{Strings.Error_CreateConfig} {ex.Message}");
                 return false;
+            }
+        }
+
+        // Saves to a temporary file first, then replaces the config file with it.
+        // If saving fails, the config file is left as it was.
+        public static void WriteSafely(Action<string> save)
+        {
+            string tempPath = FilePath + ".tmp";
+            try
+            {
+                save(tempPath);
+                if (File.Exists(FilePath))
+                {
+                    File.Replace(tempPath, FilePath, null);
+                }
+                else
+                {
+                    File.Move(tempPath, FilePath);
+                }
+            }
+            catch
+            {
+                File.Delete(tempPath);
+                throw;
             }
         }
 
@@ -133,7 +157,7 @@ namespace vmPing.Configuration
                 root.Add(GenerateConfigurationNode());
                 root.Add(GenerateColorsNode());
 
-                xd.Save(FilePath);
+                WriteSafely(xd.Save);
             }
             catch (Exception ex)
             {
@@ -167,7 +191,7 @@ namespace vmPing.Configuration
                     SetOption(configuration, "WindowTop", ApplicationOptions.WindowTop);
                 }
 
-                xd.Save(FilePath);
+                WriteSafely(xd.Save);
             }
             catch
             {

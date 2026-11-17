@@ -59,7 +59,7 @@ namespace vmPing.Views
                 return;
             }
 
-            EditAliasWindow editWindow = new EditAliasWindow(selected.Value.Key, selected.Value.Value)
+            AliasWindow editWindow = new AliasWindow(selected.Value.Key)
             {
                 Owner = this
             };
@@ -72,7 +72,7 @@ namespace vmPing.Views
 
         private void New_Click(object sender, RoutedEventArgs e)
         {
-            NewAliasWindow newWindow = new NewAliasWindow
+            AliasWindow newWindow = new AliasWindow
             {
                 Owner = this
             };

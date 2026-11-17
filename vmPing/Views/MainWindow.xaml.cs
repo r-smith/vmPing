@@ -755,7 +755,7 @@ namespace vmPing.Views
 
             probe.RefreshAlias();
 
-            EditAliasWindow wnd = new EditAliasWindow(probe)
+            AliasWindow wnd = new AliasWindow(probe.Hostname)
             {
                 Owner = this
             };

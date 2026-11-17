@@ -116,9 +116,6 @@
     <Compile Include="Views\StatusHistoryWindow.xaml.cs">
       <DependentUpon>StatusHistoryWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EditAliasWindow.xaml.cs">
-      <DependentUpon>EditAliasWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\RenameGroupWindow.xaml.cs">
       <DependentUpon>RenameGroupWindow.xaml</DependentUpon>
     </Compile>
@@ -144,8 +141,8 @@
     <Compile Include="Views\ManageFavoritesWindow.xaml.cs">
       <DependentUpon>ManageFavoritesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NewAliasWindow.xaml.cs">
-      <DependentUpon>NewAliasWindow.xaml</DependentUpon>
+    <Compile Include="Views\AliasWindow.xaml.cs">
+      <DependentUpon>AliasWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
@@ -246,10 +243,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\EditAliasWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\RenameGroupWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -294,7 +287,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\NewAliasWindow.xaml">
+    <Page Include="Views\AliasWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

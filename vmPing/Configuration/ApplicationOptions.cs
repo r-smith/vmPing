@@ -14,8 +14,10 @@ namespace vmPing.Configuration
         public static int HighLatencyAlertTriggerCount { get; set; } = 2;
         public static int TTL { get; set; } = Constants.DefaultTTL;
         public static bool DontFragment { get; set; } = false;
-        public static bool UseCustomBuffer { get; set; } = false;
-        public static byte[] Buffer { get; set; }
+        public static bool UseCustomPacketData { get; set; } = false;
+        public static int PacketSize { get; set; } = Constants.DefaultPacketSize;
+        public static string CustomPacketData { get; set; } = string.Empty;
+        public static byte[] PingData { get; private set; }
         public static PingOptions PingOptions { get; }
 
         // Popup notifications.
@@ -95,7 +97,7 @@ namespace vmPing.Configuration
         static ApplicationOptions()
         {
             // Set the default ping data.
-            Buffer = Encoding.ASCII.GetBytes(Constants.DefaultIcmpData);
+            PingData = CreatePingData(PacketSize);
 
             // Set the default ping options.
             PingOptions = new PingOptions(TTL, DontFragment);
@@ -105,6 +107,20 @@ namespace vmPing.Configuration
         {
             PingOptions.Ttl = TTL;
             PingOptions.DontFragment = DontFragment;
+            PingData = UseCustomPacketData
+                ? Encoding.ASCII.GetBytes(CustomPacketData)
+                : CreatePingData(PacketSize);
+        }
+
+        // Ping data of the given size, filled the same way as Windows ping.
+        public static byte[] CreatePingData(int size)
+        {
+            byte[] data = new byte[size];
+            for (int i = 0; i < size; i++)
+            {
+                data[i] = (byte)Constants.PingDataPattern[i % Constants.PingDataPattern.Length];
+            }
+            return data;
         }
     }
 }

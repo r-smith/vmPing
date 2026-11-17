@@ -36,7 +36,7 @@ namespace vmPing.Probes
                         PingReply reply = await ping.SendPingAsync(
                             hostNameOrAddress: Hostname,
                             timeout: ApplicationOptions.PingTimeout,
-                            buffer: ApplicationOptions.Buffer,
+                            buffer: ApplicationOptions.PingData,
                             options: ApplicationOptions.PingOptions);
 
                         if (cancellationToken.IsCancellationRequested)

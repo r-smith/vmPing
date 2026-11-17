@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
@@ -229,8 +228,9 @@ namespace vmPing.Configuration
                 Node("PingTimeout", ApplicationOptions.PingTimeout),
                 Node("TTL", ApplicationOptions.TTL),
                 Node("DontFragment", ApplicationOptions.DontFragment),
-                Node("UseCustomBuffer", ApplicationOptions.UseCustomBuffer),
-                Node("Buffer", Encoding.ASCII.GetString(ApplicationOptions.Buffer)),
+                Node("UseCustomPacketData", ApplicationOptions.UseCustomPacketData),
+                Node("PacketSize", ApplicationOptions.PacketSize),
+                Node("CustomPacketData", ApplicationOptions.CustomPacketData),
                 Node("AlertThreshold", ApplicationOptions.AlertThreshold),
                 new XComment(" LatencyDetectionMode: [Off, Dynamic, Fixed] "),
                 Node("LatencyDetectionMode", ApplicationOptions.LatencyDetectionMode),
@@ -392,8 +392,9 @@ namespace vmPing.Configuration
             ApplyInt("PingTimeout", 1000, 60000, v => ApplicationOptions.PingTimeout = v, options);
             ApplyInt("TTL", 1, 255, v => ApplicationOptions.TTL = v, options);
             ApplyBool("DontFragment", v => ApplicationOptions.DontFragment = v, options);
-            ApplyBool("UseCustomBuffer", v => ApplicationOptions.UseCustomBuffer = v, options);
-            ApplyString("Buffer", v => ApplicationOptions.Buffer = Encoding.ASCII.GetBytes(v), options);
+            ApplyBool("UseCustomPacketData", v => ApplicationOptions.UseCustomPacketData = v, options);
+            ApplyInt("PacketSize", 0, 65500, v => ApplicationOptions.PacketSize = v, options);
+            ApplyString("CustomPacketData", v => ApplicationOptions.CustomPacketData = v, options);
             ApplyInt("AlertThreshold", 1, 60, v => ApplicationOptions.AlertThreshold = v, options);
             ApplyEnum<LatencyMode>("LatencyDetectionMode", v => ApplicationOptions.LatencyDetectionMode = v, options);
             ApplyInt("HighLatencyMilliseconds", 1, 60000, v => ApplicationOptions.HighLatencyMilliseconds = v, options);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using vmPing.Configuration;
@@ -46,7 +45,7 @@ namespace vmPing.Probes
                         PingReply reply = await ping.SendPingAsync(
                             hostNameOrAddress: Hostname,
                             timeout: Timeout,
-                            buffer: Encoding.ASCII.GetBytes(Constants.DefaultIcmpData),
+                            buffer: ApplicationOptions.CreatePingData(Constants.DefaultPacketSize),
                             options: new PingOptions() { Ttl = ttl });
                         timer.Stop();
 

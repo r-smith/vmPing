@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.NetworkInformation;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -74,7 +73,7 @@ namespace vmPing.Views
         // Runs on a background thread until the token is cancelled.
         private void SendPings(string address, CancellationToken token)
         {
-            byte[] buffer = Encoding.ASCII.GetBytes(Constants.DefaultIcmpData);
+            byte[] buffer = ApplicationOptions.CreatePingData(Constants.DefaultPacketSize);
             PingOptions options = new PingOptions(Constants.DefaultTTL, true);
 
             try

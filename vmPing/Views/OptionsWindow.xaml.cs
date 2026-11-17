@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Media;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -188,16 +187,16 @@ namespace vmPing.Views
             TTL.Text = ApplicationOptions.TTL.ToString();
             DontFragment.IsChecked = ApplicationOptions.DontFragment;
 
-            if (ApplicationOptions.UseCustomBuffer)
+            if (ApplicationOptions.UseCustomPacketData)
             {
                 UseCustomPacketOption.IsChecked = true;
-                PacketData.Text = Encoding.ASCII.GetString(ApplicationOptions.Buffer);
             }
             else
             {
                 PacketSizeOption.IsChecked = true;
-                PacketSize.Text = ApplicationOptions.Buffer.Length.ToString();
             }
+            PacketSize.Text = ApplicationOptions.PacketSize.ToString();
+            PacketData.Text = ApplicationOptions.CustomPacketData;
 
             UpdateByteCount();
         }
@@ -474,6 +473,11 @@ namespace vmPing.Views
                 ShowError("Please enter a valid data size between 0 and 65,500.", AdvancedTab, PacketSize);
                 return false;
             }
+            if (UseCustomPacketOption.IsChecked == true && HasControlCharacters(PacketData.Text))
+            {
+                ShowError("Custom packet data can't contain control characters, other than tabs and new lines.", AdvancedTab, PacketData);
+                return false;
+            }
 
             return true;
         }
@@ -482,28 +486,33 @@ namespace vmPing.Views
         {
             ApplicationOptions.TTL = int.Parse(TTL.Text);
 
-            if (PacketSizeOption.IsChecked == true)
+            ApplicationOptions.UseCustomPacketData = UseCustomPacketOption.IsChecked == true;
+            if (ApplicationOptions.UseCustomPacketData)
             {
-                ApplicationOptions.Buffer = new byte[int.Parse(PacketSize.Text)];
-                ApplicationOptions.UseCustomBuffer = false;
-
-                // Fill buffer with default text.
-                if (ApplicationOptions.Buffer.Length >= 33)
-                {
-                    Buffer.BlockCopy(Encoding.ASCII.GetBytes(Constants.DefaultIcmpData), 0, ApplicationOptions.Buffer, 0, 33);
-                }
+                ApplicationOptions.CustomPacketData = PacketData.Text;
             }
             else
             {
-                // Use custom packet data.
-                ApplicationOptions.Buffer = Encoding.ASCII.GetBytes(PacketData.Text);
-                ApplicationOptions.UseCustomBuffer = true;
+                ApplicationOptions.PacketSize = int.Parse(PacketSize.Text);
             }
 
             ApplicationOptions.DontFragment = DontFragment.IsChecked == true;
 
-            // Update ping options (TTL / Don't fragment settings)
+            // Update ping options (TTL, don't fragment and ping data).
             ApplicationOptions.UpdatePingOptions();
+        }
+
+        // Control characters can't be saved to the config file. Tabs and new lines are fine.
+        private static bool HasControlCharacters(string text)
+        {
+            foreach (char c in text)
+            {
+                if (c < ' ' && c != '\t' && c != '\r' && c != '\n')
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private bool ValidateEmailAlertOptions()

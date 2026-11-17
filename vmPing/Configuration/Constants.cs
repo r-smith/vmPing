@@ -31,7 +31,9 @@ namespace vmPing.Configuration
         public const string DefaultStatisticsForegroundError = "#ffffff";
 
         // Default probe options.
-        public const string DefaultIcmpData = "https://github.com/R-Smith/vmPing";
+        public const int DefaultPacketSize = 32;
+        // Ping data repeats these letters, the same as Windows ping.
+        public const string PingDataPattern = "abcdefghijklmnopqrstuvw";
         public const int DefaultTimeout = 2000;       // In milliseconds.
         public const int DefaultTTL = 128;
         public const int DefaultInterval = 2000;      // In milliseconds.

@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -95,7 +94,7 @@ namespace vmPing.Views
                     }
                 }
 
-                byte[] buffer = Encoding.ASCII.GetBytes(Constants.DefaultIcmpData);
+                byte[] buffer = ApplicationOptions.CreatePingData(Constants.DefaultPacketSize);
                 Stopwatch stopwatch = new Stopwatch();
 
                 using (Ping ping = new Ping())

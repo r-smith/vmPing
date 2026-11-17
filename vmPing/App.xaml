@@ -9,6 +9,8 @@
 
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <!-- Theme colors. ThemeManager swaps this for Colors.Dark.xaml when the dark theme is on. -->
+                <ResourceDictionary Source="Themes/Colors.Light.xaml"/>
                 <ResourceDictionary Source="Themes/FocusVisualStyle.xaml"/>
                 <ResourceDictionary Source="Themes/Icons.xaml"/>
                 <ResourceDictionary Source="Themes/ValueConverters.xaml"/>

@@ -2,6 +2,8 @@
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media;
+using vmPing.Configuration;
+using vmPing.Services;
 
 namespace vmPing
 {
@@ -21,6 +23,9 @@ namespace vmPing
                   typeof(FrameworkElement),
                   new FrameworkPropertyMetadata(
                       XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
+
+            // Apply the light or dark colors, following the Windows setting.
+            ThemeManager.Initialize(ThemeMode.System);
         }
 
         // DEBUG: Use this for testing alternate locales.

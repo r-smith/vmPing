@@ -1,0 +1,54 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Light theme colors. Colors.Dark.xaml has the same keys. -->
+
+    <!-- Windows and panels -->
+    <SolidColorBrush x:Key="Theme.Window.Background" Color="#ffffff"/>
+    <SolidColorBrush x:Key="Theme.TitleBar.Background" Color="#f6f8fa"/>
+    <SolidColorBrush x:Key="Theme.Panel.Background" Color="#f6f8fa"/>
+    <SolidColorBrush x:Key="Theme.Panel.Border" Color="#d0d7de"/>
+
+    <!-- Text -->
+    <SolidColorBrush x:Key="Theme.Text" Color="#1f2328"/>
+    <SolidColorBrush x:Key="Theme.Text.Secondary" Color="#59636e"/>
+    <SolidColorBrush x:Key="Theme.Text.Disabled" Color="#8c959f"/>
+
+    <!-- Controls: buttons, text boxes, drop-down lists -->
+    <SolidColorBrush x:Key="Theme.Control.Background" Color="#ffffff"/>
+    <SolidColorBrush x:Key="Theme.Control.Border" Color="#818b98"/>
+    <SolidColorBrush x:Key="Theme.Control.Hover.Background" Color="#f3f5f7"/>
+    <SolidColorBrush x:Key="Theme.Control.Hover.Border" Color="#6e7781"/>
+    <SolidColorBrush x:Key="Theme.Control.Pressed.Background" Color="#e6e9ed"/>
+    <SolidColorBrush x:Key="Theme.Control.Disabled.Background" Color="#f6f8fa"/>
+    <SolidColorBrush x:Key="Theme.Control.Disabled.Border" Color="#d0d7de"/>
+
+    <!-- Default button (OK) -->
+    <SolidColorBrush x:Key="Theme.Button.Default.Background" Color="#0969da"/>
+    <SolidColorBrush x:Key="Theme.Button.Default.Foreground" Color="#ffffff"/>
+    <SolidColorBrush x:Key="Theme.Button.Default.Hover.Background" Color="#0860ca"/>
+    <SolidColorBrush x:Key="Theme.Button.Default.Pressed.Background" Color="#0757ba"/>
+
+    <!-- Accent: check marks, keyboard focus, selected tab -->
+    <SolidColorBrush x:Key="Theme.Accent" Color="#0969da"/>
+    <SolidColorBrush x:Key="Theme.Glyph.OnAccent" Color="#ffffff"/>
+    <SolidColorBrush x:Key="Theme.Focus.Ring" Color="#0969da"/>
+    <SolidColorBrush x:Key="Theme.Focus.Glow" Color="#300969da"/>
+
+    <!-- List items and menu items -->
+    <SolidColorBrush x:Key="Theme.Item.Hover.Background" Color="#e5f3ff"/>
+    <SolidColorBrush x:Key="Theme.Item.Selected.Background" Color="#cce8ff"/>
+    <SolidColorBrush x:Key="Theme.Item.Selected.Border" Color="#99d1ff"/>
+
+    <!-- Menus, drop-downs and tooltips -->
+    <SolidColorBrush x:Key="Theme.Popup.Background" Color="#ffffff"/>
+    <SolidColorBrush x:Key="Theme.Popup.Border" Color="#d0d7de"/>
+
+    <!-- Small splashes of color: icons, status text -->
+    <SolidColorBrush x:Key="Theme.Splash.Cyan" Color="#0e7490"/>
+    <SolidColorBrush x:Key="Theme.Splash.Magenta" Color="#a21caf"/>
+    <SolidColorBrush x:Key="Theme.Splash.Green" Color="#1a7f37"/>
+    <SolidColorBrush x:Key="Theme.Splash.Yellow" Color="#9a6700"/>
+    <SolidColorBrush x:Key="Theme.Splash.Orange" Color="#bc4c00"/>
+    <SolidColorBrush x:Key="Theme.Splash.Red" Color="#cf222e"/>
+    <SolidColorBrush x:Key="Theme.Splash.Teal" Color="#0f766e"/>
+</ResourceDictionary>

@@ -7,7 +7,7 @@
         Width="450"
         MinHeight="200"
         MinWidth="300"
-        Background="White"
+        Background="{DynamicResource Theme.Window.Background}"
         Closed="Window_Closed">
     <!-- The window title is the alias, else the hostname, else vmPing. Later triggers win. -->
     <Window.Style>
@@ -31,7 +31,7 @@
     </Window.Style>
 
     <!-- Items Control -->
-    <Border BorderBrush="#111" BorderThickness="0,1,0,0" Margin="0,0,0,0" CornerRadius="0"
+    <Border BorderBrush="{DynamicResource Theme.Probe.Divider}" BorderThickness="0,1,0,0" Margin="0,0,0,0" CornerRadius="0"
             Background="{Binding Status, Converter={StaticResource ProbeStatusToBackgroundBrushConverter}}">
         <Grid>
             <Grid.RowDefinitions>
@@ -44,7 +44,7 @@
                 
                 <!-- Ping statistics -->
                 <DockPanel DockPanel.Dock="Bottom"
-                           Background="Transparent">
+                           Background="{DynamicResource Theme.Probe.StatusBar.Background}">
                     <DockPanel.Style>
                         <Style TargetType="{x:Type DockPanel}">
                             <!-- Statistics are show only if: ProbeType = Ping and Statistics.Sent != 0 -->
@@ -61,55 +61,57 @@
                     </DockPanel.Style>
                     <DockPanel.Resources>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="DockPanel.Dock" Value="Left"/>
                             <Setter Property="FontFamily" Value="Segoe UI"/>
                             <Setter Property="FontSize" Value="12"/>
                             <Setter Property="FontWeight" Value="Bold"/>
                             <Setter Property="Foreground" Value="{Binding Status, Converter={StaticResource ProbeStatusToStatisticsBrushConverter}}"/>
+                            <!-- Numbers flash when they change -->
+                            <Style.Triggers>
+                                <EventTrigger RoutedEvent="Binding.TargetUpdated">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                             AutoReverse="True"
+                                                             From="1.0" To="0.75" Duration="0:0:0.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Style.Triggers>
                         </Style>
                     </DockPanel.Resources>
-                    <TextBlock Text="Sent: " Opacity="0.8" Padding="6,0,0,3" />
-                    <TextBlock Text="{Binding Statistics.Sent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}">
-                        <TextBlock.Triggers>
-                            <EventTrigger RoutedEvent="Binding.TargetUpdated">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                         AutoReverse="True"
-                                                         From="1.0" To="0.75" Duration="0:0:0.3"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </TextBlock.Triggers>
-                    </TextBlock>
-                    <TextBlock Text="  Received: " Opacity="0.8"/>
-                    <TextBlock Text="{Binding Statistics.Received, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}">
-                        <TextBlock.Triggers>
-                            <EventTrigger RoutedEvent="Binding.TargetUpdated">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                         AutoReverse="True"
-                                                         From="1.0" To="0.75" Duration="0:0:0.3"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </TextBlock.Triggers>
-                    </TextBlock>
-                    <TextBlock Text="  Lost: " Opacity="0.8"/>
-                    <TextBlock Text="{Binding Statistics.Lost, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}">
-                        <TextBlock.Triggers>
-                            <EventTrigger RoutedEvent="Binding.TargetUpdated">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                         AutoReverse="True"
-                                                         From="1.0" To="0.75" Duration="0:0:0.3"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </TextBlock.Triggers>
-                    </TextBlock>
+                    <!-- Full line when it fits, else just the sent and received counts -->
+                    <c:FirstFitPanel Margin="6,2,6,3">
+                        <!-- Full: the gaps between the counts shrink from 16 to 6 before switching -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="100*" MinWidth="6" MaxWidth="16"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="100*" MinWidth="6" MaxWidth="16"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                <TextBlock Text="Sent: " Opacity="0.8"/>
+                                <TextBlock Text="{Binding Statistics.Sent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                <TextBlock Text="Received: " Opacity="0.8"/>
+                                <TextBlock Text="{Binding Statistics.Received, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="4" Orientation="Horizontal">
+                                <TextBlock Text="Lost: " Opacity="0.8"/>
+                                <TextBlock Text="{Binding Statistics.Lost, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"/>
+                            </StackPanel>
+                        </Grid>
+                        <!-- Compact: arrows for sent and received, no lost count -->
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#x2191;" Opacity="0.8" Margin="0,0,2,0"/>
+                            <TextBlock Text="{Binding Statistics.Sent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"/>
+                            <TextBlock Text="&#x2193;" Opacity="0.8" Margin="8,0,2,0"/>
+                            <TextBlock Text="{Binding Statistics.Received, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"/>
+                        </StackPanel>
+                    </c:FirstFitPanel>
                 </DockPanel>
 
                 <!-- Ping history -->
@@ -118,7 +120,7 @@
                                   Foreground="{Binding Status, Converter={StaticResource ProbeStatusToForegroundBrushConverter}}"
                                   FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}">
                     <c:ProbeOutputBox.Resources>
-                        <Style TargetType="{x:Type ScrollBar}">
+                        <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ScrollBarStyle.Probe}">
                             <Setter Property="Opacity" Value="0.4"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">

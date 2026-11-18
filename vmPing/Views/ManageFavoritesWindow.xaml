@@ -9,7 +9,7 @@
         Width="740"
         MinWidth="620"
         WindowStartupLocation="CenterOwner"
-        Background="#f0f0f0"
+        Background="{DynamicResource Theme.Window.Background}"
         ResizeMode="CanResize"
         ShowInTaskbar="False"
         PreviewKeyDown="Window_PreviewKeyDown"
@@ -90,7 +90,7 @@
                                                 </ContextMenu>
                                             </Border.ContextMenu>
                                             <TextBlock Text="{Binding Name}"
-                                                       Foreground="#404040"
+                                                       Foreground="{DynamicResource Theme.Text.Secondary}"
                                                        FontWeight="SemiBold"
                                                        Margin="6,6,2,2"
                                                        TextTrimming="CharacterEllipsis"/>
@@ -126,7 +126,7 @@
                     <!-- Shown when there are no favorites -->
                     <TextBlock x:Name="EmptyListText"
                                Text="No favorites yet."
-                               Foreground="#707070"
+                               Foreground="{DynamicResource Theme.Text.Secondary}"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                IsHitTestVisible="False"/>
@@ -153,8 +153,8 @@
 
             <!-- Editor -->
             <Border Grid.Column="2"
-                    Background="#fcfcfc"
-                    BorderBrush="#abadb3"
+                    Background="{DynamicResource Theme.Panel.Background}"
+                    BorderBrush="{DynamicResource Theme.Panel.Border}"
                     BorderThickness="1">
                 <Grid>
                     <Grid x:Name="Editor" Margin="10">
@@ -177,7 +177,7 @@
                             </Grid.RowDefinitions>
                             <StackPanel>
                                 <TextBlock Text="Name"
-                                           Foreground="#404040"
+                                           Foreground="{DynamicResource Theme.Text}"
                                            FontSize="14"/>
                                 <TextBox x:Name="FavoriteName"
                                          Margin="0,4,0,0"
@@ -186,7 +186,7 @@
                             </StackPanel>
                             <StackPanel Grid.Column="1" Width="80" Margin="20,0,0,0">
                                 <TextBlock Text="Columns"
-                                           Foreground="#404040"
+                                           Foreground="{DynamicResource Theme.Text}"
                                            FontSize="14"/>
                                 <TextBox x:Name="FavoriteColumns"
                                          Margin="0,4,0,0"
@@ -196,7 +196,7 @@
                             </StackPanel>
                             <StackPanel Grid.Row="1" Margin="0,10,0,0">
                                 <TextBlock Text="Group"
-                                           Foreground="#404040"
+                                           Foreground="{DynamicResource Theme.Text}"
                                            FontSize="14"/>
                                 <!-- Pick an existing group, or type a new one. Leave it empty for no group. -->
                                 <ComboBox x:Name="FavoriteGroup"
@@ -210,7 +210,7 @@
                         <!-- Hosts -->
                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,14,0,0">
                             <TextBlock Text="Hosts"
-                                       Foreground="#404040"
+                                       Foreground="{DynamicResource Theme.Text}"
                                        FontSize="14"
                                        VerticalAlignment="Center"/>
                             <Label Style="{StaticResource LabelToolTip}" MaxWidth="380">
@@ -240,7 +240,7 @@
                         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
                             <TextBlock x:Name="UnsavedText"
                                        Text="Unsaved changes"
-                                       Foreground="#707070"
+                                       Foreground="{DynamicResource Theme.Text.Secondary}"
                                        VerticalAlignment="Center"
                                        Margin="0,0,9,0"/>
                             <Button x:Name="RevertButton"
@@ -260,7 +260,7 @@
                     <!-- Shown when no favorite is selected -->
                     <TextBlock x:Name="NoSelectionText"
                                Text="Select a favorite to edit it, or click New to create one."
-                               Foreground="#707070"
+                               Foreground="{DynamicResource Theme.Text.Secondary}"
                                TextWrapping="Wrap"
                                TextAlignment="Center"
                                HorizontalAlignment="Center"
@@ -275,14 +275,14 @@
                Placement="Absolute"
                AllowsTransparency="True"
                IsHitTestVisible="False">
-            <Border Background="#cce8ff"
-                    BorderBrush="#99d1ff"
+            <Border Background="{DynamicResource Theme.Item.Selected.Background}"
+                    BorderBrush="{DynamicResource Theme.Item.Selected.Border}"
                     BorderThickness="1"
                     Padding="6,2"
                     Opacity="0.85">
                 <TextBlock x:Name="DragLabel"
                            FontSize="14"
-                           Foreground="#111"/>
+                           Foreground="{DynamicResource Theme.Text}"/>
             </Border>
         </Popup>
 

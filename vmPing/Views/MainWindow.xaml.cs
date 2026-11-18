@@ -144,6 +144,8 @@ namespace vmPing.Views
                     break;
             }
 
+            RefreshProbeSpacing();
+
             // Set always on top state.
             Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
             if (Probe.StatusHistoryWindow != null && Probe.StatusHistoryWindow.IsLoaded)
@@ -161,6 +163,17 @@ namespace vmPing.Views
                     probe.IsolatedWindow.Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
                 }
             }
+        }
+
+        private void RefreshProbeSpacing()
+        {
+            bool isSpaced = ApplicationOptions.IsProbeSpacingEnabled;
+            Resources["Probes.Padding"] = new Thickness(isSpaced ? 2 : 0);
+            Resources["Probes.Margin"] = isSpaced ? new Thickness(0) : new Thickness(0, 0, -1, -1);
+            Resources["Probe.Margin"] = isSpaced ? new Thickness(2) : new Thickness(0, 0, 1, 1);
+            Resources["Probe.CornerRadius"] = new CornerRadius(isSpaced ? 4 : 0);
+            Resources["Probe.TopCornerRadius"] = isSpaced ? new CornerRadius(4, 4, 0, 0) : new CornerRadius(0);
+            Resources["Probe.BottomCornerRadius"] = isSpaced ? new CornerRadius(0, 0, 4, 4) : new CornerRadius(0);
         }
 
         private void RefreshColumnCount()

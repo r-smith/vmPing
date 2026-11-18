@@ -73,6 +73,7 @@ namespace vmPing.Configuration
 
         // Theme.
         public static ThemeMode Theme { get; set; } = ThemeMode.System;
+        public static bool IsProbeSpacingEnabled { get; set; } = true;
 
         // Probe colors, one set for each theme.
         public static ProbeColors LightProbeColors { get; set; } = ProbeColors.CreateLightDefaults();

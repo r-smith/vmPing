@@ -219,6 +219,7 @@ namespace vmPing.Views
             ThemeSystemOption.IsChecked = ApplicationOptions.Theme == ThemeMode.System;
             ThemeLightOption.IsChecked = ApplicationOptions.Theme == ThemeMode.Light;
             ThemeDarkOption.IsChecked = ApplicationOptions.Theme == ThemeMode.Dark;
+            IsProbeSpacingEnabled.IsChecked = ApplicationOptions.IsProbeSpacingEnabled;
 
             _isEditingDarkColors = ThemeManager.IsDark;
             _probeColors = ThemeManager.ProbeColors;
@@ -707,6 +708,8 @@ namespace vmPing.Views
                 ApplicationOptions.Theme = ThemeMode.System;
             }
             ThemeManager.SetMode(ApplicationOptions.Theme);
+
+            ApplicationOptions.IsProbeSpacingEnabled = IsProbeSpacingEnabled.IsChecked == true;
 
             _probeColors.BackgroundInactive = ProbeBackgroundInactive.Text;
             _probeColors.BackgroundUp = ProbeBackgroundUp.Text;

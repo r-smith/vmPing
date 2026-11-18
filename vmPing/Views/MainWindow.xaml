@@ -22,6 +22,14 @@
         <!-- Override default context menu animation: set to no animation -->
         <PopupAnimation x:Key="{x:Static SystemParameters.MenuPopupAnimationKey}">None</PopupAnimation>
 
+        <!-- Probe spacing. RefreshProbeSpacing sets these from the "Space between probes" option. -->
+        <Thickness x:Key="Probes.Padding">2</Thickness>
+        <Thickness x:Key="Probes.Margin">0</Thickness>
+        <Thickness x:Key="Probe.Margin">2</Thickness>
+        <CornerRadius x:Key="Probe.CornerRadius">4</CornerRadius>
+        <CornerRadius x:Key="Probe.TopCornerRadius">4,4,0,0</CornerRadius>
+        <CornerRadius x:Key="Probe.BottomCornerRadius">0,0,4,4</CornerRadius>
+
         <!-- Probe title bar buttons. The button's content is the icon. -->
         <Style x:Key="ProbeTitleButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Padding" Value="6,3"/>
@@ -125,7 +133,7 @@
     </Window.Resources>
 
     <!-- Root DockPanel -->
-    <DockPanel Background="#aaa">
+    <DockPanel>
         <!-- Menu bar -->
         <Menu DockPanel.Dock="Top"
               FontStretch="Normal">
@@ -337,10 +345,11 @@
         </Popup>
 
         <!-- Items Control -->
-        <ItemsControl Name="ProbeItemsControl" UseLayoutRounding="True" IsTabStop="False" Focusable="False" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource Theme.Panel.Border}" Margin="0,0,-2,-2">
+        <ItemsControl Name="ProbeItemsControl" UseLayoutRounding="True" IsTabStop="False" Focusable="False" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource Theme.Panel.Border}" Padding="{DynamicResource Probes.Padding}" Margin="{DynamicResource Probes.Margin}"
+                      Background="Transparent" AllowDrop="True" DragOver="Probe_DragOver" Drop="Probe_Drop">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="#111" BorderThickness="0,0,2,2" Margin="0" CornerRadius="0">
+                    <Border Margin="{DynamicResource Probe.Margin}" CornerRadius="{DynamicResource Probe.CornerRadius}">
                         <!-- Probe status color -->
                         <Border.Style>
                             <Style TargetType="{x:Type Border}">
@@ -373,11 +382,12 @@
                                     </Grid.ColumnDefinitions>
 
                                     <!-- Hover band -->
-                                    <Rectangle Grid.ColumnSpan="3"
-                                               Fill="{DynamicResource Theme.Probe.TitleBar.Background}"
-                                               IsHitTestVisible="False">
-                                        <Rectangle.Style>
-                                            <Style TargetType="{x:Type Rectangle}">
+                                    <Border Grid.ColumnSpan="3"
+                                            Background="{DynamicResource Theme.Probe.TitleBar.Background}"
+                                            CornerRadius="{DynamicResource Probe.TopCornerRadius}"
+                                            IsHitTestVisible="False">
+                                        <Border.Style>
+                                            <Style TargetType="{x:Type Border}">
                                                 <Setter Property="Visibility" Value="Hidden"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding ElementName=ProbeGrid, Path=IsMouseOver}" Value="True">
@@ -385,8 +395,8 @@
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
-                                        </Rectangle.Style>
-                                    </Rectangle>
+                                        </Border.Style>
+                                    </Border>
 
                                     <!-- Grip icon. Clicks go through to the drag area. -->
                                     <Border Grid.Column="0"
@@ -593,7 +603,7 @@
 
                                 <!-- Border to set background color and top border for this section.
                                      Gray while the probe runs, since the hostname can't be edited then. -->
-                                <Border Grid.ColumnSpan="4" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource Theme.Panel.Border}">
+                                <Border Grid.ColumnSpan="4" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource Theme.Panel.Border}" CornerRadius="{DynamicResource Probe.BottomCornerRadius}">
                                     <Border.Style>
                                         <Style TargetType="{x:Type Border}">
                                             <Setter Property="Background" Value="{DynamicResource Theme.Control.Background}"/>

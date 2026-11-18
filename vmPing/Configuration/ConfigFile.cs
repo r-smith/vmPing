@@ -280,7 +280,8 @@ namespace vmPing.Configuration
                 Node("IsExitToTrayEnabled", ApplicationOptions.IsExitToTrayEnabled),
                 Node("IsAlwaysShowTrayIconEnabled", ApplicationOptions.IsAlwaysShowTrayIconEnabled),
                 new XComment(" Theme: [System, Light, Dark] "),
-                Node("Theme", ApplicationOptions.Theme)
+                Node("Theme", ApplicationOptions.Theme),
+                Node("IsProbeSpacingEnabled", ApplicationOptions.IsProbeSpacingEnabled)
             );
         }
 
@@ -463,6 +464,7 @@ namespace vmPing.Configuration
             ApplyBool("IsExitToTrayEnabled", v => ApplicationOptions.IsExitToTrayEnabled = v, options);
             ApplyBool("IsAlwaysShowTrayIconEnabled", v => ApplicationOptions.IsAlwaysShowTrayIconEnabled = v, options);
             ApplyEnum<ThemeMode>("Theme", v => ApplicationOptions.Theme = v, options);
+            ApplyBool("IsProbeSpacingEnabled", v => ApplicationOptions.IsProbeSpacingEnabled = v, options);
 
             // Loaded last, since a value that can't be decrypted stops the load with an error.
             if (options.TryGetValue("EmailUser", out string emailUser) && emailUser.Length > 0)

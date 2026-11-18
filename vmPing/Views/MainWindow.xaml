@@ -34,7 +34,7 @@
                         <Grid Background="Transparent">
                             <!-- Hover highlight -->
                             <Border x:Name="highlight"
-                                    Background="{DynamicResource Theme.Probe.TitleBar.Icon}"
+                                    Background="White"
                                     CornerRadius="3"
                                     Opacity="0"/>
                             <!-- Icon -->
@@ -377,7 +377,7 @@
 
                                     <!-- Hover band -->
                                     <Rectangle Grid.ColumnSpan="3"
-                                               Fill="{DynamicResource Theme.Probe.TitleBar.Background}"
+                                               Fill="#73000000"
                                                IsHitTestVisible="False">
                                         <Rectangle.Style>
                                             <Style TargetType="{x:Type Rectangle}">
@@ -406,7 +406,7 @@
                                             </Style>
                                         </Border.Style>
                                         <Path Data="M0,0 h2 v2 h-2 z M4,0 h2 v2 h-2 z M0,4 h2 v2 h-2 z M4,4 h2 v2 h-2 z M0,8 h2 v2 h-2 z M4,8 h2 v2 h-2 z"
-                                              Fill="{DynamicResource Theme.Probe.TitleBar.Icon}"
+                                              Fill="White"
                                               Opacity="0.7"
                                               VerticalAlignment="Center"/>
                                     </Border>
@@ -433,7 +433,7 @@
 
                                         <!-- Button: Edit alias -->
                                         <Button Style="{StaticResource ProbeTitleButtonStyle}"
-                                                Content="{DynamicResource icon.pencil}"
+                                                Content="{DynamicResource icon.pencil-white}"
                                                 Margin="0,0,1,0"
                                                 ToolTip="{x:Static resource:Strings.Tooltip_EditAlias}"
                                                 IsEnabled="{Binding ElementName=Hostname, Path=Text, Converter={StaticResource StringLengthToBoolConverter}}"
@@ -441,14 +441,14 @@
 
                                         <!-- Button: Isolated view -->
                                         <Button Style="{StaticResource ProbeTitleButtonStyle}"
-                                                Content="{DynamicResource icon.window-restore}"
+                                                Content="{DynamicResource icon.window-restore-white}"
                                                 Margin="0,0,1,0"
                                                 ToolTip="{x:Static resource:Strings.Tooltip_IsolatedView}"
                                                 Click="IsolatedView_Click"/>
 
                                         <!-- Button: Remove probe -->
                                         <Button Style="{StaticResource ProbeTitleButtonStyle}"
-                                                Content="{DynamicResource icon.window-close}"
+                                                Content="{DynamicResource icon.window-close-white}"
                                                 ToolTip="{x:Static resource:Strings.Tooltip_Close}"
                                                 Click="RemoveProbe_Click"/>
                                     </StackPanel>

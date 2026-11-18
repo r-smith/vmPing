@@ -2,14 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- Favorites ListBox style -->
-    <SolidColorBrush x:Key="ListBox.Static.Background" Color="#f5f5f5"/>
-    <SolidColorBrush x:Key="ListBox.Static.Foreground" Color="#111"/>
-    <SolidColorBrush x:Key="ListBox.Static.Border" Color="#abadb3"/>
     <Style x:Key="FavoritesListBox" TargetType="{x:Type ListBox}">
-        <Setter Property="Background" Value="{StaticResource ListBox.Static.Background}"/>
-        <Setter Property="Foreground" Value="{StaticResource ListBox.Static.Foreground}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource ListBox.Static.Border}"/>
+        <Setter Property="Background" Value="{DynamicResource Theme.Control.Background}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Theme.Control.Border}"/>
         <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="2"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="SelectionMode" Value="Single"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
@@ -25,6 +23,7 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="{TemplateBinding Background}"
+                            CornerRadius="4"
                             Padding="0"
                             SnapsToDevicePixels="true">
                         <ScrollViewer Focusable="false" Padding="{TemplateBinding Padding}">
@@ -47,37 +46,36 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    <!-- Favorites ListBox items style-->
-    <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#e5f3ff"/>
-    <SolidColorBrush x:Key="Item.MouseOver.Border" Color="#e5f3ff"/>
-    <SolidColorBrush x:Key="Item.Selected.Background" Color="#cce8ff"/>
-    <SolidColorBrush x:Key="Item.Selected.Foreground" Color="#111"/>
-    <SolidColorBrush x:Key="Item.Selected.Border" Color="#99d1ff"/>
+
+    <!-- Favorites ListBox items style. Hover and selection use the same colors as other lists. -->
     <Style x:Key="FavoritesListBoxItemsStyle" TargetType="{x:Type ListBoxItem}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <Setter Property="Padding" Value="4,1"/>
+        <Setter Property="Padding" Value="3,1"/>
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0,1"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual.Item}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                    <Border x:Name="Bd"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}"
+                            CornerRadius="3"
+                            SnapsToDevicePixels="true">
                         <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.MouseOver.Background}"/>
-                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.MouseOver.Border}"/>
+                            <Setter Property="Background" TargetName="Bd" Value="{DynamicResource Theme.Item.Hover.Background}"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.Selected.Background}"/>
-                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.Selected.Border}"/>
-                            <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{StaticResource Item.Selected.Foreground}"/>
+                            <Setter Property="Background" TargetName="Bd" Value="{DynamicResource Theme.Item.Selected.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{DynamicResource Theme.Item.Selected.Border}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -7,7 +7,7 @@
         Height="250"
         Width="400"
         ResizeMode="CanMinimize"
-        Background="#002b36"
+        Background="{DynamicResource Theme.Window.Background}"
         Closed="Window_Closed">
 
     <Window.Resources>
@@ -15,219 +15,233 @@
         <converters:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="Flood Host" TrueValue="Stop Flood"/>
         <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-        
 
-        <!-- Style for hostname textbox -->
-        <ControlTemplate x:Key="TextBoxBaseControlTemplate" TargetType="{x:Type TextBoxBase}">
-            <Border Background="{TemplateBinding Background}"
-                    x:Name="Bd"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    BorderBrush="{TemplateBinding BorderBrush}">
-                <ScrollViewer x:Name="PART_ContentHost" />
-            </Border>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Background" Value="#EEEEFF" />
-                    <Setter Property="Foreground" Value="#333388" />
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-    </Window.Resources>
-    <Window.Style>
-        <Style TargetType="Window">
+        <!-- Hostname textbox -->
+        <Style x:Key="HostnameTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding IsActive}" Value="True">
-                    <DataTrigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <ColorAnimation From="#002b36" To="#201b26" Storyboard.TargetProperty="(Window.Background).(SolidColorBrush.Color)"
-                                    RepeatBehavior="Forever" AutoReverse="True" Duration="0:0:.6" />
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.EnterActions>
-                    <DataTrigger.ExitActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <ColorAnimation From="#002b36" To="#002b36" Storyboard.TargetProperty="(Window.Background).(SolidColorBrush.Color)"
-                                    Duration="0:0:0.0" FillBehavior="HoldEnd" />
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.ExitActions>
-                </DataTrigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+                </Trigger>
             </Style.Triggers>
         </Style>
-    </Window.Style>
+    </Window.Resources>
 
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        
-        
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <!-- Hostname textbox -->
-            <TextBox Name="Hostname"
-                     FontSize="18" FontWeight="Bold"
-                     BorderThickness="2,2,0,2"
-                     BorderBrush="Black"
-                     VerticalContentAlignment="Center"
-                     Template="{StaticResource TextBoxBaseControlTemplate}"
-                     IsEnabled="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}"
-                     />
-
-            <!-- Flood button -->
-            <Button Name="FloodButton"
-                    Click="FloodButton_Click"
-                    Grid.Column="1"
-                    IsDefault="True"
-                    FontSize="14"
-                    Padding="0,6"
-                    Width="125"
-                    Background="#268bd2">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border Name="FloodButtonBorder" BorderThickness="2" BorderBrush="Black"
-                                Background="{TemplateBinding Background}"
-                                Padding="{TemplateBinding Padding}">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Image Margin="0,0,8,0" Width="16" Height="16">
-                                    <Image.Style>
-                                        <Style TargetType="{x:Type Image}">
-                                            <Setter Property="Source" Value="{DynamicResource icon.stop-circle}"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsActive}" Value="False">
-                                                    <Setter Property="Source" Value="{DynamicResource icon.play}"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Image.Style>
-                                </Image>
-                                <TextBlock Text="{Binding IsActive, Converter={StaticResource BoolToStringConverter}}" />
-                            </StackPanel>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="FloodButtonBorder" Property="Background" Value="#167bc2" />
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="FloodButtonBorder" Property="Background" Value="#066ba2" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-        </Grid>
-
-
-        <Grid Grid.Row="1" VerticalAlignment="Center">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="Packets Sent:"
-                           HorizontalAlignment="Right" VerticalAlignment="Center"
-                           Margin="0,0,15,0"
-                           Foreground="#93a1a1"
-                           FontSize="16" FontWeight="Bold" />
-                <TextBlock Grid.Column="1" Name="PacketsSentText"
-                           Text="{Binding Path=PacketsSent, StringFormat='#,0'}"
-                           Foreground="#859900"
-                           FontSize="22" />
-            </Grid>
-
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="Packets Received:"
-                           HorizontalAlignment="Right" VerticalAlignment="Center"
-                           Margin="0,0,15,0"
-                           Foreground="#93a1a1"
-                           FontSize="16" FontWeight="Bold" />
-                <TextBlock Grid.Column="1" Name="PacketsReceivedText"
-                           Text="{Binding Path=PacketsReceived, StringFormat='#,0'}"
-                           Foreground="#6c71c4"
-                           FontSize="22" />
-            </Grid>
-
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="Packets Lost:"
-                           HorizontalAlignment="Right" VerticalAlignment="Center"
-                           Margin="0,0,15,0"
-                           Foreground="#93a1a1"
-                           FontSize="16" FontWeight="Bold" />
-                <TextBlock Grid.Column="1" Name="PacketsLostText"
-                           Text="{Binding Path=PacketsLost, StringFormat='#,0'}"
-                           Foreground="#dc322f"
-                           FontSize="22" />
-            </Grid>
-        </Grid>
-
-        <TextBlock Grid.Row="2" Text="Flood in progress..."
-                   Name="StatusText"
-                   Margin="0,7" HorizontalAlignment="Center"
-                   Foreground="#657b83"
-                   FontSize="13"
-                   Visibility="{Binding IsActive, Converter={StaticResource BooleanToHiddenVisibilityConverter}}">
-            <TextBlock.Style>
-                <Style TargetType="TextBlock">
+        <!-- Running: pulse -->
+        <Border Background="{DynamicResource Theme.Splash.Red}"
+                IsHitTestVisible="False"
+                Opacity="0">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsActive}" Value="True">
                             <DataTrigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard RepeatBehavior="Forever" AutoReverse="True" >
-                                        <DoubleAnimation Storyboard.TargetProperty="(TextBlock.Opacity)"
-                                                         From="1" To=".2"
-                                                         BeginTime="0:0:1.25"
-                                                         Duration="0:0:0.3" />
+                                <BeginStoryboard Name="FloodPulse">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                         From="0.06" To="0.22"
+                                                         Duration="0:0:0.6"
+                                                         AutoReverse="True"
+                                                         RepeatBehavior="Forever"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </DataTrigger.EnterActions>
                             <DataTrigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="(TextBlock.Opacity)"
-                                                         From="1" To="1" Duration="0:0:0.0" FillBehavior="HoldEnd" />
-                                    </Storyboard>
-                                </BeginStoryboard>
+                                <StopStoryboard BeginStoryboardName="FloodPulse"/>
                             </DataTrigger.ExitActions>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </TextBlock.Style>
-        </TextBlock>
-        
-        <Label Grid.Row="1" Grid.RowSpan="2"
-               VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-               Name="Information"
-               Foreground="#657b83" Background="#002b36"
-               Padding="40,0"
-               FontSize="14">
-            <TextBlock TextWrapping="Wrap" TextAlignment="Justify">
-                This tool will send a continuous stream of ICMP ping packets to the destination host.
-                It typically will not generate any more than 32 kilobytes per second of network traffic.
+            </Border.Style>
+        </Border>
+
+        <!-- Running: red frame -->
+        <Border BorderBrush="{DynamicResource Theme.Splash.Red}"
+                IsHitTestVisible="False">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsActive}" Value="True">
+                            <Setter Property="BorderThickness" Value="3"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
+
+        <Grid Margin="12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Hostname and button -->
+            <Grid Grid.Row="0" Margin="0,0,0,8" Panel.ZIndex="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Hostname textbox -->
+                <TextBox Name="Hostname"
+                         FontSize="18" FontWeight="Bold"
+                         Style="{StaticResource HostnameTextBoxStyle}"
+                         IsEnabled="{Binding IsActive, Converter={StaticResource InverseBooleanConverter}}"/>
+
+                <!-- Flood button -->
+                <Button Name="FloodButton"
+                        Click="FloodButton_Click"
+                        Grid.Column="1"
+                        IsDefault="True"
+                        FontSize="14"
+                        Padding="0,6"
+                        Margin="10,0,0,0"
+                        Width="125"
+                        Foreground="{DynamicResource Theme.Text}"
+                        FocusVisualStyle="{StaticResource FocusVisual}"
+                        Background="{DynamicResource Theme.Control.Background}">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Name="FloodButtonBorder" BorderThickness="1" BorderBrush="{DynamicResource Theme.Control.Border}"
+                                    CornerRadius="4"
+                                    Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Image Margin="0,0,8,0" Width="16" Height="16">
+                                        <Image.Style>
+                                            <Style TargetType="{x:Type Image}">
+                                                <Setter Property="Source" Value="{DynamicResource icon.stop-circle}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                        <Setter Property="Source" Value="{DynamicResource icon.play}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                    <TextBlock Text="{Binding IsActive, Converter={StaticResource BoolToStringConverter}}" />
+                                </StackPanel>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="FloodButtonBorder" Property="Background" Value="{DynamicResource Theme.Control.Hover.Background}" />
+                                    <Setter TargetName="FloodButtonBorder" Property="BorderBrush" Value="{DynamicResource Theme.Control.Hover.Border}" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="FloodButtonBorder" Property="Background" Value="{DynamicResource Theme.Control.Pressed.Background}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+
+
+            <Grid Grid.Row="1" VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Packets Sent:"
+                               HorizontalAlignment="Right" VerticalAlignment="Center"
+                               Margin="0,0,15,0"
+                               Foreground="{DynamicResource Theme.Text.Secondary}"
+                               FontSize="16" FontWeight="Bold" />
+                    <TextBlock Grid.Column="1" Name="PacketsSentText"
+                               Text="{Binding Path=PacketsSent, StringFormat='#,0'}"
+                               Foreground="{DynamicResource Theme.Splash.Green}"
+                               FontSize="22" />
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Packets Received:"
+                               HorizontalAlignment="Right" VerticalAlignment="Center"
+                               Margin="0,0,15,0"
+                               Foreground="{DynamicResource Theme.Text.Secondary}"
+                               FontSize="16" FontWeight="Bold" />
+                    <TextBlock Grid.Column="1" Name="PacketsReceivedText"
+                               Text="{Binding Path=PacketsReceived, StringFormat='#,0'}"
+                               Foreground="{DynamicResource Theme.Accent}"
+                               FontSize="22" />
+                </Grid>
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Packets Lost:"
+                               HorizontalAlignment="Right" VerticalAlignment="Center"
+                               Margin="0,0,15,0"
+                               Foreground="{DynamicResource Theme.Text.Secondary}"
+                               FontSize="16" FontWeight="Bold" />
+                    <TextBlock Grid.Column="1" Name="PacketsLostText"
+                               Text="{Binding Path=PacketsLost, StringFormat='#,0'}"
+                               Foreground="{DynamicResource Theme.Splash.Red}"
+                               FontSize="22" />
+                </Grid>
+            </Grid>
+
+            <TextBlock Grid.Row="2" Text="Flood in progress..."
+                       Name="StatusText"
+                       Margin="0,7,0,0" HorizontalAlignment="Center"
+                       Foreground="{DynamicResource Theme.Splash.Red}"
+                       FontSize="13"
+                       FontWeight="SemiBold"
+                       Visibility="{Binding IsActive, Converter={StaticResource BooleanToHiddenVisibilityConverter}}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard RepeatBehavior="Forever" AutoReverse="True" >
+                                            <DoubleAnimation Storyboard.TargetProperty="(TextBlock.Opacity)"
+                                                             From="1" To=".2"
+                                                             BeginTime="0:0:1.25"
+                                                             Duration="0:0:0.3" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="(TextBlock.Opacity)"
+                                                             From="1" To="1" Duration="0:0:0.0" FillBehavior="HoldEnd" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
             </TextBlock>
-        </Label>
-        
+            
+            <Label Grid.Row="1" Grid.RowSpan="2"
+                   VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                   Name="Information"
+                   Foreground="{DynamicResource Theme.Text.Secondary}" Background="{DynamicResource Theme.Window.Background}"
+                   Padding="40,0"
+                   FontSize="14">
+                <TextBlock TextWrapping="Wrap" TextAlignment="Justify">
+                    This tool will send a continuous stream of ICMP ping packets to the destination host.
+                    It typically will not generate any more than 32 kilobytes per second of network traffic.
+                </TextBlock>
+            </Label>
+        </Grid>
     </Grid>
 </Window>

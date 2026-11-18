@@ -24,9 +24,9 @@
                 <Setter Property="FontFamily" Value="Segoe UI"/>
                 <Setter Property="FontSize" Value="12"/>
                 <Setter Property="FontWeight" Value="SemiBold"/>
-                <Setter Property="Background" Value="#fcfcfd"/>
-                <Setter Property="Foreground" Value="Black"/>
-                <Setter Property="BorderBrush" Value="#abadb3"/>
+                <Setter Property="Background" Value="{DynamicResource Theme.Panel.Background}"/>
+                <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource Theme.Panel.Border}"/>
                 <Setter Property="BorderThickness" Value="1,0,0,1"/>
                 <Setter Property="Padding" Value="5,4,0,4"/>
                 <Setter Property="Margin" Value="-1,0,0,0"/>
@@ -34,7 +34,7 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
                             <Grid>
-                                <Themes:DataGridHeaderBorder BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" IsClickable="{TemplateBinding CanUserSort}" IsPressed="{TemplateBinding IsPressed}" IsHovered="{TemplateBinding IsMouseOver}" Padding="{TemplateBinding Padding}" SortDirection="{TemplateBinding SortDirection}" SeparatorBrush="{TemplateBinding SeparatorBrush}" SeparatorVisibility="{TemplateBinding SeparatorVisibility}">
+                                <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
@@ -50,16 +50,16 @@
                                               Visibility="Collapsed"
                                               Data="M0,0 L1,0 0.5,1 z"/>
                                     </Grid>
-                                </Themes:DataGridHeaderBorder>
+                                </Border>
                                 <Thumb x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left" Style="{StaticResource ColumnHeaderGripperStyle}"/>
                                 <Thumb x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right" Style="{StaticResource ColumnHeaderGripperStyle}"/>
                             </Grid>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#e3f7ff"/>
+                                    <Setter Property="Background" Value="{DynamicResource Theme.Control.Hover.Background}"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="True">
-                                    <Setter Property="Background" Value="#bce4f9"/>
+                                    <Setter Property="Background" Value="{DynamicResource Theme.Control.Pressed.Background}"/>
                                 </Trigger>
                                 <Trigger Property="SortDirection" Value="Ascending">
                                     <Setter TargetName="SortArrow" Property="Visibility" Value="Visible"/>
@@ -99,9 +99,8 @@
                     </Setter>
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#007acc"/>
-                            <Setter Property="Foreground" Value="#ffffff"/>
-                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Background" Value="{DynamicResource Theme.Item.Selected.Background}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -114,11 +113,12 @@
                     <Setter Property="BorderBrush" Value="Transparent"/>
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#30303030"/>
-                            <Setter Property="BorderBrush" Value="#50303030"/>
+                            <Setter Property="Background" Value="{DynamicResource Theme.Item.Hover.Background}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource Theme.Item.Hover.Background}"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="BorderBrush" Value="#303030"/>
+                            <Setter Property="Background" Value="{DynamicResource Theme.Item.Selected.Background}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource Theme.Item.Selected.Border}"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -127,7 +127,7 @@
         
         <!-- DataGrid style -->
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="#abadb3"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Theme.Control.Border}"/>
         <Setter Property="IsReadOnly" Value="True"/>
         <Setter Property="AutoGenerateColumns" Value="False"/>
         <Setter Property="SelectionMode" Value="Single"/>
@@ -139,9 +139,9 @@
         <Setter Property="CanUserResizeRows" Value="False"/>
         <Setter Property="CanUserSortColumns" Value="True"/>
         <Setter Property="HeadersVisibility" Value="Column"/>
-        <Setter Property="Background" Value="#ffffff"/>
-        <Setter Property="Foreground" Value="#111"/>
-        <Setter Property="RowBackground" Value="#ffffff"/>
+        <Setter Property="Background" Value="{DynamicResource Theme.Control.Background}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+        <Setter Property="RowBackground" Value="{DynamicResource Theme.Control.Background}"/>
         <Setter Property="GridLinesVisibility" Value="None"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="IsTabStop" Value="False"/>
@@ -201,55 +201,7 @@
         </Setter>
     </Style>
 
-    <!-- DataGrid style with a light selection, matching the favorites list -->
-    <Style x:Key="LightDataGridStyle" TargetType="{x:Type DataGrid}" BasedOn="{StaticResource DataGridStyle}">
-        <Setter Property="CellStyle">
-            <Setter.Value>
-                <Style TargetType="{x:Type DataGridCell}">
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                    <Setter Property="IsTabStop" Value="False"/>
-                    <Setter Property="Padding" Value="0"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type DataGridCell}">
-                                <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#cce8ff"/>
-                            <Setter Property="Foreground" Value="#111"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="RowStyle">
-            <Setter.Value>
-                <Style TargetType="{x:Type DataGridRow}">
-                    <Setter Property="BorderThickness" Value="0,1"/>
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#e5f3ff"/>
-                            <Setter Property="BorderBrush" Value="#e5f3ff"/>
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#cce8ff"/>
-                            <Setter Property="BorderBrush" Value="#99d1ff"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    
-    <!-- DataGrid style for the Status History window -->
+    <!-- DataGrid style for the Status History window. Kept until that window moves to theme colors. -->
     <!-- Brushes -->
     <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF000000"/>
     <SolidColorBrush x:Key="DG.Header.Static.Background" Color="Black"/>

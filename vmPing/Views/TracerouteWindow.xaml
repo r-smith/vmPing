@@ -185,6 +185,19 @@
                     <Setter Property="IsHitTestVisible" Value="False"/>
                 </Style>
             </DataGrid.CellStyle>
+            <!-- Keeps this window's dark row hover until the window moves to theme colors -->
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="BorderThickness" Value="0,1"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#30303030"/>
+                            <Setter Property="BorderBrush" Value="#50303030"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="DataGridColumnHeader">
                     <Setter Property="FontWeight" Value="SemiBold"/>

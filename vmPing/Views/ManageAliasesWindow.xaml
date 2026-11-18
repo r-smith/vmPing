@@ -32,7 +32,7 @@
         <!-- Aliases DataGrid -->
         <DataGrid x:Name="Aliases"
                   Grid.Row="1"
-                  Style="{StaticResource LightDataGridStyle}"
+                  Style="{StaticResource DataGridStyle}"
                   MouseDoubleClick="Aliases_MouseDoubleClick"
                   PreviewKeyDown="Aliases_PreviewKeyDown">
             <DataGrid.Columns>

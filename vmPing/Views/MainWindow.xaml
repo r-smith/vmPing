@@ -97,7 +97,7 @@
             </Menu.Resources>
             <Menu.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <DockPanel HorizontalAlignment="Stretch" LastChildFill="False" Background="White"/>
+                    <DockPanel HorizontalAlignment="Stretch" LastChildFill="False" Background="{DynamicResource Theme.Panel.Background}"/>
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
             
@@ -122,6 +122,7 @@
                 <!-- Columns slider -->
                 <StackPanel Orientation="Horizontal">
                     <Label Content="{Binding ElementName=ColumnCount, Path=Value}"
+                           Foreground="{DynamicResource Theme.Text}"
                            Margin="0,0,15,0"
                            Width="30"
                            FontSize="14"
@@ -138,7 +139,7 @@
                             TickPlacement="BottomRight"
                             IsSnapToTickEnabled="True"
                             Width="200"
-                            Foreground="#202020"
+                            Foreground="{DynamicResource Theme.Text.Secondary}"
                             Margin="0,8"/>
                 </StackPanel>
             </MenuItem>

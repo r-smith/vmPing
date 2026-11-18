@@ -71,6 +71,9 @@ namespace vmPing.Configuration
         public static int ProbeFontSize { get; set; } = 11;
         public static int ScannerFontSize { get; set; } = 16;
 
+        // Theme.
+        public static ThemeMode Theme { get; set; } = ThemeMode.System;
+
         // Probe background colors.
         public static string ProbeBackgroundInactive { get; set; } = Constants.DefaultProbeBackgroundInactive;
         public static string ProbeBackgroundUp { get; set; } = Constants.DefaultProbeBackgroundUp;

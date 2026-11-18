@@ -879,6 +879,27 @@
                                    Text="Colors"
                                    Style="{StaticResource OptionHeaderTextStyle}"/>
 
+                        <!-- Theme option radio button group -->
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Light or Dark"
+                                   Margin="0,10,0,0"
+                                   Style="{StaticResource OptionSubHeaderTextStyle}"/>
+                        <RadioButton DockPanel.Dock="Top"
+                                     GroupName="Theme"
+                                     Content="Use Windows setting"
+                                     Name="ThemeSystemOption"
+                                     Margin="0,6,0,0"/>
+                        <RadioButton DockPanel.Dock="Top"
+                                     GroupName="Theme"
+                                     Content="Light"
+                                     Name="ThemeLightOption"
+                                     Margin="0,6,0,0"/>
+                        <RadioButton DockPanel.Dock="Top"
+                                     GroupName="Theme"
+                                     Content="Dark"
+                                     Name="ThemeDarkOption"
+                                     Margin="0,6,0,0"/>
+
                         <!-- Probe background colors -->
                         <TextBlock DockPanel.Dock="Top"
                                    Text="Probe Background"
@@ -1013,4 +1034,4 @@
             </DockPanel>
         </Border>
     </Grid>
-</Window>
+</Window>

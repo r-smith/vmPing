@@ -211,6 +211,9 @@ namespace vmPing.Views
 
         private void PopulateLayoutOptions()
         {
+            ThemeSystemOption.IsChecked = ApplicationOptions.Theme == ThemeMode.System;
+            ThemeLightOption.IsChecked = ApplicationOptions.Theme == ThemeMode.Light;
+            ThemeDarkOption.IsChecked = ApplicationOptions.Theme == ThemeMode.Dark;
             ProbeBackgroundInactive.Text = ApplicationOptions.ProbeBackgroundInactive;
             ProbeBackgroundUp.Text = ApplicationOptions.ProbeBackgroundUp;
             ProbeBackgroundDown.Text = ApplicationOptions.ProbeBackgroundDown;
@@ -683,6 +686,20 @@ namespace vmPing.Views
 
         private void SaveLayoutOptions()
         {
+            if (ThemeLightOption.IsChecked == true)
+            {
+                ApplicationOptions.Theme = ThemeMode.Light;
+            }
+            else if (ThemeDarkOption.IsChecked == true)
+            {
+                ApplicationOptions.Theme = ThemeMode.Dark;
+            }
+            else
+            {
+                ApplicationOptions.Theme = ThemeMode.System;
+            }
+            ThemeManager.SetMode(ApplicationOptions.Theme);
+
             ApplicationOptions.ProbeBackgroundInactive = ProbeBackgroundInactive.Text;
             ApplicationOptions.ProbeBackgroundUp = ProbeBackgroundUp.Text;
             ApplicationOptions.ProbeBackgroundDown = ProbeBackgroundDown.Text;
@@ -960,4 +977,4 @@ namespace vmPing.Views
             NativeMethods.HideMinimizeAndMaximizeButtons(this);
         }
     }
-}
+}

@@ -12,6 +12,7 @@ using vmPing.Configuration;
 using vmPing.Interop;
 using vmPing.Probes;
 using vmPing.Properties;
+using vmPing.Services;
 
 namespace vmPing.Views
 {
@@ -49,6 +50,7 @@ namespace vmPing.Views
             LoadFavorites();
             LoadAliases();
             ConfigFile.Load();
+            ThemeManager.SetMode(ApplicationOptions.Theme);
             ApplyStartupWindowPlacement();
             RefreshTrayIcon();
 
@@ -1151,4 +1153,4 @@ namespace vmPing.Views
             ConfigFile.SaveWindowPlacement(saveSize, savePosition);
         }
     }
-}
+}

@@ -278,7 +278,9 @@ namespace vmPing.Configuration
                 Node("IsAlwaysOnTopEnabled", ApplicationOptions.IsAlwaysOnTopEnabled),
                 Node("IsMinimizeToTrayEnabled", ApplicationOptions.IsMinimizeToTrayEnabled),
                 Node("IsExitToTrayEnabled", ApplicationOptions.IsExitToTrayEnabled),
-                Node("IsAlwaysShowTrayIconEnabled", ApplicationOptions.IsAlwaysShowTrayIconEnabled)
+                Node("IsAlwaysShowTrayIconEnabled", ApplicationOptions.IsAlwaysShowTrayIconEnabled),
+                new XComment(" Theme: [System, Light, Dark] "),
+                Node("Theme", ApplicationOptions.Theme)
             );
         }
 
@@ -442,6 +444,7 @@ namespace vmPing.Configuration
             ApplyBool("IsMinimizeToTrayEnabled", v => ApplicationOptions.IsMinimizeToTrayEnabled = v, options);
             ApplyBool("IsExitToTrayEnabled", v => ApplicationOptions.IsExitToTrayEnabled = v, options);
             ApplyBool("IsAlwaysShowTrayIconEnabled", v => ApplicationOptions.IsAlwaysShowTrayIconEnabled = v, options);
+            ApplyEnum<ThemeMode>("Theme", v => ApplicationOptions.Theme = v, options);
 
             // Loaded last, since a value that can't be decrypted stops the load with an error.
             if (options.TryGetValue("EmailUser", out string emailUser) && emailUser.Length > 0)

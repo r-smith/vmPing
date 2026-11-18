@@ -11,7 +11,7 @@
         Width="800"
         MinHeight="200"
         MinWidth="350"
-        Background="White"
+        Background="{DynamicResource Theme.Window.Background}"
         Loaded="Window_Loaded"
         StateChanged="Window_StateChanged"
         Closing="Window_Closing"
@@ -300,7 +300,7 @@
         </Popup>
 
         <!-- Items Control -->
-        <ItemsControl Name="ProbeItemsControl" IsTabStop="False" Focusable="False" BorderThickness="0,1,0,0" BorderBrush="#111" Margin="0,0,-2,-2">
+        <ItemsControl Name="ProbeItemsControl" IsTabStop="False" Focusable="False" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource Theme.Panel.Border}" Margin="0,0,-2,-2">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="#111" BorderThickness="0,0,2,2" Margin="0" CornerRadius="0">

@@ -43,6 +43,9 @@
     <SolidColorBrush x:Key="Theme.Popup.Background" Color="#22272e"/>
     <SolidColorBrush x:Key="Theme.Popup.Border" Color="#444c56"/>
 
+    <!-- Icons -->
+    <SolidColorBrush x:Key="Theme.Icon" Color="#c5ced8"/>
+
     <!-- Scroll bar thumb and arrows (drawn partly see-through, more solid on hover) -->
     <SolidColorBrush x:Key="Theme.ScrollBar.Thumb" Color="#8b949e"/>
 

@@ -1,20 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- Control colors -->
-    <SolidColorBrush x:Key="ThumbControlBackground.Light" Color="#c2c3c9"/>
-    <SolidColorBrush x:Key="ThumbControlBackground.Dark" Color="#686868"/>
-    <SolidColorBrush x:Key="ThumbControlMouseOver.Light" Color="#686868"/>
-    <SolidColorBrush x:Key="ThumbControlMouseOver.Dark" Color="#9e9e9e"/>
-    <SolidColorBrush x:Key="ThumbControlClick.Light" Color="#5b5b5b"/>
-    <SolidColorBrush x:Key="ThumbControlClick.Dark" Color="#efebef"/>
-    <SolidColorBrush x:Key="SliderTrackColor.Light" Color="#f5f5f5"/>
-    <SolidColorBrush x:Key="SliderTrackColor.Dark" Color="#3e3e42"/>
-    <SolidColorBrush x:Key="UpDownControlBackground" Color="Transparent"/>
-    <SolidColorBrush x:Key="UpDownControlMouseOver" Color="Transparent"/>
-    <SolidColorBrush x:Key="GlyphColor" Color="#868999"/>
-    <SolidColorBrush x:Key="GlyphHoverColor" Color="#1c97ea"/>
-    <SolidColorBrush x:Key="GlyphClickColor" Color="#007acc"/>
+    <!--
+        Scroll bars draw their thumb and arrows in the scroll bar's Foreground color.
+        The standard style sets it from the theme. The probe style leaves it alone,
+        so probe scroll bars take the probe's text color and show on any probe color.
+    -->
 
     <!-- Up/Down buttons -->
     <Style x:Key="ScrollBarLineButton" TargetType="{x:Type RepeatButton}">
@@ -24,31 +15,24 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
-                    <Border x:Name="Border"
-                            Margin="0"
-                            BorderThickness="0"
-                            Background="{StaticResource UpDownControlBackground}">
+                    <Border Background="Transparent">
                         <Path x:Name="Arrow"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
                               Data="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
-                              Fill="{StaticResource GlyphColor}">
-                        </Path>
+                              Fill="{TemplateBinding Foreground}"
+                              Opacity="0.6"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" TargetName="Border" Value="{StaticResource UpDownControlMouseOver}"/>
-                            <Setter Property="Path.Fill" TargetName="Arrow" Value="{StaticResource GlyphHoverColor}"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Path.Fill" TargetName="Arrow" Value="{StaticResource GlyphClickColor}"/>
+                            <Setter Property="Opacity" TargetName="Arrow" Value="1"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!-- Scrollbar pager area -->
     <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -63,8 +47,11 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    <!-- Scrollbar thumb -->
+
+    <!--
+        Scrollbar thumb: rounded, partly see-through, more solid on hover and while dragging.
+        The bar is drawn inside a transparent area as wide as the scroll bar, so the whole width can be grabbed.
+    -->
     <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -73,15 +60,19 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border x:Name="Border"
-                            Background="{StaticResource ThumbControlBackground.Light}"
-                            BorderThickness="0"/>
+                    <Border Background="Transparent">
+                        <Border x:Name="Border"
+                                Margin="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Foreground}"
+                                CornerRadius="3"
+                                Opacity="0.5"/>
+                    </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" TargetName="Border" Value="{StaticResource ThumbControlMouseOver.Light}"/>
+                            <Setter Property="Opacity" TargetName="Border" Value="0.75"/>
                         </Trigger>
                         <Trigger Property="IsMouseCaptured" Value="True">
-                            <Setter Property="Background" TargetName="Border" Value="{StaticResource ThumbControlClick.Light}"/>
+                            <Setter Property="Opacity" TargetName="Border" Value="0.9"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -89,41 +80,14 @@
         </Setter>
     </Style>
 
-    <!-- Scrollbar thumb (Dark mode) -->
-    <Style x:Key="ScrollBarThumb.Dark" TargetType="{x:Type Thumb}">
-        <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="IsTabStop" Value="False"/>
-        <Setter Property="Focusable" Value="False"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border x:Name="Border"
-                            Background="{StaticResource ThumbControlBackground.Dark}"
-                            BorderThickness="0"/>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" TargetName="Border" Value="{StaticResource ThumbControlMouseOver.Dark}"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseCaptured" Value="True">
-                            <Setter Property="Background" TargetName="Border" Value="{StaticResource ThumbControlClick.Dark}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <!-- Vertical scrollbar control template -->
+    <!-- Vertical scrollbar control template. The scroll bar's Padding sets how thin the visible thumb is. -->
     <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
-        <Grid>
+        <Grid Background="Transparent">
             <Grid.RowDefinitions>
                 <RowDefinition MaxHeight="13"/>
                 <RowDefinition Height="0.00001*"/>
                 <RowDefinition MaxHeight="13"/>
             </Grid.RowDefinitions>
-            <Border Grid.RowSpan="3"
-                    Background="{StaticResource SliderTrackColor.Light}"/>
             <!-- Up arrow control -->
             <RepeatButton Grid.Row="0"
                           Style="{StaticResource ScrollBarLineButton}"
@@ -142,52 +106,7 @@
                 <!-- Scrollbar thumb -->
                 <Track.Thumb>
                     <Thumb Style="{StaticResource ScrollBarThumb}"
-                           Margin="2,0"/>
-                </Track.Thumb>
-                <!-- Down pager area -->
-                <Track.IncreaseRepeatButton>
-                    <RepeatButton Style="{StaticResource ScrollBarPageButton}"
-                                  Command="ScrollBar.PageDownCommand"/>
-                </Track.IncreaseRepeatButton>
-            </Track>
-            <!-- Down arrow control -->
-            <RepeatButton Grid.Row="2"
-                          Style="{StaticResource ScrollBarLineButton}"
-                          Height="13"
-                          Command="ScrollBar.LineDownCommand"
-                          Content="M 0 0 L 4 4 L 8 0 Z"/>
-        </Grid>
-    </ControlTemplate>
-
-    <!-- Vertical scrollbar control template (Dark mode) -->
-    <ControlTemplate x:Key="VerticalScrollBar.Dark" TargetType="{x:Type ScrollBar}">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition MaxHeight="13"/>
-                <RowDefinition Height="0.00001*"/>
-                <RowDefinition MaxHeight="13"/>
-            </Grid.RowDefinitions>
-            <Border Grid.RowSpan="3"
-                    Background="{StaticResource SliderTrackColor.Dark}"/>
-            <!-- Up arrow control -->
-            <RepeatButton Grid.Row="0"
-                          Style="{StaticResource ScrollBarLineButton}"
-                          Height="13"
-                          Command="ScrollBar.LineUpCommand"
-                          Content="M 0 4 L 8 4 L 4 0 Z"/>
-            <!-- Scrollbar track -->
-            <Track x:Name="PART_Track"
-                   Grid.Row="1"
-                   IsDirectionReversed="True">
-                <!-- Up pager area -->
-                <Track.DecreaseRepeatButton>
-                    <RepeatButton Style="{StaticResource ScrollBarPageButton}"
-                                  Command="ScrollBar.PageUpCommand"/>
-                </Track.DecreaseRepeatButton>
-                <!-- Scrollbar thumb -->
-                <Track.Thumb>
-                    <Thumb Style="{StaticResource ScrollBarThumb.Dark}"
-                           Margin="2,0"/>
+                           Padding="{TemplateBinding Padding}"/>
                 </Track.Thumb>
                 <!-- Down pager area -->
                 <Track.IncreaseRepeatButton>
@@ -209,6 +128,8 @@
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="ContextMenu" Value="{x:Null}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Theme.ScrollBar.Thumb}"/>
+        <Setter Property="Padding" Value="3,1"/>
         <Style.Triggers>
             <Trigger Property="Orientation" Value="Vertical">
                 <Setter Property="Width" Value="17"/>
@@ -217,11 +138,12 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <!-- Probe ScrollBar style -->
+    <!-- Probe ScrollBar style. No Foreground here, so it takes the probe's text color. -->
     <Style x:Key="ScrollBarStyle.Probe" TargetType="{x:Type ScrollBar}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="ContextMenu" Value="{x:Null}"/>
+        <Setter Property="Padding" Value="3,1"/>
         <Style.Triggers>
             <Trigger Property="Orientation" Value="Vertical">
                 <Setter Property="Width" Value="12"/>
@@ -230,17 +152,8 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <!-- Dark ScrollBar style -->
-    <Style x:Key="ScrollBarStyle.Dark" TargetType="{x:Type ScrollBar}">
-        <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="ContextMenu" Value="{x:Null}"/>
-        <Style.Triggers>
-            <Trigger Property="Orientation" Value="Vertical">
-                <Setter Property="Width" Value="17"/>
-                <Setter Property="Height" Value="Auto"/>
-                <Setter Property="Template" Value="{StaticResource VerticalScrollBar.Dark}"/>
-            </Trigger>
-        </Style.Triggers>
+    <!-- Dark ScrollBar style. Kept for Status History and the popup until they move to theme colors. -->
+    <Style x:Key="ScrollBarStyle.Dark" TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource {x:Type ScrollBar}}">
+        <Setter Property="Foreground" Value="#9e9e9e"/>
     </Style>
 </ResourceDictionary>

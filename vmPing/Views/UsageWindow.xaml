@@ -115,7 +115,7 @@
         <!-- Buttons -->
         <Border Grid.Row="1" Background="#f0f0f0" BorderBrush="#dfdfdf" BorderThickness="0,1,0,0">
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                <Button Style="{StaticResource ButtonStandardStyle}"
+                <Button Style="{StaticResource ButtonStyle}"
                         Width="100"
                         IsCancel="True"
                         IsDefault="True"

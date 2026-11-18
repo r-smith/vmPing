@@ -95,7 +95,7 @@
                     Width="100"
                     Content="Trace"
                     Foreground="Black"
-                    Style="{StaticResource ButtonStandardStyle}" Background="WhiteSmoke">
+                    Style="{StaticResource ButtonStyle}" Background="WhiteSmoke">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border Name="TraceButtonBorder" BorderThickness="1" BorderBrush="#303030"

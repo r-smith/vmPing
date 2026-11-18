@@ -437,7 +437,7 @@
                             </DockPanel>
 
                             <!-- Test button -->
-                            <Button Style="{StaticResource ButtonStandardStyle}"
+                            <Button Style="{StaticResource ButtonStyle}"
                                     Name="TestEmailButton"
                                     Visibility="{Binding IsChecked, ElementName=IsEmailAlertsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
                                     DockPanel.Dock="Top"
@@ -482,7 +482,7 @@
                                      Margin="0,4,0,8"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                 <!-- Browse button -->
-                                <Button Style="{StaticResource ButtonStandardStyle}"
+                                <Button Style="{StaticResource ButtonStyle}"
                                         Click="AudioDownBrowse_Click"
                                         Width="85"
                                         Content="Browse..."/>
@@ -497,7 +497,7 @@
                                             </Style.Triggers>
                                         </Style>
                                     </Grid.Style>
-                                    <Button Style="{StaticResource ButtonStandardStyle}"
+                                    <Button Style="{StaticResource ButtonStyle}"
                                             Click="AudioDownPlay_Click"
                                             Width="85"
                                             Margin="10,0,0,0"
@@ -534,7 +534,7 @@
                                      Margin="0,4,0,8"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                 <!-- Browse button -->
-                                <Button Style="{StaticResource ButtonStandardStyle}"
+                                <Button Style="{StaticResource ButtonStyle}"
                                         Click="AudioUpBrowse_Click"
                                         Width="85"
                                         Content="Browse..."/>
@@ -549,7 +549,7 @@
                                             </Style.Triggers>
                                         </Style>
                                     </Grid.Style>
-                                    <Button Style="{StaticResource ButtonStandardStyle}"
+                                    <Button Style="{StaticResource ButtonStyle}"
                                             Click="AudioUpPlay_Click"
                                             Width="85"
                                             Margin="10,0,0,0"
@@ -577,7 +577,7 @@
                                Margin="0,15,0,0"/>
                     <DockPanel DockPanel.Dock="Top" Margin="0,4,0,0">
                         <Button DockPanel.Dock="Right"
-                                Style="{StaticResource ButtonStandardStyle}"
+                                Style="{StaticResource ButtonStyle}"
                                 Click="BrowseLogFolder_Click"
                                 Width="85"
                                 Margin="8,0,0,0"
@@ -997,7 +997,7 @@
 
                         <!-- Restore defaults button -->
                         <Grid DockPanel.Dock="Top" Margin="0,15,0,0">
-                            <Button Style="{StaticResource ButtonStandardStyle}"
+                            <Button Style="{StaticResource ButtonStyle}"
                                     Click="RestoreDefaultColors_Click"
                                     Padding="15,5"
                                     Content="Restore Defaults"
@@ -1020,13 +1020,13 @@
                           Foreground="#111"
                           HorizontalAlignment="Right"/>
                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,9,0,0" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource ButtonStandardStyle}"
+                    <Button Style="{StaticResource ButtonStyle}"
                             Click="OK_Click"
                             Margin="0,0,9,0"
                             IsDefault="True"
                             Width="85"
                             Content="OK"/>
-                    <Button Style="{StaticResource ButtonStandardStyle}"
+                    <Button Style="{StaticResource ButtonStyle}"
                             IsCancel="True"
                             Width="85"
                             Content="Cancel"/>

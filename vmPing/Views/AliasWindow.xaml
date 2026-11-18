@@ -65,20 +65,20 @@
             </Grid.ColumnDefinitions>
             <!-- Only shown when editing an existing alias -->
             <Button x:Name="RemoveButton"
-                    Style="{StaticResource ButtonStandardStyle}"
+                    Style="{StaticResource ButtonStyle}"
                     Width="85"
                     Visibility="Collapsed"
                     Click="Remove_Click"
                     Content="_Remove" />
             <Button Grid.Column="2"
-                    Style="{StaticResource ButtonStandardStyle}"
+                    Style="{StaticResource ButtonStyle}"
                     IsDefault="True"
                     Margin="0,0,9,0"
                     Click="Save_Click"
                     Width="85"
                     Content="_Save" />
             <Button Grid.Column="3"
-                    Style="{StaticResource ButtonStandardStyle}"
+                    Style="{StaticResource ButtonStyle}"
                     Width="85"
                     IsCancel="True"
                     Content="{x:Static resource:Strings.DialogButton_Cancel}" />

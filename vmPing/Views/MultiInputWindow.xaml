@@ -94,11 +94,11 @@
 
         <!-- Buttons section -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,9,0,0">
-            <Button Style="{StaticResource ButtonStandardStyle}"
+            <Button Style="{StaticResource ButtonStyle}"
                     Content="OK"
                     Width="85"
                     Click="OK_Click"/>
-            <Button Style="{StaticResource ButtonStandardStyle}"
+            <Button Style="{StaticResource ButtonStyle}"
                     Content="Cancel"
                     Width="85"
                     Margin="9,0,0,0"

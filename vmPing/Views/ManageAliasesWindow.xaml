@@ -61,17 +61,17 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,9,0,0">
             <Button Click="New_Click"
                     Width="85"
-                    Style="{StaticResource ButtonStandardStyle}"
+                    Style="{StaticResource ButtonStyle}"
                     Content="_New"/>
             <Button Click="Edit_Click"
                     Margin="15,0"
                     Width="85"
-                    Style="{StaticResource ButtonStandardStyle}"
+                    Style="{StaticResource ButtonStyle}"
                     IsEnabled="{Binding ElementName=Aliases, Path=SelectedItems.Count}"
                     Content="_Edit"/>
             <Button Click="Remove_Click"
                     Width="85"
-                    Style="{StaticResource ButtonStandardStyle}"
+                    Style="{StaticResource ButtonStyle}"
                     IsEnabled="{Binding ElementName=Aliases, Path=SelectedItems.Count}"
                     Content="_Remove"/>
         </StackPanel>

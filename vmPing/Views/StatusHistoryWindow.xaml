@@ -334,7 +334,7 @@
                     <!-- Export button -->
                     <StackPanel DockPanel.Dock="Left" Margin="25,0,0,0" HorizontalAlignment="Left">
                         <TextBlock Margin="0,0,0,2"/>
-                        <Button Style="{StaticResource ButtonStyle.Dark}"
+                        <Button Style="{StaticResource ButtonStyle}"
                                 Content="Export"
                                 Click="Export_Click"
                                 Width="100"/>

@@ -73,12 +73,12 @@
                           Content="Portable mode"/>
                 <!-- Buttons -->
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource ButtonStandardStyle}"
+                    <Button Style="{StaticResource ButtonStyle}"
                             Click="Save_Click"
                             Width="100"
                             IsDefault="True"
                             Content="Save" />
-                    <Button Style="{StaticResource ButtonStandardStyle}"
+                    <Button Style="{StaticResource ButtonStyle}"
                             Margin="8,0,0,0"
                             Width="100"
                             IsCancel="True"

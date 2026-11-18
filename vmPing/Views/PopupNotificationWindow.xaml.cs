@@ -15,6 +15,10 @@ namespace vmPing.Views
 {
     public partial class PopupNotificationWindow : Window
     {
+        // The window is this much bigger than the card on each side, to leave room for its shadow.
+        // Matches the margin around the card in the XAML.
+        private const double ShadowSpace = 12;
+
         private DispatcherTimer _autoDismissTimer;
 
         public PopupNotificationWindow(ObservableCollection<StatusChange> statusChangeLog)
@@ -80,19 +84,19 @@ namespace vmPing.Views
             switch (StatusHistoryList.Items.Count)
             {
                 case 1:
-                    Height = 95;
+                    Height = 95 + 2 * ShadowSpace;
                     break;
                 case 2:
-                    Height = 110;
+                    Height = 110 + 2 * ShadowSpace;
                     break;
                 case 3:
-                    Height = 126;
+                    Height = 126 + 2 * ShadowSpace;
                     break;
                 case 4:
-                    Height = 147;
+                    Height = 147 + 2 * ShadowSpace;
                     break;
                 case 5:
-                    Height = 172;
+                    Height = 172 + 2 * ShadowSpace;
                     break;
             }
             PositionWindow(width: Width);

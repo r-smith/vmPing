@@ -152,8 +152,4 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <!-- Dark ScrollBar style. Kept for Status History and the popup until they move to theme colors. -->
-    <Style x:Key="ScrollBarStyle.Dark" TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource {x:Type ScrollBar}}">
-        <Setter Property="Foreground" Value="#9e9e9e"/>
-    </Style>
 </ResourceDictionary>

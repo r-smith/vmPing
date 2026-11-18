@@ -28,6 +28,7 @@
                 <ResourceDictionary Source="Themes/MenuItemStyle.xaml"/>
                 <ResourceDictionary Source="Themes/SliderStyle.xaml"/>
                 <ResourceDictionary Source="Themes/ProbeTypeStyle.xaml"/>
+                <ResourceDictionary Source="Themes/StatusChangeStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

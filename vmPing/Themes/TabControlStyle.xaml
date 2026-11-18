@@ -7,10 +7,10 @@
         <Setter Property="Margin" Value="0"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Background" Value="White"/>
-        <Setter Property="BorderBrush" Value="#FFACACAC"/>
+        <Setter Property="Background" Value="{DynamicResource Theme.Window.Background}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Theme.Panel.Border}"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Foreground" Value="{StaticResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabControl}">
@@ -39,9 +39,11 @@
                             <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
                             <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
                             <Setter Property="Margin" TargetName="HeaderPanel" Value="0"/>
+                            <Setter Property="Background" TargetName="HeaderPanel" Value="{DynamicResource Theme.Panel.Background}"/>
+                            <Setter Property="BorderThickness" TargetName="ContentPanel" Value="1,0,0,0"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{StaticResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource Theme.Text.Disabled}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -49,34 +51,28 @@
         </Setter>
     </Style>
 
-    <SolidColorBrush x:Key="TabItem.Static.Background" Color="Transparent"/>
-    <SolidColorBrush x:Key="TabItem.Static.Foreground" Color="#444"/>
-    <SolidColorBrush x:Key="TabItem.MouseOver.Background" Color="#faf9f8"/>
-    <SolidColorBrush x:Key="TabItem.MouseOver.Foreground" Color="Black"/>
-    <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#007acc"/>
-    <SolidColorBrush x:Key="TabItem.Selected.Background" Color="Transparent"/>
-    <SolidColorBrush x:Key="TabItem.Selected.Foreground" Color="Black"/>
-
-    <!-- TabItem style -->
+    <!-- TabItem header text. It follows the TabItem's Foreground, which the triggers below change. -->
     <DataTemplate x:Key="TabHeader">
         <TextBlock Text="{Binding}"
                    FontSize="13"
-                   Foreground="{StaticResource TabItem.Static.Foreground}"/>
+                   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}"/>
     </DataTemplate>
     <DataTemplate x:Key="TabSelectedHeader">
         <TextBlock Text="{Binding}"
                    FontSize="13"
                    FontWeight="SemiBold"
-                   Foreground="{StaticResource TabItem.Selected.Foreground}"/>
+                   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}"/>
     </DataTemplate>
+
+    <!-- TabItem style. The selected tab gets a raised background, an accent bar and semibold text. -->
     <Style TargetType="{x:Type TabItem}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual.Item}"/>
-        <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Background" Value="{StaticResource TabItem.Static.Background}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Theme.Text.Secondary}"/>
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="MinWidth" Value="130"/>
-        <Setter Property="Padding" Value="12,8,15,8"/>
+        <Setter Property="Padding" Value="16,7,15,7"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         <Setter Property="HeaderTemplate" Value="{StaticResource TabHeader}"/>
@@ -84,38 +80,42 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
                     <Border x:Name="mainBorder"
-                            BorderBrush="Transparent"
-                            BorderThickness="8,0,0,0"
                             Background="{TemplateBinding Background}"
-                            Margin="0">
-                        <ContentPresenter x:Name="contentPresenter"
-                                          ContentSource="Header"
-                                          Focusable="False"
-                                          HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                          Margin="{TemplateBinding Padding}"
-                                          RecognizesAccessKey="True"
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                          VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                            CornerRadius="4"
+                            Margin="4,1">
+                        <Grid>
+                            <!-- Accent bar, shown on the selected tab -->
+                            <Rectangle x:Name="selectedBar"
+                                       Width="3"
+                                       Height="16"
+                                       RadiusX="1.5"
+                                       RadiusY="1.5"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       Margin="4,0,0,0"
+                                       Fill="{DynamicResource Theme.Accent}"
+                                       Visibility="Hidden"/>
+                            <ContentPresenter x:Name="contentPresenter"
+                                              ContentSource="Header"
+                                              Focusable="False"
+                                              HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                              Margin="{TemplateBinding Padding}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                        </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True" SourceName="mainBorder">
-                            <Setter Property="Background" Value="{StaticResource TabItem.MouseOver.Background}" TargetName="mainBorder"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource TabItem.MouseOver.Background}" TargetName="mainBorder"/>
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="False">
-                            <Setter Property="Foreground" Value="{StaticResource TabItem.Static.Foreground}"/>
+                            <Setter Property="Background" Value="{DynamicResource Theme.Item.Hover.Background}" TargetName="mainBorder"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="BorderBrush" Value="{StaticResource TabItem.Selected.Border}" TargetName="mainBorder"/>
+                            <Setter Property="Background" Value="{DynamicResource Theme.Control.Background}" TargetName="mainBorder"/>
+                            <Setter Property="Visibility" Value="Visible" TargetName="selectedBar"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
                             <Setter Property="HeaderTemplate" Value="{StaticResource TabSelectedHeader}"/>
                         </Trigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsSelected" Value="False"/>
-                                <Condition Property="IsMouseOver" Value="True"/>
-                            </MultiTrigger.Conditions>
-                            <Setter Property="Foreground" Value="{StaticResource TabItem.MouseOver.Foreground}"/>
-                        </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

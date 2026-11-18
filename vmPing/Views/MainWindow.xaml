@@ -474,57 +474,53 @@
                                             <Setter Property="FontSize" Value="12"/>
                                             <Setter Property="FontWeight" Value="Bold"/>
                                             <Setter Property="Foreground" Value="{Binding Status, Converter={StaticResource ProbeStatusToStatisticsBrushConverter}}"/>
+                                            <!-- Numbers flash when they change -->
+                                            <Style.Triggers>
+                                                <EventTrigger RoutedEvent="Binding.TargetUpdated">
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                             AutoReverse="True"
+                                                                             From="1.0" To="0.75" Duration="0:0:0.3"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </EventTrigger>
+                                            </Style.Triggers>
                                         </Style>
                                     </DockPanel.Resources>
-                                    <!-- Shrinks to fit when the probe is too narrow -->
-                                    <Viewbox Stretch="Uniform"
-                                             StretchDirection="DownOnly"
-                                             HorizontalAlignment="Left">
-                                        <StackPanel Orientation="Horizontal" Margin="6,2,6,3">
-                                            <TextBlock Text="Sent: " Opacity="0.8"/>
-                                            <TextBlock Text="{Binding Statistics.Sent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}">
-                                                <TextBlock.Triggers>
-                                                    <EventTrigger RoutedEvent="Binding.TargetUpdated">
-                                                        <BeginStoryboard>
-                                                            <Storyboard>
-                                                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                                                 AutoReverse="True"
-                                                                                 From="1.0" To="0.75" Duration="0:0:0.3"/>
-                                                            </Storyboard>
-                                                        </BeginStoryboard>
-                                                    </EventTrigger>
-                                                </TextBlock.Triggers>
-                                            </TextBlock>
-                                            <TextBlock Text="Received: " Opacity="0.8" Margin="16,0,0,0"/>
-                                            <TextBlock Text="{Binding Statistics.Received, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}">
-                                                <TextBlock.Triggers>
-                                                    <EventTrigger RoutedEvent="Binding.TargetUpdated">
-                                                        <BeginStoryboard>
-                                                            <Storyboard>
-                                                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                                                 AutoReverse="True"
-                                                                                 From="1.0" To="0.75" Duration="0:0:0.3"/>
-                                                            </Storyboard>
-                                                        </BeginStoryboard>
-                                                    </EventTrigger>
-                                                </TextBlock.Triggers>
-                                            </TextBlock>
-                                            <TextBlock Text="Lost: " Opacity="0.8" Margin="16,0,0,0"/>
-                                            <TextBlock Text="{Binding Statistics.Lost, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}">
-                                                <TextBlock.Triggers>
-                                                    <EventTrigger RoutedEvent="Binding.TargetUpdated">
-                                                        <BeginStoryboard>
-                                                            <Storyboard>
-                                                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                                                 AutoReverse="True"
-                                                                                 From="1.0" To="0.75" Duration="0:0:0.3"/>
-                                                            </Storyboard>
-                                                        </BeginStoryboard>
-                                                    </EventTrigger>
-                                                </TextBlock.Triggers>
-                                            </TextBlock>
+                                    <!-- Full line when it fits, else just the sent and received counts -->
+                                    <c:FirstFitPanel Margin="6,2,6,3">
+                                        <!-- Full: the gaps between the counts shrink from 16 to 6 before switching -->
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="100*" MinWidth="6" MaxWidth="16"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="100*" MinWidth="6" MaxWidth="16"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                                <TextBlock Text="Sent: " Opacity="0.8"/>
+                                                <TextBlock Text="{Binding Statistics.Sent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                                <TextBlock Text="Received: " Opacity="0.8"/>
+                                                <TextBlock Text="{Binding Statistics.Received, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="4" Orientation="Horizontal">
+                                                <TextBlock Text="Lost: " Opacity="0.8"/>
+                                                <TextBlock Text="{Binding Statistics.Lost, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"/>
+                                            </StackPanel>
+                                        </Grid>
+                                        <!-- Compact: arrows for sent and received, no lost count -->
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="&#x2191;" Opacity="0.8" Margin="0,0,2,0"/>
+                                            <TextBlock Text="{Binding Statistics.Sent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"/>
+                                            <TextBlock Text="&#x2193;" Opacity="0.8" Margin="8,0,2,0"/>
+                                            <TextBlock Text="{Binding Statistics.Received, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"/>
                                         </StackPanel>
-                                    </Viewbox>
+                                    </c:FirstFitPanel>
                                 </DockPanel>
 
                                 <!-- Output, or a comment in its place -->

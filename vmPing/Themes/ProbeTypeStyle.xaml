@@ -5,14 +5,14 @@
     <!-- Probe type label. Shown next to the hostname when a probe isn't a ping probe. -->
     <Style x:Key="ProbeTypeLabel" TargetType="{x:Type Label}">
         <Setter Property="Visibility" Value="Collapsed"/>
-        <Setter Property="Foreground" Value="#1f4e8c"/>
+        <Setter Property="Foreground" Value="{DynamicResource Theme.Probe.TypeLabel.Foreground}"/>
         <Setter Property="FontSize" Value="11"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
-                    <Border Background="#dfe7f3"
+                    <Border Background="{DynamicResource Theme.Probe.TypeLabel.Background}"
                             CornerRadius="3"
                             Padding="5,1">
                         <ContentPresenter/>
@@ -35,7 +35,7 @@
     <!-- Probe type menu item -->
     <Style x:Key="ProbeTypeMenuItem" TargetType="{x:Type ListBoxItem}">
         <Setter Property="Focusable" Value="False"/>
-        <Setter Property="Foreground" Value="#202020"/>
+        <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -49,7 +49,7 @@
                             <Border x:Name="KeyBorder"
                                     DockPanel.Dock="Right"
                                     MinWidth="18"
-                                    BorderBrush="#c8c8c8"
+                                    BorderBrush="{DynamicResource Theme.Popup.Border}"
                                     BorderThickness="1"
                                     CornerRadius="3"
                                     Padding="3,0"
@@ -58,19 +58,19 @@
                                            Text="{TemplateBinding TextSearch.Text}"
                                            HorizontalAlignment="Center"
                                            FontSize="11"
-                                           Foreground="#808080"/>
+                                           Foreground="{DynamicResource Theme.Text.Secondary}"/>
                             </Border>
                             <ContentPresenter VerticalAlignment="Center"/>
                         </DockPanel>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="ItemBorder" Property="Background" Value="#e5eef9"/>
+                            <Setter TargetName="ItemBorder" Property="Background" Value="{DynamicResource Theme.Item.Hover.Background}"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="ItemBorder" Property="Background" Value="#c9def5"/>
-                            <Setter TargetName="KeyBorder" Property="BorderBrush" Value="#a9bed5"/>
-                            <Setter TargetName="KeyText" Property="Foreground" Value="#1f4e8c"/>
+                            <Setter TargetName="ItemBorder" Property="Background" Value="{DynamicResource Theme.Item.Selected.Background}"/>
+                            <Setter TargetName="KeyBorder" Property="BorderBrush" Value="{DynamicResource Theme.Item.Selected.Border}"/>
+                            <Setter TargetName="KeyText" Property="Foreground" Value="{DynamicResource Theme.Accent}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

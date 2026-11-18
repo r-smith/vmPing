@@ -34,7 +34,7 @@
                         <Grid Background="Transparent">
                             <!-- Hover highlight -->
                             <Border x:Name="highlight"
-                                    Background="White"
+                                    Background="{DynamicResource Theme.Probe.TitleBar.Icon}"
                                     CornerRadius="3"
                                     Opacity="0"/>
                             <!-- Icon -->
@@ -92,9 +92,6 @@
                            IsHitTestVisible="False"/>
             </Grid>
             <ControlTemplate.Triggers>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Foreground" Value="#333388"/>
-                </Trigger>
                 <MultiTrigger>
                     <MultiTrigger.Conditions>
                         <Condition Property="Text" Value=""/>
@@ -314,8 +311,8 @@
                Placement="Custom"
                StaysOpen="False"
                AllowsTransparency="True">
-            <Border Background="White"
-                    BorderBrush="#c8c8c8"
+            <Border Background="{DynamicResource Theme.Popup.Background}"
+                    BorderBrush="{DynamicResource Theme.Popup.Border}"
                     BorderThickness="1"
                     CornerRadius="6"
                     Padding="4"
@@ -377,7 +374,7 @@
 
                                     <!-- Hover band -->
                                     <Rectangle Grid.ColumnSpan="3"
-                                               Fill="#73000000"
+                                               Fill="{DynamicResource Theme.Probe.TitleBar.Background}"
                                                IsHitTestVisible="False">
                                         <Rectangle.Style>
                                             <Style TargetType="{x:Type Rectangle}">
@@ -406,7 +403,7 @@
                                             </Style>
                                         </Border.Style>
                                         <Path Data="M0,0 h2 v2 h-2 z M4,0 h2 v2 h-2 z M0,4 h2 v2 h-2 z M4,4 h2 v2 h-2 z M0,8 h2 v2 h-2 z M4,8 h2 v2 h-2 z"
-                                              Fill="White"
+                                              Fill="{DynamicResource Theme.Probe.TitleBar.Icon}"
                                               Opacity="0.7"
                                               VerticalAlignment="Center"/>
                                     </Border>
@@ -433,7 +430,7 @@
 
                                         <!-- Button: Edit alias -->
                                         <Button Style="{StaticResource ProbeTitleButtonStyle}"
-                                                Content="{DynamicResource icon.pencil-white}"
+                                                Content="{DynamicResource icon.pencil}"
                                                 Margin="0,0,1,0"
                                                 ToolTip="{x:Static resource:Strings.Tooltip_EditAlias}"
                                                 IsEnabled="{Binding ElementName=Hostname, Path=Text, Converter={StaticResource StringLengthToBoolConverter}}"
@@ -441,14 +438,14 @@
 
                                         <!-- Button: Isolated view -->
                                         <Button Style="{StaticResource ProbeTitleButtonStyle}"
-                                                Content="{DynamicResource icon.window-restore-white}"
+                                                Content="{DynamicResource icon.window-restore}"
                                                 Margin="0,0,1,0"
                                                 ToolTip="{x:Static resource:Strings.Tooltip_IsolatedView}"
                                                 Click="IsolatedView_Click"/>
 
                                         <!-- Button: Remove probe -->
                                         <Button Style="{StaticResource ProbeTitleButtonStyle}"
-                                                Content="{DynamicResource icon.window-close-white}"
+                                                Content="{DynamicResource icon.window-close}"
                                                 ToolTip="{x:Static resource:Strings.Tooltip_Close}"
                                                 Click="RemoveProbe_Click"/>
                                     </StackPanel>
@@ -592,8 +589,20 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <!-- Border to set background color and top border for this section -->
-                                <Border Grid.ColumnSpan="4" Background="#e8ffffff" BorderThickness="0,1,0,0" BorderBrush="#20000000"/>
+                                <!-- Border to set background color and top border for this section.
+                                     Gray while the probe runs, since the hostname can't be edited then. -->
+                                <Border Grid.ColumnSpan="4" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource Theme.Panel.Border}">
+                                    <Border.Style>
+                                        <Style TargetType="{x:Type Border}">
+                                            <Setter Property="Background" Value="{DynamicResource Theme.Control.Background}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                    <Setter Property="Background" Value="{DynamicResource Theme.Panel.Background}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                </Border>
 
                                 <!-- Status glyph -->
                                 <TextBlock Grid.Column="0"
@@ -601,7 +610,7 @@
                                            FontSize="14"
                                            FontFamily="Marlett"
                                            VerticalAlignment="Center"
-                                           Foreground="Black"
+                                           Foreground="{DynamicResource Theme.Text}"
                                            Padding="4,0,1,0">
                                 </TextBlock>
 
@@ -618,7 +627,6 @@
                                          FontWeight="SemiBold"
                                          FontSize="{Binding ElementName=History, Path=ActualWidth, Converter={StaticResource HostnameFontsizeConverter}}"
                                          BorderThickness="0,0,0,0"
-                                         BorderBrush="#20000000"
                                          VerticalContentAlignment="Center"
                                          Background="Transparent"
                                          Padding="0,0,0,0"
@@ -634,6 +642,9 @@
                                          Otherwise focus could land there when other probes start. -->
                                     <TextBox.Style>
                                         <Style TargetType="{x:Type TextBox}">
+                                            <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+                                            <Setter Property="CaretBrush" Value="{DynamicResource Theme.Text}"/>
+                                            <Setter Property="SelectionBrush" Value="{DynamicResource Theme.Accent}"/>
                                             <Style.Triggers>
                                                 <MultiDataTrigger>
                                                     <MultiDataTrigger.Conditions>
@@ -654,10 +665,11 @@
                                         Padding="0,2"
                                         Margin="2"
                                         HorizontalAlignment="Right"
-                                        Background="White">
+                                        Background="{DynamicResource Theme.Control.Background}">
                                     <!-- Comments can't be started, so the button can't be focused or clicked. -->
                                     <Button.Style>
                                         <Style TargetType="{x:Type Button}">
+                                            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsComment}" Value="True">
                                                     <Setter Property="Focusable" Value="False"/>
@@ -668,7 +680,7 @@
                                     </Button.Style>
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
-                                            <Border Name="PingButtonBorder" BorderThickness="1" BorderBrush="#bb2e6da4"
+                                            <Border Name="PingButtonBorder" BorderThickness="1" BorderBrush="{DynamicResource Theme.Control.Border}"
                                                     CornerRadius="4"
                                                     Background="{TemplateBinding Background}">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
@@ -686,7 +698,7 @@
                                                         </Image.Style>
                                                     </Image>
                                                     <TextBlock Visibility="{Binding ElementName=History, Path=ActualWidth, Converter={StaticResource ButtonTextVisibilityConverter}}"
-                                                               Foreground="Black"
+                                                               Foreground="{DynamicResource Theme.Text}"
                                                                FontSize="13"
                                                                VerticalAlignment="Center"
                                                                Margin="8,0,0,0">
@@ -717,11 +729,11 @@
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="PingButtonBorder" Property="Background" Value="#f0f0f0"/>
-                                                    <Setter TargetName="PingButtonBorder" Property="BorderBrush" Value="#ff2e6da4"/>
+                                                    <Setter TargetName="PingButtonBorder" Property="Background" Value="{DynamicResource Theme.Control.Hover.Background}"/>
+                                                    <Setter TargetName="PingButtonBorder" Property="BorderBrush" Value="{DynamicResource Theme.Control.Hover.Border}"/>
                                                 </Trigger>
                                                 <Trigger Property="IsPressed" Value="True">
-                                                    <Setter TargetName="PingButtonBorder" Property="Background" Value="#d8d8d8"/>
+                                                    <Setter TargetName="PingButtonBorder" Property="Background" Value="{DynamicResource Theme.Control.Pressed.Background}"/>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>

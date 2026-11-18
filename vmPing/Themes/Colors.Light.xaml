@@ -50,6 +50,10 @@
     <SolidColorBrush x:Key="Theme.Probe.TitleBar.Background" Color="#73ffffff"/>
     <SolidColorBrush x:Key="Theme.Probe.TitleBar.Icon" Color="#000000"/>
 
+    <!-- Probe type label -->
+    <SolidColorBrush x:Key="Theme.Probe.TypeLabel.Background" Color="#c8dff8"/>
+    <SolidColorBrush x:Key="Theme.Probe.TypeLabel.Foreground" Color="#033d8b"/>
+
     <!-- Scroll bar thumb and arrows (drawn partly see-through, more solid on hover) -->
     <SolidColorBrush x:Key="Theme.ScrollBar.Thumb" Color="#6e7781"/>
 

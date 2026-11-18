@@ -61,6 +61,23 @@
     <SolidColorBrush x:Key="Theme.Probe.Comment.Background" Color="#e6e9ed"/>
     <SolidColorBrush x:Key="Theme.Probe.Comment.Foreground" Color="#1f2328"/>
 
+    <!-- Log views: the background of lists like Status History -->
+    <SolidColorBrush x:Key="Theme.Log.Background" Color="#ffffff"/>
+
+    <!-- Status changes: the tag behind each status, and its text -->
+    <SolidColorBrush x:Key="Theme.Status.Up.Background" Color="#dafbe1"/>
+    <SolidColorBrush x:Key="Theme.Status.Up.Foreground" Color="#116329"/>
+    <SolidColorBrush x:Key="Theme.Status.Down.Background" Color="#ffebe9"/>
+    <SolidColorBrush x:Key="Theme.Status.Down.Foreground" Color="#a40e26"/>
+    <SolidColorBrush x:Key="Theme.Status.Start.Background" Color="#ddf4ff"/>
+    <SolidColorBrush x:Key="Theme.Status.Start.Foreground" Color="#0550ae"/>
+    <SolidColorBrush x:Key="Theme.Status.Stop.Background" Color="#fff8c5"/>
+    <SolidColorBrush x:Key="Theme.Status.Stop.Foreground" Color="#7d4e00"/>
+    <SolidColorBrush x:Key="Theme.Status.LatencyHigh.Background" Color="#fff1e5"/>
+    <SolidColorBrush x:Key="Theme.Status.LatencyHigh.Foreground" Color="#953800"/>
+    <SolidColorBrush x:Key="Theme.Status.LatencyNormal.Background" Color="#d3f5f0"/>
+    <SolidColorBrush x:Key="Theme.Status.LatencyNormal.Foreground" Color="#0a5c55"/>
+
     <!-- Scroll bar thumb and arrows (drawn partly see-through, more solid on hover) -->
     <SolidColorBrush x:Key="Theme.ScrollBar.Thumb" Color="#6e7781"/>
 

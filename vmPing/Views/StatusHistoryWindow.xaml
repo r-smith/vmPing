@@ -8,362 +8,287 @@
         Width="720"
         MinHeight="250"
         MinWidth="620"
-        Background="#313132"
-        WindowStyle="None"
+        Background="{DynamicResource Theme.Window.Background}"
         Closed="Window_Closed"
-        MouseDown="Window_MouseDown"
-        PreviewKeyDown="Window_PreviewKeyDown"
-        StateChanged="Window_StateChanged">
-    <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="32" ResizeBorderThickness="{x:Static SystemParameters.WindowResizeBorderThickness}" GlassFrameThickness="0" CornerRadius="0" />
-    </WindowChrome.WindowChrome>
+        PreviewKeyDown="Window_PreviewKeyDown">
     <Window.Resources>
-        <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ScrollBarStyle.Dark}"/>
+        <!-- Status glyph, colored by the kind of change -->
+        <Style x:Key="StatusTextStyle" TargetType="{x:Type TextBlock}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Down}">
+                    <Setter Property="Foreground" Value="{DynamicResource Theme.Status.Down.Foreground}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Error}">
+                    <Setter Property="Foreground" Value="{DynamicResource Theme.Status.Down.Foreground}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Up}">
+                    <Setter Property="Foreground" Value="{DynamicResource Theme.Status.Up.Foreground}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Start}">
+                    <Setter Property="Foreground" Value="{DynamicResource Theme.Status.Start.Foreground}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Stop}">
+                    <Setter Property="Foreground" Value="{DynamicResource Theme.Status.Stop.Foreground}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_LatencyHigh}">
+                    <Setter Property="Foreground" Value="{DynamicResource Theme.Status.LatencyHigh.Foreground}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_LatencyNormal}">
+                    <Setter Property="Foreground" Value="{DynamicResource Theme.Status.LatencyNormal.Foreground}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Status tag, colored by the kind of change -->
+        <Style x:Key="StatusTagStyle" TargetType="{x:Type Border}">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5,2"/>
+            <Setter Property="Padding" Value="6,0"/>
+            <Setter Property="CornerRadius" Value="3"/>
+            <Setter Property="TextElement.FontWeight" Value="SemiBold"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Down}">
+                    <Setter Property="Background" Value="{DynamicResource Theme.Status.Down.Background}" />
+                    <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.Down.Foreground}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Error}">
+                    <Setter Property="Background" Value="{DynamicResource Theme.Status.Down.Background}" />
+                    <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.Down.Foreground}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Up}">
+                    <Setter Property="Background" Value="{DynamicResource Theme.Status.Up.Background}" />
+                    <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.Up.Foreground}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Start}">
+                    <Setter Property="Background" Value="{DynamicResource Theme.Status.Start.Background}" />
+                    <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.Start.Foreground}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Stop}">
+                    <Setter Property="Background" Value="{DynamicResource Theme.Status.Stop.Background}" />
+                    <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.Stop.Foreground}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_LatencyHigh}">
+                    <Setter Property="Background" Value="{DynamicResource Theme.Status.LatencyHigh.Background}" />
+                    <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.LatencyHigh.Foreground}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_LatencyNormal}">
+                    <Setter Property="Background" Value="{DynamicResource Theme.Status.LatencyNormal.Background}" />
+                    <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.LatencyNormal.Foreground}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
-    <Border Style="{StaticResource WindowMainPanelStyle}">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-            <!-- Window title bar -->
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <!-- Icon -->
-                <Image Grid.Column="0"
-                       Width="16"
-                       Height="16"
-                       Margin="6,0,4,0"
-                       Source="{DynamicResource icon.status-history-dark}" />
+        <!-- History DataGrid -->
+        <DataGrid Name="StatusHistory"
+                  Grid.Row="0"
+                  FontSize="16"
+                  FontFamily="Consolas"
+                  BorderThickness="0"
+                  ColumnWidth="SizeToCells"
+                  Background="{DynamicResource Theme.Log.Background}"
+                  RowBackground="{DynamicResource Theme.Log.Background}"
+                  Style="{StaticResource DataGridStyle}">
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                    <Setter Property="IsHitTestVisible" Value="False"/>
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.Columns>
 
-                <!-- Title -->
-                <TextBlock Grid.Column="1"
-                           Margin="4,0,0,0"
-                           VerticalAlignment="Center"
-                           FontSize="13"
-                           Foreground="#f8f8f8"
-                           Text="{Binding Path=Title,
-                                 RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
-                </TextBlock>
-
-                <!-- Minimize button -->
-                <Button Grid.Column="4"
-                        Click="OnMinimizeButtonClick"
-                        RenderOptions.EdgeMode="Aliased"
-                        Style="{StaticResource TitleBarButtonStyle}"
-                        ToolTip="Minimize" ToolTipService.InitialShowDelay="1000"
-                        Foreground="#f1f1f1f1">
-                    <Path Width="46"
-                          Height="26"
-                          Data="M 18,15 H 28"
-                          Stroke="{Binding Path=Foreground,
-                                  RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
-                          StrokeThickness="1" />
-                </Button>
-                <!-- Maximize button -->
-                <Button Name="MaximizeButton"
-                        Grid.Column="5"
-                        Click="OnMaximizeRestoreButtonClick"
-                        Style="{StaticResource TitleBarButtonStyle}"
-                        ToolTip="Maximize" ToolTipService.InitialShowDelay="1000"
-                        Foreground="#f1f1f1f1">
-                    <Path Width="46"
-                          Height="28"
-                          Data="M 18.5,10.5 H 27.5 V 19.5 H 18.5 Z"
-                          Stroke="{Binding Path=Foreground,
-                                  RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
-                          StrokeThickness="1" />
-                </Button>
-                <!-- Restore button -->
-                <Button Name="RestoreButton"
-                        Grid.Column="5"
-                        Click="OnMaximizeRestoreButtonClick"
-                        Style="{StaticResource TitleBarButtonStyle}"
-                        ToolTip="Restore Down" ToolTipService.InitialShowDelay="1000"
-                        Foreground="#f1f1f1f1">
-                    <Path Width="46"
-                          Height="28"
-                          Data="M 18.5,12.5 H 25.5 V 19.5 H 18.5 Z M 20.5,12.5 V 10.5 H 27.5 V 17.5 H 25.5"
-                          Stroke="{Binding Path=Foreground,
-                                  RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
-                          StrokeThickness="1" />
-                </Button>
-                <!-- Close button -->
-                <Button Grid.Column="6"
-                        Click="OnCloseButtonClick"
-                        Style="{StaticResource TitleBarCloseButtonStyle}"
-                        ToolTip="Close" ToolTipService.InitialShowDelay="1000"
-                        Foreground="#f1f1f1f1">
-                    <Path Width="46"
-                          Height="28"
-                          Data="M 18,11 27,20 M 18,20 27,11"
-                          Stroke="{Binding Path=Foreground,
-							      RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
-                          StrokeThickness="1" />
-                </Button>
-            </Grid>
-
-            <!-- History DataGrid -->
-            <DataGrid Name="StatusHistory"
-                      Grid.Row="1"
-                      FontSize="16"
-                      FontFamily="Consolas"
-                      Background="#202020"
-                      Foreground="#fdf6e3"
-                      Style="{StaticResource StatusHistoryDataGridStyle}">
-                <DataGrid.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                        <Setter Property="IsHitTestVisible" Value="False"/>
-                    </Style>
-                </DataGrid.CellStyle>
-                <DataGrid.Columns>
-
-                    <!-- Timestamp and status glyph -->
-                    <DataGridTextColumn Binding="{Binding Timestamp}" Header="Timestamp" MinWidth="90">
-                        <DataGridTextColumn.CellStyle>
-                            <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource {x:Type DataGridCell}}">
-                                <Setter Property="FontWeight" Value="Regular"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                                <Setter Property="IsHitTestVisible" Value="False"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type DataGridCell}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding StatusAsGlyph}">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="{x:Type TextBlock}">
-                                                            <Setter Property="Padding" Value="3,2,0,2"/>
-                                                            <Setter Property="FontFamily" Value="Marlett"/>
-                                                            <Setter Property="VerticalAlignment" Value="Center"/>
-                                                            <Setter Property="IsHitTestVisible" Value="False"/>
-                                                            <Setter Property="FontSize" Value="12"/>
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Down}">
-                                                                    <Setter Property="Foreground" Value="#dc322f" />
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Error}">
-                                                                    <Setter Property="Foreground" Value="#dc322f" />
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Up}">
-                                                                    <Setter Property="Foreground" Value="#859900" />
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Start}">
-                                                                    <Setter Property="Foreground" Value="#61b8ff" />
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Stop}">
-                                                                    <Setter Property="Foreground" Value="#ecce51" />
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_LatencyHigh}">
-                                                                    <Setter Property="Foreground" Value="#f0883e" />
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_LatencyNormal}">
-                                                                    <Setter Property="Foreground" Value="#2aa198" />
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                </TextBlock>
-                                                <TextBlock Text="{Binding Timestamp, StringFormat=d }" Foreground="#989899" Padding="4,2,0,0"/>
-                                                <TextBlock Text=" "/>
-                                                <TextBlock Text="{Binding Timestamp, StringFormat=T}" Foreground="#e0e0e1" Padding="0,2,25,2"/>
-                                            </StackPanel>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </DataGridTextColumn.CellStyle>
-                    </DataGridTextColumn>
-
-                    <!-- Address -->
-                    <DataGridTextColumn Binding="{Binding Hostname}" Header="Address" MinWidth="90">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Padding" Value="5,2,25,2"/>
-                                <Setter Property="Foreground" Value="#b6fab4"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
-                    <!-- Alias -->
-                    <DataGridTextColumn Binding="{Binding Alias}" Header="Alias" MinWidth="50">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Padding" Value="5,2,25,2"/>
-                                <Setter Property="Foreground" Value="#f4f4f4"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
-                    <!-- Status -->
-                    <DataGridTextColumn Binding="{Binding StatusAsString}" Header="Status" Width="*">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Padding" Value="5,2"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Down}">
-                                        <Setter Property="Foreground" Value="#dc322f" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Error}">
-                                        <Setter Property="Foreground" Value="#dc322f" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Up}">
-                                        <Setter Property="Foreground" Value="#859900" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Start}">
-                                        <Setter Property="Foreground" Value="#61b8ff" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Stop}">
-                                        <Setter Property="Foreground" Value="#ecce51" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_LatencyHigh}">
-                                        <Setter Property="Foreground" Value="#f0883e" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_LatencyNormal}">
-                                        <Setter Property="Foreground" Value="#2aa198" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                </DataGrid.Columns>
-
-            </DataGrid>
-            
-            <!-- Filter section -->
-            <DockPanel Grid.Row="2">
-                <!-- Filter section -->
-                <DockPanel DockPanel.Dock="Left" Margin="12,6,6,9">
-                    <!-- Filter -->
-                    <StackPanel DockPanel.Dock="Left">
-                        <TextBlock Text="Filter" Foreground="#ecce51" Margin="0,0,0,2"/>
-                        <!-- Filter -->
-                        <Grid>
-                            <!-- Textbox -->
-                            <TextBox x:Name="FilterField"
-                                     Width="260"
-                                     KeyUp="TextBox_KeyUp"/>
-                            <!-- Clear button -->
-                            <Button HorizontalAlignment="Right"
-                                    Width="20"
-                                    Margin="1"
-                                    Click="FilterClear_Click"
-                                    Focusable="False"
-                                    IsTabStop="False">
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <Border>
-                                            <Border.Style>
-                                                <Style TargetType="{x:Type Border}">
-                                                    <Setter Property="Background" Value="#00000000"/>
-                                                    <Style.Triggers>
-                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Background" Value="#1d1d20"/>
-                                                        </Trigger>
-                                                        <DataTrigger Binding="{Binding Path=Text, ElementName=FilterField}" Value="">
-                                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Border.Style>
-                                            <Image Source="{DynamicResource icon.delete}" Width="13" Height="13"/>
-                                        </Border>
+                <!-- Timestamp and status glyph -->
+                <DataGridTextColumn Binding="{Binding Timestamp}" Header="Timestamp" MinWidth="90">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource {x:Type DataGridCell}}">
+                            <Setter Property="FontWeight" Value="Regular"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                            <Setter Property="IsHitTestVisible" Value="False"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding StatusAsGlyph}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource StatusTextStyle}">
+                                                        <Setter Property="Padding" Value="3,2,0,2"/>
+                                                        <Setter Property="FontFamily" Value="Marlett"/>
+                                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                                        <Setter Property="IsHitTestVisible" Value="False"/>
+                                                        <Setter Property="FontSize" Value="12"/>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <TextBlock Text="{Binding Timestamp, StringFormat=d }" Foreground="{DynamicResource Theme.Text.Secondary}" Padding="4,2,0,0"/>
+                                            <TextBlock Text=" "/>
+                                            <TextBlock Text="{Binding Timestamp, StringFormat=T}" Padding="0,2,25,2"/>
+                                        </StackPanel>
                                     </ControlTemplate>
-                                </Button.Template>
-                            </Button>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+
+                <!-- Address -->
+                <DataGridTextColumn Binding="{Binding Hostname}" Header="Address" MinWidth="90">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Padding" Value="5,2,25,2"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Alias -->
+                <DataGridTextColumn Binding="{Binding Alias}" Header="Alias" MinWidth="50">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Padding" Value="5,2,25,2"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Status -->
+                <DataGridTemplateColumn Header="Status" Width="*" SortMemberPath="StatusAsString">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource StatusTagStyle}">
+                                <TextBlock Text="{Binding StatusAsString}"/>
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+
+        </DataGrid>
+        
+        <!-- Filter section -->
+        <Border Grid.Row="1"
+                Background="{DynamicResource Theme.Panel.Background}"
+                BorderBrush="{DynamicResource Theme.Panel.Border}"
+                BorderThickness="0,1,0,0">
+            <!-- Filter section -->
+            <DockPanel DockPanel.Dock="Left" Margin="12,6,6,9">
+                <!-- Filter -->
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="Filter" Foreground="{DynamicResource Theme.Text.Secondary}" Margin="0,0,0,2"/>
+                    <!-- Filter -->
+                    <Grid>
+                        <!-- Textbox -->
+                        <TextBox x:Name="FilterField"
+                                 Width="260"
+                                 KeyUp="TextBox_KeyUp"/>
+                        <!-- Clear button -->
+                        <Button HorizontalAlignment="Right"
+                                Width="20"
+                                Margin="1"
+                                Click="FilterClear_Click"
+                                Focusable="False"
+                                IsTabStop="False">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border>
+                                        <Border.Style>
+                                            <Style TargetType="{x:Type Border}">
+                                                <Setter Property="Background" Value="#00000000"/>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="{DynamicResource Theme.Item.Hover.Background}"/>
+                                                    </Trigger>
+                                                    <DataTrigger Binding="{Binding Path=Text, ElementName=FilterField}" Value="">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <Image Source="{DynamicResource icon.delete}" Width="13" Height="13"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+                <!-- Filter checkbox options -->
+                <StackPanel Margin="15,0,0,0">
+                    <TextBlock Text="Include" Foreground="{DynamicResource Theme.Text.Secondary}" Margin="0,0,0,2"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Grid Width="90">
+                            <CheckBox x:Name="FilterUp"
+                                      Content="Up"
+                                      IsChecked="True"
+                                      Click="Filter_Click"/>
+                        </Grid>
+                        <Grid Width="90">
+                            <CheckBox x:Name="FilterStart"
+                                      Content="Start"
+                                      IsChecked="True"
+                                      Click="Filter_Click"/>
+                        </Grid>
+                        <Grid>
+                            <CheckBox x:Name="FilterLatency"
+                                      Content="Latency"
+                                      IsChecked="True"
+                                      Click="Filter_Click"/>
                         </Grid>
                     </StackPanel>
-                    <!-- Filter checkbox options -->
-                    <StackPanel Margin="15,0,0,0">
-                        <TextBlock Text="Include" Foreground="#ecce51" Margin="0,0,0,2"/>
-                        <StackPanel Orientation="Horizontal">
-                            <Grid Width="90">
-                                <CheckBox x:Name="FilterUp"
-                                          Style="{StaticResource CheckBoxStyle.Dark}"
-                                          Content="Up"
-                                          IsChecked="True"
-                                          Click="Filter_Click"/>
-                            </Grid>
-                            <Grid Width="90">
-                                <CheckBox x:Name="FilterStart"
-                                          Style="{StaticResource CheckBoxStyle.Dark}"
-                                          Content="Start"
-                                          IsChecked="True"
-                                          Click="Filter_Click"/>
-                            </Grid>
-                            <Grid>
-                                <CheckBox x:Name="FilterLatency"
-                                          Style="{StaticResource CheckBoxStyle.Dark}"
-                                          Content="Latency"
-                                          IsChecked="True"
-                                          Click="Filter_Click"/>
-                            </Grid>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Grid Width="90">
-                                <CheckBox x:Name="FilterDown"
-                                          Style="{StaticResource CheckBoxStyle.Dark}"
-                                          Content="Down"
-                                          IsChecked="True"
-                                          Click="Filter_Click"/>
-                            </Grid>
-                            <CheckBox x:Name="FilterStop"
-                                      Style="{StaticResource CheckBoxStyle.Dark}"
-                                      Content="Stop"
+                    <StackPanel Orientation="Horizontal">
+                        <Grid Width="90">
+                            <CheckBox x:Name="FilterDown"
+                                      Content="Down"
                                       IsChecked="True"
-                                      Click="Filter_Click" />
-                        </StackPanel>
+                                      Click="Filter_Click"/>
+                        </Grid>
+                        <CheckBox x:Name="FilterStop"
+                                  Content="Stop"
+                                  IsChecked="True"
+                                  Click="Filter_Click" />
                     </StackPanel>
-                    <!-- Export button -->
-                    <StackPanel DockPanel.Dock="Left" Margin="25,0,0,0" HorizontalAlignment="Left">
-                        <TextBlock Margin="0,0,0,2"/>
-                        <Button Style="{StaticResource ButtonStyle}"
-                                Content="Export"
-                                Click="Export_Click"
-                                Width="100"/>
-                    </StackPanel>
-                </DockPanel>
-            </DockPanel>
-            
-            <!-- Overlay for no items in history -->
-            <Border Background="#0e0e0e" Grid.Row="1">
-                <Border.Style>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="Visibility" Value="Collapsed" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Items.Count, ElementName=StatusHistory}" Value="0">
-                                <Setter Property="Visibility" Value="Visible" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Border.Style>
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Foreground="#ffd43b"
-                               FontSize="32"
-                               HorizontalAlignment="Center"
-                               Text="{x:Static resource:Strings.StatusHistory_NoChanges}" />
-                    <TextBlock Foreground="#e8e8e8"
-                               TextWrapping="Wrap"
-                               Margin="0,10,0,0"
-                               Text="{x:Static resource:Strings.StatusHistory_NoChangesDescription}" />
                 </StackPanel>
-            </Border>
-        </Grid>
-    </Border>
+                <!-- Export button -->
+                <StackPanel DockPanel.Dock="Left" Margin="25,0,0,0" HorizontalAlignment="Left">
+                    <TextBlock Margin="0,0,0,2"/>
+                    <Button Style="{StaticResource ButtonStyle}"
+                            Content="Export"
+                            Click="Export_Click"
+                            Width="100"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+        
+        <!-- Overlay for no items in history -->
+        <Border Background="{DynamicResource Theme.Log.Background}" Grid.Row="0">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Items.Count, ElementName=StatusHistory}" Value="0">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Foreground="{DynamicResource Theme.Splash.Yellow}"
+                           FontSize="32"
+                           HorizontalAlignment="Center"
+                           Text="{x:Static resource:Strings.StatusHistory_NoChanges}" />
+                <TextBlock Foreground="{DynamicResource Theme.Text.Secondary}"
+                           TextWrapping="Wrap"
+                           Margin="0,10,0,0"
+                           Text="{x:Static resource:Strings.StatusHistory_NoChangesDescription}" />
+            </StackPanel>
+        </Border>
+    </Grid>
 </Window>

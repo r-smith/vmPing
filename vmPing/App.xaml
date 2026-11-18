@@ -25,7 +25,6 @@
                 <ResourceDictionary Source="Themes/CheckBoxStyle.xaml"/>
                 <ResourceDictionary Source="Themes/RadioButtonStyle.xaml"/>
                 <ResourceDictionary Source="Themes/ScrollBarStyle.xaml"/>
-                <ResourceDictionary Source="Themes/WindowChrome.xaml"/>
                 <ResourceDictionary Source="Themes/MenuItemStyle.xaml"/>
                 <ResourceDictionary Source="Themes/SliderStyle.xaml"/>
                 <ResourceDictionary Source="Themes/ProbeTypeStyle.xaml"/>

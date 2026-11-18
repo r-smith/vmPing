@@ -257,7 +257,6 @@
                         <Grid>
                             <!-- Textbox -->
                             <TextBox x:Name="FilterField"
-                                     Style="{StaticResource TextBoxStyle.Dark}"
                                      Width="260"
                                      KeyUp="TextBox_KeyUp"/>
                             <!-- Clear button -->

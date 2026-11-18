@@ -2,16 +2,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:c="clr-namespace:vmPing.Controls">
 
-    <!-- TextBox style -->
-    <SolidColorBrush x:Key="TextBox.Static.Background" Color="#ffffff"/>
-    <SolidColorBrush x:Key="TextBox.Static.Foreground" Color="#111"/>
-    <SolidColorBrush x:Key="TextBox.Static.Border" Color="#abadb3"/>
-    <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#303030"/>
-    <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#007acc"/>
+    <!-- TextBox style. Keyboard focus shows an accent border with a soft glow around it. -->
     <Style TargetType="{x:Type TextBox}">
-        <Setter Property="Background" Value="{StaticResource TextBox.Static.Background}"/>
-        <Setter Property="Foreground" Value="{StaticResource TextBox.Static.Foreground}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+        <Setter Property="Background" Value="{DynamicResource Theme.Control.Background}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Theme.Control.Border}"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource Theme.Text}"/>
+        <Setter Property="SelectionBrush" Value="{DynamicResource Theme.Accent}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Padding" Value="3"/>
         <Setter Property="FontSize" Value="14"/>
@@ -25,25 +22,38 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Border x:Name="border"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Background="{TemplateBinding Background}"
-                            SnapsToDevicePixels="True">
-                        <ScrollViewer x:Name="PART_ContentHost"
-                                      Focusable="false"
-                                      HorizontalScrollBarVisibility="Hidden"
-                                      VerticalScrollBarVisibility="Hidden"/>
-                    </Border>
+                    <Grid>
+                        <!-- Glow, drawn just outside the box while it has keyboard focus -->
+                        <Border x:Name="glow"
+                                Margin="-3"
+                                BorderThickness="3"
+                                BorderBrush="{DynamicResource Theme.Focus.Glow}"
+                                CornerRadius="7"
+                                Visibility="Collapsed"/>
+                        <Border x:Name="border"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="4"
+                                SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Focusable="false"
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                    </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Opacity" TargetName="border" Value="0.56"/>
-                        </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource Theme.Control.Hover.Border}"/>
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource Theme.Focus.Ring}"/>
+                            <Setter Property="Visibility" TargetName="glow" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Background" TargetName="border" Value="{DynamicResource Theme.Control.Disabled.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource Theme.Control.Disabled.Border}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Theme.Text.Disabled}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -86,45 +96,6 @@
         </Setter>
     </Style>
 
-    <!-- Dark mode TextBox style -->
-    <SolidColorBrush x:Key="DarkTextBox.Static.Background" Color="#222"/>
-    <SolidColorBrush x:Key="DarkTextBox.Static.Foreground" Color="#eee"/>
-    <SolidColorBrush x:Key="DarkTextBox.Static.Border" Color="#abadb3"/>
-    <SolidColorBrush x:Key="DarkTextBox.MouseOver.Border" Color="#00bfff"/>
-    <SolidColorBrush x:Key="DarkTextBox.Focus.Border" Color="#007acc"/>
-    <Style x:Key="TextBoxStyle.Dark" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-        <Setter Property="Background" Value="{StaticResource DarkTextBox.Static.Background}"/>
-        <Setter Property="Foreground" Value="{StaticResource DarkTextBox.Static.Foreground}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource DarkTextBox.Static.Border}"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Border x:Name="border"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Background="{TemplateBinding Background}"
-                            SnapsToDevicePixels="True">
-                        <ScrollViewer x:Name="PART_ContentHost"
-                                      Focusable="false"
-                                      HorizontalScrollBarVisibility="Hidden"
-                                      VerticalScrollBarVisibility="Hidden"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Opacity" TargetName="border" Value="0.56"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource DarkTextBox.MouseOver.Border}"/>
-                        </Trigger>
-                        <Trigger Property="IsKeyboardFocused" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource DarkTextBox.Focus.Border}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <!-- HTML TextBox style -->
     <Style x:Key="HtmlTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="FontFamily" Value="Consolas"/>
@@ -133,11 +104,13 @@
         <Setter Property="Width" Value="80"/>
     </Style>
 
-    <!-- PasswordBox style -->
+    <!-- PasswordBox style, matching the TextBox style -->
     <Style TargetType="{x:Type PasswordBox}">
-        <Setter Property="Background" Value="{StaticResource TextBox.Static.Background}"/>
-        <Setter Property="Foreground" Value="{StaticResource TextBox.Static.Foreground}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+        <Setter Property="Background" Value="{DynamicResource Theme.Control.Background}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Theme.Control.Border}"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource Theme.Text}"/>
+        <Setter Property="SelectionBrush" Value="{DynamicResource Theme.Accent}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Padding" Value="3"/>
         <Setter Property="FontSize" Value="14"/>
@@ -151,28 +124,41 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type PasswordBox}">
-                    <Border x:Name="border"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Background="{TemplateBinding Background}">
-                        <ScrollViewer x:Name="PART_ContentHost"
-                                      Focusable="False"
-                                      HorizontalScrollBarVisibility="Hidden"
-                                      VerticalScrollBarVisibility="Hidden"/>
-                    </Border>
+                    <Grid>
+                        <Border x:Name="glow"
+                                Margin="-3"
+                                BorderThickness="3"
+                                BorderBrush="{DynamicResource Theme.Focus.Glow}"
+                                CornerRadius="7"
+                                Visibility="Collapsed"/>
+                        <Border x:Name="border"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="4"
+                                SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Focusable="False"
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                    </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Opacity" TargetName="border" Value="0.56"/>
-                        </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource Theme.Control.Hover.Border}"/>
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource Theme.Focus.Ring}"/>
+                            <Setter Property="Visibility" TargetName="glow" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" TargetName="border" Value="{DynamicResource Theme.Control.Disabled.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource Theme.Control.Disabled.Border}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Theme.Text.Disabled}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-</ResourceDictionary>
+</ResourceDictionary>

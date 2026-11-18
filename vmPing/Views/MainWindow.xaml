@@ -453,7 +453,7 @@
 
                                 <!-- Ping statistics -->
                                 <DockPanel DockPanel.Dock="Bottom"
-                                           Background="Transparent">
+                                           Background="{DynamicResource Theme.Probe.StatusBar.Background}">
                                     <DockPanel.Style>
                                         <Style TargetType="{x:Type DockPanel}">
                                             <!-- Statistics are show only if: ProbeType = Ping and Statistics.Sent != 0 -->
@@ -470,55 +470,61 @@
                                     </DockPanel.Style>
                                     <DockPanel.Resources>
                                         <Style TargetType="{x:Type TextBlock}">
-                                            <Setter Property="DockPanel.Dock" Value="Left"/>
                                             <Setter Property="FontFamily" Value="Segoe UI"/>
                                             <Setter Property="FontSize" Value="12"/>
                                             <Setter Property="FontWeight" Value="Bold"/>
                                             <Setter Property="Foreground" Value="{Binding Status, Converter={StaticResource ProbeStatusToStatisticsBrushConverter}}"/>
                                         </Style>
                                     </DockPanel.Resources>
-                                    <TextBlock Text="Sent: " Opacity="0.8" Padding="6,0,0,3" />
-                                    <TextBlock Text="{Binding Statistics.Sent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}">
-                                        <TextBlock.Triggers>
-                                            <EventTrigger RoutedEvent="Binding.TargetUpdated">
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                                         AutoReverse="True"
-                                                                         From="1.0" To="0.75" Duration="0:0:0.3"/>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </EventTrigger>
-                                        </TextBlock.Triggers>
-                                    </TextBlock>
-                                    <TextBlock Text="  Received: " Opacity="0.8"/>
-                                    <TextBlock Text="{Binding Statistics.Received, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}">
-                                        <TextBlock.Triggers>
-                                            <EventTrigger RoutedEvent="Binding.TargetUpdated">
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                                         AutoReverse="True"
-                                                                         From="1.0" To="0.75" Duration="0:0:0.3"/>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </EventTrigger>
-                                        </TextBlock.Triggers>
-                                    </TextBlock>
-                                    <TextBlock Text="  Lost: " Opacity="0.8"/>
-                                    <TextBlock Text="{Binding Statistics.Lost, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}">
-                                        <TextBlock.Triggers>
-                                            <EventTrigger RoutedEvent="Binding.TargetUpdated">
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                                         AutoReverse="True"
-                                                                         From="1.0" To="0.75" Duration="0:0:0.3"/>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </EventTrigger>
-                                        </TextBlock.Triggers>
-                                    </TextBlock>
+                                    <!-- Shrinks to fit when the probe is too narrow -->
+                                    <Viewbox Stretch="Uniform"
+                                             StretchDirection="DownOnly"
+                                             HorizontalAlignment="Left">
+                                        <StackPanel Orientation="Horizontal" Margin="6,2,6,3">
+                                            <TextBlock Text="Sent: " Opacity="0.8"/>
+                                            <TextBlock Text="{Binding Statistics.Sent, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}">
+                                                <TextBlock.Triggers>
+                                                    <EventTrigger RoutedEvent="Binding.TargetUpdated">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                                 AutoReverse="True"
+                                                                                 From="1.0" To="0.75" Duration="0:0:0.3"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                </TextBlock.Triggers>
+                                            </TextBlock>
+                                            <TextBlock Text="Received: " Opacity="0.8" Margin="16,0,0,0"/>
+                                            <TextBlock Text="{Binding Statistics.Received, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}">
+                                                <TextBlock.Triggers>
+                                                    <EventTrigger RoutedEvent="Binding.TargetUpdated">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                                 AutoReverse="True"
+                                                                                 From="1.0" To="0.75" Duration="0:0:0.3"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                </TextBlock.Triggers>
+                                            </TextBlock>
+                                            <TextBlock Text="Lost: " Opacity="0.8" Margin="16,0,0,0"/>
+                                            <TextBlock Text="{Binding Statistics.Lost, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}">
+                                                <TextBlock.Triggers>
+                                                    <EventTrigger RoutedEvent="Binding.TargetUpdated">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                                 AutoReverse="True"
+                                                                                 From="1.0" To="0.75" Duration="0:0:0.3"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                </TextBlock.Triggers>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Viewbox>
                                 </DockPanel>
 
                                 <!-- Output, or a comment in its place -->

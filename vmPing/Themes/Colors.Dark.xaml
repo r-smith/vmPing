@@ -50,6 +50,9 @@
     <SolidColorBrush x:Key="Theme.Probe.TitleBar.Background" Color="#73000000"/>
     <SolidColorBrush x:Key="Theme.Probe.TitleBar.Icon" Color="#ffffff"/>
 
+    <!-- Probe statistics line: the band behind it. Its text uses the probe statistics colors. -->
+    <SolidColorBrush x:Key="Theme.Probe.StatusBar.Background" Color="#73000000"/>
+
     <!-- Probe type label -->
     <SolidColorBrush x:Key="Theme.Probe.TypeLabel.Background" Color="#1d3a5c"/>
     <SolidColorBrush x:Key="Theme.Probe.TypeLabel.Foreground" Color="#79c0ff"/>

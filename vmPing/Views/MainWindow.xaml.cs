@@ -41,6 +41,7 @@ namespace vmPing.Views
         {
             InitializeComponent();
             ThemeManager.RegisterWindow(this);
+            ThemeManager.ThemeChanged += (sender, e) => RefreshProbeColors();
             ProbeTypeMenu.CustomPopupPlacementCallback = PlaceProbeTypeMenu;
             InitializeApplication();
         }

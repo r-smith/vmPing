@@ -6,6 +6,7 @@ using System.Windows.Media;
 using vmPing.Configuration;
 using vmPing.Probes;
 using vmPing.Properties;
+using vmPing.Services;
 
 namespace vmPing.Converters
 {
@@ -102,21 +103,22 @@ namespace vmPing.Converters
                 return Brushes.Transparent;
             }
 
+            ProbeColors colors = ThemeManager.ProbeColors;
             switch ((ProbeStatus)value)
             {
                 case ProbeStatus.Up:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ProbeBackgroundUp);
+                    return ProbeBrushHelper.FromColorString(colors.BackgroundUp);
                 case ProbeStatus.Down:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ProbeBackgroundDown);
+                    return ProbeBrushHelper.FromColorString(colors.BackgroundDown);
                 case ProbeStatus.Error:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ProbeBackgroundError);
+                    return ProbeBrushHelper.FromColorString(colors.BackgroundError);
                 case ProbeStatus.LatencyHigh:
                 case ProbeStatus.Indeterminate:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ProbeBackgroundIndeterminate);
-                case ProbeStatus.Scanner:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ProbeBackgroundScanner);
+                    return ProbeBrushHelper.FromColorString(colors.BackgroundIndeterminate);
+                case ProbeStatus.Tool:
+                    return ProbeBrushHelper.FromColorString(colors.BackgroundTool);
                 default:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ProbeBackgroundInactive);
+                    return ProbeBrushHelper.FromColorString(colors.BackgroundInactive);
             }
         }
 
@@ -135,21 +137,22 @@ namespace vmPing.Converters
                 return Brushes.Transparent;
             }
 
+            ProbeColors colors = ThemeManager.ProbeColors;
             switch ((ProbeStatus)value)
             {
                 case ProbeStatus.Up:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ProbeForegroundUp);
+                    return ProbeBrushHelper.FromColorString(colors.ForegroundUp);
                 case ProbeStatus.Down:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ProbeForegroundDown);
+                    return ProbeBrushHelper.FromColorString(colors.ForegroundDown);
                 case ProbeStatus.Error:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ProbeForegroundError);
+                    return ProbeBrushHelper.FromColorString(colors.ForegroundError);
                 case ProbeStatus.LatencyHigh:
                 case ProbeStatus.Indeterminate:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ProbeForegroundIndeterminate);
-                case ProbeStatus.Scanner:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ProbeForegroundScanner);
+                    return ProbeBrushHelper.FromColorString(colors.ForegroundIndeterminate);
+                case ProbeStatus.Tool:
+                    return ProbeBrushHelper.FromColorString(colors.ForegroundTool);
                 default:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.ProbeForegroundInactive);
+                    return ProbeBrushHelper.FromColorString(colors.ForegroundInactive);
             }
         }
 
@@ -168,19 +171,20 @@ namespace vmPing.Converters
                 return Brushes.Transparent;
             }
 
+            ProbeColors colors = ThemeManager.ProbeColors;
             switch ((ProbeStatus)value)
             {
                 case ProbeStatus.Up:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.StatisticsForegroundUp);
+                    return ProbeBrushHelper.FromColorString(colors.StatisticsUp);
                 case ProbeStatus.Down:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.StatisticsForegroundDown);
+                    return ProbeBrushHelper.FromColorString(colors.StatisticsDown);
                 case ProbeStatus.Error:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.StatisticsForegroundError);
+                    return ProbeBrushHelper.FromColorString(colors.StatisticsError);
                 case ProbeStatus.LatencyHigh:
                 case ProbeStatus.Indeterminate:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.StatisticsForegroundIndeterminate);
+                    return ProbeBrushHelper.FromColorString(colors.StatisticsIndeterminate);
                 default:
-                    return ProbeBrushHelper.FromColorString(ApplicationOptions.StatisticsForegroundInactive);
+                    return ProbeBrushHelper.FromColorString(colors.StatisticsInactive);
             }
         }
 
@@ -320,7 +324,7 @@ namespace vmPing.Converters
                 case ProbeType.Ping:
                     return ApplicationOptions.ProbeFontSize;
                 default:
-                    return ApplicationOptions.ScannerFontSize;
+                    return ApplicationOptions.ToolFontSize;
             }
         }
 

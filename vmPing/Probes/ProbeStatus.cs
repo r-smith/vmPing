@@ -9,7 +9,7 @@
         LatencyNormal,
         Indeterminate,
         Inactive,
-        Scanner,
+        Tool,
         Start,
         Stop
     }

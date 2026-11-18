@@ -22,6 +22,9 @@ namespace vmPing.Services
         public static ThemeMode Mode { get; private set; } = ThemeMode.System;
         public static bool IsDark { get; private set; }
 
+        // The probe colors for the current theme.
+        public static ProbeColors ProbeColors => IsDark ? ApplicationOptions.DarkProbeColors : ApplicationOptions.LightProbeColors;
+
         // Raised after the colors change, for anything the color resources can't update (such as the title bar).
         public static event EventHandler ThemeChanged;
 

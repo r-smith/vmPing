@@ -290,33 +290,44 @@ namespace vmPing.Configuration
             // <colors>
             //   <option name="MyOptionName">myValue</option>
             // </colors>
-
-            // Local function to create nodes.
-            XElement Node(string name, object value) =>
-                new XElement("option", new XAttribute("name", name), value ?? string.Empty);
-
+            // The light set keeps the original names. The dark set adds a "Dark." prefix.
             return new XElement("colors",
-                new XComment(" Probe background "),
-                Node("Probe.Background.Inactive", ApplicationOptions.ProbeBackgroundInactive),
-                Node("Probe.Background.Up", ApplicationOptions.ProbeBackgroundUp),
-                Node("Probe.Background.Down", ApplicationOptions.ProbeBackgroundDown),
-                Node("Probe.Background.Indeterminate", ApplicationOptions.ProbeBackgroundIndeterminate),
-                Node("Probe.Background.Error", ApplicationOptions.ProbeBackgroundError),
-
-                new XComment(" Probe foreground "),
-                Node("Probe.Foreground.Inactive", ApplicationOptions.ProbeForegroundInactive),
-                Node("Probe.Foreground.Up", ApplicationOptions.ProbeForegroundUp),
-                Node("Probe.Foreground.Down", ApplicationOptions.ProbeForegroundDown),
-                Node("Probe.Foreground.Indeterminate", ApplicationOptions.ProbeForegroundIndeterminate),
-                Node("Probe.Foreground.Error", ApplicationOptions.ProbeForegroundError),
-
-                new XComment(" Statistics foreground "),
-                Node("Statistics.Foreground.Inactive", ApplicationOptions.StatisticsForegroundInactive),
-                Node("Statistics.Foreground.Up", ApplicationOptions.StatisticsForegroundUp),
-                Node("Statistics.Foreground.Down", ApplicationOptions.StatisticsForegroundDown),
-                Node("Statistics.Foreground.Indeterminate", ApplicationOptions.StatisticsForegroundIndeterminate),
-                Node("Statistics.Foreground.Error", ApplicationOptions.StatisticsForegroundError)
+                GenerateProbeColorNodes(string.Empty, "light theme", ApplicationOptions.LightProbeColors),
+                GenerateProbeColorNodes("Dark.", "dark theme", ApplicationOptions.DarkProbeColors)
             );
+        }
+
+        private static object[] GenerateProbeColorNodes(string prefix, string themeName, ProbeColors colors)
+        {
+            // Local function to create nodes.
+            XElement Node(string name, string value) =>
+                new XElement("option", new XAttribute("name", prefix + name), value ?? string.Empty);
+
+            return new object[]
+            {
+                new XComment($" Probe background ({themeName}) "),
+                Node("Probe.Background.Inactive", colors.BackgroundInactive),
+                Node("Probe.Background.Up", colors.BackgroundUp),
+                Node("Probe.Background.Down", colors.BackgroundDown),
+                Node("Probe.Background.Indeterminate", colors.BackgroundIndeterminate),
+                Node("Probe.Background.Error", colors.BackgroundError),
+                Node("Probe.Background.Tool", colors.BackgroundTool),
+
+                new XComment($" Probe foreground ({themeName}) "),
+                Node("Probe.Foreground.Inactive", colors.ForegroundInactive),
+                Node("Probe.Foreground.Up", colors.ForegroundUp),
+                Node("Probe.Foreground.Down", colors.ForegroundDown),
+                Node("Probe.Foreground.Indeterminate", colors.ForegroundIndeterminate),
+                Node("Probe.Foreground.Error", colors.ForegroundError),
+                Node("Probe.Foreground.Tool", colors.ForegroundTool),
+
+                new XComment($" Statistics foreground ({themeName}) "),
+                Node("Statistics.Foreground.Inactive", colors.StatisticsInactive),
+                Node("Statistics.Foreground.Up", colors.StatisticsUp),
+                Node("Statistics.Foreground.Down", colors.StatisticsDown),
+                Node("Statistics.Foreground.Indeterminate", colors.StatisticsIndeterminate),
+                Node("Statistics.Foreground.Error", colors.StatisticsError)
+            };
         }
 
         public static void Load()
@@ -353,22 +364,29 @@ namespace vmPing.Configuration
                 .Where(n => n.Attributes?["name"] != null)
                 .ToDictionary(n => n.Attributes["name"].Value, n => n.InnerText);
 
-            // Load probe background colors.
-            ApplyColor("Probe.Background.Inactive", v => ApplicationOptions.ProbeBackgroundInactive = v, options);
-            ApplyColor("Probe.Background.Up", v => ApplicationOptions.ProbeBackgroundUp = v, options);
-            ApplyColor("Probe.Background.Down", v => ApplicationOptions.ProbeBackgroundDown = v, options);
-            ApplyColor("Probe.Background.Indeterminate", v => ApplicationOptions.ProbeBackgroundIndeterminate = v, options);
-            ApplyColor("Probe.Background.Error", v => ApplicationOptions.ProbeBackgroundError = v, options);
-            ApplyColor("Probe.Foreground.Inactive", v => ApplicationOptions.ProbeForegroundInactive = v, options);
-            ApplyColor("Probe.Foreground.Up", v => ApplicationOptions.ProbeForegroundUp = v, options);
-            ApplyColor("Probe.Foreground.Down", v => ApplicationOptions.ProbeForegroundDown = v, options);
-            ApplyColor("Probe.Foreground.Indeterminate", v => ApplicationOptions.ProbeForegroundIndeterminate = v, options);
-            ApplyColor("Probe.Foreground.Error", v => ApplicationOptions.ProbeForegroundError = v, options);
-            ApplyColor("Statistics.Foreground.Inactive", v => ApplicationOptions.StatisticsForegroundInactive = v, options);
-            ApplyColor("Statistics.Foreground.Up", v => ApplicationOptions.StatisticsForegroundUp = v, options);
-            ApplyColor("Statistics.Foreground.Down", v => ApplicationOptions.StatisticsForegroundDown = v, options);
-            ApplyColor("Statistics.Foreground.Indeterminate", v => ApplicationOptions.StatisticsForegroundIndeterminate = v, options);
-            ApplyColor("Statistics.Foreground.Error", v => ApplicationOptions.StatisticsForegroundError = v, options);
+            ApplyProbeColors(string.Empty, ApplicationOptions.LightProbeColors, options);
+            ApplyProbeColors("Dark.", ApplicationOptions.DarkProbeColors, options);
+        }
+
+        private static void ApplyProbeColors(string prefix, ProbeColors colors, IDictionary<string, string> options)
+        {
+            ApplyColor(prefix + "Probe.Background.Inactive", v => colors.BackgroundInactive = v, options);
+            ApplyColor(prefix + "Probe.Background.Up", v => colors.BackgroundUp = v, options);
+            ApplyColor(prefix + "Probe.Background.Down", v => colors.BackgroundDown = v, options);
+            ApplyColor(prefix + "Probe.Background.Indeterminate", v => colors.BackgroundIndeterminate = v, options);
+            ApplyColor(prefix + "Probe.Background.Error", v => colors.BackgroundError = v, options);
+            ApplyColor(prefix + "Probe.Background.Tool", v => colors.BackgroundTool = v, options);
+            ApplyColor(prefix + "Probe.Foreground.Inactive", v => colors.ForegroundInactive = v, options);
+            ApplyColor(prefix + "Probe.Foreground.Up", v => colors.ForegroundUp = v, options);
+            ApplyColor(prefix + "Probe.Foreground.Down", v => colors.ForegroundDown = v, options);
+            ApplyColor(prefix + "Probe.Foreground.Indeterminate", v => colors.ForegroundIndeterminate = v, options);
+            ApplyColor(prefix + "Probe.Foreground.Error", v => colors.ForegroundError = v, options);
+            ApplyColor(prefix + "Probe.Foreground.Tool", v => colors.ForegroundTool = v, options);
+            ApplyColor(prefix + "Statistics.Foreground.Inactive", v => colors.StatisticsInactive = v, options);
+            ApplyColor(prefix + "Statistics.Foreground.Up", v => colors.StatisticsUp = v, options);
+            ApplyColor(prefix + "Statistics.Foreground.Down", v => colors.StatisticsDown = v, options);
+            ApplyColor(prefix + "Statistics.Foreground.Indeterminate", v => colors.StatisticsIndeterminate = v, options);
+            ApplyColor(prefix + "Statistics.Foreground.Error", v => colors.StatisticsError = v, options);
         }
 
         private static void ApplyColor(string key, Action<string> setter, IDictionary<string, string> options)

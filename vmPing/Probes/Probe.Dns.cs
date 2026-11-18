@@ -11,7 +11,7 @@ namespace vmPing.Probes
         {
             IsActive = true;
             ClearHistory();
-            Status = ProbeStatus.Scanner;
+            Status = ProbeStatus.Tool;
 
             try
             {

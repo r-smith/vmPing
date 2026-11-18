@@ -69,33 +69,14 @@ namespace vmPing.Configuration
 
         // Fonts.
         public static int ProbeFontSize { get; set; } = 11;
-        public static int ScannerFontSize { get; set; } = 16;
+        public static int ToolFontSize { get; set; } = 16;
 
         // Theme.
         public static ThemeMode Theme { get; set; } = ThemeMode.System;
 
-        // Probe background colors.
-        public static string ProbeBackgroundInactive { get; set; } = Constants.DefaultProbeBackgroundInactive;
-        public static string ProbeBackgroundUp { get; set; } = Constants.DefaultProbeBackgroundUp;
-        public static string ProbeBackgroundDown { get; set; } = Constants.DefaultProbeBackgroundDown;
-        public static string ProbeBackgroundIndeterminate { get; set; } = Constants.DefaultProbeBackgroundIndeterminate;
-        public static string ProbeBackgroundError { get; set; } = Constants.DefaultProbeBackgroundError;
-        public static string ProbeBackgroundScanner { get; set; } = Constants.DefaultProbeBackgroundScanner;
-
-        // Probe foreground colors.
-        public static string ProbeForegroundInactive { get; set; } = Constants.DefaultProbeForegroundInactive;
-        public static string ProbeForegroundUp { get; set; } = Constants.DefaultProbeForegroundUp;
-        public static string ProbeForegroundDown { get; set; } = Constants.DefaultProbeForegroundDown;
-        public static string ProbeForegroundIndeterminate { get; set; } = Constants.DefaultProbeForegroundIndeterminate;
-        public static string ProbeForegroundError { get; set; } = Constants.DefaultProbeForegroundError;
-        public static string ProbeForegroundScanner { get; set; } = Constants.DefaultProbeForegroundScanner;
-
-        // Probe statistics.
-        public static string StatisticsForegroundInactive { get; set; } = Constants.DefaultStatisticsForegroundInactive;
-        public static string StatisticsForegroundUp { get; set; } = Constants.DefaultStatisticsForegroundUp;
-        public static string StatisticsForegroundDown { get; set; } = Constants.DefaultStatisticsForegroundDown;
-        public static string StatisticsForegroundIndeterminate { get; set; } = Constants.DefaultStatisticsForegroundIndeterminate;
-        public static string StatisticsForegroundError { get; set; } = Constants.DefaultStatisticsForegroundError;
+        // Probe colors, one set for each theme.
+        public static ProbeColors LightProbeColors { get; set; } = ProbeColors.CreateLightDefaults();
+        public static ProbeColors DarkProbeColors { get; set; } = ProbeColors.CreateDarkDefaults();
 
         static ApplicationOptions()
         {

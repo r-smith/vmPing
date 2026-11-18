@@ -16,6 +16,10 @@ namespace vmPing.Views
 {
     public partial class OptionsWindow : Window
     {
+        // The probe colors shown on the Theme page: the set for the theme in use when Options opened.
+        private ProbeColors _probeColors;
+        private bool _isEditingDarkColors;
+
         public OptionsWindow()
         {
             InitializeComponent();
@@ -215,21 +219,24 @@ namespace vmPing.Views
             ThemeSystemOption.IsChecked = ApplicationOptions.Theme == ThemeMode.System;
             ThemeLightOption.IsChecked = ApplicationOptions.Theme == ThemeMode.Light;
             ThemeDarkOption.IsChecked = ApplicationOptions.Theme == ThemeMode.Dark;
-            ProbeBackgroundInactive.Text = ApplicationOptions.ProbeBackgroundInactive;
-            ProbeBackgroundUp.Text = ApplicationOptions.ProbeBackgroundUp;
-            ProbeBackgroundDown.Text = ApplicationOptions.ProbeBackgroundDown;
-            ProbeBackgroundError.Text = ApplicationOptions.ProbeBackgroundError;
-            ProbeBackgroundIndeterminate.Text = ApplicationOptions.ProbeBackgroundIndeterminate;
-            ProbeForegroundInactive.Text = ApplicationOptions.ProbeForegroundInactive;
-            ProbeForegroundUp.Text = ApplicationOptions.ProbeForegroundUp;
-            ProbeForegroundDown.Text = ApplicationOptions.ProbeForegroundDown;
-            ProbeForegroundError.Text = ApplicationOptions.ProbeForegroundError;
-            ProbeForegroundIndeterminate.Text = ApplicationOptions.ProbeForegroundIndeterminate;
-            StatisticsForegroundInactive.Text = ApplicationOptions.StatisticsForegroundInactive;
-            StatisticsForegroundUp.Text = ApplicationOptions.StatisticsForegroundUp;
-            StatisticsForegroundDown.Text = ApplicationOptions.StatisticsForegroundDown;
-            StatisticsForegroundError.Text = ApplicationOptions.StatisticsForegroundError;
-            StatisticsForegroundIndeterminate.Text = ApplicationOptions.StatisticsForegroundIndeterminate;
+
+            _isEditingDarkColors = ThemeManager.IsDark;
+            _probeColors = ThemeManager.ProbeColors;
+            ProbeBackgroundInactive.Text = _probeColors.BackgroundInactive;
+            ProbeBackgroundUp.Text = _probeColors.BackgroundUp;
+            ProbeBackgroundDown.Text = _probeColors.BackgroundDown;
+            ProbeBackgroundError.Text = _probeColors.BackgroundError;
+            ProbeBackgroundIndeterminate.Text = _probeColors.BackgroundIndeterminate;
+            ProbeForegroundInactive.Text = _probeColors.ForegroundInactive;
+            ProbeForegroundUp.Text = _probeColors.ForegroundUp;
+            ProbeForegroundDown.Text = _probeColors.ForegroundDown;
+            ProbeForegroundError.Text = _probeColors.ForegroundError;
+            ProbeForegroundIndeterminate.Text = _probeColors.ForegroundIndeterminate;
+            StatisticsForegroundInactive.Text = _probeColors.StatisticsInactive;
+            StatisticsForegroundUp.Text = _probeColors.StatisticsUp;
+            StatisticsForegroundDown.Text = _probeColors.StatisticsDown;
+            StatisticsForegroundError.Text = _probeColors.StatisticsError;
+            StatisticsForegroundIndeterminate.Text = _probeColors.StatisticsIndeterminate;
         }
 
 
@@ -701,21 +708,21 @@ namespace vmPing.Views
             }
             ThemeManager.SetMode(ApplicationOptions.Theme);
 
-            ApplicationOptions.ProbeBackgroundInactive = ProbeBackgroundInactive.Text;
-            ApplicationOptions.ProbeBackgroundUp = ProbeBackgroundUp.Text;
-            ApplicationOptions.ProbeBackgroundDown = ProbeBackgroundDown.Text;
-            ApplicationOptions.ProbeBackgroundIndeterminate = ProbeBackgroundIndeterminate.Text;
-            ApplicationOptions.ProbeBackgroundError = ProbeBackgroundError.Text;
-            ApplicationOptions.ProbeForegroundInactive = ProbeForegroundInactive.Text;
-            ApplicationOptions.ProbeForegroundUp = ProbeForegroundUp.Text;
-            ApplicationOptions.ProbeForegroundDown = ProbeForegroundDown.Text;
-            ApplicationOptions.ProbeForegroundIndeterminate = ProbeForegroundIndeterminate.Text;
-            ApplicationOptions.ProbeForegroundError = ProbeForegroundError.Text;
-            ApplicationOptions.StatisticsForegroundInactive = StatisticsForegroundInactive.Text;
-            ApplicationOptions.StatisticsForegroundUp = StatisticsForegroundUp.Text;
-            ApplicationOptions.StatisticsForegroundDown = StatisticsForegroundDown.Text;
-            ApplicationOptions.StatisticsForegroundIndeterminate = StatisticsForegroundIndeterminate.Text;
-            ApplicationOptions.StatisticsForegroundError = StatisticsForegroundError.Text;
+            _probeColors.BackgroundInactive = ProbeBackgroundInactive.Text;
+            _probeColors.BackgroundUp = ProbeBackgroundUp.Text;
+            _probeColors.BackgroundDown = ProbeBackgroundDown.Text;
+            _probeColors.BackgroundIndeterminate = ProbeBackgroundIndeterminate.Text;
+            _probeColors.BackgroundError = ProbeBackgroundError.Text;
+            _probeColors.ForegroundInactive = ProbeForegroundInactive.Text;
+            _probeColors.ForegroundUp = ProbeForegroundUp.Text;
+            _probeColors.ForegroundDown = ProbeForegroundDown.Text;
+            _probeColors.ForegroundIndeterminate = ProbeForegroundIndeterminate.Text;
+            _probeColors.ForegroundError = ProbeForegroundError.Text;
+            _probeColors.StatisticsInactive = StatisticsForegroundInactive.Text;
+            _probeColors.StatisticsUp = StatisticsForegroundUp.Text;
+            _probeColors.StatisticsDown = StatisticsForegroundDown.Text;
+            _probeColors.StatisticsIndeterminate = StatisticsForegroundIndeterminate.Text;
+            _probeColors.StatisticsError = StatisticsForegroundError.Text;
         }
 
         // Allows digits and a minus sign, for positions left of or above the main monitor.
@@ -956,21 +963,24 @@ namespace vmPing.Views
 
         private void RestoreDefaultColors_Click(object sender, RoutedEventArgs e)
         {
-            ProbeBackgroundInactive.Text = Constants.DefaultProbeBackgroundInactive;
-            ProbeBackgroundUp.Text = Constants.DefaultProbeBackgroundUp;
-            ProbeBackgroundDown.Text = Constants.DefaultProbeBackgroundDown;
-            ProbeBackgroundError.Text = Constants.DefaultProbeBackgroundError;
-            ProbeBackgroundIndeterminate.Text = Constants.DefaultProbeBackgroundIndeterminate;
-            ProbeForegroundInactive.Text = Constants.DefaultProbeForegroundInactive;
-            ProbeForegroundUp.Text = Constants.DefaultProbeForegroundUp;
-            ProbeForegroundDown.Text = Constants.DefaultProbeForegroundDown;
-            ProbeForegroundError.Text = Constants.DefaultProbeForegroundError;
-            ProbeForegroundIndeterminate.Text = Constants.DefaultProbeForegroundIndeterminate;
-            StatisticsForegroundInactive.Text = Constants.DefaultStatisticsForegroundInactive;
-            StatisticsForegroundUp.Text = Constants.DefaultStatisticsForegroundUp;
-            StatisticsForegroundDown.Text = Constants.DefaultStatisticsForegroundDown;
-            StatisticsForegroundError.Text = Constants.DefaultStatisticsForegroundError;
-            StatisticsForegroundIndeterminate.Text = Constants.DefaultStatisticsForegroundIndeterminate;
+            ProbeColors defaults = _isEditingDarkColors
+                ? ProbeColors.CreateDarkDefaults()
+                : ProbeColors.CreateLightDefaults();
+            ProbeBackgroundInactive.Text = defaults.BackgroundInactive;
+            ProbeBackgroundUp.Text = defaults.BackgroundUp;
+            ProbeBackgroundDown.Text = defaults.BackgroundDown;
+            ProbeBackgroundError.Text = defaults.BackgroundError;
+            ProbeBackgroundIndeterminate.Text = defaults.BackgroundIndeterminate;
+            ProbeForegroundInactive.Text = defaults.ForegroundInactive;
+            ProbeForegroundUp.Text = defaults.ForegroundUp;
+            ProbeForegroundDown.Text = defaults.ForegroundDown;
+            ProbeForegroundError.Text = defaults.ForegroundError;
+            ProbeForegroundIndeterminate.Text = defaults.ForegroundIndeterminate;
+            StatisticsForegroundInactive.Text = defaults.StatisticsInactive;
+            StatisticsForegroundUp.Text = defaults.StatisticsUp;
+            StatisticsForegroundDown.Text = defaults.StatisticsDown;
+            StatisticsForegroundError.Text = defaults.StatisticsError;
+            StatisticsForegroundIndeterminate.Text = defaults.StatisticsIndeterminate;
         }
 
         private void Window_SourceInitialized(object sender, EventArgs e)

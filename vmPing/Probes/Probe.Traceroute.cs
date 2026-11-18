@@ -13,7 +13,7 @@ namespace vmPing.Probes
         {
             IsActive = true;
             ClearHistory();
-            Status = ProbeStatus.Scanner;
+            Status = ProbeStatus.Tool;
 
             AddHistory($"[\u2022] Tracing route to {Hostname}:");
             if (await IsHostInvalid(Hostname, cancellationToken))

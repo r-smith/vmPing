@@ -30,7 +30,8 @@
                 <TextBlock>
                     Type a list of addresses to ping.<LineBreak/>
                     Enter one per line or comma separated.<LineBreak/><LineBreak/>
-                    If you have a text file containing hosts,<LineBreak/>drag and drop it here.
+                    If you have a text file containing hosts,<LineBreak/>drag and drop it here.<LineBreak/><LineBreak/>
+                    Press Ctrl+Enter to start.
                 </TextBlock>
             </Label>
         </DockPanel>
@@ -45,6 +46,7 @@
                  FontSize="16"
                  Padding="5"
                  AllowDrop="True"
+                 PreviewKeyDown="MultiAddress_PreviewKeyDown"
                  PreviewDragOver="MultiAddress_PreviewDragOver"
                  Drop="MultiAddress_Drop"/>
 

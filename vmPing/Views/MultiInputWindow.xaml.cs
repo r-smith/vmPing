@@ -43,6 +43,16 @@ namespace vmPing.Views
             DialogResult = true;
         }
 
+        // Enter adds a new line, so Ctrl+Enter is the shortcut for OK.
+        private void MultiAddress_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                e.Handled = true;
+                DialogResult = true;
+            }
+        }
+
         private void MultiAddress_PreviewDragOver(object sender, DragEventArgs e)
         {
             e.Effects = DragDropEffects.Copy;

@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using vmPing.Probes;
 
 namespace vmPing.Controls
@@ -147,10 +148,10 @@ namespace vmPing.Controls
             return VerticalOffset + ViewportHeight >= ExtentHeight - 1;
         }
 
-        // Shows a down arrow while there is output below the visible area.
+        // Shows a badge while there is output below the visible area.
         private void UpdateAdorner()
         {
-            const double MinimumAdornerHeight = 11.0;
+            const double MinimumAdornerHeight = 21.0;
 
             AdornerLayer layer = AdornerLayer.GetAdornerLayer(this);
             if (layer == null)
@@ -161,6 +162,7 @@ namespace vmPing.Controls
             if (_adorner == null)
             {
                 _adorner = new AutoScrollAdorner(this);
+                _adorner.MouseLeftButtonDown += Adorner_MouseLeftButtonDown;
             }
 
             bool isShown = layer.GetAdorners(this) != null;
@@ -173,6 +175,16 @@ namespace vmPing.Controls
             {
                 layer.Remove(_adorner);
             }
+        }
+
+        // Clicking the badge clears any selection, which would pause auto-scroll,
+        // then jumps to the newest output and turns auto-scroll back on.
+        private void Adorner_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _isAutoScrollEnabled = true;
+            Select(Text.Length, 0);
+            _scrollViewer?.ScrollToEnd();
+            e.Handled = true;
         }
 
         // Let probes be dropped onto the output. A text box would otherwise take the drag.

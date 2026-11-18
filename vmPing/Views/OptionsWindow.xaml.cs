@@ -27,8 +27,8 @@ namespace vmPing.Views
             PopulateAudioAlertOptions();
             PopulateLogOutputOptions();
             PopulateAdvancedOptions();
-            PopulateDisplayOptions();
-            PopulateLayoutOptions();
+            PopulateWindowOptions();
+            PopulateThemeOptions();
 
             // Watch for changes only after the options are filled in.
             WatchStartupOptions();
@@ -201,7 +201,7 @@ namespace vmPing.Views
             UpdateByteCount();
         }
 
-        private void PopulateDisplayOptions()
+        private void PopulateWindowOptions()
         {
             IsAlwaysOnTopEnabled.IsChecked = ApplicationOptions.IsAlwaysOnTopEnabled;
             IsMinimizeToTrayEnabled.IsChecked = ApplicationOptions.IsMinimizeToTrayEnabled;
@@ -209,7 +209,7 @@ namespace vmPing.Views
             IsAlwaysShowTrayIconEnabled.IsChecked = ApplicationOptions.IsAlwaysShowTrayIconEnabled;
         }
 
-        private void PopulateLayoutOptions()
+        private void PopulateThemeOptions()
         {
             ThemeSystemOption.IsChecked = ApplicationOptions.Theme == ThemeMode.System;
             ThemeLightOption.IsChecked = ApplicationOptions.Theme == ThemeMode.Light;
@@ -247,8 +247,8 @@ namespace vmPing.Views
             SaveAudioAlertOptions();
             SaveLogOutputOptions();
             SaveAdvancedOptions();
-            SaveLayoutOptions();
-            SaveDisplayOptions();
+            SaveThemeOptions();
+            SaveWindowOptions();
 
             if (SaveAsDefaults.IsChecked == true)
             {
@@ -267,7 +267,7 @@ namespace vmPing.Views
                 && ValidateAudioAlertOptions()
                 && ValidateLogOutputOptions()
                 && ValidateAdvancedOptions()
-                && ValidateLayoutOptions();
+                && ValidateThemeOptions();
         }
 
         private static bool IsInRange(string text, int min, int max)
@@ -661,7 +661,7 @@ namespace vmPing.Views
             ApplicationOptions.IsLogStatusChangesEnabled = IsLogStatusChangesEnabled.IsChecked == true;
         }
 
-        private void SaveDisplayOptions()
+        private void SaveWindowOptions()
         {
             ApplicationOptions.IsAlwaysOnTopEnabled = IsAlwaysOnTopEnabled.IsChecked == true;
             ApplicationOptions.IsMinimizeToTrayEnabled = IsMinimizeToTrayEnabled.IsChecked == true;
@@ -669,13 +669,13 @@ namespace vmPing.Views
             ApplicationOptions.IsAlwaysShowTrayIconEnabled = IsAlwaysShowTrayIconEnabled.IsChecked == true;
         }
 
-        private bool ValidateLayoutOptions()
+        private bool ValidateThemeOptions()
         {
-            foreach (Visual control in ColorsDockPanel.GetChildren())
+            foreach (Visual control in ThemeDockPanel.GetChildren())
             {
                 if (control is TextBox box && !Util.IsValidHtmlColor(box.Text))
                 {
-                    ShowError("Please enter a valid HTML color code.  Accepted formats are #RGB, #RRGGBB, and #AARRGGBB.  Example: #3266CF", LayoutTab, box);
+                    ShowError("Please enter a valid HTML color code.  Accepted formats are #RGB, #RRGGBB, and #AARRGGBB.  Example: #3266CF", ThemeTab, box);
                     box.SelectAll();
                     return false;
                 }
@@ -684,7 +684,7 @@ namespace vmPing.Views
             return true;
         }
 
-        private void SaveLayoutOptions()
+        private void SaveThemeOptions()
         {
             if (ThemeLightOption.IsChecked == true)
             {

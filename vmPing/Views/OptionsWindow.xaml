@@ -607,13 +607,13 @@
                 </DockPanel>
             </TabItem>
 
-            <!-- Tab: Display -->
-            <TabItem Header="Display" Name="DisplayTab">
+            <!-- Tab: Window -->
+            <TabItem Header="Window" Name="WindowTab">
                 <DockPanel Margin="20,0" LastChildFill="False">
 
                     <!-- Header -->
                     <TextBlock DockPanel.Dock="Top"
-                               Text="Display Options"
+                               Text="Window Options"
                                Style="{StaticResource OptionHeaderTextStyle}"/>
 
                     <!-- Always on top -->
@@ -851,11 +851,11 @@
                 </DockPanel>
             </TabItem>
 
-            <!-- Tab: Layout -->
-            <TabItem Header="Colors" Name="LayoutTab">
+            <!-- Tab: Theme -->
+            <TabItem Header="Theme" Name="ThemeTab">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <DockPanel LastChildFill="False"
-                               Name="ColorsDockPanel"
+                               Name="ThemeDockPanel"
                                Margin="20,0,20,20">
                         <DockPanel.Resources>
                             <Style TargetType="{x:Type StackPanel}">
@@ -876,7 +876,7 @@
 
                         <!-- Header -->
                         <TextBlock DockPanel.Dock="Top"
-                                   Text="Colors"
+                                   Text="Theme"
                                    Style="{StaticResource OptionHeaderTextStyle}"/>
 
                         <!-- Theme option radio button group -->

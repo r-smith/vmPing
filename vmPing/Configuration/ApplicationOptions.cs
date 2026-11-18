@@ -61,7 +61,7 @@ namespace vmPing.Configuration
         public static int WindowLeft { get; set; } = 100;
         public static int WindowTop { get; set; } = 100;
 
-        // Display options.
+        // Window options.
         public static bool IsAlwaysOnTopEnabled { get; set; } = false;
         public static bool IsMinimizeToTrayEnabled { get; set; } = false;
         public static bool IsExitToTrayEnabled { get; set; } = false;

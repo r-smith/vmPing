@@ -57,6 +57,10 @@
     <SolidColorBrush x:Key="Theme.Probe.TypeLabel.Background" Color="#c8dff8"/>
     <SolidColorBrush x:Key="Theme.Probe.TypeLabel.Foreground" Color="#033d8b"/>
 
+    <!-- Probe comments -->
+    <SolidColorBrush x:Key="Theme.Probe.Comment.Background" Color="#e6e9ed"/>
+    <SolidColorBrush x:Key="Theme.Probe.Comment.Foreground" Color="#1f2328"/>
+
     <!-- Scroll bar thumb and arrows (drawn partly see-through, more solid on hover) -->
     <SolidColorBrush x:Key="Theme.ScrollBar.Thumb" Color="#6e7781"/>
 

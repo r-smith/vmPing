@@ -356,7 +356,7 @@
                                 <Setter Property="Background" Value="{Binding Status, Converter={StaticResource ProbeStatusToBackgroundBrushConverter}}"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsComment}" Value="True">
-                                        <Setter Property="Background" Value="#d6d6d6"/>
+                                        <Setter Property="Background" Value="{DynamicResource Theme.Probe.Comment.Background}"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -568,7 +568,7 @@
                                         <TextBlock Text="{Binding CommentText}"
                                                    FontSize="15"
                                                    FontWeight="SemiBold"
-                                                   Foreground="#333"
+                                                   Foreground="{DynamicResource Theme.Probe.Comment.Foreground}"
                                                    TextWrapping="Wrap"
                                                    TextAlignment="Center"
                                                    HorizontalAlignment="Center"

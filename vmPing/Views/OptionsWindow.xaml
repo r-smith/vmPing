@@ -9,7 +9,7 @@
         MinWidth="580"
         WindowStartupLocation="CenterOwner"
         ResizeMode="CanResize"
-        Background="#e1e1e1"
+        Background="{DynamicResource Theme.Window.Background}"
         SourceInitialized="Window_SourceInitialized">
 
     <Window.Resources>
@@ -18,12 +18,12 @@
             <Setter Property="FontWeight" Value="Regular"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="Foreground" Value="#505050"/>
+            <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
         </Style>
 
         <Style TargetType="{x:Type TextBlock}" x:Key="OptionSubHeaderTextStyle">
             <Setter Property="Margin" Value="0,0,0,4"/>
-            <Setter Property="Foreground" Value="#268bd2"/>
+            <Setter Property="Foreground" Value="{DynamicResource Theme.Accent}"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
@@ -181,7 +181,7 @@
                     </StackPanel>
 
                     <!-- Separator -->
-                    <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" Margin="0,20"/>
+                    <Separator DockPanel.Dock="Top" Height="1" Background="{DynamicResource Theme.Panel.Border}" Margin="0,20"/>
 
                     <!-- Packet size -->
                     <StackPanel DockPanel.Dock="Top"
@@ -227,18 +227,18 @@
 
                     <!-- Total packet size -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left" Margin="20,15,0,0">
-                        <TextBlock Foreground="#0e70c0"
+                        <TextBlock Foreground="{DynamicResource Theme.Accent}"
                                    Text="Total packet size:"/>
-                        <TextBlock Foreground="#dc322f"
+                        <TextBlock Foreground="{DynamicResource Theme.Splash.Red}"
                                    Name="Bytes"
                                    Margin="6,0,4,0"
                                    Text="64"/>
-                        <TextBlock Foreground="#dc322f"
+                        <TextBlock Foreground="{DynamicResource Theme.Splash.Red}"
                                    Text="bytes"/>
                     </StackPanel>
 
                     <!-- Separator -->
-                    <Separator DockPanel.Dock="Top" Height="1" Background="#ccc" Margin="0,20"/>
+                    <Separator DockPanel.Dock="Top" Height="1" Background="{DynamicResource Theme.Panel.Border}" Margin="0,20"/>
 
                     <!-- Fragment / Don't fragment -->
                     <DockPanel DockPanel.Dock="Top" LastChildFill="False">
@@ -391,7 +391,7 @@
                                       Name="IsSmtpAuthenticationRequired"
                                       Content="This server requires authentication"
                                       Click="IsSmtpAuthenticationRequired_Click"
-                                      Foreground="#888"
+                                      Foreground="{DynamicResource Theme.Text.Secondary}"
                                       FontSize="13"
                                       Margin="120,8,0,0"/>
                             <StackPanel DockPanel.Dock="Top"
@@ -867,7 +867,7 @@
                                 <EventSetter Event="PreviewTextInput" Handler="HtmlColor_PreviewTextInput"/>
                             </Style>
                             <Style TargetType="{x:Type Border}">
-                                <Setter Property="BorderBrush" Value="Black"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource Theme.Control.Border}"/>
                                 <Setter Property="BorderThickness" Value="1"/>
                                 <Setter Property="Width" Value="80"/>
                                 <Setter Property="Margin" Value="15,0,0,0"/>
@@ -915,6 +915,23 @@
                             </Label>
                         </DockPanel>
 
+                        <!-- Probe colors: which theme's set to edit -->
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Probe Colors"
+                                   Margin="0,20,0,0"
+                                   Style="{StaticResource OptionSubHeaderTextStyle}"/>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <RadioButton GroupName="ProbeColorSet"
+                                         Name="LightColorsOption"
+                                         Content="Light theme"
+                                         Checked="ProbeColorSet_Checked"/>
+                            <RadioButton GroupName="ProbeColorSet"
+                                         Name="DarkColorsOption"
+                                         Content="Dark theme"
+                                         Margin="20,0,0,0"
+                                         Checked="ProbeColorSet_Checked"/>
+                        </StackPanel>
+
                         <!-- Probe background colors -->
                         <TextBlock DockPanel.Dock="Top"
                                    Text="Probe Background"
@@ -944,6 +961,11 @@
                             <TextBlock Width="150" Text="Error"/>
                             <TextBox Name="ProbeBackgroundError"/>
                             <Border Background="{Binding ElementName=ProbeBackgroundError, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Tool"/>
+                            <TextBox Name="ProbeBackgroundTool"/>
+                            <Border Background="{Binding ElementName=ProbeBackgroundTool, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
 
                         <!-- Probe foreground colors -->
@@ -976,6 +998,11 @@
                             <TextBlock Width="150" Text="Error"/>
                             <TextBox Name="ProbeForegroundError"/>
                             <Border Background="{Binding ElementName=ProbeForegroundError, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Width="150" Text="Tool"/>
+                            <TextBox Name="ProbeForegroundTool"/>
+                            <Border Background="{Binding ElementName=ProbeForegroundTool, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
 
                         <!-- Statistics foreground colors -->
@@ -1026,13 +1053,12 @@
 
 
         <!-- Button Section -->
-        <Border Grid.Row="1" BorderBrush="#dfdfdf" Background="#f0f0f0" BorderThickness="0,1,0,0">
+        <Border Grid.Row="1" BorderBrush="{DynamicResource Theme.Panel.Border}" Background="{DynamicResource Theme.Panel.Background}" BorderThickness="0,1,0,0">
             <DockPanel Margin="9" HorizontalAlignment="Right">
                 <CheckBox DockPanel.Dock="Top"
                           Name="SaveAsDefaults"
                           Content="Save as vmPing defaults"
                           FontSize="13"
-                          Foreground="#111"
                           HorizontalAlignment="Right"/>
                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,9,0,0" HorizontalAlignment="Right">
                     <Button Style="{StaticResource ButtonStyle}"

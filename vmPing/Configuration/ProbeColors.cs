@@ -23,6 +23,11 @@
         public string StatisticsIndeterminate { get; set; }
         public string StatisticsError { get; set; }
 
+        public ProbeColors Clone()
+        {
+            return (ProbeColors)MemberwiseClone();
+        }
+
         public static ProbeColors CreateLightDefaults()
         {
             return new ProbeColors

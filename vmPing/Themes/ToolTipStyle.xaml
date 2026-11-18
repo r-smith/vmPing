@@ -61,7 +61,7 @@
                                            Margin="10,17,0,0"
                                            VerticalAlignment="Top"
                                            Opacity="0.75"
-                                           Source="{DynamicResource icon.question-circle-black}"/>
+                                           Source="{DynamicResource icon.question-circle}"/>
                                     <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                                       Grid.Column="1"
                                                       Margin="13,12,12,12"

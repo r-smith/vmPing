@@ -44,10 +44,32 @@
                        Margin="0,10,0,0"
                        Foreground="{DynamicResource Theme.Text}"
                        FontSize="14"/>
-            <ComboBox x:Name="MyGroup"
-                      Margin="0,4,0,0"
-                      HorizontalAlignment="Stretch"
-                      IsEditable="True"/>
+            <Grid Margin="0,4,0,0">
+                <ComboBox x:Name="MyGroup"
+                          HorizontalAlignment="Stretch"
+                          IsEditable="True"/>
+                <!-- Placeholder, shown while no group is entered -->
+                <TextBlock Text="(optional)"
+                           Margin="6,0,0,0"
+                           VerticalAlignment="Center"
+                           FontSize="14"
+                           Foreground="{DynamicResource Theme.Text.Disabled}"
+                           IsHitTestVisible="False">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=MyGroup, Path=Text}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=MyGroup, Path=Text}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
 
             <!-- What will be saved -->
             <TextBlock x:Name="Summary"

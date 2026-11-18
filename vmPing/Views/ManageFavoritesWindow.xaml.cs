@@ -114,7 +114,7 @@ namespace vmPing.Views
             UnsavedText.Visibility = _hasUnsavedChanges ? Visibility.Visible : Visibility.Hidden;
 
             SaveButton.IsEnabled = _hasUnsavedChanges;
-            RevertButton.IsEnabled = _hasUnsavedChanges;
+            RevertButton.Visibility = _hasUnsavedChanges ? Visibility.Visible : Visibility.Hidden;
             Favorites.IsEnabled = !_hasUnsavedChanges;
             NewButton.IsEnabled = !_hasUnsavedChanges;
             DuplicateButton.IsEnabled = hasSelection;

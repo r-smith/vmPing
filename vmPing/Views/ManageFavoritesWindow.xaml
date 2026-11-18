@@ -16,6 +16,29 @@
         Closing="Window_Closing"
         SourceInitialized="Window_SourceInitialized">
 
+    <Window.Resources>
+        <!-- Link button -->
+        <Style x:Key="LinkButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Foreground" Value="{DynamicResource Theme.Accent}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <AccessText x:Name="text"
+                                    Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
+                                    VerticalAlignment="Center"/>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="text" Property="TextDecorations" Value="Underline"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="9">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -199,11 +222,33 @@
                                            Foreground="{DynamicResource Theme.Text}"
                                            FontSize="14"/>
                                 <!-- Pick an existing group, or type a new one. Leave it empty for no group. -->
-                                <ComboBox x:Name="FavoriteGroup"
-                                          Margin="0,4,0,0"
-                                          HorizontalAlignment="Stretch"
-                                          IsEditable="True"
-                                          TextBoxBase.TextChanged="Editor_TextChanged"/>
+                                <Grid Margin="0,4,0,0">
+                                    <ComboBox x:Name="FavoriteGroup"
+                                              HorizontalAlignment="Stretch"
+                                              IsEditable="True"
+                                              TextBoxBase.TextChanged="Editor_TextChanged"/>
+                                    <!-- Placeholder, shown while no group is entered -->
+                                    <TextBlock Text="(optional)"
+                                               Margin="6,0,0,0"
+                                               VerticalAlignment="Center"
+                                               FontSize="14"
+                                               Foreground="{DynamicResource Theme.Text.Disabled}"
+                                               IsHitTestVisible="False">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=FavoriteGroup, Path=Text}" Value="">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ElementName=FavoriteGroup, Path=Text}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
                             </StackPanel>
                         </Grid>
 
@@ -244,8 +289,8 @@
                                        VerticalAlignment="Center"
                                        Margin="0,0,9,0"/>
                             <Button x:Name="RevertButton"
-                                    Width="85"
-                                    Style="{StaticResource ButtonStyle}"
+                                    Margin="0,0,12,0"
+                                    Style="{StaticResource LinkButtonStyle}"
                                     Content="_Revert"
                                     Click="Revert_Click"/>
                             <Button x:Name="SaveButton"
@@ -290,6 +335,7 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,9,0,0">
             <Button x:Name="OpenButton"
                     Width="85"
+                    IsDefault="True"
                     Style="{StaticResource ButtonStyle}"
                     Content="_Open"
                     Click="Open_Click"/>

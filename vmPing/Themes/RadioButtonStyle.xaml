@@ -1,27 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
-    <!-- RadioButton brushes -->
-    <SolidColorBrush x:Key="RadioButton.Foreground" Color="#555555"/>
-    <SolidColorBrush x:Key="RadioButton.Static.Background" Color="White"/>
-    <SolidColorBrush x:Key="RadioButton.Static.Border" Color="#abadb3"/>
-    <SolidColorBrush x:Key="RadioButton.MouseOver.Background" Color="White"/>
-    <SolidColorBrush x:Key="RadioButton.MouseOver.Border" Color="#303030"/>
-    <SolidColorBrush x:Key="RadioButton.MouseOver.Glyph" Color="#303030"/>
-    <SolidColorBrush x:Key="RadioButton.Disabled.Background" Color="#e6e6e6"/>
-    <SolidColorBrush x:Key="RadioButton.Disabled.Border" Color="#bcbcbc"/>
-    <SolidColorBrush x:Key="RadioButton.Disabled.Glyph" Color="#707070"/>
-    <SolidColorBrush x:Key="RadioButton.Pressed.Background" Color="#33007acc"/>
-    <SolidColorBrush x:Key="RadioButton.Pressed.Border" Color="Black"/>
-    <SolidColorBrush x:Key="RadioButton.Pressed.Glyph" Color="#505050"/>
-    <SolidColorBrush x:Key="RadioButton.Static.Glyph" Color="#505050"/>
-    
-    <!-- RadioButton style -->
+
+    <!-- RadioButton style. A selected option is an accent circle with a dot in the middle. -->
     <Style TargetType="{x:Type RadioButton}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-        <Setter Property="Background" Value="{StaticResource RadioButton.Static.Background}"/>
-        <Setter Property="Foreground" Value="{StaticResource RadioButton.Foreground}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource RadioButton.Static.Border}"/>
+        <Setter Property="Background" Value="{DynamicResource Theme.Control.Background}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Theme.Control.Border}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -35,25 +20,22 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <!-- Radio border -->
-                        <Border x:Name="radioButtonBorder"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Background="{TemplateBinding Background}"
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                CornerRadius="100"
-                                Margin="1,1,2,1">
-                            <Grid x:Name="markGrid" Margin="2">
-                                <!-- Radio fill -->
-                                <Ellipse x:Name="optionMark"
-                                         Fill="{StaticResource RadioButton.Static.Glyph}"
-                                         MinWidth="9"
-                                         MinHeight="9"
-                                         Opacity="0"/>
-                            </Grid>
-                        </Border>
-                        
+                        <!-- Radio circle, drawn as shapes so the fill and outline meet without a faint seam -->
+                        <Grid Width="16"
+                              Height="16"
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <Ellipse x:Name="radioButtonBorder"
+                                     Fill="{TemplateBinding Background}"
+                                     Stroke="{TemplateBinding BorderBrush}"
+                                     StrokeThickness="1"/>
+                            <!-- Dot -->
+                            <Ellipse x:Name="optionMark"
+                                     Width="6"
+                                     Height="6"
+                                     Fill="{DynamicResource Theme.Glyph.OnAccent}"
+                                     Opacity="0"/>
+                        </Grid>
+
                         <!-- Content -->
                         <ContentPresenter x:Name="contentPresenter"
                                           Grid.Column="1"
@@ -64,30 +46,27 @@
                                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Grid>
+                    <!-- Later triggers win, so the disabled state comes last -->
                     <ControlTemplate.Triggers>
                         <Trigger Property="HasContent" Value="true">
-                            <Setter Property="Padding" Value="4,-1,0,0"/>
+                            <Setter Property="Padding" Value="6,-1,0,0"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="radioButtonBorder" Value="{StaticResource RadioButton.MouseOver.Background}"/>
-                            <Setter Property="BorderBrush" TargetName="radioButtonBorder" Value="{StaticResource RadioButton.MouseOver.Border}"/>
-                            <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource RadioButton.MouseOver.Glyph}"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Background" TargetName="radioButtonBorder" Value="{StaticResource RadioButton.Disabled.Background}"/>
-                            <Setter Property="BorderBrush" TargetName="radioButtonBorder" Value="{StaticResource RadioButton.Disabled.Border}"/>
-                            <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource RadioButton.Disabled.Glyph}"/>
+                            <Setter Property="Stroke" TargetName="radioButtonBorder" Value="{DynamicResource Theme.Control.Hover.Border}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter Property="Background" TargetName="radioButtonBorder" Value="{StaticResource RadioButton.Pressed.Background}"/>
-                            <Setter Property="BorderBrush" TargetName="radioButtonBorder" Value="{StaticResource RadioButton.Pressed.Border}"/>
-                            <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource RadioButton.Pressed.Glyph}"/>
+                            <Setter Property="Fill" TargetName="radioButtonBorder" Value="{DynamicResource Theme.Control.Pressed.Background}"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="true">
+                            <Setter Property="Fill" TargetName="radioButtonBorder" Value="{DynamicResource Theme.Accent}"/>
+                            <Setter Property="Stroke" TargetName="radioButtonBorder" Value="{DynamicResource Theme.Accent}"/>
                             <Setter Property="Opacity" TargetName="optionMark" Value="1"/>
                         </Trigger>
-                        <Trigger Property="IsChecked" Value="{x:Null}">
-                            <Setter Property="Opacity" TargetName="optionMark" Value="0.56"/>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Fill" TargetName="radioButtonBorder" Value="{DynamicResource Theme.Control.Disabled.Background}"/>
+                            <Setter Property="Stroke" TargetName="radioButtonBorder" Value="{DynamicResource Theme.Control.Disabled.Border}"/>
+                            <Setter Property="Fill" TargetName="optionMark" Value="{DynamicResource Theme.Text.Disabled}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Theme.Text.Disabled}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -95,4 +74,4 @@
         </Setter>
     </Style>
 
-</ResourceDictionary>
+</ResourceDictionary>

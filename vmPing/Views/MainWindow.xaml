@@ -337,11 +337,11 @@
         </Popup>
 
         <!-- Items Control -->
-        <ItemsControl Name="ProbeItemsControl" IsTabStop="False" Focusable="False" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource Theme.Panel.Border}" Margin="0,0,-2,-2">
+        <ItemsControl Name="ProbeItemsControl" UseLayoutRounding="True" IsTabStop="False" Focusable="False" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource Theme.Panel.Border}" Margin="0,0,-2,-2">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="#111" BorderThickness="0,0,2,2" Margin="0" CornerRadius="0">
-                        <!-- Status color, or a neutral gray for comments -->
+                        <!-- Probe status color -->
                         <Border.Style>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="Background" Value="{Binding Status, Converter={StaticResource ProbeStatusToBackgroundBrushConverter}}"/>

@@ -23,7 +23,7 @@
         
         <!-- Header section -->
         <StackPanel Orientation="Horizontal">
-            <Image Source="{StaticResource icon.alias}" VerticalAlignment="Center" Width="20" Height="20" Margin="0,0,8,0"/>
+            <Image Source="{DynamicResource icon.alias}" VerticalAlignment="Center" Width="20" Height="20" Margin="0,0,8,0"/>
             <TextBlock Grid.Row="0"
                        Text="{x:Static resource:Strings.ManageAliases_Header}"
                        Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"/>

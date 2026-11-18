@@ -21,7 +21,7 @@
         <StackPanel Grid.Row="0" Margin="9">
             <!-- Header -->
             <StackPanel Orientation="Horizontal">
-                <Image Source="{StaticResource icon.new-favorite}"
+                <Image Source="{DynamicResource icon.new-favorite}"
                        VerticalAlignment="Center"
                        Width="20"
                        Height="20"

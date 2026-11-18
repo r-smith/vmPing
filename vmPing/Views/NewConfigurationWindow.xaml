@@ -24,7 +24,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <!-- Icon -->
-            <Image Source="{StaticResource icon.file-code}"
+            <Image Source="{DynamicResource icon.file-code}"
                    Margin="0,3,0,0"
                    VerticalAlignment="Top"
                    Opacity="0.8"

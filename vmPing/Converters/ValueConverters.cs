@@ -75,26 +75,6 @@ namespace vmPing.Converters
         }
     }
 
-    public class BooleanToImageConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is bool v && !v)
-            {
-                return (DrawingImage)Application.Current.Resources["icon.play"];
-            }
-            else
-            {
-                return (DrawingImage)Application.Current.Resources["icon.stop-circle"];
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return Binding.DoNothing;
-        }
-    }
-
     internal static class ProbeBrushHelper
     {
         private static readonly BrushConverter s_brushConverter = new BrushConverter();
@@ -318,22 +298,6 @@ namespace vmPing.Converters
             return count > 0
                 ? Strings.Toolbar_StopAll
                 : Strings.Toolbar_StartAll;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return Binding.DoNothing;
-        }
-    }
-
-    public class ProbeCountToGlobalStartStopIcon : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            long count = (value is long v) ? v : 0;
-            return count > 0
-                ? (DrawingImage)Application.Current.Resources["icon.stop-circle"]
-                : (DrawingImage)Application.Current.Resources["icon.play"];
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

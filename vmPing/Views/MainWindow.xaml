@@ -107,7 +107,7 @@
                     <AccessText Text="{x:Static resource:Strings.Toolbar_Add}" VerticalAlignment="Center"/>
                 </MenuItem.Header>
                 <MenuItem.Icon>
-                    <Image Source="{StaticResource icon.add}" VerticalAlignment="Center" Width="16" Height="16"/>
+                    <Image Source="{DynamicResource icon.add}" VerticalAlignment="Center" Width="16" Height="16"/>
                 </MenuItem.Icon>
             </MenuItem>
 
@@ -117,7 +117,7 @@
                     <AccessText Text="{x:Static resource:Strings.Toolbar_Columns}" VerticalAlignment="Center"/>
                 </MenuItem.Header>
                 <MenuItem.Icon>
-                    <Image Source="{StaticResource icon.columns-grid}" VerticalAlignment="Center" Width="16" Height="16"/>
+                    <Image Source="{DynamicResource icon.columns-grid}" VerticalAlignment="Center" Width="16" Height="16"/>
                 </MenuItem.Icon>
                 <!-- Columns slider -->
                 <StackPanel Orientation="Horizontal">
@@ -154,8 +154,18 @@
                 <MenuItem.Icon>
                     <Image Name="StartStopMenuImage"
                            VerticalAlignment="Center"
-                           Width="16" Height="16"
-                           Source="{Binding Path=(probes:Probe.ActiveCount), Converter={StaticResource ProbeCountToGlobalStartStopIcon}}"/>
+                           Width="16" Height="16">
+                        <Image.Style>
+                            <Style TargetType="{x:Type Image}">
+                                <Setter Property="Source" Value="{DynamicResource icon.stop-circle}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=(probes:Probe.ActiveCount)}" Value="0">
+                                        <Setter Property="Source" Value="{DynamicResource icon.play}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
                 </MenuItem.Icon>
             </MenuItem>
 
@@ -164,7 +174,7 @@
                       DockPanel.Dock="Right"
                       Template="{StaticResource TopLevelHeaderNoPaddingTemplate}">
                 <MenuItem.Icon>
-                    <Image Source="{StaticResource icon.chevron-circle-down}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="16" Height="16"/>
+                    <Image Source="{DynamicResource icon.chevron-circle-down}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="16" Height="16"/>
                 </MenuItem.Icon>
 
                 <!-- Menu: Options -->
@@ -172,20 +182,20 @@
                           Header="{x:Static resource:Strings.Menu_Options}"
                           InputGestureText="F10">
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource icon.options}" VerticalAlignment="Center" Width="16" Height="16"/>
+                        <Image Source="{DynamicResource icon.options}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
                 <!-- Menu: Multi-Input -->
                 <MenuItem Name="MultiInputMenu" Header="Multi-Input" InputGestureText="F2">
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource icon.input-addresses}" VerticalAlignment="Center" Width="16" Height="16"/>
+                        <Image Source="{DynamicResource icon.input-addresses}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <!-- Menu: History -->
                 <MenuItem Name="StatusHistoryMenu" Header="{x:Static resource:Strings.Menu_StatusHistory}" InputGestureText="F12">
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource icon.status-history}" VerticalAlignment="Center" Width="16" Height="16"/>
+                        <Image Source="{DynamicResource icon.status-history}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
@@ -193,12 +203,12 @@
                 <MenuItem Header="{x:Static resource:Strings.Menu_FavoriteSets}" x:Name="FavoritesMenu">
                     <MenuItem Header="{x:Static resource:Strings.Menu_SaveToFavorites}" Click="CreateFavorite_Click">
                         <MenuItem.Icon>
-                            <Image Source="{StaticResource icon.new-favorite}" VerticalAlignment="Center" Width="16" Height="16"/>
+                            <Image Source="{DynamicResource icon.new-favorite}" VerticalAlignment="Center" Width="16" Height="16"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="{x:Static resource:Strings.Menu_ManageFavorites}" Click="ManageFavorites_Click">
                         <MenuItem.Icon>
-                            <Image Source="{StaticResource icon.favorite}" VerticalAlignment="Center" Width="16" Height="16"/>
+                            <Image Source="{DynamicResource icon.favorite}" VerticalAlignment="Center" Width="16" Height="16"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator />
@@ -207,7 +217,7 @@
                 <MenuItem Header="{x:Static resource:Strings.Menu_Aliases}" x:Name="AliasesMenu">
                     <MenuItem Header="{x:Static resource:Strings.Menu_ManageAliases}" Click="ManageAliases_Click">
                         <MenuItem.Icon>
-                            <Image Source="{StaticResource icon.alias}" VerticalAlignment="Center" Width="16" Height="16"/>
+                            <Image Source="{DynamicResource icon.alias}" VerticalAlignment="Center" Width="16" Height="16"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator />
@@ -232,26 +242,26 @@
                 <!-- Menu: Traceroute -->
                 <MenuItem Header="{x:Static resource:Strings.Menu_Traceroute}" x:Name="TracerouteMenu" InputGestureText="Ctrl-T">
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource icon.route}" VerticalAlignment="Center" Width="16" Height="16"/>
+                        <Image Source="{DynamicResource icon.route}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <!-- Menu: Flood host -->
                 <MenuItem Header="{x:Static resource:Strings.Menu_FloodHost}" x:Name="FloodHostMenu" InputGestureText="Ctrl-F">
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource icon.flood-host}" VerticalAlignment="Center" Width="16" Height="16"/>
+                        <Image Source="{DynamicResource icon.flood-host}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <!-- Menu: New instance -->
                 <MenuItem Header="vmPing" x:Name="NewInstanceMenu" InputGestureText="Ctrl-N">
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource icon.vmping-logo-simple}" VerticalAlignment="Center" Width="16" Height="16"/>
+                        <Image Source="{DynamicResource icon.vmping-logo-simple}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
                 <!-- Menu: Help -->
                 <MenuItem Header="{x:Static resource:Strings.Menu_Help}" x:Name="HelpMenu" InputGestureText="F1">
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource icon.question-circle}" VerticalAlignment="Center" Width="16" Height="16"/>
+                        <Image Source="{DynamicResource icon.question-circle}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -385,7 +395,7 @@
                                                         CornerRadius="1,0,0,1"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
-                                                    <Image Name="ControlButtonImage" Source="{StaticResource icon.window-close-black}"
+                                                    <Image Name="ControlButtonImage" Source="{DynamicResource icon.window-close-black}"
                                                            Width="14" Height="14"
                                                            Opacity="0.9"/>
                                                 </Border>
@@ -393,7 +403,7 @@
                                                     <Trigger Property="IsMouseOver" Value="True">
                                                         <Setter TargetName="ControlButtonBorder" Property="Background" Value="Black"/>
                                                         <Setter TargetName="ControlButtonImage" Property="Opacity" Value="1"/>
-                                                        <Setter TargetName="ControlButtonImage" Property="Source" Value="{StaticResource icon.window-close-white}"/>
+                                                        <Setter TargetName="ControlButtonImage" Property="Source" Value="{DynamicResource icon.window-close-white}"/>
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
                                                         <Setter TargetName="ControlButtonBorder" Property="Background" Value="#444"/>
@@ -433,7 +443,7 @@
                                                         CornerRadius="1"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
-                                                    <Image Name="ControlButtonImage" Source="{StaticResource icon.window-restore-black}"
+                                                    <Image Name="ControlButtonImage" Source="{DynamicResource icon.window-restore-black}"
                                                            Width="14" Height="14"
                                                            Opacity="0.9"/>
                                                 </Border>
@@ -441,7 +451,7 @@
                                                     <Trigger Property="IsMouseOver" Value="True">
                                                         <Setter TargetName="ControlButtonBorder" Property="Background" Value="Black"/>
                                                         <Setter TargetName="ControlButtonImage" Property="Opacity" Value="1"/>
-                                                        <Setter TargetName="ControlButtonImage" Property="Source" Value="{StaticResource icon.window-restore-white}"/>
+                                                        <Setter TargetName="ControlButtonImage" Property="Source" Value="{DynamicResource icon.window-restore-white}"/>
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
                                                         <Setter TargetName="ControlButtonBorder" Property="Background" Value="#444"/>
@@ -482,7 +492,7 @@
                                                         CornerRadius="1"
                                                         Padding="{TemplateBinding Padding}"
                                                         Background="{TemplateBinding Background}">
-                                                    <Image Name="ControlButtonImage" Source="{StaticResource icon.pencil-black}"
+                                                    <Image Name="ControlButtonImage" Source="{DynamicResource icon.pencil-black}"
                                                            Width="14" Height="14"
                                                            Opacity="0.9"/>
                                                 </Border>
@@ -490,7 +500,7 @@
                                                     <Trigger Property="IsMouseOver" Value="True">
                                                         <Setter TargetName="ControlButtonBorder" Property="Background" Value="Black"/>
                                                         <Setter TargetName="ControlButtonImage" Property="Opacity" Value="1"/>
-                                                        <Setter TargetName="ControlButtonImage" Property="Source" Value="{StaticResource icon.pencil-white}"/>
+                                                        <Setter TargetName="ControlButtonImage" Property="Source" Value="{DynamicResource icon.pencil-white}"/>
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
                                                         <Setter TargetName="ControlButtonBorder" Property="Background" Value="#444"/>
@@ -733,8 +743,19 @@
                                                     CornerRadius="4"
                                                     Background="{TemplateBinding Background}">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
-                                                    <Image Source="{Binding IsActive, Converter={StaticResource BooleanToImageConverter}}" Width="16" Height="16"
-                                                           Margin="0,6"/>
+                                                    <Image Width="16" Height="16"
+                                                           Margin="0,6">
+                                                        <Image.Style>
+                                                            <Style TargetType="{x:Type Image}">
+                                                                <Setter Property="Source" Value="{DynamicResource icon.stop-circle}"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                                        <Setter Property="Source" Value="{DynamicResource icon.play}"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Image.Style>
+                                                    </Image>
                                                     <TextBlock Visibility="{Binding ElementName=History, Path=ActualWidth, Converter={StaticResource ButtonTextVisibilityConverter}}"
                                                                Foreground="Black"
                                                                FontSize="13"

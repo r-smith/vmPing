@@ -15,7 +15,6 @@
         <converters:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="Flood Host" TrueValue="Stop Flood"/>
         <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-        <converters:BooleanToImageConverter x:Key="BooleanToImageConverter" />
         
 
         <!-- Style for hostname textbox -->
@@ -99,8 +98,18 @@
                                 Background="{TemplateBinding Background}"
                                 Padding="{TemplateBinding Padding}">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Image Source="{Binding IsActive, Converter={StaticResource BooleanToImageConverter}}"
-                                       Margin="0,0,8,0" Width="16" Height="16" />
+                                <Image Margin="0,0,8,0" Width="16" Height="16">
+                                    <Image.Style>
+                                        <Style TargetType="{x:Type Image}">
+                                            <Setter Property="Source" Value="{DynamicResource icon.stop-circle}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                    <Setter Property="Source" Value="{DynamicResource icon.play}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
                                 <TextBlock Text="{Binding IsActive, Converter={StaticResource BoolToStringConverter}}" />
                             </StackPanel>
                         </Border>

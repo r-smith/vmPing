@@ -24,7 +24,7 @@
             <!-- Header -->
             <StackPanel Orientation="Horizontal"
                         DockPanel.Dock="Top">
-                <Image Source="{StaticResource icon.edit}"
+                <Image Source="{DynamicResource icon.edit}"
                        VerticalAlignment="Center"
                        Width="20"
                        Height="20"

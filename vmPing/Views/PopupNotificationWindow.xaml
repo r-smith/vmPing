@@ -68,7 +68,7 @@
                                 Padding="{TemplateBinding Padding}"
                                 Background="{TemplateBinding Background}">
                             <Image Name="ControlButtonImage"
-                                   Source="{StaticResource icon.window-restore-white}"
+                                   Source="{DynamicResource icon.window-restore-white}"
                                    Width="12"
                                    Height="12"/>
                         </Border>
@@ -76,7 +76,7 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="ControlButtonBorder" Property="Background" Value="#000" />
                                 <Setter TargetName="ControlButtonBorder" Property="Opacity" Value="1" />
-                                <Setter TargetName="ControlButtonImage" Property="Source" Value="{StaticResource icon.window-restore-white}"/>
+                                <Setter TargetName="ControlButtonImage" Property="Source" Value="{DynamicResource icon.window-restore-white}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="ControlButtonBorder" Property="BorderBrush" Value="White" />
@@ -117,7 +117,7 @@
                                 Padding="{TemplateBinding Padding}"
                                 Background="{TemplateBinding Background}">
                             <Image Name="ControlButtonImage"
-                                   Source="{StaticResource icon.window-close-white}"
+                                   Source="{DynamicResource icon.window-close-white}"
                                    Width="12"
                                    Height="12"/>
                         </Border>
@@ -125,7 +125,7 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="ControlButtonBorder" Property="Background" Value="#000" />
                                 <Setter TargetName="ControlButtonBorder" Property="Opacity" Value="1" />
-                                <Setter TargetName="ControlButtonImage" Property="Source" Value="{StaticResource icon.window-close-white}"/>
+                                <Setter TargetName="ControlButtonImage" Property="Source" Value="{DynamicResource icon.window-close-white}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="ControlButtonBorder" Property="BorderBrush" Value="White" />
@@ -251,7 +251,7 @@
         <StackPanel Grid.Row="3"
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
-            <Image Source="{StaticResource icon.vmping-logo-simple}"
+            <Image Source="{DynamicResource icon.vmping-logo-simple}"
                    Width="16"
                    Height="16" />
             <TextBlock Grid.Row="3"

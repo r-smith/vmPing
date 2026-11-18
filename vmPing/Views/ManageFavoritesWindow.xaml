@@ -25,7 +25,7 @@
 
         <!-- Header -->
         <StackPanel Orientation="Horizontal">
-            <Image Source="{StaticResource icon.favorite}" VerticalAlignment="Center" Width="20" Height="20" Margin="0,0,8,0"/>
+            <Image Source="{DynamicResource icon.favorite}" VerticalAlignment="Center" Width="20" Height="20" Margin="0,0,8,0"/>
             <TextBlock Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"
                        Text="{x:Static resource:Strings.ManageFavorites_Header}"
                        VerticalAlignment="Center"/>

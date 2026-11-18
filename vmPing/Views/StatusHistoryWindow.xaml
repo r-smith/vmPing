@@ -45,7 +45,7 @@
                        Width="16"
                        Height="16"
                        Margin="6,0,4,0"
-                       Source="{StaticResource icon.status-history-dark}" />
+                       Source="{DynamicResource icon.status-history-dark}" />
 
                 <!-- Title -->
                 <TextBlock Grid.Column="1"
@@ -282,7 +282,7 @@
                                                     </Style.Triggers>
                                                 </Style>
                                             </Border.Style>
-                                            <Image Source="{StaticResource icon.delete}" Width="13" Height="13"/>
+                                            <Image Source="{DynamicResource icon.delete}" Width="13" Height="13"/>
                                         </Border>
                                     </ControlTemplate>
                                 </Button.Template>

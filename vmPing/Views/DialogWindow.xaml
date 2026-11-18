@@ -28,7 +28,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Image x:Name="MessageImage"
-                   Source="{StaticResource icon.exclamation-triangle}"
+                   Source="{DynamicResource icon.exclamation-triangle}"
                    VerticalAlignment="Top"
                    Width="32"
                    Height="32"/>

@@ -13,9 +13,11 @@ namespace vmPing.Services
     {
         private const string LightColorsUri = "pack://application:,,,/Themes/Colors.Light.xaml";
         private const string DarkColorsUri = "pack://application:,,,/Themes/Colors.Dark.xaml";
+        private const string IconsUri = "pack://application:,,,/Themes/Icons.xaml";
         private const string PersonalizeKey = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
 
         private static ResourceDictionary s_colors;
+        private static ResourceDictionary s_icons;
 
         public static ThemeMode Mode { get; private set; } = ThemeMode.System;
         public static bool IsDark { get; private set; }
@@ -25,13 +27,21 @@ namespace vmPing.Services
 
         public static void Initialize(ThemeMode mode)
         {
-            // Find the color set merged in App.xaml (the light one). It gets replaced when the theme changes.
+            // Find the color set (the light one) and the icons merged in App.xaml. Both get replaced when the theme changes.
             foreach (ResourceDictionary dictionary in Application.Current.Resources.MergedDictionaries)
             {
-                if (dictionary.Source != null && dictionary.Source.OriginalString.Contains("Themes/Colors."))
+                if (dictionary.Source == null)
+                {
+                    continue;
+                }
+
+                if (dictionary.Source.OriginalString.Contains("Themes/Colors."))
                 {
                     s_colors = dictionary;
-                    break;
+                }
+                else if (dictionary.Source.OriginalString.Contains("Themes/Icons.xaml"))
+                {
+                    s_icons = dictionary;
                 }
             }
 
@@ -71,25 +81,35 @@ namespace vmPing.Services
                 return;
             }
 
-            ResourceDictionary colors = new ResourceDictionary
+            s_colors = ReplaceDictionary(s_colors, isDark ? DarkColorsUri : LightColorsUri);
+
+            // Icons look up their colors once, when they're created, so load a fresh copy that uses the new colors.
+            s_icons = ReplaceDictionary(s_icons, IconsUri);
+
+            IsDark = isDark;
+            ThemeChanged?.Invoke(null, EventArgs.Empty);
+        }
+
+        // Loads the dictionary at uri and puts it where the old one was (or first, if there wasn't one).
+        private static ResourceDictionary ReplaceDictionary(ResourceDictionary old, string uri)
+        {
+            ResourceDictionary replacement = new ResourceDictionary
             {
-                Source = new Uri(isDark ? DarkColorsUri : LightColorsUri, UriKind.Absolute)
+                Source = new Uri(uri, UriKind.Absolute)
             };
 
             Collection<ResourceDictionary> merged = Application.Current.Resources.MergedDictionaries;
-            int index = s_colors != null ? merged.IndexOf(s_colors) : -1;
+            int index = old != null ? merged.IndexOf(old) : -1;
             if (index >= 0)
             {
-                merged[index] = colors;
+                merged[index] = replacement;
             }
             else
             {
-                merged.Insert(0, colors);
+                merged.Insert(0, replacement);
             }
 
-            s_colors = colors;
-            IsDark = isDark;
-            ThemeChanged?.Invoke(null, EventArgs.Empty);
+            return replacement;
         }
 
         private static bool IsWindowsInDarkMode()

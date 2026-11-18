@@ -66,7 +66,7 @@
 
         <!-- Header -->
         <DockPanel LastChildFill="False">
-            <Image DockPanel.Dock="Left" Source="{StaticResource icon.input-addresses}" VerticalAlignment="Center" Width="20" Height="20" Margin="0,0,8,0"/>
+            <Image DockPanel.Dock="Left" Source="{DynamicResource icon.input-addresses}" VerticalAlignment="Center" Width="20" Height="20" Margin="0,0,8,0"/>
             <TextBlock DockPanel.Dock="Left"
                        Text="Enter addresses to ping"
                        Style="{StaticResource OptionHeaderTextStyle}" />

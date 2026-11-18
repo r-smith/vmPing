@@ -9,7 +9,7 @@
         Width="600"
         ResizeMode="NoResize"
         SizeToContent="Height"
-        Background="White"
+        Background="{DynamicResource Theme.Window.Background}"
         WindowStartupLocation="CenterScreen">
     
     <Grid Margin="0">
@@ -23,6 +23,7 @@
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="FontFamily" Value="Consolas"/>
                     <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
                     <Setter Property="TextWrapping" Value="Wrap"/>
                 </Style>
                 <Style TargetType="{x:Type TextBlock}" x:Key="Arg" BasedOn="{StaticResource {x:Type TextBlock}}">
@@ -30,7 +31,7 @@
                     <Setter Property="DockPanel.Dock" Value="Left"/>
                 </Style>
                 <Style TargetType="{x:Type TextBlock}" x:Key="Desc" BasedOn="{StaticResource {x:Type TextBlock}}">
-                    <Setter Property="Foreground" Value="#223"/>
+                    <Setter Property="Foreground" Value="{DynamicResource Theme.Text.Secondary}"/>
                 </Style>
             </StackPanel.Resources>
             <StackPanel Orientation="Horizontal">
@@ -40,7 +41,7 @@
                        Height="32"/>
                 <StackPanel Margin="10,0,0,0">
                     <TextBlock Text="vmPing"
-                               Foreground="#000000"
+                               Foreground="{DynamicResource Theme.Text}"
                                VerticalAlignment="Center"
                                FontSize="15"
                                FontFamily="Arial"
@@ -48,7 +49,7 @@
                     <TextBlock x:Name="AppVersion"
                                d:Text="1.0.0"
                                FontSize="13"
-                               Opacity="0.5"/>
+                               Foreground="{DynamicResource Theme.Text.Secondary}"/>
                 </StackPanel>
             </StackPanel>
             <TextBlock Margin="0,20,0,0"
@@ -113,7 +114,7 @@
         </StackPanel>
 
         <!-- Buttons -->
-        <Border Grid.Row="1" Background="#f0f0f0" BorderBrush="#dfdfdf" BorderThickness="0,1,0,0">
+        <Border Grid.Row="1" Background="{DynamicResource Theme.Panel.Background}" BorderBrush="{DynamicResource Theme.Panel.Border}" BorderThickness="0,1,0,0">
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
                 <Button Style="{StaticResource ButtonStyle}"
                         Width="100"

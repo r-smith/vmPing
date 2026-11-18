@@ -8,7 +8,7 @@
         Width="400"
         SizeToContent="Height"
         ResizeMode="NoResize"
-        Background="#f0f0f0"
+        Background="{DynamicResource Theme.Window.Background}"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False">
 
@@ -34,7 +34,7 @@
                     <TextBlock Text="{x:Static resource:Strings.NewAlias_Alias}"
                                FontSize="14"
                                VerticalAlignment="Center"
-                               Foreground="#404040"
+                               Foreground="{DynamicResource Theme.Text}"
                                HorizontalAlignment="Right"/>
                 </Border>
                 <TextBox x:Name="NewAlias"
@@ -47,7 +47,7 @@
                     <TextBlock Text="{x:Static resource:Strings.NewAlias_Host}"
                                FontSize="14"
                                VerticalAlignment="Center"
-                               Foreground="#404040"
+                               Foreground="{DynamicResource Theme.Text}"
                                HorizontalAlignment="Right"/>
                 </Border>
                 <TextBox x:Name="Hostname"

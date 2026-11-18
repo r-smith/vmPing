@@ -11,6 +11,7 @@
         SizeToContent="Height"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource Theme.Window.Background}"
         ShowInTaskbar="False">
     <Grid>
         <Grid.RowDefinitions>
@@ -34,12 +35,12 @@
             <DockPanel Grid.Column="1" Margin="20,0,0,0">
                 <TextBlock DockPanel.Dock="Top"
                            FontSize="14"
-                           Foreground="#202020"
+                           Foreground="{DynamicResource Theme.Text}"
                            TextWrapping="Wrap"
                            Text="To save your settings, a new configuration file is needed."/>
                 <TextBlock DockPanel.Dock="Top"
                            FontSize="14"
-                           Foreground="#202020"
+                           Foreground="{DynamicResource Theme.Text}"
                            TextWrapping="Wrap"
                            Margin="0,10,0,1"
                            Text="The file will be stored here:"/>
@@ -47,14 +48,14 @@
                 <TextBlock x:Name="FilePath"
                            DockPanel.Dock="Top"
                            FontSize="12"
-                           Foreground="#268bd2"
+                           Foreground="{DynamicResource Theme.Accent}"
                            TextWrapping="Wrap"
                            d:Text="C:\Users\username\AppData\Local\vmPing\vmPing.xml"/>
                 <!-- Portable mode note -->
                 <TextBlock DockPanel.Dock="Top"
                            Margin="0,20,0,5"
                            FontSize="12"
-                           Foreground="#888"
+                           Foreground="{DynamicResource Theme.Text.Secondary}"
                            TextWrapping="Wrap">
                     Select 'Portable mode' to save your configuration alongside vmPing.exe.
                 </TextBlock>
@@ -62,13 +63,12 @@
         </Grid>
         
         <!-- Buttons -->
-        <Border Grid.Row="1" Background="#f0f0f0" BorderBrush="#dfdfdf" BorderThickness="0,1,0,0">
+        <Border Grid.Row="1" Background="{DynamicResource Theme.Panel.Background}" BorderBrush="{DynamicResource Theme.Panel.Border}" BorderThickness="0,1,0,0">
             <DockPanel Margin="10">
                 <!-- Portable mode checkbox -->
                 <CheckBox x:Name="PortableMode"
                           DockPanel.Dock="Left"
                           Padding="5,0,10,0"
-                          Foreground="#111"
                           Click="PortableMode_Click"
                           Content="Portable mode"/>
                 <!-- Buttons -->

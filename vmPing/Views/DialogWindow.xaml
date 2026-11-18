@@ -10,7 +10,7 @@
         Height="Auto"
         Width="480"
         ResizeMode="NoResize"
-        Background="White"
+        Background="{DynamicResource Theme.Window.Background}"
         WindowStartupLocation="CenterOwner"
         SizeToContent="Height"
         ShowInTaskbar="False">
@@ -36,7 +36,7 @@
                 <TextBlock x:Name="MessageHeader"
                            DockPanel.Dock="Top"
                            Text="Warning"
-                           Foreground="#000000"
+                           Foreground="{DynamicResource Theme.Text}"
                            VerticalAlignment="Center"
                            FontSize="15"
                            FontFamily="Arial"
@@ -46,7 +46,7 @@
                            FontSize="13"
                            FontFamily="Arial"
                            Margin="0,15,0,0"
-                           Foreground="#202020"
+                           Foreground="{DynamicResource Theme.Text}"
                            d:Text="This is warning text"
                            TextWrapping="Wrap"/>
             </DockPanel>
@@ -54,8 +54,8 @@
 
         <!-- Buttons -->
         <Border Grid.Row="1"
-                Background="#f0f0f0"
-                BorderBrush="#dfdfdf"
+                Background="{DynamicResource Theme.Panel.Background}"
+                BorderBrush="{DynamicResource Theme.Panel.Border}"
                 BorderThickness="0,1,0,0">
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right"
@@ -64,6 +64,7 @@
                         Style="{StaticResource ButtonStyle}"
                         Click="OK_Click"
                         Width="100"
+                        IsDefault="True"
                         IsCancel="{Binding Visibility, ElementName=Cancel, Converter={StaticResource InverseHiddenToBoolConverter}}"
                         Content="{x:Static resource:Strings.DialogButton_OK}" />
                 <Button x:Name="Cancel"

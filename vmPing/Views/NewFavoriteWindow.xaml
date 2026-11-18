@@ -7,7 +7,7 @@
         Height="Auto"
         Width="400"
         ResizeMode="NoResize"
-        Background="#f0f0f0"
+        Background="{DynamicResource Theme.Window.Background}"
         SizeToContent="Height"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False">
@@ -33,7 +33,7 @@
             <!-- Title -->
             <TextBlock Text="{x:Static resource:Strings.NewFavorite_Title}"
                        Margin="0,10,0,0"
-                       Foreground="#404040"
+                       Foreground="{DynamicResource Theme.Text}"
                        FontSize="14"/>
             <TextBox x:Name="MyTitle"
                      Margin="0,4,0,0"
@@ -42,7 +42,7 @@
             <!-- Group: pick an existing group, or type a new one. Leave it empty for no group. -->
             <TextBlock Text="Group"
                        Margin="0,10,0,0"
-                       Foreground="#404040"
+                       Foreground="{DynamicResource Theme.Text}"
                        FontSize="14"/>
             <ComboBox x:Name="MyGroup"
                       Margin="0,4,0,0"
@@ -52,7 +52,7 @@
             <!-- What will be saved -->
             <TextBlock x:Name="Summary"
                        Margin="0,12,0,10"
-                       Foreground="#707070"
+                       Foreground="{DynamicResource Theme.Text.Secondary}"
                        TextWrapping="Wrap"/>
         </StackPanel>
 

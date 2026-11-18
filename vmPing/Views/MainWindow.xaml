@@ -22,6 +22,46 @@
         <!-- Override default context menu animation: set to no animation -->
         <PopupAnimation x:Key="{x:Static SystemParameters.MenuPopupAnimationKey}">None</PopupAnimation>
 
+        <!-- Probe title bar buttons. The button's content is the icon. -->
+        <Style x:Key="ProbeTitleButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Padding" Value="6,3"/>
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
+            <Setter Property="ToolTipService.ShowDuration" Value="2000"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid Background="Transparent">
+                            <!-- Hover highlight -->
+                            <Border x:Name="highlight"
+                                    Background="{DynamicResource Theme.Probe.TitleBar.Icon}"
+                                    CornerRadius="3"
+                                    Opacity="0"/>
+                            <!-- Icon -->
+                            <Image x:Name="icon"
+                                   Source="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
+                                   Width="14"
+                                   Height="14"
+                                   Margin="{TemplateBinding Padding}"
+                                   Opacity="0.9"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="highlight" Property="Opacity" Value="0.22"/>
+                                <Setter TargetName="icon" Property="Opacity" Value="1"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="highlight" Property="Opacity" Value="0.35"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="icon" Property="Opacity" Value="0.4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- Template for hostname textbox -->
         <ControlTemplate x:Key="TextBoxControlTemplate" TargetType="{x:Type TextBox}">
             <Grid>
@@ -328,32 +368,33 @@
                                        Drop="Probe_Drop">
 
                                 <!-- Ping title bar / button section -->
-                                <Grid DockPanel.Dock="Top">
-                                    <Grid.Style>
-                                        <Style TargetType="{x:Type Grid}">
-                                            <Setter Property="Background" Value="#00000000"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=ProbeGrid, Path=IsMouseOver}" Value="True">
-                                                    <Setter Property="Background" Value="#88888888"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Grid.Style>
-
+                                <Grid DockPanel.Dock="Top" Background="Transparent">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <!-- Grip icon -->
+                                    <!-- Hover band -->
+                                    <Rectangle Grid.ColumnSpan="3"
+                                               Fill="{DynamicResource Theme.Probe.TitleBar.Background}"
+                                               IsHitTestVisible="False">
+                                        <Rectangle.Style>
+                                            <Style TargetType="{x:Type Rectangle}">
+                                                <Setter Property="Visibility" Value="Hidden"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=ProbeGrid, Path=IsMouseOver}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Rectangle.Style>
+                                    </Rectangle>
+
+                                    <!-- Grip icon. Clicks go through to the drag area. -->
                                     <Border Grid.Column="0"
-                                            Background="Transparent"
                                             Padding="6,0,0,0"
-                                            PreviewMouseLeftButtonDown="ProbeTitle_PreviewMouseLeftButtonDown"
-                                            PreviewMouseMove="ProbeTitle_PreviewMouseMove">
+                                            IsHitTestVisible="False">
                                         <Border.Style>
                                             <Style TargetType="{x:Type Border}">
                                                 <Setter Property="Visibility" Value="Hidden"/>
@@ -365,55 +406,22 @@
                                             </Style>
                                         </Border.Style>
                                         <Path Data="M0,0 h2 v2 h-2 z M4,0 h2 v2 h-2 z M0,4 h2 v2 h-2 z M4,4 h2 v2 h-2 z M0,8 h2 v2 h-2 z M4,8 h2 v2 h-2 z"
-                                              Fill="#333"
+                                              Fill="{DynamicResource Theme.Probe.TitleBar.Icon}"
                                               Opacity="0.7"
                                               VerticalAlignment="Center"/>
                                     </Border>
 
-                                    <!-- Empty title bar area. Drag it to move the probe. -->
-                                    <Border Grid.Column="1"
+                                    <!-- Drag area: the grip and the empty part of the title bar. Drag it to move the probe. -->
+                                    <Border Grid.Column="0"
+                                            Grid.ColumnSpan="2"
                                             Background="Transparent"
                                             PreviewMouseLeftButtonDown="ProbeTitle_PreviewMouseLeftButtonDown"
                                             PreviewMouseMove="ProbeTitle_PreviewMouseMove"/>
 
-                                    <!-- Button: Remove probe -->
-                                    <Button Grid.Column="4"
-                                            Padding="6,3"
-                                            Margin="0,0,0,0"
-                                            Background="Transparent"
-                                            HorizontalAlignment="Right"
-                                            IsTabStop="False"
-                                            ToolTip="{x:Static resource:Strings.Tooltip_Close}"
-                                            ToolTipService.InitialShowDelay="1500"
-                                            ToolTipService.ShowDuration="2000"
-                                            Click="RemoveProbe_Click">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Name="ControlButtonBorder"
-                                                        BorderThickness="0"
-                                                        BorderBrush="Transparent"
-                                                        CornerRadius="1,0,0,1"
-                                                        Padding="{TemplateBinding Padding}"
-                                                        Background="{TemplateBinding Background}">
-                                                    <Image Name="ControlButtonImage" Source="{DynamicResource icon.window-close-black}"
-                                                           Width="14" Height="14"
-                                                           Opacity="0.9"/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="Black"/>
-                                                        <Setter TargetName="ControlButtonImage" Property="Opacity" Value="1"/>
-                                                        <Setter TargetName="ControlButtonImage" Property="Source" Value="{DynamicResource icon.window-close-white}"/>
-                                                    </Trigger>
-                                                    <Trigger Property="IsPressed" Value="True">
-                                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="#444"/>
-                                                        <Setter TargetName="ControlButtonImage" Property="Opacity" Value="0.4"/>
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                        <Button.Style>
-                                            <Style TargetType="{x:Type Button}">
+                                    <!-- Buttons -->
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                        <StackPanel.Style>
+                                            <Style TargetType="{x:Type StackPanel}">
                                                 <Setter Property="Visibility" Value="Hidden"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding ElementName=ProbeGrid, Path=IsMouseOver}" Value="True">
@@ -421,108 +429,29 @@
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
-                                        </Button.Style>
-                                    </Button>
+                                        </StackPanel.Style>
 
-                                    <!-- Button: Isolated view -->
-                                    <Button Grid.Column="3"
-                                            Padding="6,3"
-                                            Margin="0,0,1,0"
-                                            Background="Transparent"
-                                            HorizontalAlignment="Right"
-                                            IsTabStop="False"
-                                            ToolTip="{x:Static resource:Strings.Tooltip_IsolatedView}"
-                                            ToolTipService.InitialShowDelay="1500"
-                                            ToolTipService.ShowDuration="2000"
-                                            Click="IsolatedView_Click">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Name="ControlButtonBorder"
-                                                        BorderThickness="0"
-                                                        BorderBrush="Transparent"
-                                                        CornerRadius="1"
-                                                        Padding="{TemplateBinding Padding}"
-                                                        Background="{TemplateBinding Background}">
-                                                    <Image Name="ControlButtonImage" Source="{DynamicResource icon.window-restore-black}"
-                                                           Width="14" Height="14"
-                                                           Opacity="0.9"/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="Black"/>
-                                                        <Setter TargetName="ControlButtonImage" Property="Opacity" Value="1"/>
-                                                        <Setter TargetName="ControlButtonImage" Property="Source" Value="{DynamicResource icon.window-restore-white}"/>
-                                                    </Trigger>
-                                                    <Trigger Property="IsPressed" Value="True">
-                                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="#444"/>
-                                                        <Setter TargetName="ControlButtonImage" Property="Opacity" Value="0.4"/>
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                        <Button.Style>
-                                            <Style TargetType="{x:Type Button}">
-                                                <Setter Property="Visibility" Value="Hidden"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ElementName=ProbeGrid, Path=IsMouseOver}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Button.Style>
-                                    </Button>
+                                        <!-- Button: Edit alias -->
+                                        <Button Style="{StaticResource ProbeTitleButtonStyle}"
+                                                Content="{DynamicResource icon.pencil}"
+                                                Margin="0,0,1,0"
+                                                ToolTip="{x:Static resource:Strings.Tooltip_EditAlias}"
+                                                IsEnabled="{Binding ElementName=Hostname, Path=Text, Converter={StaticResource StringLengthToBoolConverter}}"
+                                                Click="EditAlias_Click"/>
 
-                                    <!-- Button: Edit alias -->
-                                    <Button Grid.Column="2"
-                                            Padding="6,3"
-                                            Margin="0,0,1,0"
-                                            Background="Transparent"
-                                            HorizontalAlignment="Right"
-                                            IsTabStop="False"
-                                            ToolTip="{x:Static resource:Strings.Tooltip_EditAlias}"
-                                            ToolTipService.InitialShowDelay="1500"
-                                            ToolTipService.ShowDuration="2000"
-                                            IsEnabled="{Binding ElementName=Hostname, Path=Text, Converter={StaticResource StringLengthToBoolConverter}}"
-                                            Click="EditAlias_Click">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Name="ControlButtonBorder"
-                                                        BorderThickness="0"
-                                                        BorderBrush="Transparent"
-                                                        CornerRadius="1"
-                                                        Padding="{TemplateBinding Padding}"
-                                                        Background="{TemplateBinding Background}">
-                                                    <Image Name="ControlButtonImage" Source="{DynamicResource icon.pencil-black}"
-                                                           Width="14" Height="14"
-                                                           Opacity="0.9"/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="Black"/>
-                                                        <Setter TargetName="ControlButtonImage" Property="Opacity" Value="1"/>
-                                                        <Setter TargetName="ControlButtonImage" Property="Source" Value="{DynamicResource icon.pencil-white}"/>
-                                                    </Trigger>
-                                                    <Trigger Property="IsPressed" Value="True">
-                                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="#444"/>
-                                                        <Setter TargetName="ControlButtonImage" Property="Opacity" Value="0.4"/>
-                                                    </Trigger>
-                                                    <Trigger Property="IsEnabled" Value="False">
-                                                        <Setter TargetName="ControlButtonImage" Property="Opacity" Value="0.4"/>
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                        <Button.Style>
-                                            <Style TargetType="{x:Type Button}">
-                                                <Setter Property="Visibility" Value="Hidden"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ElementName=ProbeGrid, Path=IsMouseOver}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Button.Style>
-                                    </Button>
+                                        <!-- Button: Isolated view -->
+                                        <Button Style="{StaticResource ProbeTitleButtonStyle}"
+                                                Content="{DynamicResource icon.window-restore}"
+                                                Margin="0,0,1,0"
+                                                ToolTip="{x:Static resource:Strings.Tooltip_IsolatedView}"
+                                                Click="IsolatedView_Click"/>
+
+                                        <!-- Button: Remove probe -->
+                                        <Button Style="{StaticResource ProbeTitleButtonStyle}"
+                                                Content="{DynamicResource icon.window-close}"
+                                                ToolTip="{x:Static resource:Strings.Tooltip_Close}"
+                                                Click="RemoveProbe_Click"/>
+                                    </StackPanel>
                                 </Grid>
 
                                 <!-- Ping statistics -->

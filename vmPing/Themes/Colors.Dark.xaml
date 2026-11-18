@@ -46,6 +46,10 @@
     <!-- Icons -->
     <SolidColorBrush x:Key="Theme.Icon" Color="#c5ced8"/>
 
+    <!-- Probe title bar: the band shown on hover, and the grip and button icons -->
+    <SolidColorBrush x:Key="Theme.Probe.TitleBar.Background" Color="#73000000"/>
+    <SolidColorBrush x:Key="Theme.Probe.TitleBar.Icon" Color="#ffffff"/>
+
     <!-- Scroll bar thumb and arrows (drawn partly see-through, more solid on hover) -->
     <SolidColorBrush x:Key="Theme.ScrollBar.Thumb" Color="#8b949e"/>
 

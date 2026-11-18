@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Input Addresses"
+        Title="Input addresses"
         UseLayoutRounding="True"
         Height="450" MinHeight="250"
         Width="350" MinWidth="280"

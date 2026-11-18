@@ -32,7 +32,7 @@
         <TextBlock DockPanel.Dock="Top"
                    Style="{StaticResource ResourceKey=OptionHeaderTextStyle}"
                    Margin="0,5,0,10"
-                   Text="Trace Route to Destination"/>
+                   Text="Trace route to destination"/>
         <Grid DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -204,7 +204,7 @@
                 </DataGridTextColumn>
 
                 <!-- IP address -->
-                <DataGridTextColumn Binding="{Binding HostAddress}" Header="IP Address" Width="Auto" MinWidth="100">
+                <DataGridTextColumn Binding="{Binding HostAddress}" Header="IP address" Width="Auto" MinWidth="100">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Padding" Value="5,1,35,1"/>

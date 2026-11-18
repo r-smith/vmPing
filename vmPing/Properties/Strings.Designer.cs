@@ -160,7 +160,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Confirm Delete.
+        ///   Looks up a localized string similar to Confirm delete.
         /// </summary>
         public static string DialogTitle_ConfirmDelete {
             get {
@@ -439,7 +439,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Flood Host.
+        ///   Looks up a localized string similar to Flood host.
         /// </summary>
         public static string Menu_FloodHost {
             get {
@@ -457,7 +457,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage Aliases.
+        ///   Looks up a localized string similar to Manage aliases.
         /// </summary>
         public static string Menu_ManageAliases {
             get {
@@ -466,7 +466,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage Favorites.
+        ///   Looks up a localized string similar to Manage favorites.
         /// </summary>
         public static string Menu_ManageFavorites {
             get {
@@ -484,7 +484,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Popup Alerts.
+        ///   Looks up a localized string similar to Popup alerts.
         /// </summary>
         public static string Menu_PopupAlerts {
             get {
@@ -493,7 +493,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save as Favorite.
+        ///   Looks up a localized string similar to Save as favorite.
         /// </summary>
         public static string Menu_SaveToFavorites {
             get {
@@ -592,7 +592,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selected Hosts.
+        ///   Looks up a localized string similar to Selected hosts.
         /// </summary>
         public static string NewFavorite_SelectedHostsHeader {
             get {
@@ -637,7 +637,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When Minimized.
+        ///   Looks up a localized string similar to When minimized.
         /// </summary>
         public static string Notification_WhenMinimized {
             get {
@@ -961,7 +961,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Status History.
+        ///   Looks up a localized string similar to Status history.
         /// </summary>
         public static string StatusHistory_WindowTitle {
             get {
@@ -970,7 +970,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Add Host.
+        ///   Looks up a localized string similar to _Add host.
         /// </summary>
         public static string Toolbar_Add {
             get {
@@ -988,7 +988,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Start All (F5).
+        ///   Looks up a localized string similar to _Start all (F5).
         /// </summary>
         public static string Toolbar_StartAll {
             get {
@@ -997,7 +997,7 @@ namespace vmPing.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Stop All (F5).
+        ///   Looks up a localized string similar to _Stop all (F5).
         /// </summary>
         public static string Toolbar_StopAll {
             get {

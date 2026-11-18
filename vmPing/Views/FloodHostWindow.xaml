@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:vmPing.Views"
         xmlns:converters="clr-namespace:vmPing.Converters"
-        Title="vmPing - Flood Host"
+        Title="Flood host"
         Height="250"
         Width="400"
         ResizeMode="CanMinimize"
@@ -12,7 +12,7 @@
 
     <Window.Resources>
         <!-- Value converters -->
-        <converters:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="Flood Host" TrueValue="Stop Flood"/>
+        <converters:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="Flood host" TrueValue="Stop flood"/>
         <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
 
@@ -152,7 +152,7 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="Packets Sent:"
+                    <TextBlock Grid.Column="0" Text="Packets sent:"
                                HorizontalAlignment="Right" VerticalAlignment="Center"
                                Margin="0,0,15,0"
                                Foreground="{DynamicResource Theme.Text.Secondary}"
@@ -168,7 +168,7 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="Packets Received:"
+                    <TextBlock Grid.Column="0" Text="Packets received:"
                                HorizontalAlignment="Right" VerticalAlignment="Center"
                                Margin="0,0,15,0"
                                Foreground="{DynamicResource Theme.Text.Secondary}"
@@ -184,7 +184,7 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="Packets Lost:"
+                    <TextBlock Grid.Column="0" Text="Packets lost:"
                                HorizontalAlignment="Right" VerticalAlignment="Center"
                                Margin="0,0,15,0"
                                Foreground="{DynamicResource Theme.Text.Secondary}"

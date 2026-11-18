@@ -796,7 +796,7 @@ namespace vmPing.Views
                             {
                                 DialogWindow dialogWindow = new DialogWindow(
                                     DialogWindow.DialogIcon.Info,
-                                    "Email Test",
+                                    "Email test",
                                     "A test email was sent.",
                                     "OK",
                                     false)

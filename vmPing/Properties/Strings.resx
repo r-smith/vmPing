@@ -151,7 +151,7 @@
     <value>Save</value>
   </data>
   <data name="DialogTitle_ConfirmDelete" xml:space="preserve">
-    <value>Confirm Delete</value>
+    <value>Confirm delete</value>
   </data>
   <data name="DialogTitle_Error" xml:space="preserve">
     <value>Error</value>
@@ -248,25 +248,25 @@
     <value>Favorites</value>
   </data>
   <data name="Menu_FloodHost" xml:space="preserve">
-    <value>Flood Host</value>
+    <value>Flood host</value>
   </data>
   <data name="Menu_Help" xml:space="preserve">
     <value>Help</value>
   </data>
   <data name="Menu_ManageAliases" xml:space="preserve">
-    <value>Manage Aliases</value>
+    <value>Manage aliases</value>
   </data>
   <data name="Menu_ManageFavorites" xml:space="preserve">
-    <value>Manage Favorites</value>
+    <value>Manage favorites</value>
   </data>
   <data name="Menu_Options" xml:space="preserve">
     <value>Options</value>
   </data>
   <data name="Menu_PopupAlerts" xml:space="preserve">
-    <value>Popup Alerts</value>
+    <value>Popup alerts</value>
   </data>
   <data name="Menu_SaveToFavorites" xml:space="preserve">
-    <value>Save as Favorite</value>
+    <value>Save as favorite</value>
   </data>
   <data name="Menu_StatusHistory" xml:space="preserve">
     <value>History</value>
@@ -299,7 +299,7 @@
     <value>Save this layout as a favorite</value>
   </data>
   <data name="NewFavorite_SelectedHostsHeader" xml:space="preserve">
-    <value>Selected Hosts</value>
+    <value>Selected hosts</value>
   </data>
   <data name="NewFavorite_Title" xml:space="preserve">
     <value>Name</value>
@@ -315,7 +315,7 @@
     <value>Never</value>
   </data>
   <data name="Notification_WhenMinimized" xml:space="preserve">
-    <value>When Minimized</value>
+    <value>When minimized</value>
   </data>
   <data name="Probe_Error" xml:space="preserve">
     <value>Error:</value>
@@ -423,19 +423,19 @@
     <value>When a host changes between down or up, it'll show up here</value>
   </data>
   <data name="StatusHistory_WindowTitle" xml:space="preserve">
-    <value>Status History</value>
+    <value>Status history</value>
   </data>
   <data name="Toolbar_Add" xml:space="preserve">
-    <value>_Add Host</value>
+    <value>_Add host</value>
   </data>
   <data name="Toolbar_Columns" xml:space="preserve">
     <value>_Columns</value>
   </data>
   <data name="Toolbar_StartAll" xml:space="preserve">
-    <value>_Start All (F5)</value>
+    <value>_Start all (F5)</value>
   </data>
   <data name="Toolbar_StopAll" xml:space="preserve">
-    <value>_Stop All (F5)</value>
+    <value>_Stop all (F5)</value>
   </data>
   <data name="Tooltip_Close" xml:space="preserve">
     <value>Close</value>

@@ -1007,7 +1007,7 @@ namespace vmPing.Views
             System.Windows.Forms.ContextMenuStrip menuStrip = new System.Windows.Forms.ContextMenuStrip();
             System.Windows.Forms.ToolStripMenuItem menuOptions = new System.Windows.Forms.ToolStripMenuItem("Options");
             menuOptions.Click += (s, args) => OptionsExecute(null, null);
-            System.Windows.Forms.ToolStripMenuItem menuStatusHistory = new System.Windows.Forms.ToolStripMenuItem("Status History");
+            System.Windows.Forms.ToolStripMenuItem menuStatusHistory = new System.Windows.Forms.ToolStripMenuItem("Status history");
             menuStatusHistory.Click += (s, args) => StatusHistoryExecute(null, null);
             System.Windows.Forms.ToolStripMenuItem menuExit = new System.Windows.Forms.ToolStripMenuItem("Exit vmPing");
             menuExit.Click += (s, args) =>

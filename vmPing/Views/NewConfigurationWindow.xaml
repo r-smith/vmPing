@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:vmPing.Views"
         mc:Ignorable="d"
-        Title="New Configuration"
+        Title="New configuration"
         Height="Auto"
         Width="520"
         SizeToContent="Height"

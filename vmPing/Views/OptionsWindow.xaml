@@ -40,7 +40,7 @@
             <TabItem Header="General" Name="GeneralTab">
                 <DockPanel Margin="20,0" LastChildFill="False">
                     <TextBlock DockPanel.Dock="Top"
-                               Text="Probe Options"
+                               Text="Probe options"
                                Style="{StaticResource OptionHeaderTextStyle}"/>
                     <!-- Ping interval -->
                     <StackPanel DockPanel.Dock="Top"
@@ -75,7 +75,7 @@
 
                     <!-- Down detection -->
                     <TextBlock DockPanel.Dock="Top"
-                               Text="Down Detection"
+                               Text="Down detection"
                                Margin="0,25,0,10"
                                Style="{StaticResource OptionHeaderTextStyle}"/>
                     <TextBlock DockPanel.Dock="Top"
@@ -92,7 +92,7 @@
                     <!-- High latency detection -->
                     <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,25,0,10">
                         <TextBlock DockPanel.Dock="Left"
-                                   Text="High Latency Detection"
+                                   Text="High latency detection"
                                    Margin="0"
                                    Style="{StaticResource OptionHeaderTextStyle}"/>
                         <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
@@ -163,7 +163,7 @@
 
                     <!-- Header -->
                     <TextBlock DockPanel.Dock="Top"
-                               Text="Advanced ICMP Options"
+                               Text="Advanced ICMP options"
                                Style="{StaticResource OptionHeaderTextStyle}"/>
 
                     <!-- TTL -->
@@ -264,7 +264,7 @@
                     <!-- Header -->
                     <DockPanel DockPanel.Dock="Top" LastChildFill="False">
                         <TextBlock DockPanel.Dock="Left"
-                                   Text="Popup Alerts"
+                                   Text="Popup alerts"
                                    Style="{StaticResource OptionHeaderTextStyle}"/>
                         <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
                             <TextBlock>
@@ -327,7 +327,7 @@
 
                         <!-- Header -->
                         <TextBlock DockPanel.Dock="Top"
-                                   Text="Email Alerts"
+                                   Text="Email alerts"
                                    Style="{StaticResource OptionHeaderTextStyle}"/>
 
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,15">
@@ -358,7 +358,7 @@
 
                             <!-- Server information subheading -->
                             <TextBlock DockPanel.Dock="Top"
-                                       Text="Server Information"
+                                       Text="Server information"
                                        Style="{StaticResource OptionSubHeaderTextStyle}"/>
 
                             <!-- SMTP Server-->
@@ -415,7 +415,7 @@
 
                             <!-- Email addresses subheading -->
                             <TextBlock DockPanel.Dock="Top"
-                                       Text="Email Addresses"
+                                       Text="Email addresses"
                                        Margin="0,12,0,5"
                                        Style="{StaticResource OptionSubHeaderTextStyle}"/>
 
@@ -457,7 +457,7 @@
 
                     <!-- Header -->
                     <TextBlock DockPanel.Dock="Top"
-                               Text="Audio Alerts"
+                               Text="Audio alerts"
                                Style="{StaticResource OptionHeaderTextStyle}"/>
 
                     <!-- Audio Alert Down: checkbox / tooltip -->
@@ -568,7 +568,7 @@
 
                     <!-- Header -->
                     <TextBlock DockPanel.Dock="Top"
-                               Text="Log Output"
+                               Text="Log output"
                                Style="{StaticResource OptionHeaderTextStyle}"/>
 
                     <!-- Log folder -->
@@ -595,7 +595,7 @@
                     </StackPanel>
 
                     <!-- Log status changes -->
-                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,10,0,0">
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,0">
                         <CheckBox Name="IsLogStatusChangesEnabled"
                                   Content="Log status changes"/>
                         <Label Style="{StaticResource LabelToolTip}">
@@ -613,7 +613,7 @@
 
                     <!-- Header -->
                     <TextBlock DockPanel.Dock="Top"
-                               Text="Window Options"
+                               Text="Window options"
                                Style="{StaticResource OptionHeaderTextStyle}"/>
 
                     <!-- Always on top -->
@@ -881,7 +881,7 @@
 
                         <!-- Theme option radio button group -->
                         <TextBlock DockPanel.Dock="Top"
-                                   Text="Light or Dark"
+                                   Text="Light or dark"
                                    Margin="0,10,0,0"
                                    Style="{StaticResource OptionSubHeaderTextStyle}"/>
                         <RadioButton DockPanel.Dock="Top"
@@ -902,7 +902,7 @@
 
                         <!-- Probe layout -->
                         <TextBlock DockPanel.Dock="Top"
-                                   Text="Probe Layout"
+                                   Text="Probe layout"
                                    Margin="0,20,0,0"
                                    Style="{StaticResource OptionSubHeaderTextStyle}"/>
                         <!-- Space between probes -->
@@ -917,7 +917,7 @@
 
                         <!-- Probe colors: which theme's set to edit -->
                         <TextBlock DockPanel.Dock="Top"
-                                   Text="Probe Colors"
+                                   Text="Probe colors"
                                    Margin="0,20,0,0"
                                    Style="{StaticResource OptionSubHeaderTextStyle}"/>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
@@ -934,7 +934,7 @@
 
                         <!-- Probe background colors -->
                         <TextBlock DockPanel.Dock="Top"
-                                   Text="Probe Background"
+                                   Text="Probe background"
                                    Margin="0,20,0,0"
                                    Style="{StaticResource OptionSubHeaderTextStyle}"/>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
@@ -971,7 +971,7 @@
                         <!-- Probe foreground colors -->
                         <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="Transparent" Margin="0,20,0,0"/>
                         <TextBlock DockPanel.Dock="Top"
-                                   Text="Probe Foreground"
+                                   Text="Probe foreground"
                                    Margin="0"
                                    Style="{StaticResource OptionSubHeaderTextStyle}"/>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
@@ -1008,7 +1008,7 @@
                         <!-- Statistics foreground colors -->
                         <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="Transparent" Margin="0,20,0,0"/>
                         <TextBlock DockPanel.Dock="Top"
-                                   Text="Statistics Foreground"
+                                   Text="Statistics foreground"
                                    Margin="0"
                                    Style="{StaticResource OptionSubHeaderTextStyle}"/>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
@@ -1042,7 +1042,7 @@
                             <Button Style="{StaticResource ButtonStyle}"
                                     Click="RestoreDefaultColors_Click"
                                     Padding="15,5"
-                                    Content="Restore Defaults"
+                                    Content="Restore defaults"
                                     HorizontalAlignment="Left"/>
                         </Grid>
                     </DockPanel>

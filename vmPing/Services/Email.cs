@@ -60,7 +60,7 @@ namespace vmPing.Services
         {
             using (MailMessage message = new MailMessage())
             {
-                message.Subject = "[vmPing] Test Email Notification";
+                message.Subject = "[vmPing] Test email notification";
                 message.Body = $"This is a test email sent by vmPing on {DateTime.Now:F}";
                 message.From = new MailAddress(fromAddress, "vmPing");
                 message.To.Add(recipientAddress.Replace(";", ","));

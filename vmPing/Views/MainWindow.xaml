@@ -235,7 +235,7 @@
                 </MenuItem>
                 <Separator />
                 <!-- Menu: Multi-Input -->
-                <MenuItem Name="MultiInputMenu" Header="Multi-Input" InputGestureText="F2">
+                <MenuItem Name="MultiInputMenu" Header="Multi-input" InputGestureText="F2">
                     <MenuItem.Icon>
                         <Image Source="{DynamicResource icon.input-addresses}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="vmPing.Views.HelpWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="vmPing Help"
+        Title="vmPing help"
         UseLayoutRounding="True"
         Background="{DynamicResource Theme.Window.Background}"
         Height="575"
@@ -125,13 +125,13 @@
                   Background="{DynamicResource Theme.Panel.Background}">
             <TreeViewItem Header="Intro"
                           Selected="Intro_Selected" />
-            <TreeViewItem Header="Basic Usage"
+            <TreeViewItem Header="Basic usage"
                           Selected="BasicUsage_Selected" />
-            <TreeViewItem Header="Extra Features"
+            <TreeViewItem Header="Extra features"
                           Selected="ExtraFeatures_Selected" />
             <TreeViewItem Header="Options"
                           Selected="Options_Selected" />
-            <TreeViewItem Header="Command Line Usage"
+            <TreeViewItem Header="Command line usage"
                           Selected="CommandLineUsage_Selected" />
         </TreeView>
         <GridSplitter Grid.Column="1" Width="4"
@@ -193,7 +193,7 @@
                 <!-- Basic Usage section -->
                 <Paragraph Name="BasicUsage"
                            Style="{StaticResource HeaderText}">
-                    Basic Usage
+                    Basic usage
                 </Paragraph>
                 <Paragraph Style="{StaticResource SubHeaderText}">
                     Application overview
@@ -217,7 +217,7 @@
                 <Paragraph Style="{StaticResource ParagraphText}">
                     <Run>Click</Run>
                     <Image Source="{DynamicResource icon.add}" Width="14" Height="14" Margin="3,0,0,0"/>
-                    <Run FontWeight="SemiBold">Add Host</Run>
+                    <Run FontWeight="SemiBold">Add host</Run>
                     <Run>from the menu bar, or use the keyboard shortcut,</Run>
                     <Run FontWeight="SemiBold">Alt-A</Run> .
                 </Paragraph>
@@ -240,10 +240,10 @@
                 <!-- Extra Features section -->
                 <Paragraph Name="ExtraFeatures"
                            Style="{StaticResource HeaderText}">
-                    Extra Features
+                    Extra features
                 </Paragraph>
                 <Paragraph Style="{StaticResource SubHeaderText}">
-                    Port Monitor
+                    Port monitor
                 </Paragraph>
                 <Paragraph Style="{StaticResource ParagraphText}">
                     To monitor a specific TCP port, simply enter the hostname or IP address followed by a colon and the desired port number.
@@ -252,7 +252,7 @@
                     <Bold>SERVER01:80</Bold> , will monitor port 80 on SERVER01.
                 </Paragraph>
                 <Paragraph Style="{StaticResource SubHeaderText}">
-                    Labels, Comments and Notes
+                    Labels, comments and notes
                 </Paragraph>
                 <Paragraph Style="{StaticResource ParagraphText}">
                     Hosts can be entered with a label, a comment, or a note. This works in a probe, in favorites,
@@ -266,14 +266,14 @@
                     <Bold>// Updated in March</Bold> - A note. Ignored completely, in lists of hosts.
                 </Paragraph>
                 <Paragraph Style="{StaticResource SubHeaderText}">
-                    Trace Route
+                    Traceroute
                 </Paragraph>
                 <Paragraph Style="{StaticResource ParagraphText}">
                     The trace route utility is used to measure network delays and determine the path taken to the given destination host.
                     The utility can be accessed from the dropdown icon in the top right or by pressing Ctrl-T.
                 </Paragraph>
                 <Paragraph Style="{StaticResource SubHeaderText}">
-                    Flood Host
+                    Flood host
                 </Paragraph>
                 <Paragraph Style="{StaticResource ParagraphText}">
                     The flood host utility is used to generate a significant amount of ICMP packets.
@@ -324,7 +324,7 @@
                 <!-- Command Line Usage section -->
                 <Paragraph Name="CommandLineUsage"
                            Style="{StaticResource HeaderText}">
-                    Command Line Usage
+                    Command line usage
                 </Paragraph>
                 <Paragraph Style="{StaticResource SubHeaderText}">
                     Usage: vmPing [-i interval] [-w timeout] [&lt;target_host>...]

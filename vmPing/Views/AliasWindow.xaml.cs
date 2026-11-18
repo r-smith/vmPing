@@ -24,7 +24,7 @@ namespace vmPing.Views
             {
                 _originalHost = hostname;
                 NewAlias.Text = alias;
-                Title = "Edit Alias";
+                Title = "Edit alias";
                 Header.Text = "Edit an alias";
                 RemoveButton.Visibility = Visibility.Visible;
             }

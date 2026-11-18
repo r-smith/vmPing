@@ -105,6 +105,7 @@
     <Compile Include="Converters\ValueConverters.cs" />
     <Compile Include="Controls\AutoScrollAdorner.cs" />
     <Compile Include="Controls\FirstFitPanel.cs" />
+    <Compile Include="Controls\ProbeGrid.cs" />
     <Compile Include="Controls\ProbeOutputBox.cs" />
     <Compile Include="Properties\Strings.Designer.cs">
       <AutoGen>True</AutoGen>

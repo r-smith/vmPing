@@ -25,10 +25,13 @@
         <!-- Probe spacing. RefreshProbeSpacing sets these from the "Space between probes" option. -->
         <Thickness x:Key="Probes.Padding">2</Thickness>
         <Thickness x:Key="Probes.Margin">0</Thickness>
+        <SolidColorBrush x:Key="Probes.BorderBrush" Color="Transparent"/>
         <Thickness x:Key="Probe.Margin">2</Thickness>
+        <Thickness x:Key="Probe.BorderThickness">1</Thickness>
+        <SolidColorBrush x:Key="Probe.BorderBrush" Color="Transparent"/>
         <CornerRadius x:Key="Probe.CornerRadius">4</CornerRadius>
-        <CornerRadius x:Key="Probe.TopCornerRadius">4,4,0,0</CornerRadius>
-        <CornerRadius x:Key="Probe.BottomCornerRadius">0,0,4,4</CornerRadius>
+        <CornerRadius x:Key="Probe.TopCornerRadius">3,3,0,0</CornerRadius>
+        <CornerRadius x:Key="Probe.BottomCornerRadius">0,0,3,3</CornerRadius>
 
         <!-- Probe title bar buttons. The button's content is the icon. -->
         <Style x:Key="ProbeTitleButtonStyle" TargetType="{x:Type Button}">
@@ -345,11 +348,14 @@
         </Popup>
 
         <!-- Items Control -->
-        <ItemsControl Name="ProbeItemsControl" UseLayoutRounding="True" IsTabStop="False" Focusable="False" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource Theme.Panel.Border}" Padding="{DynamicResource Probes.Padding}" Margin="{DynamicResource Probes.Margin}"
+        <ItemsControl Name="ProbeItemsControl" UseLayoutRounding="True" IsTabStop="False" Focusable="False" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource Probes.BorderBrush}" Padding="{DynamicResource Probes.Padding}" Margin="{DynamicResource Probes.Margin}"
                       Background="Transparent" AllowDrop="True" DragOver="Probe_DragOver" Drop="Probe_Drop">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border Margin="{DynamicResource Probe.Margin}" CornerRadius="{DynamicResource Probe.CornerRadius}">
+                    <Border Margin="{DynamicResource Probe.Margin}"
+                            BorderThickness="{DynamicResource Probe.BorderThickness}"
+                            BorderBrush="{DynamicResource Probe.BorderBrush}"
+                            CornerRadius="{DynamicResource Probe.CornerRadius}">
                         <!-- Probe status color -->
                         <Border.Style>
                             <Style TargetType="{x:Type Border}">
@@ -761,7 +767,7 @@
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <!-- ColumnCount.Tag is updated to contain the lesser of the two values: ColumnCount.Value and the number of probes -->
-                    <UniformGrid Columns="{Binding ElementName=ColumnCount, Path=Tag}"/>
+                    <c:ProbeGrid Columns="{Binding ElementName=ColumnCount, Path=Tag}"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

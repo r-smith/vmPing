@@ -41,7 +41,11 @@ namespace vmPing.Views
         {
             InitializeComponent();
             ThemeManager.RegisterWindow(this);
-            ThemeManager.ThemeChanged += (sender, e) => RefreshProbeColors();
+            ThemeManager.ThemeChanged += (sender, e) =>
+            {
+                RefreshProbeColors();
+                RefreshProbeSpacing();
+            };
             ProbeTypeMenu.CustomPopupPlacementCallback = PlaceProbeTypeMenu;
             InitializeApplication();
         }
@@ -169,11 +173,15 @@ namespace vmPing.Views
         {
             bool isSpaced = ApplicationOptions.IsProbeSpacingEnabled;
             Resources["Probes.Padding"] = new Thickness(isSpaced ? 2 : 0);
-            Resources["Probes.Margin"] = isSpaced ? new Thickness(0) : new Thickness(0, 0, -1, -1);
-            Resources["Probe.Margin"] = isSpaced ? new Thickness(2) : new Thickness(0, 0, 1, 1);
+            Resources["Probes.Margin"] = isSpaced ? new Thickness(0) : new Thickness(0, 0, -2, -2);
+            Resources["Probes.BorderBrush"] = FindResource(isSpaced ? "Theme.Panel.Border" : "Theme.Probe.Divider");
+            Resources["Probe.Margin"] = new Thickness(isSpaced ? 2 : 0);
+            Resources["Probe.BorderThickness"] = isSpaced ? new Thickness(1) : new Thickness(0, 0, 2, 2);
+            // Looked up again when the theme changes, since the brush comes from the theme.
+            Resources["Probe.BorderBrush"] = FindResource(isSpaced ? "Theme.Probe.Border" : "Theme.Probe.Divider");
             Resources["Probe.CornerRadius"] = new CornerRadius(isSpaced ? 4 : 0);
-            Resources["Probe.TopCornerRadius"] = isSpaced ? new CornerRadius(4, 4, 0, 0) : new CornerRadius(0);
-            Resources["Probe.BottomCornerRadius"] = isSpaced ? new CornerRadius(0, 0, 4, 4) : new CornerRadius(0);
+            Resources["Probe.TopCornerRadius"] = isSpaced ? new CornerRadius(3, 3, 0, 0) : new CornerRadius(0);
+            Resources["Probe.BottomCornerRadius"] = isSpaced ? new CornerRadius(0, 0, 3, 3) : new CornerRadius(0);
         }
 
         private void RefreshColumnCount()

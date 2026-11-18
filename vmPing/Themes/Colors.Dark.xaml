@@ -46,6 +46,10 @@
     <!-- Icons -->
     <SolidColorBrush x:Key="Theme.Icon" Color="#c5ced8"/>
 
+    <!-- Probe border: the outline around each probe with spacing, and the line between probes without it -->
+    <SolidColorBrush x:Key="Theme.Probe.Border" Color="#1fffffff"/>
+    <SolidColorBrush x:Key="Theme.Probe.Divider" Color="#111111"/>
+
     <!-- Probe title bar: the band shown on hover, and the grip and button icons -->
     <SolidColorBrush x:Key="Theme.Probe.TitleBar.Background" Color="#73000000"/>
     <SolidColorBrush x:Key="Theme.Probe.TitleBar.Icon" Color="#ffffff"/>

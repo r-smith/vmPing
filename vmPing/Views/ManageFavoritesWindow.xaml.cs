@@ -255,7 +255,7 @@ namespace vmPing.Views
             _highlightedGroup = groupItem;
             if (groupItem != null)
             {
-                groupItem.Background = (Brush)FindResource("Item.MouseOver.Background");
+                groupItem.SetResourceReference(BackgroundProperty, "Theme.Item.Hover.Background");
             }
         }
 

@@ -178,6 +178,12 @@ namespace vmPing.Probes
             }
         }
 
+        // Has the probe colors looked up again, for when the colors change but the status doesn't.
+        public void RefreshColors()
+        {
+            OnPropertyChanged(nameof(Status));
+        }
+
         private bool _isActive = false;
         public bool IsActive
         {

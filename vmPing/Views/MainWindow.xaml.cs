@@ -520,7 +520,7 @@ namespace vmPing.Views
         {
             for (int i = 0; i < _probes.Count; ++i)
             {
-                _probes[i].Status = _probes[i].Status;
+                _probes[i].RefreshColors();
             }
         }
 

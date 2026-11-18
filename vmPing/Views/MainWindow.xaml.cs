@@ -1154,4 +1154,4 @@ namespace vmPing.Views
             ConfigFile.SaveWindowPlacement(saveSize, savePosition);
         }
     }
-}
+}

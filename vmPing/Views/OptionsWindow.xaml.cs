@@ -978,4 +978,4 @@ namespace vmPing.Views
             NativeMethods.HideMinimizeAndMaximizeButtons(this);
         }
     }
-}
+}

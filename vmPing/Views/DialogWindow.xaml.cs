@@ -93,4 +93,4 @@ namespace vmPing.Views
             DialogResult = true;
         }
     }
-}
+}

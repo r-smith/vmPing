@@ -19,6 +19,7 @@ namespace vmPing.Views
         public OptionsWindow()
         {
             InitializeComponent();
+            ThemeManager.RegisterWindow(this);
 
             PopulateGeneralOptions();
             PopulateStartupOptions();

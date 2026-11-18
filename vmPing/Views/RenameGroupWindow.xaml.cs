@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using vmPing.Services;
 
 namespace vmPing.Views
 {
@@ -10,6 +11,7 @@ namespace vmPing.Views
         public RenameGroupWindow(string groupName)
         {
             InitializeComponent();
+            ThemeManager.RegisterWindow(this);
 
             GroupName.Text = groupName;
             GroupName.SelectAll();

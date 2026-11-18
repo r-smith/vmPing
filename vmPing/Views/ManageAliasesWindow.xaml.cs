@@ -7,6 +7,7 @@ using System.Windows.Input;
 using vmPing.Configuration;
 using vmPing.Interop;
 using vmPing.Properties;
+using vmPing.Services;
 
 namespace vmPing.Views
 {
@@ -15,6 +16,7 @@ namespace vmPing.Views
         public ManageAliasesWindow()
         {
             InitializeComponent();
+            ThemeManager.RegisterWindow(this);
             RefreshAliasList();
 
             // Button access keys only work with Alt, like in Manage favorites.

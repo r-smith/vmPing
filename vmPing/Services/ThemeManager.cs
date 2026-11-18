@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Media;
 using Microsoft.Win32;
 using vmPing.Configuration;
+using vmPing.Interop;
 
 namespace vmPing.Services
 {
@@ -37,6 +39,23 @@ namespace vmPing.Services
             Application.Current.Exit += (sender, e) => SystemEvents.UserPreferenceChanged -= SystemEvents_UserPreferenceChanged;
 
             SetMode(mode);
+        }
+
+        // Keeps a window's title bar in step with the theme. Call from the window's constructor.
+        public static void RegisterWindow(Window window)
+        {
+            EventHandler themeChanged = (sender, e) => UpdateTitleBar(window);
+            ThemeChanged += themeChanged;
+            window.Closed += (sender, e) => ThemeChanged -= themeChanged;
+
+            // The title bar is set once the window has a handle, before it's shown.
+            window.SourceInitialized += (sender, e) => UpdateTitleBar(window);
+        }
+
+        private static void UpdateTitleBar(Window window)
+        {
+            SolidColorBrush caption = (SolidColorBrush)Application.Current.FindResource("Theme.TitleBar.Background");
+            NativeMethods.SetTitleBarTheme(window, IsDark, caption.Color);
         }
 
         public static void SetMode(ThemeMode mode)

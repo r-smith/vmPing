@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using vmPing.Configuration;
 using vmPing.Properties;
+using vmPing.Services;
 
 namespace vmPing.Views
 {
@@ -16,6 +17,7 @@ namespace vmPing.Views
         public AliasWindow(string hostname = "")
         {
             InitializeComponent();
+            ThemeManager.RegisterWindow(this);
 
             Hostname.Text = hostname;
             if (!string.IsNullOrEmpty(hostname) && Alias.GetAll().TryGetValue(hostname, out string alias))

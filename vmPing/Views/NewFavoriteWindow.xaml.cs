@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using vmPing.Configuration;
 using vmPing.Properties;
+using vmPing.Services;
 
 namespace vmPing.Views
 {
@@ -18,6 +19,7 @@ namespace vmPing.Views
         public NewFavoriteWindow(List<string> hostList, int columnCount, string title = "")
         {
             InitializeComponent();
+            ThemeManager.RegisterWindow(this);
 
             // Empty probes aren't saved.
             _hostList = hostList.Where(h => !string.IsNullOrWhiteSpace(h)).ToList();

@@ -33,6 +33,7 @@ namespace vmPing.Views
         public ManageFavoritesWindow()
         {
             InitializeComponent();
+            ThemeManager.RegisterWindow(this);
 
             // Button access keys only work with Alt, so typing in the list to find a favorite can't press a button.
             AccessKeyManager.AddAccessKeyPressedHandler(this, (sender, e) =>

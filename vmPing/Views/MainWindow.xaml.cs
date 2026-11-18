@@ -40,6 +40,7 @@ namespace vmPing.Views
         public MainWindow()
         {
             InitializeComponent();
+            ThemeManager.RegisterWindow(this);
             ProbeTypeMenu.CustomPopupPlacementCallback = PlaceProbeTypeMenu;
             InitializeApplication();
         }

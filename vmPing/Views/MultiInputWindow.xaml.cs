@@ -21,6 +21,7 @@ namespace vmPing.Views
         public MultiInputWindow(List<string> addresses = null)
         {
             InitializeComponent();
+            ThemeManager.RegisterWindow(this);
 
             // Set initial keyboard focus to text box.
             Loaded += (sender, e) => MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));

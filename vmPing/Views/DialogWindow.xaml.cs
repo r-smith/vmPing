@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using vmPing.Properties;
+using vmPing.Services;
 
 namespace vmPing.Views
 {
@@ -17,6 +18,7 @@ namespace vmPing.Views
         public DialogWindow(DialogIcon icon, string title, string body, string confirmationText, bool isCancelButtonVisible)
         {
             InitializeComponent();
+            ThemeManager.RegisterWindow(this);
 
             MessageHeader.Text = title;
             MessageBody.Text = body;
@@ -91,4 +93,4 @@ namespace vmPing.Views
             DialogResult = true;
         }
     }
-}
+}

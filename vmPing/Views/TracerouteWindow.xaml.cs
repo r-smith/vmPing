@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using vmPing.Configuration;
 using vmPing.Models;
+using vmPing.Services;
 
 namespace vmPing.Views
 {
@@ -23,6 +24,7 @@ namespace vmPing.Views
         public TracerouteWindow()
         {
             InitializeComponent();
+            ThemeManager.RegisterWindow(this);
             Util.CenterOverMainWindow(this);
             Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
 

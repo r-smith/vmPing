@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using vmPing.Configuration;
+using vmPing.Services;
 
 namespace vmPing.Views
 {
@@ -10,6 +11,7 @@ namespace vmPing.Views
         public NewConfigurationWindow()
         {
             InitializeComponent();
+            ThemeManager.RegisterWindow(this);
 
             FilePath.Text = ConfigFile.FilePath;
         }

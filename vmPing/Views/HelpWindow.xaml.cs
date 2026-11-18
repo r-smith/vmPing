@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using vmPing.Configuration;
+using vmPing.Services;
 
 namespace vmPing.Views
 {
@@ -14,6 +15,7 @@ namespace vmPing.Views
         public HelpWindow()
         {
             InitializeComponent();
+            ThemeManager.RegisterWindow(this);
             Util.CenterOverMainWindow(this);
             Topmost = ApplicationOptions.IsAlwaysOnTopEnabled;
 

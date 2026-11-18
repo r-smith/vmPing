@@ -1,18 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
 using vmPing.Interop;
-using vmPing.Properties;
+using vmPing.Views;
 
 namespace vmPing
 {
     internal static class Util
     {
+        // Safe to call from any thread. Like a message box, it waits until the dialog is closed.
         public static void ShowError(string message)
         {
-            MessageBox.Show(message, Strings.Error_WindowTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+            if (!Application.Current.Dispatcher.CheckAccess())
+            {
+                Application.Current.Dispatcher.Invoke(() => ShowError(message));
+                return;
+            }
+
+            DialogWindow errorWindow = DialogWindow.ErrorWindow(message);
+            Window owner = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive && w != errorWindow);
+            if (owner != null)
+            {
+                errorWindow.Owner = owner;
+            }
+            else
+            {
+                // There's no window to show it over, such as while vmPing is starting.
+                errorWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                errorWindow.ShowInTaskbar = true;
+            }
+            errorWindow.ShowDialog();
         }
 
         public static bool IsValidHtmlColor(string htmlColor)

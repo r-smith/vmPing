@@ -1,10 +1,29 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Keyboard focus: an accent ring just outside the control (buttons, check boxes, radio buttons) -->
     <Style x:Key="FocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    <Border Margin="-3"
+                            BorderThickness="2"
+                            BorderBrush="{DynamicResource Theme.Focus.Ring}"
+                            CornerRadius="4"
+                            SnapsToDevicePixels="True"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Keyboard focus for list items and tabs: an accent ring just inside, so it doesn't overlap the next item -->
+    <Style x:Key="FocusVisual.Item">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border BorderThickness="2"
+                            BorderBrush="{DynamicResource Theme.Focus.Ring}"
+                            CornerRadius="3"
+                            SnapsToDevicePixels="True"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

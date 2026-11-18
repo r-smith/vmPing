@@ -70,7 +70,7 @@
                    Foreground="{StaticResource TabItem.Selected.Foreground}"/>
     </DataTemplate>
     <Style TargetType="{x:Type TabItem}">
-        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual.Item}"/>
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Background" Value="{StaticResource TabItem.Static.Background}"/>
         <Setter Property="FontSize" Value="14"/>
@@ -121,4 +121,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-</ResourceDictionary>
+</ResourceDictionary>

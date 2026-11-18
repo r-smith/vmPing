@@ -16,17 +16,6 @@
     <SolidColorBrush x:Key="RadioButton.Pressed.Glyph" Color="#505050"/>
     <SolidColorBrush x:Key="RadioButton.Static.Glyph" Color="#505050"/>
     
-    <!-- RadioButton focus visual -->
-    <Style x:Key="RadioMarkFocusVisual">
-        <Setter Property="Control.Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Rectangle Margin="19,0,0,0" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    
     <!-- RadioButton style -->
     <Style TargetType="{x:Type RadioButton}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
@@ -77,7 +66,6 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="HasContent" Value="true">
-                            <Setter Property="FocusVisualStyle" Value="{StaticResource RadioMarkFocusVisual}"/>
                             <Setter Property="Padding" Value="4,-1,0,0"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
@@ -107,4 +95,4 @@
         </Setter>
     </Style>
 
-</ResourceDictionary>
+</ResourceDictionary>

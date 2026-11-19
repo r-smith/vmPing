@@ -237,9 +237,9 @@
                                  TextChanged="PacketData_TextChanged"
                                  Width="80"
                                  MaxLength="5"
-                                 Visibility="{Binding IsChecked, ElementName=PacketSizeOption, Converter={StaticResource BooleanToHiddenVisibilityConverter}}"/>
+                                 IsEnabled="{Binding IsChecked, ElementName=PacketSizeOption}"/>
                         <TextBlock Text="bytes" Margin="10,0,0,0"
-                                   Visibility="{Binding IsChecked, ElementName=PacketSizeOption, Converter={StaticResource BooleanToHiddenVisibilityConverter}}"/>
+                                   IsEnabled="{Binding IsChecked, ElementName=PacketSizeOption}"/>
                     </StackPanel>
 
                     <!-- Packet data -->
@@ -261,7 +261,7 @@
                                  AcceptsReturn="True"
                                  VerticalScrollBarVisibility="Auto"
                                  MaxLength="65500"
-                                 Visibility="{Binding IsChecked, ElementName=UseCustomPacketOption, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                 IsEnabled="{Binding IsChecked, ElementName=UseCustomPacketOption}"/>
                     </DockPanel>
 
                     <!-- Total packet size -->
@@ -696,8 +696,14 @@
                             Keep vmPing visible above your other windows.
                         </Label>
                     </DockPanel>
-                    <!-- Minimze to tray -->
-                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,15,0,0">
+
+                    <!-- System tray -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="System tray"
+                               Margin="0,20,0,0"
+                               Style="{StaticResource OptionSubHeaderTextStyle}"/>
+                    <!-- Minimize to tray -->
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,6,0,0">
                         <CheckBox DockPanel.Dock="Left"
                                   Name="IsMinimizeToTrayEnabled"
                                   Content="Minimize to tray"/>

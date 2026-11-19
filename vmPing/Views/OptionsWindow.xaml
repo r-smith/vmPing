@@ -28,8 +28,8 @@
 
         <Style TargetType="{x:Type TextBlock}" x:Key="OptionSubHeaderTextStyle">
             <Setter Property="Margin" Value="0,0,0,4"/>
-            <Setter Property="Foreground" Value="{DynamicResource Theme.Accent}"/>
-            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+            <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
     </Window.Resources>
@@ -82,8 +82,8 @@
                         <!-- Down detection -->
                         <TextBlock DockPanel.Dock="Top"
                                    Text="Down detection"
-                                   Margin="0,25,0,10"
-                                   Style="{StaticResource OptionHeaderTextStyle}"/>
+                                   Margin="0,30,0,6"
+                                   Style="{StaticResource OptionSubHeaderTextStyle}"/>
                         <StackPanel DockPanel.Dock="Top"
                                     Orientation="Horizontal">
                             <TextBlock Text="Mark a host down after"/>
@@ -96,11 +96,11 @@
                         </StackPanel>
 
                         <!-- High latency detection -->
-                        <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,25,0,10">
+                        <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,30,0,8">
                             <TextBlock DockPanel.Dock="Left"
                                        Text="High latency detection"
                                        Margin="0"
-                                       Style="{StaticResource OptionHeaderTextStyle}"/>
+                                       Style="{StaticResource OptionSubHeaderTextStyle}"/>
                             <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="High latency detection">
                                 <TextBlock>
                                     Get an alert when a host is still up but replying slowly.
@@ -399,6 +399,7 @@
                             <!-- Server information subheading -->
                             <TextBlock DockPanel.Dock="Top"
                                        Text="Server information"
+                                       Margin="0,0,0,6"
                                        Style="{StaticResource OptionSubHeaderTextStyle}"/>
 
                             <!-- SMTP Server-->
@@ -409,7 +410,7 @@
                                 <TextBox Name="SmtpServer"/>
                             </DockPanel>
 
-                            <!-- Smtp Port -->
+                            <!-- SMTP Port -->
                             <DockPanel>
                                 <Grid Width="120">
                                     <TextBlock Text="Port"/>
@@ -425,7 +426,7 @@
                                           Margin="50,0,0,0"/>
                             </DockPanel>
 
-                            <!-- Smtp User. Authentication is used when a username is entered. -->
+                            <!-- SMTP User. Authentication is used when a username is entered. -->
                             <DockPanel>
                                 <Grid Width="120">
                                     <TextBlock Text="Username"/>
@@ -454,7 +455,7 @@
                                 </Grid>
                             </DockPanel>
 
-                            <!-- Smtp Password -->
+                            <!-- SMTP Password -->
                             <DockPanel>
                                 <Grid Width="120">
                                     <TextBlock Text="Password"/>
@@ -477,7 +478,7 @@
                             <!-- Email addresses subheading -->
                             <TextBlock DockPanel.Dock="Top"
                                        Text="Email addresses"
-                                       Margin="0,12,0,5"
+                                       Margin="0,12,0,6"
                                        Style="{StaticResource OptionSubHeaderTextStyle}"/>
 
                             <!-- From Address-->
@@ -527,6 +528,7 @@
                               Click="IsAudioDownAlertEnabled_Click"
                               Content="Play a sound when a host goes down"
                               Margin="0,15,0,0"
+                              MinHeight="20"
                               IsChecked="True"/>
                     <StackPanel DockPanel.Dock="Top"
                                 Margin="22,8,0,0"
@@ -636,7 +638,7 @@
                     </StackPanel>
 
                     <!-- Log status changes -->
-                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,0">
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,10,0,0">
                         <CheckBox Name="IsLogStatusChangesEnabled"
                                   Content="Save status changes (vmPing-status.txt)"/>
                         <Label Style="{StaticResource LabelToolTip}" Tag="Save status changes">
@@ -726,7 +728,7 @@
                         </Label>
                     </DockPanel>
                     <!-- Close to tray -->
-                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,15,0,0">
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,10,0,0">
                         <CheckBox DockPanel.Dock="Left"
                                   Name="IsExitToTrayEnabled"
                                   Content="Close to tray"/>
@@ -740,7 +742,7 @@
                         </Label>
                     </DockPanel>
                     <!-- Always show tray icon -->
-                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,15,0,0">
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,10,0,0">
                         <CheckBox DockPanel.Dock="Left"
                                   Name="IsAlwaysShowTrayIconEnabled"
                                   Content="Always show tray icon"/>
@@ -854,8 +856,9 @@
 
                         <!-- Window size -->
                         <TextBlock DockPanel.Dock="Top"
-                                   Text="Window size:"
-                                   Margin="0,20,0,5"/>
+                                   Text="Window size"
+                                   Margin="0,20,0,6"
+                                   Style="{StaticResource OptionSubHeaderTextStyle}"/>
                         <RadioButton DockPanel.Dock="Top"
                                      GroupName="WindowSize"
                                      Name="WindowSizeRememberOption"
@@ -891,8 +894,9 @@
 
                         <!-- Window position -->
                         <TextBlock DockPanel.Dock="Top"
-                                   Text="Window position:"
-                                   Margin="0,20,0,5"/>
+                                   Text="Window position"
+                                   Margin="0,20,0,6"
+                                   Style="{StaticResource OptionSubHeaderTextStyle}"/>
                         <RadioButton DockPanel.Dock="Top"
                                      GroupName="WindowPosition"
                                      Name="WindowPositionDefaultOption"

@@ -109,18 +109,17 @@
                         Width="85"
                         Margin="0,6,0,0"
                         Content="Delete"/>
-                <Button x:Name="ImportThemeButton"
-                        Style="{StaticResource ButtonStyle}"
+                <Button Style="{StaticResource ButtonStyle}"
+                        Click="ImportTheme_Click"
                         Width="85"
                         Margin="0,18,0,0"
-                        Content="Import..."
-                        IsEnabled="False"/>
+                        Content="Import..."/>
                 <Button x:Name="ExportThemeButton"
                         Style="{StaticResource ButtonStyle}"
+                        Click="ExportTheme_Click"
                         Width="85"
                         Margin="0,6,0,0"
-                        Content="Export..."
-                        IsEnabled="False"/>
+                        Content="Export..."/>
             </StackPanel>
         </Grid>
 

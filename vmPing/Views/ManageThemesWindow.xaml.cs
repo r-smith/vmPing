@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Xml;
 using vmPing.Configuration;
 using vmPing.Interop;
 using vmPing.Services;
@@ -17,6 +19,8 @@ namespace vmPing.Views
     // Built-in themes are read-only, and Duplicate makes an editable copy. Nothing changes until OK.
     public partial class ManageThemesWindow : Window
     {
+        private const string ThemeFileFilter = "vmPing theme (*.xml)|*.xml|All files|*.*";
+
         private readonly ObservableCollection<ColorTheme> _themes;
 
         // The theme whose colors are in the grid.
@@ -100,6 +104,7 @@ namespace vmPing.Views
             ThemeNamePanel.Visibility = theme.IsBuiltIn ? Visibility.Hidden : Visibility.Visible;
             BuiltInNote.Visibility = theme.IsBuiltIn ? Visibility.Visible : Visibility.Hidden;
             DeleteThemeButton.IsEnabled = !theme.IsBuiltIn;
+            ExportThemeButton.IsEnabled = !theme.IsBuiltIn;
             foreach (Visual control in ProbeColorGrid.GetChildren())
             {
                 if (control is TextBox colorBox)
@@ -166,6 +171,120 @@ namespace vmPing.Views
 
             // Select the built-in theme with the same mode.
             ThemeList.SelectedItem = _themes.First(t => t.IsBuiltIn && !t.IsSystem && t.IsDark == theme.IsDark);
+        }
+
+        // Adds a theme from a file. A name that's already used gets a number added instead of replacing the other theme.
+        private void ImportTheme_Click(object sender, RoutedEventArgs e)
+        {
+            // Keep the shown theme's edits first, since the imported theme is selected next.
+            if (!_shownTheme.IsBuiltIn)
+            {
+                if (!ValidateProbeColors())
+                {
+                    return;
+                }
+                ReadProbeColors(_shownTheme.Colors);
+            }
+
+            string filePath;
+            using (System.Windows.Forms.OpenFileDialog importDialog = new System.Windows.Forms.OpenFileDialog())
+            {
+                importDialog.Title = "Import theme";
+                importDialog.RestoreDirectory = true;
+                importDialog.Filter = ThemeFileFilter;
+                if (importDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                {
+                    return;
+                }
+                filePath = importDialog.FileName;
+            }
+
+            ColorTheme theme;
+            try
+            {
+                XmlDocument document = new XmlDocument();
+                document.Load(filePath);
+                theme = document.DocumentElement?.Name == "theme"
+                    ? ConfigFile.ReadTheme(document.DocumentElement)
+                    : null;
+            }
+            catch (Exception ex)
+            {
+                ShowError($"The theme couldn't be imported. {ex.Message}", null);
+                return;
+            }
+
+            if (theme == null)
+            {
+                ShowError("This file isn't a vmPing theme.", null);
+                return;
+            }
+
+            theme.Name = ColorTheme.GetUniqueName(theme.Name, _themes);
+            _themes.Add(theme);
+            ThemeList.SelectedItem = theme;
+            ThemeList.ScrollIntoView(theme);
+        }
+
+        // Saves the shown theme to its own file, in the same format as a theme in the config file.
+        private void ExportTheme_Click(object sender, RoutedEventArgs e)
+        {
+            if (_shownTheme.IsBuiltIn || !ValidateProbeColors())
+            {
+                return;
+            }
+            ReadProbeColors(_shownTheme.Colors);
+
+            string name = _shownTheme.Name?.Trim() ?? string.Empty;
+            if (name.Length == 0)
+            {
+                ShowError("Please enter a name for the theme.", ThemeName);
+                return;
+            }
+
+            using (System.Windows.Forms.SaveFileDialog exportDialog = new System.Windows.Forms.SaveFileDialog())
+            {
+                exportDialog.Title = "Export theme";
+                exportDialog.RestoreDirectory = true;
+                exportDialog.OverwritePrompt = true;
+                exportDialog.AddExtension = true;
+                exportDialog.Filter = ThemeFileFilter;
+                exportDialog.FileName = ToFileName(name) + ".xml";
+                if (exportDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                {
+                    return;
+                }
+
+                ColorTheme theme = _shownTheme.Clone();
+                theme.Name = name;
+                try
+                {
+                    // No <?xml ...?> line at the top: it's optional, and UTF-8 is the default without it.
+                    XmlWriterSettings settings = new XmlWriterSettings
+                    {
+                        OmitXmlDeclaration = true,
+                        Indent = true
+                    };
+                    using (XmlWriter writer = XmlWriter.Create(exportDialog.FileName, settings))
+                    {
+                        ConfigFile.GenerateThemeNode(theme).Save(writer);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ShowError($"The theme couldn't be exported. {ex.Message}", null);
+                }
+            }
+        }
+
+        // A theme name as a file name: characters Windows doesn't allow become underscores.
+        private static string ToFileName(string name)
+        {
+            foreach (char c in Path.GetInvalidFileNameChars())
+            {
+                name = name.Replace(c, '_');
+            }
+            return name;
         }
 
         private void OK_Click(object sender, RoutedEventArgs e)

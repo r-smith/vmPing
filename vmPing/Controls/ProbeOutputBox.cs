@@ -25,6 +25,9 @@ namespace vmPing.Controls
             Unloaded += OnUnloaded;
             AddHandler(ScrollViewer.ScrollChangedEvent, new ScrollChangedEventHandler(OnScrollChanged));
             SelectionChanged += OnSelectionChanged;
+
+            // An adorner stays on screen when its element is hidden, so the badge is updated then too.
+            IsVisibleChanged += (sender, e) => UpdateAdorner();
         }
 
         public Probe Probe
@@ -166,7 +169,7 @@ namespace vmPing.Controls
             }
 
             bool isShown = layer.GetAdorners(this) != null;
-            bool shouldShow = !IsScrolledToBottom() && ActualHeight >= MinimumAdornerHeight;
+            bool shouldShow = IsVisible && !IsScrolledToBottom() && ActualHeight >= MinimumAdornerHeight;
             if (shouldShow && !isShown)
             {
                 layer.Add(_adorner);

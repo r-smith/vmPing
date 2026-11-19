@@ -481,6 +481,9 @@
                                                 <DataTrigger Binding="{Binding Path=Statistics.Sent}" Value="0">
                                                     <Setter Property="Visibility" Value="Collapsed"/>
                                                 </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsComment}" Value="True">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </DockPanel.Style>
@@ -546,6 +549,16 @@
                                                       Probe="{Binding}"
                                                       Foreground="{Binding Status, Converter={StaticResource ProbeStatusToForegroundBrushConverter}}"
                                                       FontSize="{Binding Type, Converter={StaticResource ProbeTypeToFontSizeConverter}}">
+                                        <!-- Hidden for comments. The output is kept, for if the line becomes a host again. -->
+                                        <c:ProbeOutputBox.Style>
+                                            <Style TargetType="{x:Type c:ProbeOutputBox}" BasedOn="{StaticResource {x:Type c:ProbeOutputBox}}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsComment}" Value="True">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </c:ProbeOutputBox.Style>
                                         <c:ProbeOutputBox.Resources>
                                             <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ScrollBarStyle.Probe}">
                                                 <Setter Property="Opacity" Value="0.6"/>

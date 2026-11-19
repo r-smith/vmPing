@@ -970,6 +970,37 @@ namespace vmPing.Views
             }
         }
 
+        // Opens the Windows color picker for the swatch's color box. The picker has no
+        // transparency, so a color's existing alpha is kept.
+        private void ColorSwatch_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox colorBox = (TextBox)((Button)sender).Tag;
+            byte alpha = 255;
+
+            using (System.Windows.Forms.ColorDialog dialog = new System.Windows.Forms.ColorDialog())
+            {
+                dialog.FullOpen = true;
+                try
+                {
+                    Color current = (Color)ColorConverter.ConvertFromString(colorBox.Text.Trim());
+                    dialog.Color = System.Drawing.Color.FromArgb(current.R, current.G, current.B);
+                    alpha = current.A;
+                }
+                catch (Exception)
+                {
+                    // Not a valid color yet: start from the picker's default.
+                }
+
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    System.Drawing.Color picked = dialog.Color;
+                    colorBox.Text = alpha == 255
+                        ? $"#{picked.R:x2}{picked.G:x2}{picked.B:x2}"
+                        : $"#{alpha:x2}{picked.R:x2}{picked.G:x2}{picked.B:x2}";
+                }
+            }
+        }
+
         private void RestoreDefaultColors_Click(object sender, RoutedEventArgs e)
         {
             ShowProbeColors(_isEditingDarkColors

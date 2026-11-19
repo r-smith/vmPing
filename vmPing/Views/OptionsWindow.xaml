@@ -927,19 +927,51 @@
                                Name="ThemeDockPanel"
                                Margin="20,0,20,20">
                         <DockPanel.Resources>
-                            <Style TargetType="{x:Type StackPanel}">
-                                <Setter Property="Orientation" Value="Horizontal"/>
-                                <Setter Property="Margin" Value="0,5,0,0"/>
-                                <Setter Property="DockPanel.Dock" Value="Top"/>
-                            </Style>
+                            <!-- Color boxes -->
                             <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource HtmlTextBoxStyle}">
+                                <Setter Property="Width" Value="66"/>
                                 <EventSetter Event="PreviewTextInput" Handler="HtmlColor_PreviewTextInput"/>
                             </Style>
-                            <Style TargetType="{x:Type Border}">
-                                <Setter Property="BorderBrush" Value="{DynamicResource Theme.Control.Border}"/>
+
+                            <!-- Color swatch. Tag is its color box. Click opens the color picker. -->
+                            <Style x:Key="ColorSwatchStyle" TargetType="{x:Type Button}">
+                                <Setter Property="Width" Value="20"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="ToolTip" Value="Pick a color"/>
+                                <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border x:Name="swatch"
+                                                    Background="{Binding Tag.Text, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource StringToBrushConverter}}"
+                                                    BorderBrush="{DynamicResource Theme.Control.Border}"
+                                                    BorderThickness="1"
+                                                    CornerRadius="3"/>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="swatch" Property="BorderBrush" Value="{DynamicResource Theme.Control.Hover.Border}"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+
+                            <!-- Sample probe -->
+                            <Style x:Key="ColorSampleStyle" TargetType="{x:Type Border}">
+                                <Setter Property="Width" Value="78"/>
+                                <Setter Property="Margin" Value="0,4,0,0"/>
+                                <Setter Property="Padding" Value="6,0"/>
+                                <Setter Property="CornerRadius" Value="3"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource Theme.Probe.Border}"/>
                                 <Setter Property="BorderThickness" Value="1"/>
-                                <Setter Property="Width" Value="80"/>
-                                <Setter Property="Margin" Value="15,0,0,0"/>
+                            </Style>
+
+                            <!-- Column headers -->
+                            <Style x:Key="ColorHeaderStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                <Setter Property="FontSize" Value="13"/>
+                                <Setter Property="Foreground" Value="{DynamicResource Theme.Text.Secondary}"/>
+                                <Setter Property="Margin" Value="8,0,0,0"/>
                             </Style>
                         </DockPanel.Resources>
 
@@ -985,10 +1017,23 @@
                         </DockPanel>
 
                         <!-- Probe colors: which theme's set to edit -->
-                        <TextBlock DockPanel.Dock="Top"
-                                   Text="Probe colors"
-                                   Margin="0,20,0,0"
-                                   Style="{StaticResource OptionSubHeaderTextStyle}"/>
+                        <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,20,0,0">
+                            <TextBlock DockPanel.Dock="Left"
+                                       Text="Probe colors"
+                                       Margin="0"
+                                       Style="{StaticResource OptionSubHeaderTextStyle}"/>
+                            <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="Probe colors">
+                                <TextBlock>
+                                    Each row is one probe status, with a sample on the left. Click a swatch to pick a color, or type a hex value like #859900.
+                                    <LineBreak/>
+                                    <LineBreak/>
+                                    <Bold>Warning:</Bold> missed replies before a host is marked down, slow replies and high latency.
+                                    <LineBreak/>
+                                    <LineBreak/>
+                                    <Bold>Tool:</Bold> DNS lookup and traceroute probes.
+                                </TextBlock>
+                            </Label>
+                        </DockPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
                             <TextBlock Text="Edit colors for:"
                                        Margin="0,0,15,0"/>
@@ -1003,110 +1048,144 @@
                                          Checked="ProbeColorSet_Checked"/>
                         </StackPanel>
 
-                        <!-- Probe background colors -->
-                        <TextBlock DockPanel.Dock="Top"
-                                   Text="Probe background"
-                                   Margin="0,20,0,0"
-                                   Style="{StaticResource OptionSubHeaderTextStyle}"/>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Inactive"/>
-                            <TextBox Name="ProbeBackgroundInactive"/>
-                            <Border Background="{Binding ElementName=ProbeBackgroundInactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Up"/>
-                            <TextBox Name="ProbeBackgroundUp"/>
-                            <Border Background="{Binding ElementName=ProbeBackgroundUp, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Down"/>
-                            <TextBox Name="ProbeBackgroundDown"/>
-                            <Border Background="{Binding ElementName=ProbeBackgroundDown, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Warning"/>
-                            <TextBox Name="ProbeBackgroundIndeterminate"/>
-                            <Border Background="{Binding ElementName=ProbeBackgroundIndeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Error"/>
-                            <TextBox Name="ProbeBackgroundError"/>
-                            <Border Background="{Binding ElementName=ProbeBackgroundError, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Tool"/>
-                            <TextBox Name="ProbeBackgroundTool"/>
-                            <Border Background="{Binding ElementName=ProbeBackgroundTool, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
+                        <!-- Probe colors: one row per status, with a sample probe, then background, text and statistics -->
+                        <Grid DockPanel.Dock="Top" Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
-                        <!-- Probe text colors -->
-                        <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="Transparent" Margin="0,20,0,0"/>
-                        <TextBlock DockPanel.Dock="Top"
-                                   Text="Probe text"
-                                   Margin="0"
-                                   Style="{StaticResource OptionSubHeaderTextStyle}"/>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Inactive"/>
-                            <TextBox Name="ProbeForegroundInactive"/>
-                            <Border Background="{Binding ElementName=ProbeForegroundInactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Up"/>
-                            <TextBox Name="ProbeForegroundUp"/>
-                            <Border Background="{Binding ElementName=ProbeForegroundUp, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Down"/>
-                            <TextBox Name="ProbeForegroundDown"/>
-                            <Border Background="{Binding ElementName=ProbeForegroundDown, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Warning"/>
-                            <TextBox Name="ProbeForegroundIndeterminate"/>
-                            <Border Background="{Binding ElementName=ProbeForegroundIndeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Error"/>
-                            <TextBox Name="ProbeForegroundError"/>
-                            <Border Background="{Binding ElementName=ProbeForegroundError, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Tool"/>
-                            <TextBox Name="ProbeForegroundTool"/>
-                            <Border Background="{Binding ElementName=ProbeForegroundTool, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
+                            <!-- Column headers -->
+                            <TextBlock Grid.Column="1" Text="Background" Style="{StaticResource ColorHeaderStyle}"/>
+                            <TextBlock Grid.Column="2" Text="Text" Style="{StaticResource ColorHeaderStyle}"/>
+                            <TextBlock Grid.Column="3" Text="Statistics" Style="{StaticResource ColorHeaderStyle}"/>
 
-                        <!-- Statistics text colors -->
-                        <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="Transparent" Margin="0,20,0,0"/>
-                        <TextBlock DockPanel.Dock="Top"
-                                   Text="Statistics text"
-                                   Margin="0"
-                                   Style="{StaticResource OptionSubHeaderTextStyle}"/>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Inactive"/>
-                            <TextBox Name="StatisticsForegroundInactive"/>
-                            <Border Background="{Binding ElementName=StatisticsForegroundInactive, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Up"/>
-                            <TextBox Name="StatisticsForegroundUp"/>
-                            <Border Background="{Binding ElementName=StatisticsForegroundUp, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Down"/>
-                            <TextBox Name="StatisticsForegroundDown"/>
-                            <Border Background="{Binding ElementName=StatisticsForegroundDown, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Warning"/>
-                            <TextBox Name="StatisticsForegroundIndeterminate"/>
-                            <Border Background="{Binding ElementName=StatisticsForegroundIndeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,10">
-                            <TextBlock Width="150" Text="Error"/>
-                            <TextBox Name="StatisticsForegroundError"/>
-                            <Border Background="{Binding ElementName=StatisticsForegroundError, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
-                        </StackPanel>
+                            <!-- Inactive -->
+                            <Border Grid.Row="1" Style="{StaticResource ColorSampleStyle}" Background="{Binding Text, ElementName=ProbeBackgroundInactive, Converter={StaticResource StringToBrushConverter}}">
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Right" Text="↑3" FontSize="12" Margin="5,0,0,0" Foreground="{Binding Text, ElementName=StatisticsForegroundInactive, Converter={StaticResource StringToBrushConverter}}"/>
+                                    <TextBlock Text="Inactive" FontSize="12" Foreground="{Binding Text, ElementName=ProbeForegroundInactive, Converter={StaticResource StringToBrushConverter}}"/>
+                                </DockPanel>
+                            </Border>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="8,4,0,0">
+                                <Button Style="{StaticResource ColorSwatchStyle}" Tag="{Binding ElementName=ProbeBackgroundInactive}" Click="ColorSwatch_Click"/>
+                                <TextBox Name="ProbeBackgroundInactive" Margin="3,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="8,4,0,0">
+                                <Button Style="{StaticResource ColorSwatchStyle}" Tag="{Binding ElementName=ProbeForegroundInactive}" Click="ColorSwatch_Click"/>
+                                <TextBox Name="ProbeForegroundInactive" Margin="3,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal" Margin="8,4,0,0">
+                                <Button Style="{StaticResource ColorSwatchStyle}" Tag="{Binding ElementName=StatisticsForegroundInactive}" Click="ColorSwatch_Click"/>
+                                <TextBox Name="StatisticsForegroundInactive" Margin="3,0,0,0"/>
+                            </StackPanel>
+
+                            <!-- Up -->
+                            <Border Grid.Row="2" Style="{StaticResource ColorSampleStyle}" Background="{Binding Text, ElementName=ProbeBackgroundUp, Converter={StaticResource StringToBrushConverter}}">
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Right" Text="↑3" FontSize="12" Margin="5,0,0,0" Foreground="{Binding Text, ElementName=StatisticsForegroundUp, Converter={StaticResource StringToBrushConverter}}"/>
+                                    <TextBlock Text="Up" FontSize="12" Foreground="{Binding Text, ElementName=ProbeForegroundUp, Converter={StaticResource StringToBrushConverter}}"/>
+                                </DockPanel>
+                            </Border>
+                            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="8,4,0,0">
+                                <Button Style="{StaticResource ColorSwatchStyle}" Tag="{Binding ElementName=ProbeBackgroundUp}" Click="ColorSwatch_Click"/>
+                                <TextBox Name="ProbeBackgroundUp" Margin="3,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Margin="8,4,0,0">
+                                <Button Style="{StaticResource ColorSwatchStyle}" Tag="{Binding ElementName=ProbeForegroundUp}" Click="ColorSwatch_Click"/>
+                                <TextBox Name="ProbeForegroundUp" Margin="3,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="3" Orientation="Horizontal" Margin="8,4,0,0">
+                                <Button Style="{StaticResource ColorSwatchStyle}" Tag="{Binding ElementName=StatisticsForegroundUp}" Click="ColorSwatch_Click"/>
+                                <TextBox Name="StatisticsForegroundUp" Margin="3,0,0,0"/>
+                            </StackPanel>
+
+                            <!-- Down -->
+                            <Border Grid.Row="3" Style="{StaticResource ColorSampleStyle}" Background="{Binding Text, ElementName=ProbeBackgroundDown, Converter={StaticResource StringToBrushConverter}}">
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Right" Text="↑3" FontSize="12" Margin="5,0,0,0" Foreground="{Binding Text, ElementName=StatisticsForegroundDown, Converter={StaticResource StringToBrushConverter}}"/>
+                                    <TextBlock Text="Down" FontSize="12" Foreground="{Binding Text, ElementName=ProbeForegroundDown, Converter={StaticResource StringToBrushConverter}}"/>
+                                </DockPanel>
+                            </Border>
+                            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="8,4,0,0">
+                                <Button Style="{StaticResource ColorSwatchStyle}" Tag="{Binding ElementName=ProbeBackgroundDown}" Click="ColorSwatch_Click"/>
+                                <TextBox Name="ProbeBackgroundDown" Margin="3,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" Margin="8,4,0,0">
+                                <Button Style="{StaticResource ColorSwatchStyle}" Tag="{Binding ElementName=ProbeForegroundDown}" Click="ColorSwatch_Click"/>
+                                <TextBox Name="ProbeForegroundDown" Margin="3,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="3" Grid.Column="3" Orientation="Horizontal" Margin="8,4,0,0">
+                                <Button Style="{StaticResource ColorSwatchStyle}" Tag="{Binding ElementName=StatisticsForegroundDown}" Click="ColorSwatch_Click"/>
+                                <TextBox Name="StatisticsForegroundDown" Margin="3,0,0,0"/>
+                            </StackPanel>
+
+                            <!-- Warning -->
+                            <Border Grid.Row="4" Style="{StaticResource ColorSampleStyle}" Background="{Binding Text, ElementName=ProbeBackgroundIndeterminate, Converter={StaticResource StringToBrushConverter}}">
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Right" Text="↑3" FontSize="12" Margin="5,0,0,0" Foreground="{Binding Text, ElementName=StatisticsForegroundIndeterminate, Converter={StaticResource StringToBrushConverter}}"/>
+                                    <TextBlock Text="Warning" FontSize="12" Foreground="{Binding Text, ElementName=ProbeForegroundIndeterminate, Converter={StaticResource StringToBrushConverter}}"/>
+                                </DockPanel>
+                            </Border>
+                            <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" Margin="8,4,0,0">
+                                <Button Style="{StaticResource ColorSwatchStyle}" Tag="{Binding ElementName=ProbeBackgroundIndeterminate}" Click="ColorSwatch_Click"/>
+                                <TextBox Name="ProbeBackgroundIndeterminate" Margin="3,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal" Margin="8,4,0,0">
+                                <Button Style="{StaticResource ColorSwatchStyle}" Tag="{Binding ElementName=ProbeForegroundIndeterminate}" Click="ColorSwatch_Click"/>
+                                <TextBox Name="ProbeForegroundIndeterminate" Margin="3,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="4" Grid.Column="3" Orientation="Horizontal" Margin="8,4,0,0">
+                                <Button Style="{StaticResource ColorSwatchStyle}" Tag="{Binding ElementName=StatisticsForegroundIndeterminate}" Click="ColorSwatch_Click"/>
+                                <TextBox Name="StatisticsForegroundIndeterminate" Margin="3,0,0,0"/>
+                            </StackPanel>
+
+                            <!-- Error -->
+                            <Border Grid.Row="5" Style="{StaticResource ColorSampleStyle}" Background="{Binding Text, ElementName=ProbeBackgroundError, Converter={StaticResource StringToBrushConverter}}">
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Right" Text="↑3" FontSize="12" Margin="5,0,0,0" Foreground="{Binding Text, ElementName=StatisticsForegroundError, Converter={StaticResource StringToBrushConverter}}"/>
+                                    <TextBlock Text="Error" FontSize="12" Foreground="{Binding Text, ElementName=ProbeForegroundError, Converter={StaticResource StringToBrushConverter}}"/>
+                                </DockPanel>
+                            </Border>
+                            <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" Margin="8,4,0,0">
+                                <Button Style="{StaticResource ColorSwatchStyle}" Tag="{Binding ElementName=ProbeBackgroundError}" Click="ColorSwatch_Click"/>
+                                <TextBox Name="ProbeBackgroundError" Margin="3,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="5" Grid.Column="2" Orientation="Horizontal" Margin="8,4,0,0">
+                                <Button Style="{StaticResource ColorSwatchStyle}" Tag="{Binding ElementName=ProbeForegroundError}" Click="ColorSwatch_Click"/>
+                                <TextBox Name="ProbeForegroundError" Margin="3,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="5" Grid.Column="3" Orientation="Horizontal" Margin="8,4,0,0">
+                                <Button Style="{StaticResource ColorSwatchStyle}" Tag="{Binding ElementName=StatisticsForegroundError}" Click="ColorSwatch_Click"/>
+                                <TextBox Name="StatisticsForegroundError" Margin="3,0,0,0"/>
+                            </StackPanel>
+
+                            <!-- Tool -->
+                            <Border Grid.Row="6" Style="{StaticResource ColorSampleStyle}" Background="{Binding Text, ElementName=ProbeBackgroundTool, Converter={StaticResource StringToBrushConverter}}">
+                                <DockPanel>
+                                    <TextBlock Text="Tool" FontSize="12" Foreground="{Binding Text, ElementName=ProbeForegroundTool, Converter={StaticResource StringToBrushConverter}}"/>
+                                </DockPanel>
+                            </Border>
+                            <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" Margin="8,4,0,0">
+                                <Button Style="{StaticResource ColorSwatchStyle}" Tag="{Binding ElementName=ProbeBackgroundTool}" Click="ColorSwatch_Click"/>
+                                <TextBox Name="ProbeBackgroundTool" Margin="3,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="6" Grid.Column="2" Orientation="Horizontal" Margin="8,4,0,0">
+                                <Button Style="{StaticResource ColorSwatchStyle}" Tag="{Binding ElementName=ProbeForegroundTool}" Click="ColorSwatch_Click"/>
+                                <TextBox Name="ProbeForegroundTool" Margin="3,0,0,0"/>
+                            </StackPanel>
+                        </Grid>
 
                         <!-- Reset colors button -->
                         <Grid DockPanel.Dock="Top" Margin="0,15,0,0">

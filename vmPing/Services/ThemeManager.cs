@@ -130,6 +130,23 @@ namespace vmPing.Services
             return replacement;
         }
 
+        // A theme's probe colors. Use Windows setting has none of its own: it uses the built-in set
+        // for the mode Windows is in.
+        public static ProbeColors GetProbeColors(ColorTheme theme)
+        {
+            if (theme.Colors != null)
+            {
+                return theme.Colors;
+            }
+
+            return IsWindowsInDarkMode() ? s_darkProbeColors : s_lightProbeColors;
+        }
+
+        public static bool IsDarkTheme(ColorTheme theme)
+        {
+            return theme.IsSystem ? IsWindowsInDarkMode() : theme.IsDark;
+        }
+
         public static bool IsWindowsInDarkMode()
         {
             // AppsUseLightTheme is 0 when Windows apps are set to dark. It doesn't exist before Windows 10.

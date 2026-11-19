@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -11,7 +10,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
 using vmPing.Configuration;
 using vmPing.Interop;
 using vmPing.Services;
@@ -20,15 +18,9 @@ namespace vmPing.Views
 {
     public partial class OptionsWindow : Window
     {
-        // The theme list: the built-in themes, then copies of the custom themes. Edited on the
-        // Theme page and saved on OK.
+        // The themes listed in the theme drop-down, built-in themes first.
+        // Changed in the Manage themes window and saved on OK.
         private ObservableCollection<ColorTheme> _themes;
-
-        // The theme whose colors are in the grid.
-        private ColorTheme _shownTheme;
-
-        // True while the Theme page is being filled in, so it isn't taken as an edit.
-        private bool _isShowingTheme;
 
         public OptionsWindow()
         {
@@ -249,13 +241,52 @@ namespace vmPing.Views
             {
                 _themes.Add(theme.Clone());
             }
-            ThemeList.ItemsSource = _themes;
+            ThemePicker.ItemsSource = _themes;
 
             // Select the theme in use.
             ColorTheme current = _themes.FirstOrDefault(t => !t.IsBuiltIn
                 && string.Equals(t.Name, ApplicationOptions.CustomThemeName, StringComparison.OrdinalIgnoreCase));
-            ThemeList.SelectedItem = current ?? _themes[(int)ApplicationOptions.Theme];
-            ThemeList.ScrollIntoView(ThemeList.SelectedItem);
+            ThemePicker.SelectedItem = current ?? _themes[(int)ApplicationOptions.Theme];
+        }
+
+        private void ThemePicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ThemePicker.SelectedItem is ColorTheme theme)
+            {
+                ThemeSample.DataContext = ThemeManager.GetProbeColors(theme);
+            }
+        }
+
+        private void ManageThemes_Click(object sender, RoutedEventArgs e)
+        {
+            ManageThemesWindow manageThemes = new ManageThemesWindow(
+                _themes.Where(t => !t.IsBuiltIn),
+                (ColorTheme)ThemePicker.SelectedItem)
+            {
+                Owner = this
+            };
+            if (manageThemes.ShowDialog() != true)
+            {
+                return;
+            }
+
+            // Take the custom themes as they are now, and select the theme that was selected on OK.
+            foreach (ColorTheme theme in _themes.Where(t => !t.IsBuiltIn).ToList())
+            {
+                _themes.Remove(theme);
+            }
+            foreach (ColorTheme theme in manageThemes.CustomThemes)
+            {
+                _themes.Add(theme);
+            }
+
+            ColorTheme selected = manageThemes.SelectedTheme;
+            ThemePicker.SelectedItem = selected.IsBuiltIn
+                ? _themes.First(t => t.IsBuiltIn && t.IsSystem == selected.IsSystem && (t.IsSystem || t.IsDark == selected.IsDark))
+                : selected;
+
+            // The selection may not have changed, but its colors might have.
+            ThemeSample.DataContext = ThemeManager.GetProbeColors((ColorTheme)ThemePicker.SelectedItem);
         }
 
 
@@ -293,8 +324,7 @@ namespace vmPing.Views
                 && ValidateEmailAlertOptions()
                 && ValidateAudioAlertOptions()
                 && ValidateLogOutputOptions()
-                && ValidateAdvancedOptions()
-                && ValidateThemeOptions();
+                && ValidateAdvancedOptions();
         }
 
         private static bool IsInRange(string text, int min, int max)
@@ -699,84 +729,22 @@ namespace vmPing.Views
             ApplicationOptions.IsAlwaysShowTrayIconEnabled = IsAlwaysShowTrayIconEnabled.IsChecked == true;
         }
 
-        private bool ValidateThemeOptions()
-        {
-            if (!ValidateProbeColors())
-            {
-                return false;
-            }
-
-            // Custom theme names can't be empty, a built-in name, or used twice.
-            foreach (ColorTheme theme in _themes.Where(t => !t.IsBuiltIn))
-            {
-                string name = theme.Name?.Trim() ?? string.Empty;
-                string problem = null;
-                if (name.Length == 0)
-                {
-                    problem = "Please enter a name for the theme.";
-                }
-                else if (ColorTheme.IsBuiltInName(name))
-                {
-                    problem = $"\"{name}\" is the name of a built-in theme. Please choose another name.";
-                }
-                else if (_themes.Any(t => t != theme && !t.IsBuiltIn && string.Equals(t.Name?.Trim(), name, StringComparison.OrdinalIgnoreCase)))
-                {
-                    problem = $"There's already a theme named \"{name}\". Please choose another name.";
-                }
-
-                if (problem != null)
-                {
-                    ThemeList.SelectedItem = theme;
-                    ShowError(problem, AppearanceTab, ThemeName);
-                    ThemeName.SelectAll();
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private bool ValidateProbeColors()
-        {
-            foreach (Visual control in ProbeColorGrid.GetChildren())
-            {
-                if (control is TextBox box && !Util.IsValidHtmlColor(box.Text))
-                {
-                    ShowError("Please enter a valid HTML color code.  Accepted formats are #RGB, #RRGGBB, and #AARRGGBB.  Example: #3266CF", AppearanceTab, box);
-                    box.SelectAll();
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         private void SaveThemeOptions()
         {
             ApplicationOptions.IsProbeSpacingEnabled = IsProbeSpacingEnabled.IsChecked == true;
-
-            if (!_shownTheme.IsBuiltIn)
-            {
-                ReadProbeColors(_shownTheme.Colors);
-            }
-
-            List<ColorTheme> customThemes = _themes.Where(t => !t.IsBuiltIn).ToList();
-            foreach (ColorTheme theme in customThemes)
-            {
-                theme.Name = theme.Name.Trim();
-            }
-            ApplicationOptions.CustomThemes = customThemes;
+            ApplicationOptions.CustomThemes = _themes.Where(t => !t.IsBuiltIn).ToList();
 
             // The selected theme sets the light or dark mode. A custom theme also sets the probe colors.
-            if (_shownTheme.IsSystem)
+            ColorTheme selected = (ColorTheme)ThemePicker.SelectedItem;
+            if (selected.IsSystem)
             {
                 ApplicationOptions.Theme = ThemeMode.System;
             }
             else
             {
-                ApplicationOptions.Theme = _shownTheme.IsDark ? ThemeMode.Dark : ThemeMode.Light;
+                ApplicationOptions.Theme = selected.IsDark ? ThemeMode.Dark : ThemeMode.Light;
             }
-            ApplicationOptions.CustomThemeName = _shownTheme.IsBuiltIn ? string.Empty : _shownTheme.Name;
+            ApplicationOptions.CustomThemeName = selected.IsBuiltIn ? string.Empty : selected.Name;
 
             ThemeManager.SetMode(ApplicationOptions.Theme);
         }
@@ -795,15 +763,6 @@ namespace vmPing.Views
         {
             Regex regex = new Regex("[^0-9]+");
             if (regex.IsMatch(e.Text))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void HtmlColor_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            Regex regex = new Regex("[#a-fA-F0-9]");
-            if (!regex.IsMatch(e.Text))
             {
                 e.Handled = true;
             }
@@ -1024,229 +983,6 @@ namespace vmPing.Views
             {
                 UpdateByteCount();
             }
-        }
-
-        // Opens the Windows color picker for the swatch's color box. The picker has no
-        // transparency, so a color's existing alpha is kept.
-        private void ColorSwatch_Click(object sender, RoutedEventArgs e)
-        {
-            TextBox colorBox = (TextBox)((Button)sender).Tag;
-            byte alpha = 255;
-
-            using (System.Windows.Forms.ColorDialog dialog = new System.Windows.Forms.ColorDialog())
-            {
-                dialog.FullOpen = true;
-                try
-                {
-                    Color current = (Color)ColorConverter.ConvertFromString(colorBox.Text.Trim());
-                    dialog.Color = System.Drawing.Color.FromArgb(current.R, current.G, current.B);
-                    alpha = current.A;
-                }
-                catch (Exception)
-                {
-                    // Not a valid color yet: start from the picker's default.
-                }
-
-                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    System.Drawing.Color picked = dialog.Color;
-                    colorBox.Text = alpha == 255
-                        ? $"#{picked.R:x2}{picked.G:x2}{picked.B:x2}"
-                        : $"#{alpha:x2}{picked.R:x2}{picked.G:x2}{picked.B:x2}";
-                }
-            }
-        }
-
-        private void ThemeList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (!(ThemeList.SelectedItem is ColorTheme theme) || theme == _shownTheme)
-            {
-                return;
-            }
-
-            // Keep the shown theme's edits. A color that isn't valid keeps the theme selected until it's fixed.
-            if (_shownTheme != null && !_shownTheme.IsBuiltIn)
-            {
-                if (!ValidateProbeColors())
-                {
-                    ThemeList.SelectedItem = _shownTheme;
-                    return;
-                }
-                ReadProbeColors(_shownTheme.Colors);
-            }
-
-            ShowTheme(theme);
-        }
-
-        private void ShowTheme(ColorTheme theme)
-        {
-            _isShowingTheme = true;
-            _shownTheme = theme;
-            ShowProbeColors(GetColors(theme));
-            ThemeName.Text = theme.Name;
-            ThemeName.IsEnabled = !theme.IsBuiltIn;
-            DeleteThemeButton.IsEnabled = !theme.IsBuiltIn;
-            ThemeCopyNote.Visibility = Visibility.Collapsed;
-            _isShowingTheme = false;
-        }
-
-        // Use Windows setting has no colors of its own: it shows the built-in set for the mode Windows is in.
-        private static ProbeColors GetColors(ColorTheme theme)
-        {
-            if (theme.Colors != null)
-            {
-                return theme.Colors;
-            }
-
-            return ThemeManager.IsWindowsInDarkMode()
-                ? ProbeColors.CreateDarkDefaults()
-                : ProbeColors.CreateLightDefaults();
-        }
-
-        private static bool IsDarkTheme(ColorTheme theme)
-        {
-            return theme.IsSystem ? ThemeManager.IsWindowsInDarkMode() : theme.IsDark;
-        }
-
-        // The name a copy starts from. Use Windows setting copies Light or Dark, whichever Windows is in.
-        private static string GetCopyBaseName(ColorTheme theme)
-        {
-            if (theme.IsSystem)
-            {
-                return IsDarkTheme(theme) ? ColorTheme.DarkName : ColorTheme.LightName;
-            }
-
-            return theme.Name.Trim();
-        }
-
-        // Adds a custom copy of a theme to the end of the list, named "<name> copy".
-        private ColorTheme AddCopy(ColorTheme source)
-        {
-            ColorTheme copy = new ColorTheme
-            {
-                Name = ColorTheme.GetUniqueName($"{GetCopyBaseName(source)} copy", _themes),
-                IsDark = IsDarkTheme(source),
-                Colors = GetColors(source).Clone()
-            };
-            _themes.Add(copy);
-            return copy;
-        }
-
-        // Editing a built-in theme saves the change as a new theme, so the built-in stays as it is.
-        private void ProbeColor_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (_isShowingTheme || _shownTheme == null || !_shownTheme.IsBuiltIn)
-            {
-                return;
-            }
-
-            string builtInName = GetCopyBaseName(_shownTheme);
-            ColorTheme copy = AddCopy(_shownTheme);
-            ReadProbeColors(copy.Colors);
-
-            // Select the copy without filling in the grid again, so typing carries on where it is.
-            _shownTheme = copy;
-            ThemeList.SelectedItem = copy;
-            ThemeList.ScrollIntoView(copy);
-
-            _isShowingTheme = true;
-            ThemeName.Text = copy.Name;
-            ThemeName.IsEnabled = true;
-            DeleteThemeButton.IsEnabled = true;
-            _isShowingTheme = false;
-
-            ThemeCopyNoteText.Text = $"Changes to {builtInName} are saved as \"{copy.Name}\".";
-            ThemeCopyNote.Visibility = Visibility.Visible;
-        }
-
-        private void ThemeName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (!_isShowingTheme && _shownTheme != null && !_shownTheme.IsBuiltIn)
-            {
-                _shownTheme.Name = ThemeName.Text;
-            }
-        }
-
-        private void RenameTheme_Click(object sender, RoutedEventArgs e)
-        {
-            ThemeName.Focus();
-            ThemeName.SelectAll();
-        }
-
-        private void DuplicateTheme_Click(object sender, RoutedEventArgs e)
-        {
-            if (!_shownTheme.IsBuiltIn)
-            {
-                if (!ValidateProbeColors())
-                {
-                    return;
-                }
-                ReadProbeColors(_shownTheme.Colors);
-            }
-
-            ColorTheme copy = AddCopy(_shownTheme);
-            ThemeList.SelectedItem = copy;
-            ThemeList.ScrollIntoView(copy);
-            ThemeName.Focus();
-            ThemeName.SelectAll();
-        }
-
-        // Cancel brings a deleted theme back, so there's no confirmation.
-        private void DeleteTheme_Click(object sender, RoutedEventArgs e)
-        {
-            ColorTheme theme = _shownTheme;
-            if (theme == null || theme.IsBuiltIn)
-            {
-                return;
-            }
-
-            _shownTheme = null;
-            _themes.Remove(theme);
-
-            // Select the built-in theme with the same mode.
-            ThemeList.SelectedItem = _themes.First(t => t.IsBuiltIn && !t.IsSystem && t.IsDark == theme.IsDark);
-        }
-
-        private void ShowProbeColors(ProbeColors colors)
-        {
-            ProbeBackgroundInactive.Text = colors.BackgroundInactive;
-            ProbeBackgroundUp.Text = colors.BackgroundUp;
-            ProbeBackgroundDown.Text = colors.BackgroundDown;
-            ProbeBackgroundIndeterminate.Text = colors.BackgroundIndeterminate;
-            ProbeBackgroundError.Text = colors.BackgroundError;
-            ProbeBackgroundTool.Text = colors.BackgroundTool;
-            ProbeForegroundInactive.Text = colors.ForegroundInactive;
-            ProbeForegroundUp.Text = colors.ForegroundUp;
-            ProbeForegroundDown.Text = colors.ForegroundDown;
-            ProbeForegroundIndeterminate.Text = colors.ForegroundIndeterminate;
-            ProbeForegroundError.Text = colors.ForegroundError;
-            ProbeForegroundTool.Text = colors.ForegroundTool;
-            StatisticsForegroundInactive.Text = colors.StatisticsInactive;
-            StatisticsForegroundUp.Text = colors.StatisticsUp;
-            StatisticsForegroundDown.Text = colors.StatisticsDown;
-            StatisticsForegroundIndeterminate.Text = colors.StatisticsIndeterminate;
-            StatisticsForegroundError.Text = colors.StatisticsError;
-        }
-
-        private void ReadProbeColors(ProbeColors colors)
-        {
-            colors.BackgroundInactive = ProbeBackgroundInactive.Text;
-            colors.BackgroundUp = ProbeBackgroundUp.Text;
-            colors.BackgroundDown = ProbeBackgroundDown.Text;
-            colors.BackgroundIndeterminate = ProbeBackgroundIndeterminate.Text;
-            colors.BackgroundError = ProbeBackgroundError.Text;
-            colors.BackgroundTool = ProbeBackgroundTool.Text;
-            colors.ForegroundInactive = ProbeForegroundInactive.Text;
-            colors.ForegroundUp = ProbeForegroundUp.Text;
-            colors.ForegroundDown = ProbeForegroundDown.Text;
-            colors.ForegroundIndeterminate = ProbeForegroundIndeterminate.Text;
-            colors.ForegroundError = ProbeForegroundError.Text;
-            colors.ForegroundTool = ProbeForegroundTool.Text;
-            colors.StatisticsInactive = StatisticsForegroundInactive.Text;
-            colors.StatisticsUp = StatisticsForegroundUp.Text;
-            colors.StatisticsDown = StatisticsForegroundDown.Text;
-            colors.StatisticsIndeterminate = StatisticsForegroundIndeterminate.Text;
-            colors.StatisticsError = StatisticsForegroundError.Text;
         }
 
         private void Window_SourceInitialized(object sender, EventArgs e)

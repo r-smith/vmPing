@@ -9,4 +9,12 @@
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
     </Style>
+
+    <!-- Options subheader text style -->
+    <Style TargetType="{x:Type TextBlock}" x:Key="OptionSubHeaderTextStyle">
+        <Setter Property="Margin" Value="0,0,0,4"/>
+        <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
 </ResourceDictionary>

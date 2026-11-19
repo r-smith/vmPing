@@ -79,6 +79,7 @@
     </ApplicationDefinition>
     <Compile Include="Configuration\Alias.cs" />
     <Compile Include="Configuration\ApplicationOptions.cs" />
+    <Compile Include="Configuration\ColorTheme.cs" />
     <Compile Include="CommandLine.cs" />
     <Compile Include="Configuration\ConfigFile.cs" />
     <Compile Include="Configuration\LatencyMode.cs" />

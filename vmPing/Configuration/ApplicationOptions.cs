@@ -1,4 +1,6 @@
-﻿using System.Net.NetworkInformation;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using System.Text;
 
 namespace vmPing.Configuration
@@ -70,13 +72,11 @@ namespace vmPing.Configuration
         public static int ProbeFontSize { get; set; } = 11;
         public static int ToolFontSize { get; set; } = 16;
 
-        // Theme.
+        // Theme. CustomThemeName is the selected custom theme, or empty when a built-in theme is selected.
         public static ThemeMode Theme { get; set; } = ThemeMode.System;
+        public static string CustomThemeName { get; set; } = string.Empty;
+        public static List<ColorTheme> CustomThemes { get; set; } = new List<ColorTheme>();
         public static bool IsProbeSpacingEnabled { get; set; } = true;
-
-        // Probe colors, one set for each theme.
-        public static ProbeColors LightProbeColors { get; set; } = ProbeColors.CreateLightDefaults();
-        public static ProbeColors DarkProbeColors { get; set; } = ProbeColors.CreateDarkDefaults();
 
         static ApplicationOptions()
         {
@@ -85,6 +85,17 @@ namespace vmPing.Configuration
 
             // Set the default ping options.
             PingOptions = new PingOptions(TTL, DontFragment);
+        }
+
+        // The custom theme with this name, or null. Case doesn't matter.
+        public static ColorTheme FindCustomTheme(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return null;
+            }
+
+            return CustomThemes.Find(t => string.Equals(t.Name, name, StringComparison.OrdinalIgnoreCase));
         }
 
         public static void UpdatePingOptions()

@@ -940,12 +940,6 @@
                                Name="ThemeDockPanel"
                                Margin="20,0,20,20">
                         <DockPanel.Resources>
-                            <!-- Color boxes -->
-                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource HtmlTextBoxStyle}">
-                                <Setter Property="Width" Value="66"/>
-                                <EventSetter Event="PreviewTextInput" Handler="HtmlColor_PreviewTextInput"/>
-                            </Style>
-
                             <!-- Color swatch. Tag is its color box. Click opens the color picker. -->
                             <Style x:Key="ColorSwatchStyle" TargetType="{x:Type Button}">
                                 <Setter Property="Width" Value="20"/>
@@ -993,43 +987,88 @@
                                    Text="Theme"
                                    Style="{StaticResource OptionHeaderTextStyle}"/>
 
-                        <!-- Theme option radio button group -->
-                        <TextBlock DockPanel.Dock="Top"
-                                   Text="Light or dark"
-                                   Margin="0,10,0,0"
-                                   Style="{StaticResource OptionSubHeaderTextStyle}"/>
-                        <RadioButton DockPanel.Dock="Top"
-                                     GroupName="Theme"
-                                     Content="Use Windows setting"
-                                     Name="ThemeSystemOption"
-                                     Margin="0,6,0,0"/>
-                        <RadioButton DockPanel.Dock="Top"
-                                     GroupName="Theme"
-                                     Content="Light"
-                                     Name="ThemeLightOption"
-                                     Margin="0,6,0,0"/>
-                        <RadioButton DockPanel.Dock="Top"
-                                     GroupName="Theme"
-                                     Content="Dark"
-                                     Name="ThemeDarkOption"
-                                     Margin="0,6,0,0"/>
+                        <!-- Theme list: built-in themes first, then custom themes -->
+                        <Grid DockPanel.Dock="Top" Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ListBox x:Name="ThemeList"
+                                     Height="140"
+                                     Style="{StaticResource FavoritesListBox}"
+                                     ItemContainerStyle="{StaticResource FavoritesListBoxItemsStyle}"
+                                     HorizontalContentAlignment="Stretch"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                     SelectionChanged="ThemeList_SelectionChanged">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel>
+                                            <TextBlock DockPanel.Dock="Right"
+                                                       Text="{Binding Description}"
+                                                       Margin="12,0,2,0"
+                                                       FontSize="13"
+                                                       Foreground="{DynamicResource Theme.Text.Secondary}"/>
+                                            <TextBlock Text="{Binding Name}"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
 
-                        <!-- Probe layout -->
-                        <TextBlock DockPanel.Dock="Top"
-                                   Text="Probe layout"
-                                   Margin="0,20,0,0"
-                                   Style="{StaticResource OptionSubHeaderTextStyle}"/>
-                        <!-- Space between probes -->
-                        <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,6,0,0">
-                            <CheckBox DockPanel.Dock="Left"
-                                      Name="IsProbeSpacingEnabled"
-                                      Content="Space between probes"/>
-                            <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="Space between probes">
-                                Add a small gap between probes and round their corners. Turn it off to fit probes edge to edge, with a thin line between them.
-                            </Label>
+                            <!-- Theme buttons -->
+                            <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                <Button x:Name="DuplicateThemeButton"
+                                        Style="{StaticResource ButtonStyle}"
+                                        Click="DuplicateTheme_Click"
+                                        Width="85"
+                                        Content="Duplicate"/>
+                                <Button x:Name="DeleteThemeButton"
+                                        Style="{StaticResource ButtonStyle}"
+                                        Click="DeleteTheme_Click"
+                                        Width="85"
+                                        Margin="0,6,0,0"
+                                        Content="Delete"/>
+                                <Button x:Name="ExportThemeButton"
+                                        Style="{StaticResource ButtonStyle}"
+                                        Width="85"
+                                        Margin="0,18,0,0"
+                                        Content="Export..."
+                                        IsEnabled="False"/>
+                                <Button x:Name="ImportThemeButton"
+                                        Style="{StaticResource ButtonStyle}"
+                                        Width="85"
+                                        Margin="0,6,0,0"
+                                        Content="Import..."
+                                        IsEnabled="False"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Theme name. Grayed out for built-in themes. -->
+                        <DockPanel DockPanel.Dock="Top" Margin="0,8,93,0">
+                            <TextBlock Text="Name"
+                                       Width="50"/>
+                            <TextBox x:Name="ThemeName"
+                                     MaxLength="50"
+                                     TextChanged="ThemeName_TextChanged"/>
                         </DockPanel>
 
-                        <!-- Probe colors: which theme's set to edit -->
+                        <!-- Note shown after editing a built-in theme -->
+                        <StackPanel x:Name="ThemeCopyNote"
+                                    DockPanel.Dock="Top"
+                                    Orientation="Horizontal"
+                                    Margin="50,6,0,0"
+                                    Visibility="Collapsed">
+                            <TextBlock x:Name="ThemeCopyNoteText"
+                                       FontSize="13"
+                                       Foreground="{DynamicResource Theme.Text.Secondary}"/>
+                            <Button Style="{StaticResource LinkButtonStyle}"
+                                    Click="RenameTheme_Click"
+                                    Content="Rename"
+                                    FontSize="13"
+                                    Margin="6,0,0,0"/>
+                        </StackPanel>
+
+                        <!-- Probe colors -->
                         <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,20,0,0">
                             <TextBlock DockPanel.Dock="Left"
                                        Text="Probe colors"
@@ -1040,6 +1079,9 @@
                                     Each row is one probe status, with a sample on the left. Click a swatch to pick a color, or type a hex value like #859900.
                                     <LineBreak/>
                                     <LineBreak/>
+                                    Built-in themes don't change: editing one saves your changes as a new theme.
+                                    <LineBreak/>
+                                    <LineBreak/>
                                     <Bold>Warning:</Bold> missed replies before a host is marked down, slow replies and high latency.
                                     <LineBreak/>
                                     <LineBreak/>
@@ -1047,22 +1089,19 @@
                                 </TextBlock>
                             </Label>
                         </DockPanel>
-                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
-                            <TextBlock Text="Edit colors for:"
-                                       Margin="0,0,15,0"/>
-                            <RadioButton GroupName="ProbeColorSet"
-                                         Name="LightColorsOption"
-                                         Content="Light theme"
-                                         Checked="ProbeColorSet_Checked"/>
-                            <RadioButton GroupName="ProbeColorSet"
-                                         Name="DarkColorsOption"
-                                         Content="Dark theme"
-                                         Margin="20,0,0,0"
-                                         Checked="ProbeColorSet_Checked"/>
-                        </StackPanel>
 
                         <!-- Probe colors: one row per status, with a sample probe, then background, text and statistics -->
-                        <Grid DockPanel.Dock="Top" Margin="0,8,0,0">
+                        <Grid DockPanel.Dock="Top"
+                              Margin="0,8,0,0"
+                              Name="ProbeColorGrid">
+                            <Grid.Resources>
+                                <!-- Color boxes -->
+                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource HtmlTextBoxStyle}">
+                                    <Setter Property="Width" Value="66"/>
+                                    <EventSetter Event="PreviewTextInput" Handler="HtmlColor_PreviewTextInput"/>
+                                    <EventSetter Event="TextChanged" Handler="ProbeColor_TextChanged"/>
+                                </Style>
+                            </Grid.Resources>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
@@ -1200,14 +1239,20 @@
                             </StackPanel>
                         </Grid>
 
-                        <!-- Reset colors button -->
-                        <Grid DockPanel.Dock="Top" Margin="0,15,0,0">
-                            <Button Style="{StaticResource ButtonStyle}"
-                                    Click="RestoreDefaultColors_Click"
-                                    Padding="15,5"
-                                    Content="Reset colors"
-                                    HorizontalAlignment="Left"/>
-                        </Grid>
+                        <!-- Probe layout -->
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Probe layout"
+                                   Margin="0,20,0,0"
+                                   Style="{StaticResource OptionSubHeaderTextStyle}"/>
+                        <!-- Space between probes -->
+                        <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,6,0,0">
+                            <CheckBox DockPanel.Dock="Left"
+                                      Name="IsProbeSpacingEnabled"
+                                      Content="Space between probes"/>
+                            <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="Space between probes">
+                                Add a small gap between probes and round their corners. Turn it off to fit probes edge to edge, with a thin line between them.
+                            </Label>
+                        </DockPanel>
                     </DockPanel>
                 </ScrollViewer>
             </TabItem>

@@ -84,7 +84,7 @@ namespace vmPing.Configuration
                         new XElement("aliases"),
                         new XElement("favorites"),
                         new XElement("configuration"),
-                        new XElement("colors")));
+                        new XElement("themes")));
                 WriteSafely(xd.Save);
 
                 return true;
@@ -151,10 +151,12 @@ namespace vmPing.Configuration
                     ?? throw new XmlException("Invalid configuration file.");
 
                 // Delete old nodes then recreate them with current config.
+                // <colors> is from before saved themes. It's read once when upgrading, then replaced by <themes>.
                 root.Descendants("configuration").Remove();
                 root.Descendants("colors").Remove();
+                root.Descendants("themes").Remove();
                 root.Add(GenerateConfigurationNode());
-                root.Add(GenerateColorsNode());
+                root.Add(GenerateThemesNode());
 
                 WriteSafely(xd.Save);
             }
@@ -280,32 +282,40 @@ namespace vmPing.Configuration
                 Node("IsAlwaysShowTrayIconEnabled", ApplicationOptions.IsAlwaysShowTrayIconEnabled),
                 new XComment(" Theme: [System, Light, Dark] "),
                 Node("Theme", ApplicationOptions.Theme),
+                new XComment(" CustomTheme: the name of a theme under <themes>, or empty for the built-in colors "),
+                Node("CustomTheme", ApplicationOptions.CustomThemeName),
                 Node("IsProbeSpacingEnabled", ApplicationOptions.IsProbeSpacingEnabled)
             );
         }
 
-        private static XElement GenerateColorsNode()
+        private static XElement GenerateThemesNode()
         {
-            // In XML, options are written as:
-            // <colors>
-            //   <option name="MyOptionName">myValue</option>
-            // </colors>
-            // The light set keeps the original names. The dark set adds a "Dark." prefix.
-            return new XElement("colors",
-                GenerateProbeColorNodes(string.Empty, "light theme", ApplicationOptions.LightProbeColors),
-                GenerateProbeColorNodes("Dark.", "dark theme", ApplicationOptions.DarkProbeColors)
-            );
+            // In XML, themes are written as:
+            // <themes>
+            //   <theme name="My theme" mode="Dark">
+            //     <option name="Probe.Background.Up">#2ec267</option>
+            //   </theme>
+            // </themes>
+            return new XElement("themes", ApplicationOptions.CustomThemes.Select(GenerateThemeNode));
         }
 
-        private static object[] GenerateProbeColorNodes(string prefix, string themeName, ProbeColors colors)
+        internal static XElement GenerateThemeNode(ColorTheme theme)
+        {
+            return new XElement("theme",
+                new XAttribute("name", theme.Name),
+                new XAttribute("mode", theme.IsDark ? "Dark" : "Light"),
+                GenerateProbeColorNodes(theme.Colors));
+        }
+
+        private static object[] GenerateProbeColorNodes(ProbeColors colors)
         {
             // Local function to create nodes.
             XElement Node(string name, string value) =>
-                new XElement("option", new XAttribute("name", prefix + name), value ?? string.Empty);
+                new XElement("option", new XAttribute("name", name), value ?? string.Empty);
 
             return new object[]
             {
-                new XComment($" Probe background ({themeName}) "),
+                new XComment(" Probe background "),
                 Node("Probe.Background.Inactive", colors.BackgroundInactive),
                 Node("Probe.Background.Up", colors.BackgroundUp),
                 Node("Probe.Background.Down", colors.BackgroundDown),
@@ -313,7 +323,7 @@ namespace vmPing.Configuration
                 Node("Probe.Background.Error", colors.BackgroundError),
                 Node("Probe.Background.Tool", colors.BackgroundTool),
 
-                new XComment($" Probe foreground ({themeName}) "),
+                new XComment(" Probe text "),
                 Node("Probe.Foreground.Inactive", colors.ForegroundInactive),
                 Node("Probe.Foreground.Up", colors.ForegroundUp),
                 Node("Probe.Foreground.Down", colors.ForegroundDown),
@@ -321,7 +331,7 @@ namespace vmPing.Configuration
                 Node("Probe.Foreground.Error", colors.ForegroundError),
                 Node("Probe.Foreground.Tool", colors.ForegroundTool),
 
-                new XComment($" Statistics foreground ({themeName}) "),
+                new XComment(" Statistics text "),
                 Node("Statistics.Foreground.Inactive", colors.StatisticsInactive),
                 Node("Statistics.Foreground.Up", colors.StatisticsUp),
                 Node("Statistics.Foreground.Down", colors.StatisticsDown),
@@ -343,7 +353,12 @@ namespace vmPing.Configuration
                 xd.Load(FilePath);
 
                 LoadAppOptions(xd.SelectNodes("/vmping/configuration/option"));
-                LoadColors(xd.SelectNodes("/vmping/colors/option"));
+                LoadThemes(xd.SelectNodes("/vmping/themes/theme"));
+                if (xd.SelectSingleNode("/vmping/themes") == null)
+                {
+                    UpgradeColors(xd.SelectNodes("/vmping/colors/option"));
+                }
+                CheckCustomTheme();
                 ApplicationOptions.UpdatePingOptions();
             }
 
@@ -353,40 +368,116 @@ namespace vmPing.Configuration
             }
         }
 
-        private static void LoadColors(XmlNodeList nodes)
+        private static void LoadThemes(XmlNodeList nodes)
         {
             if (nodes == null)
             {
                 return;
             }
 
-            Dictionary<string, string> options = nodes.Cast<XmlNode>()
-                .Where(n => n.Attributes?["name"] != null)
-                .ToDictionary(n => n.Attributes["name"].Value, n => n.InnerText);
-
-            ApplyProbeColors(string.Empty, ApplicationOptions.LightProbeColors, options);
-            ApplyProbeColors("Dark.", ApplicationOptions.DarkProbeColors, options);
+            foreach (XmlNode node in nodes)
+            {
+                ColorTheme theme = ReadTheme(node);
+                if (theme != null
+                    && !ColorTheme.IsBuiltInName(theme.Name)
+                    && ApplicationOptions.FindCustomTheme(theme.Name) == null)
+                {
+                    ApplicationOptions.CustomThemes.Add(theme);
+                }
+            }
         }
 
-        private static void ApplyProbeColors(string prefix, ProbeColors colors, IDictionary<string, string> options)
+        // Reads a <theme> node. Colors that are missing or not valid keep the built-in light or dark color.
+        internal static ColorTheme ReadTheme(XmlNode node)
         {
-            ApplyColor(prefix + "Probe.Background.Inactive", v => colors.BackgroundInactive = v, options);
-            ApplyColor(prefix + "Probe.Background.Up", v => colors.BackgroundUp = v, options);
-            ApplyColor(prefix + "Probe.Background.Down", v => colors.BackgroundDown = v, options);
-            ApplyColor(prefix + "Probe.Background.Indeterminate", v => colors.BackgroundIndeterminate = v, options);
-            ApplyColor(prefix + "Probe.Background.Error", v => colors.BackgroundError = v, options);
-            ApplyColor(prefix + "Probe.Background.Tool", v => colors.BackgroundTool = v, options);
-            ApplyColor(prefix + "Probe.Foreground.Inactive", v => colors.ForegroundInactive = v, options);
-            ApplyColor(prefix + "Probe.Foreground.Up", v => colors.ForegroundUp = v, options);
-            ApplyColor(prefix + "Probe.Foreground.Down", v => colors.ForegroundDown = v, options);
-            ApplyColor(prefix + "Probe.Foreground.Indeterminate", v => colors.ForegroundIndeterminate = v, options);
-            ApplyColor(prefix + "Probe.Foreground.Error", v => colors.ForegroundError = v, options);
-            ApplyColor(prefix + "Probe.Foreground.Tool", v => colors.ForegroundTool = v, options);
-            ApplyColor(prefix + "Statistics.Foreground.Inactive", v => colors.StatisticsInactive = v, options);
-            ApplyColor(prefix + "Statistics.Foreground.Up", v => colors.StatisticsUp = v, options);
-            ApplyColor(prefix + "Statistics.Foreground.Down", v => colors.StatisticsDown = v, options);
-            ApplyColor(prefix + "Statistics.Foreground.Indeterminate", v => colors.StatisticsIndeterminate = v, options);
-            ApplyColor(prefix + "Statistics.Foreground.Error", v => colors.StatisticsError = v, options);
+            string name = node.Attributes?["name"]?.Value?.Trim();
+            if (string.IsNullOrEmpty(name))
+            {
+                return null;
+            }
+
+            bool isDark = string.Equals(node.Attributes?["mode"]?.Value, "Dark", StringComparison.OrdinalIgnoreCase);
+            ColorTheme theme = new ColorTheme
+            {
+                Name = name,
+                IsDark = isDark,
+                Colors = isDark ? ProbeColors.CreateDarkDefaults() : ProbeColors.CreateLightDefaults()
+            };
+            ApplyProbeColors(theme.Colors, ToOptions(node.SelectNodes("option")));
+            return theme;
+        }
+
+        // Before saved themes, <colors> held the probe colors. If they were changed from the defaults,
+        // they become a light custom theme and it's selected, so the probes look the same as before.
+        private static void UpgradeColors(XmlNodeList nodes)
+        {
+            if (nodes == null || nodes.Count == 0)
+            {
+                return;
+            }
+
+            ProbeColors defaults = ProbeColors.CreateLightDefaults();
+            ProbeColors colors = defaults.Clone();
+            ApplyProbeColors(colors, ToOptions(nodes));
+            if (colors.Matches(defaults))
+            {
+                return;
+            }
+
+            ColorTheme theme = new ColorTheme
+            {
+                Name = ColorTheme.GetUniqueName("My colors", ApplicationOptions.CustomThemes),
+                Colors = colors
+            };
+            ApplicationOptions.CustomThemes.Add(theme);
+            ApplicationOptions.Theme = ThemeMode.Light;
+            ApplicationOptions.CustomThemeName = theme.Name;
+        }
+
+        // A custom theme that no longer exists falls back to the built-in colors. One that does
+        // exist sets the light or dark mode, so the two always agree.
+        private static void CheckCustomTheme()
+        {
+            ColorTheme custom = ApplicationOptions.FindCustomTheme(ApplicationOptions.CustomThemeName);
+            if (custom == null)
+            {
+                ApplicationOptions.CustomThemeName = string.Empty;
+                return;
+            }
+
+            ApplicationOptions.CustomThemeName = custom.Name;
+            ApplicationOptions.Theme = custom.IsDark ? ThemeMode.Dark : ThemeMode.Light;
+        }
+
+        private static Dictionary<string, string> ToOptions(XmlNodeList nodes)
+        {
+            Dictionary<string, string> options = new Dictionary<string, string>();
+            foreach (XmlNode node in nodes.Cast<XmlNode>().Where(n => n.Attributes?["name"] != null))
+            {
+                options[node.Attributes["name"].Value] = node.InnerText;
+            }
+            return options;
+        }
+
+        private static void ApplyProbeColors(ProbeColors colors, IDictionary<string, string> options)
+        {
+            ApplyColor("Probe.Background.Inactive", v => colors.BackgroundInactive = v, options);
+            ApplyColor("Probe.Background.Up", v => colors.BackgroundUp = v, options);
+            ApplyColor("Probe.Background.Down", v => colors.BackgroundDown = v, options);
+            ApplyColor("Probe.Background.Indeterminate", v => colors.BackgroundIndeterminate = v, options);
+            ApplyColor("Probe.Background.Error", v => colors.BackgroundError = v, options);
+            ApplyColor("Probe.Background.Tool", v => colors.BackgroundTool = v, options);
+            ApplyColor("Probe.Foreground.Inactive", v => colors.ForegroundInactive = v, options);
+            ApplyColor("Probe.Foreground.Up", v => colors.ForegroundUp = v, options);
+            ApplyColor("Probe.Foreground.Down", v => colors.ForegroundDown = v, options);
+            ApplyColor("Probe.Foreground.Indeterminate", v => colors.ForegroundIndeterminate = v, options);
+            ApplyColor("Probe.Foreground.Error", v => colors.ForegroundError = v, options);
+            ApplyColor("Probe.Foreground.Tool", v => colors.ForegroundTool = v, options);
+            ApplyColor("Statistics.Foreground.Inactive", v => colors.StatisticsInactive = v, options);
+            ApplyColor("Statistics.Foreground.Up", v => colors.StatisticsUp = v, options);
+            ApplyColor("Statistics.Foreground.Down", v => colors.StatisticsDown = v, options);
+            ApplyColor("Statistics.Foreground.Indeterminate", v => colors.StatisticsIndeterminate = v, options);
+            ApplyColor("Statistics.Foreground.Error", v => colors.StatisticsError = v, options);
         }
 
         private static void ApplyColor(string key, Action<string> setter, IDictionary<string, string> options)
@@ -462,6 +553,7 @@ namespace vmPing.Configuration
             ApplyBool("IsExitToTrayEnabled", v => ApplicationOptions.IsExitToTrayEnabled = v, options);
             ApplyBool("IsAlwaysShowTrayIconEnabled", v => ApplicationOptions.IsAlwaysShowTrayIconEnabled = v, options);
             ApplyEnum<ThemeMode>("Theme", v => ApplicationOptions.Theme = v, options);
+            ApplyString("CustomTheme", v => ApplicationOptions.CustomThemeName = v.Trim(), options);
             ApplyBool("IsProbeSpacingEnabled", v => ApplicationOptions.IsProbeSpacingEnabled = v, options);
 
             // Loaded last, since a value that can't be decrypted stops the load with an error.

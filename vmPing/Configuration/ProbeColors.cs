@@ -1,6 +1,9 @@
-﻿namespace vmPing.Configuration
+﻿using System;
+using System.Linq;
+
+namespace vmPing.Configuration
 {
-    // One set of probe colors. The light and dark themes each have their own set.
+    // One set of probe colors, used by a theme.
     public class ProbeColors
     {
         public string BackgroundInactive { get; set; }
@@ -26,6 +29,22 @@
         public ProbeColors Clone()
         {
             return (ProbeColors)MemberwiseClone();
+        }
+
+        // True when every color is the same as in other. Case doesn't matter (#ABCDEF and #abcdef match).
+        public bool Matches(ProbeColors other)
+        {
+            return other != null && Values().SequenceEqual(other.Values(), StringComparer.OrdinalIgnoreCase);
+        }
+
+        private string[] Values()
+        {
+            return new string[]
+            {
+                BackgroundInactive, BackgroundUp, BackgroundDown, BackgroundIndeterminate, BackgroundError, BackgroundTool,
+                ForegroundInactive, ForegroundUp, ForegroundDown, ForegroundIndeterminate, ForegroundError, ForegroundTool,
+                StatisticsInactive, StatisticsUp, StatisticsDown, StatisticsIndeterminate, StatisticsError
+            };
         }
 
         public static ProbeColors CreateLightDefaults()

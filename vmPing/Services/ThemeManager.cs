@@ -16,14 +16,29 @@ namespace vmPing.Services
         private const string IconsUri = "pack://application:,,,/Themes/Icons.xaml";
         private const string PersonalizeKey = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
 
+        private static readonly ProbeColors s_lightProbeColors = ProbeColors.CreateLightDefaults();
+        private static readonly ProbeColors s_darkProbeColors = ProbeColors.CreateDarkDefaults();
+
         private static ResourceDictionary s_colors;
         private static ResourceDictionary s_icons;
 
         public static ThemeMode Mode { get; private set; } = ThemeMode.System;
         public static bool IsDark { get; private set; }
 
-        // The probe colors for the current theme.
-        public static ProbeColors ProbeColors => IsDark ? ApplicationOptions.DarkProbeColors : ApplicationOptions.LightProbeColors;
+        // The probe colors for the current theme: the custom theme's, or the built-in light or dark colors.
+        public static ProbeColors ProbeColors
+        {
+            get
+            {
+                ColorTheme custom = ApplicationOptions.FindCustomTheme(ApplicationOptions.CustomThemeName);
+                if (custom != null && custom.IsDark == IsDark)
+                {
+                    return custom.Colors;
+                }
+
+                return IsDark ? s_darkProbeColors : s_lightProbeColors;
+            }
+        }
 
         // Raised after the colors change, for anything the color resources can't update (such as the title bar).
         public static event EventHandler ThemeChanged;
@@ -115,7 +130,7 @@ namespace vmPing.Services
             return replacement;
         }
 
-        private static bool IsWindowsInDarkMode()
+        public static bool IsWindowsInDarkMode()
         {
             // AppsUseLightTheme is 0 when Windows apps are set to dark. It doesn't exist before Windows 10.
             try

@@ -6,25 +6,25 @@
     <Style x:Key="StatusTextStyle" TargetType="{x:Type TextBlock}">
         <Style.Triggers>
             <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Down}">
-                <Setter Property="Foreground" Value="{DynamicResource Theme.Status.Down.Foreground}" />
+                <Setter Property="Foreground" Value="{DynamicResource Theme.Status.Down.Foreground}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Error}">
-                <Setter Property="Foreground" Value="{DynamicResource Theme.Status.Down.Foreground}" />
+                <Setter Property="Foreground" Value="{DynamicResource Theme.Status.Down.Foreground}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Up}">
-                <Setter Property="Foreground" Value="{DynamicResource Theme.Status.Up.Foreground}" />
+                <Setter Property="Foreground" Value="{DynamicResource Theme.Status.Up.Foreground}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Start}">
-                <Setter Property="Foreground" Value="{DynamicResource Theme.Status.Start.Foreground}" />
+                <Setter Property="Foreground" Value="{DynamicResource Theme.Status.Start.Foreground}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Stop}">
-                <Setter Property="Foreground" Value="{DynamicResource Theme.Status.Stop.Foreground}" />
+                <Setter Property="Foreground" Value="{DynamicResource Theme.Status.Stop.Foreground}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_LatencyHigh}">
-                <Setter Property="Foreground" Value="{DynamicResource Theme.Status.LatencyHigh.Foreground}" />
+                <Setter Property="Foreground" Value="{DynamicResource Theme.Status.LatencyHigh.Foreground}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_LatencyNormal}">
-                <Setter Property="Foreground" Value="{DynamicResource Theme.Status.LatencyNormal.Foreground}" />
+                <Setter Property="Foreground" Value="{DynamicResource Theme.Status.LatencyNormal.Foreground}"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -38,32 +38,32 @@
         <Setter Property="TextElement.FontWeight" Value="SemiBold"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Down}">
-                <Setter Property="Background" Value="{DynamicResource Theme.Status.Down.Background}" />
-                <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.Down.Foreground}" />
+                <Setter Property="Background" Value="{DynamicResource Theme.Status.Down.Background}"/>
+                <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.Down.Foreground}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Error}">
-                <Setter Property="Background" Value="{DynamicResource Theme.Status.Down.Background}" />
-                <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.Down.Foreground}" />
+                <Setter Property="Background" Value="{DynamicResource Theme.Status.Down.Background}"/>
+                <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.Down.Foreground}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Up}">
-                <Setter Property="Background" Value="{DynamicResource Theme.Status.Up.Background}" />
-                <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.Up.Foreground}" />
+                <Setter Property="Background" Value="{DynamicResource Theme.Status.Up.Background}"/>
+                <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.Up.Foreground}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Start}">
-                <Setter Property="Background" Value="{DynamicResource Theme.Status.Start.Background}" />
-                <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.Start.Foreground}" />
+                <Setter Property="Background" Value="{DynamicResource Theme.Status.Start.Background}"/>
+                <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.Start.Foreground}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_Stop}">
-                <Setter Property="Background" Value="{DynamicResource Theme.Status.Stop.Background}" />
-                <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.Stop.Foreground}" />
+                <Setter Property="Background" Value="{DynamicResource Theme.Status.Stop.Background}"/>
+                <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.Stop.Foreground}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_LatencyHigh}">
-                <Setter Property="Background" Value="{DynamicResource Theme.Status.LatencyHigh.Background}" />
-                <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.LatencyHigh.Foreground}" />
+                <Setter Property="Background" Value="{DynamicResource Theme.Status.LatencyHigh.Background}"/>
+                <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.LatencyHigh.Foreground}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding StatusAsString}" Value="{x:Static resource:Strings.StatusChange_LatencyNormal}">
-                <Setter Property="Background" Value="{DynamicResource Theme.Status.LatencyNormal.Background}" />
-                <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.LatencyNormal.Foreground}" />
+                <Setter Property="Background" Value="{DynamicResource Theme.Status.LatencyNormal.Background}"/>
+                <Setter Property="TextElement.Foreground" Value="{DynamicResource Theme.Status.LatencyNormal.Foreground}"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>

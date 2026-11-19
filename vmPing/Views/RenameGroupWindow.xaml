@@ -14,8 +14,8 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0"
@@ -50,11 +50,11 @@
                     Margin="0,0,9,0"
                     Click="Save_Click"
                     Width="85"
-                    Content="{x:Static resource:Strings.DialogButton_Save}" />
+                    Content="{x:Static resource:Strings.DialogButton_Save}"/>
             <Button Style="{StaticResource ButtonStyle}"
                     Width="85"
                     IsCancel="True"
-                    Content="{x:Static resource:Strings.DialogButton_Cancel}" />
+                    Content="{x:Static resource:Strings.DialogButton_Cancel}"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -233,7 +233,7 @@
                         <Image Source="{DynamicResource icon.options}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <Separator />
+                <Separator/>
                 <!-- Menu: Multi-Input -->
                 <MenuItem Name="MultiInputMenu" Header="Multi-input" InputGestureText="F2">
                     <MenuItem.Icon>
@@ -246,7 +246,7 @@
                         <Image Source="{DynamicResource icon.status-history}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <Separator />
+                <Separator/>
                 <!-- Menu: Favorites -->
                 <MenuItem Header="{x:Static resource:Strings.Menu_FavoriteSets}" x:Name="FavoritesMenu">
                     <MenuItem Header="{x:Static resource:Strings.Menu_SaveToFavorites}" Click="CreateFavorite_Click">
@@ -259,7 +259,7 @@
                             <Image Source="{DynamicResource icon.favorite}" VerticalAlignment="Center" Width="16" Height="16"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator />
+                    <Separator/>
                 </MenuItem>
                 <!-- Menu: Aliases-->
                 <MenuItem Header="{x:Static resource:Strings.Menu_Aliases}" x:Name="AliasesMenu">
@@ -268,9 +268,9 @@
                             <Image Source="{DynamicResource icon.alias}" VerticalAlignment="Center" Width="16" Height="16"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator />
+                    <Separator/>
                 </MenuItem>
-                <Separator />
+                <Separator/>
                 <!-- Menu: Popup alerts -->
                 <MenuItem Header="{x:Static resource:Strings.Menu_PopupAlerts}">
                     <MenuItem Name="PopupNever"
@@ -286,7 +286,7 @@
                               Click="PopupAlways_Click"
                               IsCheckable="True"/>
                 </MenuItem>
-                <Separator />
+                <Separator/>
                 <!-- Menu: Traceroute -->
                 <MenuItem Header="{x:Static resource:Strings.Menu_Traceroute}" x:Name="TracerouteMenu" InputGestureText="Ctrl-T">
                     <MenuItem.Icon>
@@ -305,7 +305,7 @@
                         <Image Source="{DynamicResource icon.vmping-logo-simple}" VerticalAlignment="Center" Width="16" Height="16"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <Separator />
+                <Separator/>
                 <!-- Menu: Help -->
                 <MenuItem Header="{x:Static resource:Strings.Menu_Help}" x:Name="HelpMenu" InputGestureText="F1">
                     <MenuItem.Icon>

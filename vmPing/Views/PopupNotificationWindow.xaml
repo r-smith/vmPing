@@ -20,7 +20,7 @@
         <EventTrigger RoutedEvent="Window.Loaded">
             <BeginStoryboard>
                 <Storyboard>
-                    <DoubleAnimation Duration="00:00:00.25" Storyboard.TargetProperty="Opacity" From="0" To="0.99" />
+                    <DoubleAnimation Duration="00:00:00.25" Storyboard.TargetProperty="Opacity" From="0" To="0.99"/>
                     <DoubleAnimation Duration="00:00:00.3" Storyboard.TargetName="slideTransform" Storyboard.TargetProperty="Y" From="16" To="0">
                         <DoubleAnimation.EasingFunction>
                             <CubicEase EasingMode="EaseOut"/>
@@ -53,16 +53,16 @@
                 CornerRadius="6">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <!-- Buttons -->
                 <Grid HorizontalAlignment="Right">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
                     <!-- Button: Maximize / Dedicated Window -->
@@ -92,21 +92,21 @@
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="{DynamicResource Theme.Item.Hover.Background}" />
-                                        <Setter TargetName="ControlButtonBorder" Property="Opacity" Value="1" />
+                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="{DynamicResource Theme.Item.Hover.Background}"/>
+                                        <Setter TargetName="ControlButtonBorder" Property="Opacity" Value="1"/>
                                     </Trigger>
                                     <Trigger Property="IsPressed" Value="True">
-                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="{DynamicResource Theme.Control.Pressed.Background}" />
+                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="{DynamicResource Theme.Control.Pressed.Background}"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Button.Template>
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
-                                <Setter Property="Visibility" Value="Hidden" />
+                                <Setter Property="Visibility" Value="Hidden"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=IsMouseOver}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Setter Property="Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -140,21 +140,21 @@
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="{DynamicResource Theme.Item.Hover.Background}" />
-                                        <Setter TargetName="ControlButtonBorder" Property="Opacity" Value="1" />
+                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="{DynamicResource Theme.Item.Hover.Background}"/>
+                                        <Setter TargetName="ControlButtonBorder" Property="Opacity" Value="1"/>
                                     </Trigger>
                                     <Trigger Property="IsPressed" Value="True">
-                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="{DynamicResource Theme.Control.Pressed.Background}" />
+                                        <Setter TargetName="ControlButtonBorder" Property="Background" Value="{DynamicResource Theme.Control.Pressed.Background}"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Button.Template>
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
-                                <Setter Property="Visibility" Value="Hidden" />
+                                <Setter Property="Visibility" Value="Hidden"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=IsMouseOver}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Setter Property="Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -176,11 +176,11 @@
                          MouseLeftButtonUp="Window_MouseLeftButtonUp">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="{x:Type ListBoxItem}">
-                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Background" Value="Transparent"/>
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                        <ContentPresenter />
+                                        <ContentPresenter/>
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
@@ -213,21 +213,21 @@
                                            FontSize="15"
                                            Foreground="{DynamicResource Theme.Text.Secondary}"
                                            VerticalAlignment="Center"
-                                           Padding="6,0,0,0" />
+                                           Padding="6,0,0,0"/>
                                 <!-- Hostname (or alias) -->
                                 <TextBlock DockPanel.Dock="Left"
                                            Text="{Binding AliasIfExistOrHostname}"
                                            FontSize="17"
                                            Foreground="{DynamicResource Theme.Text}"
                                            VerticalAlignment="Center"
-                                           Padding="9,0,0,0" />
+                                           Padding="9,0,0,0"/>
                                 <!-- Arrow symbol -->
                                 <TextBlock DockPanel.Dock="Left"
                                            Text="🠖"
                                            FontSize="17"
                                            Foreground="{DynamicResource Theme.Text.Secondary}"
                                            VerticalAlignment="Center"
-                                           Padding="5,0" />
+                                           Padding="5,0"/>
                                 <!-- Status -->
                                 <Border DockPanel.Dock="Left" Style="{StaticResource StatusTagStyle}">
                                     <TextBlock Text="{Binding StatusAsString}" FontSize="17"/>
@@ -243,7 +243,7 @@
                             Orientation="Horizontal">
                     <Image Source="{DynamicResource icon.vmping-logo-simple}"
                            Width="16"
-                           Height="16" />
+                           Height="16"/>
                     <TextBlock Grid.Row="3"
                                Text="vmPing"
                                FontSize="13"

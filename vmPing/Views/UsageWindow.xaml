@@ -14,8 +14,8 @@
     
     <Grid Margin="0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <StackPanel Margin="20,10,20,35">

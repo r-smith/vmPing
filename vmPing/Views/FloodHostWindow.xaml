@@ -13,8 +13,8 @@
     <Window.Resources>
         <!-- Value converters -->
         <converters:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="Flood host" TrueValue="Stop flood"/>
-        <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
-        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter"/>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
 
         <!-- Hostname textbox -->
         <Style x:Key="HostnameTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
@@ -73,16 +73,16 @@
 
         <Grid Margin="12">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- Hostname and button -->
             <Grid Grid.Row="0" Margin="0,0,0,8" Panel.ZIndex="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Hostname textbox -->
@@ -122,16 +122,16 @@
                                             </Style>
                                         </Image.Style>
                                     </Image>
-                                    <TextBlock Text="{Binding IsActive, Converter={StaticResource BoolToStringConverter}}" />
+                                    <TextBlock Text="{Binding IsActive, Converter={StaticResource BoolToStringConverter}}"/>
                                 </StackPanel>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="FloodButtonBorder" Property="Background" Value="{DynamicResource Theme.Control.Hover.Background}" />
-                                    <Setter TargetName="FloodButtonBorder" Property="BorderBrush" Value="{DynamicResource Theme.Control.Hover.Border}" />
+                                    <Setter TargetName="FloodButtonBorder" Property="Background" Value="{DynamicResource Theme.Control.Hover.Background}"/>
+                                    <Setter TargetName="FloodButtonBorder" Property="BorderBrush" Value="{DynamicResource Theme.Control.Hover.Border}"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="FloodButtonBorder" Property="Background" Value="{DynamicResource Theme.Control.Pressed.Background}" />
+                                    <Setter TargetName="FloodButtonBorder" Property="Background" Value="{DynamicResource Theme.Control.Pressed.Background}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -142,57 +142,57 @@
 
             <Grid Grid.Row="1" VerticalAlignment="Center">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="Packets sent:"
                                HorizontalAlignment="Right" VerticalAlignment="Center"
                                Margin="0,0,15,0"
                                Foreground="{DynamicResource Theme.Text.Secondary}"
-                               FontSize="16" FontWeight="Bold" />
+                               FontSize="16" FontWeight="Bold"/>
                     <TextBlock Grid.Column="1" Name="PacketsSentText"
                                Text="{Binding Path=PacketsSent, StringFormat='#,0'}"
                                Foreground="{DynamicResource Theme.Splash.Green}"
-                               FontSize="22" />
+                               FontSize="22"/>
                 </Grid>
 
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="Packets received:"
                                HorizontalAlignment="Right" VerticalAlignment="Center"
                                Margin="0,0,15,0"
                                Foreground="{DynamicResource Theme.Text.Secondary}"
-                               FontSize="16" FontWeight="Bold" />
+                               FontSize="16" FontWeight="Bold"/>
                     <TextBlock Grid.Column="1" Name="PacketsReceivedText"
                                Text="{Binding Path=PacketsReceived, StringFormat='#,0'}"
                                Foreground="{DynamicResource Theme.Accent}"
-                               FontSize="22" />
+                               FontSize="22"/>
                 </Grid>
 
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="Packets lost:"
                                HorizontalAlignment="Right" VerticalAlignment="Center"
                                Margin="0,0,15,0"
                                Foreground="{DynamicResource Theme.Text.Secondary}"
-                               FontSize="16" FontWeight="Bold" />
+                               FontSize="16" FontWeight="Bold"/>
                     <TextBlock Grid.Column="1" Name="PacketsLostText"
                                Text="{Binding Path=PacketsLost, StringFormat='#,0'}"
                                Foreground="{DynamicResource Theme.Splash.Red}"
-                               FontSize="22" />
+                               FontSize="22"/>
                 </Grid>
             </Grid>
 
@@ -209,11 +209,11 @@
                             <DataTrigger Binding="{Binding IsActive}" Value="True">
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard>
-                                        <Storyboard RepeatBehavior="Forever" AutoReverse="True" >
+                                        <Storyboard RepeatBehavior="Forever" AutoReverse="True">
                                             <DoubleAnimation Storyboard.TargetProperty="(TextBlock.Opacity)"
                                                              From="1" To=".2"
                                                              BeginTime="0:0:1.25"
-                                                             Duration="0:0:0.3" />
+                                                             Duration="0:0:0.3"/>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </DataTrigger.EnterActions>
@@ -221,7 +221,7 @@
                                     <BeginStoryboard>
                                         <Storyboard>
                                             <DoubleAnimation Storyboard.TargetProperty="(TextBlock.Opacity)"
-                                                             From="1" To="1" Duration="0:0:0.0" FillBehavior="HoldEnd" />
+                                                             From="1" To="1" Duration="0:0:0.0" FillBehavior="HoldEnd"/>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </DataTrigger.ExitActions>

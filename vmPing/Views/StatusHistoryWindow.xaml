@@ -14,8 +14,8 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- History DataGrid -->
@@ -185,7 +185,7 @@
                         <CheckBox x:Name="FilterStop"
                                   Content="Stop"
                                   IsChecked="True"
-                                  Click="Filter_Click" />
+                                  Click="Filter_Click"/>
                     </StackPanel>
                 </StackPanel>
                 <!-- Export button -->
@@ -203,10 +203,10 @@
         <Border Background="{DynamicResource Theme.Log.Background}" Grid.Row="0">
             <Border.Style>
                 <Style TargetType="{x:Type Border}">
-                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Setter Property="Visibility" Value="Collapsed"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Items.Count, ElementName=StatusHistory}" Value="0">
-                            <Setter Property="Visibility" Value="Visible" />
+                            <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -215,11 +215,11 @@
                 <TextBlock Foreground="{DynamicResource Theme.Splash.Yellow}"
                            FontSize="32"
                            HorizontalAlignment="Center"
-                           Text="{x:Static resource:Strings.StatusHistory_NoChanges}" />
+                           Text="{x:Static resource:Strings.StatusHistory_NoChanges}"/>
                 <TextBlock Foreground="{DynamicResource Theme.Text.Secondary}"
                            TextWrapping="Wrap"
                            Margin="0,10,0,0"
-                           Text="{x:Static resource:Strings.StatusHistory_NoChangesDescription}" />
+                           Text="{x:Static resource:Strings.StatusHistory_NoChangesDescription}"/>
             </StackPanel>
         </Border>
     </Grid>

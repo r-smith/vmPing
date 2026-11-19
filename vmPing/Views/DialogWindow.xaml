@@ -17,15 +17,15 @@
 
     <Grid Margin="0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- Icon and text -->
         <Grid Grid.Row="0" Margin="20,10,20,35">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Image x:Name="MessageImage"
                    Source="{DynamicResource icon.exclamation-triangle}"
@@ -66,13 +66,13 @@
                         Width="100"
                         IsDefault="True"
                         IsCancel="{Binding Visibility, ElementName=Cancel, Converter={StaticResource InverseHiddenToBoolConverter}}"
-                        Content="{x:Static resource:Strings.DialogButton_OK}" />
+                        Content="{x:Static resource:Strings.DialogButton_OK}"/>
                 <Button x:Name="Cancel"
                         Style="{StaticResource ButtonStyle}"
                         Margin="8,0,0,0"
                         Width="100"
                         IsCancel="True"
-                        Content="{x:Static resource:Strings.DialogButton_Cancel}" />
+                        Content="{x:Static resource:Strings.DialogButton_Cancel}"/>
             </StackPanel>
         </Border>
     </Grid>

@@ -4,19 +4,19 @@
                     xmlns:resource="clr-namespace:vmPing.Properties">
     
     <!-- Value converters -->
-    <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-    <converters:InverseHiddenToBoolConverter x:Key="InverseHiddenToBoolConverter" />
-    <converters:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="{x:Static resource:Strings.Button_Ping}" TrueValue="{x:Static resource:Strings.Button_Stop}" />
-    <converters:ProbeStatusToBackgroundBrushConverter x:Key="ProbeStatusToBackgroundBrushConverter" />
-    <converters:ProbeStatusToForegroundBrushConverter x:Key="ProbeStatusToForegroundBrushConverter" />
-    <converters:ProbeStatusToStatisticsBrushConverter x:Key="ProbeStatusToStatisticsBrushConverter" />
-    <converters:ProbeStatusToGlyphConverter x:Key="ProbeStatusToGlyphConverter" />
-    <converters:ProbeCountToGlobalStartStopText x:Key="ProbeCountToGlobalStartStopText" />
-    <converters:HostnameFontsizeConverter x:Key="HostnameFontsizeConverter" />
-    <converters:ButtonTextVisibilityConverter x:Key="ButtonTextVisibilityConverter" />
-    <converters:ProbeTypeToFontSizeConverter x:Key="ProbeTypeToFontSizeConverter" />
-    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-    <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter" />
-    <converters:StringToBrushConverter x:Key="StringToBrushConverter" />
-    <converters:StringLengthToBoolConverter x:Key="StringLengthToBoolConverter" />
+    <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    <converters:InverseHiddenToBoolConverter x:Key="InverseHiddenToBoolConverter"/>
+    <converters:BoolToStringConverter x:Key="BoolToStringConverter" FalseValue="{x:Static resource:Strings.Button_Ping}" TrueValue="{x:Static resource:Strings.Button_Stop}"/>
+    <converters:ProbeStatusToBackgroundBrushConverter x:Key="ProbeStatusToBackgroundBrushConverter"/>
+    <converters:ProbeStatusToForegroundBrushConverter x:Key="ProbeStatusToForegroundBrushConverter"/>
+    <converters:ProbeStatusToStatisticsBrushConverter x:Key="ProbeStatusToStatisticsBrushConverter"/>
+    <converters:ProbeStatusToGlyphConverter x:Key="ProbeStatusToGlyphConverter"/>
+    <converters:ProbeCountToGlobalStartStopText x:Key="ProbeCountToGlobalStartStopText"/>
+    <converters:HostnameFontsizeConverter x:Key="HostnameFontsizeConverter"/>
+    <converters:ButtonTextVisibilityConverter x:Key="ButtonTextVisibilityConverter"/>
+    <converters:ProbeTypeToFontSizeConverter x:Key="ProbeTypeToFontSizeConverter"/>
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    <converters:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter"/>
+    <converters:StringToBrushConverter x:Key="StringToBrushConverter"/>
+    <converters:StringLengthToBoolConverter x:Key="StringLengthToBoolConverter"/>
 </ResourceDictionary>

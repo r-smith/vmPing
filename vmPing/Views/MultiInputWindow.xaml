@@ -15,9 +15,9 @@
     
     <Grid Margin="9">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
@@ -25,7 +25,7 @@
             <Image DockPanel.Dock="Left" Source="{DynamicResource icon.input-addresses}" VerticalAlignment="Center" Width="20" Height="20" Margin="0,0,8,0"/>
             <TextBlock DockPanel.Dock="Left"
                        Text="Enter addresses to ping"
-                       Style="{StaticResource OptionHeaderTextStyle}" />
+                       Style="{StaticResource OptionHeaderTextStyle}"/>
             <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="Entering addresses" MaxWidth="250">
                 <TextBlock>
                     Enter one address per line, or separate them with commas. To label a host, add # and a name after it.

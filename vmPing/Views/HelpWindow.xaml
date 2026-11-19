@@ -12,79 +12,79 @@
 
     <Window.Resources>
         <Style TargetType="TextBlock">
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="FontSize" Value="16" />
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="FontSize" Value="16"/>
         </Style>
         <Style TargetType="Paragraph">
-            <Setter Property="TextAlignment" Value="Left" />
-            <Setter Property="FontFamily" Value="Segoe UI, Arial" />
-            <Setter Property="FontSize" Value="16" />
+            <Setter Property="TextAlignment" Value="Left"/>
+            <Setter Property="FontFamily" Value="Segoe UI, Arial"/>
+            <Setter Property="FontSize" Value="16"/>
         </Style>
 
         <!-- Title style -->
         <Style x:Key="TitleText"
                BasedOn="{StaticResource {x:Type TextBlock}}"
                TargetType="TextBlock">
-            <Setter Property="Margin" Value="0,0,0,0" />
-            <Setter Property="FontSize" Value="26" />
-            <Setter Property="FontFamily" Value="Segoe UI" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="Foreground" Value="{DynamicResource Theme.Text}" />
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
         </Style>
 
         <!-- HyperLink style -->
         <Style x:Key="HyperlinkStyle"
                BasedOn="{StaticResource {x:Type Hyperlink}}"
                TargetType="Hyperlink">
-            <Setter Property="TextDecorations" Value="None" />
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="Foreground" Value="{DynamicResource Theme.Accent}" />
+            <Setter Property="TextDecorations" Value="None"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="{DynamicResource Theme.Accent}"/>
         </Style>
 
         <!-- Version style -->
         <Style x:Key="VersionText"
                BasedOn="{StaticResource {x:Type Paragraph}}"
                TargetType="Paragraph">
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="Foreground" Value="{DynamicResource Theme.Text.Secondary}" />
-            <Setter Property="Margin" Value="0,0,0,0" />
-            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="{DynamicResource Theme.Text.Secondary}"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="TextAlignment" Value="Center"/>
         </Style>
 
         <!-- Section header style -->
         <Style x:Key="HeaderText"
                BasedOn="{StaticResource {x:Type Paragraph}}"
                TargetType="Paragraph">
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Margin" Value="0,40,0,0" />
-            <Setter Property="Foreground" Value="{DynamicResource Theme.Accent}" />
-            <Setter Property="FontSize" Value="26" />
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,40,0,0"/>
+            <Setter Property="Foreground" Value="{DynamicResource Theme.Accent}"/>
+            <Setter Property="FontSize" Value="26"/>
         </Style>
 
         <!-- Sub-header style -->
         <Style x:Key="SubHeaderText"
                BasedOn="{StaticResource {x:Type Paragraph}}"
                TargetType="Paragraph">
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Margin" Value="0,25,0,0" />
-            <Setter Property="Foreground" Value="{DynamicResource Theme.Text}" />
-            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,25,0,0"/>
+            <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+            <Setter Property="FontSize" Value="16"/>
         </Style>
 
         <!-- Paragraph style -->
         <Style x:Key="ParagraphText"
                BasedOn="{StaticResource {x:Type Paragraph}}"
                TargetType="Paragraph">
-            <Setter Property="Margin" Value="0,2,0,0" />
-            <Setter Property="Foreground" Value="{DynamicResource Theme.Text.Secondary}" />
+            <Setter Property="Margin" Value="0,2,0,0"/>
+            <Setter Property="Foreground" Value="{DynamicResource Theme.Text.Secondary}"/>
         </Style>
 
         <!-- Topic list items -->
         <Style TargetType="{x:Type TreeViewItem}">
-            <Setter Property="Foreground" Value="{DynamicResource Theme.Text}" />
-            <Setter Property="Padding" Value="8,4" />
-            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual.Item}" />
+            <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual.Item}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TreeViewItem}">
@@ -96,17 +96,17 @@
                                     BorderBrush="Transparent"
                                     BorderThickness="1"
                                     CornerRadius="3">
-                                <ContentPresenter ContentSource="Header" />
+                                <ContentPresenter ContentSource="Header"/>
                             </Border>
-                            <ItemsPresenter />
+                            <ItemsPresenter/>
                         </StackPanel>
                         <ControlTemplate.Triggers>
                             <Trigger SourceName="Bd" Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Theme.Item.Hover.Background}" />
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Theme.Item.Hover.Background}"/>
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Theme.Item.Selected.Background}" />
-                                <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource Theme.Item.Selected.Border}" />
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Theme.Item.Selected.Background}"/>
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource Theme.Item.Selected.Border}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -117,40 +117,40 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <TreeView Name="HelpTree" FontSize="10pt" BorderThickness="0" Padding="0,20,20,20" Margin="0"
                   Background="{DynamicResource Theme.Panel.Background}">
             <TreeViewItem Header="Intro"
-                          Selected="Intro_Selected" />
+                          Selected="Intro_Selected"/>
             <TreeViewItem Header="Basic usage"
-                          Selected="BasicUsage_Selected" />
+                          Selected="BasicUsage_Selected"/>
             <TreeViewItem Header="Extra features"
-                          Selected="ExtraFeatures_Selected" />
+                          Selected="ExtraFeatures_Selected"/>
             <TreeViewItem Header="Options"
-                          Selected="Options_Selected" />
+                          Selected="Options_Selected"/>
             <TreeViewItem Header="Command line usage"
-                          Selected="CommandLineUsage_Selected" />
+                          Selected="CommandLineUsage_Selected"/>
         </TreeView>
         <GridSplitter Grid.Column="1" Width="4"
                       HorizontalAlignment="Center"
                       Background="{DynamicResource Theme.Panel.Border}"
                       BorderThickness="0"
-                      VerticalAlignment="Stretch" />
+                      VerticalAlignment="Stretch"/>
 
         <FlowDocumentScrollViewer Name="MainDocument" Grid.Column="2" FocusVisualStyle="{x:Null}">
             <FlowDocument Foreground="{DynamicResource Theme.Text}">
                 <!-- Logo and title -->
                 <BlockUIContainer>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,20">
-                        <Image Source="/vmPing.ico" Width="32" Height="32" Margin="0,0,12,0" />
+                        <Image Source="/vmPing.ico" Width="32" Height="32" Margin="0,0,12,0"/>
                         <TextBlock Style="{StaticResource TitleText}"
                                    VerticalAlignment="Center"
                                    Text="vmPing">
                             <TextBlock.Effect>
-                                <DropShadowEffect ShadowDepth="4" Direction="330" Color="Black" Opacity="0.15" BlurRadius="4" />
+                                <DropShadowEffect ShadowDepth="4" Direction="330" Color="Black" Opacity="0.15" BlurRadius="4"/>
                             </TextBlock.Effect>
                         </TextBlock>
                     </StackPanel>
@@ -178,7 +178,7 @@
 
                 <!-- Intro section -->
                 <BlockUIContainer>
-                    <Rectangle Margin="0,30,0,0" HorizontalAlignment="Stretch" Fill="{DynamicResource Theme.Panel.Border}" Height="1" />
+                    <Rectangle Margin="0,30,0,0" HorizontalAlignment="Stretch" Fill="{DynamicResource Theme.Panel.Border}" Height="1"/>
                 </BlockUIContainer>
                 <Paragraph Name="Intro" Margin="0,5"
                            Foreground="{DynamicResource Theme.Text}">
@@ -187,7 +187,7 @@
                     Color-coding allows you to tell at a glance the status of each host.
                 </Paragraph>
                 <BlockUIContainer>
-                    <Rectangle HorizontalAlignment="Stretch" Fill="{DynamicResource Theme.Panel.Border}" Height="1" />
+                    <Rectangle HorizontalAlignment="Stretch" Fill="{DynamicResource Theme.Panel.Border}" Height="1"/>
                 </BlockUIContainer>
 
                 <!-- Basic Usage section -->

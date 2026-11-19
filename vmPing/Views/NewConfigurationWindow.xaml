@@ -77,12 +77,12 @@
                             Click="Save_Click"
                             Width="100"
                             IsDefault="True"
-                            Content="Save" />
+                            Content="Save"/>
                     <Button Style="{StaticResource ButtonStyle}"
                             Margin="8,0,0,0"
                             Width="100"
                             IsCancel="True"
-                            Content="Cancel" />
+                            Content="Cancel"/>
                 </StackPanel>
             </DockPanel>
         </Border>

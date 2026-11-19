@@ -35,8 +35,8 @@
             Background="{Binding Status, Converter={StaticResource ProbeStatusToBackgroundBrushConverter}}">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <!-- Ping output section -->

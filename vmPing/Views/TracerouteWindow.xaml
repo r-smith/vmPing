@@ -139,7 +139,7 @@
                             <DataTrigger Binding="{Binding IsActive}" Value="True">
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard>
-                                        <Storyboard RepeatBehavior="Forever" AutoReverse="True" >
+                                        <Storyboard RepeatBehavior="Forever" AutoReverse="True">
                                             <DoubleAnimation Storyboard.TargetProperty="(TextBlock.Opacity)"
                                                              From="1" To=".2"
                                                              BeginTime="0:0:0.0"

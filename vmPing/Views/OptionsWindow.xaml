@@ -677,178 +677,180 @@
 
             <!-- Tab: Startup -->
             <TabItem Header="Startup" Name="StartupTab">
-                <DockPanel Margin="20,0" LastChildFill="False">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <DockPanel Margin="20,0,20,15" LastChildFill="False">
 
-                    <!-- Header -->
-                    <TextBlock DockPanel.Dock="Top"
-                               Text="Startup"
-                               Style="{StaticResource OptionHeaderTextStyle}"/>
+                        <!-- Header -->
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Startup"
+                                   Style="{StaticResource OptionHeaderTextStyle}"/>
 
-                    <!-- Startup mode selection -->
-                    <TextBlock DockPanel.Dock="Top"
-                               Text="Choose how vmPing should start:"
-                               Margin="0,0,0,5"/>
-                    <ComboBox DockPanel.Dock="Top"
-                              Name="StartupMode"
-                              Width="200">
-                        <ComboBoxItem Content="Blank (default)" Tag="Standard" IsSelected="True"/>
-                        <ComboBoxItem Content="Multi-input window" Tag="Standard"/>
-                        <ComboBoxItem Content="Load a favorite" Tag="Favorite"/>
-                    </ComboBox>
-                    <!-- Initial probe / column count -->
-                    <StackPanel DockPanel.Dock="Top"
-                                Orientation="Horizontal"
-                                Margin="0,13,0,0">
-                        <!-- Style to control visibility based on selected startup mode -->
-                        <StackPanel.Style>
-                            <Style>
-                                <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ElementName=StartupMode, Path=SelectedItem.Tag}" Value="Standard">
-                                        <Setter Property="StackPanel.Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </StackPanel.Style>
-                        <!-- Probe count -->
-                        <StackPanel Margin="0,0,30,0">
-                            <TextBlock Text="Probe count:"
-                                       Margin="0,0,0,4"/>
-                            <TextBox Name="InitialProbeCount"
+                        <!-- Startup mode selection -->
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Choose how vmPing should start:"
+                                   Margin="0,0,0,5"/>
+                        <ComboBox DockPanel.Dock="Top"
+                                  Name="StartupMode"
+                                  Width="200">
+                            <ComboBoxItem Content="Blank (default)" Tag="Standard" IsSelected="True"/>
+                            <ComboBoxItem Content="Multi-input window" Tag="Standard"/>
+                            <ComboBoxItem Content="Load a favorite" Tag="Favorite"/>
+                        </ComboBox>
+                        <!-- Initial probe / column count -->
+                        <StackPanel DockPanel.Dock="Top"
+                                    Orientation="Horizontal"
+                                    Margin="0,13,0,0">
+                            <!-- Style to control visibility based on selected startup mode -->
+                            <StackPanel.Style>
+                                <Style>
+                                    <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=StartupMode, Path=SelectedItem.Tag}" Value="Standard">
+                                            <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+                            <!-- Probe count -->
+                            <StackPanel Margin="0,0,30,0">
+                                <TextBlock Text="Probe count:"
+                                           Margin="0,0,0,4"/>
+                                <TextBox Name="InitialProbeCount"
+                                         PreviewTextInput="NumericTextbox_PreviewTextInput"
+                                         Width="60"
+                                         HorizontalAlignment="Left"
+                                         MaxLength="2"/>
+                            </StackPanel>
+                            <!-- Column count-->
+                            <StackPanel>
+                                <TextBlock Text="Column count:"
+                                           Margin="0,0,0,4"/>
+                                <TextBox Name="InitialColumnCount"
+                                         PreviewTextInput="NumericTextbox_PreviewTextInput"
+                                         Width="60"
+                                         HorizontalAlignment="Left"
+                                         MaxLength="2"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <!-- Select a favorite -->
+                        <StackPanel DockPanel.Dock="Top"
+                                    Orientation="Horizontal"
+                                    Margin="0,13,0,0">
+                            <!-- Style to control visibility based on selected startup mode -->
+                            <StackPanel.Style>
+                                <Style>
+                                    <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=StartupMode, Path=SelectedItem.Tag}" Value="Favorite">
+                                            <Setter Property="StackPanel.Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+                            <!-- Favorite selection -->
+                            <StackPanel Margin="0,0,35,0">
+                                <TextBlock Text="Select a favorite:"
+                                           Margin="0,0,0,4"/>
+                                <ComboBox DockPanel.Dock="Top"
+                                          Name="InitialFavorite"
+                                          Width="250">
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Start minimized -->
+                        <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,20,0,0">
+                            <CheckBox DockPanel.Dock="Left"
+                                      Name="IsStartMinimizedEnabled"
+                                      Content="Start minimized"/>
+                            <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
+                                <TextBlock>
+                                    Start vmPing minimized to the taskbar.
+                                    <LineBreak/>
+                                    <LineBreak/>
+                                    <Bold>Note:</Bold> If 'Minimize to tray' is also on, vmPing starts hidden in the system tray.
+                                    <LineBreak/>
+                                    <LineBreak/>
+                                    If vmPing is already running, a new copy opens normally.
+                                </TextBlock>
+                            </Label>
+                        </DockPanel>
+
+                        <!-- Window size -->
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Window size:"
+                                   Margin="0,20,0,5"/>
+                        <RadioButton DockPanel.Dock="Top"
+                                     GroupName="WindowSize"
+                                     Name="WindowSizeRememberOption"
+                                     Content="Remember the last size"
+                                     Margin="0,0,0,6"/>
+                        <StackPanel DockPanel.Dock="Top"
+                                    Orientation="Horizontal">
+                            <RadioButton GroupName="WindowSize"
+                                         Name="WindowSizeFixedOption"
+                                         Content="Fixed size:"
+                                         IsChecked="True"
+                                         Width="150"
+                                         VerticalAlignment="Center"/>
+                            <TextBlock Text="Width"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,5,0"/>
+                            <TextBox Name="FixedWindowWidth"
                                      PreviewTextInput="NumericTextbox_PreviewTextInput"
+                                     IsEnabled="{Binding ElementName=WindowSizeFixedOption, Path=IsChecked}"
                                      Width="60"
-                                     HorizontalAlignment="Left"
-                                     MaxLength="2"/>
-                        </StackPanel>
-                        <!-- Column count-->
-                        <StackPanel>
-                            <TextBlock Text="Column count:"
-                                       Margin="0,0,0,4"/>
-                            <TextBox Name="InitialColumnCount"
+                                     MaxLength="4"/>
+                            <TextBlock Text="Height"
+                                       VerticalAlignment="Center"
+                                       Margin="15,0,5,0"/>
+                            <TextBox Name="FixedWindowHeight"
                                      PreviewTextInput="NumericTextbox_PreviewTextInput"
+                                     IsEnabled="{Binding ElementName=WindowSizeFixedOption, Path=IsChecked}"
                                      Width="60"
-                                     HorizontalAlignment="Left"
-                                     MaxLength="2"/>
+                                     MaxLength="4"/>
                         </StackPanel>
-                    </StackPanel>
-                    <!-- Select a favorite -->
-                    <StackPanel DockPanel.Dock="Top"
-                                Orientation="Horizontal"
-                                Margin="0,13,0,0">
-                        <!-- Style to control visibility based on selected startup mode -->
-                        <StackPanel.Style>
-                            <Style>
-                                <Setter Property="StackPanel.Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ElementName=StartupMode, Path=SelectedItem.Tag}" Value="Favorite">
-                                        <Setter Property="StackPanel.Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </StackPanel.Style>
-                        <!-- Favorite selection -->
-                        <StackPanel Margin="0,0,35,0">
-                            <TextBlock Text="Select a favorite:"
-                                       Margin="0,0,0,4"/>
-                            <ComboBox DockPanel.Dock="Top"
-                                      Name="InitialFavorite"
-                                      Width="250">
-                            </ComboBox>
-                        </StackPanel>
-                    </StackPanel>
 
-                    <!-- Start minimized -->
-                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,20,0,0">
-                        <CheckBox DockPanel.Dock="Left"
-                                  Name="IsStartMinimizedEnabled"
-                                  Content="Start minimized"/>
-                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
-                            <TextBlock>
-                                Start vmPing minimized to the taskbar.
-                                <LineBreak/>
-                                <LineBreak/>
-                                <Bold>Note:</Bold> If 'Minimize to tray' is also on, vmPing starts hidden in the system tray.
-                                <LineBreak/>
-                                <LineBreak/>
-                                If vmPing is already running, a new copy opens normally.
-                            </TextBlock>
-                        </Label>
+                        <!-- Window position -->
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Window position:"
+                                   Margin="0,20,0,5"/>
+                        <RadioButton DockPanel.Dock="Top"
+                                     GroupName="WindowPosition"
+                                     Name="WindowPositionDefaultOption"
+                                     Content="Default"
+                                     IsChecked="True"/>
+                        <RadioButton DockPanel.Dock="Top"
+                                     GroupName="WindowPosition"
+                                     Name="WindowPositionRememberOption"
+                                     Content="Remember the last position"
+                                     Margin="0,6"/>
+                        <StackPanel DockPanel.Dock="Top"
+                                    Orientation="Horizontal">
+                            <RadioButton GroupName="WindowPosition"
+                                         Name="WindowPositionFixedOption"
+                                         Content="Fixed position:"
+                                         Width="150"
+                                         VerticalAlignment="Center"/>
+                            <TextBlock Text="Left"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,5,0"/>
+                            <TextBox Name="FixedWindowLeft"
+                                     PreviewTextInput="SignedNumericTextbox_PreviewTextInput"
+                                     IsEnabled="{Binding ElementName=WindowPositionFixedOption, Path=IsChecked}"
+                                     Width="60"
+                                     MaxLength="5"/>
+                            <TextBlock Text="Top"
+                                       VerticalAlignment="Center"
+                                       Margin="15,0,5,0"/>
+                            <TextBox Name="FixedWindowTop"
+                                     PreviewTextInput="SignedNumericTextbox_PreviewTextInput"
+                                     IsEnabled="{Binding ElementName=WindowPositionFixedOption, Path=IsChecked}"
+                                     Width="60"
+                                     MaxLength="5"/>
+                        </StackPanel>
                     </DockPanel>
-
-                    <!-- Window size -->
-                    <TextBlock DockPanel.Dock="Top"
-                               Text="Window size:"
-                               Margin="0,20,0,5"/>
-                    <RadioButton DockPanel.Dock="Top"
-                                 GroupName="WindowSize"
-                                 Name="WindowSizeRememberOption"
-                                 Content="Remember the last size"
-                                 Margin="0,0,0,6"/>
-                    <StackPanel DockPanel.Dock="Top"
-                                Orientation="Horizontal">
-                        <RadioButton GroupName="WindowSize"
-                                     Name="WindowSizeFixedOption"
-                                     Content="Fixed size:"
-                                     IsChecked="True"
-                                     Width="150"
-                                     VerticalAlignment="Center"/>
-                        <TextBlock Text="Width"
-                                   VerticalAlignment="Center"
-                                   Margin="0,0,5,0"/>
-                        <TextBox Name="FixedWindowWidth"
-                                 PreviewTextInput="NumericTextbox_PreviewTextInput"
-                                 IsEnabled="{Binding ElementName=WindowSizeFixedOption, Path=IsChecked}"
-                                 Width="60"
-                                 MaxLength="4"/>
-                        <TextBlock Text="Height"
-                                   VerticalAlignment="Center"
-                                   Margin="15,0,5,0"/>
-                        <TextBox Name="FixedWindowHeight"
-                                 PreviewTextInput="NumericTextbox_PreviewTextInput"
-                                 IsEnabled="{Binding ElementName=WindowSizeFixedOption, Path=IsChecked}"
-                                 Width="60"
-                                 MaxLength="4"/>
-                    </StackPanel>
-
-                    <!-- Window position -->
-                    <TextBlock DockPanel.Dock="Top"
-                               Text="Window position:"
-                               Margin="0,20,0,5"/>
-                    <RadioButton DockPanel.Dock="Top"
-                                 GroupName="WindowPosition"
-                                 Name="WindowPositionDefaultOption"
-                                 Content="Default"
-                                 IsChecked="True"/>
-                    <RadioButton DockPanel.Dock="Top"
-                                 GroupName="WindowPosition"
-                                 Name="WindowPositionRememberOption"
-                                 Content="Remember the last position"
-                                 Margin="0,6"/>
-                    <StackPanel DockPanel.Dock="Top"
-                                Orientation="Horizontal">
-                        <RadioButton GroupName="WindowPosition"
-                                     Name="WindowPositionFixedOption"
-                                     Content="Fixed position:"
-                                     Width="150"
-                                     VerticalAlignment="Center"/>
-                        <TextBlock Text="Left"
-                                   VerticalAlignment="Center"
-                                   Margin="0,0,5,0"/>
-                        <TextBox Name="FixedWindowLeft"
-                                 PreviewTextInput="SignedNumericTextbox_PreviewTextInput"
-                                 IsEnabled="{Binding ElementName=WindowPositionFixedOption, Path=IsChecked}"
-                                 Width="60"
-                                 MaxLength="5"/>
-                        <TextBlock Text="Top"
-                                   VerticalAlignment="Center"
-                                   Margin="15,0,5,0"/>
-                        <TextBox Name="FixedWindowTop"
-                                 PreviewTextInput="SignedNumericTextbox_PreviewTextInput"
-                                 IsEnabled="{Binding ElementName=WindowPositionFixedOption, Path=IsChecked}"
-                                 Width="60"
-                                 MaxLength="5"/>
-                    </StackPanel>
-                </DockPanel>
+                </ScrollViewer>
             </TabItem>
 
             <!-- Tab: Theme -->

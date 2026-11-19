@@ -117,7 +117,18 @@ namespace vmPing.Views
             PingIntervalUnits.Text = pingIntervalUnits;
 
             // High latency detection.
-            LatencyDetectionMode.SelectedIndex = (int)ApplicationOptions.LatencyDetectionMode;
+            switch (ApplicationOptions.LatencyDetectionMode)
+            {
+                case LatencyMode.Dynamic:
+                    LatencyDynamicOption.IsChecked = true;
+                    break;
+                case LatencyMode.Fixed:
+                    LatencyFixedOption.IsChecked = true;
+                    break;
+                default:
+                    LatencyOffOption.IsChecked = true;
+                    break;
+            }
             HighLatencyMilliseconds.Text = ApplicationOptions.HighLatencyMilliseconds.ToString();
             HighLatencyTriggerCount.Text = ApplicationOptions.HighLatencyAlertTriggerCount.ToString();
         }
@@ -308,12 +319,12 @@ namespace vmPing.Views
             }
             if (!IsInRange(AlertThreshold.Text, 1, 60))
             {
-                ShowError("Please enter an alert threshold between 1 and 60.", GeneralTab, AlertThreshold);
+                ShowError("Please enter a number of missed replies between 1 and 60.", GeneralTab, AlertThreshold);
                 return false;
             }
 
             // The high latency threshold and trigger count are only used when a mode is selected.
-            if ((LatencyMode)LatencyDetectionMode.SelectedIndex != LatencyMode.Off)
+            if (GetLatencyMode() != LatencyMode.Off)
             {
                 if (!IsInRange(HighLatencyMilliseconds.Text, 1, 60000))
                 {
@@ -322,7 +333,7 @@ namespace vmPing.Views
                 }
                 if (!IsInRange(HighLatencyTriggerCount.Text, 1, 60))
                 {
-                    ShowError("Please enter a number of slow pings between 1 and 60.", GeneralTab, HighLatencyTriggerCount);
+                    ShowError("Please enter a number of slow replies between 1 and 60.", GeneralTab, HighLatencyTriggerCount);
                     return false;
                 }
             }
@@ -336,12 +347,19 @@ namespace vmPing.Views
             ApplicationOptions.PingTimeout = int.Parse(PingTimeout.Text) * 1000;
             ApplicationOptions.AlertThreshold = int.Parse(AlertThreshold.Text);
 
-            ApplicationOptions.LatencyDetectionMode = (LatencyMode)LatencyDetectionMode.SelectedIndex;
+            ApplicationOptions.LatencyDetectionMode = GetLatencyMode();
             if (ApplicationOptions.LatencyDetectionMode != LatencyMode.Off)
             {
                 ApplicationOptions.HighLatencyMilliseconds = long.Parse(HighLatencyMilliseconds.Text);
                 ApplicationOptions.HighLatencyAlertTriggerCount = int.Parse(HighLatencyTriggerCount.Text);
             }
+        }
+
+        private LatencyMode GetLatencyMode()
+        {
+            if (LatencyDynamicOption.IsChecked == true) return LatencyMode.Dynamic;
+            if (LatencyFixedOption.IsChecked == true) return LatencyMode.Fixed;
+            return LatencyMode.Off;
         }
 
         private bool ValidateStartupOptions()

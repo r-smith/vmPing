@@ -19,6 +19,11 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="{DynamicResource Theme.Text.Disabled}"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style TargetType="{x:Type TextBlock}" x:Key="OptionSubHeaderTextStyle">
@@ -79,15 +84,15 @@
                                    Text="Down detection"
                                    Margin="0,25,0,10"
                                    Style="{StaticResource OptionHeaderTextStyle}"/>
-                        <TextBlock DockPanel.Dock="Top"
-                                   Text="Number of failed pings to mark host as down:"/>
                         <StackPanel DockPanel.Dock="Top"
-                                    Orientation="Horizontal"
-                                    Margin="0,4,0,0">
+                                    Orientation="Horizontal">
+                            <TextBlock Text="Mark a host down after"/>
                             <TextBox Name="AlertThreshold"
                                      PreviewTextInput="NumericTextbox_PreviewTextInput"
                                      Width="60"
+                                     Margin="8,0"
                                      MaxLength="2"/>
+                            <TextBlock Text="missed replies"/>
                         </StackPanel>
 
                         <!-- High latency detection -->
@@ -109,50 +114,79 @@
                             </Label>
                         </DockPanel>
 
-                        <!-- Latency mode. The item order must match the LatencyMode enum. -->
+                        <!-- Latency mode -->
                         <StackPanel DockPanel.Dock="Top"
                                     Orientation="Horizontal">
-                            <TextBlock Text="Latency mode:"
-                                       Width="110"/>
-                            <ComboBox Name="LatencyDetectionMode" Width="100">
-                                <ComboBoxItem Content="Off" IsSelected="True"/>
-                                <ComboBoxItem Content="Dynamic"/>
-                                <ComboBoxItem Content="Fixed"/>
-                            </ComboBox>
+                            <RadioButton GroupName="LatencyMode"
+                                         Name="LatencyOffOption"
+                                         Content="Off"
+                                         IsChecked="True"/>
+                            <RadioButton GroupName="LatencyMode"
+                                         Name="LatencyDynamicOption"
+                                         Content="Dynamic"
+                                         Margin="24,0,0,0"/>
+                            <RadioButton GroupName="LatencyMode"
+                                         Name="LatencyFixedOption"
+                                         Content="Fixed"
+                                         Margin="24,0,0,0"/>
                         </StackPanel>
 
-                        <!-- Threshold and trigger count. Hidden when latency mode is off. -->
+                        <!-- Threshold and slow reply count. Hidden when latency mode is off. -->
                         <StackPanel DockPanel.Dock="Top">
                             <StackPanel.Style>
                                 <Style TargetType="{x:Type StackPanel}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ElementName=LatencyDetectionMode, Path=SelectedIndex}" Value="0">
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=LatencyOffOption}" Value="True">
                                             <Setter Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </StackPanel.Style>
 
+                            <!-- Threshold. The words around the box follow the mode. -->
                             <StackPanel Orientation="Horizontal"
-                                        Margin="0,10,0,0">
-                                <TextBlock Text="Threshold:"
-                                           Width="110"/>
+                                        Margin="0,12,0,0">
+                                <TextBlock>
+                                    <TextBlock.Style>
+                                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                            <Setter Property="Text" Value="Slow when"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsChecked, ElementName=LatencyFixedOption}" Value="True">
+                                                    <Setter Property="Text" Value="Slow when a reply takes"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                                 <TextBox Name="HighLatencyMilliseconds"
                                          PreviewTextInput="NumericTextbox_PreviewTextInput"
                                          Width="60"
+                                         Margin="8,0"
                                          MaxLength="5"/>
-                                <TextBlock Text="milliseconds"
-                                           Margin="10,0,0,0"/>
+                                <TextBlock>
+                                    <TextBlock.Style>
+                                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                            <Setter Property="Text" Value="ms slower than its fastest reply"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsChecked, ElementName=LatencyFixedOption}" Value="True">
+                                                    <Setter Property="Text" Value="ms or longer"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                             </StackPanel>
 
-                            <TextBlock Text="Number of slow pings to mark host as high latency:"
-                                       Margin="0,10,0,0"/>
+                            <!-- Slow reply count -->
                             <StackPanel Orientation="Horizontal"
-                                        Margin="0,4,0,0">
+                                        Margin="0,10,0,0">
+                                <TextBlock Text="Mark a host slow after"/>
                                 <TextBox Name="HighLatencyTriggerCount"
                                          PreviewTextInput="NumericTextbox_PreviewTextInput"
                                          Width="60"
+                                         Margin="8,0"
                                          MaxLength="2"/>
+                                <TextBlock Text="slow replies"/>
                             </StackPanel>
                         </StackPanel>
                     </DockPanel>

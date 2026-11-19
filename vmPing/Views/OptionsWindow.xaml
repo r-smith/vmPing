@@ -390,33 +390,54 @@
                                           Margin="50,0,0,0"/>
                             </DockPanel>
 
-                            <!-- Authentication section -->
-                            <!-- Smtp Authentication -->
-                            <CheckBox DockPanel.Dock="Top"
-                                      Name="IsSmtpAuthenticationRequired"
-                                      Content="This server requires authentication"
-                                      Click="IsSmtpAuthenticationRequired_Click"
-                                      Foreground="{DynamicResource Theme.Text.Secondary}"
-                                      FontSize="13"
-                                      Margin="120,8,0,0"/>
-                            <StackPanel DockPanel.Dock="Top"
-                                        Visibility="{Binding IsChecked, ElementName=IsSmtpAuthenticationRequired, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <!-- Smtp User -->
-                                <DockPanel>
-                                    <Grid Width="120">
-                                        <TextBlock Text="Username"/>
-                                    </Grid>
+                            <!-- Smtp User. Authentication is used when a username is entered. -->
+                            <DockPanel>
+                                <Grid Width="120">
+                                    <TextBlock Text="Username"/>
+                                </Grid>
+                                <Grid>
                                     <TextBox Name="SmtpUsername"/>
-                                </DockPanel>
+                                    <!-- Placeholder, shown while the username is empty -->
+                                    <TextBlock Text="(optional)"
+                                               Margin="6,0,0,0"
+                                               HorizontalAlignment="Left"
+                                               VerticalAlignment="Center"
+                                               FontSize="14"
+                                               Foreground="{DynamicResource Theme.Text.Disabled}"
+                                               IsHitTestVisible="False">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=SmtpUsername, Path=Text}" Value="">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
+                            </DockPanel>
 
-                                <!-- Smtp Password -->
-                                <DockPanel>
-                                    <Grid Width="120">
-                                        <TextBlock Text="Password"/>
-                                    </Grid>
-                                    <PasswordBox Name="SmtpPassword"/>
-                                </DockPanel>
-                            </StackPanel>
+                            <!-- Smtp Password -->
+                            <DockPanel>
+                                <Grid Width="120">
+                                    <TextBlock Text="Password"/>
+                                </Grid>
+                                <Grid>
+                                    <PasswordBox Name="SmtpPassword"
+                                                 PasswordChanged="SmtpPassword_PasswordChanged"/>
+                                    <!-- Placeholder, shown while the password is empty. PasswordChanged shows and hides it. -->
+                                    <TextBlock x:Name="SmtpPasswordPlaceholder"
+                                               Text="(optional)"
+                                               Margin="6,0,0,0"
+                                               HorizontalAlignment="Left"
+                                               VerticalAlignment="Center"
+                                               FontSize="14"
+                                               Foreground="{DynamicResource Theme.Text.Disabled}"
+                                               IsHitTestVisible="False"/>
+                                </Grid>
+                            </DockPanel>
 
                             <!-- Email addresses subheading -->
                             <TextBlock DockPanel.Dock="Top"

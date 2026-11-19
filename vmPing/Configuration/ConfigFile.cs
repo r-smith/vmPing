@@ -259,7 +259,6 @@ namespace vmPing.Configuration
                 Node("EmailServer", ApplicationOptions.EmailServer),
                 Node("EmailPort", ApplicationOptions.EmailPort),
                 Node("IsEmailSslEnabled", ApplicationOptions.IsEmailSslEnabled),
-                Node("IsEmailAuthenticationRequired", ApplicationOptions.IsEmailAuthenticationRequired),
                 Node("EmailUser", string.IsNullOrWhiteSpace(ApplicationOptions.EmailUser)
                     ? string.Empty
                     : StringCipher.Encrypt(ApplicationOptions.EmailUser)),
@@ -436,7 +435,6 @@ namespace vmPing.Configuration
             ApplyBool("IsAutoDismissEnabled", v => ApplicationOptions.IsAutoDismissEnabled = v, options);
             ApplyInt("AutoDismissMilliseconds", 1000, 99000, v => ApplicationOptions.AutoDismissMilliseconds = v, options);
             ApplyBool("IsEmailAlertEnabled", v => ApplicationOptions.IsEmailAlertEnabled = v, options);
-            ApplyBool("IsEmailAuthenticationRequired", v => ApplicationOptions.IsEmailAuthenticationRequired = v, options);
             ApplyString("EmailServer", v => ApplicationOptions.EmailServer = v, options);
             ApplyString("EmailPort", v => ApplicationOptions.EmailPort = v, options);
             ApplyBool("IsEmailSslEnabled", v => ApplicationOptions.IsEmailSslEnabled = v, options);

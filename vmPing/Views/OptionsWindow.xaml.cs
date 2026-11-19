@@ -167,7 +167,6 @@ namespace vmPing.Views
         private void PopulateEmailAlertOptions()
         {
             IsEmailAlertsEnabled.IsChecked = ApplicationOptions.IsEmailAlertEnabled;
-            IsSmtpAuthenticationRequired.IsChecked = ApplicationOptions.IsEmailAuthenticationRequired;
             IsSmtpSslEnabled.IsChecked = ApplicationOptions.IsEmailSslEnabled;
             SmtpServer.Text = ApplicationOptions.EmailServer;
             SmtpPort.Text = ApplicationOptions.EmailPort;
@@ -549,9 +548,9 @@ namespace vmPing.Views
                 ShowError("Please enter a valid 'from' address. This address appears as the sender for any alerts that are sent.", EmailAlertsTab, EmailFromAddress);
                 return false;
             }
-            if (IsSmtpAuthenticationRequired.IsChecked == true && SmtpUsername.Text.Length == 0)
+            if (SmtpPassword.Password.Length > 0 && SmtpUsername.Text.Trim().Length == 0)
             {
-                ShowError("Please enter a valid username for your mail server.", EmailAlertsTab, SmtpUsername);
+                ShowError("Please enter a username to go with the password.", EmailAlertsTab, SmtpUsername);
                 return false;
             }
 
@@ -566,16 +565,9 @@ namespace vmPing.Views
                 return;
             }
 
-            ApplicationOptions.IsEmailAuthenticationRequired = IsSmtpAuthenticationRequired.IsChecked == true;
-            if (!ApplicationOptions.IsEmailAuthenticationRequired)
-            {
-                SmtpUsername.Text = string.Empty;
-                SmtpPassword.Password = string.Empty;
-            }
-
             ApplicationOptions.EmailServer = SmtpServer.Text;
             ApplicationOptions.EmailPort = SmtpPort.Text;
-            ApplicationOptions.EmailUser = SmtpUsername.Text;
+            ApplicationOptions.EmailUser = SmtpUsername.Text.Trim();
             ApplicationOptions.EmailPassword = SmtpPassword.Password;
             ApplicationOptions.EmailRecipient = EmailRecipientAddress.Text;
             ApplicationOptions.EmailFromAddress = EmailFromAddress.Text;
@@ -755,12 +747,11 @@ namespace vmPing.Views
             }
         }
 
-        private void IsSmtpAuthenticationRequired_Click(object sender, RoutedEventArgs e)
+        private void SmtpPassword_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (IsSmtpAuthenticationRequired.IsChecked == true)
-            {
-                SmtpUsername.Focus();
-            }
+            SmtpPasswordPlaceholder.Visibility = SmtpPassword.Password.Length == 0
+                ? Visibility.Visible
+                : Visibility.Collapsed;
         }
 
         private async void TestEmail_Click(object sender, RoutedEventArgs e)
@@ -770,8 +761,7 @@ namespace vmPing.Views
             string serverAddress = SmtpServer.Text;
             string serverPort = SmtpPort.Text;
             bool isSslEnabled = IsSmtpSslEnabled.IsChecked == true;
-            bool isAuthRequired = IsSmtpAuthenticationRequired.IsChecked == true;
-            string username = SmtpUsername.Text;
+            string username = SmtpUsername.Text.Trim();
             System.Security.SecureString password = SmtpPassword.SecurePassword;
             string mailFrom = EmailFromAddress.Text;
             string mailRecipient = EmailRecipientAddress.Text;
@@ -784,7 +774,6 @@ namespace vmPing.Views
                         serverAddress,
                         serverPort,
                         isSslEnabled,
-                        isAuthRequired,
                         username,
                         password,
                         mailFrom,

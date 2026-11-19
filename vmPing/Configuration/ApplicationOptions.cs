@@ -27,7 +27,6 @@ namespace vmPing.Configuration
 
         // Email notifications.
         public static bool IsEmailAlertEnabled { get; set; } = false;
-        public static bool IsEmailAuthenticationRequired { get; set; } = false;
         public static bool IsEmailSslEnabled { get; set; } = false;
         public static string EmailServer { get; set; }
         public static string EmailUser { get; set; }

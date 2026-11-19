@@ -31,7 +31,8 @@ namespace vmPing.Services
                         {
                             smtp.Port = port;
                         }
-                        if (ApplicationOptions.IsEmailAuthenticationRequired)
+                        // Sign in only when a username is set.
+                        if (!string.IsNullOrWhiteSpace(ApplicationOptions.EmailUser))
                         {
                             smtp.Credentials = new NetworkCredential(
                                 ApplicationOptions.EmailUser,
@@ -52,7 +53,6 @@ namespace vmPing.Services
             string server,
             string port,
             bool isSslEnabled,
-            bool isAuthRequired,
             string username,
             System.Security.SecureString password,
             string fromAddress,
@@ -73,7 +73,8 @@ namespace vmPing.Services
                     {
                         smtp.Port = portNumber;
                     }
-                    if (isAuthRequired)
+                    // Sign in only when a username is set.
+                    if (!string.IsNullOrWhiteSpace(username))
                     {
                         smtp.UseDefaultCredentials = false;
                         smtp.Credentials = new NetworkCredential(username, password);

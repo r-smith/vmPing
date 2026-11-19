@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Media;
 using System.Text.RegularExpressions;
@@ -840,6 +841,18 @@ namespace vmPing.Views
             {
                 LogFolder.Text = folder;
             }
+        }
+
+        private void OpenLogFolder_Click(object sender, RoutedEventArgs e)
+        {
+            string folder = LogFolder.Text.Trim();
+            if (!Directory.Exists(folder))
+            {
+                ShowError("The log folder does not exist. Please choose an existing folder.", LogOutputTab, LogFolder);
+                return;
+            }
+
+            Process.Start("explorer.exe", $"\"{folder}\"");
         }
 
         private void AudioDownBrowse_Click(object sender, RoutedEventArgs e)

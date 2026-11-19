@@ -315,46 +315,42 @@
                         </Label>
                     </DockPanel>
 
-
-                    <!-- Popup notification option radio button group -->
+                    <!-- When to show popups -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="Show popup alerts:"
+                               Margin="0,10,0,0"/>
                     <RadioButton DockPanel.Dock="Top"
                                  GroupName="PopupAlerts"
-                                 Content="Disabled"
-                                 Name="PopupsDisabledOption"
-                                 Margin="0,15,0,0"/>
+                                 Content="Always"
+                                 Name="PopupsAlwaysOption"
+                                 Margin="0,8,0,0"
+                                 IsChecked="True"/>
                     <RadioButton DockPanel.Dock="Top"
                                  GroupName="PopupAlerts"
-                                 Content="Show when minimized"
+                                 Content="Only while vmPing is minimized"
                                  Name="PopupsMinimizedOption"
                                  Margin="0,6"/>
                     <RadioButton DockPanel.Dock="Top"
                                  GroupName="PopupAlerts"
-                                 Content="Always show"
-                                 Name="PopupsAlwaysOption"
-                                 IsChecked="True"/>
+                                 Content="Never"
+                                 Name="PopupsDisabledOption"/>
 
-                    <!-- Auto-dismiss enabled checkbox -->
-                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,20,0,5">
-                        <CheckBox DockPanel.Dock="Left"
-                                  Name="IsAutoDismissEnabled"
-                                  Content="Auto-dismiss notifications"
-                                  IsChecked="True"/>
-                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="Auto-dismiss notifications">
-                            Close popup alerts automatically after the number of seconds you choose.
-                        </Label>
-                    </DockPanel>
-
-                    <!-- Auto-dismiss interval textbox -->
+                    <!-- Auto-dismiss. Grayed out when popups are off. -->
                     <StackPanel DockPanel.Dock="Top"
-                                Visibility="{Binding IsChecked, ElementName=IsAutoDismissEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                Margin="50,0,0,0"
-                                Orientation="Horizontal">
+                                Orientation="Horizontal"
+                                Margin="0,20,0,0"
+                                IsEnabled="{Binding IsChecked, ElementName=PopupsDisabledOption, Converter={StaticResource InverseBooleanConverter}}">
+                        <CheckBox Name="IsAutoDismissEnabled"
+                                  Content="Close popups after"
+                                  VerticalAlignment="Center"
+                                  IsChecked="True"/>
                         <TextBox Name="AutoDismissInterval"
                                  PreviewTextInput="NumericTextbox_PreviewTextInput"
+                                 IsEnabled="{Binding IsChecked, ElementName=IsAutoDismissEnabled}"
                                  Width="60"
+                                 Margin="8,0"
                                  MaxLength="2"/>
-                        <TextBlock Text="seconds"
-                                   Margin="10,0,0,0"/>
+                        <TextBlock Text="seconds"/>
                     </StackPanel>
                 </DockPanel>
             </TabItem>

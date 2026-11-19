@@ -454,9 +454,12 @@ namespace vmPing.Views
 
         private bool ValidateNotificationOptions()
         {
-            if (IsAutoDismissEnabled.IsChecked == true && !IsInRange(AutoDismissInterval.Text, 1, 99))
+            // The seconds only matter when popups are on and set to close.
+            if (IsAutoDismissEnabled.IsChecked == true
+                && PopupsDisabledOption.IsChecked != true
+                && !IsInRange(AutoDismissInterval.Text, 1, 99))
             {
-                ShowError("Please enter a valid number of seconds for the auto-dismiss interval.", PopupAlertsTab, AutoDismissInterval);
+                ShowError("Please enter a number of seconds between 1 and 99 for closing popups.", PopupAlertsTab, AutoDismissInterval);
                 return false;
             }
 
@@ -466,7 +469,7 @@ namespace vmPing.Views
         private void SaveNotificationOptions()
         {
             ApplicationOptions.IsAutoDismissEnabled = IsAutoDismissEnabled.IsChecked == true;
-            if (ApplicationOptions.IsAutoDismissEnabled)
+            if (ApplicationOptions.IsAutoDismissEnabled && IsInRange(AutoDismissInterval.Text, 1, 99))
             {
                 ApplicationOptions.AutoDismissMilliseconds = int.Parse(AutoDismissInterval.Text) * 1000;
             }

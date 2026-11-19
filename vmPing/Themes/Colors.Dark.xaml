@@ -39,9 +39,15 @@
     <SolidColorBrush x:Key="Theme.Item.Selected.Background" Color="#1d3a5c"/>
     <SolidColorBrush x:Key="Theme.Item.Selected.Border" Color="#4493f8"/>
 
-    <!-- Menus, drop-downs and tooltips -->
+    <!-- Menus, drop-downs and popups -->
     <SolidColorBrush x:Key="Theme.Popup.Background" Color="#22272e"/>
     <SolidColorBrush x:Key="Theme.Popup.Border" Color="#444c56"/>
+
+    <!-- Tooltips -->
+    <SolidColorBrush x:Key="Theme.ToolTip.Background" Color="#3d444d"/>
+    <SolidColorBrush x:Key="Theme.ToolTip.Border" Color="#3d444d"/>
+    <SolidColorBrush x:Key="Theme.ToolTip.Text" Color="#f0f6fc"/>
+    <SolidColorBrush x:Key="Theme.ToolTip.Text.Secondary" Color="#d1d7e0"/>
 
     <!-- Icons -->
     <SolidColorBrush x:Key="Theme.Icon" Color="#c5ced8"/>

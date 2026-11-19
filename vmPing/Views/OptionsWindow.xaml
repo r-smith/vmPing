@@ -226,12 +226,15 @@
                     <StackPanel DockPanel.Dock="Top"
                                 Orientation="Horizontal"
                                 Margin="0">
-                        <RadioButton GroupName="IcmpData"
-                                     Content="Data size"
-                                     Name="PacketSizeOption"
-                                     Checked="PacketSizeOption_Checked"
-                                     IsChecked="True"
-                                     Width="160"/>
+                        <Grid Width="160">
+                            <RadioButton GroupName="IcmpData"
+                                         Content="Data size"
+                                         Name="PacketSizeOption"
+                                         Checked="PacketSizeOption_Checked"
+                                         IsChecked="True"
+                                         HorizontalAlignment="Left"
+                                         VerticalAlignment="Center"/>
+                        </Grid>
                         <TextBox Name="PacketSize"
                                  PreviewTextInput="NumericTextbox_PreviewTextInput"
                                  TextChanged="PacketData_TextChanged"
@@ -245,13 +248,15 @@
                     <!-- Packet data -->
                     <DockPanel DockPanel.Dock="Top"
                                 Margin="0,7,0,0">
-                        <RadioButton GroupName="IcmpData"
-                                     Content="Custom data"
-                                     Name="UseCustomPacketOption"
-                                     Checked="UseCustomPacketOption_Checked"
-                                     DockPanel.Dock="Left"
-                                     VerticalAlignment="Top"
-                                     Width="160"/>
+                        <Grid DockPanel.Dock="Left"
+                              Width="160">
+                            <RadioButton GroupName="IcmpData"
+                                         Content="Custom data"
+                                         Name="UseCustomPacketOption"
+                                         Checked="UseCustomPacketOption_Checked"
+                                         HorizontalAlignment="Left"
+                                         VerticalAlignment="Top"/>
+                        </Grid>
                         <TextBox Name="PacketData"
                                  TextChanged="PacketData_TextChanged"
                                  Height="80"
@@ -660,15 +665,19 @@
                             </Style>
                         </StackPanel.Style>
                         <TextBlock Text="Log folder"/>
-                        <DockPanel Margin="0,4,0,0">
-                            <Button DockPanel.Dock="Right"
+                        <Grid Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Name="LogFolder"/>
+                            <Button Grid.Column="1"
                                     Style="{StaticResource ButtonStyle}"
                                     Click="BrowseLogFolder_Click"
                                     Width="85"
                                     Margin="8,0,0,0"
                                     Content="Browse..."/>
-                            <TextBox Name="LogFolder"/>
-                        </DockPanel>
+                        </Grid>
                         <Button Style="{StaticResource LinkButtonStyle}"
                                 Click="OpenLogFolder_Click"
                                 Content="Open folder"
@@ -854,12 +863,14 @@
                                      Margin="0,0,0,6"/>
                         <StackPanel DockPanel.Dock="Top"
                                     Orientation="Horizontal">
-                            <RadioButton GroupName="WindowSize"
-                                         Name="WindowSizeFixedOption"
-                                         Content="Fixed size:"
-                                         IsChecked="True"
-                                         Width="150"
-                                         VerticalAlignment="Center"/>
+                            <Grid Width="150">
+                                <RadioButton GroupName="WindowSize"
+                                             Name="WindowSizeFixedOption"
+                                             Content="Fixed size:"
+                                             IsChecked="True"
+                                             HorizontalAlignment="Left"
+                                             VerticalAlignment="Center"/>
+                            </Grid>
                             <TextBlock Text="Width"
                                        VerticalAlignment="Center"
                                        Margin="0,0,5,0"/>
@@ -894,11 +905,13 @@
                                      Margin="0,6"/>
                         <StackPanel DockPanel.Dock="Top"
                                     Orientation="Horizontal">
-                            <RadioButton GroupName="WindowPosition"
-                                         Name="WindowPositionFixedOption"
-                                         Content="Fixed position:"
-                                         Width="150"
-                                         VerticalAlignment="Center"/>
+                            <Grid Width="150">
+                                <RadioButton GroupName="WindowPosition"
+                                             Name="WindowPositionFixedOption"
+                                             Content="Fixed position:"
+                                             HorizontalAlignment="Left"
+                                             VerticalAlignment="Center"/>
+                            </Grid>
                             <TextBlock Text="Left"
                                        VerticalAlignment="Center"
                                        Margin="0,0,5,0"/>

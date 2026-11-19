@@ -937,8 +937,8 @@
                 </ScrollViewer>
             </TabItem>
 
-            <!-- Tab: Theme -->
-            <TabItem Header="Theme" Name="ThemeTab">
+            <!-- Tab: Appearance -->
+            <TabItem Header="Appearance" Name="AppearanceTab">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <DockPanel LastChildFill="False"
                                Name="ThemeDockPanel"
@@ -988,11 +988,17 @@
 
                         <!-- Header -->
                         <TextBlock DockPanel.Dock="Top"
-                                   Text="Theme"
+                                   Text="Appearance"
                                    Style="{StaticResource OptionHeaderTextStyle}"/>
 
+                        <!-- Theme -->
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Theme"
+                                   Margin="0,10,0,6"
+                                   Style="{StaticResource OptionSubHeaderTextStyle}"/>
+
                         <!-- Theme list: built-in themes first, then custom themes -->
-                        <Grid DockPanel.Dock="Top" Margin="0,10,0,0">
+                        <Grid DockPanel.Dock="Top">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
@@ -1243,9 +1249,9 @@
                             </StackPanel>
                         </Grid>
 
-                        <!-- Probe layout -->
+                        <!-- Probes -->
                         <TextBlock DockPanel.Dock="Top"
-                                   Text="Probe layout"
+                                   Text="Probes"
                                    Margin="0,20,0,0"
                                    Style="{StaticResource OptionSubHeaderTextStyle}"/>
                         <!-- Space between probes -->

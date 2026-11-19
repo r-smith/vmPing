@@ -727,7 +727,7 @@ namespace vmPing.Views
                 if (problem != null)
                 {
                     ThemeList.SelectedItem = theme;
-                    ShowError(problem, ThemeTab, ThemeName);
+                    ShowError(problem, AppearanceTab, ThemeName);
                     ThemeName.SelectAll();
                     return false;
                 }
@@ -742,7 +742,7 @@ namespace vmPing.Views
             {
                 if (control is TextBox box && !Util.IsValidHtmlColor(box.Text))
                 {
-                    ShowError("Please enter a valid HTML color code.  Accepted formats are #RGB, #RRGGBB, and #AARRGGBB.  Example: #3266CF", ThemeTab, box);
+                    ShowError("Please enter a valid HTML color code.  Accepted formats are #RGB, #RRGGBB, and #AARRGGBB.  Example: #3266CF", AppearanceTab, box);
                     box.SelectAll();
                     return false;
                 }

@@ -258,11 +258,15 @@
                                        Foreground="{DynamicResource Theme.Text}"
                                        FontSize="14"
                                        VerticalAlignment="Center"/>
-                            <Label Style="{StaticResource LabelToolTip}" MaxWidth="380">
+                            <Label Style="{StaticResource LabelToolTip}" Tag="Hosts" MaxWidth="380">
                                 <TextBlock>
-                                    Enter one host per line, or separate them with commas.<LineBreak/>
-                                    Add a label after a host with #, or start a line with # for a comment.<LineBreak/><LineBreak/>
-                                    If you have a text file containing hosts, drag and drop it here.
+                                    Enter one host per line, or separate them with commas.
+                                    <LineBreak/>
+                                    <LineBreak/>
+                                    To label a host, add # and a name after it, like 10.0.0.1 # Router. Start a line with # to make it a comment.
+                                    <LineBreak/>
+                                    <LineBreak/>
+                                    Have a text file of hosts? Drag and drop it here.
                                 </TextBlock>
                             </Label>
                         </StackPanel>

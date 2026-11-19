@@ -95,15 +95,15 @@
                                    Text="High latency detection"
                                    Margin="0"
                                    Style="{StaticResource OptionHeaderTextStyle}"/>
-                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="High latency detection">
                             <TextBlock>
-                                Alerts you when a host is up but responding slowly.
+                                Get an alert when a host is still up but replying slowly.
                                 <LineBreak/>
                                 <LineBreak/>
-                                Dynamic: a reply is slow when it takes longer than the fastest reply from that host plus the threshold.
+                                <Bold>Dynamic:</Bold> a reply is slow when it takes longer than the host's fastest reply plus the threshold.
                                 <LineBreak/>
                                 <LineBreak/>
-                                Fixed: a reply is slow when it takes as long as the threshold or longer.
+                                <Bold>Fixed:</Bold> a reply is slow when it takes as long as the threshold or longer.
                             </TextBlock>
                         </Label>
                     </DockPanel>
@@ -245,12 +245,12 @@
                         <CheckBox DockPanel.Dock="Left"
                                   Name="DontFragment"
                                   Content="Don't fragment"/>
-                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="Don't fragment">
                             <TextBlock>
-                                The don't fragment flag instructs routers to discard the packet if it is too big.
+                                Tells routers to drop a packet that's too big instead of splitting it up.
                                 <LineBreak/>
                                 <LineBreak/>
-                                Your maximum transmission unit (MTU) can be determined by enabling this option and adjusting the packet data size.
+                                Tip: turn this on and adjust the packet size to find the largest packet your network can carry (the MTU).
                             </TextBlock>
                         </Label>
                     </DockPanel>
@@ -266,12 +266,12 @@
                         <TextBlock DockPanel.Dock="Left"
                                    Text="Popup alerts"
                                    Style="{StaticResource OptionHeaderTextStyle}"/>
-                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="Popup alerts">
                             <TextBlock>
-                                Popup alerts appear in the lower right corner of your screen when a host you are monitoring changes status (down or up).
+                                A small popup appears in the lower-right corner of your screen when a host goes down or comes back up.
                                 <LineBreak/>
                                 <LineBreak/>
-                                You can always show popup alerts, show only when vmPing is minimized, or disable entirely.
+                                Show them always, only while vmPing is minimized, or turn them off.
                             </TextBlock>
                         </Label>
                     </DockPanel>
@@ -300,8 +300,8 @@
                                   Name="IsAutoDismissEnabled"
                                   Content="Auto-dismiss notifications"
                                   IsChecked="True"/>
-                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
-                            Automatically close popup alerts after the specified number of seconds.
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="Auto-dismiss notifications">
+                            Close popup alerts automatically after the number of seconds you choose.
                         </Label>
                     </DockPanel>
 
@@ -336,8 +336,8 @@
                                       Content="Enable email alerts"
                                       Click="IsEmailAlertsEnabled_Click"
                                       IsChecked="True"/>
-                            <Label Style="{StaticResource LabelToolTip}">
-                                Enable this option to send an email alert every time a host changes status (down or up).
+                            <Label Style="{StaticResource LabelToolTip}" Tag="Enable email alerts">
+                                Send an email every time a host goes down or comes back up.
                             </Label>
                         </StackPanel>
 
@@ -466,8 +466,8 @@
                                   Click="IsAudioDownAlertEnabled_Click"
                                   Content="Enable audio alert: host down"
                                   IsChecked="True"/>
-                        <Label Style="{StaticResource LabelToolTip}">
-                            Enable this option to play a sound when a host goes down.
+                        <Label Style="{StaticResource LabelToolTip}" Tag="Audio alert: host down">
+                            Play a sound when a host goes down.
                         </Label>
                     </StackPanel>
 
@@ -518,8 +518,8 @@
                                   Click="IsAudioUpAlertEnabled_Click"
                                   Content="Enable audio alert: host up"
                                   IsChecked="True"/>
-                        <Label Style="{StaticResource LabelToolTip}">
-                            Enable this option to play a sound when a host comes up.
+                        <Label Style="{StaticResource LabelToolTip}" Tag="Audio alert: host up">
+                            Play a sound when a host comes back up.
                         </Label>
                     </StackPanel>
 
@@ -589,8 +589,8 @@
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,20,0,0">
                         <CheckBox Name="IsLogOutputEnabled"
                                   Content="Log ping output"/>
-                        <Label Style="{StaticResource LabelToolTip}">
-                            Writes all ping output to text files in the log folder, one file for each host (hostname.txt).
+                        <Label Style="{StaticResource LabelToolTip}" Tag="Log ping output">
+                            Save each host's ping output to its own text file (hostname.txt) in the log folder.
                         </Label>
                     </StackPanel>
 
@@ -598,10 +598,13 @@
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,15,0,0">
                         <CheckBox Name="IsLogStatusChangesEnabled"
                                   Content="Log status changes"/>
-                        <Label Style="{StaticResource LabelToolTip}">
-                            Writes all status changes to vmPing-status.txt in the log folder.
-                            A status change is when a host you are pinging goes down, or a down host comes back up.
-                            The file is tab delimited, so it's suitable for Excel or database imports.
+                        <Label Style="{StaticResource LabelToolTip}" Tag="Log status changes">
+                            <TextBlock>
+                                Record each time a host goes down or comes back up in vmPing-status.txt in the log folder.
+                                <LineBreak/>
+                                <LineBreak/>
+                                The file is tab separated, so it opens neatly in Excel or imports into a database.
+                            </TextBlock>
                         </Label>
                     </StackPanel>
                 </DockPanel>
@@ -621,8 +624,8 @@
                         <CheckBox DockPanel.Dock="Left"
                                   Name="IsAlwaysOnTopEnabled"
                                   Content="Always on top"/>
-                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
-                            Keep the vmPing application on top and always visible over other windows.
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="Always on top">
+                            Keep vmPing visible above your other windows.
                         </Label>
                     </DockPanel>
                     <!-- Minimze to tray -->
@@ -630,17 +633,12 @@
                         <CheckBox DockPanel.Dock="Left"
                                   Name="IsMinimizeToTrayEnabled"
                                   Content="Minimize to tray"/>
-                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="Minimize to tray">
                             <TextBlock>
-                                Place an icon in the system tray when vmPing is minimized.
+                                Minimizing vmPing sends it to the system tray instead of the taskbar. Click the tray icon to bring it back.
                                 <LineBreak/>
                                 <LineBreak/>
-                                To keep the system tray icon always visible:
-                                <LineBreak/>
-                                Right-click the Windows taskbar and choose 'Taskbar settings'.
-                                Under 'Notifications area' click 'Select which icons to appear on the taskbar'. Look for vmPing and set to 'On'.
-                                <LineBreak/>
-                                (Steps may vary)
+                                Can't see the icon? Windows may hide it under the ^ arrow. To keep it showing, open the taskbar settings and turn vmPing on under the system tray icons. (Steps vary by Windows version.)
                             </TextBlock>
                         </Label>
                     </DockPanel>
@@ -649,17 +647,12 @@
                         <CheckBox DockPanel.Dock="Left"
                                   Name="IsExitToTrayEnabled"
                                   Content="Exit to tray"/>
-                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="Exit to tray">
                             <TextBlock>
-                                When closing vmPing, the application will minimize to the system tray rather than exit. Right-click the tray icon to exit.
+                                Closing the window keeps vmPing running in the system tray. To quit, right-click the tray icon and choose Exit vmPing.
                                 <LineBreak/>
                                 <LineBreak/>
-                                To keep the system tray icon always visible:
-                                <LineBreak/>
-                                Right-click the Windows taskbar and choose 'Taskbar settings'.
-                                Under 'Notifications area' click 'Select which icons to appear on the taskbar'. Look for vmPing and set to 'On'.
-                                <LineBreak/>
-                                (Steps may vary)
+                                Can't see the icon? Windows may hide it under the ^ arrow. To keep it showing, open the taskbar settings and turn vmPing on under the system tray icons. (Steps vary by Windows version.)
                             </TextBlock>
                         </Label>
                     </DockPanel>
@@ -668,8 +661,8 @@
                         <CheckBox DockPanel.Dock="Left"
                                   Name="IsAlwaysShowTrayIconEnabled"
                                   Content="Always show tray icon"/>
-                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
-                            Show the vmPing icon in the system tray all the time, not only when vmPing is minimized or closed to the tray. Click the icon to bring vmPing to the front.
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="Always show tray icon">
+                            Keep vmPing's icon in the system tray all the time, not just when it's minimized or closed to the tray. Click the icon to bring vmPing to the front.
                         </Label>
                     </DockPanel>
                 </DockPanel>
@@ -763,15 +756,15 @@
                             <CheckBox DockPanel.Dock="Left"
                                       Name="IsStartMinimizedEnabled"
                                       Content="Start minimized"/>
-                            <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
+                            <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="Start minimized">
                                 <TextBlock>
-                                    Start vmPing minimized to the taskbar.
+                                    Open vmPing minimized to the taskbar.
                                     <LineBreak/>
                                     <LineBreak/>
-                                    <Bold>Note:</Bold> If 'Minimize to tray' is also on, vmPing starts hidden in the system tray.
+                                    If Minimize to tray is also on, vmPing starts hidden in the system tray instead.
                                     <LineBreak/>
                                     <LineBreak/>
-                                    If vmPing is already running, a new copy opens normally.
+                                    This only applies to the first copy. If vmPing is already running, a new copy opens normally.
                                 </TextBlock>
                             </Label>
                         </DockPanel>
@@ -912,8 +905,8 @@
                             <CheckBox DockPanel.Dock="Left"
                                       Name="IsProbeSpacingEnabled"
                                       Content="Space between probes"/>
-                            <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}">
-                                Leave a small gap between probes and round their corners. When unchecked, probes sit edge to edge with a thin line between them.
+                            <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="Space between probes">
+                                Add a small gap between probes and round their corners. Turn it off to fit probes edge to edge, with a thin line between them.
                             </Label>
                         </DockPanel>
 

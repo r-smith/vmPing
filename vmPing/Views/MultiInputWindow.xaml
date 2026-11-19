@@ -26,12 +26,15 @@
             <TextBlock DockPanel.Dock="Left"
                        Text="Enter addresses to ping"
                        Style="{StaticResource OptionHeaderTextStyle}" />
-            <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" MaxWidth="250">
+            <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="Entering addresses" MaxWidth="250">
                 <TextBlock>
-                    Type a list of addresses to ping.<LineBreak/>
-                    Enter one per line or comma separated.<LineBreak/><LineBreak/>
-                    If you have a text file containing hosts,<LineBreak/>drag and drop it here.<LineBreak/><LineBreak/>
-                    Press Ctrl+Enter to start.
+                    Enter one address per line, or separate them with commas. To label a host, add # and a name after it.
+                    <LineBreak/>
+                    <LineBreak/>
+                    Have a text file of hosts? Drag and drop it here.
+                    <LineBreak/>
+                    <LineBreak/>
+                    Press Ctrl+Enter to start pinging.
                 </TextBlock>
             </Label>
         </DockPanel>

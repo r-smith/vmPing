@@ -36,125 +36,127 @@
         </Grid.RowDefinitions>
 
         <TabControl TabStripPlacement="Left" HorizontalContentAlignment="Left">
-            <!-- Tab: General -->
-            <TabItem Header="General" Name="GeneralTab">
-                <DockPanel Margin="20,0" LastChildFill="False">
-                    <TextBlock DockPanel.Dock="Top"
-                               Text="Probe options"
-                               Style="{StaticResource OptionHeaderTextStyle}"/>
-                    <!-- Ping interval -->
-                    <StackPanel DockPanel.Dock="Top"
-                                Orientation="Horizontal"
-                                Margin="0,10,0,0">
-                        <TextBlock Text="Ping interval:"
-                                   Width="110"/>
-                        <TextBox Name="PingInterval"
-                                 PreviewTextInput="NumericTextbox_PreviewTextInput"
-                                 Width="60"
-                                 MaxLength="5"/>
-                        <ComboBox Name="PingIntervalUnits" Width="100" Margin="10,0,0,0">
-                            <ComboBoxItem Content="seconds" IsSelected="True"/>
-                            <ComboBoxItem Content="minutes"/>
-                            <ComboBoxItem Content="hours"/>
-                        </ComboBox>
-                    </StackPanel>
-
-                    <!-- Ping timeout -->
-                    <StackPanel DockPanel.Dock="Top"
-                                Orientation="Horizontal"
-                                Margin="0,10,0,0">
-                        <TextBlock Text="Ping timeout:"
-                                   Width="110"/>
-                        <TextBox Name="PingTimeout"
-                                 PreviewTextInput="NumericTextbox_PreviewTextInput"
-                                 Width="60"
-                                 MaxLength="2"/>
-                        <TextBlock Text="seconds"
-                                   Margin="10,0,0,0"/>
-                    </StackPanel>
-
-                    <!-- Down detection -->
-                    <TextBlock DockPanel.Dock="Top"
-                               Text="Down detection"
-                               Margin="0,25,0,10"
-                               Style="{StaticResource OptionHeaderTextStyle}"/>
-                    <TextBlock DockPanel.Dock="Top"
-                               Text="Number of failed pings to mark host as down:"/>
-                    <StackPanel DockPanel.Dock="Top"
-                                Orientation="Horizontal"
-                                Margin="0,4,0,0">
-                        <TextBox Name="AlertThreshold"
-                                 PreviewTextInput="NumericTextbox_PreviewTextInput"
-                                 Width="60"
-                                 MaxLength="2"/>
-                    </StackPanel>
-
-                    <!-- High latency detection -->
-                    <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,25,0,10">
-                        <TextBlock DockPanel.Dock="Left"
-                                   Text="High latency detection"
-                                   Margin="0"
+            <!-- Tab: Monitoring -->
+            <TabItem Header="Monitoring" Name="GeneralTab">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <DockPanel Margin="20,0,20,15" LastChildFill="False">
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Monitoring"
                                    Style="{StaticResource OptionHeaderTextStyle}"/>
-                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="High latency detection">
-                            <TextBlock>
-                                Get an alert when a host is still up but replying slowly.
-                                <LineBreak/>
-                                <LineBreak/>
-                                <Bold>Dynamic:</Bold> a reply is slow when it takes longer than the host's fastest reply plus the threshold.
-                                <LineBreak/>
-                                <LineBreak/>
-                                <Bold>Fixed:</Bold> a reply is slow when it takes as long as the threshold or longer.
-                            </TextBlock>
-                        </Label>
-                    </DockPanel>
-
-                    <!-- Latency mode. The item order must match the LatencyMode enum. -->
-                    <StackPanel DockPanel.Dock="Top"
-                                Orientation="Horizontal">
-                        <TextBlock Text="Latency mode:"
-                                   Width="110"/>
-                        <ComboBox Name="LatencyDetectionMode" Width="100">
-                            <ComboBoxItem Content="Off" IsSelected="True"/>
-                            <ComboBoxItem Content="Dynamic"/>
-                            <ComboBoxItem Content="Fixed"/>
-                        </ComboBox>
-                    </StackPanel>
-
-                    <!-- Threshold and trigger count. Hidden when latency mode is off. -->
-                    <StackPanel DockPanel.Dock="Top">
-                        <StackPanel.Style>
-                            <Style TargetType="{x:Type StackPanel}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ElementName=LatencyDetectionMode, Path=SelectedIndex}" Value="0">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </StackPanel.Style>
-
-                        <StackPanel Orientation="Horizontal"
+                        <!-- Ping interval -->
+                        <StackPanel DockPanel.Dock="Top"
+                                    Orientation="Horizontal"
                                     Margin="0,10,0,0">
-                            <TextBlock Text="Threshold:"
+                            <TextBlock Text="Ping interval:"
                                        Width="110"/>
-                            <TextBox Name="HighLatencyMilliseconds"
+                            <TextBox Name="PingInterval"
                                      PreviewTextInput="NumericTextbox_PreviewTextInput"
                                      Width="60"
                                      MaxLength="5"/>
-                            <TextBlock Text="milliseconds"
+                            <ComboBox Name="PingIntervalUnits" Width="100" Margin="10,0,0,0">
+                                <ComboBoxItem Content="seconds" IsSelected="True"/>
+                                <ComboBoxItem Content="minutes"/>
+                                <ComboBoxItem Content="hours"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Ping timeout -->
+                        <StackPanel DockPanel.Dock="Top"
+                                    Orientation="Horizontal"
+                                    Margin="0,10,0,0">
+                            <TextBlock Text="Ping timeout:"
+                                       Width="110"/>
+                            <TextBox Name="PingTimeout"
+                                     PreviewTextInput="NumericTextbox_PreviewTextInput"
+                                     Width="60"
+                                     MaxLength="2"/>
+                            <TextBlock Text="seconds"
                                        Margin="10,0,0,0"/>
                         </StackPanel>
 
-                        <TextBlock Text="Number of slow pings to mark host as high latency:"
-                                   Margin="0,10,0,0"/>
-                        <StackPanel Orientation="Horizontal"
+                        <!-- Down detection -->
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Down detection"
+                                   Margin="0,25,0,10"
+                                   Style="{StaticResource OptionHeaderTextStyle}"/>
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="Number of failed pings to mark host as down:"/>
+                        <StackPanel DockPanel.Dock="Top"
+                                    Orientation="Horizontal"
                                     Margin="0,4,0,0">
-                            <TextBox Name="HighLatencyTriggerCount"
+                            <TextBox Name="AlertThreshold"
                                      PreviewTextInput="NumericTextbox_PreviewTextInput"
                                      Width="60"
                                      MaxLength="2"/>
                         </StackPanel>
-                    </StackPanel>
-                </DockPanel>
+
+                        <!-- High latency detection -->
+                        <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,25,0,10">
+                            <TextBlock DockPanel.Dock="Left"
+                                       Text="High latency detection"
+                                       Margin="0"
+                                       Style="{StaticResource OptionHeaderTextStyle}"/>
+                            <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="High latency detection">
+                                <TextBlock>
+                                    Get an alert when a host is still up but replying slowly.
+                                    <LineBreak/>
+                                    <LineBreak/>
+                                    <Bold>Dynamic:</Bold> a reply is slow when it takes longer than the host's fastest reply plus the threshold.
+                                    <LineBreak/>
+                                    <LineBreak/>
+                                    <Bold>Fixed:</Bold> a reply is slow when it takes as long as the threshold or longer.
+                                </TextBlock>
+                            </Label>
+                        </DockPanel>
+
+                        <!-- Latency mode. The item order must match the LatencyMode enum. -->
+                        <StackPanel DockPanel.Dock="Top"
+                                    Orientation="Horizontal">
+                            <TextBlock Text="Latency mode:"
+                                       Width="110"/>
+                            <ComboBox Name="LatencyDetectionMode" Width="100">
+                                <ComboBoxItem Content="Off" IsSelected="True"/>
+                                <ComboBoxItem Content="Dynamic"/>
+                                <ComboBoxItem Content="Fixed"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Threshold and trigger count. Hidden when latency mode is off. -->
+                        <StackPanel DockPanel.Dock="Top">
+                            <StackPanel.Style>
+                                <Style TargetType="{x:Type StackPanel}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=LatencyDetectionMode, Path=SelectedIndex}" Value="0">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0,10,0,0">
+                                <TextBlock Text="Threshold:"
+                                           Width="110"/>
+                                <TextBox Name="HighLatencyMilliseconds"
+                                         PreviewTextInput="NumericTextbox_PreviewTextInput"
+                                         Width="60"
+                                         MaxLength="5"/>
+                                <TextBlock Text="milliseconds"
+                                           Margin="10,0,0,0"/>
+                            </StackPanel>
+
+                            <TextBlock Text="Number of slow pings to mark host as high latency:"
+                                       Margin="0,10,0,0"/>
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0,4,0,0">
+                                <TextBox Name="HighLatencyTriggerCount"
+                                         PreviewTextInput="NumericTextbox_PreviewTextInput"
+                                         Width="60"
+                                         MaxLength="2"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </DockPanel>
+                </ScrollViewer>
             </TabItem>
 
             <!-- Tab: Advanced -->
@@ -163,7 +165,7 @@
 
                     <!-- Header -->
                     <TextBlock DockPanel.Dock="Top"
-                               Text="Advanced ICMP options"
+                               Text="Advanced ping options"
                                Style="{StaticResource OptionHeaderTextStyle}"/>
 
                     <!-- TTL -->
@@ -178,6 +180,9 @@
                                  MaxLength="3"/>
                         <TextBlock Text="hops"
                                    Margin="10,0,0,0"/>
+                        <Label Style="{StaticResource LabelToolTip}" Tag="Time to live">
+                            How many routers a ping can pass through before it's dropped. Each router along the way counts as one hop.
+                        </Label>
                     </StackPanel>
 
                     <!-- Separator -->
@@ -188,7 +193,7 @@
                                 Orientation="Horizontal"
                                 Margin="0">
                         <RadioButton GroupName="IcmpData"
-                                     Content="Packet data size"
+                                     Content="Data size"
                                      Name="PacketSizeOption"
                                      Checked="PacketSizeOption_Checked"
                                      IsChecked="True"
@@ -207,7 +212,7 @@
                     <DockPanel DockPanel.Dock="Top"
                                 Margin="0,7,0,0">
                         <RadioButton GroupName="IcmpData"
-                                     Content="Custom packet data"
+                                     Content="Custom data"
                                      Name="UseCustomPacketOption"
                                      Checked="UseCustomPacketOption_Checked"
                                      DockPanel.Dock="Left"
@@ -227,13 +232,13 @@
 
                     <!-- Total packet size -->
                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left" Margin="20,15,0,0">
-                        <TextBlock Foreground="{DynamicResource Theme.Accent}"
+                        <TextBlock Foreground="{DynamicResource Theme.Text.Secondary}"
                                    Text="Total packet size:"/>
-                        <TextBlock Foreground="{DynamicResource Theme.Splash.Red}"
+                        <TextBlock Foreground="{DynamicResource Theme.Text.Secondary}"
                                    Name="Bytes"
                                    Margin="6,0,4,0"
                                    Text="64"/>
-                        <TextBlock Foreground="{DynamicResource Theme.Splash.Red}"
+                        <TextBlock Foreground="{DynamicResource Theme.Text.Secondary}"
                                    Text="bytes"/>
                     </StackPanel>
 
@@ -257,8 +262,8 @@
                 </DockPanel>
             </TabItem>
 
-            <!-- Tab: Popup Alerts -->
-            <TabItem Header="Notifications" Name="PopupAlertsTab">
+            <!-- Tab: Popups -->
+            <TabItem Header="Popups" Name="PopupAlertsTab">
                 <DockPanel Margin="20,0" LastChildFill="False">
 
                     <!-- Header -->
@@ -380,7 +385,7 @@
                                          MaxLength="5"
                                          Width="75"/>
                                 <CheckBox Name="IsSmtpSslEnabled"
-                                          Content="Enable SSL/TLS"
+                                          Content="Use STARTTLS"
                                           FontSize="13"
                                           Margin="50,0,0,0"/>
                             </DockPanel>
@@ -419,6 +424,14 @@
                                        Margin="0,12,0,5"
                                        Style="{StaticResource OptionSubHeaderTextStyle}"/>
 
+                            <!-- From Address-->
+                            <DockPanel>
+                                <Grid Width="120">
+                                    <TextBlock Text="From address"/>
+                                </Grid>
+                                <TextBox Name="EmailFromAddress"/>
+                            </DockPanel>
+
                             <!-- Recipient Address-->
                             <DockPanel>
                                 <Grid Width="120">
@@ -428,36 +441,28 @@
                                          LostFocus="EmailRecipientAddress_LostFocus"/>
                             </DockPanel>
 
-                            <!-- From Address-->
-                            <DockPanel>
-                                <Grid Width="120">
-                                    <TextBlock Text="From address"/>
-                                </Grid>
-                                <TextBox Name="EmailFromAddress"/>
-                            </DockPanel>
-
                             <!-- Test button -->
                             <Button Style="{StaticResource ButtonStyle}"
                                     Name="TestEmailButton"
                                     Visibility="{Binding IsChecked, ElementName=IsEmailAlertsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
                                     DockPanel.Dock="Top"
                                     Click="TestEmail_Click"
-                                    Width="85"
+                                    Padding="15,5"
                                     Margin="0,18,0,0"
-                                    Content="Test"
+                                    Content="Send test email"
                                     HorizontalAlignment="Left"/>
                         </DockPanel>
                     </DockPanel>
                 </ScrollViewer>
             </TabItem>
 
-            <!-- Tab: Audio Alerts -->
+            <!-- Tab: Sounds -->
             <TabItem Header="Sounds" Name="AudioAlertTab">
                 <DockPanel Margin="20,0">
 
                     <!-- Header -->
                     <TextBlock DockPanel.Dock="Top"
-                               Text="Audio alerts"
+                               Text="Sound alerts"
                                Style="{StaticResource OptionHeaderTextStyle}"/>
 
                     <!-- Audio Alert Down: checkbox / tooltip -->
@@ -568,7 +573,7 @@
 
                     <!-- Header -->
                     <TextBlock DockPanel.Dock="Top"
-                               Text="Log output"
+                               Text="Logging"
                                Style="{StaticResource OptionHeaderTextStyle}"/>
 
                     <!-- Log folder -->
@@ -616,7 +621,7 @@
 
                     <!-- Header -->
                     <TextBlock DockPanel.Dock="Top"
-                               Text="Window options"
+                               Text="Window"
                                Style="{StaticResource OptionHeaderTextStyle}"/>
 
                     <!-- Always on top -->
@@ -642,12 +647,12 @@
                             </TextBlock>
                         </Label>
                     </DockPanel>
-                    <!-- Exit to tray -->
+                    <!-- Close to tray -->
                     <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="0,15,0,0">
                         <CheckBox DockPanel.Dock="Left"
                                   Name="IsExitToTrayEnabled"
-                                  Content="Exit to tray"/>
-                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="Exit to tray">
+                                  Content="Close to tray"/>
+                        <Label DockPanel.Dock="Left" Style="{StaticResource LabelToolTip}" Tag="Close to tray">
                             <TextBlock>
                                 Closing the window keeps vmPing running in the system tray. To quit, right-click the tray icon and choose Exit vmPing.
                                 <LineBreak/>
@@ -680,13 +685,13 @@
 
                         <!-- Startup mode selection -->
                         <TextBlock DockPanel.Dock="Top"
-                                   Text="Choose how vmPing should start:"
+                                   Text="When vmPing opens:"
                                    Margin="0,0,0,5"/>
                         <ComboBox DockPanel.Dock="Top"
                                   Name="StartupMode"
-                                  Width="200">
-                            <ComboBoxItem Content="Blank (default)" Tag="Standard" IsSelected="True"/>
-                            <ComboBoxItem Content="Multi-input window" Tag="Standard"/>
+                                  Width="240">
+                            <ComboBoxItem Content="Show empty probes" Tag="Standard" IsSelected="True"/>
+                            <ComboBoxItem Content="Open the multi-input window" Tag="Standard"/>
                             <ComboBoxItem Content="Load a favorite" Tag="Favorite"/>
                         </ComboBox>
                         <!-- Initial probe / column count -->
@@ -706,7 +711,7 @@
                             </StackPanel.Style>
                             <!-- Probe count -->
                             <StackPanel Margin="0,0,30,0">
-                                <TextBlock Text="Probe count:"
+                                <TextBlock Text="Probes:"
                                            Margin="0,0,0,4"/>
                                 <TextBox Name="InitialProbeCount"
                                          PreviewTextInput="NumericTextbox_PreviewTextInput"
@@ -716,7 +721,7 @@
                             </StackPanel>
                             <!-- Column count-->
                             <StackPanel>
-                                <TextBlock Text="Column count:"
+                                <TextBlock Text="Columns:"
                                            Margin="0,0,0,4"/>
                                 <TextBox Name="InitialColumnCount"
                                          PreviewTextInput="NumericTextbox_PreviewTextInput"
@@ -811,7 +816,7 @@
                         <RadioButton DockPanel.Dock="Top"
                                      GroupName="WindowPosition"
                                      Name="WindowPositionDefaultOption"
-                                     Content="Default"
+                                     Content="Let Windows choose"
                                      IsChecked="True"/>
                         <RadioButton DockPanel.Dock="Top"
                                      GroupName="WindowPosition"
@@ -916,6 +921,8 @@
                                    Margin="0,20,0,0"
                                    Style="{StaticResource OptionSubHeaderTextStyle}"/>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,6,0,0">
+                            <TextBlock Text="Edit colors for:"
+                                       Margin="0,0,15,0"/>
                             <RadioButton GroupName="ProbeColorSet"
                                          Name="LightColorsOption"
                                          Content="Light theme"
@@ -948,7 +955,7 @@
                             <Border Background="{Binding ElementName=ProbeBackgroundDown, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Indeterminate"/>
+                            <TextBlock Width="150" Text="Warning"/>
                             <TextBox Name="ProbeBackgroundIndeterminate"/>
                             <Border Background="{Binding ElementName=ProbeBackgroundIndeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
@@ -963,10 +970,10 @@
                             <Border Background="{Binding ElementName=ProbeBackgroundTool, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
 
-                        <!-- Probe foreground colors -->
+                        <!-- Probe text colors -->
                         <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="Transparent" Margin="0,20,0,0"/>
                         <TextBlock DockPanel.Dock="Top"
-                                   Text="Probe foreground"
+                                   Text="Probe text"
                                    Margin="0"
                                    Style="{StaticResource OptionSubHeaderTextStyle}"/>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
@@ -985,7 +992,7 @@
                             <Border Background="{Binding ElementName=ProbeForegroundDown, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Indeterminate"/>
+                            <TextBlock Width="150" Text="Warning"/>
                             <TextBox Name="ProbeForegroundIndeterminate"/>
                             <Border Background="{Binding ElementName=ProbeForegroundIndeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
@@ -1000,10 +1007,10 @@
                             <Border Background="{Binding ElementName=ProbeForegroundTool, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
 
-                        <!-- Statistics foreground colors -->
+                        <!-- Statistics text colors -->
                         <Separator DockPanel.Dock="Top" Height="1" Width="20" Background="Transparent" Margin="0,20,0,0"/>
                         <TextBlock DockPanel.Dock="Top"
-                                   Text="Statistics foreground"
+                                   Text="Statistics text"
                                    Margin="0"
                                    Style="{StaticResource OptionSubHeaderTextStyle}"/>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
@@ -1022,7 +1029,7 @@
                             <Border Background="{Binding ElementName=StatisticsForegroundDown, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBlock Width="150" Text="Indeterminate"/>
+                            <TextBlock Width="150" Text="Warning"/>
                             <TextBox Name="StatisticsForegroundIndeterminate"/>
                             <Border Background="{Binding ElementName=StatisticsForegroundIndeterminate, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
@@ -1032,12 +1039,12 @@
                             <Border Background="{Binding ElementName=StatisticsForegroundError, Path=Text, Converter={StaticResource StringToBrushConverter}}"/>
                         </StackPanel>
 
-                        <!-- Restore defaults button -->
+                        <!-- Reset colors button -->
                         <Grid DockPanel.Dock="Top" Margin="0,15,0,0">
                             <Button Style="{StaticResource ButtonStyle}"
                                     Click="RestoreDefaultColors_Click"
                                     Padding="15,5"
-                                    Content="Restore defaults"
+                                    Content="Reset colors"
                                     HorizontalAlignment="Left"/>
                         </Grid>
                     </DockPanel>
@@ -1052,7 +1059,7 @@
             <DockPanel Margin="9" HorizontalAlignment="Right">
                 <CheckBox DockPanel.Dock="Top"
                           Name="SaveAsDefaults"
-                          Content="Save as vmPing defaults"
+                          Content="Keep these settings next time vmPing starts"
                           FontSize="13"
                           HorizontalAlignment="Right"/>
                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,9,0,0" HorizontalAlignment="Right">

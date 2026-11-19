@@ -44,7 +44,7 @@ namespace vmPing.Views
         }
 
         // Startup options only matter when vmPing starts, which needs them saved.
-        // So changing any of them checks "Save as vmPing defaults".
+        // So changing any of them checks "Keep these settings next time vmPing starts".
         private void WatchStartupOptions()
         {
             UIElement startupOptions = (UIElement)StartupTab.Content;
@@ -820,7 +820,7 @@ namespace vmPing.Views
                 }
             });
             TestEmailButton.IsEnabled = true;
-            TestEmailButton.Content = "Test";
+            TestEmailButton.Content = "Send test email";
         }
 
         private void BrowseLogFolder_Click(object sender, RoutedEventArgs e)
